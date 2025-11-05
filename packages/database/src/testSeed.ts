@@ -4,40 +4,26 @@ const prisma = new PrismaClient()
 
 const now = new Date().toISOString()
 
-const data = await prisma.lecturer.findMany({
-    where: {
-        mainSubjectClasses: {
-            some: {
-                semester: { id: 'cmff4wak60029p401qhul7ld9' },
-                trainingObjectTypeId: 'cmfaifezw00b9pm01pwevm1o2',
+const data = await prisma.curriculum.findMany({
+    where: { trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000', deletedAt: null },
+    include: {
+        curriculumVersion: {
+            where: { trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000' },
+            include: {
+                trainingTime: true,
+                trainingBlocks: { include: { subjects: { include: { subject: true } } } },
+                trainingObjectType: true,
+                documentFiles: true,
+                fixedClasses: { include: { trainingCourse: true } },
             },
+            orderBy: [{ name: 'asc' }],
         },
+        managementOrganization: true,
+        trainingMajor: true,
     },
-    orderBy: { userProfile: { firstName: 'asc' } },
-    // include: {
-    //     userProfile: {
-    //         include: { academicDegreeType: true, academicRankType: true, level: true, rank: true },
-    //     },
-    //     mainSubjectClasses: { include: { semester: true } },
-    //     organization: true,
-    // },
+    orderBy: { createdAt: 'desc' },
+    // take: 10,
+    // skip: 0,
 })
 
-const cls = await prisma.subjectClass.findMany({
-    where: {
-        lecturerId: {
-            not: null,
-        },
-        semester: { id: 'cmff4wak60029p401qhul7ld9' },
-    },
-    // orderBy: { userProfile: { firstName: 'asc' } },
-    // include: {
-    //     userProfile: {
-    //         include: { academicDegreeType: true, academicRankType: true, level: true, rank: true },
-    //     },
-    //     mainSubjectClasses: { include: { semester: true } },
-    //     organization: true,
-    // },
-})
-
-console.log(cls.length)
+console.log(data.length)

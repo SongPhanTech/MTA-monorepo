@@ -51,10 +51,11 @@ import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import { getMinioUrl } from '@workspace/constant'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
+import { putDMNhanViens } from '@workspace/libs/api/system'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import dayjs from 'dayjs'
-import { putDMNhanViens } from '@workspace/libs/api/system'
+
 dayjs.locale('vi')
 interface itemType {
     id: string
@@ -381,7 +382,7 @@ export default function UpdateUserPage() {
 
         try {
             showSpinner()
-            const res = await putDMNhanViens({
+            putDMNhanViens({
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
@@ -394,638 +395,564 @@ export default function UpdateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 Id: id,
+            }).catch((error) => {
+                console.log(error)
             })
-            if (res.status === 200) {
-                let listTransaction: any = [
-                    {
-                        model: 'UserProfile',
-                        operation: 'update',
+            // if (res.status === 200) {
+            let listTransaction: any = [
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id,
+                        },
                         data: {
-                            where: {
-                                id,
-                            },
-                            data: {
-                                hocVi: { deleteMany: {} },
-                                hocHam: { deleteMany: {} },
-                                relatives: { deleteMany: {} },
-                                trinhDoLyLuanChinhTri: { deleteMany: {} },
-                                trinhDoQuanLyNhaNuoc: { deleteMany: {} },
-                                ngoaiNgu: { deleteMany: {} },
-                                tinHoc: { deleteMany: {} },
-                                boiDuongQuocPhongAnNinh: { deleteMany: {} },
-                                capBac: { deleteMany: {} },
-                                quaTrinhCongTac: { deleteMany: {} },
-                                quaTrinhCuDiCongTac: { deleteMany: {} },
-                                quaTrinhCuDiDaoTao: { deleteMany: {} },
-                                khenThuong: { deleteMany: {} },
-                                kyLuat: { deleteMany: {} },
-                                doiTuongChinhSach: { deleteMany: {} },
-                                keKhaiTaiSan: { deleteMany: {} },
-                                chienDau: { deleteMany: {} },
-                                diNuocNgoai: { deleteMany: {} },
-                                thuongTat: { deleteMany: {} },
-                                danhHieu: { deleteMany: {} },
-                                tiengDanToc: { deleteMany: {} },
-                                ToChucXaHoi: { deleteMany: {} },
-                                QuaTrinhLuong: { deleteMany: {} },
-                                quaTrinhHocTap: { deleteMany: {} },
-                            },
+                            hocVi: { deleteMany: {} },
+                            hocHam: { deleteMany: {} },
+                            relatives: { deleteMany: {} },
+                            trinhDoLyLuanChinhTri: { deleteMany: {} },
+                            trinhDoQuanLyNhaNuoc: { deleteMany: {} },
+                            ngoaiNgu: { deleteMany: {} },
+                            tinHoc: { deleteMany: {} },
+                            boiDuongQuocPhongAnNinh: { deleteMany: {} },
+                            capBac: { deleteMany: {} },
+                            quaTrinhCongTac: { deleteMany: {} },
+                            quaTrinhCuDiCongTac: { deleteMany: {} },
+                            quaTrinhCuDiDaoTao: { deleteMany: {} },
+                            khenThuong: { deleteMany: {} },
+                            kyLuat: { deleteMany: {} },
+                            doiTuongChinhSach: { deleteMany: {} },
+                            keKhaiTaiSan: { deleteMany: {} },
+                            chienDau: { deleteMany: {} },
+                            diNuocNgoai: { deleteMany: {} },
+                            thuongTat: { deleteMany: {} },
+                            danhHieu: { deleteMany: {} },
+                            tiengDanToc: { deleteMany: {} },
+                            ToChucXaHoi: { deleteMany: {} },
+                            QuaTrinhLuong: { deleteMany: {} },
+                            quaTrinhHocTap: { deleteMany: {} },
                         },
                     },
-                    {
-                        model: 'UserProfile',
-                        operation: 'update',
+                },
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id,
+                        },
                         data: {
-                            where: {
-                                id,
-                            },
-                            data: {
-                                genderId,
-                                sucKhoeId,
-                                nationalityId,
-                                religionId,
-                                trinhDoHocVanId,
-                                nhomMauId,
-                                ethnicityId,
-                            },
+                            genderId,
+                            sucKhoeId,
+                            nationalityId,
+                            religionId,
+                            trinhDoHocVanId,
+                            nhomMauId,
+                            ethnicityId,
                         },
                     },
+                },
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id,
+                        },
+                        data: {
+                            ...values,
+                            lastName: values.lastName.trim(),
+                            firstName: values.firstName.trim(),
+                            bLaHocVien: values.bLaHocVien,
+                            bLaCanBoNhanVien: !!(
+                                bLaGiangVien === true || values?.bLaCanBoNhanVien === true
+                            ),
+                            fullname:
+                                `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                            dateOfBirth: values.dateOfBirth
+                                ? dayjs(values.dateOfBirth).toISOString()
+                                : null,
+                            idCardDate: values.idCardDate
+                                ? dayjs(values.idCardDate).toISOString()
+                                : null,
+                            unionDate: values.unionDate
+                                ? dayjs(values.unionDate).toISOString()
+                                : null,
+                            CPVJoinDate: values.CPVJoinDate
+                                ? dayjs(values.CPVJoinDate).toISOString()
+                                : null,
+                            officialCPVDate: values.officialCPVDate
+                                ? dayjs(values.officialCPVDate).toISOString()
+                                : null,
+                            tenureDate: values.tenureDate
+                                ? dayjs(values.tenureDate).toISOString()
+                                : null,
+                            avatar: form.getFieldValue('avatar'),
+                            hocVi:
+                                values.hocVi && values.hocVi.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.hocVi.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            hocHam:
+                                values.hocHam && values.hocHam.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.hocHam.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            relatives:
+                                values.relatives && values.relatives.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.relatives.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            trinhDoLyLuanChinhTri:
+                                values.trinhDoLyLuanChinhTri &&
+                                values.trinhDoLyLuanChinhTri.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.trinhDoLyLuanChinhTri.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            trinhDoQuanLyNhaNuoc:
+                                values.trinhDoQuanLyNhaNuoc &&
+                                values.trinhDoQuanLyNhaNuoc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.trinhDoQuanLyNhaNuoc.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            ngoaiNgu:
+                                values.ngoaiNgu && values.ngoaiNgu.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.ngoaiNgu.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            tinHoc:
+                                values.tinHoc && values.tinHoc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.tinHoc.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            boiDuongQuocPhongAnNinh:
+                                values.boiDuongQuocPhongAnNinh &&
+                                values.boiDuongQuocPhongAnNinh.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.boiDuongQuocPhongAnNinh.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            capBac:
+                                values.capBac && values.capBac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.capBac.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhCongTac:
+                                values.quaTrinhCongTac && values.quaTrinhCongTac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCongTac.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhCuDiCongTac:
+                                values.quaTrinhCuDiCongTac && values.quaTrinhCuDiCongTac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCuDiCongTac.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhCuDiDaoTao:
+                                values.quaTrinhCuDiDaoTao && values.quaTrinhCuDiDaoTao.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCuDiDaoTao.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            khenThuong:
+                                values.khenThuong && values.khenThuong.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.khenThuong.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            kyLuat:
+                                values.kyLuat && values.kyLuat.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.kyLuat.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            doiTuongChinhSach:
+                                values.doiTuongChinhSach && values.doiTuongChinhSach.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.doiTuongChinhSach.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            keKhaiTaiSan:
+                                values.keKhaiTaiSan && values.keKhaiTaiSan.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.keKhaiTaiSan.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            chienDau:
+                                values.chienDau && values.chienDau.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.chienDau.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            diNuocNgoai:
+                                values.diNuocNgoai && values.diNuocNgoai.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.diNuocNgoai.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            thuongTat:
+                                values.thuongTat && values.thuongTat.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.thuongTat.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            danhHieu:
+                                values.danhHieu && values.danhHieu.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.danhHieu.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            tiengDanToc:
+                                values.tiengDanToc && values.tiengDanToc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.tiengDanToc.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            ToChucXaHoi:
+                                values.ToChucXaHoi && values.ToChucXaHoi.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.ToChucXaHoi.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            QuaTrinhLuong:
+                                values.QuaTrinhLuong && values.QuaTrinhLuong.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.QuaTrinhLuong.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhHocTap:
+                                values.quaTrinhHocTap && values.quaTrinhHocTap.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhHocTap.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+                        },
+                    },
+                },
+            ]
+            if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                listTransaction = [
+                    ...listTransaction,
                     {
-                        model: 'UserProfile',
+                        model: 'Lecturer',
                         operation: 'update',
                         data: {
                             where: {
-                                id,
+                                id: cccdUserProfileData?.lecturer?.id,
                             },
                             data: {
-                                ...values,
-                                lastName: values.lastName.trim(),
-                                firstName: values.firstName.trim(),
-                                bLaHocVien: values.bLaHocVien,
-                                bLaCanBoNhanVien: !!(
-                                    bLaGiangVien === true || values?.bLaCanBoNhanVien === true
-                                ),
-                                fullname:
-                                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
-                                dateOfBirth: values.dateOfBirth
-                                    ? dayjs(values.dateOfBirth).toISOString()
-                                    : null,
-                                idCardDate: values.idCardDate
-                                    ? dayjs(values.idCardDate).toISOString()
-                                    : null,
-                                unionDate: values.unionDate
-                                    ? dayjs(values.unionDate).toISOString()
-                                    : null,
-                                CPVJoinDate: values.CPVJoinDate
-                                    ? dayjs(values.CPVJoinDate).toISOString()
-                                    : null,
-                                officialCPVDate: values.officialCPVDate
-                                    ? dayjs(values.officialCPVDate).toISOString()
-                                    : null,
-                                tenureDate: values.tenureDate
-                                    ? dayjs(values.tenureDate).toISOString()
-                                    : null,
-                                avatar: form.getFieldValue('avatar'),
-                                hocVi:
-                                    values.hocVi && values.hocVi.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.hocVi.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                hocHam:
-                                    values.hocHam && values.hocHam.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.hocHam.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                relatives:
-                                    values.relatives && values.relatives.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.relatives.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                trinhDoLyLuanChinhTri:
-                                    values.trinhDoLyLuanChinhTri &&
-                                    values.trinhDoLyLuanChinhTri.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.trinhDoLyLuanChinhTri.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                trinhDoQuanLyNhaNuoc:
-                                    values.trinhDoQuanLyNhaNuoc &&
-                                    values.trinhDoQuanLyNhaNuoc.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.trinhDoQuanLyNhaNuoc.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                ngoaiNgu:
-                                    values.ngoaiNgu && values.ngoaiNgu.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.ngoaiNgu.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                tinHoc:
-                                    values.tinHoc && values.tinHoc.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.tinHoc.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                boiDuongQuocPhongAnNinh:
-                                    values.boiDuongQuocPhongAnNinh &&
-                                    values.boiDuongQuocPhongAnNinh.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.boiDuongQuocPhongAnNinh.map(
-                                                      (item) => {
-                                                          const {
-                                                              id,
-                                                              userProfileId,
-                                                              ...itemWithoutId
-                                                          } = item
-                                                          return itemWithoutId
-                                                      }
-                                                  ),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                capBac:
-                                    values.capBac && values.capBac.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.capBac.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                quaTrinhCongTac:
-                                    values.quaTrinhCongTac && values.quaTrinhCongTac.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.quaTrinhCongTac.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                quaTrinhCuDiCongTac:
-                                    values.quaTrinhCuDiCongTac &&
-                                    values.quaTrinhCuDiCongTac.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.quaTrinhCuDiCongTac.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                quaTrinhCuDiDaoTao:
-                                    values.quaTrinhCuDiDaoTao &&
-                                    values.quaTrinhCuDiDaoTao.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.quaTrinhCuDiDaoTao.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                khenThuong:
-                                    values.khenThuong && values.khenThuong.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.khenThuong.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                kyLuat:
-                                    values.kyLuat && values.kyLuat.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.kyLuat.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                doiTuongChinhSach:
-                                    values.doiTuongChinhSach && values.doiTuongChinhSach.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.doiTuongChinhSach.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                keKhaiTaiSan:
-                                    values.keKhaiTaiSan && values.keKhaiTaiSan.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.keKhaiTaiSan.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                chienDau:
-                                    values.chienDau && values.chienDau.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.chienDau.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                diNuocNgoai:
-                                    values.diNuocNgoai && values.diNuocNgoai.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.diNuocNgoai.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                thuongTat:
-                                    values.thuongTat && values.thuongTat.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.thuongTat.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                danhHieu:
-                                    values.danhHieu && values.danhHieu.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.danhHieu.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                tiengDanToc:
-                                    values.tiengDanToc && values.tiengDanToc.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.tiengDanToc.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                ToChucXaHoi:
-                                    values.ToChucXaHoi && values.ToChucXaHoi.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.ToChucXaHoi.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                QuaTrinhLuong:
-                                    values.QuaTrinhLuong && values.QuaTrinhLuong.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.QuaTrinhLuong.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
-
-                                quaTrinhHocTap:
-                                    values.quaTrinhHocTap && values.quaTrinhHocTap.length > 0
-                                        ? {
-                                              createMany: {
-                                                  data: values.quaTrinhHocTap.map((item) => {
-                                                      const {
-                                                          id,
-                                                          userProfileId,
-                                                          ...itemWithoutId
-                                                      } = item
-                                                      return itemWithoutId
-                                                  }),
-                                                  skipDuplicates: true,
-                                              },
-                                          }
-                                        : undefined,
+                                code: values?.code,
+                                lecturerTypeId,
+                                organizationId: values?.sDM_DonViId,
                             },
                         },
                     },
                 ]
-                if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Lecturer',
-                            operation: 'update',
-                            data: {
-                                where: {
-                                    id: cccdUserProfileData?.lecturer?.id,
-                                },
-                                data: {
-                                    code: values?.code,
-                                    lecturerTypeId,
-                                    organizationId: values?.sDM_DonViId,
-                                },
-                            },
-                        },
-                    ]
-                }
-                if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Lecturer',
-                            operation: 'create',
-                            data: {
-                                data: {
-                                    userProfileId: id,
-                                    code: values?.code,
-                                    lecturerTypeId,
-                                    organizationId: values?.sDM_DonViId,
-                                },
-                            },
-                        },
-                    ]
-                }
-
-                if (cccdUserProfileData?.lecturer && !bLaGiangVien) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Lecturer',
-                            operation: 'delete',
-                            data: {
-                                where: {
-                                    id: cccdUserProfileData?.lecturer?.id,
-                                },
-                            },
-                        },
-                    ]
-                }
-
-                if (
-                    cccdUserProfileData?.staffs &&
-                    values.bLaCanBoNhanVien &&
-                    staffTypeId &&
-                    staffPositionId
-                ) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Staff',
-                            operation: 'update',
-                            data: {
-                                where: {
-                                    id: cccdUserProfileData?.staffs?.id,
-                                },
-                                data: {
-                                    code: values?.code,
-                                    staffPositionId,
-                                    staffTypeId,
-                                    organizationId: values?.sDM_DonViId,
-                                },
-                            },
-                        },
-                    ]
-                }
-                if (
-                    !cccdUserProfileData?.staffs &&
-                    values.bLaCanBoNhanVien &&
-                    staffTypeId &&
-                    staffPositionId
-                ) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Staff',
-                            operation: 'create',
-                            data: {
-                                data: {
-                                    userProfileId: id,
-                                    code: values?.code,
-                                    staffPositionId,
-                                    staffTypeId,
-                                    organizationId: values?.sDM_DonViId,
-                                },
-                            },
-                        },
-                    ]
-                }
-
-                if (cccdUserProfileData?.staffs && !values.bLaCanBoNhanVien) {
-                    listTransaction = [
-                        ...listTransaction,
-                        {
-                            model: 'Staff',
-                            operation: 'delete',
-                            data: {
-                                where: {
-                                    id: cccdUserProfileData?.staffs?.id,
-                                },
-                            },
-                        },
-                    ]
-                }
-
-                await sqlTransaction(listTransaction)
-                queryClient.invalidateQueries({
-                    queryKey: ['UserProfile'],
-                })
-                message.success('Cập nhật thành công')
             }
+            if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                listTransaction = [
+                    ...listTransaction,
+                    {
+                        model: 'Lecturer',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                userProfileId: id,
+                                code: values?.code,
+                                lecturerTypeId,
+                                organizationId: values?.sDM_DonViId,
+                            },
+                        },
+                    },
+                ]
+            }
+
+            if (cccdUserProfileData?.lecturer && !bLaGiangVien) {
+                listTransaction = [
+                    ...listTransaction,
+                    {
+                        model: 'Lecturer',
+                        operation: 'delete',
+                        data: {
+                            where: {
+                                id: cccdUserProfileData?.lecturer?.id,
+                            },
+                        },
+                    },
+                ]
+            }
+
+            if (
+                cccdUserProfileData?.staffs &&
+                values.bLaCanBoNhanVien &&
+                staffTypeId &&
+                staffPositionId
+            ) {
+                listTransaction = [
+                    ...listTransaction,
+                    {
+                        model: 'Staff',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: cccdUserProfileData?.staffs?.id,
+                            },
+                            data: {
+                                code: values?.code,
+                                staffPositionId,
+                                staffTypeId,
+                                organizationId: values?.sDM_DonViId,
+                            },
+                        },
+                    },
+                ]
+            }
+            if (
+                !cccdUserProfileData?.staffs &&
+                values.bLaCanBoNhanVien &&
+                staffTypeId &&
+                staffPositionId
+            ) {
+                listTransaction = [
+                    ...listTransaction,
+                    {
+                        model: 'Staff',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                userProfileId: id,
+                                code: values?.code,
+                                staffPositionId,
+                                staffTypeId,
+                                organizationId: values?.sDM_DonViId,
+                            },
+                        },
+                    },
+                ]
+            }
+
+            if (cccdUserProfileData?.staffs && !values.bLaCanBoNhanVien) {
+                listTransaction = [
+                    ...listTransaction,
+                    {
+                        model: 'Staff',
+                        operation: 'delete',
+                        data: {
+                            where: {
+                                id: cccdUserProfileData?.staffs?.id,
+                            },
+                        },
+                    },
+                ]
+            }
+
+            await sqlTransaction(listTransaction)
+            queryClient.invalidateQueries({
+                queryKey: ['UserProfile'],
+            })
+            message.success('Cập nhật thành công')
+            // }
             // router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {
             message.error('Đã có lỗi xảy ra, vui lòng thử lại sau')
