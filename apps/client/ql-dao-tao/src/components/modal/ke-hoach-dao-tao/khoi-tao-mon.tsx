@@ -66,9 +66,9 @@ const KhoiTaoMon = () => {
                                     id: planTraining?.id ?? '',
                                 },
                             },
-                            // fixedClasses: {
-                            //     connect: fixedClassIds.map((id) => ({ id })),
-                            // },
+                            fixedClasses: {
+                                connect: fixedClassIds.map((id) => ({ id })),
+                            },
                         },
                     })
                 )
