@@ -743,6 +743,7 @@ app.openapi(graduationCheck, async (c) => {
                 diplomaTypeId: result.diplomaType?.id,
                 trainingMajorId: result.trainingMajor?.id,
                 gpa: result.gpa,
+                rankId: result.rank?.id,
                 reason: result.reason,
                 status: ApplicationStatus.IN_REVIEW,
             },
