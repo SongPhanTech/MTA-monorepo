@@ -116,6 +116,9 @@ export type FilterProps = {
     midtermScoreCmp?: { lte?: number | null; gte?: number | null }
     examScoreCmp?: { lte?: number | null; gte?: number | null }
     finalScoreCmp?: { lte?: number | null; gte?: number | null }
+    gpaCmp?: { lte?: number | null; gte?: number | null }
+    reason?: string
+    graduation?: boolean[]
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]

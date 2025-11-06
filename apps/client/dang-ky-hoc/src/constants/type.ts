@@ -137,7 +137,15 @@ export type FilterProps = {
     order?: 'asc' | 'desc'
 }
 export type ColumnTypeProps = ColumnsType & {
-    type?: string
+    type?:
+        | 'input'
+        | 'input_search'
+        | 'select'
+        | 'tree_select'
+        | 'order'
+        | 'date'
+        | 'cmp'
+        | (string & {})
     distinctFilters?: string[]
     options?: any[]
     dataIndex?: string

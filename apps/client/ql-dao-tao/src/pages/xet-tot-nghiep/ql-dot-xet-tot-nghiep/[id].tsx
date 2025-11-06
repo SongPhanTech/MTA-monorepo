@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import RejectIcon from '@components/icons/reject'
+import ViewIcon from '@components/icons/view'
 import GraduationDecision from '@components/sub-pages/graduationDecision'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -54,6 +55,7 @@ export default function StudentGraduationApplication() {
         applicationDate: undefined,
         statusApplication: undefined,
     })
+    const [showDecision, setShowDecision] = useState(false)
     const [trainingCourseSelected, setTrainingCourseSelected] = useState<string>()
     const [fixedClassSelected, setFixedClassSelected] = useState<string>()
 
@@ -93,6 +95,28 @@ export default function StudentGraduationApplication() {
                       status: { in: filters.statusApplication },
                   }
                 : {}),
+            ...(filters.graduation?.length
+                ? { OR: filters.graduation.map((v) => ({ graduation: v })) }
+                : {}),
+            ...(filters.gpaCmp
+                ? {
+                      gpa: {
+                          ...(filters.gpaCmp.gte
+                              ? {
+                                    gte: Number(filters.gpaCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.gpaCmp.lte
+                              ? {
+                                    lte: Number(filters.gpaCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.reason
+                ? { reason: { contains: filters.reason, mode: 'insensitive' as const } }
+                : {}),
         }),
         [
             filters.code,
@@ -100,6 +124,9 @@ export default function StudentGraduationApplication() {
             filters.applicationDate,
             filters.statusApplication,
             graduationSessionId,
+            filters.graduation,
+            filters.gpaCmp,
+            filters.reason,
         ]
     )
 
@@ -470,6 +497,13 @@ export default function StudentGraduationApplication() {
                         <Flex align="center" justify="space-between" className="px-4">
                             <h2 className="text-xl font-bold">{initialValue?.name}</h2>
                             <div className="flex align-middle items-center gap-2">
+                                <Button
+                                    type="primary"
+                                    className="mr-8"
+                                    onClick={() => setShowDecision(!showDecision)}
+                                >
+                                    {showDecision ? 'Ẩn kết quả' : 'Xem kết quả'}
+                                </Button>
                                 <div>Khoá</div>
                                 <Select
                                     className="min-w-32"
@@ -503,7 +537,7 @@ export default function StudentGraduationApplication() {
                                 </Button>
                             </div>
                         </Flex>
-                        <GraduationDecision sessionId={graduationSessionId} />
+                        {showDecision && <GraduationDecision sessionId={graduationSessionId} />}
                     </Col>
                     <Flex>
                         <Col span={24}>
@@ -587,9 +621,6 @@ export default function StudentGraduationApplication() {
                                                 type: 'checkbox',
                                                 ...rowSelection,
                                             }}
-                                            onRowClick={(record) =>
-                                                handleOpenModalLearningResult(record)
-                                            }
                                             filters={filters}
                                             setFilters={(value) => {
                                                 setFilters(value)
@@ -687,6 +718,8 @@ export default function StudentGraduationApplication() {
                                                     title: 'GPA',
                                                     width: 60,
                                                     align: 'center',
+                                                    dataIndex: 'gpaCmp',
+                                                    type: 'cmp',
                                                     render: (record) => {
                                                         if (record?.gpa) {
                                                             return <span>{record.gpa}</span>
@@ -694,7 +727,6 @@ export default function StudentGraduationApplication() {
                                                         return null
                                                     },
                                                 },
-
                                                 {
                                                     title: 'Hệ số xét',
                                                     width: 80,
@@ -716,6 +748,12 @@ export default function StudentGraduationApplication() {
                                                     title: 'Kết quả xét',
                                                     width: 90,
                                                     align: 'center',
+                                                    dataIndex: 'graduation',
+                                                    type: 'select',
+                                                    options: [
+                                                        { value: true, label: 'Đạt' },
+                                                        { value: false, label: 'Không đạt' },
+                                                    ],
                                                     render: (record) =>
                                                         record?.graduation ? (
                                                             <Tag color="green">Đạt</Tag>
@@ -727,7 +765,9 @@ export default function StudentGraduationApplication() {
                                                     title: 'Ghi chú',
                                                     width: 220,
                                                     align: 'center',
-                                                    render: (record) => {
+                                                    dataIndex: 'reason',
+                                                    type: 'input',
+                                                    render: (_, record) => {
                                                         if (record?.downgraded) {
                                                             return (
                                                                 <span>
@@ -797,15 +837,25 @@ export default function StudentGraduationApplication() {
                                                     width: 100,
                                                     align: 'center',
                                                     fixed: 'right',
-                                                    render: (_, { id }) => {
-                                                        if (id) {
+                                                    render: (_, record) => {
+                                                        if (record.id) {
                                                             return (
                                                                 <Row className="justify-center gap-2">
+                                                                    <ViewIcon
+                                                                        title="KQHT theo CTĐT"
+                                                                        onClick={() => {
+                                                                            handleOpenModalLearningResult(
+                                                                                record
+                                                                            )
+                                                                        }}
+                                                                    />
                                                                     <RejectIcon
                                                                         popConfirm={{
                                                                             onConfirm: (e) => {
                                                                                 e?.stopPropagation()
-                                                                                handleReject(id)
+                                                                                handleReject(
+                                                                                    record.id
+                                                                                )
                                                                             },
                                                                             onCancel: (e) => {
                                                                                 e?.stopPropagation()
@@ -822,7 +872,7 @@ export default function StudentGraduationApplication() {
                                                                     <EditIcon
                                                                         onClick={(e) => {
                                                                             onOpen({
-                                                                                id,
+                                                                                id: record.id,
                                                                                 graduationSessionId,
                                                                             })
                                                                             e.stopPropagation()
@@ -832,7 +882,9 @@ export default function StudentGraduationApplication() {
                                                                     <DeleteIcon
                                                                         popConfirm={{
                                                                             onConfirm: (e) => {
-                                                                                handleDelete(id)
+                                                                                handleDelete(
+                                                                                    record.id
+                                                                                )
                                                                                 e?.stopPropagation()
                                                                             },
                                                                             onCancel: (e) => {

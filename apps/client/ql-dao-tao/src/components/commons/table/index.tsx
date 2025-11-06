@@ -15,7 +15,7 @@ import {
     type TableProps as TableAntdProps,
     Tree,
 } from 'antd'
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
@@ -29,9 +29,25 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
+declare type PropertyKey = string | number | symbol
+export type AnyObject = Record<PropertyKey, any>
+export type ColumnsType<RecordType = AnyObject> = ((
+    | ColumnGroupType<RecordType>
+    | ColumnType<RecordType>
+) & {
+    type?:
+        | 'input'
+        | 'input_search'
+        | 'select'
+        | 'tree_select'
+        | 'order'
+        | 'date'
+        | 'cmp'
+        | (string & {})
+})[]
+
 type TableProps<T = Record<string, unknown>> = {
     columns?: ColumnsType<T> & {
-        type?: string
         distinctFilters?: string[]
         options?: ColumnOption[]
     }
