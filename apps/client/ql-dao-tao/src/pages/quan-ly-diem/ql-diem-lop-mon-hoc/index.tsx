@@ -130,7 +130,7 @@ export default function QuanLyDiemLopMonHoc({
             }
         }
 
-        if (role === 'P2/P7') {
+        if ((role === 'P2/P7' || role === 'P13') && score !== 'PHACH') {
             baseMenu = [
                 ...baseMenu,
                 {

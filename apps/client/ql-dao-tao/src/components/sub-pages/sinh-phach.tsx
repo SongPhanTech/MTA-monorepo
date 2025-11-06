@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
 import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
-import { useFindUniqueExamList, useUpdateExamRoom } from '@workspace/db/hooks'
+import { useFindUniqueExamList, useUpdateExamList } from '@workspace/db/hooks'
 import { useGenExamListCode } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
@@ -54,7 +54,7 @@ export default function SinhPhach() {
         })
     }
     const { mutateAsync: genCode } = useGenExamListCode()
-    const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
+    const { mutateAsync: updateExamList } = useUpdateExamList()
     const handleGenCode = async () => {
         const res = await genCode({
             data: { examListId: selectedExamListId ?? '' },
@@ -64,11 +64,24 @@ export default function SinhPhach() {
             refetch()
         }
     }
+
     return (
         <>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                    <Checkbox checked={examList?.lockExamCode}>Khoá sinh phách</Checkbox>
+                    <Checkbox
+                        onChange={async (e) => {
+                            try {
+                                await updateExamList({
+                                    where: { id: selectedExamListId ?? '' },
+                                    data: { lockExamCode: e.target.checked },
+                                })
+                            } catch (error) {}
+                        }}
+                        checked={examList?.lockExamCode}
+                    >
+                        Khoá sinh phách
+                    </Checkbox>
                     <Flex justify="end" align="center">
                         <ExportPhach data={examList?.examPapers || []} />
                         <Button

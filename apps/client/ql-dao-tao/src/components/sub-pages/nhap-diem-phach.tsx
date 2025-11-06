@@ -4,10 +4,11 @@ import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
+import { useEffect } from 'react'
 
 export default function NhapDiemPhach() {
-    const [form] = Form.useForm<{ list: { score: number | null }[] }>()
-     const { selectedExamListId } = useStore(diemPhongThiStore)
+    const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
+    const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data: examList, refetch } = useFindUniqueExamList(
         {
             where: { id: selectedExamListId },
@@ -30,6 +31,22 @@ export default function NhapDiemPhach() {
         },
         { enabled: !!selectedExamListId }
     )
+
+    useEffect(() => {
+        if (examList) {
+            form.setFieldsValue({
+                list: examList.examPapers.reduce(
+                    (acc, curr) => {
+                        acc[curr.id] = {
+                            score: curr.studentSubjectScore?.examScore ?? null,
+                        }
+                        return acc
+                    },
+                    {} as Record<string, { score: number | null }>
+                ),
+            })
+        }
+    }, [examList, form])
 
     const handleSave = () => {
         Modal.confirm({
