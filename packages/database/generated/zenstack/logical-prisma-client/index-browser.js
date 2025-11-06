@@ -3573,6 +3573,18 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   diplomaTypeId: 'diplomaTypeId'
 };
 
+exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
+};
+
 exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6289,6 +6301,14 @@ exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
   diplomaTypeId: 'diplomaTypeId'
 };
 
+exports.Prisma.ApplicationDowngradedOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
+};
+
 exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7254,6 +7274,7 @@ exports.Prisma.ModelName = {
   ScholarshipAward: 'ScholarshipAward',
   GraduationSession: 'GraduationSession',
   StudentGraduationApplication: 'StudentGraduationApplication',
+  ApplicationDowngraded: 'ApplicationDowngraded',
   ApplicationCheckResult: 'ApplicationCheckResult',
   GraduationDecision: 'GraduationDecision',
   AcademicRankingConvert: 'AcademicRankingConvert',

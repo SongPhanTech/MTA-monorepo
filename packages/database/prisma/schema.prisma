@@ -5412,6 +5412,7 @@ model StudentGraduationApplication {
   graduation             Boolean?
   gpa                    Decimal?                 @db.Decimal(5, 2)
   reason                 String?
+  downgraded             ApplicationDowngraded?
   rank                   AcademicRankingConvert?  @relation(fields: [rankId], references: [id])
   rankId                 String?
   trainingMajor          TrainingMajor?           @relation(fields: [trainingMajorId], references: [id])
@@ -5424,6 +5425,23 @@ model StudentGraduationApplication {
   decision               GraduationDecision?
 
   @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+model ApplicationDowngraded {
+  id                             String                             @id() @default(cuid())
+  code                           String?                            @unique()
+  active                         Boolean                            @default(true)
+  description                    String?                            @db.Text()
+  deletedAt                      DateTime?
+  createdAt                      DateTime                           @default(now())
+  updatedAt                      DateTime                           @default(now()) @updatedAt()
+  studentGraduationApplication   StudentGraduationApplication       @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                             @unique()
+  from                           AcademicRankingConvert             @relation(fields: [fromId], references: [id])
+  fromId                         String
+  conditions                     GraduationRankDowngradeCondition[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -5503,6 +5521,7 @@ model AcademicRankingConvert {
   downgradeRules               GraduationRankDowngradeRule[]
   graduationDecision           GraduationDecision[]
   studentGraduationApplication StudentGraduationApplication[]
+  applicationDowngraded        ApplicationDowngraded[]
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
@@ -5526,20 +5545,21 @@ model GraduationRankDowngradeRule {
 
 /// Một điều kiện cụ thể trong bộ quy tắc hạ bậc
 model GraduationRankDowngradeCondition {
-  id              String                      @id() @default(cuid())
-  code            String?                     @unique()
-  active          Boolean                     @default(true)
-  description     String?                     @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime                    @default(now())
-  updatedAt       DateTime                    @default(now()) @updatedAt()
-  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
-  downgradeRuleId String
-  field           CriteriaField
-  operator        CriteriaOperator
-  invert          Boolean                     @default(false)
-  value           Float
-  tuple           String[]                    @default([])
+  id                    String                      @id() @default(cuid())
+  code                  String?                     @unique()
+  active                Boolean                     @default(true)
+  description           String?                     @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @default(now()) @updatedAt()
+  downgradeRule         GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId       String
+  field                 CriteriaField
+  operator              CriteriaOperator
+  invert                Boolean                     @default(false)
+  value                 Float
+  tuple                 String[]                    @default([])
+  applicationDowngraded ApplicationDowngraded[]
 
   @@schema("ql-dao-tao")
 }

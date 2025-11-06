@@ -207,6 +207,7 @@ export * from './ScholarshipCriteria.schema';
 export * from './ScholarshipAward.schema';
 export * from './GraduationSession.schema';
 export * from './StudentGraduationApplication.schema';
+export * from './ApplicationDowngraded.schema';
 export * from './ApplicationCheckResult.schema';
 export * from './GraduationDecision.schema';
 export * from './AcademicRankingConvert.schema';

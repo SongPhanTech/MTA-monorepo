@@ -207,6 +207,7 @@ export * from './scholarship-criteria';
 export * from './scholarship-award';
 export * from './graduation-session';
 export * from './student-graduation-application';
+export * from './application-downgraded';
 export * from './application-check-result';
 export * from './graduation-decision';
 export * from './academic-ranking-convert';

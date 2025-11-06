@@ -2123,6 +2123,16 @@ export type GraduationSession = $Result.DefaultSelection<Prisma.$GraduationSessi
  */
 export type StudentGraduationApplication = $Result.DefaultSelection<Prisma.$StudentGraduationApplicationPayload>;
 /**
+ * Model ApplicationDowngraded
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ApplicationDowngraded = $Result.DefaultSelection<Prisma.$ApplicationDowngradedPayload>;
+/**
  * Model ApplicationCheckResult
  * Kết quả kiểm tra điều kiện tự động của hệ thống
  * @
@@ -4517,6 +4527,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get studentGraduationApplication(): Prisma.StudentGraduationApplicationDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.applicationDowngraded`: Exposes CRUD operations for the **ApplicationDowngraded** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ApplicationDowngradeds
+     * const applicationDowngradeds = await prisma.applicationDowngraded.findMany()
+     * ```
+     */
+    get applicationDowngraded(): Prisma.ApplicationDowngradedDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.applicationCheckResult`: Exposes CRUD operations for the **ApplicationCheckResult** model.
      * Example usage:
      * ```ts
@@ -5842,6 +5861,7 @@ export namespace Prisma {
         ScholarshipAward: 'ScholarshipAward',
         GraduationSession: 'GraduationSession',
         StudentGraduationApplication: 'StudentGraduationApplication',
+        ApplicationDowngraded: 'ApplicationDowngraded',
         ApplicationCheckResult: 'ApplicationCheckResult',
         GraduationDecision: 'GraduationDecision',
         AcademicRankingConvert: 'AcademicRankingConvert',
@@ -9149,6 +9169,17 @@ export namespace Prisma {
         trainingMajorId: 'trainingMajorId',
         diplomaTypeId: 'diplomaTypeId'
     };
+    export const ApplicationDowngradedScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        studentGraduationApplicationId: 'studentGraduationApplicationId',
+        fromId: 'fromId'
+    };
     export const ApplicationCheckResultScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -11610,6 +11641,13 @@ export namespace Prisma {
         rankId: 'rankId',
         trainingMajorId: 'trainingMajorId',
         diplomaTypeId: 'diplomaTypeId'
+    };
+    export const ApplicationDowngradedOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        studentGraduationApplicationId: 'studentGraduationApplicationId',
+        fromId: 'fromId'
     };
     export const ApplicationCheckResultOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -90857,6 +90895,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         session<T extends GraduationSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GraduationSessionDefaultArgs<ExtArgs>>): Prisma__GraduationSessionClient<$Result.GetResult<Prisma.$GraduationSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        downgraded<T extends StudentGraduationApplication$downgradedArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$downgradedArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         rank<T extends StudentGraduationApplication$rankArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$rankArgs<ExtArgs>>): Prisma__AcademicRankingConvertClient<$Result.GetResult<Prisma.$AcademicRankingConvertPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         trainingMajor<T extends StudentGraduationApplication$trainingMajorArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$trainingMajorArgs<ExtArgs>>): Prisma__TrainingMajorClient<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         diplomaType<T extends StudentGraduationApplication$diplomaTypeArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$diplomaTypeArgs<ExtArgs>>): Prisma__DiplomaTypeClient<$Result.GetResult<Prisma.$DiplomaTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -90907,6 +90946,389 @@ export namespace Prisma {
         readonly rankId: FieldRef<"StudentGraduationApplication", 'String'>;
         readonly trainingMajorId: FieldRef<"StudentGraduationApplication", 'String'>;
         readonly diplomaTypeId: FieldRef<"StudentGraduationApplication", 'String'>;
+    }
+
+    export interface ApplicationDowngradedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ApplicationDowngraded'], meta: { name: 'ApplicationDowngraded' } };
+        /**
+         * Fields of the ApplicationDowngraded model
+         */
+        readonly fields: ApplicationDowngradedFieldRefs;
+        /**
+         * Find zero or one ApplicationDowngraded that matches the filter.
+         * @param {ApplicationDowngradedFindUniqueArgs} args - Arguments to find a ApplicationDowngraded
+         * @example
+         * // Get one ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ApplicationDowngradedFindUniqueArgs>(args: SelectSubset<T, ApplicationDowngradedFindUniqueArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ApplicationDowngraded that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ApplicationDowngradedFindUniqueOrThrowArgs} args - Arguments to find a ApplicationDowngraded
+         * @example
+         * // Get one ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ApplicationDowngradedFindUniqueOrThrowArgs>(args: SelectSubset<T, ApplicationDowngradedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ApplicationDowngraded that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedFindFirstArgs} args - Arguments to find a ApplicationDowngraded
+         * @example
+         * // Get one ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ApplicationDowngradedFindFirstArgs>(args?: SelectSubset<T, ApplicationDowngradedFindFirstArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ApplicationDowngraded that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedFindFirstOrThrowArgs} args - Arguments to find a ApplicationDowngraded
+         * @example
+         * // Get one ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ApplicationDowngradedFindFirstOrThrowArgs>(args?: SelectSubset<T, ApplicationDowngradedFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ApplicationDowngradeds that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ApplicationDowngradeds
+         * const applicationDowngradeds = await prisma.applicationDowngraded.findMany()
+         *
+         * // Get first 10 ApplicationDowngradeds
+         * const applicationDowngradeds = await prisma.applicationDowngraded.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const applicationDowngradedWithIdOnly = await prisma.applicationDowngraded.findMany({ select: { id: true } })
+         */
+        findMany<T extends ApplicationDowngradedFindManyArgs>(args?: SelectSubset<T, ApplicationDowngradedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ApplicationDowngraded.
+         * @param {ApplicationDowngradedCreateArgs} args - Arguments to create a ApplicationDowngraded.
+         * @example
+         * // Create one ApplicationDowngraded
+         * const ApplicationDowngraded = await prisma.applicationDowngraded.create({
+         *   data: {
+         *     // ... data to create a ApplicationDowngraded
+         *   }
+         * })
+         */
+        create<T extends ApplicationDowngradedCreateArgs>(args: SelectSubset<T, ApplicationDowngradedCreateArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ApplicationDowngradeds.
+         * @param {ApplicationDowngradedCreateManyArgs} args - Arguments to create many ApplicationDowngradeds.
+         * @example
+         * // Create many ApplicationDowngradeds
+         * const applicationDowngraded = await prisma.applicationDowngraded.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ApplicationDowngradedCreateManyArgs>(args?: SelectSubset<T, ApplicationDowngradedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ApplicationDowngradeds and returns the data saved in the database.
+         * @param {ApplicationDowngradedCreateManyAndReturnArgs} args - Arguments to create many ApplicationDowngradeds.
+         * @example
+         * // Create many ApplicationDowngradeds
+         * const applicationDowngraded = await prisma.applicationDowngraded.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ApplicationDowngradeds and only return the `id`
+         * const applicationDowngradedWithIdOnly = await prisma.applicationDowngraded.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ApplicationDowngradedCreateManyAndReturnArgs>(args?: SelectSubset<T, ApplicationDowngradedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ApplicationDowngraded.
+         * @param {ApplicationDowngradedDeleteArgs} args - Arguments to delete one ApplicationDowngraded.
+         * @example
+         * // Delete one ApplicationDowngraded
+         * const ApplicationDowngraded = await prisma.applicationDowngraded.delete({
+         *   where: {
+         *     // ... filter to delete one ApplicationDowngraded
+         *   }
+         * })
+         */
+        delete<T extends ApplicationDowngradedDeleteArgs>(args: SelectSubset<T, ApplicationDowngradedDeleteArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ApplicationDowngraded.
+         * @param {ApplicationDowngradedUpdateArgs} args - Arguments to update one ApplicationDowngraded.
+         * @example
+         * // Update one ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ApplicationDowngradedUpdateArgs>(args: SelectSubset<T, ApplicationDowngradedUpdateArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ApplicationDowngradeds.
+         * @param {ApplicationDowngradedDeleteManyArgs} args - Arguments to filter ApplicationDowngradeds to delete.
+         * @example
+         * // Delete a few ApplicationDowngradeds
+         * const { count } = await prisma.applicationDowngraded.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ApplicationDowngradedDeleteManyArgs>(args?: SelectSubset<T, ApplicationDowngradedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ApplicationDowngradeds.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ApplicationDowngradeds
+         * const applicationDowngraded = await prisma.applicationDowngraded.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ApplicationDowngradedUpdateManyArgs>(args: SelectSubset<T, ApplicationDowngradedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ApplicationDowngradeds and returns the data updated in the database.
+         * @param {ApplicationDowngradedUpdateManyAndReturnArgs} args - Arguments to update many ApplicationDowngradeds.
+         * @example
+         * // Update many ApplicationDowngradeds
+         * const applicationDowngraded = await prisma.applicationDowngraded.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ApplicationDowngradeds and only return the `id`
+         * const applicationDowngradedWithIdOnly = await prisma.applicationDowngraded.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ApplicationDowngradedUpdateManyAndReturnArgs>(args: SelectSubset<T, ApplicationDowngradedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ApplicationDowngraded.
+         * @param {ApplicationDowngradedUpsertArgs} args - Arguments to update or create a ApplicationDowngraded.
+         * @example
+         * // Update or create a ApplicationDowngraded
+         * const applicationDowngraded = await prisma.applicationDowngraded.upsert({
+         *   create: {
+         *     // ... data to create a ApplicationDowngraded
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ApplicationDowngraded we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ApplicationDowngradedUpsertArgs>(args: SelectSubset<T, ApplicationDowngradedUpsertArgs<ExtArgs>>): Prisma__ApplicationDowngradedClient<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ApplicationDowngradeds.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedCountArgs} args - Arguments to filter ApplicationDowngradeds to count.
+         * @example
+         * // Count the number of ApplicationDowngradeds
+         * const count = await prisma.applicationDowngraded.count({
+         *   where: {
+         *     // ... the filter for the ApplicationDowngradeds we want to count
+         *   }
+         * })
+         */
+        count<T extends ApplicationDowngradedCountArgs>(args?: Subset<T, ApplicationDowngradedCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ApplicationDowngradedCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ApplicationDowngraded.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ApplicationDowngradedAggregateArgs>(args: Subset<T, ApplicationDowngradedAggregateArgs>): Prisma.PrismaPromise<GetApplicationDowngradedAggregateType<T>>;
+        /**
+         * Group by ApplicationDowngraded.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ApplicationDowngradedGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ApplicationDowngradedGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ApplicationDowngradedGroupByArgs['orderBy'] }
+        : { orderBy?: ApplicationDowngradedGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ApplicationDowngradedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApplicationDowngradedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ApplicationDowngraded.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ApplicationDowngradedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        studentGraduationApplication<T extends StudentGraduationApplicationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplicationDefaultArgs<ExtArgs>>): Prisma__StudentGraduationApplicationClient<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        from<T extends AcademicRankingConvertDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AcademicRankingConvertDefaultArgs<ExtArgs>>): Prisma__AcademicRankingConvertClient<$Result.GetResult<Prisma.$AcademicRankingConvertPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        conditions<T extends ApplicationDowngraded$conditionsArgs<ExtArgs> = {}>(args?: Subset<T, ApplicationDowngraded$conditionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationRankDowngradeConditionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ApplicationDowngraded model
+     */
+    interface ApplicationDowngradedFieldRefs {
+        readonly id: FieldRef<"ApplicationDowngraded", 'String'>;
+        readonly code: FieldRef<"ApplicationDowngraded", 'String'>;
+        readonly active: FieldRef<"ApplicationDowngraded", 'Boolean'>;
+        readonly description: FieldRef<"ApplicationDowngraded", 'String'>;
+        readonly deletedAt: FieldRef<"ApplicationDowngraded", 'DateTime'>;
+        readonly createdAt: FieldRef<"ApplicationDowngraded", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ApplicationDowngraded", 'DateTime'>;
+        readonly studentGraduationApplicationId: FieldRef<"ApplicationDowngraded", 'String'>;
+        readonly fromId: FieldRef<"ApplicationDowngraded", 'String'>;
     }
 
     export interface ApplicationCheckResultDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -92038,6 +92460,7 @@ export namespace Prisma {
         downgradeRules<T extends AcademicRankingConvert$downgradeRulesArgs<ExtArgs> = {}>(args?: Subset<T, AcademicRankingConvert$downgradeRulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         graduationDecision<T extends AcademicRankingConvert$graduationDecisionArgs<ExtArgs> = {}>(args?: Subset<T, AcademicRankingConvert$graduationDecisionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentGraduationApplication<T extends AcademicRankingConvert$studentGraduationApplicationArgs<ExtArgs> = {}>(args?: Subset<T, AcademicRankingConvert$studentGraduationApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        applicationDowngraded<T extends AcademicRankingConvert$applicationDowngradedArgs<ExtArgs> = {}>(args?: Subset<T, AcademicRankingConvert$applicationDowngradedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -92808,6 +93231,7 @@ export namespace Prisma {
     export interface Prisma__GraduationRankDowngradeConditionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         downgradeRule<T extends GraduationRankDowngradeRuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GraduationRankDowngradeRuleDefaultArgs<ExtArgs>>): Prisma__GraduationRankDowngradeRuleClient<$Result.GetResult<Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        applicationDowngraded<T extends GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs> = {}>(args?: Subset<T, GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationDowngradedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -108733,7 +109157,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -123759,6 +124183,80 @@ export namespace Prisma {
                     }
                 }
             }
+            ApplicationDowngraded: {
+                payload: Prisma.$ApplicationDowngradedPayload<ExtArgs>
+                fields: Prisma.ApplicationDowngradedFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ApplicationDowngradedFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ApplicationDowngradedFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ApplicationDowngradedFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ApplicationDowngradedFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ApplicationDowngradedFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ApplicationDowngradedCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ApplicationDowngradedCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ApplicationDowngradedCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ApplicationDowngradedDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    update: {
+                        args: Prisma.ApplicationDowngradedUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ApplicationDowngradedDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ApplicationDowngradedUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ApplicationDowngradedUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ApplicationDowngradedUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ApplicationDowngradedPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ApplicationDowngradedAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateApplicationDowngraded>
+                    }
+                    groupBy: {
+                        args: Prisma.ApplicationDowngradedGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ApplicationDowngradedGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ApplicationDowngradedCountArgs<ExtArgs>
+                        result: $Utils.Optional<ApplicationDowngradedCountAggregateOutputType> | number
+                    }
+                }
+            }
             ApplicationCheckResult: {
                 payload: Prisma.$ApplicationCheckResultPayload<ExtArgs>
                 fields: Prisma.ApplicationCheckResultFieldRefs
@@ -127397,6 +127895,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardOmit
         graduationSession?: GraduationSessionOmit
         studentGraduationApplication?: StudentGraduationApplicationOmit
+        applicationDowngraded?: ApplicationDowngradedOmit
         applicationCheckResult?: ApplicationCheckResultOmit
         graduationDecision?: GraduationDecisionOmit
         academicRankingConvert?: AcademicRankingConvertOmit
@@ -132530,6 +133029,30 @@ export namespace Prisma {
         where?: StudentSubjectScoreWhereInput
     };
     /**
+     * Count Type ApplicationDowngradedCountOutputType
+     */
+    export type ApplicationDowngradedCountOutputType = {
+        conditions: number
+    };
+    export type ApplicationDowngradedCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        conditions?: boolean | ApplicationDowngradedCountOutputTypeCountConditionsArgs
+    };
+    /**
+     * ApplicationDowngradedCountOutputType without action
+     */
+    export type ApplicationDowngradedCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngradedCountOutputType
+         */
+        select?: ApplicationDowngradedCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ApplicationDowngradedCountOutputType without action
+     */
+    export type ApplicationDowngradedCountOutputTypeCountConditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: GraduationRankDowngradeConditionWhereInput
+    };
+    /**
      * Count Type AcademicRankingConvertCountOutputType
      */
     export type AcademicRankingConvertCountOutputType = {
@@ -132537,12 +133060,14 @@ export namespace Prisma {
         downgradeRules: number
         graduationDecision: number
         studentGraduationApplication: number
+        applicationDowngraded: number
     };
     export type AcademicRankingConvertCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         rankingCondition?: boolean | AcademicRankingConvertCountOutputTypeCountRankingConditionArgs
         downgradeRules?: boolean | AcademicRankingConvertCountOutputTypeCountDowngradeRulesArgs
         graduationDecision?: boolean | AcademicRankingConvertCountOutputTypeCountGraduationDecisionArgs
         studentGraduationApplication?: boolean | AcademicRankingConvertCountOutputTypeCountStudentGraduationApplicationArgs
+        applicationDowngraded?: boolean | AcademicRankingConvertCountOutputTypeCountApplicationDowngradedArgs
     };
     /**
      * AcademicRankingConvertCountOutputType without action
@@ -132578,6 +133103,12 @@ export namespace Prisma {
         where?: StudentGraduationApplicationWhereInput
     };
     /**
+     * AcademicRankingConvertCountOutputType without action
+     */
+    export type AcademicRankingConvertCountOutputTypeCountApplicationDowngradedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ApplicationDowngradedWhereInput
+    };
+    /**
      * Count Type GraduationRankDowngradeRuleCountOutputType
      */
     export type GraduationRankDowngradeRuleCountOutputType = {
@@ -132600,6 +133131,30 @@ export namespace Prisma {
      */
     export type GraduationRankDowngradeRuleCountOutputTypeCountConditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: GraduationRankDowngradeConditionWhereInput
+    };
+    /**
+     * Count Type GraduationRankDowngradeConditionCountOutputType
+     */
+    export type GraduationRankDowngradeConditionCountOutputType = {
+        applicationDowngraded: number
+    };
+    export type GraduationRankDowngradeConditionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        applicationDowngraded?: boolean | GraduationRankDowngradeConditionCountOutputTypeCountApplicationDowngradedArgs
+    };
+    /**
+     * GraduationRankDowngradeConditionCountOutputType without action
+     */
+    export type GraduationRankDowngradeConditionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the GraduationRankDowngradeConditionCountOutputType
+         */
+        select?: GraduationRankDowngradeConditionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * GraduationRankDowngradeConditionCountOutputType without action
+     */
+    export type GraduationRankDowngradeConditionCountOutputTypeCountApplicationDowngradedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ApplicationDowngradedWhereInput
     };
     /**
      * Count Type RankingConditionCountOutputType
@@ -292212,6 +292767,7 @@ export namespace Prisma {
         diplomaTypeId?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
+        downgraded?: boolean | StudentGraduationApplication$downgradedArgs<ExtArgs>
         rank?: boolean | StudentGraduationApplication$rankArgs<ExtArgs>
         trainingMajor?: boolean | StudentGraduationApplication$trainingMajorArgs<ExtArgs>
         diplomaType?: boolean | StudentGraduationApplication$diplomaTypeArgs<ExtArgs>
@@ -292292,6 +292848,7 @@ export namespace Prisma {
     export type StudentGraduationApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
+        downgraded?: boolean | StudentGraduationApplication$downgradedArgs<ExtArgs>
         rank?: boolean | StudentGraduationApplication$rankArgs<ExtArgs>
         trainingMajor?: boolean | StudentGraduationApplication$trainingMajorArgs<ExtArgs>
         diplomaType?: boolean | StudentGraduationApplication$diplomaTypeArgs<ExtArgs>
@@ -292320,6 +292877,7 @@ export namespace Prisma {
         objects: {
             student: Prisma.$StudentPayload<ExtArgs>
             session: Prisma.$GraduationSessionPayload<ExtArgs>
+            downgraded: Prisma.$ApplicationDowngradedPayload<ExtArgs> | null
             rank: Prisma.$AcademicRankingConvertPayload<ExtArgs> | null
             trainingMajor: Prisma.$TrainingMajorPayload<ExtArgs> | null
             diplomaType: Prisma.$DiplomaTypePayload<ExtArgs> | null
@@ -292731,6 +293289,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * StudentGraduationApplication.downgraded
+     */
+    export type StudentGraduationApplication$downgradedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        where?: ApplicationDowngradedWhereInput
+    };
+    /**
      * StudentGraduationApplication.rank
      */
     export type StudentGraduationApplication$rankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -292887,6 +293463,682 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: StudentGraduationApplicationInclude<ExtArgs> | null
+    };
+    /**
+     * Model ApplicationDowngraded
+     */
+    export type AggregateApplicationDowngraded = {
+        _count: ApplicationDowngradedCountAggregateOutputType | null
+        _min: ApplicationDowngradedMinAggregateOutputType | null
+        _max: ApplicationDowngradedMaxAggregateOutputType | null
+    };
+    export type ApplicationDowngradedMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        studentGraduationApplicationId: string | null
+        fromId: string | null
+    };
+    export type ApplicationDowngradedMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        studentGraduationApplicationId: string | null
+        fromId: string | null
+    };
+    export type ApplicationDowngradedCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        studentGraduationApplicationId: number
+        fromId: number
+        _all: number
+    };
+    export type ApplicationDowngradedMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentGraduationApplicationId?: true
+        fromId?: true
+    };
+    export type ApplicationDowngradedMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentGraduationApplicationId?: true
+        fromId?: true
+    };
+    export type ApplicationDowngradedCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentGraduationApplicationId?: true
+        fromId?: true
+        _all?: true
+    };
+    export type ApplicationDowngradedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ApplicationDowngraded to aggregate.
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ApplicationDowngradeds to fetch.
+         */
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ApplicationDowngradeds from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ApplicationDowngradeds.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ApplicationDowngradeds
+        **/
+        _count?: true | ApplicationDowngradedCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ApplicationDowngradedMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ApplicationDowngradedMaxAggregateInputType
+    };
+    export type GetApplicationDowngradedAggregateType<T extends ApplicationDowngradedAggregateArgs> = {
+        [P in keyof T & keyof AggregateApplicationDowngraded]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateApplicationDowngraded[P]>
+        : GetScalarType<T[P], AggregateApplicationDowngraded[P]>
+    };
+    export type ApplicationDowngradedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ApplicationDowngradedWhereInput
+        orderBy?: ApplicationDowngradedOrderByWithAggregationInput | ApplicationDowngradedOrderByWithAggregationInput[]
+        by: ApplicationDowngradedScalarFieldEnum[] | ApplicationDowngradedScalarFieldEnum
+        having?: ApplicationDowngradedScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ApplicationDowngradedCountAggregateInputType | true
+        _min?: ApplicationDowngradedMinAggregateInputType
+        _max?: ApplicationDowngradedMaxAggregateInputType
+    };
+    export type ApplicationDowngradedGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        studentGraduationApplicationId: string
+        fromId: string
+        _count: ApplicationDowngradedCountAggregateOutputType | null
+        _min: ApplicationDowngradedMinAggregateOutputType | null
+        _max: ApplicationDowngradedMaxAggregateOutputType | null
+    };
+    type GetApplicationDowngradedGroupByPayload<T extends ApplicationDowngradedGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ApplicationDowngradedGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ApplicationDowngradedGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ApplicationDowngradedGroupByOutputType[P]>
+                : GetScalarType<T[P], ApplicationDowngradedGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ApplicationDowngradedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentGraduationApplicationId?: boolean
+        fromId?: boolean
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+        conditions?: boolean | ApplicationDowngraded$conditionsArgs<ExtArgs>
+        _count?: boolean | ApplicationDowngradedCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["applicationDowngraded"]>;
+    export type ApplicationDowngradedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentGraduationApplicationId?: boolean
+        fromId?: boolean
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["applicationDowngraded"]>;
+    export type ApplicationDowngradedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentGraduationApplicationId?: boolean
+        fromId?: boolean
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["applicationDowngraded"]>;
+    export type ApplicationDowngradedSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentGraduationApplicationId?: boolean
+        fromId?: boolean
+    };
+    export type ApplicationDowngradedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentGraduationApplicationId" | "fromId", ExtArgs["result"]["applicationDowngraded"]>;
+    export type ApplicationDowngradedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+        conditions?: boolean | ApplicationDowngraded$conditionsArgs<ExtArgs>
+        _count?: boolean | ApplicationDowngradedCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ApplicationDowngradedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+    };
+    export type ApplicationDowngradedIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentGraduationApplication?: boolean | StudentGraduationApplicationDefaultArgs<ExtArgs>
+        from?: boolean | AcademicRankingConvertDefaultArgs<ExtArgs>
+    };
+    export type $ApplicationDowngradedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ApplicationDowngraded"
+        objects: {
+            studentGraduationApplication: Prisma.$StudentGraduationApplicationPayload<ExtArgs>
+            from: Prisma.$AcademicRankingConvertPayload<ExtArgs>
+            conditions: Prisma.$GraduationRankDowngradeConditionPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            studentGraduationApplicationId: string
+            fromId: string
+        }, ExtArgs["result"]["applicationDowngraded"]>
+        composites: {}
+    };
+    type ApplicationDowngradedGetPayload<S extends boolean | null | undefined | ApplicationDowngradedDefaultArgs> = $Result.GetResult<Prisma.$ApplicationDowngradedPayload, S>;
+    type ApplicationDowngradedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ApplicationDowngradedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ApplicationDowngradedCountAggregateInputType | true
+    };
+    /**
+     * ApplicationDowngraded findUnique
+     */
+    export type ApplicationDowngradedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter, which ApplicationDowngraded to fetch.
+         */
+        where: ApplicationDowngradedWhereUniqueInput
+    };
+    /**
+     * ApplicationDowngraded findUniqueOrThrow
+     */
+    export type ApplicationDowngradedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter, which ApplicationDowngraded to fetch.
+         */
+        where: ApplicationDowngradedWhereUniqueInput
+    };
+    /**
+     * ApplicationDowngraded findFirst
+     */
+    export type ApplicationDowngradedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter, which ApplicationDowngraded to fetch.
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ApplicationDowngradeds to fetch.
+         */
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ApplicationDowngradeds.
+         */
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ApplicationDowngradeds from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ApplicationDowngradeds.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ApplicationDowngradeds.
+         */
+        distinct?: ApplicationDowngradedScalarFieldEnum | ApplicationDowngradedScalarFieldEnum[]
+    };
+    /**
+     * ApplicationDowngraded findFirstOrThrow
+     */
+    export type ApplicationDowngradedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter, which ApplicationDowngraded to fetch.
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ApplicationDowngradeds to fetch.
+         */
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ApplicationDowngradeds.
+         */
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ApplicationDowngradeds from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ApplicationDowngradeds.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ApplicationDowngradeds.
+         */
+        distinct?: ApplicationDowngradedScalarFieldEnum | ApplicationDowngradedScalarFieldEnum[]
+    };
+    /**
+     * ApplicationDowngraded findMany
+     */
+    export type ApplicationDowngradedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter, which ApplicationDowngradeds to fetch.
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ApplicationDowngradeds to fetch.
+         */
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ApplicationDowngradeds.
+         */
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ApplicationDowngradeds from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ApplicationDowngradeds.
+         */
+        skip?: number
+        distinct?: ApplicationDowngradedScalarFieldEnum | ApplicationDowngradedScalarFieldEnum[]
+    };
+    /**
+     * ApplicationDowngraded create
+     */
+    export type ApplicationDowngradedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ApplicationDowngraded.
+         */
+        data: XOR<ApplicationDowngradedCreateInput, ApplicationDowngradedUncheckedCreateInput>
+    };
+    /**
+     * ApplicationDowngraded createMany
+     */
+    export type ApplicationDowngradedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ApplicationDowngradeds.
+         */
+        data: ApplicationDowngradedCreateManyInput | ApplicationDowngradedCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ApplicationDowngraded createManyAndReturn
+     */
+    export type ApplicationDowngradedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * The data used to create many ApplicationDowngradeds.
+         */
+        data: ApplicationDowngradedCreateManyInput | ApplicationDowngradedCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ApplicationDowngraded update
+     */
+    export type ApplicationDowngradedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ApplicationDowngraded.
+         */
+        data: XOR<ApplicationDowngradedUpdateInput, ApplicationDowngradedUncheckedUpdateInput>
+        /**
+         * Choose, which ApplicationDowngraded to update.
+         */
+        where: ApplicationDowngradedWhereUniqueInput
+    };
+    /**
+     * ApplicationDowngraded updateMany
+     */
+    export type ApplicationDowngradedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ApplicationDowngradeds.
+         */
+        data: XOR<ApplicationDowngradedUpdateManyMutationInput, ApplicationDowngradedUncheckedUpdateManyInput>
+        /**
+         * Filter which ApplicationDowngradeds to update
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * Limit how many ApplicationDowngradeds to update.
+         */
+        limit?: number
+    };
+    /**
+     * ApplicationDowngraded updateManyAndReturn
+     */
+    export type ApplicationDowngradedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * The data used to update ApplicationDowngradeds.
+         */
+        data: XOR<ApplicationDowngradedUpdateManyMutationInput, ApplicationDowngradedUncheckedUpdateManyInput>
+        /**
+         * Filter which ApplicationDowngradeds to update
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * Limit how many ApplicationDowngradeds to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ApplicationDowngraded upsert
+     */
+    export type ApplicationDowngradedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ApplicationDowngraded to update in case it exists.
+         */
+        where: ApplicationDowngradedWhereUniqueInput
+        /**
+         * In case the ApplicationDowngraded found by the `where` argument doesn't exist, create a new ApplicationDowngraded with this data.
+         */
+        create: XOR<ApplicationDowngradedCreateInput, ApplicationDowngradedUncheckedCreateInput>
+        /**
+         * In case the ApplicationDowngraded was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ApplicationDowngradedUpdateInput, ApplicationDowngradedUncheckedUpdateInput>
+    };
+    /**
+     * ApplicationDowngraded delete
+     */
+    export type ApplicationDowngradedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        /**
+         * Filter which ApplicationDowngraded to delete.
+         */
+        where: ApplicationDowngradedWhereUniqueInput
+    };
+    /**
+     * ApplicationDowngraded deleteMany
+     */
+    export type ApplicationDowngradedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ApplicationDowngradeds to delete
+         */
+        where?: ApplicationDowngradedWhereInput
+        /**
+         * Limit how many ApplicationDowngradeds to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ApplicationDowngraded.conditions
+     */
+    export type ApplicationDowngraded$conditionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the GraduationRankDowngradeCondition
+         */
+        select?: GraduationRankDowngradeConditionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the GraduationRankDowngradeCondition
+         */
+        omit?: GraduationRankDowngradeConditionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: GraduationRankDowngradeConditionInclude<ExtArgs> | null
+        where?: GraduationRankDowngradeConditionWhereInput
+        orderBy?: GraduationRankDowngradeConditionOrderByWithRelationInput | GraduationRankDowngradeConditionOrderByWithRelationInput[]
+        cursor?: GraduationRankDowngradeConditionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: GraduationRankDowngradeConditionScalarFieldEnum | GraduationRankDowngradeConditionScalarFieldEnum[]
+    };
+    /**
+     * ApplicationDowngraded without action
+     */
+    export type ApplicationDowngradedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
     };
     /**
      * Model ApplicationCheckResult
@@ -294784,6 +296036,7 @@ export namespace Prisma {
         downgradeRules?: boolean | AcademicRankingConvert$downgradeRulesArgs<ExtArgs>
         graduationDecision?: boolean | AcademicRankingConvert$graduationDecisionArgs<ExtArgs>
         studentGraduationApplication?: boolean | AcademicRankingConvert$studentGraduationApplicationArgs<ExtArgs>
+        applicationDowngraded?: boolean | AcademicRankingConvert$applicationDowngradedArgs<ExtArgs>
         _count?: boolean | AcademicRankingConvertCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["academicRankingConvert"]>;
     export type AcademicRankingConvertSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -294852,6 +296105,7 @@ export namespace Prisma {
         downgradeRules?: boolean | AcademicRankingConvert$downgradeRulesArgs<ExtArgs>
         graduationDecision?: boolean | AcademicRankingConvert$graduationDecisionArgs<ExtArgs>
         studentGraduationApplication?: boolean | AcademicRankingConvert$studentGraduationApplicationArgs<ExtArgs>
+        applicationDowngraded?: boolean | AcademicRankingConvert$applicationDowngradedArgs<ExtArgs>
         _count?: boolean | AcademicRankingConvertCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type AcademicRankingConvertIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -294868,6 +296122,7 @@ export namespace Prisma {
             downgradeRules: Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>[]
             graduationDecision: Prisma.$GraduationDecisionPayload<ExtArgs>[]
             studentGraduationApplication: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
+            applicationDowngraded: Prisma.$ApplicationDowngradedPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -295362,6 +296617,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentGraduationApplicationScalarFieldEnum | StudentGraduationApplicationScalarFieldEnum[]
+    };
+    /**
+     * AcademicRankingConvert.applicationDowngraded
+     */
+    export type AcademicRankingConvert$applicationDowngradedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        where?: ApplicationDowngradedWhereInput
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ApplicationDowngradedScalarFieldEnum | ApplicationDowngradedScalarFieldEnum[]
     };
     /**
      * AcademicRankingConvert without action
@@ -296274,6 +297552,8 @@ export namespace Prisma {
         value?: boolean
         tuple?: boolean
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        applicationDowngraded?: boolean | GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>
+        _count?: boolean | GraduationRankDowngradeConditionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["graduationRankDowngradeCondition"]>;
     export type GraduationRankDowngradeConditionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -296325,6 +297605,8 @@ export namespace Prisma {
     export type GraduationRankDowngradeConditionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "downgradeRuleId" | "field" | "operator" | "invert" | "value" | "tuple", ExtArgs["result"]["graduationRankDowngradeCondition"]>;
     export type GraduationRankDowngradeConditionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
+        applicationDowngraded?: boolean | GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs>
+        _count?: boolean | GraduationRankDowngradeConditionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type GraduationRankDowngradeConditionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         downgradeRule?: boolean | GraduationRankDowngradeRuleDefaultArgs<ExtArgs>
@@ -296336,6 +297618,7 @@ export namespace Prisma {
         name: "GraduationRankDowngradeCondition"
         objects: {
             downgradeRule: Prisma.$GraduationRankDowngradeRulePayload<ExtArgs>
+            applicationDowngraded: Prisma.$ApplicationDowngradedPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -296734,6 +298017,29 @@ export namespace Prisma {
          * Limit how many GraduationRankDowngradeConditions to delete.
          */
         limit?: number
+    };
+    /**
+     * GraduationRankDowngradeCondition.applicationDowngraded
+     */
+    export type GraduationRankDowngradeCondition$applicationDowngradedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ApplicationDowngraded
+         */
+        select?: ApplicationDowngradedSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ApplicationDowngraded
+         */
+        omit?: ApplicationDowngradedOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ApplicationDowngradedInclude<ExtArgs> | null
+        where?: ApplicationDowngradedWhereInput
+        orderBy?: ApplicationDowngradedOrderByWithRelationInput | ApplicationDowngradedOrderByWithRelationInput[]
+        cursor?: ApplicationDowngradedWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ApplicationDowngradedScalarFieldEnum | ApplicationDowngradedScalarFieldEnum[]
     };
     /**
      * GraduationRankDowngradeCondition without action
@@ -323515,6 +324821,7 @@ export namespace Prisma {
     export type ScholarshipAwardScalarFieldEnum = (typeof ScholarshipAwardScalarFieldEnum)[keyof typeof ScholarshipAwardScalarFieldEnum];
     export type GraduationSessionScalarFieldEnum = (typeof GraduationSessionScalarFieldEnum)[keyof typeof GraduationSessionScalarFieldEnum];
     export type StudentGraduationApplicationScalarFieldEnum = (typeof StudentGraduationApplicationScalarFieldEnum)[keyof typeof StudentGraduationApplicationScalarFieldEnum];
+    export type ApplicationDowngradedScalarFieldEnum = (typeof ApplicationDowngradedScalarFieldEnum)[keyof typeof ApplicationDowngradedScalarFieldEnum];
     export type ApplicationCheckResultScalarFieldEnum = (typeof ApplicationCheckResultScalarFieldEnum)[keyof typeof ApplicationCheckResultScalarFieldEnum];
     export type GraduationDecisionScalarFieldEnum = (typeof GraduationDecisionScalarFieldEnum)[keyof typeof GraduationDecisionScalarFieldEnum];
     export type AcademicRankingConvertScalarFieldEnum = (typeof AcademicRankingConvertScalarFieldEnum)[keyof typeof AcademicRankingConvertScalarFieldEnum];
@@ -323769,6 +325076,7 @@ export namespace Prisma {
     export type ScholarshipAwardOrderByRelevanceFieldEnum = (typeof ScholarshipAwardOrderByRelevanceFieldEnum)[keyof typeof ScholarshipAwardOrderByRelevanceFieldEnum];
     export type GraduationSessionOrderByRelevanceFieldEnum = (typeof GraduationSessionOrderByRelevanceFieldEnum)[keyof typeof GraduationSessionOrderByRelevanceFieldEnum];
     export type StudentGraduationApplicationOrderByRelevanceFieldEnum = (typeof StudentGraduationApplicationOrderByRelevanceFieldEnum)[keyof typeof StudentGraduationApplicationOrderByRelevanceFieldEnum];
+    export type ApplicationDowngradedOrderByRelevanceFieldEnum = (typeof ApplicationDowngradedOrderByRelevanceFieldEnum)[keyof typeof ApplicationDowngradedOrderByRelevanceFieldEnum];
     export type ApplicationCheckResultOrderByRelevanceFieldEnum = (typeof ApplicationCheckResultOrderByRelevanceFieldEnum)[keyof typeof ApplicationCheckResultOrderByRelevanceFieldEnum];
     export type GraduationDecisionOrderByRelevanceFieldEnum = (typeof GraduationDecisionOrderByRelevanceFieldEnum)[keyof typeof GraduationDecisionOrderByRelevanceFieldEnum];
     export type AcademicRankingConvertOrderByRelevanceFieldEnum = (typeof AcademicRankingConvertOrderByRelevanceFieldEnum)[keyof typeof AcademicRankingConvertOrderByRelevanceFieldEnum];
@@ -345586,6 +346894,7 @@ export namespace Prisma {
         diplomaTypeId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
+        downgraded?: XOR<ApplicationDowngradedNullableScalarRelationFilter, ApplicationDowngradedWhereInput> | null
         rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
         trainingMajor?: XOR<TrainingMajorNullableScalarRelationFilter, TrainingMajorWhereInput> | null
         diplomaType?: XOR<DiplomaTypeNullableScalarRelationFilter, DiplomaTypeWhereInput> | null
@@ -345614,6 +346923,7 @@ export namespace Prisma {
         diplomaTypeId?: SortOrderInput | SortOrder
         student?: StudentOrderByWithRelationInput
         session?: GraduationSessionOrderByWithRelationInput
+        downgraded?: ApplicationDowngradedOrderByWithRelationInput
         rank?: AcademicRankingConvertOrderByWithRelationInput
         trainingMajor?: TrainingMajorOrderByWithRelationInput
         diplomaType?: DiplomaTypeOrderByWithRelationInput
@@ -345647,6 +346957,7 @@ export namespace Prisma {
         diplomaTypeId?: StringNullableFilter<"StudentGraduationApplication"> | string | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
+        downgraded?: XOR<ApplicationDowngradedNullableScalarRelationFilter, ApplicationDowngradedWhereInput> | null
         rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
         trainingMajor?: XOR<TrainingMajorNullableScalarRelationFilter, TrainingMajorWhereInput> | null
         diplomaType?: XOR<DiplomaTypeNullableScalarRelationFilter, DiplomaTypeWhereInput> | null
@@ -345700,6 +347011,83 @@ export namespace Prisma {
         rankId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
         trainingMajorId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
         diplomaTypeId?: StringNullableWithAggregatesFilter<"StudentGraduationApplication"> | string | null
+    };
+    export type ApplicationDowngradedWhereInput = {
+        AND?: ApplicationDowngradedWhereInput | ApplicationDowngradedWhereInput[]
+        OR?: ApplicationDowngradedWhereInput[]
+        NOT?: ApplicationDowngradedWhereInput | ApplicationDowngradedWhereInput[]
+        id?: StringFilter<"ApplicationDowngraded"> | string
+        code?: StringNullableFilter<"ApplicationDowngraded"> | string | null
+        active?: BoolFilter<"ApplicationDowngraded"> | boolean
+        description?: StringNullableFilter<"ApplicationDowngraded"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ApplicationDowngraded"> | Date | string | null
+        createdAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        updatedAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        studentGraduationApplicationId?: StringFilter<"ApplicationDowngraded"> | string
+        fromId?: StringFilter<"ApplicationDowngraded"> | string
+        studentGraduationApplication?: XOR<StudentGraduationApplicationScalarRelationFilter, StudentGraduationApplicationWhereInput>
+        from?: XOR<AcademicRankingConvertScalarRelationFilter, AcademicRankingConvertWhereInput>
+        conditions?: GraduationRankDowngradeConditionListRelationFilter
+    };
+    export type ApplicationDowngradedOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentGraduationApplicationId?: SortOrder
+        fromId?: SortOrder
+        studentGraduationApplication?: StudentGraduationApplicationOrderByWithRelationInput
+        from?: AcademicRankingConvertOrderByWithRelationInput
+        conditions?: GraduationRankDowngradeConditionOrderByRelationAggregateInput
+        _relevance?: ApplicationDowngradedOrderByRelevanceInput
+    };
+    export type ApplicationDowngradedWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        studentGraduationApplicationId?: string
+        AND?: ApplicationDowngradedWhereInput | ApplicationDowngradedWhereInput[]
+        OR?: ApplicationDowngradedWhereInput[]
+        NOT?: ApplicationDowngradedWhereInput | ApplicationDowngradedWhereInput[]
+        active?: BoolFilter<"ApplicationDowngraded"> | boolean
+        description?: StringNullableFilter<"ApplicationDowngraded"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ApplicationDowngraded"> | Date | string | null
+        createdAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        updatedAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        fromId?: StringFilter<"ApplicationDowngraded"> | string
+        studentGraduationApplication?: XOR<StudentGraduationApplicationScalarRelationFilter, StudentGraduationApplicationWhereInput>
+        from?: XOR<AcademicRankingConvertScalarRelationFilter, AcademicRankingConvertWhereInput>
+        conditions?: GraduationRankDowngradeConditionListRelationFilter
+    }, "id" | "code" | "studentGraduationApplicationId">;
+    export type ApplicationDowngradedOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentGraduationApplicationId?: SortOrder
+        fromId?: SortOrder
+        _count?: ApplicationDowngradedCountOrderByAggregateInput
+        _max?: ApplicationDowngradedMaxOrderByAggregateInput
+        _min?: ApplicationDowngradedMinOrderByAggregateInput
+    };
+    export type ApplicationDowngradedScalarWhereWithAggregatesInput = {
+        AND?: ApplicationDowngradedScalarWhereWithAggregatesInput | ApplicationDowngradedScalarWhereWithAggregatesInput[]
+        OR?: ApplicationDowngradedScalarWhereWithAggregatesInput[]
+        NOT?: ApplicationDowngradedScalarWhereWithAggregatesInput | ApplicationDowngradedScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ApplicationDowngraded"> | string
+        code?: StringNullableWithAggregatesFilter<"ApplicationDowngraded"> | string | null
+        active?: BoolWithAggregatesFilter<"ApplicationDowngraded"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ApplicationDowngraded"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ApplicationDowngraded"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ApplicationDowngraded"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ApplicationDowngraded"> | Date | string
+        studentGraduationApplicationId?: StringWithAggregatesFilter<"ApplicationDowngraded"> | string
+        fromId?: StringWithAggregatesFilter<"ApplicationDowngraded"> | string
     };
     export type ApplicationCheckResultWhereInput = {
         AND?: ApplicationCheckResultWhereInput | ApplicationCheckResultWhereInput[]
@@ -345955,6 +347343,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleListRelationFilter
         graduationDecision?: GraduationDecisionListRelationFilter
         studentGraduationApplication?: StudentGraduationApplicationListRelationFilter
+        applicationDowngraded?: ApplicationDowngradedListRelationFilter
     };
     export type AcademicRankingConvertOrderByWithRelationInput = {
         id?: SortOrder
@@ -345979,6 +347368,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleOrderByRelationAggregateInput
         graduationDecision?: GraduationDecisionOrderByRelationAggregateInput
         studentGraduationApplication?: StudentGraduationApplicationOrderByRelationAggregateInput
+        applicationDowngraded?: ApplicationDowngradedOrderByRelationAggregateInput
         _relevance?: AcademicRankingConvertOrderByRelevanceInput
     };
     export type AcademicRankingConvertWhereUniqueInput = Prisma.AtLeast<{
@@ -346008,6 +347398,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleListRelationFilter
         graduationDecision?: GraduationDecisionListRelationFilter
         studentGraduationApplication?: StudentGraduationApplicationListRelationFilter
+        applicationDowngraded?: ApplicationDowngradedListRelationFilter
     }, "id" | "code" | "trainingCourseId_context_rankOrder">;
     export type AcademicRankingConvertOrderByWithAggregationInput = {
         id?: SortOrder
@@ -346142,6 +347533,7 @@ export namespace Prisma {
         value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
         tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
         downgradeRule?: XOR<GraduationRankDowngradeRuleScalarRelationFilter, GraduationRankDowngradeRuleWhereInput>
+        applicationDowngraded?: ApplicationDowngradedListRelationFilter
     };
     export type GraduationRankDowngradeConditionOrderByWithRelationInput = {
         id?: SortOrder
@@ -346158,6 +347550,7 @@ export namespace Prisma {
         value?: SortOrder
         tuple?: SortOrder
         downgradeRule?: GraduationRankDowngradeRuleOrderByWithRelationInput
+        applicationDowngraded?: ApplicationDowngradedOrderByRelationAggregateInput
         _relevance?: GraduationRankDowngradeConditionOrderByRelevanceInput
     };
     export type GraduationRankDowngradeConditionWhereUniqueInput = Prisma.AtLeast<{
@@ -346178,6 +347571,7 @@ export namespace Prisma {
         value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
         tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
         downgradeRule?: XOR<GraduationRankDowngradeRuleScalarRelationFilter, GraduationRankDowngradeRuleWhereInput>
+        applicationDowngraded?: ApplicationDowngradedListRelationFilter
     }, "id" | "code">;
     export type GraduationRankDowngradeConditionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -373149,6 +374543,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -373175,6 +374570,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -373195,6 +374591,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -373221,6 +374618,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -373277,6 +374675,85 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ApplicationDowngradedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplication: StudentGraduationApplicationCreateNestedOneWithoutDowngradedInput
+        from: AcademicRankingConvertCreateNestedOneWithoutApplicationDowngradedInput
+        conditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplicationId: string
+        fromId: string
+        conditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplication?: StudentGraduationApplicationUpdateOneRequiredWithoutDowngradedNestedInput
+        from?: AcademicRankingConvertUpdateOneRequiredWithoutApplicationDowngradedNestedInput
+        conditions?: GraduationRankDowngradeConditionUpdateManyWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
+        fromId?: StringFieldUpdateOperationsInput | string
+        conditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplicationId: string
+        fromId: string
+    };
+    export type ApplicationDowngradedUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type ApplicationDowngradedUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
+        fromId?: StringFieldUpdateOperationsInput | string
     };
     export type ApplicationCheckResultCreateInput = {
         id?: string
@@ -373539,6 +375016,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateInput = {
         id?: string
@@ -373562,6 +375040,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373585,6 +375064,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373608,6 +375088,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertCreateManyInput = {
         id?: string
@@ -373752,6 +375233,7 @@ export namespace Prisma {
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
         downgradeRule: GraduationRankDowngradeRuleCreateNestedOneWithoutConditionsInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionUncheckedCreateInput = {
         id?: string
@@ -373767,6 +375249,7 @@ export namespace Prisma {
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373782,6 +375265,7 @@ export namespace Prisma {
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
         downgradeRule?: GraduationRankDowngradeRuleUpdateOneRequiredWithoutConditionsNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373797,6 +375281,7 @@ export namespace Prisma {
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionCreateManyInput = {
         id?: string
@@ -391953,6 +393438,10 @@ export namespace Prisma {
         is?: GraduationSessionWhereInput
         isNot?: GraduationSessionWhereInput
     };
+    export type ApplicationDowngradedNullableScalarRelationFilter = {
+        is?: ApplicationDowngradedWhereInput | null
+        isNot?: ApplicationDowngradedWhereInput | null
+    };
     export type AcademicRankingConvertNullableScalarRelationFilter = {
         is?: AcademicRankingConvertWhereInput | null
         isNot?: AcademicRankingConvertWhereInput | null
@@ -392054,6 +393543,56 @@ export namespace Prisma {
         is?: StudentGraduationApplicationWhereInput
         isNot?: StudentGraduationApplicationWhereInput
     };
+    export type AcademicRankingConvertScalarRelationFilter = {
+        is?: AcademicRankingConvertWhereInput
+        isNot?: AcademicRankingConvertWhereInput
+    };
+    export type GraduationRankDowngradeConditionListRelationFilter = {
+        every?: GraduationRankDowngradeConditionWhereInput
+        some?: GraduationRankDowngradeConditionWhereInput
+        none?: GraduationRankDowngradeConditionWhereInput
+    };
+    export type GraduationRankDowngradeConditionOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ApplicationDowngradedOrderByRelevanceInput = {
+        fields: ApplicationDowngradedOrderByRelevanceFieldEnum | ApplicationDowngradedOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ApplicationDowngradedCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentGraduationApplicationId?: SortOrder
+        fromId?: SortOrder
+    };
+    export type ApplicationDowngradedMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentGraduationApplicationId?: SortOrder
+        fromId?: SortOrder
+    };
+    export type ApplicationDowngradedMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentGraduationApplicationId?: SortOrder
+        fromId?: SortOrder
+    };
     export type RankingConditionScalarRelationFilter = {
         is?: RankingConditionWhereInput
         isNot?: RankingConditionWhereInput
@@ -392111,10 +393650,6 @@ export namespace Prisma {
     };
     export type ApplicationCheckResultSumOrderByAggregateInput = {
         actualValue?: SortOrder
-    };
-    export type AcademicRankingConvertScalarRelationFilter = {
-        is?: AcademicRankingConvertWhereInput
-        isNot?: AcademicRankingConvertWhereInput
     };
     export type DocumentFileNullableScalarRelationFilter = {
         is?: DocumentFileWhereInput | null
@@ -392212,10 +393747,18 @@ export namespace Prisma {
         some?: GraduationRankDowngradeRuleWhereInput
         none?: GraduationRankDowngradeRuleWhereInput
     };
+    export type ApplicationDowngradedListRelationFilter = {
+        every?: ApplicationDowngradedWhereInput
+        some?: ApplicationDowngradedWhereInput
+        none?: ApplicationDowngradedWhereInput
+    };
     export type RankingConditionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type GraduationRankDowngradeRuleOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ApplicationDowngradedOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type AcademicRankingConvertOrderByRelevanceInput = {
@@ -392307,14 +393850,6 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumRankingContextFilter<$PrismaModel>
         _max?: NestedEnumRankingContextFilter<$PrismaModel>
-    };
-    export type GraduationRankDowngradeConditionListRelationFilter = {
-        every?: GraduationRankDowngradeConditionWhereInput
-        some?: GraduationRankDowngradeConditionWhereInput
-        none?: GraduationRankDowngradeConditionWhereInput
-    };
-    export type GraduationRankDowngradeConditionOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type GraduationRankDowngradeRuleOrderByRelevanceInput = {
         fields: GraduationRankDowngradeRuleOrderByRelevanceFieldEnum | GraduationRankDowngradeRuleOrderByRelevanceFieldEnum[]
@@ -413988,6 +415523,11 @@ export namespace Prisma {
         connectOrCreate?: GraduationSessionCreateOrConnectWithoutApplicationsInput
         connect?: GraduationSessionWhereUniqueInput
     };
+    export type ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutStudentGraduationApplicationInput
+        connect?: ApplicationDowngradedWhereUniqueInput
+    };
     export type AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput = {
         create?: XOR<AcademicRankingConvertCreateWithoutStudentGraduationApplicationInput, AcademicRankingConvertUncheckedCreateWithoutStudentGraduationApplicationInput>
         connectOrCreate?: AcademicRankingConvertCreateOrConnectWithoutStudentGraduationApplicationInput
@@ -414023,6 +415563,11 @@ export namespace Prisma {
         create?: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
         connectOrCreate?: GraduationDecisionCreateOrConnectWithoutApplicationInput
         connect?: GraduationDecisionWhereUniqueInput
+    };
+    export type ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutStudentGraduationApplicationInput
+        connect?: ApplicationDowngradedWhereUniqueInput
     };
     export type ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput = {
         create?: XOR<ApplicationCheckResultCreateWithoutStudentGraduationApplicationInput, ApplicationCheckResultUncheckedCreateWithoutStudentGraduationApplicationInput> | ApplicationCheckResultCreateWithoutStudentGraduationApplicationInput[] | ApplicationCheckResultUncheckedCreateWithoutStudentGraduationApplicationInput[]
@@ -414061,6 +415606,15 @@ export namespace Prisma {
         upsert?: GraduationSessionUpsertWithoutApplicationsInput
         connect?: GraduationSessionWhereUniqueInput
         update?: XOR<XOR<GraduationSessionUpdateToOneWithWhereWithoutApplicationsInput, GraduationSessionUpdateWithoutApplicationsInput>, GraduationSessionUncheckedUpdateWithoutApplicationsInput>
+    };
+    export type ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutStudentGraduationApplicationInput
+        upsert?: ApplicationDowngradedUpsertWithoutStudentGraduationApplicationInput
+        disconnect?: ApplicationDowngradedWhereInput | boolean
+        delete?: ApplicationDowngradedWhereInput | boolean
+        connect?: ApplicationDowngradedWhereUniqueInput
+        update?: XOR<XOR<ApplicationDowngradedUpdateToOneWithWhereWithoutStudentGraduationApplicationInput, ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput>, ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput>
     };
     export type AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput = {
         create?: XOR<AcademicRankingConvertCreateWithoutStudentGraduationApplicationInput, AcademicRankingConvertUncheckedCreateWithoutStudentGraduationApplicationInput>
@@ -414135,6 +415689,15 @@ export namespace Prisma {
         connect?: GraduationDecisionWhereUniqueInput
         update?: XOR<XOR<GraduationDecisionUpdateToOneWithWhereWithoutApplicationInput, GraduationDecisionUpdateWithoutApplicationInput>, GraduationDecisionUncheckedUpdateWithoutApplicationInput>
     };
+    export type ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutStudentGraduationApplicationInput
+        upsert?: ApplicationDowngradedUpsertWithoutStudentGraduationApplicationInput
+        disconnect?: ApplicationDowngradedWhereInput | boolean
+        delete?: ApplicationDowngradedWhereInput | boolean
+        connect?: ApplicationDowngradedWhereUniqueInput
+        update?: XOR<XOR<ApplicationDowngradedUpdateToOneWithWhereWithoutStudentGraduationApplicationInput, ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput>, ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput>
+    };
     export type ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput = {
         create?: XOR<ApplicationCheckResultCreateWithoutStudentGraduationApplicationInput, ApplicationCheckResultUncheckedCreateWithoutStudentGraduationApplicationInput> | ApplicationCheckResultCreateWithoutStudentGraduationApplicationInput[] | ApplicationCheckResultUncheckedCreateWithoutStudentGraduationApplicationInput[]
         connectOrCreate?: ApplicationCheckResultCreateOrConnectWithoutStudentGraduationApplicationInput | ApplicationCheckResultCreateOrConnectWithoutStudentGraduationApplicationInput[]
@@ -414180,6 +415743,64 @@ export namespace Prisma {
         delete?: GraduationDecisionWhereInput | boolean
         connect?: GraduationDecisionWhereUniqueInput
         update?: XOR<XOR<GraduationDecisionUpdateToOneWithWhereWithoutApplicationInput, GraduationDecisionUpdateWithoutApplicationInput>, GraduationDecisionUncheckedUpdateWithoutApplicationInput>
+    };
+    export type StudentGraduationApplicationCreateNestedOneWithoutDowngradedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutDowngradedInput, StudentGraduationApplicationUncheckedCreateWithoutDowngradedInput>
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutDowngradedInput
+        connect?: StudentGraduationApplicationWhereUniqueInput
+    };
+    export type AcademicRankingConvertCreateNestedOneWithoutApplicationDowngradedInput = {
+        create?: XOR<AcademicRankingConvertCreateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedCreateWithoutApplicationDowngradedInput>
+        connectOrCreate?: AcademicRankingConvertCreateOrConnectWithoutApplicationDowngradedInput
+        connect?: AcademicRankingConvertWhereUniqueInput
+    };
+    export type GraduationRankDowngradeConditionCreateNestedManyWithoutApplicationDowngradedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput> | GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+    };
+    export type GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutApplicationDowngradedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput> | GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+    };
+    export type StudentGraduationApplicationUpdateOneRequiredWithoutDowngradedNestedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutDowngradedInput, StudentGraduationApplicationUncheckedCreateWithoutDowngradedInput>
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutDowngradedInput
+        upsert?: StudentGraduationApplicationUpsertWithoutDowngradedInput
+        connect?: StudentGraduationApplicationWhereUniqueInput
+        update?: XOR<XOR<StudentGraduationApplicationUpdateToOneWithWhereWithoutDowngradedInput, StudentGraduationApplicationUpdateWithoutDowngradedInput>, StudentGraduationApplicationUncheckedUpdateWithoutDowngradedInput>
+    };
+    export type AcademicRankingConvertUpdateOneRequiredWithoutApplicationDowngradedNestedInput = {
+        create?: XOR<AcademicRankingConvertCreateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedCreateWithoutApplicationDowngradedInput>
+        connectOrCreate?: AcademicRankingConvertCreateOrConnectWithoutApplicationDowngradedInput
+        upsert?: AcademicRankingConvertUpsertWithoutApplicationDowngradedInput
+        connect?: AcademicRankingConvertWhereUniqueInput
+        update?: XOR<XOR<AcademicRankingConvertUpdateToOneWithWhereWithoutApplicationDowngradedInput, AcademicRankingConvertUpdateWithoutApplicationDowngradedInput>, AcademicRankingConvertUncheckedUpdateWithoutApplicationDowngradedInput>
+    };
+    export type GraduationRankDowngradeConditionUpdateManyWithoutApplicationDowngradedNestedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput> | GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput[]
+        upsert?: GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutApplicationDowngradedInput[]
+        set?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        disconnect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        delete?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        update?: GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutApplicationDowngradedInput[]
+        updateMany?: GraduationRankDowngradeConditionUpdateManyWithWhereWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpdateManyWithWhereWithoutApplicationDowngradedInput[]
+        deleteMany?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedNestedInput = {
+        create?: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput> | GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput[] | GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput[]
+        connectOrCreate?: GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput[]
+        upsert?: GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutApplicationDowngradedInput[]
+        set?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        disconnect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        delete?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        connect?: GraduationRankDowngradeConditionWhereUniqueInput | GraduationRankDowngradeConditionWhereUniqueInput[]
+        update?: GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutApplicationDowngradedInput[]
+        updateMany?: GraduationRankDowngradeConditionUpdateManyWithWhereWithoutApplicationDowngradedInput | GraduationRankDowngradeConditionUpdateManyWithWhereWithoutApplicationDowngradedInput[]
+        deleteMany?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
     };
     export type StudentGraduationApplicationCreateNestedOneWithoutApplicationCheckResultInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutApplicationCheckResultInput, StudentGraduationApplicationUncheckedCreateWithoutApplicationCheckResultInput>
@@ -414354,6 +415975,12 @@ export namespace Prisma {
         createMany?: StudentGraduationApplicationCreateManyRankInputEnvelope
         connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
     };
+    export type ApplicationDowngradedCreateNestedManyWithoutFromInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput> | ApplicationDowngradedCreateWithoutFromInput[] | ApplicationDowngradedUncheckedCreateWithoutFromInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutFromInput | ApplicationDowngradedCreateOrConnectWithoutFromInput[]
+        createMany?: ApplicationDowngradedCreateManyFromInputEnvelope
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+    };
     export type RankingConditionUncheckedCreateNestedManyWithoutRankingInput = {
         create?: XOR<RankingConditionCreateWithoutRankingInput, RankingConditionUncheckedCreateWithoutRankingInput> | RankingConditionCreateWithoutRankingInput[] | RankingConditionUncheckedCreateWithoutRankingInput[]
         connectOrCreate?: RankingConditionCreateOrConnectWithoutRankingInput | RankingConditionCreateOrConnectWithoutRankingInput[]
@@ -414377,6 +416004,12 @@ export namespace Prisma {
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutRankInput | StudentGraduationApplicationCreateOrConnectWithoutRankInput[]
         createMany?: StudentGraduationApplicationCreateManyRankInputEnvelope
         connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+    };
+    export type ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput> | ApplicationDowngradedCreateWithoutFromInput[] | ApplicationDowngradedUncheckedCreateWithoutFromInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutFromInput | ApplicationDowngradedCreateOrConnectWithoutFromInput[]
+        createMany?: ApplicationDowngradedCreateManyFromInputEnvelope
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
     };
     export type EnumRankingContextFieldUpdateOperationsInput = {
         set?: $Enums.RankingContext
@@ -414440,6 +416073,19 @@ export namespace Prisma {
         updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutRankInput | StudentGraduationApplicationUpdateManyWithWhereWithoutRankInput[]
         deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
     };
+    export type ApplicationDowngradedUpdateManyWithoutFromNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput> | ApplicationDowngradedCreateWithoutFromInput[] | ApplicationDowngradedUncheckedCreateWithoutFromInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutFromInput | ApplicationDowngradedCreateOrConnectWithoutFromInput[]
+        upsert?: ApplicationDowngradedUpsertWithWhereUniqueWithoutFromInput | ApplicationDowngradedUpsertWithWhereUniqueWithoutFromInput[]
+        createMany?: ApplicationDowngradedCreateManyFromInputEnvelope
+        set?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        disconnect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        delete?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        update?: ApplicationDowngradedUpdateWithWhereUniqueWithoutFromInput | ApplicationDowngradedUpdateWithWhereUniqueWithoutFromInput[]
+        updateMany?: ApplicationDowngradedUpdateManyWithWhereWithoutFromInput | ApplicationDowngradedUpdateManyWithWhereWithoutFromInput[]
+        deleteMany?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
+    };
     export type RankingConditionUncheckedUpdateManyWithoutRankingNestedInput = {
         create?: XOR<RankingConditionCreateWithoutRankingInput, RankingConditionUncheckedCreateWithoutRankingInput> | RankingConditionCreateWithoutRankingInput[] | RankingConditionUncheckedCreateWithoutRankingInput[]
         connectOrCreate?: RankingConditionCreateOrConnectWithoutRankingInput | RankingConditionCreateOrConnectWithoutRankingInput[]
@@ -414491,6 +416137,19 @@ export namespace Prisma {
         update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutRankInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutRankInput[]
         updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutRankInput | StudentGraduationApplicationUpdateManyWithWhereWithoutRankInput[]
         deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+    };
+    export type ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput> | ApplicationDowngradedCreateWithoutFromInput[] | ApplicationDowngradedUncheckedCreateWithoutFromInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutFromInput | ApplicationDowngradedCreateOrConnectWithoutFromInput[]
+        upsert?: ApplicationDowngradedUpsertWithWhereUniqueWithoutFromInput | ApplicationDowngradedUpsertWithWhereUniqueWithoutFromInput[]
+        createMany?: ApplicationDowngradedCreateManyFromInputEnvelope
+        set?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        disconnect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        delete?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        update?: ApplicationDowngradedUpdateWithWhereUniqueWithoutFromInput | ApplicationDowngradedUpdateWithWhereUniqueWithoutFromInput[]
+        updateMany?: ApplicationDowngradedUpdateManyWithWhereWithoutFromInput | ApplicationDowngradedUpdateManyWithWhereWithoutFromInput[]
+        deleteMany?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
     };
     export type AcademicRankingConvertCreateNestedOneWithoutDowngradeRulesInput = {
         create?: XOR<AcademicRankingConvertCreateWithoutDowngradeRulesInput, AcademicRankingConvertUncheckedCreateWithoutDowngradeRulesInput>
@@ -414550,6 +416209,16 @@ export namespace Prisma {
         connectOrCreate?: GraduationRankDowngradeRuleCreateOrConnectWithoutConditionsInput
         connect?: GraduationRankDowngradeRuleWhereUniqueInput
     };
+    export type ApplicationDowngradedCreateNestedManyWithoutConditionsInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+    };
+    export type ApplicationDowngradedUncheckedCreateNestedManyWithoutConditionsInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+    };
     export type GraduationRankDowngradeConditionUpdatetupleInput = {
         set?: string[]
         push?: string | string[]
@@ -414560,6 +416229,30 @@ export namespace Prisma {
         upsert?: GraduationRankDowngradeRuleUpsertWithoutConditionsInput
         connect?: GraduationRankDowngradeRuleWhereUniqueInput
         update?: XOR<XOR<GraduationRankDowngradeRuleUpdateToOneWithWhereWithoutConditionsInput, GraduationRankDowngradeRuleUpdateWithoutConditionsInput>, GraduationRankDowngradeRuleUncheckedUpdateWithoutConditionsInput>
+    };
+    export type ApplicationDowngradedUpdateManyWithoutConditionsNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
+        upsert?: ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput | ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput[]
+        set?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        disconnect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        delete?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        update?: ApplicationDowngradedUpdateWithWhereUniqueWithoutConditionsInput | ApplicationDowngradedUpdateWithWhereUniqueWithoutConditionsInput[]
+        updateMany?: ApplicationDowngradedUpdateManyWithWhereWithoutConditionsInput | ApplicationDowngradedUpdateManyWithWhereWithoutConditionsInput[]
+        deleteMany?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
+    };
+    export type ApplicationDowngradedUncheckedUpdateManyWithoutConditionsNestedInput = {
+        create?: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput> | ApplicationDowngradedCreateWithoutConditionsInput[] | ApplicationDowngradedUncheckedCreateWithoutConditionsInput[]
+        connectOrCreate?: ApplicationDowngradedCreateOrConnectWithoutConditionsInput | ApplicationDowngradedCreateOrConnectWithoutConditionsInput[]
+        upsert?: ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput | ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput[]
+        set?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        disconnect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        delete?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        connect?: ApplicationDowngradedWhereUniqueInput | ApplicationDowngradedWhereUniqueInput[]
+        update?: ApplicationDowngradedUpdateWithWhereUniqueWithoutConditionsInput | ApplicationDowngradedUpdateWithWhereUniqueWithoutConditionsInput[]
+        updateMany?: ApplicationDowngradedUpdateManyWithWhereWithoutConditionsInput | ApplicationDowngradedUpdateManyWithWhereWithoutConditionsInput[]
+        deleteMany?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
     };
     export type RankingConditionCreatetupleInput = {
         set: string[]
@@ -460231,6 +461924,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -460256,6 +461950,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
@@ -460279,6 +461974,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -460304,6 +462000,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
@@ -465178,6 +466875,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -465200,6 +466898,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertCreateOrConnectWithoutTrainingCourseInput = {
         where: AcademicRankingConvertWhereUniqueInput
@@ -482542,6 +484241,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
@@ -482566,6 +484266,7 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -484402,6 +486103,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
@@ -484426,6 +486128,7 @@ export namespace Prisma {
         reason?: string | null
         rankId?: string | null
         trainingMajorId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -486065,6 +487768,7 @@ export namespace Prisma {
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -486090,6 +487794,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -515565,6 +517270,7 @@ export namespace Prisma {
         gpa?: Decimal | DecimalJsLike | number | string | null
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -515590,6 +517296,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -515857,6 +517564,32 @@ export namespace Prisma {
         where: GraduationSessionWhereUniqueInput
         create: XOR<GraduationSessionCreateWithoutApplicationsInput, GraduationSessionUncheckedCreateWithoutApplicationsInput>
     };
+    export type ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        from: AcademicRankingConvertCreateNestedOneWithoutApplicationDowngradedInput
+        conditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        fromId: string
+        conditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedCreateOrConnectWithoutStudentGraduationApplicationInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        create: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+    };
     export type AcademicRankingConvertCreateWithoutStudentGraduationApplicationInput = {
         id?: string
         code?: string | null
@@ -515878,6 +517611,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionCreateNestedManyWithoutRankingInput
         downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateWithoutStudentGraduationApplicationInput = {
         id?: string
@@ -515900,6 +517634,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedCreateNestedManyWithoutRankingInput
         downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertCreateOrConnectWithoutStudentGraduationApplicationInput = {
         where: AcademicRankingConvertWhereUniqueInput
@@ -516405,6 +518140,37 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         status?: EnumGraduationSessionStatusFieldUpdateOperationsInput | $Enums.GraduationSessionStatus
     };
+    export type ApplicationDowngradedUpsertWithoutStudentGraduationApplicationInput = {
+        update: XOR<ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput>
+        create: XOR<ApplicationDowngradedCreateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedCreateWithoutStudentGraduationApplicationInput>
+        where?: ApplicationDowngradedWhereInput
+    };
+    export type ApplicationDowngradedUpdateToOneWithWhereWithoutStudentGraduationApplicationInput = {
+        where?: ApplicationDowngradedWhereInput
+        data: XOR<ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput, ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput>
+    };
+    export type ApplicationDowngradedUpdateWithoutStudentGraduationApplicationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        from?: AcademicRankingConvertUpdateOneRequiredWithoutApplicationDowngradedNestedInput
+        conditions?: GraduationRankDowngradeConditionUpdateManyWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedUncheckedUpdateWithoutStudentGraduationApplicationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        fromId?: StringFieldUpdateOperationsInput | string
+        conditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedNestedInput
+    };
     export type AcademicRankingConvertUpsertWithoutStudentGraduationApplicationInput = {
         update: XOR<AcademicRankingConvertUpdateWithoutStudentGraduationApplicationInput, AcademicRankingConvertUncheckedUpdateWithoutStudentGraduationApplicationInput>
         create: XOR<AcademicRankingConvertCreateWithoutStudentGraduationApplicationInput, AcademicRankingConvertUncheckedCreateWithoutStudentGraduationApplicationInput>
@@ -516435,6 +518201,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUpdateManyWithoutRankingNestedInput
         downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateWithoutStudentGraduationApplicationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -516457,6 +518224,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedUpdateManyWithoutRankingNestedInput
         downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type TrainingMajorUpsertWithoutStudentGraduationApplicationInput = {
         update: XOR<TrainingMajorUpdateWithoutStudentGraduationApplicationInput, TrainingMajorUncheckedUpdateWithoutStudentGraduationApplicationInput>
@@ -516660,6 +518428,281 @@ export namespace Prisma {
         diplomaFront?: DocumentFileUncheckedUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: DocumentFileUncheckedUpdateOneWithoutDiplomaBackNestedInput
     };
+    export type StudentGraduationApplicationCreateWithoutDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        graduation?: boolean | null
+        gpa?: Decimal | DecimalJsLike | number | string | null
+        reason?: string | null
+        student: StudentCreateNestedOneWithoutGraduationApplicationsInput
+        session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
+        trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
+        diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
+        applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
+        decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationUncheckedCreateWithoutDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        sessionId: string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        graduation?: boolean | null
+        gpa?: Decimal | DecimalJsLike | number | string | null
+        reason?: string | null
+        rankId?: string | null
+        trainingMajorId?: string | null
+        diplomaTypeId?: string | null
+        applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
+        decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationCreateOrConnectWithoutDowngradedInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        create: XOR<StudentGraduationApplicationCreateWithoutDowngradedInput, StudentGraduationApplicationUncheckedCreateWithoutDowngradedInput>
+    };
+    export type AcademicRankingConvertCreateWithoutApplicationDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classification: string
+        context: $Enums.RankingContext
+        rankOrder: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
+        graduated: boolean
+        trainingCourse: TrainingCourseCreateNestedOneWithoutAcademicRankingConvertInput
+        rankingCondition?: RankingConditionCreateNestedManyWithoutRankingInput
+        downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
+        graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
+        studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+    };
+    export type AcademicRankingConvertUncheckedCreateWithoutApplicationDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classification: string
+        context: $Enums.RankingContext
+        rankOrder: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
+        graduated: boolean
+        trainingCourseId: string
+        rankingCondition?: RankingConditionUncheckedCreateNestedManyWithoutRankingInput
+        downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
+        studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+    };
+    export type AcademicRankingConvertCreateOrConnectWithoutApplicationDowngradedInput = {
+        where: AcademicRankingConvertWhereUniqueInput
+        create: XOR<AcademicRankingConvertCreateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedCreateWithoutApplicationDowngradedInput>
+    };
+    export type GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        field: $Enums.CriteriaField
+        operator: $Enums.CriteriaOperator
+        invert?: boolean
+        value: number
+        tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        downgradeRule: GraduationRankDowngradeRuleCreateNestedOneWithoutConditionsInput
+    };
+    export type GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        downgradeRuleId: string
+        field: $Enums.CriteriaField
+        operator: $Enums.CriteriaOperator
+        invert?: boolean
+        value: number
+        tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+    };
+    export type GraduationRankDowngradeConditionCreateOrConnectWithoutApplicationDowngradedInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        create: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput>
+    };
+    export type StudentGraduationApplicationUpsertWithoutDowngradedInput = {
+        update: XOR<StudentGraduationApplicationUpdateWithoutDowngradedInput, StudentGraduationApplicationUncheckedUpdateWithoutDowngradedInput>
+        create: XOR<StudentGraduationApplicationCreateWithoutDowngradedInput, StudentGraduationApplicationUncheckedCreateWithoutDowngradedInput>
+        where?: StudentGraduationApplicationWhereInput
+    };
+    export type StudentGraduationApplicationUpdateToOneWithWhereWithoutDowngradedInput = {
+        where?: StudentGraduationApplicationWhereInput
+        data: XOR<StudentGraduationApplicationUpdateWithoutDowngradedInput, StudentGraduationApplicationUncheckedUpdateWithoutDowngradedInput>
+    };
+    export type StudentGraduationApplicationUpdateWithoutDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
+        session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
+        trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
+        diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
+        applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
+        decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
+    };
+    export type StudentGraduationApplicationUncheckedUpdateWithoutDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        graduation?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
+        decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
+    };
+    export type AcademicRankingConvertUpsertWithoutApplicationDowngradedInput = {
+        update: XOR<AcademicRankingConvertUpdateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedUpdateWithoutApplicationDowngradedInput>
+        create: XOR<AcademicRankingConvertCreateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedCreateWithoutApplicationDowngradedInput>
+        where?: AcademicRankingConvertWhereInput
+    };
+    export type AcademicRankingConvertUpdateToOneWithWhereWithoutApplicationDowngradedInput = {
+        where?: AcademicRankingConvertWhereInput
+        data: XOR<AcademicRankingConvertUpdateWithoutApplicationDowngradedInput, AcademicRankingConvertUncheckedUpdateWithoutApplicationDowngradedInput>
+    };
+    export type AcademicRankingConvertUpdateWithoutApplicationDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classification?: StringFieldUpdateOperationsInput | string
+        context?: EnumRankingContextFieldUpdateOperationsInput | $Enums.RankingContext
+        rankOrder?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutAcademicRankingConvertNestedInput
+        rankingCondition?: RankingConditionUpdateManyWithoutRankingNestedInput
+        downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
+        graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
+        studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+    };
+    export type AcademicRankingConvertUncheckedUpdateWithoutApplicationDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classification?: StringFieldUpdateOperationsInput | string
+        context?: EnumRankingContextFieldUpdateOperationsInput | $Enums.RankingContext
+        rankOrder?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        rankingCondition?: RankingConditionUncheckedUpdateManyWithoutRankingNestedInput
+        downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
+        studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+    };
+    export type GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutApplicationDowngradedInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        update: XOR<GraduationRankDowngradeConditionUpdateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedUpdateWithoutApplicationDowngradedInput>
+        create: XOR<GraduationRankDowngradeConditionCreateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedCreateWithoutApplicationDowngradedInput>
+    };
+    export type GraduationRankDowngradeConditionUpdateWithWhereUniqueWithoutApplicationDowngradedInput = {
+        where: GraduationRankDowngradeConditionWhereUniqueInput
+        data: XOR<GraduationRankDowngradeConditionUpdateWithoutApplicationDowngradedInput, GraduationRankDowngradeConditionUncheckedUpdateWithoutApplicationDowngradedInput>
+    };
+    export type GraduationRankDowngradeConditionUpdateManyWithWhereWithoutApplicationDowngradedInput = {
+        where: GraduationRankDowngradeConditionScalarWhereInput
+        data: XOR<GraduationRankDowngradeConditionUpdateManyMutationInput, GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedInput>
+    };
+    export type GraduationRankDowngradeConditionScalarWhereInput = {
+        AND?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
+        OR?: GraduationRankDowngradeConditionScalarWhereInput[]
+        NOT?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
+        id?: StringFilter<"GraduationRankDowngradeCondition"> | string
+        code?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
+        active?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
+        description?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
+        deletedAt?: DateTimeNullableFilter<"GraduationRankDowngradeCondition"> | Date | string | null
+        createdAt?: DateTimeFilter<"GraduationRankDowngradeCondition"> | Date | string
+        updatedAt?: DateTimeFilter<"GraduationRankDowngradeCondition"> | Date | string
+        downgradeRuleId?: StringFilter<"GraduationRankDowngradeCondition"> | string
+        field?: EnumCriteriaFieldFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
+        operator?: EnumCriteriaOperatorFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
+        invert?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
+        value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
+        tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
+    };
     export type StudentGraduationApplicationCreateWithoutApplicationCheckResultInput = {
         id?: string
         code?: string | null
@@ -516675,6 +518718,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -516700,6 +518744,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
@@ -516766,6 +518811,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -516791,6 +518837,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
@@ -516849,6 +518896,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
@@ -516874,6 +518922,7 @@ export namespace Prisma {
         rankId?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -517103,6 +519152,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionCreateNestedManyWithoutRankingInput
         downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
         studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateWithoutGraduationDecisionInput = {
         id?: string
@@ -517125,6 +519175,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedCreateNestedManyWithoutRankingInput
         downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertCreateOrConnectWithoutGraduationDecisionInput = {
         where: AcademicRankingConvertWhereUniqueInput
@@ -517314,6 +519365,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -517339,6 +519391,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -517583,6 +519636,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUpdateManyWithoutRankingNestedInput
         downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateWithoutGraduationDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -517605,6 +519659,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedUpdateManyWithoutRankingNestedInput
         downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type DiplomaTypeUpsertWithoutGraduationDecisionInput = {
         update: XOR<DiplomaTypeUpdateWithoutGraduationDecisionInput, DiplomaTypeUncheckedUpdateWithoutGraduationDecisionInput>
@@ -518012,6 +520067,7 @@ export namespace Prisma {
         reason?: string | null
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        downgraded?: ApplicationDowngradedCreateNestedOneWithoutStudentGraduationApplicationInput
         trainingMajor?: TrainingMajorCreateNestedOneWithoutStudentGraduationApplicationInput
         diplomaType?: DiplomaTypeCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
@@ -518036,6 +520092,7 @@ export namespace Prisma {
         reason?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+        downgraded?: ApplicationDowngradedUncheckedCreateNestedOneWithoutStudentGraduationApplicationInput
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
         gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
         supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
@@ -518047,6 +520104,36 @@ export namespace Prisma {
     };
     export type StudentGraduationApplicationCreateManyRankInputEnvelope = {
         data: StudentGraduationApplicationCreateManyRankInput | StudentGraduationApplicationCreateManyRankInput[]
+        skipDuplicates?: boolean
+    };
+    export type ApplicationDowngradedCreateWithoutFromInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplication: StudentGraduationApplicationCreateNestedOneWithoutDowngradedInput
+        conditions?: GraduationRankDowngradeConditionCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedUncheckedCreateWithoutFromInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplicationId: string
+        conditions?: GraduationRankDowngradeConditionUncheckedCreateNestedManyWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedCreateOrConnectWithoutFromInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        create: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput>
+    };
+    export type ApplicationDowngradedCreateManyFromInputEnvelope = {
+        data: ApplicationDowngradedCreateManyFromInput | ApplicationDowngradedCreateManyFromInput[]
         skipDuplicates?: boolean
     };
     export type TrainingCourseUpsertWithoutAcademicRankingConvertInput = {
@@ -518235,6 +520322,33 @@ export namespace Prisma {
         where: StudentGraduationApplicationScalarWhereInput
         data: XOR<StudentGraduationApplicationUpdateManyMutationInput, StudentGraduationApplicationUncheckedUpdateManyWithoutRankInput>
     };
+    export type ApplicationDowngradedUpsertWithWhereUniqueWithoutFromInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        update: XOR<ApplicationDowngradedUpdateWithoutFromInput, ApplicationDowngradedUncheckedUpdateWithoutFromInput>
+        create: XOR<ApplicationDowngradedCreateWithoutFromInput, ApplicationDowngradedUncheckedCreateWithoutFromInput>
+    };
+    export type ApplicationDowngradedUpdateWithWhereUniqueWithoutFromInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        data: XOR<ApplicationDowngradedUpdateWithoutFromInput, ApplicationDowngradedUncheckedUpdateWithoutFromInput>
+    };
+    export type ApplicationDowngradedUpdateManyWithWhereWithoutFromInput = {
+        where: ApplicationDowngradedScalarWhereInput
+        data: XOR<ApplicationDowngradedUpdateManyMutationInput, ApplicationDowngradedUncheckedUpdateManyWithoutFromInput>
+    };
+    export type ApplicationDowngradedScalarWhereInput = {
+        AND?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
+        OR?: ApplicationDowngradedScalarWhereInput[]
+        NOT?: ApplicationDowngradedScalarWhereInput | ApplicationDowngradedScalarWhereInput[]
+        id?: StringFilter<"ApplicationDowngraded"> | string
+        code?: StringNullableFilter<"ApplicationDowngraded"> | string | null
+        active?: BoolFilter<"ApplicationDowngraded"> | boolean
+        description?: StringNullableFilter<"ApplicationDowngraded"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ApplicationDowngraded"> | Date | string | null
+        createdAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        updatedAt?: DateTimeFilter<"ApplicationDowngraded"> | Date | string
+        studentGraduationApplicationId?: StringFilter<"ApplicationDowngraded"> | string
+        fromId?: StringFilter<"ApplicationDowngraded"> | string
+    };
     export type AcademicRankingConvertCreateWithoutDowngradeRulesInput = {
         id?: string
         code?: string | null
@@ -518256,6 +520370,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionCreateNestedManyWithoutRankingInput
         graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateWithoutDowngradeRulesInput = {
         id?: string
@@ -518278,6 +520393,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedCreateNestedManyWithoutRankingInput
         graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertCreateOrConnectWithoutDowngradeRulesInput = {
         where: AcademicRankingConvertWhereUniqueInput
@@ -518296,6 +520412,7 @@ export namespace Prisma {
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionUncheckedCreateWithoutDowngradeRuleInput = {
         id?: string
@@ -518310,6 +520427,7 @@ export namespace Prisma {
         invert?: boolean
         value: number
         tuple?: GraduationRankDowngradeConditionCreatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutConditionsInput
     };
     export type GraduationRankDowngradeConditionCreateOrConnectWithoutDowngradeRuleInput = {
         where: GraduationRankDowngradeConditionWhereUniqueInput
@@ -518349,6 +520467,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUpdateManyWithoutRankingNestedInput
         graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateWithoutDowngradeRulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -518371,6 +520490,7 @@ export namespace Prisma {
         rankingCondition?: RankingConditionUncheckedUpdateManyWithoutRankingNestedInput
         graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type GraduationRankDowngradeConditionUpsertWithWhereUniqueWithoutDowngradeRuleInput = {
         where: GraduationRankDowngradeConditionWhereUniqueInput
@@ -518384,24 +520504,6 @@ export namespace Prisma {
     export type GraduationRankDowngradeConditionUpdateManyWithWhereWithoutDowngradeRuleInput = {
         where: GraduationRankDowngradeConditionScalarWhereInput
         data: XOR<GraduationRankDowngradeConditionUpdateManyMutationInput, GraduationRankDowngradeConditionUncheckedUpdateManyWithoutDowngradeRuleInput>
-    };
-    export type GraduationRankDowngradeConditionScalarWhereInput = {
-        AND?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
-        OR?: GraduationRankDowngradeConditionScalarWhereInput[]
-        NOT?: GraduationRankDowngradeConditionScalarWhereInput | GraduationRankDowngradeConditionScalarWhereInput[]
-        id?: StringFilter<"GraduationRankDowngradeCondition"> | string
-        code?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
-        active?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
-        description?: StringNullableFilter<"GraduationRankDowngradeCondition"> | string | null
-        deletedAt?: DateTimeNullableFilter<"GraduationRankDowngradeCondition"> | Date | string | null
-        createdAt?: DateTimeFilter<"GraduationRankDowngradeCondition"> | Date | string
-        updatedAt?: DateTimeFilter<"GraduationRankDowngradeCondition"> | Date | string
-        downgradeRuleId?: StringFilter<"GraduationRankDowngradeCondition"> | string
-        field?: EnumCriteriaFieldFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaField
-        operator?: EnumCriteriaOperatorFilter<"GraduationRankDowngradeCondition"> | $Enums.CriteriaOperator
-        invert?: BoolFilter<"GraduationRankDowngradeCondition"> | boolean
-        value?: FloatFilter<"GraduationRankDowngradeCondition"> | number
-        tuple?: StringNullableListFilter<"GraduationRankDowngradeCondition">
     };
     export type GraduationRankDowngradeRuleCreateWithoutConditionsInput = {
         id?: string
@@ -518426,6 +520528,32 @@ export namespace Prisma {
     export type GraduationRankDowngradeRuleCreateOrConnectWithoutConditionsInput = {
         where: GraduationRankDowngradeRuleWhereUniqueInput
         create: XOR<GraduationRankDowngradeRuleCreateWithoutConditionsInput, GraduationRankDowngradeRuleUncheckedCreateWithoutConditionsInput>
+    };
+    export type ApplicationDowngradedCreateWithoutConditionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplication: StudentGraduationApplicationCreateNestedOneWithoutDowngradedInput
+        from: AcademicRankingConvertCreateNestedOneWithoutApplicationDowngradedInput
+    };
+    export type ApplicationDowngradedUncheckedCreateWithoutConditionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplicationId: string
+        fromId: string
+    };
+    export type ApplicationDowngradedCreateOrConnectWithoutConditionsInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        create: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput>
     };
     export type GraduationRankDowngradeRuleUpsertWithoutConditionsInput = {
         update: XOR<GraduationRankDowngradeRuleUpdateWithoutConditionsInput, GraduationRankDowngradeRuleUncheckedUpdateWithoutConditionsInput>
@@ -518456,6 +520584,19 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         initialRankId?: StringFieldUpdateOperationsInput | string
     };
+    export type ApplicationDowngradedUpsertWithWhereUniqueWithoutConditionsInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        update: XOR<ApplicationDowngradedUpdateWithoutConditionsInput, ApplicationDowngradedUncheckedUpdateWithoutConditionsInput>
+        create: XOR<ApplicationDowngradedCreateWithoutConditionsInput, ApplicationDowngradedUncheckedCreateWithoutConditionsInput>
+    };
+    export type ApplicationDowngradedUpdateWithWhereUniqueWithoutConditionsInput = {
+        where: ApplicationDowngradedWhereUniqueInput
+        data: XOR<ApplicationDowngradedUpdateWithoutConditionsInput, ApplicationDowngradedUncheckedUpdateWithoutConditionsInput>
+    };
+    export type ApplicationDowngradedUpdateManyWithWhereWithoutConditionsInput = {
+        where: ApplicationDowngradedScalarWhereInput
+        data: XOR<ApplicationDowngradedUpdateManyMutationInput, ApplicationDowngradedUncheckedUpdateManyWithoutConditionsInput>
+    };
     export type AcademicRankingConvertCreateWithoutRankingConditionInput = {
         id?: string
         code?: string | null
@@ -518477,6 +520618,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertUncheckedCreateWithoutRankingConditionInput = {
         id?: string
@@ -518499,6 +520641,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedCreateNestedManyWithoutInitialRankInput
         graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutFinalRankingInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutRankInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedCreateNestedManyWithoutFromInput
     };
     export type AcademicRankingConvertCreateOrConnectWithoutRankingConditionInput = {
         where: AcademicRankingConvertWhereUniqueInput
@@ -518566,6 +520709,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateWithoutRankingConditionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -518588,6 +520732,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type ApplicationCheckResultUpsertWithWhereUniqueWithoutRankingConditionInput = {
         where: ApplicationCheckResultWhereUniqueInput
@@ -546499,6 +548644,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -546524,6 +548670,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
@@ -546562,6 +548709,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -546587,6 +548735,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
@@ -548958,6 +551107,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548980,6 +551130,7 @@ export namespace Prisma {
         downgradeRules?: GraduationRankDowngradeRuleUncheckedUpdateManyWithoutInitialRankNestedInput
         graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutFinalRankingNestedInput
         studentGraduationApplication?: StudentGraduationApplicationUncheckedUpdateManyWithoutRankNestedInput
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutFromNestedInput
     };
     export type AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -558311,6 +560462,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
@@ -558335,6 +560487,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -559185,6 +561338,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
@@ -559209,6 +561363,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -560218,6 +562373,7 @@ export namespace Prisma {
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -560243,6 +562399,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -569194,6 +571351,7 @@ export namespace Prisma {
         gpa?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
@@ -569219,6 +571377,7 @@ export namespace Prisma {
         rankId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -569482,6 +571641,51 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         isImproving?: BoolFieldUpdateOperationsInput | boolean
     };
+    export type GraduationRankDowngradeConditionUpdateWithoutApplicationDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        downgradeRule?: GraduationRankDowngradeRuleUpdateOneRequiredWithoutConditionsNestedInput
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateWithoutApplicationDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        downgradeRuleId?: StringFieldUpdateOperationsInput | string
+        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+    };
+    export type GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        downgradeRuleId?: StringFieldUpdateOperationsInput | string
+        field?: EnumCriteriaFieldFieldUpdateOperationsInput | $Enums.CriteriaField
+        operator?: EnumCriteriaOperatorFieldUpdateOperationsInput | $Enums.CriteriaOperator
+        invert?: BoolFieldUpdateOperationsInput | boolean
+        value?: FloatFieldUpdateOperationsInput | number
+        tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+    };
     export type RankingConditionCreateManyRankingInput = {
         id?: string
         code?: string | null
@@ -569542,6 +571746,16 @@ export namespace Prisma {
         reason?: string | null
         trainingMajorId?: string | null
         diplomaTypeId?: string | null
+    };
+    export type ApplicationDowngradedCreateManyFromInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentGraduationApplicationId: string
     };
     export type RankingConditionUpdateWithoutRankingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -569695,6 +571909,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        downgraded?: ApplicationDowngradedUpdateOneWithoutStudentGraduationApplicationNestedInput
         trainingMajor?: TrainingMajorUpdateOneWithoutStudentGraduationApplicationNestedInput
         diplomaType?: DiplomaTypeUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
@@ -569719,6 +571934,7 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        downgraded?: ApplicationDowngradedUncheckedUpdateOneWithoutStudentGraduationApplicationNestedInput
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
         gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
         supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
@@ -569741,6 +571957,38 @@ export namespace Prisma {
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         trainingMajorId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ApplicationDowngradedUpdateWithoutFromInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplication?: StudentGraduationApplicationUpdateOneRequiredWithoutDowngradedNestedInput
+        conditions?: GraduationRankDowngradeConditionUpdateManyWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedUncheckedUpdateWithoutFromInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
+        conditions?: GraduationRankDowngradeConditionUncheckedUpdateManyWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedUncheckedUpdateManyWithoutFromInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
     };
     export type GraduationRankDowngradeConditionCreateManyDowngradeRuleInput = {
         id?: string
@@ -569769,6 +572017,7 @@ export namespace Prisma {
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateWithoutDowngradeRuleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -569783,6 +572032,7 @@ export namespace Prisma {
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+        applicationDowngraded?: ApplicationDowngradedUncheckedUpdateManyWithoutConditionsNestedInput
     };
     export type GraduationRankDowngradeConditionUncheckedUpdateManyWithoutDowngradeRuleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -569797,6 +572047,39 @@ export namespace Prisma {
         invert?: BoolFieldUpdateOperationsInput | boolean
         value?: FloatFieldUpdateOperationsInput | number
         tuple?: GraduationRankDowngradeConditionUpdatetupleInput | string[]
+    };
+    export type ApplicationDowngradedUpdateWithoutConditionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplication?: StudentGraduationApplicationUpdateOneRequiredWithoutDowngradedNestedInput
+        from?: AcademicRankingConvertUpdateOneRequiredWithoutApplicationDowngradedNestedInput
+    };
+    export type ApplicationDowngradedUncheckedUpdateWithoutConditionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
+        fromId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ApplicationDowngradedUncheckedUpdateManyWithoutConditionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentGraduationApplicationId?: StringFieldUpdateOperationsInput | string
+        fromId?: StringFieldUpdateOperationsInput | string
     };
     export type ApplicationCheckResultCreateManyRankingConditionInput = {
         id?: string
