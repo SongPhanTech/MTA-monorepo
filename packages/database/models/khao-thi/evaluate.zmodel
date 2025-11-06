@@ -43,13 +43,56 @@ model CriterionCatalog extends Base {
   @@schema("khao-thi")
 }
 
+enum AssignmentStatus {
+  PENDING      //Chưa nộp
+  SUBMITTED    //Đã nộp
+  REVISION     //Yêu cầu chỉnh sửa
+  APPROVED     //Đã duyệt
+
+  @@schema("khao-thi")
+}
+
 //Phân công giảng viên đánh giá tiêu chí
 model CriterionAssignment extends Base {
-  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId String
-  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
-  lecturerId            String
-  deadline              DateTime
+  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId       String
+  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String
+  deadline                    DateTime
+
+  status                      AssignmentStatus             @default(PENDING)
+  submittedAt                 DateTime?                    @default(now()) //Thời điểm nộp
+
+  deadlineHistories           DeadlineHistory[]
+  criterionAssignmentComments CriterionAssignmentComment[]
+
+  @@schema("khao-thi")
+}
+
+//Comment 
+model CriterionAssignmentComment extends Base {
+  assignment   CriterionAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String
+
+  reviewer     UserProfile         @relation(fields: [reviewerId], references: [id])
+  reviewerId   String
+
+  content      String              @db.Text
+
+  @@schema("khao-thi")
+}
+
+//Lịch sử thay đổi deadline
+model DeadlineHistory extends Base {
+  criterionAssignment   CriterionAssignment @relation(fields: [criterionAssignmentId], references: [id], onDelete: Cascade)
+  criterionAssignmentId String
+
+  oldDeadline           DateTime?
+  newDeadline           DateTime
+
+  changedBy             UserProfile?        @relation(fields: [changedById], references: [id])
+  changedById           String?             //Người thay đổi deadline
+  reason                String?             @db.Text  //Lý do gia hạn
 
   @@schema("khao-thi")
 }
