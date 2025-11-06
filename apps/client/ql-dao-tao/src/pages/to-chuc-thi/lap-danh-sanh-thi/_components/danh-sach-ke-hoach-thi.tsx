@@ -288,6 +288,22 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     }))
                 const res = await sqlTransaction([
                     {
+                        model: 'ExamPaper' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                examCode: null,
+                                examList: {
+                                    examRoom: {
+                                        examId: {
+                                            in: listChanges.map(({ examId }) => examId),
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
                         model: 'ExamList' as const,
                         operation: 'deleteMany',
                         data: {
@@ -738,9 +754,11 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                                             (el) => el.createdExamCode
                                                         )
                                                 ) &&
-                                                record?.examRoom.some(
+                                                record?.examRoom?.some(
                                                     (er: { examList: ExamList[] }) =>
-                                                        er.examList.some((el) => el.createdExamCode)
+                                                        er.examList?.some(
+                                                            (el) => el.createdExamCode
+                                                        )
                                                 )
                                             }
                                             checked={record?.examRoom?.every?.(
@@ -763,9 +781,9 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList.every((el) => el.lockExamCode)
                                                 ) &&
-                                                record?.examRoom.some(
+                                                record?.examRoom?.some(
                                                     (er: { examList: ExamList[] }) =>
-                                                        er.examList.some((el) => el.lockExamCode)
+                                                        er.examList?.some((el) => el.lockExamCode)
                                                 )
                                             }
                                             checked={record?.examRoom?.every?.(

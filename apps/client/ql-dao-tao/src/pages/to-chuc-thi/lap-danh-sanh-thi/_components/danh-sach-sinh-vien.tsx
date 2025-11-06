@@ -144,7 +144,6 @@ export default function DanhSachSinhVien() {
     const handleLayDiemCCTX = async () => {
         try {
             showSpinner()
-
             const resExam = await sqlTransaction([
                 {
                     model: 'Exam' as const,
@@ -187,24 +186,6 @@ export default function DanhSachSinhVien() {
                 }
             }>
             const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
-            // let allExamLists = exam.examRooms.flatMap((er) =>
-            //     er.examList.map((el) => ({
-            //         ...el,
-            //         capacity: er.capacity,
-            //         studentSubjectScores: [] as typeof allStudentSubjectScores,
-            //     }))
-            // )
-            // for (const el of allExamLists) {
-            //     const capacity = el.capacity || 0
-            //     for (let i = 0; i < capacity; i++) {
-            //         const studentSubjectScore = allStudentSubjectScores.shift()
-            //         if (!studentSubjectScore) {
-            //             break
-            //         }
-            //         el.studentSubjectScores.push(studentSubjectScore)
-            //     }
-            // }
-
             const examNonRoomId = createId()
             const examListNonRoomId = createId()
             const res = await sqlTransaction([

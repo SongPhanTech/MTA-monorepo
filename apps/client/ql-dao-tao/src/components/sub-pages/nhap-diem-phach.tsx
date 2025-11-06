@@ -1,14 +1,17 @@
 import Table from '@components/commons/table'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { useMemo } from 'react'
 
-export default function NhapDiemPhach({ examListId }: { examListId: string }) {
+export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: { score: number | null }[] }>()
+     const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data: examList, refetch } = useFindUniqueExamList(
         {
-            where: { id: examListId },
+            where: { id: selectedExamListId },
             include: {
                 examPapers: {
                     include: {
@@ -26,7 +29,7 @@ export default function NhapDiemPhach({ examListId }: { examListId: string }) {
                 },
             },
         },
-        { enabled: !!examListId }
+        { enabled: !!selectedExamListId }
     )
     const disabled = useMemo(() => {
         return examList?.lockExamCode || true

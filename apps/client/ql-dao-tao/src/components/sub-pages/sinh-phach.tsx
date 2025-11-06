@@ -1,15 +1,18 @@
 import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList, useUpdateExamRoom } from '@workspace/db/hooks'
 import { useGenExamListCode } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
 
-export default function SinhPhach({ examListId }: { examListId: string }) {
+export default function SinhPhach() {
     const router = useRouter()
+    const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data: examRoom, refetch } = useFindUniqueExamList(
         {
-            where: { id: examListId },
+            where: { id: selectedExamListId },
             include: {
                 examPapers: {
                     include: {
@@ -37,7 +40,7 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
                 },
             },
         },
-        { enabled: !!examListId }
+        { enabled: !!selectedExamListId }
     )
     const handleSave = () => {
         Modal.confirm({
@@ -54,7 +57,7 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
     const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: { examListId },
+            data: { examListId: selectedExamListId ?? '' },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
