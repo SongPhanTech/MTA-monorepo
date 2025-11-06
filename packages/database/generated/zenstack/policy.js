@@ -2085,6 +2085,32 @@ const policy = {
                 update: {},
             },
         },
+        criterionAssignmentComment: {
+            modelLevel: {
+                read: { guard: CriterionAssignmentComment_read, },
+                create: { guard: CriterionAssignmentComment_create, inputChecker: CriterionAssignmentComment_create_input, },
+                update: { guard: CriterionAssignmentComment_update, },
+                postUpdate: { guard: CriterionAssignmentComment_postUpdate, },
+                delete: { guard: CriterionAssignmentComment_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        deadlineHistory: {
+            modelLevel: {
+                read: { guard: DeadlineHistory_read, },
+                create: { guard: DeadlineHistory_create, inputChecker: DeadlineHistory_create_input, },
+                update: { guard: DeadlineHistory_update, },
+                postUpdate: { guard: DeadlineHistory_postUpdate, },
+                delete: { guard: DeadlineHistory_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         requirementCriterionCatalog: {
             modelLevel: {
                 read: { guard: RequirementCriterionCatalog_read, },
@@ -3417,6 +3443,8 @@ const policy = {
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
         criterionAssignment: { hasValidation: false },
+        criterionAssignmentComment: { hasValidation: false },
+        deadlineHistory: { hasValidation: false },
         requirementCriterionCatalog: { hasValidation: false },
         scoreScaleCatalog: { hasValidation: false },
         evaluationStandard: { hasValidation: false },
@@ -15937,6 +15965,162 @@ function CriterionAssignment_delete(context, db) {
     return { OR: [] };
 }
 function $check_CriterionAssignment_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionAssignmentComment_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_CriterionAssignmentComment_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionAssignmentComment_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionAssignmentComment_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionAssignmentComment_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function CriterionAssignmentComment_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionAssignmentComment_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionAssignmentComment_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_CriterionAssignmentComment_postUpdate(input, context) {
+    return true;
+}
+function CriterionAssignmentComment_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionAssignmentComment_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DeadlineHistory_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DeadlineHistory_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DeadlineHistory_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DeadlineHistory_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DeadlineHistory_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DeadlineHistory_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DeadlineHistory_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DeadlineHistory_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DeadlineHistory_postUpdate(input, context) {
+    return true;
+}
+function DeadlineHistory_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DeadlineHistory_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

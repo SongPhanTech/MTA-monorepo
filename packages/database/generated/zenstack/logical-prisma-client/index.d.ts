@@ -1664,6 +1664,26 @@ export type CriterionCatalog = $Result.DefaultSelection<Prisma.$CriterionCatalog
  */
 export type CriterionAssignment = $Result.DefaultSelection<Prisma.$CriterionAssignmentPayload>;
 /**
+ * Model CriterionAssignmentComment
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type CriterionAssignmentComment = $Result.DefaultSelection<Prisma.$CriterionAssignmentCommentPayload>;
+/**
+ * Model DeadlineHistory
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type DeadlineHistory = $Result.DefaultSelection<Prisma.$DeadlineHistoryPayload>;
+/**
  * Model RequirementCriterionCatalog
  * Danh mục yêu cầu
  * @
@@ -2649,6 +2669,7 @@ export type DecisionType = $Enums.DecisionType;
 export type CouncilProposalStatus = $Enums.CouncilProposalStatus;
 export type CouncilRole = $Enums.CouncilRole;
 export type PaymentStatus = $Enums.PaymentStatus;
+export type AssignmentStatus = $Enums.AssignmentStatus;
 export type EvaluationMemberRole = $Enums.EvaluationMemberRole;
 export type EvaluationSecretaryMemberRole = $Enums.EvaluationSecretaryMemberRole;
 export type SurveyQuestionType = $Enums.SurveyQuestionType;
@@ -4140,6 +4161,24 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get criterionAssignment(): Prisma.CriterionAssignmentDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.criterionAssignmentComment`: Exposes CRUD operations for the **CriterionAssignmentComment** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more CriterionAssignmentComments
+     * const criterionAssignmentComments = await prisma.criterionAssignmentComment.findMany()
+     * ```
+     */
+    get criterionAssignmentComment(): Prisma.CriterionAssignmentCommentDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.deadlineHistory`: Exposes CRUD operations for the **DeadlineHistory** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more DeadlineHistories
+     * const deadlineHistories = await prisma.deadlineHistory.findMany()
+     * ```
+     */
+    get deadlineHistory(): Prisma.DeadlineHistoryDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.requirementCriterionCatalog`: Exposes CRUD operations for the **RequirementCriterionCatalog** model.
      * Example usage:
      * ```ts
@@ -5070,6 +5109,7 @@ export const DecisionType: typeof $Enums.DecisionType;
 export const CouncilProposalStatus: typeof $Enums.CouncilProposalStatus;
 export const CouncilRole: typeof $Enums.CouncilRole;
 export const PaymentStatus: typeof $Enums.PaymentStatus;
+export const AssignmentStatus: typeof $Enums.AssignmentStatus;
 export const EvaluationMemberRole: typeof $Enums.EvaluationMemberRole;
 export const EvaluationSecretaryMemberRole: typeof $Enums.EvaluationSecretaryMemberRole;
 export const SurveyQuestionType: typeof $Enums.SurveyQuestionType;
@@ -5373,6 +5413,13 @@ export namespace $Enums {
         FAILED: 'FAILED'
     };
     export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
+    export const AssignmentStatus: {
+        PENDING: 'PENDING',
+        SUBMITTED: 'SUBMITTED',
+        REVISION: 'REVISION',
+        APPROVED: 'APPROVED'
+    };
+    export type AssignmentStatus = (typeof AssignmentStatus)[keyof typeof AssignmentStatus];
     export const EvaluationMemberRole: {
         CHAIRMAN: 'CHAIRMAN',
         VICE_PRESIDENT: 'VICE_PRESIDENT',
@@ -5818,6 +5865,8 @@ export namespace Prisma {
         StandardCatalog: 'StandardCatalog',
         CriterionCatalog: 'CriterionCatalog',
         CriterionAssignment: 'CriterionAssignment',
+        CriterionAssignmentComment: 'CriterionAssignmentComment',
+        DeadlineHistory: 'DeadlineHistory',
         RequirementCriterionCatalog: 'RequirementCriterionCatalog',
         ScoreScaleCatalog: 'ScoreScaleCatalog',
         EvaluationStandard: 'EvaluationStandard',
@@ -8585,7 +8634,35 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         evaluationCriterionId: 'evaluationCriterionId',
         lecturerId: 'lecturerId',
-        deadline: 'deadline'
+        deadline: 'deadline',
+        status: 'status',
+        submittedAt: 'submittedAt'
+    };
+    export const CriterionAssignmentCommentScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        assignmentId: 'assignmentId',
+        reviewerId: 'reviewerId',
+        content: 'content'
+    };
+    export const DeadlineHistoryScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        criterionAssignmentId: 'criterionAssignmentId',
+        oldDeadline: 'oldDeadline',
+        newDeadline: 'newDeadline',
+        changedById: 'changedById',
+        reason: 'reason'
     };
     export const RequirementCriterionCatalogScalarFieldEnum: {
         id: 'id',
@@ -11306,6 +11383,22 @@ export namespace Prisma {
         evaluationCriterionId: 'evaluationCriterionId',
         lecturerId: 'lecturerId'
     };
+    export const CriterionAssignmentCommentOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        assignmentId: 'assignmentId',
+        reviewerId: 'reviewerId',
+        content: 'content'
+    };
+    export const DeadlineHistoryOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        criterionAssignmentId: 'criterionAssignmentId',
+        changedById: 'changedById',
+        reason: 'reason'
+    };
     export const RequirementCriterionCatalogOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
@@ -13205,6 +13298,8 @@ export namespace Prisma {
         subjectClassHistory<T extends UserProfile$subjectClassHistoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$subjectClassHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         changeLog<T extends UserProfile$changeLogArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$changeLogArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChangeLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveySession<T extends UserProfile$surveySessionArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$surveySessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        deadlineHistories<T extends UserProfile$deadlineHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$deadlineHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criterionAssignmentComments<T extends UserProfile$criterionAssignmentCommentsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$criterionAssignmentCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -74321,6 +74416,8 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         evaluationCriterion<T extends EvaluationCriterionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterionDefaultArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        deadlineHistories<T extends CriterionAssignment$deadlineHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, CriterionAssignment$deadlineHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criterionAssignmentComments<T extends CriterionAssignment$criterionAssignmentCommentsArgs<ExtArgs> = {}>(args?: Subset<T, CriterionAssignment$criterionAssignmentCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -74357,6 +74454,776 @@ export namespace Prisma {
         readonly evaluationCriterionId: FieldRef<"CriterionAssignment", 'String'>;
         readonly lecturerId: FieldRef<"CriterionAssignment", 'String'>;
         readonly deadline: FieldRef<"CriterionAssignment", 'DateTime'>;
+        readonly status: FieldRef<"CriterionAssignment", 'AssignmentStatus'>;
+        readonly submittedAt: FieldRef<"CriterionAssignment", 'DateTime'>;
+    }
+
+    export interface CriterionAssignmentCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CriterionAssignmentComment'], meta: { name: 'CriterionAssignmentComment' } };
+        /**
+         * Fields of the CriterionAssignmentComment model
+         */
+        readonly fields: CriterionAssignmentCommentFieldRefs;
+        /**
+         * Find zero or one CriterionAssignmentComment that matches the filter.
+         * @param {CriterionAssignmentCommentFindUniqueArgs} args - Arguments to find a CriterionAssignmentComment
+         * @example
+         * // Get one CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends CriterionAssignmentCommentFindUniqueArgs>(args: SelectSubset<T, CriterionAssignmentCommentFindUniqueArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one CriterionAssignmentComment that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {CriterionAssignmentCommentFindUniqueOrThrowArgs} args - Arguments to find a CriterionAssignmentComment
+         * @example
+         * // Get one CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends CriterionAssignmentCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, CriterionAssignmentCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriterionAssignmentComment that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentFindFirstArgs} args - Arguments to find a CriterionAssignmentComment
+         * @example
+         * // Get one CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends CriterionAssignmentCommentFindFirstArgs>(args?: SelectSubset<T, CriterionAssignmentCommentFindFirstArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriterionAssignmentComment that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentFindFirstOrThrowArgs} args - Arguments to find a CriterionAssignmentComment
+         * @example
+         * // Get one CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends CriterionAssignmentCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, CriterionAssignmentCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more CriterionAssignmentComments that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all CriterionAssignmentComments
+         * const criterionAssignmentComments = await prisma.criterionAssignmentComment.findMany()
+         *
+         * // Get first 10 CriterionAssignmentComments
+         * const criterionAssignmentComments = await prisma.criterionAssignmentComment.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const criterionAssignmentCommentWithIdOnly = await prisma.criterionAssignmentComment.findMany({ select: { id: true } })
+         */
+        findMany<T extends CriterionAssignmentCommentFindManyArgs>(args?: SelectSubset<T, CriterionAssignmentCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a CriterionAssignmentComment.
+         * @param {CriterionAssignmentCommentCreateArgs} args - Arguments to create a CriterionAssignmentComment.
+         * @example
+         * // Create one CriterionAssignmentComment
+         * const CriterionAssignmentComment = await prisma.criterionAssignmentComment.create({
+         *   data: {
+         *     // ... data to create a CriterionAssignmentComment
+         *   }
+         * })
+         */
+        create<T extends CriterionAssignmentCommentCreateArgs>(args: SelectSubset<T, CriterionAssignmentCommentCreateArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many CriterionAssignmentComments.
+         * @param {CriterionAssignmentCommentCreateManyArgs} args - Arguments to create many CriterionAssignmentComments.
+         * @example
+         * // Create many CriterionAssignmentComments
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends CriterionAssignmentCommentCreateManyArgs>(args?: SelectSubset<T, CriterionAssignmentCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many CriterionAssignmentComments and returns the data saved in the database.
+         * @param {CriterionAssignmentCommentCreateManyAndReturnArgs} args - Arguments to create many CriterionAssignmentComments.
+         * @example
+         * // Create many CriterionAssignmentComments
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many CriterionAssignmentComments and only return the `id`
+         * const criterionAssignmentCommentWithIdOnly = await prisma.criterionAssignmentComment.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends CriterionAssignmentCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, CriterionAssignmentCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a CriterionAssignmentComment.
+         * @param {CriterionAssignmentCommentDeleteArgs} args - Arguments to delete one CriterionAssignmentComment.
+         * @example
+         * // Delete one CriterionAssignmentComment
+         * const CriterionAssignmentComment = await prisma.criterionAssignmentComment.delete({
+         *   where: {
+         *     // ... filter to delete one CriterionAssignmentComment
+         *   }
+         * })
+         */
+        delete<T extends CriterionAssignmentCommentDeleteArgs>(args: SelectSubset<T, CriterionAssignmentCommentDeleteArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one CriterionAssignmentComment.
+         * @param {CriterionAssignmentCommentUpdateArgs} args - Arguments to update one CriterionAssignmentComment.
+         * @example
+         * // Update one CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends CriterionAssignmentCommentUpdateArgs>(args: SelectSubset<T, CriterionAssignmentCommentUpdateArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more CriterionAssignmentComments.
+         * @param {CriterionAssignmentCommentDeleteManyArgs} args - Arguments to filter CriterionAssignmentComments to delete.
+         * @example
+         * // Delete a few CriterionAssignmentComments
+         * const { count } = await prisma.criterionAssignmentComment.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends CriterionAssignmentCommentDeleteManyArgs>(args?: SelectSubset<T, CriterionAssignmentCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriterionAssignmentComments.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many CriterionAssignmentComments
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends CriterionAssignmentCommentUpdateManyArgs>(args: SelectSubset<T, CriterionAssignmentCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriterionAssignmentComments and returns the data updated in the database.
+         * @param {CriterionAssignmentCommentUpdateManyAndReturnArgs} args - Arguments to update many CriterionAssignmentComments.
+         * @example
+         * // Update many CriterionAssignmentComments
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more CriterionAssignmentComments and only return the `id`
+         * const criterionAssignmentCommentWithIdOnly = await prisma.criterionAssignmentComment.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends CriterionAssignmentCommentUpdateManyAndReturnArgs>(args: SelectSubset<T, CriterionAssignmentCommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one CriterionAssignmentComment.
+         * @param {CriterionAssignmentCommentUpsertArgs} args - Arguments to update or create a CriterionAssignmentComment.
+         * @example
+         * // Update or create a CriterionAssignmentComment
+         * const criterionAssignmentComment = await prisma.criterionAssignmentComment.upsert({
+         *   create: {
+         *     // ... data to create a CriterionAssignmentComment
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the CriterionAssignmentComment we want to update
+         *   }
+         * })
+         */
+        upsert<T extends CriterionAssignmentCommentUpsertArgs>(args: SelectSubset<T, CriterionAssignmentCommentUpsertArgs<ExtArgs>>): Prisma__CriterionAssignmentCommentClient<$Result.GetResult<Prisma.$CriterionAssignmentCommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of CriterionAssignmentComments.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentCountArgs} args - Arguments to filter CriterionAssignmentComments to count.
+         * @example
+         * // Count the number of CriterionAssignmentComments
+         * const count = await prisma.criterionAssignmentComment.count({
+         *   where: {
+         *     // ... the filter for the CriterionAssignmentComments we want to count
+         *   }
+         * })
+         */
+        count<T extends CriterionAssignmentCommentCountArgs>(args?: Subset<T, CriterionAssignmentCommentCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], CriterionAssignmentCommentCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a CriterionAssignmentComment.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends CriterionAssignmentCommentAggregateArgs>(args: Subset<T, CriterionAssignmentCommentAggregateArgs>): Prisma.PrismaPromise<GetCriterionAssignmentCommentAggregateType<T>>;
+        /**
+         * Group by CriterionAssignmentComment.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCommentGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends CriterionAssignmentCommentGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CriterionAssignmentCommentGroupByArgs['orderBy'] }
+        : { orderBy?: CriterionAssignmentCommentGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, CriterionAssignmentCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCriterionAssignmentCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for CriterionAssignmentComment.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__CriterionAssignmentCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        assignment<T extends CriterionAssignmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CriterionAssignmentDefaultArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        reviewer<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the CriterionAssignmentComment model
+     */
+    interface CriterionAssignmentCommentFieldRefs {
+        readonly id: FieldRef<"CriterionAssignmentComment", 'String'>;
+        readonly code: FieldRef<"CriterionAssignmentComment", 'String'>;
+        readonly active: FieldRef<"CriterionAssignmentComment", 'Boolean'>;
+        readonly description: FieldRef<"CriterionAssignmentComment", 'String'>;
+        readonly deletedAt: FieldRef<"CriterionAssignmentComment", 'DateTime'>;
+        readonly createdAt: FieldRef<"CriterionAssignmentComment", 'DateTime'>;
+        readonly updatedAt: FieldRef<"CriterionAssignmentComment", 'DateTime'>;
+        readonly assignmentId: FieldRef<"CriterionAssignmentComment", 'String'>;
+        readonly reviewerId: FieldRef<"CriterionAssignmentComment", 'String'>;
+        readonly content: FieldRef<"CriterionAssignmentComment", 'String'>;
+    }
+
+    export interface DeadlineHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DeadlineHistory'], meta: { name: 'DeadlineHistory' } };
+        /**
+         * Fields of the DeadlineHistory model
+         */
+        readonly fields: DeadlineHistoryFieldRefs;
+        /**
+         * Find zero or one DeadlineHistory that matches the filter.
+         * @param {DeadlineHistoryFindUniqueArgs} args - Arguments to find a DeadlineHistory
+         * @example
+         * // Get one DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends DeadlineHistoryFindUniqueArgs>(args: SelectSubset<T, DeadlineHistoryFindUniqueArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one DeadlineHistory that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {DeadlineHistoryFindUniqueOrThrowArgs} args - Arguments to find a DeadlineHistory
+         * @example
+         * // Get one DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends DeadlineHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, DeadlineHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first DeadlineHistory that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryFindFirstArgs} args - Arguments to find a DeadlineHistory
+         * @example
+         * // Get one DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends DeadlineHistoryFindFirstArgs>(args?: SelectSubset<T, DeadlineHistoryFindFirstArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first DeadlineHistory that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryFindFirstOrThrowArgs} args - Arguments to find a DeadlineHistory
+         * @example
+         * // Get one DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends DeadlineHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, DeadlineHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more DeadlineHistories that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all DeadlineHistories
+         * const deadlineHistories = await prisma.deadlineHistory.findMany()
+         *
+         * // Get first 10 DeadlineHistories
+         * const deadlineHistories = await prisma.deadlineHistory.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const deadlineHistoryWithIdOnly = await prisma.deadlineHistory.findMany({ select: { id: true } })
+         */
+        findMany<T extends DeadlineHistoryFindManyArgs>(args?: SelectSubset<T, DeadlineHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a DeadlineHistory.
+         * @param {DeadlineHistoryCreateArgs} args - Arguments to create a DeadlineHistory.
+         * @example
+         * // Create one DeadlineHistory
+         * const DeadlineHistory = await prisma.deadlineHistory.create({
+         *   data: {
+         *     // ... data to create a DeadlineHistory
+         *   }
+         * })
+         */
+        create<T extends DeadlineHistoryCreateArgs>(args: SelectSubset<T, DeadlineHistoryCreateArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many DeadlineHistories.
+         * @param {DeadlineHistoryCreateManyArgs} args - Arguments to create many DeadlineHistories.
+         * @example
+         * // Create many DeadlineHistories
+         * const deadlineHistory = await prisma.deadlineHistory.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends DeadlineHistoryCreateManyArgs>(args?: SelectSubset<T, DeadlineHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many DeadlineHistories and returns the data saved in the database.
+         * @param {DeadlineHistoryCreateManyAndReturnArgs} args - Arguments to create many DeadlineHistories.
+         * @example
+         * // Create many DeadlineHistories
+         * const deadlineHistory = await prisma.deadlineHistory.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many DeadlineHistories and only return the `id`
+         * const deadlineHistoryWithIdOnly = await prisma.deadlineHistory.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends DeadlineHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, DeadlineHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a DeadlineHistory.
+         * @param {DeadlineHistoryDeleteArgs} args - Arguments to delete one DeadlineHistory.
+         * @example
+         * // Delete one DeadlineHistory
+         * const DeadlineHistory = await prisma.deadlineHistory.delete({
+         *   where: {
+         *     // ... filter to delete one DeadlineHistory
+         *   }
+         * })
+         */
+        delete<T extends DeadlineHistoryDeleteArgs>(args: SelectSubset<T, DeadlineHistoryDeleteArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one DeadlineHistory.
+         * @param {DeadlineHistoryUpdateArgs} args - Arguments to update one DeadlineHistory.
+         * @example
+         * // Update one DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends DeadlineHistoryUpdateArgs>(args: SelectSubset<T, DeadlineHistoryUpdateArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more DeadlineHistories.
+         * @param {DeadlineHistoryDeleteManyArgs} args - Arguments to filter DeadlineHistories to delete.
+         * @example
+         * // Delete a few DeadlineHistories
+         * const { count } = await prisma.deadlineHistory.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends DeadlineHistoryDeleteManyArgs>(args?: SelectSubset<T, DeadlineHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more DeadlineHistories.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many DeadlineHistories
+         * const deadlineHistory = await prisma.deadlineHistory.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends DeadlineHistoryUpdateManyArgs>(args: SelectSubset<T, DeadlineHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more DeadlineHistories and returns the data updated in the database.
+         * @param {DeadlineHistoryUpdateManyAndReturnArgs} args - Arguments to update many DeadlineHistories.
+         * @example
+         * // Update many DeadlineHistories
+         * const deadlineHistory = await prisma.deadlineHistory.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more DeadlineHistories and only return the `id`
+         * const deadlineHistoryWithIdOnly = await prisma.deadlineHistory.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends DeadlineHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, DeadlineHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one DeadlineHistory.
+         * @param {DeadlineHistoryUpsertArgs} args - Arguments to update or create a DeadlineHistory.
+         * @example
+         * // Update or create a DeadlineHistory
+         * const deadlineHistory = await prisma.deadlineHistory.upsert({
+         *   create: {
+         *     // ... data to create a DeadlineHistory
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the DeadlineHistory we want to update
+         *   }
+         * })
+         */
+        upsert<T extends DeadlineHistoryUpsertArgs>(args: SelectSubset<T, DeadlineHistoryUpsertArgs<ExtArgs>>): Prisma__DeadlineHistoryClient<$Result.GetResult<Prisma.$DeadlineHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of DeadlineHistories.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryCountArgs} args - Arguments to filter DeadlineHistories to count.
+         * @example
+         * // Count the number of DeadlineHistories
+         * const count = await prisma.deadlineHistory.count({
+         *   where: {
+         *     // ... the filter for the DeadlineHistories we want to count
+         *   }
+         * })
+         */
+        count<T extends DeadlineHistoryCountArgs>(args?: Subset<T, DeadlineHistoryCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], DeadlineHistoryCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a DeadlineHistory.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends DeadlineHistoryAggregateArgs>(args: Subset<T, DeadlineHistoryAggregateArgs>): Prisma.PrismaPromise<GetDeadlineHistoryAggregateType<T>>;
+        /**
+         * Group by DeadlineHistory.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {DeadlineHistoryGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends DeadlineHistoryGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DeadlineHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: DeadlineHistoryGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, DeadlineHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDeadlineHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for DeadlineHistory.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__DeadlineHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        criterionAssignment<T extends CriterionAssignmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CriterionAssignmentDefaultArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        changedBy<T extends DeadlineHistory$changedByArgs<ExtArgs> = {}>(args?: Subset<T, DeadlineHistory$changedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the DeadlineHistory model
+     */
+    interface DeadlineHistoryFieldRefs {
+        readonly id: FieldRef<"DeadlineHistory", 'String'>;
+        readonly code: FieldRef<"DeadlineHistory", 'String'>;
+        readonly active: FieldRef<"DeadlineHistory", 'Boolean'>;
+        readonly description: FieldRef<"DeadlineHistory", 'String'>;
+        readonly deletedAt: FieldRef<"DeadlineHistory", 'DateTime'>;
+        readonly createdAt: FieldRef<"DeadlineHistory", 'DateTime'>;
+        readonly updatedAt: FieldRef<"DeadlineHistory", 'DateTime'>;
+        readonly criterionAssignmentId: FieldRef<"DeadlineHistory", 'String'>;
+        readonly oldDeadline: FieldRef<"DeadlineHistory", 'DateTime'>;
+        readonly newDeadline: FieldRef<"DeadlineHistory", 'DateTime'>;
+        readonly changedById: FieldRef<"DeadlineHistory", 'String'>;
+        readonly reason: FieldRef<"DeadlineHistory", 'String'>;
     }
 
     export interface RequirementCriterionCatalogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -109157,7 +110024,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "criterionAssignmentComment" | "deadlineHistory" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -121001,6 +121868,154 @@ export namespace Prisma {
                     }
                 }
             }
+            CriterionAssignmentComment: {
+                payload: Prisma.$CriterionAssignmentCommentPayload<ExtArgs>
+                fields: Prisma.CriterionAssignmentCommentFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.CriterionAssignmentCommentFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.CriterionAssignmentCommentFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.CriterionAssignmentCommentFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.CriterionAssignmentCommentFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    findMany: {
+                        args: Prisma.CriterionAssignmentCommentFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>[]
+                    }
+                    create: {
+                        args: Prisma.CriterionAssignmentCommentCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    createMany: {
+                        args: Prisma.CriterionAssignmentCommentCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.CriterionAssignmentCommentCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.CriterionAssignmentCommentDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    update: {
+                        args: Prisma.CriterionAssignmentCommentUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.CriterionAssignmentCommentDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.CriterionAssignmentCommentUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.CriterionAssignmentCommentUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.CriterionAssignmentCommentUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentCommentPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.CriterionAssignmentCommentAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateCriterionAssignmentComment>
+                    }
+                    groupBy: {
+                        args: Prisma.CriterionAssignmentCommentGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<CriterionAssignmentCommentGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.CriterionAssignmentCommentCountArgs<ExtArgs>
+                        result: $Utils.Optional<CriterionAssignmentCommentCountAggregateOutputType> | number
+                    }
+                }
+            }
+            DeadlineHistory: {
+                payload: Prisma.$DeadlineHistoryPayload<ExtArgs>
+                fields: Prisma.DeadlineHistoryFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.DeadlineHistoryFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.DeadlineHistoryFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.DeadlineHistoryFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.DeadlineHistoryFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    findMany: {
+                        args: Prisma.DeadlineHistoryFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>[]
+                    }
+                    create: {
+                        args: Prisma.DeadlineHistoryCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    createMany: {
+                        args: Prisma.DeadlineHistoryCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.DeadlineHistoryCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.DeadlineHistoryDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    update: {
+                        args: Prisma.DeadlineHistoryUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.DeadlineHistoryDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.DeadlineHistoryUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.DeadlineHistoryUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.DeadlineHistoryUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$DeadlineHistoryPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.DeadlineHistoryAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateDeadlineHistory>
+                    }
+                    groupBy: {
+                        args: Prisma.DeadlineHistoryGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<DeadlineHistoryGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.DeadlineHistoryCountArgs<ExtArgs>
+                        result: $Utils.Optional<DeadlineHistoryCountAggregateOutputType> | number
+                    }
+                }
+            }
             RequirementCriterionCatalog: {
                 payload: Prisma.$RequirementCriterionCatalogPayload<ExtArgs>
                 fields: Prisma.RequirementCriterionCatalogFieldRefs
@@ -127852,6 +128867,8 @@ export namespace Prisma {
         standardCatalog?: StandardCatalogOmit
         criterionCatalog?: CriterionCatalogOmit
         criterionAssignment?: CriterionAssignmentOmit
+        criterionAssignmentComment?: CriterionAssignmentCommentOmit
+        deadlineHistory?: DeadlineHistoryOmit
         requirementCriterionCatalog?: RequirementCriterionCatalogOmit
         scoreScaleCatalog?: ScoreScaleCatalogOmit
         evaluationStandard?: EvaluationStandardOmit
@@ -128054,6 +129071,8 @@ export namespace Prisma {
         subjectClassHistory: number
         changeLog: number
         surveySession: number
+        deadlineHistories: number
+        criterionAssignmentComments: number
     };
     export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         relatives?: boolean | UserProfileCountOutputTypeCountRelativesArgs
@@ -128094,6 +129113,8 @@ export namespace Prisma {
         subjectClassHistory?: boolean | UserProfileCountOutputTypeCountSubjectClassHistoryArgs
         changeLog?: boolean | UserProfileCountOutputTypeCountChangeLogArgs
         surveySession?: boolean | UserProfileCountOutputTypeCountSurveySessionArgs
+        deadlineHistories?: boolean | UserProfileCountOutputTypeCountDeadlineHistoriesArgs
+        criterionAssignmentComments?: boolean | UserProfileCountOutputTypeCountCriterionAssignmentCommentsArgs
     };
     /**
      * UserProfileCountOutputType without action
@@ -128331,6 +129352,18 @@ export namespace Prisma {
      */
     export type UserProfileCountOutputTypeCountSurveySessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveySessionWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountDeadlineHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DeadlineHistoryWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountCriterionAssignmentCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentCommentWhereInput
     };
     /**
      * Count Type GroupCountOutputType
@@ -132059,6 +133092,38 @@ export namespace Prisma {
      */
     export type CriterionCatalogCountOutputTypeCountRequirementCriterionCatalogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: RequirementCriterionCatalogWhereInput
+    };
+    /**
+     * Count Type CriterionAssignmentCountOutputType
+     */
+    export type CriterionAssignmentCountOutputType = {
+        deadlineHistories: number
+        criterionAssignmentComments: number
+    };
+    export type CriterionAssignmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        deadlineHistories?: boolean | CriterionAssignmentCountOutputTypeCountDeadlineHistoriesArgs
+        criterionAssignmentComments?: boolean | CriterionAssignmentCountOutputTypeCountCriterionAssignmentCommentsArgs
+    };
+    /**
+     * CriterionAssignmentCountOutputType without action
+     */
+    export type CriterionAssignmentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentCountOutputType
+         */
+        select?: CriterionAssignmentCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * CriterionAssignmentCountOutputType without action
+     */
+    export type CriterionAssignmentCountOutputTypeCountDeadlineHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DeadlineHistoryWhereInput
+    };
+    /**
+     * CriterionAssignmentCountOutputType without action
+     */
+    export type CriterionAssignmentCountOutputTypeCountCriterionAssignmentCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentCommentWhereInput
     };
     /**
      * Count Type ScoreScaleCatalogCountOutputType
@@ -136166,6 +137231,8 @@ export namespace Prisma {
         subjectClassHistory?: boolean | UserProfile$subjectClassHistoryArgs<ExtArgs>
         changeLog?: boolean | UserProfile$changeLogArgs<ExtArgs>
         surveySession?: boolean | UserProfile$surveySessionArgs<ExtArgs>
+        deadlineHistories?: boolean | UserProfile$deadlineHistoriesArgs<ExtArgs>
+        criterionAssignmentComments?: boolean | UserProfile$criterionAssignmentCommentsArgs<ExtArgs>
         _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["userProfile"]>;
     export type UserProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -136669,6 +137736,8 @@ export namespace Prisma {
         subjectClassHistory?: boolean | UserProfile$subjectClassHistoryArgs<ExtArgs>
         changeLog?: boolean | UserProfile$changeLogArgs<ExtArgs>
         surveySession?: boolean | UserProfile$surveySessionArgs<ExtArgs>
+        deadlineHistories?: boolean | UserProfile$deadlineHistoriesArgs<ExtArgs>
+        criterionAssignmentComments?: boolean | UserProfile$criterionAssignmentCommentsArgs<ExtArgs>
         _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -136835,6 +137904,8 @@ export namespace Prisma {
             subjectClassHistory: Prisma.$SubjectClassHistoryPayload<ExtArgs>[]
             changeLog: Prisma.$ChangeLogPayload<ExtArgs>[]
             surveySession: Prisma.$SurveySessionPayload<ExtArgs>[]
+            deadlineHistories: Prisma.$DeadlineHistoryPayload<ExtArgs>[]
+            criterionAssignmentComments: Prisma.$CriterionAssignmentCommentPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -138876,6 +139947,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SurveySessionScalarFieldEnum | SurveySessionScalarFieldEnum[]
+    };
+    /**
+     * UserProfile.deadlineHistories
+     */
+    export type UserProfile$deadlineHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        where?: DeadlineHistoryWhereInput
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        cursor?: DeadlineHistoryWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DeadlineHistoryScalarFieldEnum | DeadlineHistoryScalarFieldEnum[]
+    };
+    /**
+     * UserProfile.criterionAssignmentComments
+     */
+    export type UserProfile$criterionAssignmentCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        where?: CriterionAssignmentCommentWhereInput
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriterionAssignmentCommentScalarFieldEnum | CriterionAssignmentCommentScalarFieldEnum[]
     };
     /**
      * UserProfile without action
@@ -260904,6 +262021,8 @@ export namespace Prisma {
         evaluationCriterionId: string | null
         lecturerId: string | null
         deadline: Date | null
+        status: $Enums.AssignmentStatus | null
+        submittedAt: Date | null
     };
     export type CriterionAssignmentMaxAggregateOutputType = {
         id: string | null
@@ -260916,6 +262035,8 @@ export namespace Prisma {
         evaluationCriterionId: string | null
         lecturerId: string | null
         deadline: Date | null
+        status: $Enums.AssignmentStatus | null
+        submittedAt: Date | null
     };
     export type CriterionAssignmentCountAggregateOutputType = {
         id: number
@@ -260928,6 +262049,8 @@ export namespace Prisma {
         evaluationCriterionId: number
         lecturerId: number
         deadline: number
+        status: number
+        submittedAt: number
         _all: number
     };
     export type CriterionAssignmentMinAggregateInputType = {
@@ -260941,6 +262064,8 @@ export namespace Prisma {
         evaluationCriterionId?: true
         lecturerId?: true
         deadline?: true
+        status?: true
+        submittedAt?: true
     };
     export type CriterionAssignmentMaxAggregateInputType = {
         id?: true
@@ -260953,6 +262078,8 @@ export namespace Prisma {
         evaluationCriterionId?: true
         lecturerId?: true
         deadline?: true
+        status?: true
+        submittedAt?: true
     };
     export type CriterionAssignmentCountAggregateInputType = {
         id?: true
@@ -260965,6 +262092,8 @@ export namespace Prisma {
         evaluationCriterionId?: true
         lecturerId?: true
         deadline?: true
+        status?: true
+        submittedAt?: true
         _all?: true
     };
     export type CriterionAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -261044,6 +262173,8 @@ export namespace Prisma {
         evaluationCriterionId: string
         lecturerId: string
         deadline: Date
+        status: $Enums.AssignmentStatus
+        submittedAt: Date | null
         _count: CriterionAssignmentCountAggregateOutputType | null
         _min: CriterionAssignmentMinAggregateOutputType | null
         _max: CriterionAssignmentMaxAggregateOutputType | null
@@ -261071,8 +262202,13 @@ export namespace Prisma {
         evaluationCriterionId?: boolean
         lecturerId?: boolean
         deadline?: boolean
+        status?: boolean
+        submittedAt?: boolean
         evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
         lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+        deadlineHistories?: boolean | CriterionAssignment$deadlineHistoriesArgs<ExtArgs>
+        criterionAssignmentComments?: boolean | CriterionAssignment$criterionAssignmentCommentsArgs<ExtArgs>
+        _count?: boolean | CriterionAssignmentCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["criterionAssignment"]>;
     export type CriterionAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -261085,6 +262221,8 @@ export namespace Prisma {
         evaluationCriterionId?: boolean
         lecturerId?: boolean
         deadline?: boolean
+        status?: boolean
+        submittedAt?: boolean
         evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
         lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["criterionAssignment"]>;
@@ -261099,6 +262237,8 @@ export namespace Prisma {
         evaluationCriterionId?: boolean
         lecturerId?: boolean
         deadline?: boolean
+        status?: boolean
+        submittedAt?: boolean
         evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
         lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["criterionAssignment"]>;
@@ -261113,11 +262253,16 @@ export namespace Prisma {
         evaluationCriterionId?: boolean
         lecturerId?: boolean
         deadline?: boolean
+        status?: boolean
+        submittedAt?: boolean
     };
-    export type CriterionAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "evaluationCriterionId" | "lecturerId" | "deadline", ExtArgs["result"]["criterionAssignment"]>;
+    export type CriterionAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "evaluationCriterionId" | "lecturerId" | "deadline" | "status" | "submittedAt", ExtArgs["result"]["criterionAssignment"]>;
     export type CriterionAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
         lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+        deadlineHistories?: boolean | CriterionAssignment$deadlineHistoriesArgs<ExtArgs>
+        criterionAssignmentComments?: boolean | CriterionAssignment$criterionAssignmentCommentsArgs<ExtArgs>
+        _count?: boolean | CriterionAssignmentCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type CriterionAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
@@ -261132,6 +262277,8 @@ export namespace Prisma {
         objects: {
             evaluationCriterion: Prisma.$EvaluationCriterionPayload<ExtArgs>
             lecturer: Prisma.$LecturerPayload<ExtArgs>
+            deadlineHistories: Prisma.$DeadlineHistoryPayload<ExtArgs>[]
+            criterionAssignmentComments: Prisma.$CriterionAssignmentCommentPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -261144,6 +262291,8 @@ export namespace Prisma {
             evaluationCriterionId: string
             lecturerId: string
             deadline: Date
+            status: $Enums.AssignmentStatus
+            submittedAt: Date | null
         }, ExtArgs["result"]["criterionAssignment"]>
         composites: {}
     };
@@ -261529,6 +262678,52 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * CriterionAssignment.deadlineHistories
+     */
+    export type CriterionAssignment$deadlineHistoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        where?: DeadlineHistoryWhereInput
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        cursor?: DeadlineHistoryWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DeadlineHistoryScalarFieldEnum | DeadlineHistoryScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignment.criterionAssignmentComments
+     */
+    export type CriterionAssignment$criterionAssignmentCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        where?: CriterionAssignmentCommentWhereInput
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriterionAssignmentCommentScalarFieldEnum | CriterionAssignmentCommentScalarFieldEnum[]
+    };
+    /**
      * CriterionAssignment without action
      */
     export type CriterionAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -261544,6 +262739,1368 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: CriterionAssignmentInclude<ExtArgs> | null
+    };
+    /**
+     * Model CriterionAssignmentComment
+     */
+    export type AggregateCriterionAssignmentComment = {
+        _count: CriterionAssignmentCommentCountAggregateOutputType | null
+        _min: CriterionAssignmentCommentMinAggregateOutputType | null
+        _max: CriterionAssignmentCommentMaxAggregateOutputType | null
+    };
+    export type CriterionAssignmentCommentMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        assignmentId: string | null
+        reviewerId: string | null
+        content: string | null
+    };
+    export type CriterionAssignmentCommentMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        assignmentId: string | null
+        reviewerId: string | null
+        content: string | null
+    };
+    export type CriterionAssignmentCommentCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        assignmentId: number
+        reviewerId: number
+        content: number
+        _all: number
+    };
+    export type CriterionAssignmentCommentMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        assignmentId?: true
+        reviewerId?: true
+        content?: true
+    };
+    export type CriterionAssignmentCommentMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        assignmentId?: true
+        reviewerId?: true
+        content?: true
+    };
+    export type CriterionAssignmentCommentCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        assignmentId?: true
+        reviewerId?: true
+        content?: true
+        _all?: true
+    };
+    export type CriterionAssignmentCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriterionAssignmentComment to aggregate.
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignmentComments to fetch.
+         */
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignmentComments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignmentComments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned CriterionAssignmentComments
+        **/
+        _count?: true | CriterionAssignmentCommentCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: CriterionAssignmentCommentMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: CriterionAssignmentCommentMaxAggregateInputType
+    };
+    export type GetCriterionAssignmentCommentAggregateType<T extends CriterionAssignmentCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCriterionAssignmentComment]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCriterionAssignmentComment[P]>
+        : GetScalarType<T[P], AggregateCriterionAssignmentComment[P]>
+    };
+    export type CriterionAssignmentCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentCommentWhereInput
+        orderBy?: CriterionAssignmentCommentOrderByWithAggregationInput | CriterionAssignmentCommentOrderByWithAggregationInput[]
+        by: CriterionAssignmentCommentScalarFieldEnum[] | CriterionAssignmentCommentScalarFieldEnum
+        having?: CriterionAssignmentCommentScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: CriterionAssignmentCommentCountAggregateInputType | true
+        _min?: CriterionAssignmentCommentMinAggregateInputType
+        _max?: CriterionAssignmentCommentMaxAggregateInputType
+    };
+    export type CriterionAssignmentCommentGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        assignmentId: string
+        reviewerId: string
+        content: string
+        _count: CriterionAssignmentCommentCountAggregateOutputType | null
+        _min: CriterionAssignmentCommentMinAggregateOutputType | null
+        _max: CriterionAssignmentCommentMaxAggregateOutputType | null
+    };
+    type GetCriterionAssignmentCommentGroupByPayload<T extends CriterionAssignmentCommentGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<CriterionAssignmentCommentGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof CriterionAssignmentCommentGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], CriterionAssignmentCommentGroupByOutputType[P]>
+                : GetScalarType<T[P], CriterionAssignmentCommentGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type CriterionAssignmentCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        assignmentId?: boolean
+        reviewerId?: boolean
+        content?: boolean
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignmentComment"]>;
+    export type CriterionAssignmentCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        assignmentId?: boolean
+        reviewerId?: boolean
+        content?: boolean
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignmentComment"]>;
+    export type CriterionAssignmentCommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        assignmentId?: boolean
+        reviewerId?: boolean
+        content?: boolean
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignmentComment"]>;
+    export type CriterionAssignmentCommentSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        assignmentId?: boolean
+        reviewerId?: boolean
+        content?: boolean
+    };
+    export type CriterionAssignmentCommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "assignmentId" | "reviewerId" | "content", ExtArgs["result"]["criterionAssignmentComment"]>;
+    export type CriterionAssignmentCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type CriterionAssignmentCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type CriterionAssignmentCommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        assignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        reviewer?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type $CriterionAssignmentCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "CriterionAssignmentComment"
+        objects: {
+            assignment: Prisma.$CriterionAssignmentPayload<ExtArgs>
+            reviewer: Prisma.$UserProfilePayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            assignmentId: string
+            reviewerId: string
+            content: string
+        }, ExtArgs["result"]["criterionAssignmentComment"]>
+        composites: {}
+    };
+    type CriterionAssignmentCommentGetPayload<S extends boolean | null | undefined | CriterionAssignmentCommentDefaultArgs> = $Result.GetResult<Prisma.$CriterionAssignmentCommentPayload, S>;
+    type CriterionAssignmentCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<CriterionAssignmentCommentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: CriterionAssignmentCommentCountAggregateInputType | true
+    };
+    /**
+     * CriterionAssignmentComment findUnique
+     */
+    export type CriterionAssignmentCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignmentComment to fetch.
+         */
+        where: CriterionAssignmentCommentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignmentComment findUniqueOrThrow
+     */
+    export type CriterionAssignmentCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignmentComment to fetch.
+         */
+        where: CriterionAssignmentCommentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignmentComment findFirst
+     */
+    export type CriterionAssignmentCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignmentComment to fetch.
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignmentComments to fetch.
+         */
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriterionAssignmentComments.
+         */
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignmentComments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignmentComments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriterionAssignmentComments.
+         */
+        distinct?: CriterionAssignmentCommentScalarFieldEnum | CriterionAssignmentCommentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignmentComment findFirstOrThrow
+     */
+    export type CriterionAssignmentCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignmentComment to fetch.
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignmentComments to fetch.
+         */
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriterionAssignmentComments.
+         */
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignmentComments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignmentComments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriterionAssignmentComments.
+         */
+        distinct?: CriterionAssignmentCommentScalarFieldEnum | CriterionAssignmentCommentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignmentComment findMany
+     */
+    export type CriterionAssignmentCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignmentComments to fetch.
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignmentComments to fetch.
+         */
+        orderBy?: CriterionAssignmentCommentOrderByWithRelationInput | CriterionAssignmentCommentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing CriterionAssignmentComments.
+         */
+        cursor?: CriterionAssignmentCommentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignmentComments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignmentComments.
+         */
+        skip?: number
+        distinct?: CriterionAssignmentCommentScalarFieldEnum | CriterionAssignmentCommentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignmentComment create
+     */
+    export type CriterionAssignmentCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * The data needed to create a CriterionAssignmentComment.
+         */
+        data: XOR<CriterionAssignmentCommentCreateInput, CriterionAssignmentCommentUncheckedCreateInput>
+    };
+    /**
+     * CriterionAssignmentComment createMany
+     */
+    export type CriterionAssignmentCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many CriterionAssignmentComments.
+         */
+        data: CriterionAssignmentCommentCreateManyInput | CriterionAssignmentCommentCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * CriterionAssignmentComment createManyAndReturn
+     */
+    export type CriterionAssignmentCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * The data used to create many CriterionAssignmentComments.
+         */
+        data: CriterionAssignmentCommentCreateManyInput | CriterionAssignmentCommentCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CriterionAssignmentComment update
+     */
+    export type CriterionAssignmentCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * The data needed to update a CriterionAssignmentComment.
+         */
+        data: XOR<CriterionAssignmentCommentUpdateInput, CriterionAssignmentCommentUncheckedUpdateInput>
+        /**
+         * Choose, which CriterionAssignmentComment to update.
+         */
+        where: CriterionAssignmentCommentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignmentComment updateMany
+     */
+    export type CriterionAssignmentCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update CriterionAssignmentComments.
+         */
+        data: XOR<CriterionAssignmentCommentUpdateManyMutationInput, CriterionAssignmentCommentUncheckedUpdateManyInput>
+        /**
+         * Filter which CriterionAssignmentComments to update
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * Limit how many CriterionAssignmentComments to update.
+         */
+        limit?: number
+    };
+    /**
+     * CriterionAssignmentComment updateManyAndReturn
+     */
+    export type CriterionAssignmentCommentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * The data used to update CriterionAssignmentComments.
+         */
+        data: XOR<CriterionAssignmentCommentUpdateManyMutationInput, CriterionAssignmentCommentUncheckedUpdateManyInput>
+        /**
+         * Filter which CriterionAssignmentComments to update
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * Limit how many CriterionAssignmentComments to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CriterionAssignmentComment upsert
+     */
+    export type CriterionAssignmentCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * The filter to search for the CriterionAssignmentComment to update in case it exists.
+         */
+        where: CriterionAssignmentCommentWhereUniqueInput
+        /**
+         * In case the CriterionAssignmentComment found by the `where` argument doesn't exist, create a new CriterionAssignmentComment with this data.
+         */
+        create: XOR<CriterionAssignmentCommentCreateInput, CriterionAssignmentCommentUncheckedCreateInput>
+        /**
+         * In case the CriterionAssignmentComment was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<CriterionAssignmentCommentUpdateInput, CriterionAssignmentCommentUncheckedUpdateInput>
+    };
+    /**
+     * CriterionAssignmentComment delete
+     */
+    export type CriterionAssignmentCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+        /**
+         * Filter which CriterionAssignmentComment to delete.
+         */
+        where: CriterionAssignmentCommentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignmentComment deleteMany
+     */
+    export type CriterionAssignmentCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriterionAssignmentComments to delete
+         */
+        where?: CriterionAssignmentCommentWhereInput
+        /**
+         * Limit how many CriterionAssignmentComments to delete.
+         */
+        limit?: number
+    };
+    /**
+     * CriterionAssignmentComment without action
+     */
+    export type CriterionAssignmentCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignmentComment
+         */
+        select?: CriterionAssignmentCommentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignmentComment
+         */
+        omit?: CriterionAssignmentCommentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentCommentInclude<ExtArgs> | null
+    };
+    /**
+     * Model DeadlineHistory
+     */
+    export type AggregateDeadlineHistory = {
+        _count: DeadlineHistoryCountAggregateOutputType | null
+        _min: DeadlineHistoryMinAggregateOutputType | null
+        _max: DeadlineHistoryMaxAggregateOutputType | null
+    };
+    export type DeadlineHistoryMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        criterionAssignmentId: string | null
+        oldDeadline: Date | null
+        newDeadline: Date | null
+        changedById: string | null
+        reason: string | null
+    };
+    export type DeadlineHistoryMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        criterionAssignmentId: string | null
+        oldDeadline: Date | null
+        newDeadline: Date | null
+        changedById: string | null
+        reason: string | null
+    };
+    export type DeadlineHistoryCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        criterionAssignmentId: number
+        oldDeadline: number
+        newDeadline: number
+        changedById: number
+        reason: number
+        _all: number
+    };
+    export type DeadlineHistoryMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        criterionAssignmentId?: true
+        oldDeadline?: true
+        newDeadline?: true
+        changedById?: true
+        reason?: true
+    };
+    export type DeadlineHistoryMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        criterionAssignmentId?: true
+        oldDeadline?: true
+        newDeadline?: true
+        changedById?: true
+        reason?: true
+    };
+    export type DeadlineHistoryCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        criterionAssignmentId?: true
+        oldDeadline?: true
+        newDeadline?: true
+        changedById?: true
+        reason?: true
+        _all?: true
+    };
+    export type DeadlineHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which DeadlineHistory to aggregate.
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DeadlineHistories to fetch.
+         */
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: DeadlineHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DeadlineHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DeadlineHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned DeadlineHistories
+        **/
+        _count?: true | DeadlineHistoryCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: DeadlineHistoryMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: DeadlineHistoryMaxAggregateInputType
+    };
+    export type GetDeadlineHistoryAggregateType<T extends DeadlineHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateDeadlineHistory]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDeadlineHistory[P]>
+        : GetScalarType<T[P], AggregateDeadlineHistory[P]>
+    };
+    export type DeadlineHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DeadlineHistoryWhereInput
+        orderBy?: DeadlineHistoryOrderByWithAggregationInput | DeadlineHistoryOrderByWithAggregationInput[]
+        by: DeadlineHistoryScalarFieldEnum[] | DeadlineHistoryScalarFieldEnum
+        having?: DeadlineHistoryScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: DeadlineHistoryCountAggregateInputType | true
+        _min?: DeadlineHistoryMinAggregateInputType
+        _max?: DeadlineHistoryMaxAggregateInputType
+    };
+    export type DeadlineHistoryGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        criterionAssignmentId: string
+        oldDeadline: Date | null
+        newDeadline: Date
+        changedById: string | null
+        reason: string | null
+        _count: DeadlineHistoryCountAggregateOutputType | null
+        _min: DeadlineHistoryMinAggregateOutputType | null
+        _max: DeadlineHistoryMaxAggregateOutputType | null
+    };
+    type GetDeadlineHistoryGroupByPayload<T extends DeadlineHistoryGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<DeadlineHistoryGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof DeadlineHistoryGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], DeadlineHistoryGroupByOutputType[P]>
+                : GetScalarType<T[P], DeadlineHistoryGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type DeadlineHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        criterionAssignmentId?: boolean
+        oldDeadline?: boolean
+        newDeadline?: boolean
+        changedById?: boolean
+        reason?: boolean
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    }, ExtArgs["result"]["deadlineHistory"]>;
+    export type DeadlineHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        criterionAssignmentId?: boolean
+        oldDeadline?: boolean
+        newDeadline?: boolean
+        changedById?: boolean
+        reason?: boolean
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    }, ExtArgs["result"]["deadlineHistory"]>;
+    export type DeadlineHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        criterionAssignmentId?: boolean
+        oldDeadline?: boolean
+        newDeadline?: boolean
+        changedById?: boolean
+        reason?: boolean
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    }, ExtArgs["result"]["deadlineHistory"]>;
+    export type DeadlineHistorySelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        criterionAssignmentId?: boolean
+        oldDeadline?: boolean
+        newDeadline?: boolean
+        changedById?: boolean
+        reason?: boolean
+    };
+    export type DeadlineHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "criterionAssignmentId" | "oldDeadline" | "newDeadline" | "changedById" | "reason", ExtArgs["result"]["deadlineHistory"]>;
+    export type DeadlineHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    };
+    export type DeadlineHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    };
+    export type DeadlineHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        criterionAssignment?: boolean | CriterionAssignmentDefaultArgs<ExtArgs>
+        changedBy?: boolean | DeadlineHistory$changedByArgs<ExtArgs>
+    };
+    export type $DeadlineHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "DeadlineHistory"
+        objects: {
+            criterionAssignment: Prisma.$CriterionAssignmentPayload<ExtArgs>
+            changedBy: Prisma.$UserProfilePayload<ExtArgs> | null
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            criterionAssignmentId: string
+            oldDeadline: Date | null
+            newDeadline: Date
+            changedById: string | null
+            reason: string | null
+        }, ExtArgs["result"]["deadlineHistory"]>
+        composites: {}
+    };
+    type DeadlineHistoryGetPayload<S extends boolean | null | undefined | DeadlineHistoryDefaultArgs> = $Result.GetResult<Prisma.$DeadlineHistoryPayload, S>;
+    type DeadlineHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<DeadlineHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: DeadlineHistoryCountAggregateInputType | true
+    };
+    /**
+     * DeadlineHistory findUnique
+     */
+    export type DeadlineHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which DeadlineHistory to fetch.
+         */
+        where: DeadlineHistoryWhereUniqueInput
+    };
+    /**
+     * DeadlineHistory findUniqueOrThrow
+     */
+    export type DeadlineHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which DeadlineHistory to fetch.
+         */
+        where: DeadlineHistoryWhereUniqueInput
+    };
+    /**
+     * DeadlineHistory findFirst
+     */
+    export type DeadlineHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which DeadlineHistory to fetch.
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DeadlineHistories to fetch.
+         */
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for DeadlineHistories.
+         */
+        cursor?: DeadlineHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DeadlineHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DeadlineHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of DeadlineHistories.
+         */
+        distinct?: DeadlineHistoryScalarFieldEnum | DeadlineHistoryScalarFieldEnum[]
+    };
+    /**
+     * DeadlineHistory findFirstOrThrow
+     */
+    export type DeadlineHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which DeadlineHistory to fetch.
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DeadlineHistories to fetch.
+         */
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for DeadlineHistories.
+         */
+        cursor?: DeadlineHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DeadlineHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DeadlineHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of DeadlineHistories.
+         */
+        distinct?: DeadlineHistoryScalarFieldEnum | DeadlineHistoryScalarFieldEnum[]
+    };
+    /**
+     * DeadlineHistory findMany
+     */
+    export type DeadlineHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which DeadlineHistories to fetch.
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of DeadlineHistories to fetch.
+         */
+        orderBy?: DeadlineHistoryOrderByWithRelationInput | DeadlineHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing DeadlineHistories.
+         */
+        cursor?: DeadlineHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` DeadlineHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` DeadlineHistories.
+         */
+        skip?: number
+        distinct?: DeadlineHistoryScalarFieldEnum | DeadlineHistoryScalarFieldEnum[]
+    };
+    /**
+     * DeadlineHistory create
+     */
+    export type DeadlineHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * The data needed to create a DeadlineHistory.
+         */
+        data: XOR<DeadlineHistoryCreateInput, DeadlineHistoryUncheckedCreateInput>
+    };
+    /**
+     * DeadlineHistory createMany
+     */
+    export type DeadlineHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many DeadlineHistories.
+         */
+        data: DeadlineHistoryCreateManyInput | DeadlineHistoryCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * DeadlineHistory createManyAndReturn
+     */
+    export type DeadlineHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * The data used to create many DeadlineHistories.
+         */
+        data: DeadlineHistoryCreateManyInput | DeadlineHistoryCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * DeadlineHistory update
+     */
+    export type DeadlineHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * The data needed to update a DeadlineHistory.
+         */
+        data: XOR<DeadlineHistoryUpdateInput, DeadlineHistoryUncheckedUpdateInput>
+        /**
+         * Choose, which DeadlineHistory to update.
+         */
+        where: DeadlineHistoryWhereUniqueInput
+    };
+    /**
+     * DeadlineHistory updateMany
+     */
+    export type DeadlineHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update DeadlineHistories.
+         */
+        data: XOR<DeadlineHistoryUpdateManyMutationInput, DeadlineHistoryUncheckedUpdateManyInput>
+        /**
+         * Filter which DeadlineHistories to update
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * Limit how many DeadlineHistories to update.
+         */
+        limit?: number
+    };
+    /**
+     * DeadlineHistory updateManyAndReturn
+     */
+    export type DeadlineHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * The data used to update DeadlineHistories.
+         */
+        data: XOR<DeadlineHistoryUpdateManyMutationInput, DeadlineHistoryUncheckedUpdateManyInput>
+        /**
+         * Filter which DeadlineHistories to update
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * Limit how many DeadlineHistories to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * DeadlineHistory upsert
+     */
+    export type DeadlineHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * The filter to search for the DeadlineHistory to update in case it exists.
+         */
+        where: DeadlineHistoryWhereUniqueInput
+        /**
+         * In case the DeadlineHistory found by the `where` argument doesn't exist, create a new DeadlineHistory with this data.
+         */
+        create: XOR<DeadlineHistoryCreateInput, DeadlineHistoryUncheckedCreateInput>
+        /**
+         * In case the DeadlineHistory was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<DeadlineHistoryUpdateInput, DeadlineHistoryUncheckedUpdateInput>
+    };
+    /**
+     * DeadlineHistory delete
+     */
+    export type DeadlineHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
+        /**
+         * Filter which DeadlineHistory to delete.
+         */
+        where: DeadlineHistoryWhereUniqueInput
+    };
+    /**
+     * DeadlineHistory deleteMany
+     */
+    export type DeadlineHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which DeadlineHistories to delete
+         */
+        where?: DeadlineHistoryWhereInput
+        /**
+         * Limit how many DeadlineHistories to delete.
+         */
+        limit?: number
+    };
+    /**
+     * DeadlineHistory.changedBy
+     */
+    export type DeadlineHistory$changedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the UserProfile
+         */
+        select?: UserProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the UserProfile
+         */
+        omit?: UserProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: UserProfileInclude<ExtArgs> | null
+        where?: UserProfileWhereInput
+    };
+    /**
+     * DeadlineHistory without action
+     */
+    export type DeadlineHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DeadlineHistory
+         */
+        select?: DeadlineHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DeadlineHistory
+         */
+        omit?: DeadlineHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DeadlineHistoryInclude<ExtArgs> | null
     };
     /**
      * Model RequirementCriterionCatalog
@@ -324778,6 +327335,8 @@ export namespace Prisma {
     export type StandardCatalogScalarFieldEnum = (typeof StandardCatalogScalarFieldEnum)[keyof typeof StandardCatalogScalarFieldEnum];
     export type CriterionCatalogScalarFieldEnum = (typeof CriterionCatalogScalarFieldEnum)[keyof typeof CriterionCatalogScalarFieldEnum];
     export type CriterionAssignmentScalarFieldEnum = (typeof CriterionAssignmentScalarFieldEnum)[keyof typeof CriterionAssignmentScalarFieldEnum];
+    export type CriterionAssignmentCommentScalarFieldEnum = (typeof CriterionAssignmentCommentScalarFieldEnum)[keyof typeof CriterionAssignmentCommentScalarFieldEnum];
+    export type DeadlineHistoryScalarFieldEnum = (typeof DeadlineHistoryScalarFieldEnum)[keyof typeof DeadlineHistoryScalarFieldEnum];
     export type RequirementCriterionCatalogScalarFieldEnum = (typeof RequirementCriterionCatalogScalarFieldEnum)[keyof typeof RequirementCriterionCatalogScalarFieldEnum];
     export type ScoreScaleCatalogScalarFieldEnum = (typeof ScoreScaleCatalogScalarFieldEnum)[keyof typeof ScoreScaleCatalogScalarFieldEnum];
     export type EvaluationStandardScalarFieldEnum = (typeof EvaluationStandardScalarFieldEnum)[keyof typeof EvaluationStandardScalarFieldEnum];
@@ -325033,6 +327592,8 @@ export namespace Prisma {
     export type StandardCatalogOrderByRelevanceFieldEnum = (typeof StandardCatalogOrderByRelevanceFieldEnum)[keyof typeof StandardCatalogOrderByRelevanceFieldEnum];
     export type CriterionCatalogOrderByRelevanceFieldEnum = (typeof CriterionCatalogOrderByRelevanceFieldEnum)[keyof typeof CriterionCatalogOrderByRelevanceFieldEnum];
     export type CriterionAssignmentOrderByRelevanceFieldEnum = (typeof CriterionAssignmentOrderByRelevanceFieldEnum)[keyof typeof CriterionAssignmentOrderByRelevanceFieldEnum];
+    export type CriterionAssignmentCommentOrderByRelevanceFieldEnum = (typeof CriterionAssignmentCommentOrderByRelevanceFieldEnum)[keyof typeof CriterionAssignmentCommentOrderByRelevanceFieldEnum];
+    export type DeadlineHistoryOrderByRelevanceFieldEnum = (typeof DeadlineHistoryOrderByRelevanceFieldEnum)[keyof typeof DeadlineHistoryOrderByRelevanceFieldEnum];
     export type RequirementCriterionCatalogOrderByRelevanceFieldEnum = (typeof RequirementCriterionCatalogOrderByRelevanceFieldEnum)[keyof typeof RequirementCriterionCatalogOrderByRelevanceFieldEnum];
     export type ScoreScaleCatalogOrderByRelevanceFieldEnum = (typeof ScoreScaleCatalogOrderByRelevanceFieldEnum)[keyof typeof ScoreScaleCatalogOrderByRelevanceFieldEnum];
     export type EvaluationStandardOrderByRelevanceFieldEnum = (typeof EvaluationStandardOrderByRelevanceFieldEnum)[keyof typeof EvaluationStandardOrderByRelevanceFieldEnum];
@@ -325482,6 +328043,14 @@ export namespace Prisma {
      * Reference to a field of type 'PaymentStatus[]'
      */
     export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>;
+    /**
+     * Reference to a field of type 'AssignmentStatus'
+     */
+    export type EnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus'>;
+    /**
+     * Reference to a field of type 'AssignmentStatus[]'
+     */
+    export type ListEnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus[]'>;
     /**
      * Reference to a field of type 'EvaluationMemberRole[]'
      */
@@ -325936,6 +328505,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryListRelationFilter
         changeLog?: ChangeLogListRelationFilter
         surveySession?: SurveySessionListRelationFilter
+        deadlineHistories?: DeadlineHistoryListRelationFilter
+        criterionAssignmentComments?: CriterionAssignmentCommentListRelationFilter
     };
     export type UserProfileOrderByWithRelationInput = {
         id?: SortOrder
@@ -326129,6 +328700,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryOrderByRelationAggregateInput
         changeLog?: ChangeLogOrderByRelationAggregateInput
         surveySession?: SurveySessionOrderByRelationAggregateInput
+        deadlineHistories?: DeadlineHistoryOrderByRelationAggregateInput
+        criterionAssignmentComments?: CriterionAssignmentCommentOrderByRelationAggregateInput
         _relevance?: UserProfileOrderByRelevanceInput
     };
     export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -326326,6 +328899,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryListRelationFilter
         changeLog?: ChangeLogListRelationFilter
         surveySession?: SurveySessionListRelationFilter
+        deadlineHistories?: DeadlineHistoryListRelationFilter
+        criterionAssignmentComments?: CriterionAssignmentCommentListRelationFilter
     }, "id" | "code" | "idCardNumber">;
     export type UserProfileOrderByWithAggregationInput = {
         id?: SortOrder
@@ -342996,8 +345571,12 @@ export namespace Prisma {
         evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
         lecturerId?: StringFilter<"CriterionAssignment"> | string
         deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        status?: EnumAssignmentStatusFilter<"CriterionAssignment"> | $Enums.AssignmentStatus
+        submittedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
         evaluationCriterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
         lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+        deadlineHistories?: DeadlineHistoryListRelationFilter
+        criterionAssignmentComments?: CriterionAssignmentCommentListRelationFilter
     };
     export type CriterionAssignmentOrderByWithRelationInput = {
         id?: SortOrder
@@ -343010,8 +345589,12 @@ export namespace Prisma {
         evaluationCriterionId?: SortOrder
         lecturerId?: SortOrder
         deadline?: SortOrder
+        status?: SortOrder
+        submittedAt?: SortOrderInput | SortOrder
         evaluationCriterion?: EvaluationCriterionOrderByWithRelationInput
         lecturer?: LecturerOrderByWithRelationInput
+        deadlineHistories?: DeadlineHistoryOrderByRelationAggregateInput
+        criterionAssignmentComments?: CriterionAssignmentCommentOrderByRelationAggregateInput
         _relevance?: CriterionAssignmentOrderByRelevanceInput
     };
     export type CriterionAssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -343028,8 +345611,12 @@ export namespace Prisma {
         evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
         lecturerId?: StringFilter<"CriterionAssignment"> | string
         deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        status?: EnumAssignmentStatusFilter<"CriterionAssignment"> | $Enums.AssignmentStatus
+        submittedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
         evaluationCriterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
         lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+        deadlineHistories?: DeadlineHistoryListRelationFilter
+        criterionAssignmentComments?: CriterionAssignmentCommentListRelationFilter
     }, "id" | "code">;
     export type CriterionAssignmentOrderByWithAggregationInput = {
         id?: SortOrder
@@ -343042,6 +345629,8 @@ export namespace Prisma {
         evaluationCriterionId?: SortOrder
         lecturerId?: SortOrder
         deadline?: SortOrder
+        status?: SortOrder
+        submittedAt?: SortOrderInput | SortOrder
         _count?: CriterionAssignmentCountOrderByAggregateInput
         _max?: CriterionAssignmentMaxOrderByAggregateInput
         _min?: CriterionAssignmentMinOrderByAggregateInput
@@ -343060,6 +345649,176 @@ export namespace Prisma {
         evaluationCriterionId?: StringWithAggregatesFilter<"CriterionAssignment"> | string
         lecturerId?: StringWithAggregatesFilter<"CriterionAssignment"> | string
         deadline?: DateTimeWithAggregatesFilter<"CriterionAssignment"> | Date | string
+        status?: EnumAssignmentStatusWithAggregatesFilter<"CriterionAssignment"> | $Enums.AssignmentStatus
+        submittedAt?: DateTimeNullableWithAggregatesFilter<"CriterionAssignment"> | Date | string | null
+    };
+    export type CriterionAssignmentCommentWhereInput = {
+        AND?: CriterionAssignmentCommentWhereInput | CriterionAssignmentCommentWhereInput[]
+        OR?: CriterionAssignmentCommentWhereInput[]
+        NOT?: CriterionAssignmentCommentWhereInput | CriterionAssignmentCommentWhereInput[]
+        id?: StringFilter<"CriterionAssignmentComment"> | string
+        code?: StringNullableFilter<"CriterionAssignmentComment"> | string | null
+        active?: BoolFilter<"CriterionAssignmentComment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignmentComment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignmentComment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        assignmentId?: StringFilter<"CriterionAssignmentComment"> | string
+        reviewerId?: StringFilter<"CriterionAssignmentComment"> | string
+        content?: StringFilter<"CriterionAssignmentComment"> | string
+        assignment?: XOR<CriterionAssignmentScalarRelationFilter, CriterionAssignmentWhereInput>
+        reviewer?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    };
+    export type CriterionAssignmentCommentOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        assignmentId?: SortOrder
+        reviewerId?: SortOrder
+        content?: SortOrder
+        assignment?: CriterionAssignmentOrderByWithRelationInput
+        reviewer?: UserProfileOrderByWithRelationInput
+        _relevance?: CriterionAssignmentCommentOrderByRelevanceInput
+    };
+    export type CriterionAssignmentCommentWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: CriterionAssignmentCommentWhereInput | CriterionAssignmentCommentWhereInput[]
+        OR?: CriterionAssignmentCommentWhereInput[]
+        NOT?: CriterionAssignmentCommentWhereInput | CriterionAssignmentCommentWhereInput[]
+        active?: BoolFilter<"CriterionAssignmentComment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignmentComment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignmentComment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        assignmentId?: StringFilter<"CriterionAssignmentComment"> | string
+        reviewerId?: StringFilter<"CriterionAssignmentComment"> | string
+        content?: StringFilter<"CriterionAssignmentComment"> | string
+        assignment?: XOR<CriterionAssignmentScalarRelationFilter, CriterionAssignmentWhereInput>
+        reviewer?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    }, "id" | "code">;
+    export type CriterionAssignmentCommentOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        assignmentId?: SortOrder
+        reviewerId?: SortOrder
+        content?: SortOrder
+        _count?: CriterionAssignmentCommentCountOrderByAggregateInput
+        _max?: CriterionAssignmentCommentMaxOrderByAggregateInput
+        _min?: CriterionAssignmentCommentMinOrderByAggregateInput
+    };
+    export type CriterionAssignmentCommentScalarWhereWithAggregatesInput = {
+        AND?: CriterionAssignmentCommentScalarWhereWithAggregatesInput | CriterionAssignmentCommentScalarWhereWithAggregatesInput[]
+        OR?: CriterionAssignmentCommentScalarWhereWithAggregatesInput[]
+        NOT?: CriterionAssignmentCommentScalarWhereWithAggregatesInput | CriterionAssignmentCommentScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"CriterionAssignmentComment"> | string
+        code?: StringNullableWithAggregatesFilter<"CriterionAssignmentComment"> | string | null
+        active?: BoolWithAggregatesFilter<"CriterionAssignmentComment"> | boolean
+        description?: StringNullableWithAggregatesFilter<"CriterionAssignmentComment"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"CriterionAssignmentComment"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"CriterionAssignmentComment"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"CriterionAssignmentComment"> | Date | string
+        assignmentId?: StringWithAggregatesFilter<"CriterionAssignmentComment"> | string
+        reviewerId?: StringWithAggregatesFilter<"CriterionAssignmentComment"> | string
+        content?: StringWithAggregatesFilter<"CriterionAssignmentComment"> | string
+    };
+    export type DeadlineHistoryWhereInput = {
+        AND?: DeadlineHistoryWhereInput | DeadlineHistoryWhereInput[]
+        OR?: DeadlineHistoryWhereInput[]
+        NOT?: DeadlineHistoryWhereInput | DeadlineHistoryWhereInput[]
+        id?: StringFilter<"DeadlineHistory"> | string
+        code?: StringNullableFilter<"DeadlineHistory"> | string | null
+        active?: BoolFilter<"DeadlineHistory"> | boolean
+        description?: StringNullableFilter<"DeadlineHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        criterionAssignmentId?: StringFilter<"DeadlineHistory"> | string
+        oldDeadline?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        newDeadline?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        changedById?: StringNullableFilter<"DeadlineHistory"> | string | null
+        reason?: StringNullableFilter<"DeadlineHistory"> | string | null
+        criterionAssignment?: XOR<CriterionAssignmentScalarRelationFilter, CriterionAssignmentWhereInput>
+        changedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    };
+    export type DeadlineHistoryOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        criterionAssignmentId?: SortOrder
+        oldDeadline?: SortOrderInput | SortOrder
+        newDeadline?: SortOrder
+        changedById?: SortOrderInput | SortOrder
+        reason?: SortOrderInput | SortOrder
+        criterionAssignment?: CriterionAssignmentOrderByWithRelationInput
+        changedBy?: UserProfileOrderByWithRelationInput
+        _relevance?: DeadlineHistoryOrderByRelevanceInput
+    };
+    export type DeadlineHistoryWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: DeadlineHistoryWhereInput | DeadlineHistoryWhereInput[]
+        OR?: DeadlineHistoryWhereInput[]
+        NOT?: DeadlineHistoryWhereInput | DeadlineHistoryWhereInput[]
+        active?: BoolFilter<"DeadlineHistory"> | boolean
+        description?: StringNullableFilter<"DeadlineHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        criterionAssignmentId?: StringFilter<"DeadlineHistory"> | string
+        oldDeadline?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        newDeadline?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        changedById?: StringNullableFilter<"DeadlineHistory"> | string | null
+        reason?: StringNullableFilter<"DeadlineHistory"> | string | null
+        criterionAssignment?: XOR<CriterionAssignmentScalarRelationFilter, CriterionAssignmentWhereInput>
+        changedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    }, "id" | "code">;
+    export type DeadlineHistoryOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        criterionAssignmentId?: SortOrder
+        oldDeadline?: SortOrderInput | SortOrder
+        newDeadline?: SortOrder
+        changedById?: SortOrderInput | SortOrder
+        reason?: SortOrderInput | SortOrder
+        _count?: DeadlineHistoryCountOrderByAggregateInput
+        _max?: DeadlineHistoryMaxOrderByAggregateInput
+        _min?: DeadlineHistoryMinOrderByAggregateInput
+    };
+    export type DeadlineHistoryScalarWhereWithAggregatesInput = {
+        AND?: DeadlineHistoryScalarWhereWithAggregatesInput | DeadlineHistoryScalarWhereWithAggregatesInput[]
+        OR?: DeadlineHistoryScalarWhereWithAggregatesInput[]
+        NOT?: DeadlineHistoryScalarWhereWithAggregatesInput | DeadlineHistoryScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"DeadlineHistory"> | string
+        code?: StringNullableWithAggregatesFilter<"DeadlineHistory"> | string | null
+        active?: BoolWithAggregatesFilter<"DeadlineHistory"> | boolean
+        description?: StringNullableWithAggregatesFilter<"DeadlineHistory"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"DeadlineHistory"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"DeadlineHistory"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"DeadlineHistory"> | Date | string
+        criterionAssignmentId?: StringWithAggregatesFilter<"DeadlineHistory"> | string
+        oldDeadline?: DateTimeNullableWithAggregatesFilter<"DeadlineHistory"> | Date | string | null
+        newDeadline?: DateTimeWithAggregatesFilter<"DeadlineHistory"> | Date | string
+        changedById?: StringNullableWithAggregatesFilter<"DeadlineHistory"> | string | null
+        reason?: StringNullableWithAggregatesFilter<"DeadlineHistory"> | string | null
     };
     export type RequirementCriterionCatalogWhereInput = {
         AND?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
@@ -350959,6 +353718,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateInput = {
         id?: string
@@ -351117,6 +353878,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -351275,6 +354038,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -351433,6 +354198,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateManyInput = {
         id?: string
@@ -370334,8 +373101,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
         evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
         lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentUncheckedCreateInput = {
         id?: string
@@ -370348,6 +373119,10 @@ export namespace Prisma {
         evaluationCriterionId: string
         lecturerId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -370358,8 +373133,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
         lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -370372,6 +373151,10 @@ export namespace Prisma {
         evaluationCriterionId?: StringFieldUpdateOperationsInput | string
         lecturerId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentCreateManyInput = {
         id?: string
@@ -370384,6 +373167,8 @@ export namespace Prisma {
         evaluationCriterionId: string
         lecturerId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
     };
     export type CriterionAssignmentUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -370394,6 +373179,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type CriterionAssignmentUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -370406,6 +373193,186 @@ export namespace Prisma {
         evaluationCriterionId?: StringFieldUpdateOperationsInput | string
         lecturerId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type CriterionAssignmentCommentCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        assignment: CriterionAssignmentCreateNestedOneWithoutCriterionAssignmentCommentsInput
+        reviewer: UserProfileCreateNestedOneWithoutCriterionAssignmentCommentsInput
+    };
+    export type CriterionAssignmentCommentUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        assignmentId: string
+        reviewerId: string
+        content: string
+    };
+    export type CriterionAssignmentCommentUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        assignment?: CriterionAssignmentUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput
+        reviewer?: UserProfileUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        assignmentId?: StringFieldUpdateOperationsInput | string
+        reviewerId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriterionAssignmentCommentCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        assignmentId: string
+        reviewerId: string
+        content: string
+    };
+    export type CriterionAssignmentCommentUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        assignmentId?: StringFieldUpdateOperationsInput | string
+        reviewerId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
+    export type DeadlineHistoryCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        reason?: string | null
+        criterionAssignment: CriterionAssignmentCreateNestedOneWithoutDeadlineHistoriesInput
+        changedBy?: UserProfileCreateNestedOneWithoutDeadlineHistoriesInput
+    };
+    export type DeadlineHistoryUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        criterionAssignmentId: string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        changedById?: string | null
+        reason?: string | null
+    };
+    export type DeadlineHistoryUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        criterionAssignment?: CriterionAssignmentUpdateOneRequiredWithoutDeadlineHistoriesNestedInput
+        changedBy?: UserProfileUpdateOneWithoutDeadlineHistoriesNestedInput
+    };
+    export type DeadlineHistoryUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        criterionAssignmentId?: StringFieldUpdateOperationsInput | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        changedById?: NullableStringFieldUpdateOperationsInput | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DeadlineHistoryCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        criterionAssignmentId: string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        changedById?: string | null
+        reason?: string | null
+    };
+    export type DeadlineHistoryUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DeadlineHistoryUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        criterionAssignmentId?: StringFieldUpdateOperationsInput | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        changedById?: NullableStringFieldUpdateOperationsInput | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type RequirementCriterionCatalogCreateInput = {
         id?: string
@@ -379288,6 +382255,16 @@ export namespace Prisma {
         some?: SurveySessionWhereInput
         none?: SurveySessionWhereInput
     };
+    export type DeadlineHistoryListRelationFilter = {
+        every?: DeadlineHistoryWhereInput
+        some?: DeadlineHistoryWhereInput
+        none?: DeadlineHistoryWhereInput
+    };
+    export type CriterionAssignmentCommentListRelationFilter = {
+        every?: CriterionAssignmentCommentWhereInput
+        some?: CriterionAssignmentCommentWhereInput
+        none?: CriterionAssignmentCommentWhereInput
+    };
     export type RelativeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -379394,6 +382371,12 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type SurveySessionOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type DeadlineHistoryOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type CriterionAssignmentCommentOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type UserProfileOrderByRelevanceInput = {
@@ -390906,6 +393889,12 @@ export namespace Prisma {
     export type CriterionCatalogSumOrderByAggregateInput = {
         order?: SortOrder
     };
+    export type EnumAssignmentStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAssignmentStatusFilter<$PrismaModel> | $Enums.AssignmentStatus
+    };
     export type EvaluationCriterionScalarRelationFilter = {
         is?: EvaluationCriterionWhereInput
         isNot?: EvaluationCriterionWhereInput
@@ -390926,6 +393915,8 @@ export namespace Prisma {
         evaluationCriterionId?: SortOrder
         lecturerId?: SortOrder
         deadline?: SortOrder
+        status?: SortOrder
+        submittedAt?: SortOrder
     };
     export type CriterionAssignmentMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -390938,6 +393929,8 @@ export namespace Prisma {
         evaluationCriterionId?: SortOrder
         lecturerId?: SortOrder
         deadline?: SortOrder
+        status?: SortOrder
+        submittedAt?: SortOrder
     };
     export type CriterionAssignmentMinOrderByAggregateInput = {
         id?: SortOrder
@@ -390950,6 +393943,109 @@ export namespace Prisma {
         evaluationCriterionId?: SortOrder
         lecturerId?: SortOrder
         deadline?: SortOrder
+        status?: SortOrder
+        submittedAt?: SortOrder
+    };
+    export type EnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssignmentStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+        _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+    };
+    export type CriterionAssignmentScalarRelationFilter = {
+        is?: CriterionAssignmentWhereInput
+        isNot?: CriterionAssignmentWhereInput
+    };
+    export type CriterionAssignmentCommentOrderByRelevanceInput = {
+        fields: CriterionAssignmentCommentOrderByRelevanceFieldEnum | CriterionAssignmentCommentOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type CriterionAssignmentCommentCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        assignmentId?: SortOrder
+        reviewerId?: SortOrder
+        content?: SortOrder
+    };
+    export type CriterionAssignmentCommentMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        assignmentId?: SortOrder
+        reviewerId?: SortOrder
+        content?: SortOrder
+    };
+    export type CriterionAssignmentCommentMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        assignmentId?: SortOrder
+        reviewerId?: SortOrder
+        content?: SortOrder
+    };
+    export type DeadlineHistoryOrderByRelevanceInput = {
+        fields: DeadlineHistoryOrderByRelevanceFieldEnum | DeadlineHistoryOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type DeadlineHistoryCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        criterionAssignmentId?: SortOrder
+        oldDeadline?: SortOrder
+        newDeadline?: SortOrder
+        changedById?: SortOrder
+        reason?: SortOrder
+    };
+    export type DeadlineHistoryMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        criterionAssignmentId?: SortOrder
+        oldDeadline?: SortOrder
+        newDeadline?: SortOrder
+        changedById?: SortOrder
+        reason?: SortOrder
+    };
+    export type DeadlineHistoryMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        criterionAssignmentId?: SortOrder
+        oldDeadline?: SortOrder
+        newDeadline?: SortOrder
+        changedById?: SortOrder
+        reason?: SortOrder
     };
     export type CriterionCatalogScalarRelationFilter = {
         is?: CriterionCatalogWhereInput
@@ -396167,6 +399263,18 @@ export namespace Prisma {
         createMany?: SurveySessionCreateManyProfileInputEnvelope
         connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
     };
+    export type DeadlineHistoryCreateNestedManyWithoutChangedByInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput> | DeadlineHistoryCreateWithoutChangedByInput[] | DeadlineHistoryUncheckedCreateWithoutChangedByInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutChangedByInput | DeadlineHistoryCreateOrConnectWithoutChangedByInput[]
+        createMany?: DeadlineHistoryCreateManyChangedByInputEnvelope
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+    };
+    export type CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput> | CriterionAssignmentCommentCreateWithoutReviewerInput[] | CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput | CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput[]
+        createMany?: CriterionAssignmentCommentCreateManyReviewerInputEnvelope
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+    };
     export type RelativeUncheckedCreateNestedManyWithoutUserProfileInput = {
         create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
         connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -396404,6 +399512,18 @@ export namespace Prisma {
         connectOrCreate?: SurveySessionCreateOrConnectWithoutProfileInput | SurveySessionCreateOrConnectWithoutProfileInput[]
         createMany?: SurveySessionCreateManyProfileInputEnvelope
         connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+    };
+    export type DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput> | DeadlineHistoryCreateWithoutChangedByInput[] | DeadlineHistoryUncheckedCreateWithoutChangedByInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutChangedByInput | DeadlineHistoryCreateOrConnectWithoutChangedByInput[]
+        createMany?: DeadlineHistoryCreateManyChangedByInputEnvelope
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+    };
+    export type CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput> | CriterionAssignmentCommentCreateWithoutReviewerInput[] | CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput | CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput[]
+        createMany?: CriterionAssignmentCommentCreateManyReviewerInputEnvelope
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
     };
     export type NullableBoolFieldUpdateOperationsInput = {
         set?: boolean | null
@@ -397242,6 +400362,32 @@ export namespace Prisma {
         updateMany?: SurveySessionUpdateManyWithWhereWithoutProfileInput | SurveySessionUpdateManyWithWhereWithoutProfileInput[]
         deleteMany?: SurveySessionScalarWhereInput | SurveySessionScalarWhereInput[]
     };
+    export type DeadlineHistoryUpdateManyWithoutChangedByNestedInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput> | DeadlineHistoryCreateWithoutChangedByInput[] | DeadlineHistoryUncheckedCreateWithoutChangedByInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutChangedByInput | DeadlineHistoryCreateOrConnectWithoutChangedByInput[]
+        upsert?: DeadlineHistoryUpsertWithWhereUniqueWithoutChangedByInput | DeadlineHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+        createMany?: DeadlineHistoryCreateManyChangedByInputEnvelope
+        set?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        disconnect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        delete?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        update?: DeadlineHistoryUpdateWithWhereUniqueWithoutChangedByInput | DeadlineHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+        updateMany?: DeadlineHistoryUpdateManyWithWhereWithoutChangedByInput | DeadlineHistoryUpdateManyWithWhereWithoutChangedByInput[]
+        deleteMany?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+    };
+    export type CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput> | CriterionAssignmentCommentCreateWithoutReviewerInput[] | CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput | CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput[]
+        upsert?: CriterionAssignmentCommentUpsertWithWhereUniqueWithoutReviewerInput | CriterionAssignmentCommentUpsertWithWhereUniqueWithoutReviewerInput[]
+        createMany?: CriterionAssignmentCommentCreateManyReviewerInputEnvelope
+        set?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        delete?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        update?: CriterionAssignmentCommentUpdateWithWhereUniqueWithoutReviewerInput | CriterionAssignmentCommentUpdateWithWhereUniqueWithoutReviewerInput[]
+        updateMany?: CriterionAssignmentCommentUpdateManyWithWhereWithoutReviewerInput | CriterionAssignmentCommentUpdateManyWithWhereWithoutReviewerInput[]
+        deleteMany?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
+    };
     export type RelativeUncheckedUpdateManyWithoutUserProfileNestedInput = {
         create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
         connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -397753,6 +400899,32 @@ export namespace Prisma {
         update?: SurveySessionUpdateWithWhereUniqueWithoutProfileInput | SurveySessionUpdateWithWhereUniqueWithoutProfileInput[]
         updateMany?: SurveySessionUpdateManyWithWhereWithoutProfileInput | SurveySessionUpdateManyWithWhereWithoutProfileInput[]
         deleteMany?: SurveySessionScalarWhereInput | SurveySessionScalarWhereInput[]
+    };
+    export type DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput> | DeadlineHistoryCreateWithoutChangedByInput[] | DeadlineHistoryUncheckedCreateWithoutChangedByInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutChangedByInput | DeadlineHistoryCreateOrConnectWithoutChangedByInput[]
+        upsert?: DeadlineHistoryUpsertWithWhereUniqueWithoutChangedByInput | DeadlineHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+        createMany?: DeadlineHistoryCreateManyChangedByInputEnvelope
+        set?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        disconnect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        delete?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        update?: DeadlineHistoryUpdateWithWhereUniqueWithoutChangedByInput | DeadlineHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+        updateMany?: DeadlineHistoryUpdateManyWithWhereWithoutChangedByInput | DeadlineHistoryUpdateManyWithWhereWithoutChangedByInput[]
+        deleteMany?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput> | CriterionAssignmentCommentCreateWithoutReviewerInput[] | CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput | CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput[]
+        upsert?: CriterionAssignmentCommentUpsertWithWhereUniqueWithoutReviewerInput | CriterionAssignmentCommentUpsertWithWhereUniqueWithoutReviewerInput[]
+        createMany?: CriterionAssignmentCommentCreateManyReviewerInputEnvelope
+        set?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        delete?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        update?: CriterionAssignmentCommentUpdateWithWhereUniqueWithoutReviewerInput | CriterionAssignmentCommentUpdateWithWhereUniqueWithoutReviewerInput[]
+        updateMany?: CriterionAssignmentCommentUpdateManyWithWhereWithoutReviewerInput | CriterionAssignmentCommentUpdateManyWithWhereWithoutReviewerInput[]
+        deleteMany?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
     };
     export type DM_HocHamCreateNestedOneWithoutHocHamInput = {
         create?: XOR<DM_HocHamCreateWithoutHocHamInput, DM_HocHamUncheckedCreateWithoutHocHamInput>
@@ -412309,6 +415481,33 @@ export namespace Prisma {
         connectOrCreate?: LecturerCreateOrConnectWithoutCriterionAssignmentsInput
         connect?: LecturerWhereUniqueInput
     };
+    export type DeadlineHistoryCreateNestedManyWithoutCriterionAssignmentInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput> | DeadlineHistoryCreateWithoutCriterionAssignmentInput[] | DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput | DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput[]
+        createMany?: DeadlineHistoryCreateManyCriterionAssignmentInputEnvelope
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+    };
+    export type CriterionAssignmentCommentCreateNestedManyWithoutAssignmentInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput> | CriterionAssignmentCommentCreateWithoutAssignmentInput[] | CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput | CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput[]
+        createMany?: CriterionAssignmentCommentCreateManyAssignmentInputEnvelope
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+    };
+    export type DeadlineHistoryUncheckedCreateNestedManyWithoutCriterionAssignmentInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput> | DeadlineHistoryCreateWithoutCriterionAssignmentInput[] | DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput | DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput[]
+        createMany?: DeadlineHistoryCreateManyCriterionAssignmentInputEnvelope
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+    };
+    export type CriterionAssignmentCommentUncheckedCreateNestedManyWithoutAssignmentInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput> | CriterionAssignmentCommentCreateWithoutAssignmentInput[] | CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput | CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput[]
+        createMany?: CriterionAssignmentCommentCreateManyAssignmentInputEnvelope
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+    };
+    export type EnumAssignmentStatusFieldUpdateOperationsInput = {
+        set?: $Enums.AssignmentStatus
+    };
     export type EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput = {
         create?: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
         connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutCriterionAssignmentsInput
@@ -412322,6 +415521,108 @@ export namespace Prisma {
         upsert?: LecturerUpsertWithoutCriterionAssignmentsInput
         connect?: LecturerWhereUniqueInput
         update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutCriterionAssignmentsInput, LecturerUpdateWithoutCriterionAssignmentsInput>, LecturerUncheckedUpdateWithoutCriterionAssignmentsInput>
+    };
+    export type DeadlineHistoryUpdateManyWithoutCriterionAssignmentNestedInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput> | DeadlineHistoryCreateWithoutCriterionAssignmentInput[] | DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput | DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput[]
+        upsert?: DeadlineHistoryUpsertWithWhereUniqueWithoutCriterionAssignmentInput | DeadlineHistoryUpsertWithWhereUniqueWithoutCriterionAssignmentInput[]
+        createMany?: DeadlineHistoryCreateManyCriterionAssignmentInputEnvelope
+        set?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        disconnect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        delete?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        update?: DeadlineHistoryUpdateWithWhereUniqueWithoutCriterionAssignmentInput | DeadlineHistoryUpdateWithWhereUniqueWithoutCriterionAssignmentInput[]
+        updateMany?: DeadlineHistoryUpdateManyWithWhereWithoutCriterionAssignmentInput | DeadlineHistoryUpdateManyWithWhereWithoutCriterionAssignmentInput[]
+        deleteMany?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+    };
+    export type CriterionAssignmentCommentUpdateManyWithoutAssignmentNestedInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput> | CriterionAssignmentCommentCreateWithoutAssignmentInput[] | CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput | CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput[]
+        upsert?: CriterionAssignmentCommentUpsertWithWhereUniqueWithoutAssignmentInput | CriterionAssignmentCommentUpsertWithWhereUniqueWithoutAssignmentInput[]
+        createMany?: CriterionAssignmentCommentCreateManyAssignmentInputEnvelope
+        set?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        delete?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        update?: CriterionAssignmentCommentUpdateWithWhereUniqueWithoutAssignmentInput | CriterionAssignmentCommentUpdateWithWhereUniqueWithoutAssignmentInput[]
+        updateMany?: CriterionAssignmentCommentUpdateManyWithWhereWithoutAssignmentInput | CriterionAssignmentCommentUpdateManyWithWhereWithoutAssignmentInput[]
+        deleteMany?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
+    };
+    export type DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentNestedInput = {
+        create?: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput> | DeadlineHistoryCreateWithoutCriterionAssignmentInput[] | DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput[]
+        connectOrCreate?: DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput | DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput[]
+        upsert?: DeadlineHistoryUpsertWithWhereUniqueWithoutCriterionAssignmentInput | DeadlineHistoryUpsertWithWhereUniqueWithoutCriterionAssignmentInput[]
+        createMany?: DeadlineHistoryCreateManyCriterionAssignmentInputEnvelope
+        set?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        disconnect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        delete?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        connect?: DeadlineHistoryWhereUniqueInput | DeadlineHistoryWhereUniqueInput[]
+        update?: DeadlineHistoryUpdateWithWhereUniqueWithoutCriterionAssignmentInput | DeadlineHistoryUpdateWithWhereUniqueWithoutCriterionAssignmentInput[]
+        updateMany?: DeadlineHistoryUpdateManyWithWhereWithoutCriterionAssignmentInput | DeadlineHistoryUpdateManyWithWhereWithoutCriterionAssignmentInput[]
+        deleteMany?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentNestedInput = {
+        create?: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput> | CriterionAssignmentCommentCreateWithoutAssignmentInput[] | CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput[]
+        connectOrCreate?: CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput | CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput[]
+        upsert?: CriterionAssignmentCommentUpsertWithWhereUniqueWithoutAssignmentInput | CriterionAssignmentCommentUpsertWithWhereUniqueWithoutAssignmentInput[]
+        createMany?: CriterionAssignmentCommentCreateManyAssignmentInputEnvelope
+        set?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        delete?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        connect?: CriterionAssignmentCommentWhereUniqueInput | CriterionAssignmentCommentWhereUniqueInput[]
+        update?: CriterionAssignmentCommentUpdateWithWhereUniqueWithoutAssignmentInput | CriterionAssignmentCommentUpdateWithWhereUniqueWithoutAssignmentInput[]
+        updateMany?: CriterionAssignmentCommentUpdateManyWithWhereWithoutAssignmentInput | CriterionAssignmentCommentUpdateManyWithWhereWithoutAssignmentInput[]
+        deleteMany?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
+    };
+    export type CriterionAssignmentCreateNestedOneWithoutCriterionAssignmentCommentsInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutCriterionAssignmentCommentsInput
+        connect?: CriterionAssignmentWhereUniqueInput
+    };
+    export type UserProfileCreateNestedOneWithoutCriterionAssignmentCommentsInput = {
+        create?: XOR<UserProfileCreateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutCriterionAssignmentCommentsInput
+        connect?: UserProfileWhereUniqueInput
+    };
+    export type CriterionAssignmentUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutCriterionAssignmentCommentsInput
+        upsert?: CriterionAssignmentUpsertWithoutCriterionAssignmentCommentsInput
+        connect?: CriterionAssignmentWhereUniqueInput
+        update?: XOR<XOR<CriterionAssignmentUpdateToOneWithWhereWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUpdateWithoutCriterionAssignmentCommentsInput>, CriterionAssignmentUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type UserProfileUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput = {
+        create?: XOR<UserProfileCreateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutCriterionAssignmentCommentsInput
+        upsert?: UserProfileUpsertWithoutCriterionAssignmentCommentsInput
+        connect?: UserProfileWhereUniqueInput
+        update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutCriterionAssignmentCommentsInput, UserProfileUpdateWithoutCriterionAssignmentCommentsInput>, UserProfileUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type CriterionAssignmentCreateNestedOneWithoutDeadlineHistoriesInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedCreateWithoutDeadlineHistoriesInput>
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutDeadlineHistoriesInput
+        connect?: CriterionAssignmentWhereUniqueInput
+    };
+    export type UserProfileCreateNestedOneWithoutDeadlineHistoriesInput = {
+        create?: XOR<UserProfileCreateWithoutDeadlineHistoriesInput, UserProfileUncheckedCreateWithoutDeadlineHistoriesInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDeadlineHistoriesInput
+        connect?: UserProfileWhereUniqueInput
+    };
+    export type CriterionAssignmentUpdateOneRequiredWithoutDeadlineHistoriesNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedCreateWithoutDeadlineHistoriesInput>
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutDeadlineHistoriesInput
+        upsert?: CriterionAssignmentUpsertWithoutDeadlineHistoriesInput
+        connect?: CriterionAssignmentWhereUniqueInput
+        update?: XOR<XOR<CriterionAssignmentUpdateToOneWithWhereWithoutDeadlineHistoriesInput, CriterionAssignmentUpdateWithoutDeadlineHistoriesInput>, CriterionAssignmentUncheckedUpdateWithoutDeadlineHistoriesInput>
+    };
+    export type UserProfileUpdateOneWithoutDeadlineHistoriesNestedInput = {
+        create?: XOR<UserProfileCreateWithoutDeadlineHistoriesInput, UserProfileUncheckedCreateWithoutDeadlineHistoriesInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDeadlineHistoriesInput
+        upsert?: UserProfileUpsertWithoutDeadlineHistoriesInput
+        disconnect?: UserProfileWhereInput | boolean
+        delete?: UserProfileWhereInput | boolean
+        connect?: UserProfileWhereUniqueInput
+        update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutDeadlineHistoriesInput, UserProfileUpdateWithoutDeadlineHistoriesInput>, UserProfileUncheckedUpdateWithoutDeadlineHistoriesInput>
     };
     export type RequirementCriterionCatalogCreatequestionsInput = {
         set: string[]
@@ -418542,6 +421843,21 @@ export namespace Prisma {
         _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
         _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
     };
+    export type NestedEnumAssignmentStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAssignmentStatusFilter<$PrismaModel> | $Enums.AssignmentStatus
+    };
+    export type NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssignmentStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+        _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+    };
     export type NestedEnumEvaluationSecretaryMemberRoleFilter<$PrismaModel = never> = {
         equals?: $Enums.EvaluationSecretaryMemberRole | EnumEvaluationSecretaryMemberRoleFieldRefInput<$PrismaModel>
         in?: $Enums.EvaluationSecretaryMemberRole[] | ListEnumEvaluationSecretaryMemberRoleFieldRefInput<$PrismaModel>
@@ -418878,6 +422194,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutChangeLogInput = {
         id?: string
@@ -419035,6 +422353,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutChangeLogInput = {
         where: UserProfileWhereUniqueInput
@@ -419205,6 +422525,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChangeLogInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -419362,6 +422684,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type GroupCreateWithoutUserProfileInput = {
         id?: string
@@ -422531,6 +425855,70 @@ export namespace Prisma {
         data: SurveySessionCreateManyProfileInput | SurveySessionCreateManyProfileInput[]
         skipDuplicates?: boolean
     };
+    export type DeadlineHistoryCreateWithoutChangedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        reason?: string | null
+        criterionAssignment: CriterionAssignmentCreateNestedOneWithoutDeadlineHistoriesInput
+    };
+    export type DeadlineHistoryUncheckedCreateWithoutChangedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        criterionAssignmentId: string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        reason?: string | null
+    };
+    export type DeadlineHistoryCreateOrConnectWithoutChangedByInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        create: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput>
+    };
+    export type DeadlineHistoryCreateManyChangedByInputEnvelope = {
+        data: DeadlineHistoryCreateManyChangedByInput | DeadlineHistoryCreateManyChangedByInput[]
+        skipDuplicates?: boolean
+    };
+    export type CriterionAssignmentCommentCreateWithoutReviewerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        assignment: CriterionAssignmentCreateNestedOneWithoutCriterionAssignmentCommentsInput
+    };
+    export type CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        assignmentId: string
+        content: string
+    };
+    export type CriterionAssignmentCommentCreateOrConnectWithoutReviewerInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        create: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput>
+    };
+    export type CriterionAssignmentCommentCreateManyReviewerInputEnvelope = {
+        data: CriterionAssignmentCommentCreateManyReviewerInput | CriterionAssignmentCommentCreateManyReviewerInput[]
+        skipDuplicates?: boolean
+    };
     export type GroupUpsertWithoutUserProfileInput = {
         update: XOR<GroupUpdateWithoutUserProfileInput, GroupUncheckedUpdateWithoutUserProfileInput>
         create: XOR<GroupCreateWithoutUserProfileInput, GroupUncheckedCreateWithoutUserProfileInput>
@@ -425540,6 +428928,64 @@ export namespace Prisma {
         isCompleted?: BoolFilter<"SurveySession"> | boolean
         surveyObjectTypeId?: StringNullableFilter<"SurveySession"> | string | null
     };
+    export type DeadlineHistoryUpsertWithWhereUniqueWithoutChangedByInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        update: XOR<DeadlineHistoryUpdateWithoutChangedByInput, DeadlineHistoryUncheckedUpdateWithoutChangedByInput>
+        create: XOR<DeadlineHistoryCreateWithoutChangedByInput, DeadlineHistoryUncheckedCreateWithoutChangedByInput>
+    };
+    export type DeadlineHistoryUpdateWithWhereUniqueWithoutChangedByInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        data: XOR<DeadlineHistoryUpdateWithoutChangedByInput, DeadlineHistoryUncheckedUpdateWithoutChangedByInput>
+    };
+    export type DeadlineHistoryUpdateManyWithWhereWithoutChangedByInput = {
+        where: DeadlineHistoryScalarWhereInput
+        data: XOR<DeadlineHistoryUpdateManyMutationInput, DeadlineHistoryUncheckedUpdateManyWithoutChangedByInput>
+    };
+    export type DeadlineHistoryScalarWhereInput = {
+        AND?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+        OR?: DeadlineHistoryScalarWhereInput[]
+        NOT?: DeadlineHistoryScalarWhereInput | DeadlineHistoryScalarWhereInput[]
+        id?: StringFilter<"DeadlineHistory"> | string
+        code?: StringNullableFilter<"DeadlineHistory"> | string | null
+        active?: BoolFilter<"DeadlineHistory"> | boolean
+        description?: StringNullableFilter<"DeadlineHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        criterionAssignmentId?: StringFilter<"DeadlineHistory"> | string
+        oldDeadline?: DateTimeNullableFilter<"DeadlineHistory"> | Date | string | null
+        newDeadline?: DateTimeFilter<"DeadlineHistory"> | Date | string
+        changedById?: StringNullableFilter<"DeadlineHistory"> | string | null
+        reason?: StringNullableFilter<"DeadlineHistory"> | string | null
+    };
+    export type CriterionAssignmentCommentUpsertWithWhereUniqueWithoutReviewerInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        update: XOR<CriterionAssignmentCommentUpdateWithoutReviewerInput, CriterionAssignmentCommentUncheckedUpdateWithoutReviewerInput>
+        create: XOR<CriterionAssignmentCommentCreateWithoutReviewerInput, CriterionAssignmentCommentUncheckedCreateWithoutReviewerInput>
+    };
+    export type CriterionAssignmentCommentUpdateWithWhereUniqueWithoutReviewerInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        data: XOR<CriterionAssignmentCommentUpdateWithoutReviewerInput, CriterionAssignmentCommentUncheckedUpdateWithoutReviewerInput>
+    };
+    export type CriterionAssignmentCommentUpdateManyWithWhereWithoutReviewerInput = {
+        where: CriterionAssignmentCommentScalarWhereInput
+        data: XOR<CriterionAssignmentCommentUpdateManyMutationInput, CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerInput>
+    };
+    export type CriterionAssignmentCommentScalarWhereInput = {
+        AND?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
+        OR?: CriterionAssignmentCommentScalarWhereInput[]
+        NOT?: CriterionAssignmentCommentScalarWhereInput | CriterionAssignmentCommentScalarWhereInput[]
+        id?: StringFilter<"CriterionAssignmentComment"> | string
+        code?: StringNullableFilter<"CriterionAssignmentComment"> | string | null
+        active?: BoolFilter<"CriterionAssignmentComment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignmentComment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignmentComment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignmentComment"> | Date | string
+        assignmentId?: StringFilter<"CriterionAssignmentComment"> | string
+        reviewerId?: StringFilter<"CriterionAssignmentComment"> | string
+        content?: StringFilter<"CriterionAssignmentComment"> | string
+    };
     export type DM_HocHamCreateWithoutHocHamInput = {
         Id?: string
         sMa?: string | null
@@ -425736,6 +429182,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutHocHamInput = {
         id?: string
@@ -425893,6 +429341,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutHocHamInput = {
         where: UserProfileWhereUniqueInput
@@ -426108,6 +429558,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutHocHamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -426265,6 +429717,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_HocViCreateWithoutHocViInput = {
         Id?: string
@@ -426532,6 +429986,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutHocViInput = {
         id?: string
@@ -426689,6 +430145,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutHocViInput = {
         where: UserProfileWhereUniqueInput
@@ -426984,6 +430442,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutHocViInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -427141,6 +430601,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutRelativesInput = {
         id?: string
@@ -427298,6 +430760,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutRelativesInput = {
         id?: string
@@ -427455,6 +430919,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutRelativesInput = {
         where: UserProfileWhereUniqueInput
@@ -427625,6 +431091,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutRelativesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -427782,6 +431250,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: string
@@ -427939,6 +431409,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: string
@@ -428096,6 +431568,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoLyLuanChinhTriInput = {
         where: UserProfileWhereUniqueInput
@@ -428290,6 +431764,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -428447,6 +431923,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_TrinhDoLyLuanChinhTriUpsertWithoutTrinhDoLyLuanChinhTriInput = {
         update: XOR<DM_TrinhDoLyLuanChinhTriUpdateWithoutTrinhDoLyLuanChinhTriInput, DM_TrinhDoLyLuanChinhTriUncheckedUpdateWithoutTrinhDoLyLuanChinhTriInput>
@@ -428633,6 +432111,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoQuanLyNhaNuocInput = {
         id?: string
@@ -428790,6 +432270,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoQuanLyNhaNuocInput = {
         where: UserProfileWhereUniqueInput
@@ -428984,6 +432466,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoQuanLyNhaNuocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -429141,6 +432625,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_TrinhDoQuanLyNhaNuocUpsertWithoutTrinhDoQuanLyNhaNuocInput = {
         update: XOR<DM_TrinhDoQuanLyNhaNuocUpdateWithoutTrinhDoQuanLyNhaNuocInput, DM_TrinhDoQuanLyNhaNuocUncheckedUpdateWithoutTrinhDoQuanLyNhaNuocInput>
@@ -429405,6 +432891,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNgoaiNguInput = {
         id?: string
@@ -429562,6 +433050,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNgoaiNguInput = {
         where: UserProfileWhereUniqueInput
@@ -429820,6 +433310,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNgoaiNguInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -429977,6 +433469,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_TrinhDoTinHocCreateWithoutTinHocInput = {
         Id?: string
@@ -430172,6 +433666,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutTinHocInput = {
         id?: string
@@ -430329,6 +433825,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutTinHocInput = {
         where: UserProfileWhereUniqueInput
@@ -430542,6 +434040,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTinHocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -430699,6 +434199,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: string
@@ -430856,6 +434358,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: string
@@ -431013,6 +434517,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutBoiDuongQuocPhongAnNinhInput = {
         where: UserProfileWhereUniqueInput
@@ -431183,6 +434689,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -431340,6 +434848,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_CapBacCreateWithoutCapBacInput = {
         Id?: string
@@ -431537,6 +435047,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutCapBacInput = {
         id?: string
@@ -431694,6 +435206,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutCapBacInput = {
         where: UserProfileWhereUniqueInput
@@ -431909,6 +435423,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCapBacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -432066,6 +435582,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_ChucVuCreateWithoutQuaTrinhCongTacInput = {
         Id?: string
@@ -432291,6 +435809,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput = {
         id?: string
@@ -432448,6 +435968,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCongTacInput = {
         where: UserProfileWhereUniqueInput
@@ -432696,6 +436218,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -432853,6 +436377,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_ChucVuCreateWithoutQuaTrinhCuDiCongTacInput = {
         Id?: string
@@ -433054,6 +436580,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
         id?: string
@@ -433211,6 +436739,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
         where: UserProfileWhereUniqueInput
@@ -433430,6 +436960,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433587,6 +437119,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_LoaiHinhDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: string
@@ -433768,6 +437302,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: string
@@ -433925,6 +437461,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput = {
         where: UserProfileWhereUniqueInput
@@ -434124,6 +437662,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -434281,6 +437821,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutKhenThuongInput = {
         id?: string
@@ -434438,6 +437980,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutKhenThuongInput = {
         id?: string
@@ -434595,6 +438139,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutKhenThuongInput = {
         where: UserProfileWhereUniqueInput
@@ -434765,6 +438311,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKhenThuongInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -434922,6 +438470,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutKyLuatInput = {
         id?: string
@@ -435079,6 +438629,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutKyLuatInput = {
         id?: string
@@ -435236,6 +438788,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutKyLuatInput = {
         where: UserProfileWhereUniqueInput
@@ -435406,6 +438960,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKyLuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -435563,6 +439119,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutDoiTuongChinhSachInput = {
         id?: string
@@ -435720,6 +439278,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDoiTuongChinhSachInput = {
         id?: string
@@ -435877,6 +439437,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDoiTuongChinhSachInput = {
         where: UserProfileWhereUniqueInput
@@ -436047,6 +439609,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDoiTuongChinhSachInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -436204,6 +439768,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutKeKhaiTaiSanInput = {
         id?: string
@@ -436361,6 +439927,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutKeKhaiTaiSanInput = {
         id?: string
@@ -436518,6 +440086,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutKeKhaiTaiSanInput = {
         where: UserProfileWhereUniqueInput
@@ -436688,6 +440258,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKeKhaiTaiSanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -436845,6 +440417,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_DanTocCreateWithoutTiengDanTocInput = {
         Id?: string
@@ -437046,6 +440620,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutTiengDanTocInput = {
         id?: string
@@ -437203,6 +440779,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutTiengDanTocInput = {
         where: UserProfileWhereUniqueInput
@@ -437422,6 +441000,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTiengDanTocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -437579,6 +441159,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutChienDauInput = {
         id?: string
@@ -437736,6 +441318,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutChienDauInput = {
         id?: string
@@ -437893,6 +441477,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutChienDauInput = {
         where: UserProfileWhereUniqueInput
@@ -438063,6 +441649,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChienDauInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -438220,6 +441808,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_QuocGiaCreateWithoutNuocNgoaiInput = {
         Id?: string
@@ -438421,6 +442011,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDiNuocNgoaiInput = {
         id?: string
@@ -438578,6 +442170,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDiNuocNgoaiInput = {
         where: UserProfileWhereUniqueInput
@@ -438797,6 +442391,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDiNuocNgoaiInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -438954,6 +442550,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_LoaiThuongTatCreateWithoutThuongTatInput = {
         id?: string
@@ -439135,6 +442733,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutThuongTatInput = {
         id?: string
@@ -439292,6 +442892,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutThuongTatInput = {
         where: UserProfileWhereUniqueInput
@@ -439491,6 +443093,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutThuongTatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -439648,6 +443252,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileCreateWithoutDanhHieuInput = {
         id?: string
@@ -439805,6 +443411,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDanhHieuInput = {
         id?: string
@@ -439962,6 +443570,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDanhHieuInput = {
         where: UserProfileWhereUniqueInput
@@ -440132,6 +443742,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDanhHieuInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440289,6 +443901,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_TruongDaoTaoBacDHCreateWithoutQuaTrinhHocTapInput = {
         id?: string
@@ -440520,6 +444134,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhHocTapInput = {
         id?: string
@@ -440677,6 +444293,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhHocTapInput = {
         where: UserProfileWhereUniqueInput
@@ -440936,6 +444554,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhHocTapInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -441093,6 +444713,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_ToChucXaHoiCreateWithoutToChucXaHoiInput = {
         id?: string
@@ -441274,6 +444896,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutToChucXaHoiInput = {
         id?: string
@@ -441431,6 +445055,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutToChucXaHoiInput = {
         where: UserProfileWhereUniqueInput
@@ -441630,6 +445256,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutToChucXaHoiInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -441787,6 +445415,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_NgachCreateWithoutQuaTrinhLuongInput = {
         id?: string
@@ -441992,6 +445622,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhLuongInput = {
         id?: string
@@ -442149,6 +445781,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhLuongInput = {
         where: UserProfileWhereUniqueInput
@@ -442377,6 +446011,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhLuongInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -442534,6 +446170,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_NhanVienCreateWithoutGroupInput = {
         Id?: string
@@ -442801,6 +446439,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutGroupInput = {
         id?: string
@@ -442958,6 +446598,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutGroupInput = {
         where: UserProfileWhereUniqueInput
@@ -443556,6 +447198,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDocumentsUploadedInput = {
         id?: string
@@ -443713,6 +447357,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDocumentsUploadedInput = {
         where: UserProfileWhereUniqueInput
@@ -443874,6 +447520,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDocumentsApprovedInput = {
         id?: string
@@ -444031,6 +447679,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDocumentsApprovedInput = {
         where: UserProfileWhereUniqueInput
@@ -444258,6 +447908,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDocumentsUploadedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -444415,6 +448067,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUpsertWithoutDocumentsApprovedInput = {
         update: XOR<UserProfileUpdateWithoutDocumentsApprovedInput, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
@@ -444581,6 +448235,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDocumentsApprovedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -444738,6 +448394,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput = {
         where: DocumentTopicWhereUniqueInput
@@ -445112,6 +448770,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutFaqsUploadedInput = {
         id?: string
@@ -445269,6 +448929,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutFaqsUploadedInput = {
         where: UserProfileWhereUniqueInput
@@ -445430,6 +449092,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutFaqsApprovedInput = {
         id?: string
@@ -445587,6 +449251,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutFaqsApprovedInput = {
         where: UserProfileWhereUniqueInput
@@ -445794,6 +449460,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutFaqsUploadedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -445951,6 +449619,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUpsertWithoutFaqsApprovedInput = {
         update: XOR<UserProfileUpdateWithoutFaqsApprovedInput, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
@@ -446117,6 +449787,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutFaqsApprovedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -446274,6 +449946,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type TopicCreateWithoutPromptsInput = {
         id?: string
@@ -446500,6 +450174,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutConversationsInput = {
         id?: string
@@ -446657,6 +450333,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutConversationsInput = {
         where: UserProfileWhereUniqueInput
@@ -446919,6 +450597,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutConversationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -447076,6 +450756,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserSessionUpsertWithoutConversationInput = {
         update: XOR<UserSessionUpdateWithoutConversationInput, UserSessionUncheckedUpdateWithoutConversationInput>
@@ -447780,6 +451462,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutRankInput = {
         id?: string
@@ -447937,6 +451621,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutRankInput = {
         where: UserProfileWhereUniqueInput
@@ -448162,6 +451848,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutLevelInput = {
         id?: string
@@ -448319,6 +452007,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutLevelInput = {
         where: UserProfileWhereUniqueInput
@@ -448497,6 +452187,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutPositionCPVInput = {
         id?: string
@@ -448654,6 +452346,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutPositionCPVInput = {
         where: UserProfileWhereUniqueInput
@@ -448938,6 +452632,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutAcademicRankTypeInput = {
         id?: string
@@ -449095,6 +452791,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutAcademicRankTypeInput = {
         where: UserProfileWhereUniqueInput
@@ -449322,6 +453020,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput = {
         id?: string
@@ -449479,6 +453179,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput = {
         where: UserProfileWhereUniqueInput
@@ -449706,6 +453408,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutEthnicityInput = {
         id?: string
@@ -449863,6 +453567,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutEthnicityInput = {
         where: UserProfileWhereUniqueInput
@@ -451575,6 +455281,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutReligionInput = {
         id?: string
@@ -451732,6 +455440,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutReligionInput = {
         where: UserProfileWhereUniqueInput
@@ -452010,6 +455720,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutGenderInput = {
         id?: string
@@ -452167,6 +455879,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutGenderInput = {
         where: UserProfileWhereUniqueInput
@@ -452584,6 +456298,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNationalityInput = {
         id?: string
@@ -452741,6 +456457,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNationalityInput = {
         where: UserProfileWhereUniqueInput
@@ -452979,6 +456697,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceHometownInput = {
         id?: string
@@ -453136,6 +456856,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -453301,6 +457023,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceOfBirthInput = {
         id?: string
@@ -453458,6 +457182,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -453623,6 +457349,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutProvincePermanentAddressInput = {
         id?: string
@@ -453780,6 +457508,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutProvincePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -453945,6 +457675,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceCurrentAddressInput = {
         id?: string
@@ -454102,6 +457834,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -454383,6 +458117,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceHometownInput = {
         id?: string
@@ -454540,6 +458276,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -454705,6 +458443,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceOfBirthInput = {
         id?: string
@@ -454862,6 +458602,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -455027,6 +458769,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvincePermanentAddressInput = {
         id?: string
@@ -455184,6 +458928,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvincePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -455349,6 +459095,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceCurrentAddressInput = {
         id?: string
@@ -455506,6 +459254,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -455772,6 +459522,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictHometownInput = {
         id?: string
@@ -455929,6 +459681,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -456094,6 +459848,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictOfBirthInput = {
         id?: string
@@ -456251,6 +460007,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -456416,6 +460174,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictPermanentAddressInput = {
         id?: string
@@ -456573,6 +460333,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictPermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -456738,6 +460500,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictCurrentAddressInput = {
         id?: string
@@ -456895,6 +460659,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -457112,6 +460878,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneHometownInput = {
         id?: string
@@ -457269,6 +461037,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -457434,6 +461204,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneOfBirthInput = {
         id?: string
@@ -457591,6 +461363,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -457756,6 +461530,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutCommunePermanentAddressInput = {
         id?: string
@@ -457913,6 +461689,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutCommunePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -458078,6 +461856,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneCurrentAddressInput = {
         id?: string
@@ -458235,6 +462015,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -458452,6 +462234,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneHometownInput = {
         id?: string
@@ -458609,6 +462393,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -458774,6 +462560,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneOfBirthInput = {
         id?: string
@@ -458931,6 +462719,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -459096,6 +462886,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommunePermanentAddressInput = {
         id?: string
@@ -459253,6 +463045,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommunePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -459418,6 +463212,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneCurrentAddressInput = {
         id?: string
@@ -459575,6 +463371,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -462952,6 +466750,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput = {
         id?: string
@@ -463109,6 +466909,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutStudentSubjectScoreHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -463356,6 +467158,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463513,6 +467317,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type StudentSubjectScoreCreateWithoutCertificatesInput = {
         id?: string
@@ -473816,6 +477622,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutSubjectVersionHistoryInput = {
         id?: string
@@ -473973,6 +477781,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutSubjectVersionHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -474256,6 +478066,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSubjectVersionHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -474413,6 +478225,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type SubjectInGroupCreateWithoutEquivalencyGroupInput = {
         id?: string
@@ -478239,6 +482053,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutSubjectClassHistoryInput = {
         id?: string
@@ -478396,6 +482212,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutSubjectClassHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -478679,6 +482497,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSubjectClassHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -478836,6 +482656,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type SubjectClassCreateWithoutSubjectClassTimesInput = {
         id?: string
@@ -486838,6 +490660,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
         id?: string
@@ -486995,6 +490819,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutEducationAndTrainingInput = {
         where: UserProfileWhereUniqueInput
@@ -488660,6 +492486,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEducationAndTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -488817,6 +492645,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type TrainingLevelUpsertWithoutStudentsInput = {
         update: XOR<TrainingLevelUpdateWithoutStudentsInput, TrainingLevelUncheckedUpdateWithoutStudentsInput>
@@ -495160,6 +498990,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutLecturerInput = {
         id?: string
@@ -495317,6 +499149,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutLecturerInput = {
         where: UserProfileWhereUniqueInput
@@ -496379,7 +500213,11 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
         evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentUncheckedCreateWithoutLecturerInput = {
         id?: string
@@ -496391,6 +500229,10 @@ export namespace Prisma {
         updatedAt?: Date | string
         evaluationCriterionId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentCreateOrConnectWithoutLecturerInput = {
         where: CriterionAssignmentWhereUniqueInput
@@ -496565,6 +500407,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -496722,6 +500566,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_DonViUpsertWithoutLecturersInput = {
         update: XOR<DM_DonViUpdateWithoutLecturersInput, DM_DonViUncheckedUpdateWithoutLecturersInput>
@@ -497140,6 +500986,8 @@ export namespace Prisma {
         evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
         lecturerId?: StringFilter<"CriterionAssignment"> | string
         deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        status?: EnumAssignmentStatusFilter<"CriterionAssignment"> | $Enums.AssignmentStatus
+        submittedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
     };
     export type UserProfileCreateWithoutLecturerHistoryInput = {
         id?: string
@@ -497297,6 +501145,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutLecturerHistoryInput = {
         id?: string
@@ -497454,6 +501304,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutLecturerHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -497728,6 +501580,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLecturerHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -497885,6 +501739,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_DonViUpsertWithoutLecturerHistoryInput = {
         update: XOR<DM_DonViUpdateWithoutLecturerHistoryInput, DM_DonViUncheckedUpdateWithoutLecturerHistoryInput>
@@ -504473,6 +508329,70 @@ export namespace Prisma {
         where: LecturerWhereUniqueInput
         create: XOR<LecturerCreateWithoutCriterionAssignmentsInput, LecturerUncheckedCreateWithoutCriterionAssignmentsInput>
     };
+    export type DeadlineHistoryCreateWithoutCriterionAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        reason?: string | null
+        changedBy?: UserProfileCreateNestedOneWithoutDeadlineHistoriesInput
+    };
+    export type DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        changedById?: string | null
+        reason?: string | null
+    };
+    export type DeadlineHistoryCreateOrConnectWithoutCriterionAssignmentInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        create: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput>
+    };
+    export type DeadlineHistoryCreateManyCriterionAssignmentInputEnvelope = {
+        data: DeadlineHistoryCreateManyCriterionAssignmentInput | DeadlineHistoryCreateManyCriterionAssignmentInput[]
+        skipDuplicates?: boolean
+    };
+    export type CriterionAssignmentCommentCreateWithoutAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        reviewer: UserProfileCreateNestedOneWithoutCriterionAssignmentCommentsInput
+    };
+    export type CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        reviewerId: string
+        content: string
+    };
+    export type CriterionAssignmentCommentCreateOrConnectWithoutAssignmentInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        create: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput>
+    };
+    export type CriterionAssignmentCommentCreateManyAssignmentInputEnvelope = {
+        data: CriterionAssignmentCommentCreateManyAssignmentInput | CriterionAssignmentCommentCreateManyAssignmentInput[]
+        skipDuplicates?: boolean
+    };
     export type EvaluationCriterionUpsertWithoutCriterionAssignmentsInput = {
         update: XOR<EvaluationCriterionUpdateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedUpdateWithoutCriterionAssignmentsInput>
         create: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
@@ -504592,6 +508512,1476 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+    };
+    export type DeadlineHistoryUpsertWithWhereUniqueWithoutCriterionAssignmentInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        update: XOR<DeadlineHistoryUpdateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedUpdateWithoutCriterionAssignmentInput>
+        create: XOR<DeadlineHistoryCreateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedCreateWithoutCriterionAssignmentInput>
+    };
+    export type DeadlineHistoryUpdateWithWhereUniqueWithoutCriterionAssignmentInput = {
+        where: DeadlineHistoryWhereUniqueInput
+        data: XOR<DeadlineHistoryUpdateWithoutCriterionAssignmentInput, DeadlineHistoryUncheckedUpdateWithoutCriterionAssignmentInput>
+    };
+    export type DeadlineHistoryUpdateManyWithWhereWithoutCriterionAssignmentInput = {
+        where: DeadlineHistoryScalarWhereInput
+        data: XOR<DeadlineHistoryUpdateManyMutationInput, DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentInput>
+    };
+    export type CriterionAssignmentCommentUpsertWithWhereUniqueWithoutAssignmentInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        update: XOR<CriterionAssignmentCommentUpdateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedUpdateWithoutAssignmentInput>
+        create: XOR<CriterionAssignmentCommentCreateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedCreateWithoutAssignmentInput>
+    };
+    export type CriterionAssignmentCommentUpdateWithWhereUniqueWithoutAssignmentInput = {
+        where: CriterionAssignmentCommentWhereUniqueInput
+        data: XOR<CriterionAssignmentCommentUpdateWithoutAssignmentInput, CriterionAssignmentCommentUncheckedUpdateWithoutAssignmentInput>
+    };
+    export type CriterionAssignmentCommentUpdateManyWithWhereWithoutAssignmentInput = {
+        where: CriterionAssignmentCommentScalarWhereInput
+        data: XOR<CriterionAssignmentCommentUpdateManyMutationInput, CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentInput>
+    };
+    export type CriterionAssignmentCreateWithoutCriterionAssignmentCommentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
+        lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutCriterionAssignmentInput
+    };
+    export type CriterionAssignmentUncheckedCreateWithoutCriterionAssignmentCommentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        lecturerId: string
+        deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutCriterionAssignmentInput
+    };
+    export type CriterionAssignmentCreateOrConnectWithoutCriterionAssignmentCommentsInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        create: XOR<CriterionAssignmentCreateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type UserProfileCreateWithoutCriterionAssignmentCommentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+    };
+    export type UserProfileUncheckedCreateWithoutCriterionAssignmentCommentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    };
+    export type UserProfileCreateOrConnectWithoutCriterionAssignmentCommentsInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type CriterionAssignmentUpsertWithoutCriterionAssignmentCommentsInput = {
+        update: XOR<CriterionAssignmentUpdateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+        create: XOR<CriterionAssignmentCreateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        where?: CriterionAssignmentWhereInput
+    };
+    export type CriterionAssignmentUpdateToOneWithWhereWithoutCriterionAssignmentCommentsInput = {
+        where?: CriterionAssignmentWhereInput
+        data: XOR<CriterionAssignmentUpdateWithoutCriterionAssignmentCommentsInput, CriterionAssignmentUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type CriterionAssignmentUpdateWithoutCriterionAssignmentCommentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutCriterionAssignmentNestedInput
+    };
+    export type CriterionAssignmentUncheckedUpdateWithoutCriterionAssignmentCommentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentNestedInput
+    };
+    export type UserProfileUpsertWithoutCriterionAssignmentCommentsInput = {
+        update: XOR<UserProfileUpdateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+        create: XOR<UserProfileCreateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedCreateWithoutCriterionAssignmentCommentsInput>
+        where?: UserProfileWhereInput
+    };
+    export type UserProfileUpdateToOneWithWhereWithoutCriterionAssignmentCommentsInput = {
+        where?: UserProfileWhereInput
+        data: XOR<UserProfileUpdateWithoutCriterionAssignmentCommentsInput, UserProfileUncheckedUpdateWithoutCriterionAssignmentCommentsInput>
+    };
+    export type UserProfileUpdateWithoutCriterionAssignmentCommentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutCriterionAssignmentCommentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    };
+    export type CriterionAssignmentCreateWithoutDeadlineHistoriesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
+        lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutAssignmentInput
+    };
+    export type CriterionAssignmentUncheckedCreateWithoutDeadlineHistoriesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        lecturerId: string
+        deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutAssignmentInput
+    };
+    export type CriterionAssignmentCreateOrConnectWithoutDeadlineHistoriesInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        create: XOR<CriterionAssignmentCreateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedCreateWithoutDeadlineHistoriesInput>
+    };
+    export type UserProfileCreateWithoutDeadlineHistoriesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
+    };
+    export type UserProfileUncheckedCreateWithoutDeadlineHistoriesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
+    };
+    export type UserProfileCreateOrConnectWithoutDeadlineHistoriesInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutDeadlineHistoriesInput, UserProfileUncheckedCreateWithoutDeadlineHistoriesInput>
+    };
+    export type CriterionAssignmentUpsertWithoutDeadlineHistoriesInput = {
+        update: XOR<CriterionAssignmentUpdateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedUpdateWithoutDeadlineHistoriesInput>
+        create: XOR<CriterionAssignmentCreateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedCreateWithoutDeadlineHistoriesInput>
+        where?: CriterionAssignmentWhereInput
+    };
+    export type CriterionAssignmentUpdateToOneWithWhereWithoutDeadlineHistoriesInput = {
+        where?: CriterionAssignmentWhereInput
+        data: XOR<CriterionAssignmentUpdateWithoutDeadlineHistoriesInput, CriterionAssignmentUncheckedUpdateWithoutDeadlineHistoriesInput>
+    };
+    export type CriterionAssignmentUpdateWithoutDeadlineHistoriesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutAssignmentNestedInput
+    };
+    export type CriterionAssignmentUncheckedUpdateWithoutDeadlineHistoriesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentNestedInput
+    };
+    export type UserProfileUpsertWithoutDeadlineHistoriesInput = {
+        update: XOR<UserProfileUpdateWithoutDeadlineHistoriesInput, UserProfileUncheckedUpdateWithoutDeadlineHistoriesInput>
+        create: XOR<UserProfileCreateWithoutDeadlineHistoriesInput, UserProfileUncheckedCreateWithoutDeadlineHistoriesInput>
+        where?: UserProfileWhereInput
+    };
+    export type UserProfileUpdateToOneWithWhereWithoutDeadlineHistoriesInput = {
+        where?: UserProfileWhereInput
+        data: XOR<UserProfileUpdateWithoutDeadlineHistoriesInput, UserProfileUncheckedUpdateWithoutDeadlineHistoriesInput>
+    };
+    export type UserProfileUpdateWithoutDeadlineHistoriesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutDeadlineHistoriesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type CriterionCatalogCreateWithoutRequirementCriterionCatalogInput = {
         id?: string
@@ -505057,7 +510447,11 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
         lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput = {
         id?: string
@@ -505069,6 +510463,10 @@ export namespace Prisma {
         updatedAt?: Date | string
         lecturerId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutCriterionAssignmentInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutAssignmentInput
     };
     export type CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput = {
         where: CriterionAssignmentWhereUniqueInput
@@ -506597,6 +511995,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutEvidenceFilesInput = {
         id?: string
@@ -506754,6 +512154,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutEvidenceFilesInput = {
         where: UserProfileWhereUniqueInput
@@ -506961,6 +512363,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEvidenceFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -507118,6 +512522,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type SurveyCreateWithoutSurveyObjectTypeInput = {
         id?: string
@@ -509793,6 +515199,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutSurveySessionInput = {
         id?: string
@@ -509950,6 +515358,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutSurveySessionInput = {
         where: UserProfileWhereUniqueInput
@@ -510399,6 +515809,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSurveySessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -510556,6 +515968,8 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type StudentUpsertWithoutSurveySessionsInput = {
         update: XOR<StudentUpdateWithoutSurveySessionsInput, StudentUncheckedUpdateWithoutSurveySessionsInput>
@@ -514561,6 +519975,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutStaffsInput = {
         id?: string
@@ -514718,6 +520134,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutStaffsInput = {
         where: UserProfileWhereUniqueInput
@@ -515078,6 +520496,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStaffsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -515235,6 +520655,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_DonViUpsertWithoutStaffsInput = {
         update: XOR<DM_DonViUpdateWithoutStaffsInput, DM_DonViUncheckedUpdateWithoutStaffsInput>
@@ -515550,6 +520972,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutStaffHistoryInput = {
         id?: string
@@ -515707,6 +521131,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutStaffHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -516007,6 +521433,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStaffHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -516164,6 +521592,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type DM_DonViUpsertWithoutStaffHistoryInput = {
         update: XOR<DM_DonViUpdateWithoutStaffHistoryInput, DM_DonViUncheckedUpdateWithoutStaffHistoryInput>
@@ -524105,6 +529535,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoHocVanInput = {
         id?: string
@@ -524262,6 +529694,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoHocVanInput = {
         where: UserProfileWhereUniqueInput
@@ -524803,6 +530237,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutChiHuyQuanLyInput = {
         id?: string
@@ -524960,6 +530396,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutChiHuyQuanLyInput = {
         where: UserProfileWhereUniqueInput
@@ -525138,6 +530576,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutChuyenMonKyThuatInput = {
         id?: string
@@ -525295,6 +530735,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutChuyenMonKyThuatInput = {
         where: UserProfileWhereUniqueInput
@@ -525473,6 +530915,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutSucKhoeInput = {
         id?: string
@@ -525630,6 +531074,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutSucKhoeInput = {
         where: UserProfileWhereUniqueInput
@@ -525808,6 +531254,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileUncheckedCreateWithoutNhomMauInput = {
         id?: string
@@ -525965,6 +531413,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        deadlineHistories?: DeadlineHistoryUncheckedCreateNestedManyWithoutChangedByInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedCreateNestedManyWithoutReviewerInput
     };
     export type UserProfileCreateOrConnectWithoutNhomMauInput = {
         where: UserProfileWhereUniqueInput
@@ -526836,6 +532286,30 @@ export namespace Prisma {
         completedAt?: Date | string | null
         isCompleted?: boolean
         surveyObjectTypeId?: string | null
+    };
+    export type DeadlineHistoryCreateManyChangedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        criterionAssignmentId: string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        reason?: string | null
+    };
+    export type CriterionAssignmentCommentCreateManyReviewerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        assignmentId: string
+        content: string
     };
     export type RelativeUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -528660,6 +534134,78 @@ export namespace Prisma {
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
         surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type DeadlineHistoryUpdateWithoutChangedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        criterionAssignment?: CriterionAssignmentUpdateOneRequiredWithoutDeadlineHistoriesNestedInput
+    };
+    export type DeadlineHistoryUncheckedUpdateWithoutChangedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        criterionAssignmentId?: StringFieldUpdateOperationsInput | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DeadlineHistoryUncheckedUpdateManyWithoutChangedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        criterionAssignmentId?: StringFieldUpdateOperationsInput | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CriterionAssignmentCommentUpdateWithoutReviewerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        assignment?: CriterionAssignmentUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateWithoutReviewerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        assignmentId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        assignmentId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
     export type DM_NhanVienCreateManyGroupInput = {
         Id?: string
         sMa?: string | null
@@ -529113,6 +534659,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -529270,6 +534818,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -530236,6 +535786,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -530393,6 +535945,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -530823,6 +536377,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -530980,6 +536536,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531403,6 +536961,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutPositionCPVInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531560,6 +537120,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutPositionCPVInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -532061,6 +537623,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -532218,6 +537782,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -532665,6 +538231,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -532822,6 +538390,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533268,6 +538838,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEthnicityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533425,6 +538997,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutEthnicityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535400,6 +540974,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutReligionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535557,6 +541133,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutReligionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -536064,6 +541642,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutGenderInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -536221,6 +541801,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutGenderInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -536801,6 +542383,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNationalityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -536958,6 +542542,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNationalityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -537750,6 +543336,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -537907,6 +543495,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538181,6 +543771,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538338,6 +543930,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538612,6 +544206,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538769,6 +544365,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539043,6 +544641,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539200,6 +544800,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539992,6 +545594,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540149,6 +545753,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540423,6 +546029,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540580,6 +546188,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540854,6 +546464,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541011,6 +546623,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541285,6 +546899,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541442,6 +547058,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -542223,6 +547841,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -542380,6 +548000,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -542654,6 +548276,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -542811,6 +548435,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543085,6 +548711,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictPermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543242,6 +548870,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictPermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543516,6 +549146,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543673,6 +549305,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544415,6 +550049,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544572,6 +550208,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544846,6 +550484,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545003,6 +550643,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545277,6 +550919,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545434,6 +551078,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545708,6 +551354,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545865,6 +551513,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546607,6 +552257,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546764,6 +552416,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547038,6 +552692,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547195,6 +552851,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547469,6 +553127,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547626,6 +553286,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547900,6 +553562,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548057,6 +553721,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564457,6 +570123,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         evaluationCriterionId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
     };
     export type SubjectClassUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565636,7 +571304,11 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentUncheckedUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565648,6 +571320,10 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         evaluationCriterionId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentUncheckedUpdateManyWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565659,6 +571335,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         evaluationCriterionId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type StudentResearchRegistrationCreateManyResearchProjectInput = {
         id?: string
@@ -567455,6 +573133,102 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         questions?: RequirementCriterionCatalogUpdatequestionsInput | string[]
     };
+    export type DeadlineHistoryCreateManyCriterionAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        oldDeadline?: Date | string | null
+        newDeadline: Date | string
+        changedById?: string | null
+        reason?: string | null
+    };
+    export type CriterionAssignmentCommentCreateManyAssignmentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        reviewerId: string
+        content: string
+    };
+    export type DeadlineHistoryUpdateWithoutCriterionAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        changedBy?: UserProfileUpdateOneWithoutDeadlineHistoriesNestedInput
+    };
+    export type DeadlineHistoryUncheckedUpdateWithoutCriterionAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        changedById?: NullableStringFieldUpdateOperationsInput | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        oldDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        newDeadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        changedById?: NullableStringFieldUpdateOperationsInput | string | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CriterionAssignmentCommentUpdateWithoutAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        reviewer?: UserProfileUpdateOneRequiredWithoutCriterionAssignmentCommentsNestedInput
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateWithoutAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        reviewerId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        reviewerId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+    };
     export type CriterionCatalogCreateManyScoreScaleInput = {
         id?: string
         code?: string | null
@@ -567681,6 +573455,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         lecturerId: string
         deadline: Date | string
+        status?: $Enums.AssignmentStatus
+        submittedAt?: Date | string | null
     };
     export type RequirementCriterionUpdateWithoutEvaluationCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -567735,7 +573511,11 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentUncheckedUpdateWithoutEvaluationCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -567747,6 +573527,10 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutCriterionAssignmentNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutAssignmentNestedInput
     };
     export type CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -567758,6 +573542,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: StringFieldUpdateOperationsInput | string
         deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+        submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type EvidenceCreateManyCategoryInput = {
         id?: string
@@ -573056,6 +578842,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoHocVanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573213,6 +579001,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutTrinhDoHocVanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574036,6 +579826,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChiHuyQuanLyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574193,6 +579985,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutChiHuyQuanLyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574584,6 +580378,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChuyenMonKyThuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574741,6 +580537,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutChuyenMonKyThuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -575132,6 +580930,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSucKhoeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -575289,6 +581089,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutSucKhoeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -575680,6 +581482,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNhomMauInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -575837,6 +581641,8 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        deadlineHistories?: DeadlineHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+        criterionAssignmentComments?: CriterionAssignmentCommentUncheckedUpdateManyWithoutReviewerNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNhomMauInput = {
         id?: StringFieldUpdateOperationsInput | string

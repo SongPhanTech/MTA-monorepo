@@ -1247,6 +1247,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'profile',
+                }, deadlineHistories: {
+                    name: "deadlineHistories",
+                    type: "DeadlineHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'changedBy',
+                }, criterionAssignmentComments: {
+                    name: "criterionAssignmentComments",
+                    type: "CriterionAssignmentComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'reviewer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17214,6 +17226,189 @@ const metadata = {
                 }, deadline: {
                     name: "deadline",
                     type: "DateTime",
+                }, status: {
+                    name: "status",
+                    type: "AssignmentStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, submittedAt: {
+                    name: "submittedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, deadlineHistories: {
+                    name: "deadlineHistories",
+                    type: "DeadlineHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criterionAssignment',
+                }, criterionAssignmentComments: {
+                    name: "criterionAssignmentComments",
+                    type: "CriterionAssignmentComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'assignment',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        criterionAssignmentComment: {
+            name: 'CriterionAssignmentComment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, assignment: {
+                    name: "assignment",
+                    type: "CriterionAssignment",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'criterionAssignmentComments',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "assignmentId" },
+                }, assignmentId: {
+                    name: "assignmentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'assignment',
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'criterionAssignmentComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'reviewer',
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        deadlineHistory: {
+            name: 'DeadlineHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, criterionAssignment: {
+                    name: "criterionAssignment",
+                    type: "CriterionAssignment",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'deadlineHistories',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "criterionAssignmentId" },
+                }, criterionAssignmentId: {
+                    name: "criterionAssignmentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionAssignment',
+                }, oldDeadline: {
+                    name: "oldDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, newDeadline: {
+                    name: "newDeadline",
+                    type: "DateTime",
+                }, changedBy: {
+                    name: "changedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'deadlineHistories',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "changedById" },
+                }, changedById: {
+                    name: "changedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'changedBy',
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24368,6 +24563,7 @@ const metadata = {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
         evaluationPeriod: ['EvaluationStandard', 'EvaluationCouncil', 'EvaluationSecretarYCouncil'],
+        criterionAssignment: ['CriterionAssignmentComment', 'DeadlineHistory'],
         evaluationStandard: ['EvaluationCriterion'],
         evaluationCriterion: ['CriterionAssignment', 'RequirementCriterion'],
         evidence: ['AnalysisFormEvidence'],

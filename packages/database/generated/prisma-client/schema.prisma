@@ -380,6 +380,15 @@ enum PaymentStatus {
   @@schema("ql-dao-tao")
 }
 
+enum AssignmentStatus {
+  PENDING
+  SUBMITTED
+  REVISION
+  APPROVED
+
+  @@schema("khao-thi")
+}
+
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN
@@ -784,6 +793,8 @@ model UserProfile {
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
+  deadlineHistories             DeadlineHistory[]
+  criterionAssignmentComments   CriterionAssignmentComment[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4498,6 +4509,44 @@ model CriterionCatalog {
 }
 
 model CriterionAssignment {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId       String
+  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String
+  deadline                    DateTime
+  status                      AssignmentStatus             @default(PENDING)
+  submittedAt                 DateTime?                    @default(now())
+  deadlineHistories           DeadlineHistory[]
+  criterionAssignmentComments CriterionAssignmentComment[]
+
+  @@schema("khao-thi")
+}
+
+model CriterionAssignmentComment {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt()
+  assignment   CriterionAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String
+  reviewer     UserProfile         @relation(fields: [reviewerId], references: [id])
+  reviewerId   String
+  content      String              @db.Text()
+
+  @@schema("khao-thi")
+}
+
+model DeadlineHistory {
   id                    String              @id() @default(cuid())
   code                  String?             @unique()
   active                Boolean             @default(true)
@@ -4505,11 +4554,13 @@ model CriterionAssignment {
   deletedAt             DateTime?
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @default(now()) @updatedAt()
-  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId String
-  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
-  lecturerId            String
-  deadline              DateTime
+  criterionAssignment   CriterionAssignment @relation(fields: [criterionAssignmentId], references: [id], onDelete: Cascade)
+  criterionAssignmentId String
+  oldDeadline           DateTime?
+  newDeadline           DateTime
+  changedBy             UserProfile?        @relation(fields: [changedById], references: [id])
+  changedById           String?
+  reason                String?             @db.Text()
 
   @@schema("khao-thi")
 }

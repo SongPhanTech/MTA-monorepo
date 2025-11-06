@@ -164,6 +164,8 @@ export * from './EvaluationPeriod.schema';
 export * from './StandardCatalog.schema';
 export * from './CriterionCatalog.schema';
 export * from './CriterionAssignment.schema';
+export * from './CriterionAssignmentComment.schema';
+export * from './DeadlineHistory.schema';
 export * from './RequirementCriterionCatalog.schema';
 export * from './ScoreScaleCatalog.schema';
 export * from './EvaluationStandard.schema';

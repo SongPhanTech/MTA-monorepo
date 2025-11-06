@@ -164,6 +164,8 @@ export * from './evaluation-period';
 export * from './standard-catalog';
 export * from './criterion-catalog';
 export * from './criterion-assignment';
+export * from './criterion-assignment-comment';
+export * from './deadline-history';
 export * from './requirement-criterion-catalog';
 export * from './score-scale-catalog';
 export * from './evaluation-standard';

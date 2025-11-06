@@ -326,8 +326,9 @@ export function useSuspenseCountCriterionAssignment<TArgs extends Prisma.Criteri
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('CriterionAssignment', `${endpoint}/criterionAssignment/count`, args, options, fetch);
 }
+import type { AssignmentStatus } from '../zenstack/models';
 
-export function useCheckCriterionAssignment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; evaluationCriterionId?: string; lecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCriterionAssignment<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; evaluationCriterionId?: string; lecturerId?: string; status?: AssignmentStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CriterionAssignment', `${endpoint}/criterionAssignment/check`, args, options, fetch);
 }
