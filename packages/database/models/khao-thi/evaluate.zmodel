@@ -71,13 +71,16 @@ model CriterionAssignment extends Base {
 
 //Comment 
 model CriterionAssignmentComment extends Base {
-  assignment   CriterionAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  assignmentId String
+  assignment             CriterionAssignment   @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId           String
 
-  reviewer     UserProfile         @relation(fields: [reviewerId], references: [id])
-  reviewerId   String
+  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
+  reviewerId             String
 
-  content      String              @db.Text
+  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
+  requirementCriterionId String?
+
+  content                String                @db.Text
 
   @@schema("khao-thi")
 }
@@ -199,16 +202,17 @@ model Evidence extends Base {
 
 /// Yêu cầu trong phiếu phân tích tiêu chí
 model RequirementCriterion extends Base {
-  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId String
-  order                 Int
-  name                  String
-  questions             String[]
+  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId       String
+  order                       Int
+  name                        String
+  questions                   String[]
 
-  evidences             AnalysisFormEvidence[]
-  evidencePlaces        String                 @default("")
-  collectionMethod      String                 @default("")
+  evidences                   AnalysisFormEvidence[]
+  evidencePlaces              String                       @default("")
+  collectionMethod            String                       @default("")
 
+  criterionAssignmentComments CriterionAssignmentComment[]
   @@schema("khao-thi")
 }
 
