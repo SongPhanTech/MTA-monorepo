@@ -1,4 +1,4 @@
-import { BarChartOutlined, EyeOutlined } from '@ant-design/icons'
+import {  EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -15,7 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -31,6 +31,8 @@ function TabDotKhaoSat() {
         surveyTopicId: undefined,
         startDate: undefined,
         endDate: undefined,
+        isPublic: undefined,
+        anonymous: undefined,
     })
     const router = useRouter()
     const where = useMemo(
@@ -53,6 +55,16 @@ function TabDotKhaoSat() {
                               },
                           },
                       },
+                  }
+                : {}),
+            ...(filters.isPublic && filters.isPublic.length === 1
+                ? {
+                      isPublic: filters.isPublic[0],
+                  }
+                : {}),
+            ...(filters.anonymous && filters.anonymous.length === 1
+                ? {
+                      anonymous: filters.anonymous[0],
                   }
                 : {}),
             ...(filters.surveyTopicId
@@ -79,13 +91,7 @@ function TabDotKhaoSat() {
                   }
                 : {}),
         }),
-        [
-            filters.name,
-            filters.surveyTopicId,
-            filters.surveyObjectTypeId,
-            filters.startDate,
-            filters.endDate,
-        ]
+        [filters]
     )
 
     const { data = [], refetch } = useFindManySurvey({
@@ -171,6 +177,16 @@ function TabDotKhaoSat() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                        //            onRow={(record) => {
+                        //     return {
+                        //         onClick: () => {
+                        //             setSelectedId(record.id)
+                        //         },
+                        //         className: cn(
+                        //             selectedId === record.id ? 'bg-orange-200' : ''
+                        //         ),
+                        //     }
+                        // }}
                         columns={[
                             {
                                 title: 'STT',
@@ -185,7 +201,7 @@ function TabDotKhaoSat() {
                                 type: 'input',
                             },
                             {
-                                title: 'Chủ đề khảo sát',
+                                title: 'Chủ đề KS',
                                 dataIndex: 'surveyTopicId',
                                 type: 'select',
                                 options: surveyTopicData?.map(({ id, name }) => ({
@@ -196,7 +212,7 @@ function TabDotKhaoSat() {
                                     record?.surveyTopic ? record?.surveyTopic.name : '',
                             },
                             {
-                                title: 'Đối tượng khảo sát',
+                                title: 'ĐTLKS',
                                 dataIndex: 'surveyObjectTypeId',
                                 type: 'select',
                                 options: surveyObjectTypeData?.map(({ id, name }) => ({
@@ -218,26 +234,68 @@ function TabDotKhaoSat() {
                                 },
                             },
                             {
+                                title: 'Công khai',
+                                dataIndex: 'isPublic',
+                                align: 'center',
+                                width: 100,
+                                type: 'select',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Công khai',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Nội bộ',
+                                    },
+                                ],
+                                render: (_, record) => {
+                                    return <Checkbox checked={record?.isPublic} />
+                                },
+                            },
+
+                            {
+                                title: 'Ẩn danh',
+                                dataIndex: 'anonymous',
+                                align: 'center',
+                                width: 100,
+                                type: 'select',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Ẩn danh',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Không ẩn danh',
+                                    },
+                                ],
+                                render: (_, record) => {
+                                    return <Checkbox checked={record?.anonymous} />
+                                },
+                            },
+                            {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
                                 type: 'date',
-                                render: (_, record) =>
-                                    record?.startDate
-                                        ? dayjs(record?.startDate).format('DD/MM/YYYY')
-                                        : '',
+                                width: 120,
+                                render: (_, record) =>{
+                                    return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
+                                }
                             },
+
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
                                 type: 'date',
-                                render: (_, record) =>
-                                    record?.endDate
-                                        ? dayjs(record?.endDate).format('DD/MM/YYYY')
-                                        : '',
+                                width: 120,
+                                render: (_, record) =>{
+                                    return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
+                                }
                             },
                             {
                                 title: 'Thao tác',
-                                width: 170,
+                                width: 120,
                                 align: 'center',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -257,7 +315,7 @@ function TabDotKhaoSat() {
                                     }
                                 ) => (
                                     <Row className="justify-end gap-2">
-                                        {can(
+                                        {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
                                         ) &&
@@ -274,7 +332,7 @@ function TabDotKhaoSat() {
                                                         style={{ fontSize: '16px' }}
                                                     />
                                                 </Tooltip>
-                                            )}
+                                            )} */}
 
                                         {surveyQuestion?.length > 0 &&
                                             can(

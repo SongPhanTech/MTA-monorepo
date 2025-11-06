@@ -129,6 +129,8 @@ export type FilterProps = {
   examCode?: string;
   score?: "asc" | "desc";
   surveyQuestionGroupId?: string[];
+  isPublic?: boolean[];
+  anonymous?: boolean[];
 };
 
 export type ColumnTypeProps = ColumnsType & {

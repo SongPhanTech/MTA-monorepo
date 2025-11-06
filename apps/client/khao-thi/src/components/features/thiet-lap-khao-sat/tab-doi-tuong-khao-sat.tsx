@@ -258,7 +258,7 @@ function TabDoiTuongKhaoSat() {
                                 fixed: 'left',
                             },
                             {
-                                title: 'Tên đối tượng khảo sát',
+                                title: 'Tên Đối tượng làm khảo sát',
                                 dataIndex: 'name',
                                 type: 'input',
                                 width: 200,

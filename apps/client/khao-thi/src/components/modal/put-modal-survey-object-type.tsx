@@ -393,17 +393,17 @@ const PutSurveyObjectTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa đối tượng khảo sát' : 'Thêm mới đối tượng khảo sát'}
+            title={id ? 'Chỉnh sửa đối tượng làm khảo sát' : 'Thêm mới đối tượng làm khảo sát'}
             className="w-[1000px]"
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã đối tượng khảo sát" required>
-                    <Input placeholder="Nhập mã đối tượng khảo sát" />
+                <FormItem form={form} name="code" label="Mã đối tượng làm khảo sát" required>
+                    <Input placeholder="Nhập mã đối tượng làm khảo sát" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên đối tượng khảo sát" required>
-                    <Input placeholder="Nhập tên đối tượng khảo sát" />
+                <FormItem form={form} name="name" label="Tên đối tượng làm khảo sát" required>
+                    <Input placeholder="Nhập tên đối tượng làm khảo sát" />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -22,7 +22,7 @@ function Page() {
         },
         {
             key: '2',
-            label: 'Đối tượng khảo sát',
+            label: 'Đối tượng làm khảo sát',
             children: <TabDoiTuongKhaoSat />,
         },
         {

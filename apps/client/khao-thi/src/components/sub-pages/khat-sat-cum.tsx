@@ -15,7 +15,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -257,7 +257,7 @@ function TabDotKhaoSatCum() {
                                 },
                             },
                             {
-                                title: 'Đối tượng khảo sát',
+                                title: 'Đối tượng làm khảo sát',
                                 dataIndex: 'surveyObjectTypeId',
                                 type: 'select',
                                 options: surveyObjectTypeData?.map(({ id, name }) => ({
@@ -278,23 +278,65 @@ function TabDotKhaoSatCum() {
                                     )
                                 },
                             },
+                             {
+                                title: 'Công khai',
+                                dataIndex: 'isPublic',
+                                align: 'center',
+                                width: 100,
+                                type: 'select',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Công khai',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Nội bộ',
+                                    },
+                                ],
+                                render: (_, record) => {
+                                    return <Checkbox checked={record?.isPublic} />
+                                },
+                            },
+
+                            {
+                                title: 'Ẩn danh',
+                                dataIndex: 'anonymous',
+                                align: 'center',
+                                width: 100,
+                                type: 'select',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Ẩn danh',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Không ẩn danh',
+                                    },
+                                ],
+                                render: (_, record) => {
+                                    return <Checkbox checked={record?.anonymous} />
+                                },
+                            },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
                                 type: 'date',
-                                render: (_, record) =>
-                                    record?.startDate
-                                        ? dayjs(record?.startDate).format('DD/MM/YYYY')
-                                        : '',
+                                width: 120,
+                                render: (_, record) =>{
+                                    return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
+                                }
                             },
+
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
                                 type: 'date',
-                                render: (_, record) =>
-                                    record?.endDate
-                                        ? dayjs(record?.endDate).format('DD/MM/YYYY')
-                                        : '',
+                                width: 120,
+                                render: (_, record) =>{
+                                    return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
+                                }
                             },
                             {
                                 title: 'Thao tác',
