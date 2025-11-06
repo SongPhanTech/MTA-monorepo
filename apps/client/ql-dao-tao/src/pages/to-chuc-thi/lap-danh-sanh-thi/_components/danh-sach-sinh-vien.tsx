@@ -2,7 +2,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { useStore } from '@tanstack/react-store'
-import type { Prisma } from '@workspace/db/client'
+import { type Prisma } from '@workspace/db/client'
 import { useFindManyExamList } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
@@ -161,6 +161,23 @@ export default function DanhSachSinhVien() {
                     }
                 }
             }>
+
+            const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
+
+            console.log(exam.examRooms.flatMap((er) =>
+                er.examList.map((el) => ({
+                    ...el,
+                    capacity: er.capacity,
+                }))
+            )
+);
+            
+            // new PrismaClient().exam.create({
+            //     data: {
+            //         studentSubjectScoreId: exam.subjectClass[0].subjectClassStudent[0].id,
+            //         examListId: exam.examRooms[0].examList[0].id,
+            //     },
+            // })
             const res = await sqlTransaction([
                 {
                     model: 'ExamPaper' as const,
