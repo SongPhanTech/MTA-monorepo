@@ -2,6 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -17,15 +18,22 @@ import {
     useFindManyTrainingCourse,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+
 import { useAbility } from '@workspace/permissions/hooks'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
 
 import type React from 'react'
 import { useState } from 'react'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+// import { getMinioUrl } from '@workspace/constant'
 
 export default function PostgraduateProject() {
     const { can } = useAbility()
+    const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
+        useThesisProjectStatusOptions()
     const [editingRowKey, setEditingRowKey] = useState<string | null>(null)
 
     const [editingValues, setEditingValues] = useState<Record<string, any>>({})
@@ -34,20 +42,30 @@ export default function PostgraduateProject() {
     const handleSave = async (rowId: string) => {
         try {
             showSpinner()
-            const payload = {
+            const basePayload = {
                 title: editingValues.title,
                 description: `Ngôn ngữ: ${editingValues.language} - Luận án/Đề án: ${editingValues.type}`,
+                status: editingValues.status,
                 supervisor: {
                     connect: {
-                        id: editingValues.supervisor,
+                        id: editingValues.supervisor === '' ? null : editingValues.supervisor,
                     },
                 },
+            }
+            const coSupervisorPayload =
+                editingValues.coSupervisor === '' || editingValues.coSupervisor === null
+                    ? { coSupervisor: { disconnect: true } }
+                    : {
+                          coSupervisor: {
+                              connect: {
+                                  id: editingValues.coSupervisor,
+                              },
+                          },
+                      }
 
-                coSupervisor: {
-                    connect: {
-                        id: editingValues.coSupervisor,
-                    },
-                },
+            const payload = {
+                ...basePayload,
+                ...coSupervisorPayload,
             }
             await updateThesisProject({
                 data: payload,
@@ -74,7 +92,9 @@ export default function PostgraduateProject() {
     const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([])
     const [needAllStudents, setNeedAllStudents] = useState<boolean>(false)
     const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false)
-
+    const { onOpen: openModalCauHinhLuanVan } = useDisclosure<{ thesisProjectId: string }>({
+        tag: 'ModalCauHinhLuanVan',
+    })
     const { data: sDm_Donvi } = useFindManyDM_DonVi()
     const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null)
 
@@ -114,36 +134,62 @@ export default function PostgraduateProject() {
     const defaultButtonClick = () => {
         message.info('Tính năng đang trong quá trình phát triển')
     }
-    const saoQDHDLV = () => {
-        console.log('students', allStudents)
+    const saoQDHDLV = async () => {
         const presentDay = dayjs().format('DD/MM/YYYY')
         const ngayQD = presentDay.split('/')[0]
         const thangQD = presentDay.split('/')[1]
         const namQD = presentDay.split('/')[2]
-        console.log('ngayQD', ngayQD)
         if (!students?.length) {
             message.error('Không có dữ liệu để sao QĐ HDLV')
             return
         }
         const allSheetOptions = allStudents?.map((student) => {
+            const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+            const coSupervisor =
+                student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
+            const cbgd1 = supervisor ? `1. ${supervisor}` : ''
+            const cbgd2 = coSupervisor ? `2. ${coSupervisor}` : ''
+            let cbhdFinal = cbgd1
+            if (cbgd2) {
+                cbhdFinal += `\n ${cbgd2}`
+            }
+            const data = {
+                ngayQD: ngayQD,
+                thangQD: thangQD,
+                namQD: namQD,
+                type:
+                    student?.thesisRegistrations?.[0]?.thesisProject?.description
+                        ?.split('-')[1]
+                        .trim()
+                        .split(':')[1] || '',
+                khoa: student?.fixedClass?.trainingCourse?.name || '',
+                chuyennganh:
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
+                nganh:
+                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
+                        ?.name || '',
+                detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                hoten: student?.userProfile?.fullname,
+                canbohuongdan: cbhdFinal,
+                khoaquanly:
+                    student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
+                ngay: ngayQD,
+                thang: thangQD,
+                nam: namQD,
+            }
             return {
                 sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-                data: {
-                    ngayQD: ngayQD,
-                    thangQD: thangQD,
-                    namQD: namQD,
-                    type:
-                        student?.thesisRegistrations?.[0]?.thesisProject?.description
-                            ?.split('-')[1]
-                            .trim()
-                            .split(':')[1] || '',
-                    khoa: student?.fixedClass?.trainingCourse?.name || '',
-
-                    fullname: student.userProfile?.fullname,
-                    code: student.userProfile?.code,
-                },
+                data: data,
             }
         })
+        await exportFromTemplate({
+            templateUrl: '/lms/templates/chuong-trinh-dao-tao/BanSaoQDHuongDanLuanVan.xlsx',
+            sheets: allSheetOptions ?? [],
+            fileName: 'BanSaoQDHuongDanLuanVan',
+            mergeSheetsToOne: true,
+            sheetName: 'BanSaoQDHuongDanLuanVan',
+        })
+        message.success('Xuất file thành công')
     }
     const buttonList = [
         {
@@ -154,7 +200,7 @@ export default function PostgraduateProject() {
         {
             id: 2,
             label: 'Sao QĐ HDLV',
-            onClick: () => saoQDHDLV(),
+            onClick: async () => await saoQDHDLV(),
         },
         {
             id: 3,
@@ -454,10 +500,8 @@ export default function PostgraduateProject() {
                                     <Button
                                         type="primary"
                                         onClick={() => {
-                                            // 1. "Chốt" bộ lọc: Copy giá trị từ UI vào Query
                                             setQueryFixedClasses(fixedClassesSelected)
 
-                                            // 2. Kích hoạt hook (chỉ cho lần đầu tiên)
                                             if (!hasClickedFetch) {
                                                 setHasClickedFetch(true)
                                             }
@@ -465,13 +509,22 @@ export default function PostgraduateProject() {
                                     >
                                         Xem kết quả
                                     </Button>
-                                    <Button
-                                        type="primary"
-                                        className="ml-2"
-                                        onClick={async () => await taodulieumau()}
+                                    <Popconfirm
+                                        placement="rightTop"
+                                        title="Xác nhận tạo dữ liệu mẫu"
+                                        description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
+                                        onConfirm={async () => {
+                                            setQueryFixedClasses(fixedClassesSelected)
+                                            if (!hasClickedFetch) {
+                                                setHasClickedFetch(true)
+                                            }
+                                            await taodulieumau()
+                                        }}
                                     >
-                                        Tạo dữ liệu mẫu
-                                    </Button>
+                                        <Button type="primary" className="ml-2">
+                                            Tạo dữ liệu mẫu
+                                        </Button>
+                                    </Popconfirm>
                                 </Form.Item>
                             </Flex>
                         </Col>
@@ -480,7 +533,11 @@ export default function PostgraduateProject() {
                         <Col>
                             <Flex gap={4} wrap="wrap">
                                 {buttonList.map((item) => (
-                                    <Button key={item.id} type="primary" onClick={item.onClick}>
+                                    <Button
+                                        key={item.id}
+                                        type="primary"
+                                        onClick={async () => await item.onClick()}
+                                    >
                                         {item.id}. {item.label}
                                     </Button>
                                 ))}
@@ -551,7 +608,6 @@ export default function PostgraduateProject() {
                                                     ''
                                                 }
                                                 onChange={(e) => {
-                                                    console.log('value', e.target.value)
                                                     handleEditChange('title', e.target.value)
                                                 }}
                                             />
@@ -578,7 +634,7 @@ export default function PostgraduateProject() {
                                                 value={
                                                     editingValues.supervisor ||
                                                     record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.supervisor?.name ||
+                                                        ?.supervisor?.id ||
                                                     ''
                                                 }
                                                 onChange={(value) =>
@@ -609,7 +665,7 @@ export default function PostgraduateProject() {
                                                 value={
                                                     editingValues.coSupervisor ||
                                                     record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.coSupervisor?.name ||
+                                                        ?.coSupervisor?.id ||
                                                     ''
                                                 }
                                                 onChange={(value) =>
@@ -618,7 +674,10 @@ export default function PostgraduateProject() {
                                             />
                                         )
                                     }
-                                    return record
+                                    return (
+                                        record?.thesisRegistrations?.[0]?.thesisProject
+                                            ?.coSupervisor?.name || ''
+                                    )
                                 },
                             },
                             {
@@ -678,6 +737,42 @@ export default function PostgraduateProject() {
                                     const data =
                                         record?.thesisRegistrations?.[0]?.thesisProject?.description
                                     return data ? data.split('-')[1].trim().split(':')[1] : ''
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                width: 100,
+                                dataIndex: 'status',
+                                render: (text: string, record: any) => {
+                                    if (record?.id === editingRowKey) {
+                                        return (
+                                            <Select
+                                                className="w-full"
+                                                options={useThesisProjectStatusOptions().thesisProjectStatusOptions.map(
+                                                    (item) => ({
+                                                        label: item.label,
+                                                        value: item.value,
+                                                    })
+                                                )}
+                                                value={
+                                                    editingValues.status ||
+                                                    record?.thesisRegistrations?.[0]?.thesisProject
+                                                        ?.status ||
+                                                    ''
+                                                }
+                                                onChange={(value) =>
+                                                    handleEditChange('status', value)
+                                                }
+                                            />
+                                        )
+                                    }
+                                    const label = getThesisProjectStatusLabel(
+                                        record?.thesisRegistrations?.[0]?.thesisProject?.status
+                                    )
+                                    const color = getThesisProjectStatusColor(
+                                        record?.thesisRegistrations?.[0]?.thesisProject?.status
+                                    )
+                                    return <Tag color={color}>{label}</Tag>
                                 },
                             },
                             {
@@ -768,6 +863,18 @@ export default function PostgraduateProject() {
                                                         } finally {
                                                             hideSpinner()
                                                         }
+                                                    }}
+                                                />
+
+                                                <SettingsIcon
+                                                    title="Cấu hình bảo vệ luận văn/Đề án"
+                                                    className="text-sm text-yellow-700 cursor-pointer"
+                                                    onClick={() => {
+                                                        openModalCauHinhLuanVan({
+                                                            thesisProjectId:
+                                                                record?.thesisRegistrations?.[0]
+                                                                    ?.thesisProject?.id,
+                                                        })
                                                     }}
                                                 />
                                             </Row>

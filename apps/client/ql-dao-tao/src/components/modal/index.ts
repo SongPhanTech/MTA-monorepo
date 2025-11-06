@@ -99,6 +99,7 @@ import PutCertificateArchivedModal from './put-archived-certificate'
 import { XemTaiLieu } from './xem-tai-lieu'
 import PutDeadlineScoreModal from './set-deadline-score'
 import PutThesisSession from './put-dot-xet-luan-van'
+import ModalCauHinhLuanVan from './modal-cau-hinh-luan-van'
 export {
     XemTaiLieu,
     ModalViewHistoryChange,
@@ -201,5 +202,6 @@ export {
     PutCertificateArchivedModal,
     PutDeadlineScoreModal,
     PutThesisSession,
+    ModalCauHinhLuanVan,
 }
 export * from './ke-hoach-dao-tao'
