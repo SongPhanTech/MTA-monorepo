@@ -3367,8 +3367,6 @@ exports.Prisma.ExamScalarFieldEnum = {
   status: 'status',
   questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
-  createdExamCode: 'createdExamCode',
-  lockExamCode: 'lockExamCode',
   duration: 'duration',
   session: 'session',
   subjectVersionId: 'subjectVersionId'
@@ -3398,6 +3396,7 @@ exports.Prisma.ExamListScalarFieldEnum = {
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId',
+  createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
   start: 'start',
   end: 'end'

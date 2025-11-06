@@ -4,7 +4,8 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { cn, formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import { useCountExamRoom, useFindManyExamList } from '@workspace/db/hooks'
+import { Prisma } from '@workspace/db/client'
+import { useCountExamList, useFindManyExamList } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row } from 'antd'
@@ -24,7 +25,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
     })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    const where: any = useMemo(() => {
+    const where = useMemo(() => {
         return {
             ...(trainingObjectTypeId || semesterId
                 ? {
@@ -38,7 +39,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                       },
                   }
                 : {}),
-        }
+        } as Prisma.ExamListWhereInput
     }, [filters, trainingObjectTypeId, semesterId])
 
     const { data = [], refetch } = useFindManyExamList({
@@ -80,9 +81,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    data[0].examRoom?.room.building?.trainingLocation?.name
-
-    const { data: count } = useCountExamRoom({
+    const { data: count } = useCountExamList({
         where: {
             ...where,
             deletedAt: null,

@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import { type SubjectClass } from '@workspace/db/client'
+import { ExamList, type SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
@@ -130,6 +130,17 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 select: {
                     roomId: true,
                     capacity: true,
+                    examList: {
+                        select: {
+                            createdExamCode: true,
+                            lockExamCode: true,
+                        },
+                    },
+                },
+                where: {
+                    roomId: {
+                        not: null,
+                    },
                 },
             },
         },
@@ -690,12 +701,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <Checkbox
                                             indeterminate={
-                                                isLockScore.length > 0 &&
-                                                isLockScore.length !== record.subjectClass.length
+                                                !record?.subjectClass?.every?.(
+                                                    (sc: SubjectClass) => sc.isLockScore
+                                                ) &&
+                                                record?.subjectClass.some(
+                                                    (sc: SubjectClass) => sc.isLockScore
+                                                )
                                             }
-                                            checked={
-                                                isLockScore.length === record.subjectClass.length
-                                            }
+                                            checked={record?.subjectClass.every(
+                                                (sc: SubjectClass) => sc.isLockScore
+                                            )}
                                         />
                                     )
                                 },
@@ -714,8 +729,26 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 60,
                                 render: (_, record) => {
-                                    const createdExamCode = record.createdExamCode
-                                    return <Checkbox checked={createdExamCode} />
+                                    return (
+                                        <Checkbox
+                                            indeterminate={
+                                                !record?.examRoom?.every?.(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.every(
+                                                            (el) => el.createdExamCode
+                                                        )
+                                                ) &&
+                                                record?.examRoom.some(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.some((el) => el.createdExamCode)
+                                                )
+                                            }
+                                            checked={record?.examRoom?.every?.(
+                                                (sc: { examList: ExamList[] }) =>
+                                                    sc.examList.every((el) => el.createdExamCode)
+                                            )}
+                                        />
+                                    )
                                 },
                             },
                             {
@@ -723,8 +756,24 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 60,
                                 render: (_, record) => {
-                                    const lockExamCode = record.lockExamCode
-                                    return <Checkbox checked={lockExamCode} />
+                                    return (
+                                        <Checkbox
+                                            indeterminate={
+                                                !record?.examRoom?.every?.(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.every((el) => el.lockExamCode)
+                                                ) &&
+                                                record?.examRoom.some(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.some((el) => el.lockExamCode)
+                                                )
+                                            }
+                                            checked={record?.examRoom?.every?.(
+                                                (sc: { examList: ExamList[] }) =>
+                                                    sc.examList.every((el) => el.lockExamCode)
+                                            )}
+                                        />
+                                    )
                                 },
                             },
                             {

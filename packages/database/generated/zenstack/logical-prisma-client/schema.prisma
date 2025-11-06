@@ -5715,9 +5715,6 @@ model Exam {
   questionBankId     String?
   /// khoá DS thi
   lockExamSessions   Boolean             @default(false)
-  /// Đã đánh phách
-  createdExamCode    Boolean             @default(false)
-  lockExamCode       Boolean             @default(false)
   /// thời gian thi
   duration           Int?
   session            Int                 @default(1)
@@ -5772,6 +5769,8 @@ model ExamList {
   firstSupervisorId  String?
   secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
   secondSupervisorId String?
+  /// Đã đánh phách
+  createdExamCode    Boolean     @default(false)
   lockExamCode       Boolean     @default(false)
   start              Int?
   end                Int?
