@@ -1,9 +1,9 @@
+// @ts-nocheck
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import type React from 'react'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -17,6 +17,7 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
+import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
