@@ -42,6 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     student: z.record(z.string(), z.unknown()),
     session: z.record(z.string(), z.unknown()),
+    downgraded: z.record(z.string(), z.unknown()).optional(),
     rank: z.record(z.string(), z.unknown()).optional(),
     trainingMajor: z.record(z.string(), z.unknown()).optional(),
     diplomaType: z.record(z.string(), z.unknown()).optional(),

@@ -19893,6 +19893,12 @@ const metadata: ModelMeta = {
                     name: "reason",
                     type: "String",
                     isOptional: true,
+                }, downgraded: {
+                    name: "downgraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
                 }, rank: {
                     name: "rank",
                     type: "AcademicRankingConvert",
@@ -19970,6 +19976,82 @@ const metadata: ModelMeta = {
                 }, studentId_sessionId: {
                     name: "studentId_sessionId",
                     fields: ["studentId", "sessionId"]
+                },
+            },
+        },
+        applicationDowngraded: {
+            name: 'ApplicationDowngraded', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    backLink: 'downgraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentGraduationApplication',
+                }, from: {
+                    name: "from",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fromId" },
+                }, fromId: {
+                    name: "fromId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'from',
+                }, conditions: {
+                    name: "conditions",
+                    type: "GraduationRankDowngradeCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    fields: ["studentGraduationApplicationId"]
                 },
             },
         },
@@ -20308,6 +20390,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'rank',
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'from',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20443,6 +20531,13 @@ const metadata: ModelMeta = {
                     type: "String",
                     isArray: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'conditions',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {

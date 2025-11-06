@@ -39,6 +39,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     downgradeRule: z.record(z.string(), z.unknown()),
+    applicationDowngraded: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

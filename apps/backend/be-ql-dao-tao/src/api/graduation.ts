@@ -1,5 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, RankingContext, SubjectRequirementType } from '@workspace/db'
+import {
+    AcademicActionType,
+    ApplicationStatus,
+    RankingContext,
+    StudentStatus,
+    SubjectRequirementType,
+} from '@workspace/db'
 import {
     AcademicRankingConvertScalarSchema,
     DiplomaTypeScalarSchema,
@@ -67,6 +73,10 @@ app.openapi(graduationApplicationInit, async (c) => {
         where: {
             ...(trainingCourseId ? { fixedClass: { trainingCourseId } } : {}),
             ...(fixedClassId ? { fixedClassId } : {}),
+            deletedAt: null,
+            status: {
+                in: [StudentStatus.ENROLLED, StudentStatus.PENDING_GRADUATION_REVIEW],
+            },
         },
     })
 
@@ -151,7 +161,15 @@ app.openapi(graduationCheck, async (c) => {
         where: { id: sessionId },
         include: {
             applications: {
-                ...(applicationIds?.length ? { where: { id: { in: applicationIds } } } : {}),
+                where: {
+                    ...(applicationIds?.length
+                        ? { id: { in: applicationIds } }
+                        : {
+                              status: {
+                                  in: [ApplicationStatus.SUBMITTED, ApplicationStatus.IN_REVIEW],
+                              },
+                          }),
+                },
             },
         },
     })
@@ -631,26 +649,27 @@ app.openapi(graduationCheck, async (c) => {
         ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
             const isEligible = rank.rankingCondition.every(async (rule) => {
                 const passed = evaluateCondition(studentDataContext, rule)
-                // const actualValue = Number(studentDataContext[rule.field])
-                // await prisma.applicationCheckResult
-                //     .upsert({
-                //         where: {
-                //             studentGraduationApplicationId_rankingConditionId: {
-                //                 studentGraduationApplicationId: application.id,
-                //                 rankingConditionId: rule.id,
-                //             },
-                //         },
-                //         create: {
-                //             studentGraduationApplicationId: application.id,
-                //             rankingConditionId: rule.id,
-                //             passed,
-                //             actualValue,
-                //         },
-                //         update: { passed, actualValue },
-                //     })
-                //     .catch((e) => {
-                //         console.log(e)
-                //     })
+                const actualValue = Number(studentDataContext[rule.field])
+                // TODO: optimize this
+                await prisma.applicationCheckResult
+                    .upsert({
+                        where: {
+                            studentGraduationApplicationId_rankingConditionId: {
+                                studentGraduationApplicationId: application.id,
+                                rankingConditionId: rule.id,
+                            },
+                        },
+                        create: {
+                            studentGraduationApplicationId: application.id,
+                            rankingConditionId: rule.id,
+                            passed,
+                            actualValue,
+                        },
+                        update: { passed, actualValue },
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
 
                 return passed
             })
@@ -723,6 +742,9 @@ app.openapi(graduationCheck, async (c) => {
                 graduation: result.graduation,
                 diplomaTypeId: result.diplomaType?.id,
                 trainingMajorId: result.trainingMajor?.id,
+                gpa: result.gpa,
+                reason: result.reason,
+                status: ApplicationStatus.IN_REVIEW,
             },
         })
     }
