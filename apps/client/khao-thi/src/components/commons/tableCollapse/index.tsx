@@ -214,10 +214,10 @@ const TableCollapse = <
                 // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
                 // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
-                scroll={{
-                    x: 'max-content',
-                    y: scrollable ? maxHeight : undefined,
-                }}
+                // scroll={{
+                //     x: 'max-content',
+                //     y: scrollable ? maxHeight : undefined,
+                // }}
                 bordered
                 data={dataWithKey}
                 pagination={pagination}
@@ -312,6 +312,9 @@ const TableCollapse = <
                 }
                 .ant-table-row > td:first-child:not(:hover) {
                     background-color: white;
+                }
+                .ant-table-content {
+                    overflow: visible !important;
                 }
             `}
             </style>
