@@ -2,7 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import CreateIcon from '@components/icons/create'
+import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -18,6 +18,7 @@ import {
     useFindManyTrainingCourse,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+
 import { useAbility } from '@workspace/permissions/hooks'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
@@ -26,6 +27,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 // import { getMinioUrl } from '@workspace/constant'
 
 export default function PostgraduateProject() {
@@ -90,7 +92,9 @@ export default function PostgraduateProject() {
     const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([])
     const [needAllStudents, setNeedAllStudents] = useState<boolean>(false)
     const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false)
-
+    const { onOpen: openModalCauHinhLuanVan } = useDisclosure<{ thesisProjectId: string }>({
+        tag: 'ModalCauHinhLuanVan',
+    })
     const { data: sDm_Donvi } = useFindManyDM_DonVi()
     const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null)
 
@@ -861,9 +865,17 @@ export default function PostgraduateProject() {
                                                         }
                                                     }}
                                                 />
-                                                <CreateIcon
-                                                    className="text-sm text-green-700 cursor-pointer"
-                                                    title="Thêm hội đồng"
+
+                                                <SettingsIcon
+                                                    title="Cấu hình bảo vệ luận văn/Đề án"
+                                                    className="text-sm text-yellow-700 cursor-pointer"
+                                                    onClick={() => {
+                                                        openModalCauHinhLuanVan({
+                                                            thesisProjectId:
+                                                                record?.thesisRegistrations?.[0]
+                                                                    ?.thesisProject?.id,
+                                                        })
+                                                    }}
                                                 />
                                             </Row>
                                         )
