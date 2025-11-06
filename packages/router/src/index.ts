@@ -223,6 +223,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Điểm lớp môn học',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
+                        label: 'Điểm lớp môn học (P13)',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
+                        description: 'Điểm lớp môn học (P13)',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
                         label: 'Nhập điểm theo phách',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 export default function SinhPhach() {
     const router = useRouter()
     const { selectedExamListId } = useStore(diemPhongThiStore)
-    const { data: examRoom, refetch } = useFindUniqueExamList(
+    const { data: examList, refetch } = useFindUniqueExamList(
         {
             where: { id: selectedExamListId },
             include: {
@@ -68,16 +68,16 @@ export default function SinhPhach() {
         <>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                    <Checkbox checked={examRoom?.lockExamCode}>Khoá sinh phách</Checkbox>
+                    <Checkbox checked={examList?.lockExamCode}>Khoá sinh phách</Checkbox>
                     <Flex justify="end" align="center">
-                        <ExportPhach data={examRoom?.examPapers || []} />
+                        <ExportPhach data={examList?.examPapers || []} />
                         <Button
                             type="primary"
                             className="ml-3"
                             onClick={() => {
                                 handleSave()
                             }}
-                            disabled={examRoom?.lockExamCode}
+                            disabled={examList?.lockExamCode}
                         >
                             Tạo phách
                         </Button>
@@ -96,16 +96,16 @@ export default function SinhPhach() {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Mã học sinh',
+                            title: 'Mã SV',
                             dataIndex: 'name',
                             width: 150,
-                            render: (_, record: any) =>
+                            render: (_, record) =>
                                 record?.studentSubjectScore?.student?.userProfile?.code || '',
                         },
                         {
                             title: 'Tên thí sinh',
                             dataIndex: 'fullname',
-                            render: (_, record: any) =>
+                            render: (_, record) =>
                                 `${record?.studentSubjectScore?.student?.userProfile?.lastName} ${record?.studentSubjectScore?.student?.userProfile?.firstName}` ||
                                 '',
                         },
@@ -113,10 +113,10 @@ export default function SinhPhach() {
                             title: 'Phách',
                             dataIndex: 'name',
                             width: 150,
-                            render: (_, record: any) => record?.examCode || '',
+                            render: (_, record) => record?.examCode || '',
                         },
                     ]}
-                    data={examRoom?.examPapers || []}
+                    data={examList?.examPapers || []}
                     pagination={false}
                 />
             </Col>

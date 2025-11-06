@@ -386,8 +386,43 @@ export default function NhapDiem({
                 subject: {
                     select: {
                         onePoint: true,
+                        credit: true,
+                        managementOrganization: {
+                            select: {
+                                sTen: true,
+                            },
+                        },
                     },
                 },
+                subjectClassStudent: true,
+                semester: {
+                    select: {
+                        name: true,
+                        schoolYear: true,
+                    },
+                },
+                code: true,
+                name: true,
+                mainLecturer: {
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                extraLecturer: {
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                examDate: true,
+                examType: true,
             },
         },
         {
@@ -560,10 +595,11 @@ export default function NhapDiem({
                             'IN_DS_THI'
                         ) && (
                             <ExportTemplateExam
-                                selectedSubjectClass={selectedSubjectClassId}
                                 dataClass={dataDetailSubjectClass}
                                 dataTable={dataTable}
-                                disabled={!dataDetailSubjectClass?.enteredScore}
+                                disabled={
+                                    !dataDetailSubjectClass?.enteredScore || !selectedSubjectClassId
+                                }
                             />
                         )}
                     {score !== 'CC/TX' &&
@@ -1030,7 +1066,11 @@ export default function NhapDiem({
                                             valuePropName="checked"
                                         >
                                             <Checkbox
-                                                disabled={score === 'CC/TX' || disabledForm}
+                                                disabled={
+                                                    role !== 'P13' ||
+                                                    score === 'CC/TX' ||
+                                                    disabledForm
+                                                }
                                             />
                                         </Form.Item>
                                     )

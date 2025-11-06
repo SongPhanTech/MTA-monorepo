@@ -4,7 +4,6 @@ import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
-import { useMemo } from 'react'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: { score: number | null }[] }>()
@@ -31,25 +30,22 @@ export default function NhapDiemPhach() {
         },
         { enabled: !!selectedExamListId }
     )
-    const disabled = useMemo(() => {
-        return examList?.lockExamCode || true
-    }, [examList?.lockExamCode])
 
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn sinh phách không?',
+            content: 'Bạn có chắc chắn muốn lưu điểm không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleGenCode()
+                handleNhapDiem()
             },
         })
     }
     const { mutateAsync: saveScore } = useSaveExamScore()
 
     // const listForm = Form.useWatch('list', form) || []
-    const handleGenCode = async () => {
+    const handleNhapDiem = async () => {
         const dataForm = form.getFieldsValue()
         const dataSubmit = Object.entries(dataForm.list).map(([key, value_]) => {
             return {
@@ -61,7 +57,7 @@ export default function NhapDiemPhach() {
             data: dataSubmit,
         })
         if (res?.status === 200) {
-            message.success('Sinh phách thành công')
+            message.success('Lưu điểm thành công')
             refetch()
         }
     }
@@ -74,7 +70,6 @@ export default function NhapDiemPhach() {
                         onClick={() => {
                             handleSave()
                         }}
-                        disabled={disabled}
                     >
                         Lưu
                     </Button>

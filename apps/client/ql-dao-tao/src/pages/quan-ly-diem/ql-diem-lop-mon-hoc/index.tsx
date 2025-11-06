@@ -1,3 +1,4 @@
+import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
 import NhapDiem from '@components/sub-pages/nhap-diem'
 import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
@@ -7,15 +8,13 @@ import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
-import { Checkbox, Col, Flex, Form, Input, Row, Tabs, type TabsProps } from 'antd'
+import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
-import Select from '@components/commons/select'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
-    score?: 'CC/TX' | 'THI'
+    score?: 'CC/TX' | 'THI' | 'PHACH'
 }
 type SubmitFormType = {
     isLockExamScore?: boolean
@@ -87,7 +86,7 @@ export default function QuanLyDiemLopMonHoc({
 
     const items = useMemo(() => {
         let baseMenu: TabsProps['items'] =
-            role === 'P13'
+            role === 'P13' && score === 'PHACH'
                 ? [
                       {
                           label: 'Phòng thi',
@@ -143,7 +142,7 @@ export default function QuanLyDiemLopMonHoc({
             ]
         }
 
-        if (role === 'P13') {
+        if (role === 'P13' && score === 'PHACH') {
             baseMenu = [
                 ...baseMenu,
                 {
@@ -222,7 +221,7 @@ export default function QuanLyDiemLopMonHoc({
     }, [data, form])
     return (
         <Row gutter={[16, 4]}>
-            {role !== 'P13' && (
+            {score !== 'PHACH' && (
                 <>
                     <Col span={12}>
                         <div className="flex items-center mb-2 w-full">
