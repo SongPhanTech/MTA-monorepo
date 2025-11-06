@@ -39,7 +39,7 @@ const baseSchema = z.object({
     enteredExamScore: z.boolean().default(false),
     issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean().default(false),
-    isLockExamScore: z.boolean().default(true),
+    isLockExamScore: z.boolean().default(false),
     scoreSubmitted: z.boolean().default(false),
     scoreChecked: z.boolean().default(false),
 }

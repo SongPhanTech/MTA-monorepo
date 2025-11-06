@@ -184,10 +184,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     (acc, exam) => {
                         acc[exam.id] = {
                             rooms:
-                                exam.examRooms?.map((er) => ({
-                                    roomId: er.roomId,
-                                    quantity: er.capacity,
-                                })) || [],
+                                exam.examRooms
+                                    .filter((er) => !!er.roomId)
+                                    ?.map((er) => ({
+                                        roomId: er.roomId ?? '',
+                                        quantity: er.capacity,
+                                    })) || [],
                             isChanged: false,
                             session: exam.session ?? 1,
                         }

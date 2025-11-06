@@ -861,7 +861,7 @@ export default function NhapDiem({
                                 type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
-                                    if (role !== 'GV' || score === 'CC/TX') {
+                                    if (role !== 'GV' || score === 'CC/TX' || !!record.examBanned) {
                                         return record.examScore || ''
                                     }
                                     return (

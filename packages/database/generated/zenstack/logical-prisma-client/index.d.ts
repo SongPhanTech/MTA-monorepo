@@ -86228,7 +86228,7 @@ export namespace Prisma {
     export interface Prisma__ExamRoomClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        room<T extends RoomDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoomDefaultArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        room<T extends ExamRoom$roomArgs<ExtArgs> = {}>(args?: Subset<T, ExamRoom$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         examList<T extends ExamRoom$examListArgs<ExtArgs> = {}>(args?: Subset<T, ExamRoom$examListArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -283351,7 +283351,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         examId: string
-        roomId: string
+        roomId: string | null
         capacity: number
         _count: ExamRoomCountAggregateOutputType | null
         _avg: ExamRoomAvgAggregateOutputType | null
@@ -283383,7 +283383,7 @@ export namespace Prisma {
         roomId?: boolean
         capacity?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
         examList?: boolean | ExamRoom$examListArgs<ExtArgs>
         _count?: boolean | ExamRoomCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examRoom"]>;
@@ -283399,7 +283399,7 @@ export namespace Prisma {
         roomId?: boolean
         capacity?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
     }, ExtArgs["result"]["examRoom"]>;
     export type ExamRoomSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -283413,7 +283413,7 @@ export namespace Prisma {
         roomId?: boolean
         capacity?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
     }, ExtArgs["result"]["examRoom"]>;
     export type ExamRoomSelectScalar = {
         id?: boolean
@@ -283430,23 +283430,23 @@ export namespace Prisma {
     export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId" | "capacity", ExtArgs["result"]["examRoom"]>;
     export type ExamRoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
         examList?: boolean | ExamRoom$examListArgs<ExtArgs>
         _count?: boolean | ExamRoomCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ExamRoomIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
     };
     export type ExamRoomIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | RoomDefaultArgs<ExtArgs>
+        room?: boolean | ExamRoom$roomArgs<ExtArgs>
     };
     export type $ExamRoomPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ExamRoom"
         objects: {
             exam: Prisma.$ExamPayload<ExtArgs>
-            room: Prisma.$RoomPayload<ExtArgs>
+            room: Prisma.$RoomPayload<ExtArgs> | null
             examList: Prisma.$ExamListPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -283458,7 +283458,7 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             examId: string
-            roomId: string
+            roomId: string | null
             capacity: number
         }, ExtArgs["result"]["examRoom"]>
         composites: {}
@@ -283843,6 +283843,24 @@ export namespace Prisma {
          * Limit how many ExamRooms to delete.
          */
         limit?: number
+    };
+    /**
+     * ExamRoom.room
+     */
+    export type ExamRoom$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Room
+         */
+        select?: RoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Room
+         */
+        omit?: RoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: RoomInclude<ExtArgs> | null
+        where?: RoomWhereInput
     };
     /**
      * ExamRoom.examList
@@ -344455,10 +344473,10 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
-        roomId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringNullableFilter<"ExamRoom"> | string | null
         capacity?: IntFilter<"ExamRoom"> | number
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
+        room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
         examList?: ExamListListRelationFilter
     };
     export type ExamRoomOrderByWithRelationInput = {
@@ -344470,7 +344488,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        roomId?: SortOrder
+        roomId?: SortOrderInput | SortOrder
         capacity?: SortOrder
         exam?: ExamOrderByWithRelationInput
         room?: RoomOrderByWithRelationInput
@@ -344490,10 +344508,10 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
-        roomId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringNullableFilter<"ExamRoom"> | string | null
         capacity?: IntFilter<"ExamRoom"> | number
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
+        room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
         examList?: ExamListListRelationFilter
     }, "id" | "code" | "examId_roomId">;
     export type ExamRoomOrderByWithAggregationInput = {
@@ -344505,7 +344523,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        roomId?: SortOrder
+        roomId?: SortOrderInput | SortOrder
         capacity?: SortOrder
         _count?: ExamRoomCountOrderByAggregateInput
         _avg?: ExamRoomAvgOrderByAggregateInput
@@ -344525,7 +344543,7 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
         examId?: StringWithAggregatesFilter<"ExamRoom"> | string
-        roomId?: StringWithAggregatesFilter<"ExamRoom"> | string
+        roomId?: StringNullableWithAggregatesFilter<"ExamRoom"> | string | null
         capacity?: IntWithAggregatesFilter<"ExamRoom"> | number
     };
     export type ExamListWhereInput = {
@@ -371973,9 +371991,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        capacity: number
+        capacity?: number
         exam: ExamCreateNestedOneWithoutExamRoomsInput
-        room: RoomCreateNestedOneWithoutExamRoomsInput
+        room?: RoomCreateNestedOneWithoutExamRoomsInput
         examList?: ExamListCreateNestedManyWithoutExamRoomInput
     };
     export type ExamRoomUncheckedCreateInput = {
@@ -371987,8 +372005,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        roomId: string
-        capacity: number
+        roomId?: string | null
+        capacity?: number
         examList?: ExamListUncheckedCreateNestedManyWithoutExamRoomInput
     };
     export type ExamRoomUpdateInput = {
@@ -372001,7 +372019,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         capacity?: IntFieldUpdateOperationsInput | number
         exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
-        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
+        room?: RoomUpdateOneWithoutExamRoomsNestedInput
         examList?: ExamListUpdateManyWithoutExamRoomNestedInput
     };
     export type ExamRoomUncheckedUpdateInput = {
@@ -372013,7 +372031,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        roomId?: StringFieldUpdateOperationsInput | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
         capacity?: IntFieldUpdateOperationsInput | number
         examList?: ExamListUncheckedUpdateManyWithoutExamRoomNestedInput
     };
@@ -372026,8 +372044,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        roomId: string
-        capacity: number
+        roomId?: string | null
+        capacity?: number
     };
     export type ExamRoomUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -372048,7 +372066,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        roomId?: StringFieldUpdateOperationsInput | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
         capacity?: IntFieldUpdateOperationsInput | number
     };
     export type ExamListCreateInput = {
@@ -391235,10 +391253,6 @@ export namespace Prisma {
     export type ExamScalarRelationFilter = {
         is?: ExamWhereInput
         isNot?: ExamWhereInput
-    };
-    export type RoomScalarRelationFilter = {
-        is?: RoomWhereInput
-        isNot?: RoomWhereInput
     };
     export type ExamRoomOrderByRelevanceInput = {
         fields: ExamRoomOrderByRelevanceFieldEnum | ExamRoomOrderByRelevanceFieldEnum[]
@@ -413408,10 +413422,12 @@ export namespace Prisma {
         connect?: ExamWhereUniqueInput
         update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutExamRoomsInput, ExamUpdateWithoutExamRoomsInput>, ExamUncheckedUpdateWithoutExamRoomsInput>
     };
-    export type RoomUpdateOneRequiredWithoutExamRoomsNestedInput = {
+    export type RoomUpdateOneWithoutExamRoomsNestedInput = {
         create?: XOR<RoomCreateWithoutExamRoomsInput, RoomUncheckedCreateWithoutExamRoomsInput>
         connectOrCreate?: RoomCreateOrConnectWithoutExamRoomsInput
         upsert?: RoomUpsertWithoutExamRoomsInput
+        disconnect?: RoomWhereInput | boolean
+        delete?: RoomWhereInput | boolean
         connect?: RoomWhereUniqueInput
         update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutExamRoomsInput, RoomUpdateWithoutExamRoomsInput>, RoomUncheckedUpdateWithoutExamRoomsInput>
     };
@@ -481358,7 +481374,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        capacity: number
+        capacity?: number
         exam: ExamCreateNestedOneWithoutExamRoomsInput
         examList?: ExamListCreateNestedManyWithoutExamRoomInput
     };
@@ -481371,7 +481387,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        capacity: number
+        capacity?: number
         examList?: ExamListUncheckedCreateNestedManyWithoutExamRoomInput
     };
     export type ExamRoomCreateOrConnectWithoutRoomInput = {
@@ -481492,7 +481508,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
-        roomId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringNullableFilter<"ExamRoom"> | string | null
         capacity?: IntFilter<"ExamRoom"> | number
     };
     export type DM_DonViCreateWithoutTrainingFieldsInput = {
@@ -511145,8 +511161,8 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        capacity: number
-        room: RoomCreateNestedOneWithoutExamRoomsInput
+        capacity?: number
+        room?: RoomCreateNestedOneWithoutExamRoomsInput
         examList?: ExamListCreateNestedManyWithoutExamRoomInput
     };
     export type ExamRoomUncheckedCreateWithoutExamInput = {
@@ -511157,8 +511173,8 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        roomId: string
-        capacity: number
+        roomId?: string | null
+        capacity?: number
         examList?: ExamListUncheckedCreateNestedManyWithoutExamRoomInput
     };
     export type ExamRoomCreateOrConnectWithoutExamInput = {
@@ -511632,9 +511648,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        capacity: number
+        capacity?: number
         exam: ExamCreateNestedOneWithoutExamRoomsInput
-        room: RoomCreateNestedOneWithoutExamRoomsInput
+        room?: RoomCreateNestedOneWithoutExamRoomsInput
     };
     export type ExamRoomUncheckedCreateWithoutExamListInput = {
         id?: string
@@ -511645,8 +511661,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        roomId: string
-        capacity: number
+        roomId?: string | null
+        capacity?: number
     };
     export type ExamRoomCreateOrConnectWithoutExamListInput = {
         where: ExamRoomWhereUniqueInput
@@ -511833,7 +511849,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         capacity?: IntFieldUpdateOperationsInput | number
         exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
-        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
+        room?: RoomUpdateOneWithoutExamRoomsNestedInput
     };
     export type ExamRoomUncheckedUpdateWithoutExamListInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -511844,7 +511860,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        roomId?: StringFieldUpdateOperationsInput | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
         capacity?: IntFieldUpdateOperationsInput | number
     };
     export type LecturerUpsertWithoutExamRoomsMainInput = {
@@ -557270,7 +557286,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        capacity: number
+        capacity?: number
     };
     export type SubjectClassUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -568599,8 +568615,8 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        roomId: string
-        capacity: number
+        roomId?: string | null
+        capacity?: number
     };
     export type SubjectClassUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -568830,7 +568846,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         capacity?: IntFieldUpdateOperationsInput | number
-        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
+        room?: RoomUpdateOneWithoutExamRoomsNestedInput
         examList?: ExamListUpdateManyWithoutExamRoomNestedInput
     };
     export type ExamRoomUncheckedUpdateWithoutExamInput = {
@@ -568841,7 +568857,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        roomId?: StringFieldUpdateOperationsInput | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
         capacity?: IntFieldUpdateOperationsInput | number
         examList?: ExamListUncheckedUpdateManyWithoutExamRoomNestedInput
     };
@@ -568853,7 +568869,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        roomId?: StringFieldUpdateOperationsInput | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
         capacity?: IntFieldUpdateOperationsInput | number
     };
     export type ExamListCreateManyExamRoomInput = {

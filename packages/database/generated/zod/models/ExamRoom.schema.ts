@@ -13,7 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    capacity: z.number(),
+    capacity: z.number().default(0),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -29,13 +29,13 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.string(), z.unknown()),
-    room: z.record(z.string(), z.unknown()),
+    room: z.record(z.string(), z.unknown()).optional(),
     examList: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
-    roomId: z.string(),
+    roomId: z.string().nullish(),
 }
 );
 
@@ -78,7 +78,7 @@ export const ExamRoomPrismaUpdateSchema = z.object({
  * `ExamRoom` schema for create operations excluding foreign keys and relations.
  */
 export const ExamRoomCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, capacity: true
 });
 
 

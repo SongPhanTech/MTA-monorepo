@@ -3027,7 +3027,7 @@ model SubjectClass {
   /// khoá điểm CC/TX
   isLockScore                 Boolean               @default(false)
   /// khoá điểm thi
-  isLockExamScore             Boolean               @default(true)
+  isLockExamScore             Boolean               @default(false)
   scoreSubmitted              Boolean               @default(false)
   scoreChecked                Boolean               @default(false)
   room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
@@ -5151,9 +5151,9 @@ model ExamRoom {
   updatedAt   DateTime   @default(now()) @updatedAt()
   exam        Exam       @relation(fields: [examId], references: [id])
   examId      String
-  room        Room       @relation(fields: [roomId], references: [id])
-  roomId      String
-  capacity    Int
+  room        Room?      @relation(fields: [roomId], references: [id])
+  roomId      String?
+  capacity    Int        @default(0)
   examList    ExamList[]
 
   @@unique([examId, roomId])

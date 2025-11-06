@@ -1,7 +1,9 @@
+import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { useStore } from '@tanstack/react-store'
+import { createId } from '@workspace/db'
 import { type Prisma } from '@workspace/db/client'
 import { useFindManyExamList } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -161,23 +163,27 @@ export default function DanhSachSinhVien() {
                     }
                 }
             }>
-
             const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
+            // let allExamLists = exam.examRooms.flatMap((er) =>
+            //     er.examList.map((el) => ({
+            //         ...el,
+            //         capacity: er.capacity,
+            //         studentSubjectScores: [] as typeof allStudentSubjectScores,
+            //     }))
+            // )
+            // for (const el of allExamLists) {
+            //     const capacity = el.capacity || 0
+            //     for (let i = 0; i < capacity; i++) {
+            //         const studentSubjectScore = allStudentSubjectScores.shift()
+            //         if (!studentSubjectScore) {
+            //             break
+            //         }
+            //         el.studentSubjectScores.push(studentSubjectScore)
+            //     }
+            // }
 
-            console.log(exam.examRooms.flatMap((er) =>
-                er.examList.map((el) => ({
-                    ...el,
-                    capacity: er.capacity,
-                }))
-            )
-);
-            
-            // new PrismaClient().exam.create({
-            //     data: {
-            //         studentSubjectScoreId: exam.subjectClass[0].subjectClassStudent[0].id,
-            //         examListId: exam.examRooms[0].examList[0].id,
-            //     },
-            // })
+            const examNonRoomId = createId()
+            const examListNonRoomId = createId()
             const res = await sqlTransaction([
                 {
                     model: 'ExamPaper' as const,
@@ -193,10 +199,70 @@ export default function DanhSachSinhVien() {
                         },
                     },
                 },
+                {
+                    model: 'ExamList' as const,
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            examRoom: {
+                                examId: selectedExamId,
+                                roomId: null,
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'ExamRoom' as const,
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            examId: selectedExamId,
+                            roomId: null,
+                        },
+                    },
+                },
+                {
+                    model: 'ExamRoom' as const,
+                    operation: 'create',
+                    data: {
+                        data: {
+                            id: examNonRoomId,
+                            examId: selectedExamId,
+                            roomId: null,
+                        },
+                    },
+                },
+                {
+                    model: 'ExamList' as const,
+                    operation: 'create',
+                    data: {
+                        data: {
+                            id: examListNonRoomId,
+                            examRoomId: examNonRoomId,
+                        },
+                    },
+                },
+                ...allStudentSubjectScores.map((studentSubjectScore) => ({
+                    model: 'ExamPaper' as const,
+                    operation: 'create',
+                    data: {
+                        studentSubjectScoreId: studentSubjectScore.id,
+                        examListId: examListNonRoomId,
+                    },
+                })),
             ])
             if (res.status !== 200) {
                 throw new Error('Lấy điểm thất bại')
             }
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'ExamPaper'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'ExamList'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'Exam'],
+            })
             message.success('Lấy điểm thành công')
         } catch (error: any) {
             message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')

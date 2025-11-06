@@ -10695,7 +10695,7 @@ const metadata = {
                 }, isLockExamScore: {
                     name: "isLockExamScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, scoreSubmitted: {
                     name: "scoreSubmitted",
                     type: "Boolean",
@@ -19879,6 +19879,7 @@ const metadata = {
                     name: "room",
                     type: "Room",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examRooms',
                     isRelationOwner: true,
@@ -19886,11 +19887,13 @@ const metadata = {
                 }, roomId: {
                     name: "roomId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
                 }, capacity: {
                     name: "capacity",
                     type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, examList: {
                     name: "examList",
                     type: "ExamList",
