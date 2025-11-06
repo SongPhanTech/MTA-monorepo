@@ -1,12 +1,40 @@
 import { DownloadOutlined } from '@ant-design/icons'
 import { useExamTypeOptions } from '@hooks/examType'
+import type { Prisma } from '@workspace/db/client'
 import { Button, Flex } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-const ExportPhach = ({ data }: { data: any[] }) => {
-    const { options, getExamTypeLabel } = useExamTypeOptions()
+const ExportPhach = ({
+    data,
+}: {
+    data: Prisma.ExamPaperGetPayload<{
+        include: {
+            studentSubjectScore: {
+                include: {
+                    student: {
+                        include: {
+                            userProfile: true
+                            fixedClass: true
+                        }
+                    }
+                    subjectClass: {
+                        include: {
+                            fixedClasses: {
+                                include: {
+                                    trainingCourse: true
+                                }
+                            }
+                        }
+                    }
+                    subjectVersion: true
+                }
+            }
+        }
+    }>[]
+}) => {
+    const { getExamTypeLabel } = useExamTypeOptions()
     const exportTemplate = async () => {
         // Tạo workbook mới
         const workbook = new ExcelJS.Workbook()
@@ -165,7 +193,7 @@ const ExportPhach = ({ data }: { data: any[] }) => {
         worksheet.getCell('A9').style = headerStyle
 
         worksheet.getCell('C9').value =
-            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_1
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.[0].trainingCourse?.coef_1
         worksheet.getCell('C9').style = headerStyle
 
         worksheet.getCell('E6').value = 'Khoá'
@@ -181,7 +209,7 @@ const ExportPhach = ({ data }: { data: any[] }) => {
         worksheet.getCell('E9').style = headerStyle
 
         worksheet.getCell('F6').value =
-            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.code
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.[0].trainingCourse?.code
         worksheet.getCell('F6').style = headerStyle
 
         worksheet.getCell('F7').value = ''
@@ -191,7 +219,7 @@ const ExportPhach = ({ data }: { data: any[] }) => {
         worksheet.getCell('F8').style = headerStyle
 
         worksheet.getCell('F9').value =
-            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_2
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.[0].trainingCourse?.coef_2
         worksheet.getCell('F9').style = headerStyle
 
         worksheet.getCell('H6').value = 'Ngày thi'
@@ -207,6 +235,8 @@ const ExportPhach = ({ data }: { data: any[] }) => {
         worksheet.getCell('H9').style = headerStyle
 
         worksheet.getCell('I6').value = data[0]?.studentSubjectScore?.subjectClass?.examDate
+            ? dayjs(data[0]?.studentSubjectScore?.subjectClass?.examDate).format('DD/MM/YYYY')
+            : ''
         worksheet.getCell('I6').style = headerStyle
 
         worksheet.getCell('I7').value = data[0]?.studentSubjectScore?.subjectVersion?.credit
@@ -218,7 +248,7 @@ const ExportPhach = ({ data }: { data: any[] }) => {
         worksheet.getCell('I8').style = headerStyle
 
         worksheet.getCell('I9').value =
-            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_3
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.[0].trainingCourse?.coef_3
         worksheet.getCell('I9').style = headerStyle
 
         const headerRow = worksheet.getRow(11)
@@ -255,9 +285,9 @@ const ExportPhach = ({ data }: { data: any[] }) => {
                     index + 1,
                     i?.studentSubjectScore?.student?.userProfile?.code,
                     `${i?.studentSubjectScore?.student?.userProfile?.lastName} ${i?.studentSubjectScore?.student?.userProfile?.firstName}`,
-                    dayjs(i?.studentSubjectScore?.student?.userProfile.dateOfBirth).format(
+                    `${dayjs(i?.studentSubjectScore?.student?.userProfile.dateOfBirth).format(
                         'DD/MM/YYYY'
-                    ) || '',
+                    )}` || '',
                     i?.studentSubjectScore?.student?.fixedClass?.name || '',
                     i.studentSubjectScore?.attendanceScore || '',
                     i.studentSubjectScore?.midtermScore || '',
@@ -271,7 +301,7 @@ const ExportPhach = ({ data }: { data: any[] }) => {
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
-        saveAs(new Blob([buffer]), 'Mau_nhap_sinh_vien.xlsx')
+        saveAs(new Blob([buffer]), 'Mau_phach.xlsx')
     }
 
     return (

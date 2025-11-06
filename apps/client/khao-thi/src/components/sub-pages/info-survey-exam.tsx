@@ -102,7 +102,7 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
             </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên khảo sát" required>
-                    <Input placeholder="Nhập tên đối tượng khảo sát" />
+                    <Input placeholder="Nhập tên đối tượng làm khảo sát" />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -119,11 +119,11 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="surveyObjectTypes" label="Đối tượng khảo sát" required>
+                <FormItem form={form} name="surveyObjectTypes" label="Đối tượng làm khảo sát" required>
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn đối tượng khảo sát"
+                        placeholder="Chọn đối tượng làm khảo sát"
                         options={surveyObjectTypesData.map((i: SurveyObjectType) => {
                             return {
                                 value: i.id,

@@ -61,6 +61,8 @@ model StudentGraduationApplication extends Base {
   gpa                    Decimal?                 @db.Decimal(5, 2)
   reason                 String?
 
+  downgraded             ApplicationDowngraded?
+
   rank                   AcademicRankingConvert?  @relation(fields: [rankId], references: [id])
   rankId                 String?
 
@@ -77,6 +79,18 @@ model StudentGraduationApplication extends Base {
   decision               GraduationDecision?
 
   @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+model ApplicationDowngraded extends Base {
+  studentGraduationApplication   StudentGraduationApplication       @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                             @unique
+
+  from                           AcademicRankingConvert             @relation(fields: [fromId], references: [id])
+  fromId                         String
+
+  conditions                     GraduationRankDowngradeCondition[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -155,6 +169,7 @@ model AcademicRankingConvert extends Base {
   downgradeRules               GraduationRankDowngradeRule[]
   graduationDecision           GraduationDecision[]
   studentGraduationApplication StudentGraduationApplication[]
+  applicationDowngraded        ApplicationDowngraded[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
@@ -177,14 +192,16 @@ model GraduationRankDowngradeRule extends Base {
 
 /// Một điều kiện cụ thể trong bộ quy tắc hạ bậc
 model GraduationRankDowngradeCondition extends Base {
-  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
-  downgradeRuleId String
+  downgradeRule         GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId       String
 
-  field           CriteriaField  // Trường dữ liệu để kiểm tra
-  operator        CriteriaOperator // Toán tử so sánh (GTE, LTE...)
-  invert          Boolean                     @default(false) // đảo ngược operator
-  value           Float          // Giá trị ngưỡng
-  tuple           String[]                    @default([]) // giá trị sử dụng cho operator IN
+  field                 CriteriaField  // Trường dữ liệu để kiểm tra
+  operator              CriteriaOperator // Toán tử so sánh (GTE, LTE...)
+  invert                Boolean                     @default(false) // đảo ngược operator
+  value                 Float          // Giá trị ngưỡng
+  tuple                 String[]                    @default([]) // giá trị sử dụng cho operator IN
+
+  applicationDowngraded ApplicationDowngraded[]
 
   @@schema("ql-dao-tao")
 }
@@ -243,6 +260,7 @@ model DiplomaVerificationApplication extends Base {
 
   @@schema("ql-dao-tao")
 }
+
 
 enum DiplomaVerificationStatus {
   PENDING       // Đang chờ xử lý

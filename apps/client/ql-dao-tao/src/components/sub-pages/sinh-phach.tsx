@@ -1,15 +1,18 @@
 import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
-import { useFindUniqueExamList, useUpdateExamRoom } from '@workspace/db/hooks'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
+import { useFindUniqueExamList, useUpdateExamList } from '@workspace/db/hooks'
 import { useGenExamListCode } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
 
-export default function SinhPhach({ examListId }: { examListId: string }) {
+export default function SinhPhach() {
     const router = useRouter()
-    const { data: examRoom, refetch } = useFindUniqueExamList(
+    const { selectedExamListId } = useStore(diemPhongThiStore)
+    const { data: examList, refetch } = useFindUniqueExamList(
         {
-            where: { id: examListId },
+            where: { id: selectedExamListId },
             include: {
                 examPapers: {
                     include: {
@@ -37,7 +40,7 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
                 },
             },
         },
-        { enabled: !!examListId }
+        { enabled: !!selectedExamListId }
     )
     const handleSave = () => {
         Modal.confirm({
@@ -51,30 +54,43 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
         })
     }
     const { mutateAsync: genCode } = useGenExamListCode()
-    const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
+    const { mutateAsync: updateExamList } = useUpdateExamList()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: { examListId },
+            data: { examListId: selectedExamListId ?? '' },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
             refetch()
         }
     }
+
     return (
         <>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                    <Checkbox checked={examRoom?.lockExamCode}>Khoá sinh phách</Checkbox>
+                    <Checkbox
+                        onChange={async (e) => {
+                            try {
+                                await updateExamList({
+                                    where: { id: selectedExamListId ?? '' },
+                                    data: { lockExamCode: e.target.checked },
+                                })
+                            } catch (error) {}
+                        }}
+                        checked={examList?.lockExamCode}
+                    >
+                        Khoá sinh phách
+                    </Checkbox>
                     <Flex justify="end" align="center">
-                        <ExportPhach data={examRoom?.examPapers || []} />
+                        <ExportPhach data={examList?.examPapers || []} />
                         <Button
                             type="primary"
                             className="ml-3"
                             onClick={() => {
                                 handleSave()
                             }}
-                            disabled={examRoom?.lockExamCode}
+                            disabled={examList?.lockExamCode}
                         >
                             Tạo phách
                         </Button>
@@ -93,16 +109,16 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Mã học sinh',
+                            title: 'Mã SV',
                             dataIndex: 'name',
                             width: 150,
-                            render: (_, record: any) =>
+                            render: (_, record) =>
                                 record?.studentSubjectScore?.student?.userProfile?.code || '',
                         },
                         {
                             title: 'Tên thí sinh',
                             dataIndex: 'fullname',
-                            render: (_, record: any) =>
+                            render: (_, record) =>
                                 `${record?.studentSubjectScore?.student?.userProfile?.lastName} ${record?.studentSubjectScore?.student?.userProfile?.firstName}` ||
                                 '',
                         },
@@ -110,10 +126,10 @@ export default function SinhPhach({ examListId }: { examListId: string }) {
                             title: 'Phách',
                             dataIndex: 'name',
                             width: 150,
-                            render: (_, record: any) => record?.examCode || '',
+                            render: (_, record) => record?.examCode || '',
                         },
                     ]}
-                    data={examRoom?.examPapers || []}
+                    data={examList?.examPapers || []}
                     pagination={false}
                 />
             </Col>

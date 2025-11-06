@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod';
+import { AssignmentStatus } from '../../zenstack/models';
+import { AssignmentStatusSchema } from '../enums/AssignmentStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -14,6 +16,8 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     deadline: z.coerce.date(),
+    status: AssignmentStatusSchema,
+    submittedAt: z.coerce.date().default(() => new Date()).nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -25,11 +29,15 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     deadline: z.coerce.date(),
+    status: AssignmentStatusSchema,
+    submittedAt: z.coerce.date().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     evaluationCriterion: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()),
+    deadlineHistories: z.array(z.unknown()).optional(),
+    criterionAssignmentComments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -69,7 +77,9 @@ export const CriterionAssignmentPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    deadline: z.coerce.date()
+    deadline: z.coerce.date(),
+    status: AssignmentStatusSchema,
+    submittedAt: z.coerce.date().nullish()
 }).partial().passthrough();
 
 
@@ -77,7 +87,7 @@ export const CriterionAssignmentPrismaUpdateSchema = z.object({
  * `CriterionAssignment` schema for create operations excluding foreign keys and relations.
  */
 export const CriterionAssignmentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true, submittedAt: true
 });
 
 

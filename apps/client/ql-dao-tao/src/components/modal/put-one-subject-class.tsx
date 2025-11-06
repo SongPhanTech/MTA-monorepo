@@ -186,6 +186,9 @@ const PutOneSubjectClassModal = () => {
                 examScoreDeadline: subjectClassData.examScoreDeadline
                     ? dayjs(subjectClassData.examScoreDeadline)
                     : null,
+                scoreDeadLineStart: subjectClassData.scoreDeadLineStart
+                    ? dayjs(subjectClassData.scoreDeadLineStart)
+                    : null,
                 dayOfWeeks: subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek),
                 times: subjectClassData.subjectClassTimes?.map((item) => ({
                     dayOfWeek: item.dayOfWeek,
@@ -204,7 +207,7 @@ const PutOneSubjectClassModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Cập nhật lớp môn học' : 'Mở lớp môn học'}
-            className="w-[65vw]"
+            className="w-[85vw]"
         >
             <Col span={12}>
                 <FormItem form={form} name="semesterId" label="Học kỳ" required>

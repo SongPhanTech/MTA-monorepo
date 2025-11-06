@@ -160,7 +160,7 @@ const PutSurveyModal = () => {
                             description: output.description,
                             additionalSuggestion: output.additionalSuggestion,
                             isPublic: output.isPublic,
-                            anonymous: output.anonymous,
+                            anonymous: !output.isPublic ? false:output.anonymous,
                             surveyChoice: {
                                 createMany: {
                                     data: output.surveyChoice.map((item) => ({
@@ -195,10 +195,10 @@ const PutSurveyModal = () => {
                         data: {
                             code: output.code,
                             name: output.name.trim(),
-                            surveyObjectType: {
+                            surveyObjectType:output?.surveyObjectTypes?.length >0? {
                                 connect:
                                     output.surveyObjectTypes.map((item) => ({ id: item })) || [],
-                            },
+                            }:{},
                             surveyTopic: {
                                 connect: {
                                     id: output.surveyTopicId,
@@ -208,7 +208,7 @@ const PutSurveyModal = () => {
                             endDate: output.endDate,
                             description: output.description,
                             isPublic: output.isPublic,
-                            anonymous: output.anonymous,
+                            anonymous: !output.isPublic ? false:output.anonymous,
                             additionalSuggestion: output.additionalSuggestion,
                             surveyChoice: {
                                 createMany: {
@@ -236,10 +236,7 @@ const PutSurveyModal = () => {
 
             // refetch() lại danh sách level
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
+            console.log(error);
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -298,7 +295,7 @@ const PutSurveyModal = () => {
 
     const surveyTopicId = Form.useWatch('surveyTopicId', form)
     const isPublic = Form.useWatch('isPublic', form)
-     const anonymous = Form.useWatch('anonymous', form)
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const steps: StepItem[] = useMemo(() => {
         return [
@@ -515,7 +512,7 @@ const PutSurveyModal = () => {
         } else {
             form.setFieldsValue({
                 isPublic: false,
-                anonymous: true,
+                anonymous: false,
                 additionalSuggestion: false,
                 surveyChoice: choices,
             })

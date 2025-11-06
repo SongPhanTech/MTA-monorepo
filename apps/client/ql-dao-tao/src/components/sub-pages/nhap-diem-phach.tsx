@@ -1,14 +1,17 @@
 import Table from '@components/commons/table'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 
-export default function NhapDiemPhach({ examListId }: { examListId: string }) {
-    const [form] = Form.useForm<{ list: { score: number | null }[] }>()
+export default function NhapDiemPhach() {
+    const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
+    const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data: examList, refetch } = useFindUniqueExamList(
         {
-            where: { id: examListId },
+            where: { id: selectedExamListId },
             include: {
                 examPapers: {
                     include: {
@@ -26,27 +29,40 @@ export default function NhapDiemPhach({ examListId }: { examListId: string }) {
                 },
             },
         },
-        { enabled: !!examListId }
+        { enabled: !!selectedExamListId }
     )
-    const disabled = useMemo(() => {
-        return examList?.lockExamCode || true
-    }, [examList?.lockExamCode])
+
+    useEffect(() => {
+        if (examList) {
+            form.setFieldsValue({
+                list: examList.examPapers.reduce(
+                    (acc, curr) => {
+                        acc[curr.id] = {
+                            score: curr.studentSubjectScore?.examScore ?? null,
+                        }
+                        return acc
+                    },
+                    {} as Record<string, { score: number | null }>
+                ),
+            })
+        }
+    }, [examList, form])
 
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn sinh phách không?',
+            content: 'Bạn có chắc chắn muốn lưu điểm không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                handleGenCode()
+                handleNhapDiem()
             },
         })
     }
     const { mutateAsync: saveScore } = useSaveExamScore()
 
     // const listForm = Form.useWatch('list', form) || []
-    const handleGenCode = async () => {
+    const handleNhapDiem = async () => {
         const dataForm = form.getFieldsValue()
         const dataSubmit = Object.entries(dataForm.list).map(([key, value_]) => {
             return {
@@ -58,7 +74,7 @@ export default function NhapDiemPhach({ examListId }: { examListId: string }) {
             data: dataSubmit,
         })
         if (res?.status === 200) {
-            message.success('Sinh phách thành công')
+            message.success('Lưu điểm thành công')
             refetch()
         }
     }
@@ -71,7 +87,6 @@ export default function NhapDiemPhach({ examListId }: { examListId: string }) {
                         onClick={() => {
                             handleSave()
                         }}
-                        disabled={disabled}
                     >
                         Lưu
                     </Button>

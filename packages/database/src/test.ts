@@ -21,5 +21,3 @@ const curriculums = await prisma.curriculum.findMany({
     },
     orderBy: { createdAt: 'desc' },
 })
-
-console.log(curriculums.length)

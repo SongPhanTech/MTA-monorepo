@@ -42,6 +42,7 @@ import { DecisionType } from "../prisma-client";
 import { CouncilProposalStatus } from "../prisma-client";
 import { CouncilRole } from "../prisma-client";
 import { PaymentStatus } from "../prisma-client";
+import { AssignmentStatus } from "../prisma-client";
 import { EvaluationMemberRole } from "../prisma-client";
 import { EvaluationSecretaryMemberRole } from "../prisma-client";
 import { SurveyQuestionType } from "../prisma-client";
@@ -3261,6 +3262,46 @@ const policy: PolicyDef = {
             },
 
         },
+        criterionAssignmentComment: {
+            modelLevel: {
+                read: { guard: CriterionAssignmentComment_read, },
+                create: { guard: CriterionAssignmentComment_create, inputChecker: CriterionAssignmentComment_create_input, },
+                update: { guard: CriterionAssignmentComment_update, },
+                postUpdate: { guard: CriterionAssignmentComment_postUpdate, },
+                delete: { guard: CriterionAssignmentComment_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        deadlineHistory: {
+            modelLevel: {
+                read: { guard: DeadlineHistory_read, },
+                create: { guard: DeadlineHistory_create, inputChecker: DeadlineHistory_create_input, },
+                update: { guard: DeadlineHistory_update, },
+                postUpdate: { guard: DeadlineHistory_postUpdate, },
+                delete: { guard: DeadlineHistory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         requirementCriterionCatalog: {
             modelLevel: {
                 read: { guard: RequirementCriterionCatalog_read, },
@@ -4108,6 +4149,26 @@ const policy: PolicyDef = {
                 update: { guard: StudentGraduationApplication_update, },
                 postUpdate: { guard: StudentGraduationApplication_postUpdate, },
                 delete: { guard: StudentGraduationApplication_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        applicationDowngraded: {
+            modelLevel: {
+                read: { guard: ApplicationDowngraded_read, },
+                create: { guard: ApplicationDowngraded_create, inputChecker: ApplicationDowngraded_create_input, },
+                update: { guard: ApplicationDowngraded_update, },
+                postUpdate: { guard: ApplicationDowngraded_postUpdate, },
+                delete: { guard: ApplicationDowngraded_delete, }
             },
             fieldLevel: {
                 read:
@@ -5203,6 +5264,8 @@ const policy: PolicyDef = {
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
         criterionAssignment: { hasValidation: false },
+        criterionAssignmentComment: { hasValidation: false },
+        deadlineHistory: { hasValidation: false },
         requirementCriterionCatalog: { hasValidation: false },
         scoreScaleCatalog: { hasValidation: false },
         evaluationStandard: { hasValidation: false },
@@ -5246,6 +5309,7 @@ const policy: PolicyDef = {
         scholarshipAward: { hasValidation: false },
         graduationSession: { hasValidation: false },
         studentGraduationApplication: { hasValidation: false },
+        applicationDowngraded: { hasValidation: false },
         applicationCheckResult: { hasValidation: false },
         graduationDecision: { hasValidation: false },
         academicRankingConvert: { hasValidation: true },
@@ -15675,6 +15739,136 @@ function $check_CriterionAssignment_delete(input: any, context: QueryContext): a
     return false;
 }
 
+function CriterionAssignmentComment_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_CriterionAssignmentComment_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignmentComment_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignmentComment_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignmentComment_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function CriterionAssignmentComment_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignmentComment_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignmentComment_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_CriterionAssignmentComment_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function CriterionAssignmentComment_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignmentComment_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DeadlineHistory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DeadlineHistory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DeadlineHistory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DeadlineHistory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DeadlineHistory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DeadlineHistory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DeadlineHistory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DeadlineHistory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DeadlineHistory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DeadlineHistory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DeadlineHistory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function RequirementCriterionCatalog_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -18464,6 +18658,71 @@ function StudentGraduationApplication_delete(context: QueryContext, db: CrudCont
 }
 
 function $check_StudentGraduationApplication_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationDowngraded_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ApplicationDowngraded_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationDowngraded_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationDowngraded_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationDowngraded_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ApplicationDowngraded_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationDowngraded_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationDowngraded_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ApplicationDowngraded_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ApplicationDowngraded_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationDowngraded_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

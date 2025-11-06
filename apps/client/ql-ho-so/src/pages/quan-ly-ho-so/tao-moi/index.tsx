@@ -47,14 +47,14 @@ import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import ToChucXaHoiForm from '@components/modal/quan-ly-ho-so/form/to-chuc-xa-hoi'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import { postDMNhanViens } from '@workspace/libs/api/system'
 import dayjs from 'dayjs'
+import axios from 'axios'
 
 dayjs.locale('vi')
 interface itemType {
@@ -401,22 +401,40 @@ export default function CreateUserPage() {
     }: SubmitForm) => {
         if (!values) return
 
-        const fileName = values.avatar
         if (fileList.length > 0) {
-            const file = fileList[0]
-            const resPresignedUrl = await generatePresignedUrl({
-                path: 'avatar',
-                extension: file.name?.split('.').pop() ?? '',
-            })
+            // const file = fileList[0]
+            // const resPresignedUrl = await generatePresignedUrl({
+            //     path: 'avatar',
+            //     extension: file.name?.split('.').pop() ?? '',
+            // })
 
-            await fetch(resPresignedUrl.data.url, {
-                method: 'PUT',
-                body: file.originFileObj,
-            })
+            // await fetch(resPresignedUrl.data.url, {
+            //     method: 'PUT',
+            //     body: file.originFileObj,
+            // })
 
-            form.setFieldsValue({
-                avatar: resPresignedUrl.data.fileName,
-            })
+            // form.setFieldsValue({
+            //     avatar: resPresignedUrl.data.fileName,
+            // })
+            const file: any = fileList[0]
+            const formData = new FormData()
+            formData.append('file', file?.originFileObj)
+            const resPresignedUrl = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${window.tenantCode || 'dev'}&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'K-TenantCode': window.tenantCode || 'dev',
+                        'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                    },
+                }
+            )
+            if (resPresignedUrl?.status === 200 && resPresignedUrl?.data?.fileName) {
+                form.setFieldsValue({
+                    avatar: resPresignedUrl?.data?.fileName,
+                })
+            }
         }
         try {
             showSpinner()
@@ -432,6 +450,7 @@ export default function CreateUserPage() {
                 sCCCD: values.idCardNumber,
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
+                sAvatarId: form.getFieldValue('avatar'),
             })
             if (res?.status === 200) {
                     let rank=null
@@ -815,18 +834,8 @@ export default function CreateUserPage() {
             hideSpinner()
         }
     }
-    const avatar = Form.useWatch('avatar', form)
-    const fileListValue = useMemo(() => {
-        if (avatar) {
-            const avatarFile: UploadFile = {
-                uid: '-1',
-                name: 'avatar.jpg',
-                status: 'done',
-                url: getMinioUrl(avatar), // Sử dụng getMinioUrl để tạo URL hiển thị
-            }
-            return [avatarFile]
-        }
-    }, [avatar])
+
+
 
     return (
         <>
@@ -894,7 +903,7 @@ export default function CreateUserPage() {
                                             <Upload
                                                 listType="picture-circle"
                                                 maxCount={1}
-                                                fileList={avatar ? fileListValue : fileList}
+                                                fileList={fileList}
                                                 onChange={onChange}
                                                 onRemove={() => {
                                                     setFileList([])

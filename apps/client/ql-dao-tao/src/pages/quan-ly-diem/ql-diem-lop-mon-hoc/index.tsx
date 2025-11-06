@@ -1,3 +1,4 @@
+import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
 import NhapDiem from '@components/sub-pages/nhap-diem'
 import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
@@ -10,11 +11,10 @@ import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/
 import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
-    score?: 'CC/TX' | 'THI'
+    score?: 'CC/TX' | 'THI' | 'PHACH'
 }
 type SubmitFormType = {
     isLockExamScore?: boolean
@@ -24,12 +24,18 @@ type SubmitFormType = {
     scoreSubmittedOld?: boolean
     scoreCheckedOld?: boolean
 }
-export type diemLopMonHocStoreState = {
+export type DiemLopMonHocStoreState = {
     selectedSubjectClassId?: string
 }
 
-export const diemLopMonHocStore = new Store<diemLopMonHocStoreState>({
+export const diemLopMonHocStore = new Store<DiemLopMonHocStoreState>({
     selectedSubjectClassId: undefined,
+})
+
+export const diemPhongThiStore = new Store<{
+    selectedExamListId?: string
+}>({
+    selectedExamListId: undefined,
 })
 
 export default function QuanLyDiemLopMonHoc({
@@ -39,6 +45,7 @@ export default function QuanLyDiemLopMonHoc({
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
     const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
+    const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data } = useFindUniqueSubjectClass(
         {
             where: {
@@ -79,17 +86,12 @@ export default function QuanLyDiemLopMonHoc({
 
     const items = useMemo(() => {
         let baseMenu: TabsProps['items'] =
-            role === 'P13'
+            role === 'P13' && score === 'PHACH'
                 ? [
                       {
                           label: 'Phòng thi',
                           key: '1',
-                          children: (
-                              <PhongThi
-                                  selectedRowKeys={''}
-                                  setSelectedRowKeys={(value: string) => {}}
-                              />
-                          ),
+                          children: <PhongThi />,
                       },
                   ]
                 : [
@@ -128,7 +130,7 @@ export default function QuanLyDiemLopMonHoc({
             }
         }
 
-        if (role === 'P2/P7') {
+        if ((role === 'P2/P7' || role === 'P13') && score !== 'PHACH') {
             baseMenu = [
                 ...baseMenu,
                 {
@@ -140,25 +142,25 @@ export default function QuanLyDiemLopMonHoc({
             ]
         }
 
-        if (role === 'P13') {
+        if (role === 'P13' && score === 'PHACH') {
             baseMenu = [
                 ...baseMenu,
                 {
                     label: 'Đánh phách',
                     key: '2',
-                    children: <SinhPhach examListId={''} />,
-                    disabled: !data,
+                    children: <SinhPhach />,
+                    disabled: !selectedExamListId,
                 },
                 {
                     label: 'Nhập điểm theo phách',
                     key: '3',
-                    children: <NhapDiemPhach examListId={''} />,
-                    disabled: !data,
+                    children: <NhapDiemPhach />,
+                    disabled: !selectedExamListId,
                 },
             ]
         }
         return baseMenu
-    }, [data, role, score, activeKey])
+    }, [data, role, score, activeKey, selectedExamListId])
 
     const reasonDate = useCallback(() => {
         if (score === 'CC/TX' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {
@@ -219,123 +221,132 @@ export default function QuanLyDiemLopMonHoc({
     }, [data, form])
     return (
         <Row gutter={[16, 4]}>
-            <Col span={12}>
-                <div className="flex items-center mb-2 w-full">
-                    <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
-                    <div className="w-[300px]">
-                        <Input
-                            size="small"
-                            placeholder="Mã lớp MH"
-                            className="pointer-events-none"
-                            value={data?.code}
-                        />
-                    </div>
-                    <div className="ml-3 w-full">
-                        <Input
-                            size="small"
-                            placeholder="Tên lớp MH"
-                            className="pointer-events-none"
-                            value={data?.name}
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center mb-2 w-full">
-                    <div className="min-w-[150px] w-[150px]">Giảng viên:</div>
-                    <div className="w-full">
-                        <Input
-                            className="w-full pointer-events-none"
-                            placeholder="Giảng viên"
-                            size="small"
-                            value={
-                                data?.mainLecturer
-                                    ? `${data?.mainLecturer?.userProfile?.lastName} ${data?.mainLecturer?.userProfile?.firstName}`
-                                    : ''
-                            }
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center w-full">
-                    <div className="min-w-[150px] w-[150px]">Đơn vị quản lý</div>
-                    <div className="w-full">
-                        <Input
-                            size="small"
-                            className="w-full pointer-events-none"
-                            placeholder="Giảng viên"
-                            value={
-                                data?.subject?.managementOrganization
-                                    ? `${data?.subject?.managementOrganization?.sMa} - ${data?.subject?.managementOrganization?.sTen}`
-                                    : ''
-                            }
-                        />
-                    </div>
-                </div>
-            </Col>
-
-            <Col span={12}>
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onValuesChange={(changedValue) => {
-                        updateSubjectClass({
-                            where: { id: selectedSubjectClassId || '' },
-                            data: {
-                                ...changedValue,
-                            },
-                        })
-                    }}
-                >
-                    <div className="flex items-center mb-2 w-full">
-                        <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
-                        <div className="w-full">{reasonDate()}</div>
-                    </div>
-                    <div className="flex items-center mb-2 w-full h-6">
-                        <div className="flex items-center mr-9 ">
-                            <FormItem
-                                form={form}
-                                name="isLockExamScore"
-                                className="min-w-[200px] !mb-0"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={role !== 'P13' || !selectedSubjectClassId}>
-                                    P13 đã khoá
-                                </Checkbox>
-                            </FormItem>
-                        </div>
-                        <div className="flex items-center w-full">
-                            <FormItem
-                                form={form}
-                                name="scoreSubmitted"
-                                className="min-w-[200px] !mb-0"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={role !== 'P13' || !selectedSubjectClassId}>
-                                    P13 đã nhận Phiếu điểm
-                                </Checkbox>
-                            </FormItem>
-                            <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
+            {score !== 'PHACH' && (
+                <>
+                    <Col span={12}>
+                        <div className="flex items-center mb-2 w-full">
+                            <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
+                            <div className="w-[300px]">
+                                <Input
+                                    size="small"
+                                    placeholder="Mã lớp MH"
+                                    className="pointer-events-none"
+                                    value={data?.code}
+                                />
+                            </div>
+                            <div className="ml-3 w-full">
+                                <Input
+                                    size="small"
+                                    placeholder="Tên lớp MH"
+                                    className="pointer-events-none"
+                                    value={data?.name}
+                                />
                             </div>
                         </div>
-                    </div>
-                    <div className="flex items-center mb-2 w-full h-6">
-                        <div className="flex items-center w-full">
-                            <FormItem
-                                form={form}
-                                name="scoreChecked"
-                                className="min-w-[250px]"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={role !== 'P2/P7' || !selectedSubjectClassId}>
-                                    P2/P7 kiểm tra lại phiếu điểm
-                                </Checkbox>
-                            </FormItem>
+                        <div className="flex items-center mb-2 w-full">
+                            <div className="min-w-[150px] w-[150px]">Giảng viên:</div>
                             <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
+                                <Input
+                                    className="w-full pointer-events-none"
+                                    placeholder="Giảng viên"
+                                    size="small"
+                                    value={
+                                        data?.mainLecturer
+                                            ? `${data?.mainLecturer?.userProfile?.lastName} ${data?.mainLecturer?.userProfile?.firstName}`
+                                            : ''
+                                    }
+                                />
                             </div>
                         </div>
-                    </div>
-                </Form>
-            </Col>
+                        <div className="flex items-center w-full">
+                            <div className="min-w-[150px] w-[150px]">Đơn vị quản lý</div>
+                            <div className="w-full">
+                                <Input
+                                    size="small"
+                                    className="w-full pointer-events-none"
+                                    placeholder="Giảng viên"
+                                    value={
+                                        data?.subject?.managementOrganization
+                                            ? `${data?.subject?.managementOrganization?.sMa} - ${data?.subject?.managementOrganization?.sTen}`
+                                            : ''
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <Form
+                            form={form}
+                            layout="vertical"
+                            onValuesChange={(changedValue) => {
+                                updateSubjectClass({
+                                    where: { id: selectedSubjectClassId || '' },
+                                    data: {
+                                        ...changedValue,
+                                    },
+                                })
+                            }}
+                        >
+                            <div className="flex items-center mb-2 w-full">
+                                <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
+                                <div className="w-full">{reasonDate()}</div>
+                            </div>
+                            <div className="flex items-center mb-2 w-full h-6">
+                                <div className="flex items-center mr-9 ">
+                                    <FormItem
+                                        form={form}
+                                        name="isLockExamScore"
+                                        className="min-w-[200px] !mb-0"
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox
+                                            disabled={role !== 'P13' || !selectedSubjectClassId}
+                                        >
+                                            P13 đã khoá
+                                        </Checkbox>
+                                    </FormItem>
+                                </div>
+                                <div className="flex items-center w-full">
+                                    <FormItem
+                                        form={form}
+                                        name="scoreSubmitted"
+                                        className="min-w-[200px] !mb-0"
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox
+                                            disabled={role !== 'P13' || !selectedSubjectClassId}
+                                        >
+                                            P13 đã nhận Phiếu điểm
+                                        </Checkbox>
+                                    </FormItem>
+                                    <div className="w-full">
+                                        <Input size="small" className="pointer-events-none" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center mb-2 w-full h-6">
+                                <div className="flex items-center w-full">
+                                    <FormItem
+                                        form={form}
+                                        name="scoreChecked"
+                                        className="min-w-[250px]"
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox
+                                            disabled={role !== 'P2/P7' || !selectedSubjectClassId}
+                                        >
+                                            P2/P7 kiểm tra lại phiếu điểm
+                                        </Checkbox>
+                                    </FormItem>
+                                    <div className="w-full">
+                                        <Input size="small" className="pointer-events-none" />
+                                    </div>
+                                </div>
+                            </div>
+                        </Form>
+                    </Col>
+                </>
+            )}
             <Col span={24}>
                 <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />
             </Col>

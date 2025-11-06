@@ -1169,6 +1169,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'profile',
+                }, deadlineHistories: {
+                    name: "deadlineHistories",
+                    type: "DeadlineHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'changedBy',
+                }, criterionAssignmentComments: {
+                    name: "criterionAssignmentComments",
+                    type: "CriterionAssignmentComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'reviewer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10176,7 +10188,7 @@ const metadata: ModelMeta = {
                 }, isLockExamScore: {
                     name: "isLockExamScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, scoreSubmitted: {
                     name: "scoreSubmitted",
                     type: "Boolean",
@@ -16305,6 +16317,177 @@ const metadata: ModelMeta = {
                 }, deadline: {
                     name: "deadline",
                     type: "DateTime",
+                }, status: {
+                    name: "status",
+                    type: "AssignmentStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, submittedAt: {
+                    name: "submittedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, deadlineHistories: {
+                    name: "deadlineHistories",
+                    type: "DeadlineHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criterionAssignment',
+                }, criterionAssignmentComments: {
+                    name: "criterionAssignmentComments",
+                    type: "CriterionAssignmentComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'assignment',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        criterionAssignmentComment: {
+            name: 'CriterionAssignmentComment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, assignment: {
+                    name: "assignment",
+                    type: "CriterionAssignment",
+                    isDataModel: true,
+                    backLink: 'criterionAssignmentComments',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "assignmentId" },
+                }, assignmentId: {
+                    name: "assignmentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'assignment',
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'criterionAssignmentComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'reviewer',
+                }, content: {
+                    name: "content",
+                    type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        deadlineHistory: {
+            name: 'DeadlineHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, criterionAssignment: {
+                    name: "criterionAssignment",
+                    type: "CriterionAssignment",
+                    isDataModel: true,
+                    backLink: 'deadlineHistories',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "criterionAssignmentId" },
+                }, criterionAssignmentId: {
+                    name: "criterionAssignmentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionAssignment',
+                }, oldDeadline: {
+                    name: "oldDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, newDeadline: {
+                    name: "newDeadline",
+                    type: "DateTime",
+                }, changedBy: {
+                    name: "changedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'deadlineHistories',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "changedById" },
+                }, changedById: {
+                    name: "changedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'changedBy',
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18722,14 +18905,6 @@ const metadata: ModelMeta = {
                     name: "lockExamSessions",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, createdExamCode: {
-                    name: "createdExamCode",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, lockExamCode: {
-                    name: "lockExamCode",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, duration: {
                     name: "duration",
                     type: "Int",
@@ -18832,17 +19007,20 @@ const metadata: ModelMeta = {
                     name: "room",
                     type: "Room",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'examRooms',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
                 }, roomId: {
                     name: "roomId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
                 }, capacity: {
                     name: "capacity",
                     type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, examList: {
                     name: "examList",
                     type: "ExamList",
@@ -18936,6 +19114,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'secondSupervisor',
+                }, createdExamCode: {
+                    name: "createdExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, lockExamCode: {
                     name: "lockExamCode",
                     type: "Boolean",
@@ -19894,6 +20076,12 @@ const metadata: ModelMeta = {
                     name: "reason",
                     type: "String",
                     isOptional: true,
+                }, downgraded: {
+                    name: "downgraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
                 }, rank: {
                     name: "rank",
                     type: "AcademicRankingConvert",
@@ -19971,6 +20159,82 @@ const metadata: ModelMeta = {
                 }, studentId_sessionId: {
                     name: "studentId_sessionId",
                     fields: ["studentId", "sessionId"]
+                },
+            },
+        },
+        applicationDowngraded: {
+            name: 'ApplicationDowngraded', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    backLink: 'downgraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentGraduationApplicationId" },
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentGraduationApplication',
+                }, from: {
+                    name: "from",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "fromId" },
+                }, fromId: {
+                    name: "fromId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'from',
+                }, conditions: {
+                    name: "conditions",
+                    type: "GraduationRankDowngradeCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'applicationDowngraded',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentGraduationApplicationId: {
+                    name: "studentGraduationApplicationId",
+                    fields: ["studentGraduationApplicationId"]
                 },
             },
         },
@@ -20309,6 +20573,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'rank',
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'from',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20444,6 +20714,13 @@ const metadata: ModelMeta = {
                     type: "String",
                     isArray: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, applicationDowngraded: {
+                    name: "applicationDowngraded",
+                    type: "ApplicationDowngraded",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'conditions',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22934,6 +23211,7 @@ const metadata: ModelMeta = {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
         evaluationPeriod: ['EvaluationStandard', 'EvaluationCouncil', 'EvaluationSecretarYCouncil'],
+        criterionAssignment: ['CriterionAssignmentComment', 'DeadlineHistory'],
         evaluationStandard: ['EvaluationCriterion'],
         evaluationCriterion: ['CriterionAssignment', 'RequirementCriterion'],
         evidence: ['AnalysisFormEvidence'],

@@ -2945,7 +2945,37 @@ exports.Prisma.CriterionAssignmentScalarFieldEnum = {
   updatedAt: 'updatedAt',
   evaluationCriterionId: 'evaluationCriterionId',
   lecturerId: 'lecturerId',
-  deadline: 'deadline'
+  deadline: 'deadline',
+  status: 'status',
+  submittedAt: 'submittedAt'
+};
+
+exports.Prisma.CriterionAssignmentCommentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  assignmentId: 'assignmentId',
+  reviewerId: 'reviewerId',
+  content: 'content'
+};
+
+exports.Prisma.DeadlineHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  criterionAssignmentId: 'criterionAssignmentId',
+  oldDeadline: 'oldDeadline',
+  newDeadline: 'newDeadline',
+  changedById: 'changedById',
+  reason: 'reason'
 };
 
 exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
@@ -3367,8 +3397,6 @@ exports.Prisma.ExamScalarFieldEnum = {
   status: 'status',
   questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
-  createdExamCode: 'createdExamCode',
-  lockExamCode: 'lockExamCode',
   duration: 'duration',
   session: 'session',
   subjectVersionId: 'subjectVersionId'
@@ -3398,6 +3426,7 @@ exports.Prisma.ExamListScalarFieldEnum = {
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId',
+  createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
   start: 'start',
   end: 'end'
@@ -3572,6 +3601,18 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   rankId: 'rankId',
   trainingMajorId: 'trainingMajorId',
   diplomaTypeId: 'diplomaTypeId'
+};
+
+exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
 };
 
 exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
@@ -5911,6 +5952,24 @@ exports.Prisma.CriterionAssignmentOrderByRelevanceFieldEnum = {
   lecturerId: 'lecturerId'
 };
 
+exports.Prisma.CriterionAssignmentCommentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  assignmentId: 'assignmentId',
+  reviewerId: 'reviewerId',
+  content: 'content'
+};
+
+exports.Prisma.DeadlineHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  criterionAssignmentId: 'criterionAssignmentId',
+  changedById: 'changedById',
+  reason: 'reason'
+};
+
 exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6288,6 +6347,14 @@ exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
   rankId: 'rankId',
   trainingMajorId: 'trainingMajorId',
   diplomaTypeId: 'diplomaTypeId'
+};
+
+exports.Prisma.ApplicationDowngradedOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentGraduationApplicationId: 'studentGraduationApplicationId',
+  fromId: 'fromId'
 };
 
 exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {
@@ -6952,6 +7019,13 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   FAILED: 'FAILED'
 };
 
+exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
+  PENDING: 'PENDING',
+  SUBMITTED: 'SUBMITTED',
+  REVISION: 'REVISION',
+  APPROVED: 'APPROVED'
+};
+
 exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   CHAIRMAN: 'CHAIRMAN',
   VICE_PRESIDENT: 'VICE_PRESIDENT',
@@ -7212,6 +7286,8 @@ exports.Prisma.ModelName = {
   StandardCatalog: 'StandardCatalog',
   CriterionCatalog: 'CriterionCatalog',
   CriterionAssignment: 'CriterionAssignment',
+  CriterionAssignmentComment: 'CriterionAssignmentComment',
+  DeadlineHistory: 'DeadlineHistory',
   RequirementCriterionCatalog: 'RequirementCriterionCatalog',
   ScoreScaleCatalog: 'ScoreScaleCatalog',
   EvaluationStandard: 'EvaluationStandard',
@@ -7255,6 +7331,7 @@ exports.Prisma.ModelName = {
   ScholarshipAward: 'ScholarshipAward',
   GraduationSession: 'GraduationSession',
   StudentGraduationApplication: 'StudentGraduationApplication',
+  ApplicationDowngraded: 'ApplicationDowngraded',
   ApplicationCheckResult: 'ApplicationCheckResult',
   GraduationDecision: 'GraduationDecision',
   AcademicRankingConvert: 'AcademicRankingConvert',

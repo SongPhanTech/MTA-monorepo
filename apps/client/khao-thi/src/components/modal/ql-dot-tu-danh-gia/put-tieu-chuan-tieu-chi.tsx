@@ -4,7 +4,7 @@ import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { createId, type EvaluationPeriod } from '@workspace/db'
-import { useFindManyStandardCatalog } from '@workspace/db/hooks'
+import { useFindManyEvaluationStandard, useFindManyStandardCatalog } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
@@ -51,7 +51,9 @@ const PutTieuChuanTieuChi = () => {
         isOpen,
         onClose,
         input: id,
-    } = useDisclosure({
+    } = useDisclosure<{
+        id?: string
+    }>({
         tag: 'PutTieuChuanTieuChi',
     })
 
@@ -91,6 +93,31 @@ const PutTieuChuanTieuChi = () => {
             },
         },
     })
+
+    const { data: existingStandards } = useFindManyEvaluationStandard(
+        {
+            where: {
+                periodId: selectedEvaluationPeriodId,
+            },
+            include: {
+                criteria: {
+                    include: {
+                        requirementCriterions: true,
+                    },
+                    orderBy: {
+                        order: 'asc',
+                    },
+                },
+            },
+            orderBy: {
+                order: 'asc',
+            },
+        },
+        {
+            enabled: !!id && !!selectedEvaluationPeriodId,
+        }
+    )
+
     const treeData = useMemo(() => {
         return (
             dataCatalog?.map(({ criteria, ...standard }) => ({
@@ -112,10 +139,42 @@ const PutTieuChuanTieuChi = () => {
     }, [dataCatalog])
 
     useEffect(() => {
-        setCatalogSelected(treeData)
-        const allKeys = getAllKeys(treeData)
-        setCheckedKeys(allKeys)
-    }, [treeData])
+        if (id && existingStandards && existingStandards.length > 0) {
+            const selectedKeys: string[] = []
+
+            existingStandards.forEach((standard) => {
+                const catalogStandard = dataCatalog?.find((s) => s.name === standard.name)
+                if (catalogStandard) {
+                    selectedKeys.push(catalogStandard.id)
+                    standard.criteria.forEach((criterion) => {
+                        const catalogCriterion = catalogStandard.criteria.find(
+                            (c) => c.name === criterion.name
+                        )
+                        if (catalogCriterion) {
+                            selectedKeys.push(catalogCriterion.id)
+                            criterion.requirementCriterions.forEach((req) => {
+                                const catalogReq =
+                                    catalogCriterion.requirementCriterionCatalog.find(
+                                        (r) => r.name === req.name
+                                    )
+                                if (catalogReq) {
+                                    selectedKeys.push(catalogReq.id)
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+            setCheckedKeys(selectedKeys)
+            const filtered = filterTree(treeData, selectedKeys)
+            setCatalogSelected(filtered as TreeData)
+        } else if (!id) {
+            setCatalogSelected(treeData)
+            const allKeys = getAllKeys(treeData)
+            setCheckedKeys(allKeys)
+        }
+    }, [treeData, id, existingStandards, dataCatalog])
 
     const onCheck = (checked: string[]) => {
         setCheckedKeys(checked)
@@ -124,42 +183,113 @@ const PutTieuChuanTieuChi = () => {
     }
 
     const onOk = async () => {
+        const standards = catalogSelected.map((s, i1) => {
+            const standardId = createId()
+            const criteria = s.children.map((c, i2) => {
+                const evaluationCriterionId = createId()
+                const requirements = c.children.map(({ name, questions }, i3) => {
+                    return {
+                        evaluationCriterionId,
+                        id: createId(),
+                        order: i3 + 1,
+                        name: name,
+                        questions,
+                    }
+                })
+                return {
+                    standardId,
+                    id: evaluationCriterionId,
+                    order: i2 + 1,
+                    name: c.name,
+                    scoreScaleId: c.scoreScaleId,
+                    requirementCriterionCatalog: requirements,
+                }
+            })
+
+            return {
+                periodId: selectedEvaluationPeriodId,
+                id: standardId,
+                name: s.name,
+                order: i1 + 1,
+                criteria,
+            }
+        })
+
         try {
             showSpinner()
             if (id) {
+                const res = await sqlTransaction([
+                    {
+                        model: 'RequirementCriterion' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                evaluationCriterion: {
+                                    standard: {
+                                        periodId: selectedEvaluationPeriodId,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        model: 'EvaluationCriterion' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                standard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        model: 'EvaluationStandard' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                periodId: selectedEvaluationPeriodId,
+                            },
+                        },
+                    },
+                    {
+                        model: 'EvaluationStandard' as const,
+                        operation: 'createMany',
+                        data: {
+                            data: standards.map(({ criteria, ...standard }) => standard),
+                        },
+                    },
+                    {
+                        model: 'EvaluationCriterion' as const,
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.map(
+                                    ({ requirementCriterionCatalog, ...criterion }) => criterion
+                                )
+                            ),
+                        },
+                    },
+                    {
+                        model: 'RequirementCriterion' as const,
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.flatMap(
+                                    ({ requirementCriterionCatalog }) => requirementCriterionCatalog
+                                )
+                            ),
+                        },
+                    },
+                ])
+
+                if (res.status !== 200) {
+                    message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+                    return
+                }
+
+                message.success('Cập nhật thành công')
             } else {
-                const standards = catalogSelected.map((s, i1) => {
-                    const standardId = createId()
-                    const criteria = s.children.map((c, i2) => {
-                        const evaluationCriterionId = createId()
-                        const requirements = c.children.map(({ name, questions }, i3) => {
-                            return {
-                                evaluationCriterionId,
-                                id: createId(),
-                                order: i3 + 1,
-                                name: name,
-                                questions,
-                            }
-                        })
-                        return {
-                            standardId,
-                            id: evaluationCriterionId,
-                            order: i2 + 1,
-                            name: c.name,
-                            scoreScaleId: c.scoreScaleId,
-                            requirementCriterionCatalog: requirements,
-                        }
-                    })
-
-                    return {
-                        periodId: selectedEvaluationPeriodId,
-                        id: standardId,
-                        name: s.name,
-                        order: i1 + 1,
-                        criteria,
-                    }
-                })
-
                 const res = await sqlTransaction([
                     {
                         model: 'EvaluationStandard',
@@ -213,7 +343,7 @@ const PutTieuChuanTieuChi = () => {
     return (
         <PutFormModal
             form={form}
-            title="Cập nhật tiêu chuẩn - tiêu chí"
+            title={id ? 'Chỉnh sửa tiêu chuẩn tiêu chí' : 'Thêm tiêu chuẩn tiêu chí'}
             open={isOpen}
             onCancel={onClose}
             className="w-[500px]"

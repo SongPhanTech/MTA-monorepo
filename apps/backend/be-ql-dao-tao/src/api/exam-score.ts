@@ -85,7 +85,7 @@ app.openapi(genExamListCode, async (c) => {
         return c.json({ message: 'Không có thí sinh' }, 404)
     }
 
-    const hasScore = examList.examPapers.some((s) => s.studentSubjectScore.finalScore !== null)
+    const hasScore = examList.examPapers.some((s) => s.studentSubjectScore.examScore !== null)
 
     if (hasScore) {
         return c.json({ message: 'Phách đã được nhập điểm' }, 400)

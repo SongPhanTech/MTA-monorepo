@@ -48,13 +48,13 @@ import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh
 import useSpinner from '@hooks/spinner'
 import CreateLayout from '@layouts/create-layout'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
-import { getMinioUrl } from '@workspace/constant'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
-import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { putDMNhanViens } from '@workspace/libs/api/system'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import dayjs from 'dayjs'
+import axios from 'axios'
 
 dayjs.locale('vi')
 interface itemType {
@@ -348,12 +348,12 @@ export default function UpdateUserPage() {
 
     const { showSpinner, hideSpinner } = useSpinner()
     function findLatestQuyetDinh(list: any[]) {
-    if (list.length === 0) return null
-    return list.reduce((latest, current) =>
-        new Date(current.ngayNhanQuyetDinh) > new Date(latest.ngayNhanQuyetDinh)
-        ? current
-        : latest
-    )
+        if (list.length === 0) return null
+        return list.reduce((latest, current) =>
+            new Date(current.ngayNhanQuyetDinh) > new Date(latest.ngayNhanQuyetDinh)
+                ? current
+                : latest
+        )
     }
 
     const handleSubmit = async ({
@@ -372,32 +372,26 @@ export default function UpdateUserPage() {
     }: SubmitForm) => {
         if (!values) return
         if (fileList.length > 0) {
-            const file = fileList[0]
-            const resPresignedUrl = await generatePresignedUrl({
-                path: 'avatar',
-                extension: file.name?.split('.').pop() ?? '',
-            })
-        
-            await fetch(resPresignedUrl.data.url, {
-                method: 'PUT',
-                body: file.originFileObj,
-            })
-
-            form.setFieldsValue({
-                avatar: resPresignedUrl.data.fileName,
-            })
-            // const formData = new FormData();
-            // formData.append("file", file?.originFileObj); 
-            // // const tenantCode = getCookie(c, 'x-tenantcode')
-            // const resPresignedUrl = await axios.post(`${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/UploadFile/6`, formData, {
-            //     headers: {
-            //         "Content-Type": "multipart/form-data",
-            //         "tenantCode": window.tenantCode || 'dev',
-            //     "appCode": process.env.NEXT_PUBLIC_APP_CODE
-            //     },
-            //     })
-            // console.log(resPresignedUrl,'123');
-            // return
+            const file: any = fileList[0]
+            const formData = new FormData()
+            formData.append('file', file?.originFileObj)
+            // const tenantCode = getCookie(c, 'x-tenantcode')
+            const resPresignedUrl = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${window.tenantCode || 'dev'}&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'K-TenantCode': window.tenantCode || 'dev',
+                        'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                    },
+                }
+            )
+            if (resPresignedUrl?.status === 200 && resPresignedUrl?.data?.fileName) {
+                form.setFieldsValue({
+                    avatar: resPresignedUrl?.data?.fileName,
+                })
+            }
         }
 
         try {
@@ -415,16 +409,17 @@ export default function UpdateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 Id: id,
+                sAvatarId: form.getFieldValue('avatar'),
             }).catch((error) => {
                 console.log(error)
             })
-                 let rank=null
-                if(values.capBac?.length>0){
-                    if(values.capBac?.length===1){
-                        rank = values.capBac[0]
-                    }
-                   rank = findLatestQuyetDinh(values?.capBac)
+            let rank = null
+            if (values.capBac?.length > 0) {
+                if (values.capBac?.length === 1) {
+                    rank = values.capBac[0]
                 }
+                rank = findLatestQuyetDinh(values?.capBac)
+            }
             // if (res.status === 200) {
             let listTransaction: any = [
                 {
@@ -516,7 +511,7 @@ export default function UpdateUserPage() {
                                 ? dayjs(values.tenureDate).toISOString()
                                 : null,
                             avatar: form.getFieldValue('avatar'),
-                            rankId:rank?.capBacId ?? undefined ,
+                            rankId: rank?.capBacId ?? undefined,
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {
@@ -975,14 +970,14 @@ export default function UpdateUserPage() {
                 ]
             }
 
-           const res= await sqlTransaction(listTransaction)
-           if(res?.status===200){
-                        queryClient.invalidateQueries({
-                queryKey: ['UserProfile'],
-            })
-            message.success('Cập nhật thành công')
-           }
-    
+            const res = await sqlTransaction(listTransaction)
+            if (res?.status === 200) {
+                queryClient.invalidateQueries({
+                    queryKey: ['UserProfile'],
+                })
+                message.success('Cập nhật thành công')
+            }
+
             // }
             // router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {
@@ -1042,7 +1037,7 @@ export default function UpdateUserPage() {
 
     // Hàm fill thông tin từ dữ liệu cccdUserProfileData
     const fillUserInfo = useCallback(
-        (userData: any) => {
+        async(userData: any) => {
             if (!userData) return
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
@@ -1063,22 +1058,57 @@ export default function UpdateUserPage() {
                 staffTypeId: userData.staffs?.staffTypeId,
                 lecturerTypeId: userData.lecturer?.lecturerTypeId,
             })
+            if(userData?.avatar){
+                const imageUrl = await getLInkImage();
+                const avatarFile: UploadFile = {
+                    uid: '-1',
+                    name: 'avatar.jpg',
+                    status: 'done',
+                    url: imageUrl, // Sử dụng getMinioUrl để tạo URL hiển thị
+                }
+                setFileList([avatarFile])
+            }
         },
         [form]
     )
+    const getLInkImage = async () => {
+        const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/employee/${id}/image`,
+            {
+                responseType: 'blob', 
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'K-TenantCode': window.tenantCode || 'dev',
+                    'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                },
+                params: {
+                    h:100,
+                    w:100,
+                    appCode: process.env.NEXT_PUBLIC_APP_CODE,
+                    tenantCode: window.tenantCode || 'dev',
+                }
+            }
+        )
+        if(res?.status === 200) {
+            return URL.createObjectURL(res.data)
+        }
+
+        return ''
+    }
 
     const avatar = Form.useWatch('avatar', form)
-    const fileListValue = useMemo(() => {
-        if (avatar) {
-            const avatarFile: UploadFile = {
-                uid: '-1',
-                name: 'avatar.jpg',
-                status: 'done',
-                url: getMinioUrl(avatar), // Sử dụng getMinioUrl để tạo URL hiển thị
-            }
-            return [avatarFile]
-        }
-    }, [avatar])
+    // const fileListValue = useMemo(async() => {
+    //     if (avatar) {
+    //         const imageUrl = await getLInkImage();
+    //         const avatarFile: UploadFile = {
+    //             uid: '-1',
+    //             name: 'avatar.jpg',
+    //             status: 'done',
+    //             url: imageUrl, // Sử dụng getMinioUrl để tạo URL hiển thị
+    //         }
+    //         return [avatarFile]
+    //     }
+    // }, [avatar])
 
     // Effect để fill thông tin khi có dữ liệu từ API
     useEffect(() => {
@@ -1153,7 +1183,7 @@ export default function UpdateUserPage() {
                                             <Upload
                                                 listType="picture-circle"
                                                 maxCount={1}
-                                                fileList={avatar ? fileListValue : fileList}
+                                                fileList={fileList}
                                                 onChange={onChange}
                                                 onRemove={() => {
                                                     setFileList([])

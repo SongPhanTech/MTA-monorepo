@@ -58,7 +58,7 @@ const ThongTinKhaoSatModal = () => {
                         width: 50,
                     },
                     {
-                        title: 'Đối tượng khảo sát',
+                        title: 'Đối tượng làm khảo sát',
                         dataIndex: 'name',
                         align: 'center',
                         key: 'name',

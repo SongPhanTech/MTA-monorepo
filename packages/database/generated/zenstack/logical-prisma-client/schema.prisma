@@ -380,6 +380,15 @@ enum PaymentStatus {
   @@schema("ql-dao-tao")
 }
 
+enum AssignmentStatus {
+  PENDING
+  SUBMITTED
+  REVISION
+  APPROVED
+
+  @@schema("khao-thi")
+}
+
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN
@@ -791,6 +800,8 @@ model UserProfile {
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
+  deadlineHistories             DeadlineHistory[]
+  criterionAssignmentComments   CriterionAssignmentComment[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -3345,7 +3356,7 @@ model SubjectClass {
   /// khoá điểm CC/TX
   isLockScore                 Boolean               @default(false)
   /// khoá điểm thi
-  isLockExamScore             Boolean               @default(true)
+  isLockExamScore             Boolean               @default(false)
   scoreSubmitted              Boolean               @default(false)
   scoreChecked                Boolean               @default(false)
   room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
@@ -4999,6 +5010,50 @@ model CriterionCatalog {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model CriterionAssignment {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId       String
+  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String
+  deadline                    DateTime
+  status                      AssignmentStatus             @default(PENDING)
+  submittedAt                 DateTime?                    @default(now())
+  deadlineHistories           DeadlineHistory[]
+  criterionAssignmentComments CriterionAssignmentComment[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model CriterionAssignmentComment {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt()
+  assignment   CriterionAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String
+  reviewer     UserProfile         @relation(fields: [reviewerId], references: [id])
+  reviewerId   String
+  content      String              @db.Text()
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model DeadlineHistory {
   id                    String              @id() @default(cuid())
   code                  String?             @unique()
   active                Boolean             @default(true)
@@ -5006,11 +5061,13 @@ model CriterionAssignment {
   deletedAt             DateTime?
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @default(now()) @updatedAt()
-  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId String
-  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
-  lecturerId            String
-  deadline              DateTime
+  criterionAssignment   CriterionAssignment @relation(fields: [criterionAssignmentId], references: [id], onDelete: Cascade)
+  criterionAssignmentId String
+  oldDeadline           DateTime?
+  newDeadline           DateTime
+  changedBy             UserProfile?        @relation(fields: [changedById], references: [id])
+  changedById           String?
+  reason                String?             @db.Text()
 
   @@schema("khao-thi")
 }
@@ -5715,9 +5772,6 @@ model Exam {
   questionBankId     String?
   /// khoá DS thi
   lockExamSessions   Boolean             @default(false)
-  /// Đã đánh phách
-  createdExamCode    Boolean             @default(false)
-  lockExamCode       Boolean             @default(false)
   /// thời gian thi
   duration           Int?
   session            Int                 @default(1)
@@ -5745,9 +5799,9 @@ model ExamRoom {
   updatedAt   DateTime   @default(now()) @updatedAt()
   exam        Exam       @relation(fields: [examId], references: [id])
   examId      String
-  room        Room       @relation(fields: [roomId], references: [id])
-  roomId      String
-  capacity    Int
+  room        Room?      @relation(fields: [roomId], references: [id])
+  roomId      String?
+  capacity    Int        @default(0)
   examList    ExamList[]
 
   @@unique([examId, roomId])
@@ -5772,6 +5826,8 @@ model ExamList {
   firstSupervisorId  String?
   secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
   secondSupervisorId String?
+  /// Đã đánh phách
+  createdExamCode    Boolean     @default(false)
   lockExamCode       Boolean     @default(false)
   start              Int?
   end                Int?
@@ -6043,6 +6099,7 @@ model StudentGraduationApplication {
   graduation             Boolean?
   gpa                    Decimal?                 @db.Decimal(5, 2)
   reason                 String?
+  downgraded             ApplicationDowngraded?
   rank                   AcademicRankingConvert?  @relation(fields: [rankId], references: [id])
   rankId                 String?
   trainingMajor          TrainingMajor?           @relation(fields: [trainingMajorId], references: [id])
@@ -6055,6 +6112,26 @@ model StudentGraduationApplication {
   decision               GraduationDecision?
 
   @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ApplicationDowngraded {
+  id                             String                             @id() @default(cuid())
+  code                           String?                            @unique()
+  active                         Boolean                            @default(true)
+  description                    String?                            @db.Text()
+  deletedAt                      DateTime?
+  createdAt                      DateTime                           @default(now())
+  updatedAt                      DateTime                           @default(now()) @updatedAt()
+  studentGraduationApplication   StudentGraduationApplication       @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                             @unique()
+  from                           AcademicRankingConvert             @relation(fields: [fromId], references: [id])
+  fromId                         String
+  conditions                     GraduationRankDowngradeCondition[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -6145,6 +6222,7 @@ model AcademicRankingConvert {
   downgradeRules               GraduationRankDowngradeRule[]
   graduationDecision           GraduationDecision[]
   studentGraduationApplication StudentGraduationApplication[]
+  applicationDowngraded        ApplicationDowngraded[]
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
@@ -6174,20 +6252,21 @@ model GraduationRankDowngradeRule {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model GraduationRankDowngradeCondition {
-  id              String                      @id() @default(cuid())
-  code            String?                     @unique()
-  active          Boolean                     @default(true)
-  description     String?                     @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime                    @default(now())
-  updatedAt       DateTime                    @default(now()) @updatedAt()
-  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
-  downgradeRuleId String
-  field           CriteriaField
-  operator        CriteriaOperator
-  invert          Boolean                     @default(false)
-  value           Float
-  tuple           String[]                    @default([])
+  id                    String                      @id() @default(cuid())
+  code                  String?                     @unique()
+  active                Boolean                     @default(true)
+  description           String?                     @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @default(now()) @updatedAt()
+  downgradeRule         GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId       String
+  field                 CriteriaField
+  operator              CriteriaOperator
+  invert                Boolean                     @default(false)
+  value                 Float
+  tuple                 String[]                    @default([])
+  applicationDowngraded ApplicationDowngraded[]
 
   @@schema("ql-dao-tao")
 }

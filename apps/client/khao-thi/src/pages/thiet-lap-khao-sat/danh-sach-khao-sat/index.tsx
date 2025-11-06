@@ -153,21 +153,24 @@ export default function DetailSurveyPage() {
                                 </HtmlTruncate>
                             ),
                         },
-                        {
+                         {
                             title: 'Ngày bắt đầu',
                             dataIndex: 'startDate',
                             type: 'date',
-                            render: (_, record) =>
-                                record?.startDate
-                                    ? dayjs(record?.startDate).format('DD/MM/YYYY')
-                                    : '',
+                            width: 120,
+                            render: (_, record) =>{
+                                return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
+                            }
                         },
+
                         {
                             title: 'Ngày kết thúc',
                             dataIndex: 'endDate',
                             type: 'date',
-                            render: (_, record) =>
-                                record?.endDate ? dayjs(record?.endDate).format('DD/MM/YYYY') : '',
+                            width: 120,
+                            render: (_, record) =>{
+                                return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
+                            }
                         },
                         {
                             title: 'Trạng thái',

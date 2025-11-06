@@ -1,5 +1,7 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@components/commons/typeFilter'
+import CreateIcon from '@components/icons/create'
+import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -8,7 +10,7 @@ import { useCountEvaluationStandard, useFindManyEvaluationStandard } from '@work
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Form, Input, Row } from 'antd'
-import { BookPlus, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -94,6 +96,13 @@ export default function EvaluationStandardTab() {
         },
     })
 
+    const { onOpen: onOpenPutCriterionCatalog } = useDisclosure<{
+        id: string
+        standardId: string
+    }>({
+        tag: 'PutCriterionCatalog',
+    })
+
     return (
         <Row gutter={[8, 0]}>
             <Col span={24}>
@@ -123,18 +132,23 @@ export default function EvaluationStandardTab() {
                         </Form.Item>
                     </Col>
                     <Col>
-                        {can(
-                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                            'THEM'
-                        ) && (
+                        {!data || data.length === 0 ? (
                             <Button
                                 type="primary"
                                 onClick={() => {
                                     onOpen()
                                 }}
                             >
-                                <BookPlus />
                                 Thêm mới
+                            </Button>
+                        ) : (
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    onOpen({ id: data[0]?.id })
+                                }}
+                            >
+                                Chỉnh sửa
                             </Button>
                         )}
                     </Col>
@@ -143,9 +157,6 @@ export default function EvaluationStandardTab() {
             <Col span={24}>
                 <TableCollapse
                     rowKey="id"
-                    scroll={{
-                        x: 'false',
-                    }}
                     headerTitleKey={({ order, name }) => {
                         const parts = [order, name].filter(Boolean)
                         return `Tiêu chuẩn ${parts.join(' - ')}`
@@ -157,11 +168,30 @@ export default function EvaluationStandardTab() {
                         setFilters(value)
                         setCurrentPage(1)
                     }}
+                    headerRight={(record) => (
+                        <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
+                            {can(
+                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                'THEM'
+                            ) && (
+                                <CreateIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenPutCriterionCatalog({
+                                            id: '',
+                                            standardId: record?.id,
+                                        })
+                                    }}
+                                    title="Thêm mới phiên bản"
+                                />
+                            )}
+                        </div>
+                    )}
                     columns={[
                         {
                             title: 'Thứ tự',
                             dataIndex: 'order',
-                            width: 150,
+                            width: 50,
                             align: 'center',
                             type: 'order',
                         },
@@ -170,6 +200,31 @@ export default function EvaluationStandardTab() {
                             dataIndex: 'name',
                             type: 'input',
                             width: 300,
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 20,
+                            render: (_, record) => {
+                                return (
+                                    <Row className="justify-end gap-2 px-3">
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenPutCriterionCatalog({
+                                                        id: record?.id,
+                                                        standardId: record?.standardId,
+                                                    })
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                    </Row>
+                                )
+                            },
                         },
                     ]}
                     data={data}

@@ -1,45 +1,63 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
+import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import { useCountExamRoom, useFindManyExamList } from '@workspace/db/hooks'
+import { type Prisma } from '@workspace/db/client'
+import { useCountExamList, useFindManyExamList } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Row } from 'antd'
+import { Col, Flex, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
-export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
+export default function PhongThi() {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { options: examTypeOptions, getExamTypeLabel } = useExamTypeOptions()
 
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: session } = useSession()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
+        searchText: '',
+        examType: undefined,
     })
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    const where: any = useMemo(() => {
+    const { selectedExamListId } = useStore(diemPhongThiStore)
+
+    const where = useMemo(() => {
         return {
-            ...(trainingObjectTypeId || semesterId
-                ? {
-                      exam: {
-                          subjectClass: {
-                              some: {
-                                  trainingObjectTypeId,
-                                  semesterId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
-        }
-    }, [filters, trainingObjectTypeId, semesterId])
+            examRoom: {
+                exam: {
+                    subjectClass: {
+                        some: {
+                            trainingObjectTypeId,
+                            semesterId,
+                            ...(filters.examType && filters.examType.length > 0
+                                ? {
+                                      examType: {
+                                          in: filters.examType,
+                                      },
+                                  }
+                                : {}),
+                        },
+                    },
+                    lockExamSessions: true,
+                },
+                roomId: {
+                    not: null,
+                },
+            },
+        } as Prisma.ExamListWhereInput
+    }, [trainingObjectTypeId, semesterId, filters])
 
     const { data = [], refetch } = useFindManyExamList({
         where,
@@ -71,7 +89,11 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                     },
                 },
             },
-            _count: true,
+            _count: {
+                select: {
+                    examPapers: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -80,9 +102,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    data[0].examRoom?.room.building?.trainingLocation?.name
-
-    const { data: count } = useCountExamRoom({
+    const { data: count } = useCountExamList({
         where: {
             ...where,
             deletedAt: null,
@@ -94,10 +114,43 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
         }, 500),
         []
     )
+    const debouncedSearch = useCallback(
+        _.debounce((value: string) => {
+            setFilters((prev) => ({
+                ...prev,
+                searchText: value,
+            }))
+        }, 500),
+        []
+    )
 
     return (
         <div className="bg-white">
             <Row gutter={[16, 16]}>
+                <Flex gap={8}>
+                    <Input
+                        placeholder="Tìm kiếm"
+                        className="w-60"
+                        allowClear
+                        onChange={(e) => debouncedSearch(e.target.value)}
+                    />
+                    <Select
+                        allowClear
+                        mode="multiple"
+                        placeholder="Chọn hình thức thi"
+                        className="w-60"
+                        options={examTypeOptions.map((opt) => ({
+                            label: opt.label,
+                            value: opt.value,
+                        }))}
+                        onChange={(value) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                examType: value,
+                            }))
+                        }
+                    />
+                </Flex>
                 <Col span={24}>
                     <Table
                         rowKey="id"
@@ -106,9 +159,12 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    setSelectedRowKeys(record.id)
+                                    diemPhongThiStore.setState({ selectedExamListId: record.id })
+                                    debouncedRefetch()
                                 },
-                                className: cn(selectedRowKeys === record.id ? 'bg-orange-200' : ''),
+                                className: cn(
+                                    selectedExamListId === record.id ? 'bg-orange-200' : ''
+                                ),
                             }
                         }}
                         columns={[
@@ -124,20 +180,31 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record?.examRoom.room.name || '',
+                                render: (_, record) => record?.examRoom?.room?.name || '',
                             },
                             {
-                                title: 'Địa chỉ',
-                                dataIndex: 'fullname',
+                                title: 'Khu vực',
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) =>
-                                    `${record?.examRoom?.room.building?.name} ${record?.examRoom?.room.building?.trainingLocation?.name}`,
+                                    `${record?.examRoom?.room?.building?.name} ${record?.examRoom?.room?.building?.trainingLocation?.name}`,
+                            },
+                            {
+                                title: 'Hình thức thi',
+                                width: 150,
+                                type: 'input',
+                                align: 'center',
+                                render: (_, record) => {
+                                    return (
+                                        getExamTypeLabel(
+                                            record?.examRoom?.exam?.subjectClass?.[0]?.examType
+                                        ) || ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Môn học',
-                                dataIndex: 'fullname',
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
@@ -159,16 +226,13 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 },
                             },
                             {
-                                title: 'Tiết',
-                                dataIndex: 'fullname',
+                                title: 'Ca thi',
                                 width: 150,
                                 align: 'center',
-                                render: (_, record) =>
-                                    `${record?.start || ''} - ${record?.end || ''}`,
+                                render: (_, record) => `${record?.start || ''}`,
                             },
                             {
                                 title: 'Ngày thi',
-                                dataIndex: 'fullname',
                                 width: 150,
                                 align: 'center',
                                 render: (_, record) =>
@@ -176,11 +240,10 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                             },
                             {
                                 title: 'Số thí sinh',
-                                dataIndex: 'fullname',
                                 width: 150,
                                 align: 'center',
                                 render: (_, record) => {
-                                    return record?._count?.examSessions
+                                    return record?._count?.examPapers || 0
                                 },
                             },
                         ]}

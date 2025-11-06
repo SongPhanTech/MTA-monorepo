@@ -321,7 +321,7 @@ const ModalPrintStudentSubjectScore = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
+                className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman !text-black"
             >
                 <div className="text-center font-bold uppercase">
                     <div className="flex items-center justify-between">
@@ -337,13 +337,12 @@ const ModalPrintStudentSubjectScore = () => {
                         </div>
                     </div>
                     {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP ? (
-                        <div className="font-normal border max-w-32 mt-5 text-[18px] border-black">
+                        <div className="font-normal border max-w-32 ml-10 mt-5 text-[18px] border-black">
                             Bản nháp
                         </div>
                     ) : (
                         ''
                     )}
-
                     <div className="mt-4 uppercase text-[20px]">Phiếu điểm</div>
                     <div className="text-sm normal-case font-normal italic">
                         {`(${data?.semester?.name} - ${data?.semester?.schoolYear?.name})`}

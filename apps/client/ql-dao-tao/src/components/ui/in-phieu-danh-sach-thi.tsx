@@ -1,4 +1,5 @@
 import { useExamTypeOptions } from '@hooks/examType'
+import type { Prisma } from '@workspace/db/client'
 import { Button } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
@@ -7,18 +8,114 @@ import { Printer } from 'lucide-react'
 import { useMemo } from 'react'
 
 interface ExportTemplateExamProps {
-    selectedSubjectClass: string | undefined
-    dataTable: any[]
-    dataClass: any
+    dataTable: Prisma.StudentSubjectScoreGetPayload<{
+        include: {
+            student: {
+                include: {
+                    userProfile: true
+                    fixedClass: {
+                        include: {
+                            trainingCourse: {
+                                include: {
+                                    scoreConverts: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            subjectClass: {
+                include: {
+                    subject: true
+                    semester: {
+                        include: {
+                            schoolYear: true
+                        }
+                    }
+                    mainLecturer: {
+                        include: {
+                            userProfile: true
+                        }
+                    }
+                    extraLecturer: {
+                        include: {
+                            userProfile: true
+                        }
+                    }
+                    enterGradeLecturer: {
+                        include: {
+                            userProfile: true
+                        }
+                    }
+                }
+            }
+            awards: {
+                include: {
+                    archivedAward: true
+                }
+            }
+            certificates: {
+                include: {
+                    archivedCertificate: true
+                }
+            }
+        }
+    }>[]
+    dataClass?: Prisma.SubjectClassGetPayload<{
+        select: {
+            scoreDeadLineStart: true
+            scoreDeadline: true
+            examScoreDeadline: true
+            isLockScore: true
+            isLockExamScore: true
+            enteredScore: true
+            enteredExamScore: true
+            subject: {
+                select: {
+                    onePoint: true
+                    credit: true
+                    managementOrganization: {
+                        select: {
+                            sTen: true
+                        }
+                    }
+                }
+            }
+            subjectClassStudent: true
+            semester: {
+                select: {
+                    name: true
+                    schoolYear: true
+                }
+            }
+            code: true
+            name: true
+            mainLecturer: {
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true
+                        }
+                    }
+                }
+            }
+            extraLecturer: {
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true
+                        }
+                    }
+                }
+            }
+            examDate: true
+            examType: true
+        }
+    }>
     disabled?: boolean
 }
 
-const ExportTemplateExam = ({
-    selectedSubjectClass,
-    dataTable,
-    dataClass,
-    disabled,
-}: ExportTemplateExamProps) => {
+const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateExamProps) => {
     const { getExamTypeLabel } = useExamTypeOptions()
     // const firstTrainingCourse = useMemo(() => {
     //     return dataClass?.subjectClassStudent?.find(({ student }: any) =>
@@ -391,7 +488,7 @@ const ExportTemplateExam = ({
     }
 
     return (
-        <Button onClick={exportTemplate} disabled={!selectedSubjectClass || disabled}>
+        <Button onClick={exportTemplate} disabled={disabled}>
             <Printer />
             Xuất phiếu danh sách thi
         </Button>
