@@ -197,7 +197,7 @@ export default function FAQSidebar({ faqData, onClose }: FAQSidebarProps) {
             title={
                 <div className="flex items-center gap-2">
                     <QuestionCircleOutlined className="text-primary" />
-                    <span className="font-semibold">Câu hỏi thường gặp (FAQ)</span>
+                    <span className="font-semibold">Câu hỏi thường gặp</span>
                 </div>
             }
             size="default"
@@ -262,40 +262,31 @@ export default function FAQSidebar({ faqData, onClose }: FAQSidebarProps) {
                             <div
                                 ref={contentRef}
                                 className="space-y-4 text-gray-800 leading-relaxed"
-                                style={{
-                                    fontFamily: '"Noto Serif", serif',
-                                }}
                             >
                                 {/* Question Section */}
-                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r">
-                                    <div className="flex items-start gap-2">
-                                        <span className="font-bold text-blue-700 text-sm flex-shrink-0">
-                                            Câu hỏi:
-                                        </span>
-                                        <div
-                                            className="flex-1 text-sm text-blue-900 font-medium whitespace-pre-wrap break-words"
-                                            style={{ overflowWrap: 'anywhere' }}
-                                            // biome-ignore lint/security/noDangerouslySetInnerHtml: highlighted content
-                                            dangerouslySetInnerHTML={{
-                                                __html: highlightedQuestion,
-                                            }}
-                                        />
+                                <div>
+                                    <div className="font-bold text-primary text-base mb-2">
+                                        Câu hỏi:
                                     </div>
+                                    <div
+                                        className="text-sm text-gray-900 whitespace-pre-wrap break-words"
+                                        style={{ overflowWrap: 'anywhere' }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: highlightedQuestion,
+                                        }}
+                                    />
                                 </div>
 
                                 {/* Answer Section */}
-                                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r">
-                                    <div className="flex items-start gap-2">
-                                        <span className="font-bold text-green-700 text-sm flex-shrink-0">
-                                            Câu trả lời:
-                                        </span>
-                                        <div
-                                            className="flex-1 text-sm text-green-900 whitespace-pre-wrap break-words"
-                                            style={{ overflowWrap: 'anywhere' }}
-                                            // biome-ignore lint/security/noDangerouslySetInnerHtml: highlighted content
-                                            dangerouslySetInnerHTML={{ __html: highlightedAnswer }}
-                                        />
+                                <div>
+                                    <div className="font-bold text-primary text-base mb-2">
+                                        Câu trả lời:
                                     </div>
+                                    <div
+                                        className="text-sm text-gray-900 whitespace-pre-wrap break-words"
+                                        style={{ overflowWrap: 'anywhere' }}
+                                        dangerouslySetInnerHTML={{ __html: highlightedAnswer }}
+                                    />
                                 </div>
                             </div>
                         )}
@@ -312,27 +303,6 @@ export default function FAQSidebar({ faqData, onClose }: FAQSidebarProps) {
                                 allowClear
                                 className="flex-1"
                             />
-                            {/* {totalMatches > 0 && (
-                                <div className="flex items-center gap-1">
-                                    <span className="text-xs text-gray-500 whitespace-nowrap">
-                                        {currentMatchIndex + 1}/{totalMatches}
-                                    </span>
-                                    <button
-                                        type="button"
-                                        onClick={handlePrevMatch}
-                                        className="text-gray-500 hover:text-primary transition-colors"
-                                    >
-                                        <UpCircleOutlined className="text-lg" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleNextMatch}
-                                        className="text-gray-500 hover:text-primary transition-colors"
-                                    >
-                                        <DownCircleOutlined className="text-lg" />
-                                    </button>
-                                </div>
-                            )} */}
                         </div>
                     </div>
                 </div>

@@ -143,23 +143,17 @@ export default function FAQCitationTooltip({ citation, onClick }: FAQCitationToo
                     scrollbarWidth: 'thin',
                 }}
             >
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-2 rounded-r mb-2">
-                    <div className="flex items-start gap-2">
-                        <span className="font-bold text-blue-700 text-xs flex-shrink-0">
-                            Câu hỏi:
-                        </span>
-                        <p className="flex-1 text-xs text-blue-900 font-medium leading-relaxed whitespace-pre-wrap break-words">
+                <div className="space-y-3 mb-2">
+                    <div>
+                        <div className="font-bold text-primary text-xs mb-1">Câu hỏi:</div>
+                        <p className="text-xs text-gray-900 leading-relaxed whitespace-pre-wrap break-words">
                             {question}
                         </p>
                     </div>
-                </div>
 
-                <div className="bg-green-50 border-l-4 border-green-500 p-2 rounded-r">
-                    <div className="flex items-start gap-2">
-                        <span className="font-bold text-green-700 text-xs flex-shrink-0">
-                            Câu trả lời:
-                        </span>
-                        <p className="flex-1 text-xs text-green-900 leading-relaxed whitespace-pre-wrap break-words">
+                    <div>
+                        <div className="font-bold text-primary text-xs mb-1">Câu trả lời:</div>
+                        <p className="text-xs text-gray-900 leading-relaxed whitespace-pre-wrap break-words">
                             {answer}
                         </p>
                     </div>
@@ -167,7 +161,7 @@ export default function FAQCitationTooltip({ citation, onClick }: FAQCitationToo
 
                 <div className="pt-3 mt-3 border-t border-gray-200 pb-3 space-y-2">
                     <div className="text-xs text-gray-500 flex items-center gap-1">
-                        <span>Nguồn gốc:</span>
+                        <span>Trích:</span>
                         <span className="px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">
                             Câu hỏi thường gặp
                         </span>
