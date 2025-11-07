@@ -14,6 +14,8 @@ export default function TroLyAo() {
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
+    const [selectedTopic, setSelectedTopic] = useState<{ id: string; name: string } | null>(null)
+    const [faqQuestions, setFaqQuestions] = useState<string[]>([])
     const { mutateAsync: createConversation } = useCreateConversation()
     const isProcessingRef = useRef(false)
 
