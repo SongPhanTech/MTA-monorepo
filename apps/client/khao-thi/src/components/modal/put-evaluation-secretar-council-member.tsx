@@ -4,13 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { EVALUATION_SECRETARY_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { EvaluationSecretaryMember } from '@workspace/db'
-import {
-    useCreateEvaluationSecretaryMember,
-    useFindManyLecturer,
-    useFindUniqueEvaluationSecretaryMember,
-    useUpdateEvaluationSecretaryMember,
-} from '@workspace/db/hooks'
+
 import { Col, Form, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'

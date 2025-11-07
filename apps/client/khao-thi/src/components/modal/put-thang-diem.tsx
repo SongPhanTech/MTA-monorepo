@@ -2,12 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ScoreScaleCatalog } from '@workspace/db'
-import {
-    useCreateScoreScaleCatalog,
-    useFindUniqueScoreScaleCatalog,
-    useUpdateScoreScaleCatalog,
-} from '@workspace/db/hooks'
+
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
