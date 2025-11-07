@@ -278,7 +278,7 @@ function TabDotKhaoSatCum() {
                                     )
                                 },
                             },
-                             {
+                            {
                                 title: 'Công khai',
                                 dataIndex: 'isPublic',
                                 align: 'center',
@@ -324,9 +324,17 @@ function TabDotKhaoSatCum() {
                                 dataIndex: 'startDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.startDate
+                                                ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
 
                             {
@@ -334,9 +342,17 @@ function TabDotKhaoSatCum() {
                                 dataIndex: 'endDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.endDate
+                                                ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',

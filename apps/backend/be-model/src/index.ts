@@ -102,7 +102,7 @@ app.all('/api/system/:appcode/*', async (c) => {
         headers: {
             'x-clientid': clientId,
             'x-clientsecret': clientSecret,
-            'content-type':'application/json-patch+json'
+            'content-type': 'application/json-patch+json',
         },
     })
     return res

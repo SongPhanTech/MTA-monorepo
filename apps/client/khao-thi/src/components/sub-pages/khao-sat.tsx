@@ -1,4 +1,4 @@
-import {  EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -279,9 +279,17 @@ function TabDotKhaoSat() {
                                 dataIndex: 'startDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.startDate
+                                                ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
 
                             {
@@ -289,9 +297,17 @@ function TabDotKhaoSat() {
                                 dataIndex: 'endDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.endDate
+                                                ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',

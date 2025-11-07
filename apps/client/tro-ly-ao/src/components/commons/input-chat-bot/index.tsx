@@ -81,7 +81,7 @@ export default function ChatInput({
                         <div className="flex justify-between items-center px-1">
                             <Tooltip title="Chọn tài liệu tham khảo">
                                 <Button
-                                    onClick={() => console.log("tài liệu")}
+                                    onClick={() => console.log('tài liệu')}
                                     className={`w-9 h-9 rounded-full flex items-center justify-center border-0 transition-all duration-200 ${
                                         isFaqMode
                                             ? 'bg-primary text-white hover:bg-primary/90 shadow-md'

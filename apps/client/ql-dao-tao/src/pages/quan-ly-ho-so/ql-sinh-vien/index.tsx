@@ -383,10 +383,7 @@ export default function UserProfilePageDs() {
                         </Col>
                         <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                {can(
-                                    QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
-                                    'NHAP_EXCEL'
-                                ) && (
+                                {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'NHAP_EXCEL') && (
                                     <>
                                         <Button
                                             type="primary"
@@ -402,10 +399,7 @@ export default function UserProfilePageDs() {
                                         <ExportTemplateStudent />
                                     </>
                                 )}
-                                {can(
-                                    QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
-                                    'THEM'
-                                ) && (
+                                {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') && (
                                     <Button onClick={handleModal} type="primary">
                                         Thêm mới
                                     </Button>
@@ -615,10 +609,7 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip> */}
-                                        {can(
-                                            QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
-                                            'SUA'
-                                        ) && (
+                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'SUA') && (
                                             <EditIcon
                                                 onClick={onOpenUpdate.bind(null, {
                                                     id: record.id,
@@ -626,10 +617,7 @@ export default function UserProfilePageDs() {
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
-                                        {can(
-                                            QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
-                                            'XOA'
-                                        ) && (
+                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'XOA') && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(record.id),
