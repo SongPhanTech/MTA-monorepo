@@ -1,6 +1,6 @@
 import { getMinioUrl } from '@workspace/constant'
 import { createId } from '@workspace/db'
-import { Button, Col, Flex, Image, message, Modal, Row } from 'antd'
+import { Button, Col, Flex, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type DocumentType =
@@ -228,7 +228,7 @@ export type OnlyOfficeFullConfig = Partial<{
         onWarning: (warning: any) => void
         onInfo: (info: any) => void
         onOutdatedVersion: () => void
-        onDownloadAs: (url: string) => void
+        onDownloadAs: (data: { data: { url: string } }) => void
         onRequestSaveAs: (event: {
             data: {
                 url: string
@@ -318,10 +318,25 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     key: id, // unique key
                     title,
                     url: uri,
+                    permissions: {
+                        download: true,
+                    },
                 },
                 events: {
                     onRequestSaveAs: (event) => {
-                        console.log('OnlyOfficeViewer - onRequestSaveAs:', event)
+                        // console.log('OnlyOfficeViewer - onRequestSaveAs:', event)
+                    },
+                    onDocumentStateChange: (state) => {
+                        // console.log('OnlyOfficeViewer - onDocumentStateChange:', state)
+                    },
+                    onDownloadAs(data) {
+                        // console.log('OnlyOfficeViewer - onDownloadAs:', data)
+                        const link = document.createElement('a')
+                        link.href = data?.data?.url
+                        link.setAttribute('download', title || 'download')
+                        document.body.appendChild(link)
+                        link.click()
+                        link.parentNode?.removeChild(link)
                     },
                 },
                 editorConfig: {
@@ -399,19 +414,10 @@ const XemTaiLieu = () => {
                     <Flex justify="end" className="mb-2">
                         <Button
                             type="primary"
-                            onClick={async (e) => {
+                            onClick={(e) => {
                                 e.stopPropagation()
                                 e.preventDefault()
-                                const response = await fetch(documentUrl)
-                                if (!response.ok) return message.error('Lỗi khi tải file')
-                                const blob = await response.blob()
-                                const blobUrl = window.URL.createObjectURL(blob)
-                                const link = document.createElement('a')
-                                link.href = blobUrl
-                                link.setAttribute('download', input?.name || 'download')
-                                document.body.appendChild(link)
-                                link.click()
-                                link.parentNode?.removeChild(link)
+                                window?.docEditor?.downloadAs?.(input?.mimeType)
                             }}
                         >
                             Tải xuống
