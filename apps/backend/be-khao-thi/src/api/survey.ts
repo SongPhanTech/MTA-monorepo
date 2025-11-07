@@ -947,7 +947,7 @@ const getSurveyObjects = createRoute({
                             educationAndTraining: models.StudentScalarSchema.extend({
                                 fixedClass: models.FixedClassScalarSchema.nullable(),
                             }).array(),
-                            surveySession: models.SurveySessionScalarSchema.array(),
+                            surveySession: models.SurveySessionScalarSchema.optional(),
                         })
                     ),
                 },
@@ -1105,7 +1105,12 @@ app.openapi(getSurveyObjects, async (c) => {
         where: { id: { in: [...profileIds] } },
     })
 
-    return c.json({ data: profiles, count }, 200)
+    const data = profiles.map((profile) => ({
+        ...profile,
+        surveySession: profile.surveySession[0],
+    }))
+
+    return c.json({ data, count }, 200)
 })
 
 export default app
