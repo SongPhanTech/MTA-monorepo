@@ -1268,6 +1268,13 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'reviewer',
+                }, classSchedules: {
+                    name: "classSchedules",
+                    type: "ClassSchedule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'userProfiles',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -11485,6 +11492,7 @@ const metadata: ModelMeta = {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classSchedules',
                     isRelationOwner: true,
@@ -11492,6 +11500,7 @@ const metadata: ModelMeta = {
                 }, subjectClassId: {
                     name: "subjectClassId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectClass',
                 }, periodType: {
@@ -11504,6 +11513,14 @@ const metadata: ModelMeta = {
                 }, endPeriod: {
                     name: "endPeriod",
                     type: "Int",
+                }, startTime: {
+                    name: "startTime",
+                    type: "DateTime",
+                    isOptional: true,
+                }, endTime: {
+                    name: "endTime",
+                    type: "DateTime",
+                    isOptional: true,
                 }, classDate: {
                     name: "classDate",
                     type: "DateTime",
@@ -11553,6 +11570,13 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'extraLecturer',
+                }, userProfiles: {
+                    name: "userProfiles",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classSchedules',
+                    isRelationOwner: true,
                 }, notes: {
                     name: "notes",
                     type: "String",

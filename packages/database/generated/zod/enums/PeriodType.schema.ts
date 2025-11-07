@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const PeriodTypeSchema = z.enum(["THEORY", "PRACTICE", "LAB", "SEMINAR", "EXAM", "MAKEUP", "REVIEW"])
+export const PeriodTypeSchema = z.enum(["THEORY", "PRACTICE", "LAB", "SEMINAR", "EXAM", "MAKEUP", "REVIEW", "CHECK", "WEEK"])

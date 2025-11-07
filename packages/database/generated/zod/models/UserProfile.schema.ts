@@ -252,6 +252,7 @@ const relationSchema = z.object({
     changeLog: z.array(z.unknown()).optional(),
     surveySession: z.array(z.unknown()).optional(),
     evaluationCriterionComments: z.array(z.unknown()).optional(),
+    classSchedules: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

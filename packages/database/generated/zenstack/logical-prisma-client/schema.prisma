@@ -188,6 +188,8 @@ enum PeriodType {
   EXAM
   MAKEUP
   REVIEW
+  CHECK
+  WEEK
 
   @@schema("ql-dao-tao")
 }
@@ -808,6 +810,7 @@ model UserProfile {
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
   evaluationCriterionComments   EvaluationCriterionComment[]
+  classSchedules                ClassSchedule[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -3514,11 +3517,13 @@ model ClassSchedule {
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @default(now()) @updatedAt()
   createdBy           String?        @default("") @db.Uuid()
-  subjectClass        SubjectClass   @relation(fields: [subjectClassId], references: [id])
-  subjectClassId      String
+  subjectClass        SubjectClass?  @relation(fields: [subjectClassId], references: [id])
+  subjectClassId      String?
   periodType          PeriodType     @default(THEORY)
   startPeriod         Int
   endPeriod           Int
+  startTime           DateTime?
+  endTime             DateTime?
   classDate           DateTime       @db.Date()
   room                Room?          @relation(fields: [roomId], references: [id])
   roomId              String?
@@ -3526,6 +3531,7 @@ model ClassSchedule {
   lecturerId          String?
   extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId     String?
+  userProfiles        UserProfile[]
   notes               String?
   isReplacement       Boolean        @default(false)
   originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])

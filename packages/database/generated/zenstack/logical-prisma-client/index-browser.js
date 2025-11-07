@@ -2065,6 +2065,8 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   periodType: 'periodType',
   startPeriod: 'startPeriod',
   endPeriod: 'endPeriod',
+  startTime: 'startTime',
+  endTime: 'endTime',
   classDate: 'classDate',
   roomId: 'roomId',
   lecturerId: 'lecturerId',
@@ -7207,7 +7209,9 @@ exports.PeriodType = exports.$Enums.PeriodType = {
   SEMINAR: 'SEMINAR',
   EXAM: 'EXAM',
   MAKEUP: 'MAKEUP',
-  REVIEW: 'REVIEW'
+  REVIEW: 'REVIEW',
+  CHECK: 'CHECK',
+  WEEK: 'WEEK'
 };
 
 exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {

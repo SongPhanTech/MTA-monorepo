@@ -809,6 +809,8 @@ enum PeriodType {
   EXAM        // Thi/kiểm tra
   MAKEUP      // Học bù
   REVIEW      // Ôn tập
+  CHECK       // Kiểm tra giảng dạy
+  WEEK        // Lịch tuần/tháng học viện
 
   @@schema("ql-dao-tao")
 }
@@ -949,16 +951,18 @@ model SubjectClassTime extends Base {
   @@schema("ql-dao-tao")
 }
 
-// Bảng thời khoá biểu chi tiết
+// Bảng thời khoá biểu / Lịch làm việc
 model ClassSchedule extends Base {
   // Liên kết với lớp môn học
-  subjectClass        SubjectClass   @relation(fields: [subjectClassId], references: [id])
-  subjectClassId      String
+  subjectClass        SubjectClass?  @relation(fields: [subjectClassId], references: [id])
+  subjectClassId      String?
 
   periodType          PeriodType     @default(THEORY)
   startPeriod         Int              // Tiết bắt đầu (1, 2, 3, ...)
-  endPeriod           Int              // Tiết kết thúc
-
+  endPeriod           Int              // Tiết kết thúc (1, 2, 3, ...)
+  // Thông tin thời gian cụ thể
+  startTime           DateTime?       // Thời gian bắt đầu cụ thể
+  endTime             DateTime?       // Thời gian kết thúc cụ thể
   // Thông tin ngày học cụ thể
   classDate           DateTime       @db.Date
 
@@ -969,6 +973,8 @@ model ClassSchedule extends Base {
   lecturerId          String?
   extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId     String?
+
+  userProfiles        UserProfile[]  // Người tham gia thêm
 
   notes               String?         
 

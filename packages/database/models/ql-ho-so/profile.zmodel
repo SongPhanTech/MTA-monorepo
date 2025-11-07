@@ -251,6 +251,7 @@ model UserProfile extends Base {
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
   evaluationCriterionComments   EvaluationCriterionComment[]
+  classSchedules                ClassSchedule[]
 
   @@auth()
   @@schema("ql-nguoi-dung")

@@ -5208,7 +5208,9 @@ export namespace $Enums {
         SEMINAR: 'SEMINAR',
         EXAM: 'EXAM',
         MAKEUP: 'MAKEUP',
-        REVIEW: 'REVIEW'
+        REVIEW: 'REVIEW',
+        CHECK: 'CHECK',
+        WEEK: 'WEEK'
     };
     export type PeriodType = (typeof PeriodType)[keyof typeof PeriodType];
     export const SubjectClassType: {
@@ -7757,6 +7759,8 @@ export namespace Prisma {
         periodType: 'periodType',
         startPeriod: 'startPeriod',
         endPeriod: 'endPeriod',
+        startTime: 'startTime',
+        endTime: 'endTime',
         classDate: 'classDate',
         roomId: 'roomId',
         lecturerId: 'lecturerId',
@@ -13610,6 +13614,7 @@ export namespace Prisma {
         changeLog<T extends UserProfile$changeLogArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$changeLogArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChangeLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveySession<T extends UserProfile$surveySessionArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$surveySessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         evaluationCriterionComments<T extends UserProfile$evaluationCriterionCommentsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$evaluationCriterionCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classSchedules<T extends UserProfile$classSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$classSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -52619,10 +52624,11 @@ export namespace Prisma {
      */
     export interface Prisma__ClassScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        subjectClass<T extends SubjectClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassDefaultArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        subjectClass<T extends ClassSchedule$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         room<T extends ClassSchedule$roomArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         lecturer<T extends ClassSchedule$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         extraLecturer<T extends ClassSchedule$extraLecturerArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$extraLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        userProfiles<T extends ClassSchedule$userProfilesArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$userProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         originalSchedule<T extends ClassSchedule$originalScheduleArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$originalScheduleArgs<ExtArgs>>): Prisma__ClassScheduleClient<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         replacementSchedule<T extends ClassSchedule$replacementScheduleArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$replacementScheduleArgs<ExtArgs>>): Prisma__ClassScheduleClient<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
@@ -52663,6 +52669,8 @@ export namespace Prisma {
         readonly periodType: FieldRef<"ClassSchedule", 'PeriodType'>;
         readonly startPeriod: FieldRef<"ClassSchedule", 'Int'>;
         readonly endPeriod: FieldRef<"ClassSchedule", 'Int'>;
+        readonly startTime: FieldRef<"ClassSchedule", 'DateTime'>;
+        readonly endTime: FieldRef<"ClassSchedule", 'DateTime'>;
         readonly classDate: FieldRef<"ClassSchedule", 'DateTime'>;
         readonly roomId: FieldRef<"ClassSchedule", 'String'>;
         readonly lecturerId: FieldRef<"ClassSchedule", 'String'>;
@@ -128214,6 +128222,7 @@ export namespace Prisma {
         changeLog: number
         surveySession: number
         evaluationCriterionComments: number
+        classSchedules: number
     };
     export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         relatives?: boolean | UserProfileCountOutputTypeCountRelativesArgs
@@ -128255,6 +128264,7 @@ export namespace Prisma {
         changeLog?: boolean | UserProfileCountOutputTypeCountChangeLogArgs
         surveySession?: boolean | UserProfileCountOutputTypeCountSurveySessionArgs
         evaluationCriterionComments?: boolean | UserProfileCountOutputTypeCountEvaluationCriterionCommentsArgs
+        classSchedules?: boolean | UserProfileCountOutputTypeCountClassSchedulesArgs
     };
     /**
      * UserProfileCountOutputType without action
@@ -128498,6 +128508,12 @@ export namespace Prisma {
      */
     export type UserProfileCountOutputTypeCountEvaluationCriterionCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: EvaluationCriterionCommentWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountClassSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassScheduleWhereInput
     };
     /**
      * Count Type GroupCountOutputType
@@ -130634,6 +130650,30 @@ export namespace Prisma {
      */
     export type SubjectClassCountOutputTypeCountSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveyWhereInput
+    };
+    /**
+     * Count Type ClassScheduleCountOutputType
+     */
+    export type ClassScheduleCountOutputType = {
+        userProfiles: number
+    };
+    export type ClassScheduleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        userProfiles?: boolean | ClassScheduleCountOutputTypeCountUserProfilesArgs
+    };
+    /**
+     * ClassScheduleCountOutputType without action
+     */
+    export type ClassScheduleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassScheduleCountOutputType
+         */
+        select?: ClassScheduleCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ClassScheduleCountOutputType without action
+     */
+    export type ClassScheduleCountOutputTypeCountUserProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: UserProfileWhereInput
     };
     /**
      * Count Type TrainingObjectTypeCountOutputType
@@ -136314,6 +136354,7 @@ export namespace Prisma {
         changeLog?: boolean | UserProfile$changeLogArgs<ExtArgs>
         surveySession?: boolean | UserProfile$surveySessionArgs<ExtArgs>
         evaluationCriterionComments?: boolean | UserProfile$evaluationCriterionCommentsArgs<ExtArgs>
+        classSchedules?: boolean | UserProfile$classSchedulesArgs<ExtArgs>
         _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["userProfile"]>;
     export type UserProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -136821,6 +136862,7 @@ export namespace Prisma {
         changeLog?: boolean | UserProfile$changeLogArgs<ExtArgs>
         surveySession?: boolean | UserProfile$surveySessionArgs<ExtArgs>
         evaluationCriterionComments?: boolean | UserProfile$evaluationCriterionCommentsArgs<ExtArgs>
+        classSchedules?: boolean | UserProfile$classSchedulesArgs<ExtArgs>
         _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -136988,6 +137030,7 @@ export namespace Prisma {
             changeLog: Prisma.$ChangeLogPayload<ExtArgs>[]
             surveySession: Prisma.$SurveySessionPayload<ExtArgs>[]
             evaluationCriterionComments: Prisma.$EvaluationCriterionCommentPayload<ExtArgs>[]
+            classSchedules: Prisma.$ClassSchedulePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -139053,6 +139096,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: EvaluationCriterionCommentScalarFieldEnum | EvaluationCriterionCommentScalarFieldEnum[]
+    };
+    /**
+     * UserProfile.classSchedules
+     */
+    export type UserProfile$classSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassSchedule
+         */
+        select?: ClassScheduleSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassSchedule
+         */
+        omit?: ClassScheduleOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassScheduleInclude<ExtArgs> | null
+        where?: ClassScheduleWhereInput
+        orderBy?: ClassScheduleOrderByWithRelationInput | ClassScheduleOrderByWithRelationInput[]
+        cursor?: ClassScheduleWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassScheduleScalarFieldEnum | ClassScheduleScalarFieldEnum[]
     };
     /**
      * UserProfile without action
@@ -216416,6 +216482,8 @@ export namespace Prisma {
         periodType: $Enums.PeriodType | null
         startPeriod: number | null
         endPeriod: number | null
+        startTime: Date | null
+        endTime: Date | null
         classDate: Date | null
         roomId: string | null
         lecturerId: string | null
@@ -216438,6 +216506,8 @@ export namespace Prisma {
         periodType: $Enums.PeriodType | null
         startPeriod: number | null
         endPeriod: number | null
+        startTime: Date | null
+        endTime: Date | null
         classDate: Date | null
         roomId: string | null
         lecturerId: string | null
@@ -216460,6 +216530,8 @@ export namespace Prisma {
         periodType: number
         startPeriod: number
         endPeriod: number
+        startTime: number
+        endTime: number
         classDate: number
         roomId: number
         lecturerId: number
@@ -216491,6 +216563,8 @@ export namespace Prisma {
         periodType?: true
         startPeriod?: true
         endPeriod?: true
+        startTime?: true
+        endTime?: true
         classDate?: true
         roomId?: true
         lecturerId?: true
@@ -216513,6 +216587,8 @@ export namespace Prisma {
         periodType?: true
         startPeriod?: true
         endPeriod?: true
+        startTime?: true
+        endTime?: true
         classDate?: true
         roomId?: true
         lecturerId?: true
@@ -216535,6 +216611,8 @@ export namespace Prisma {
         periodType?: true
         startPeriod?: true
         endPeriod?: true
+        startTime?: true
+        endTime?: true
         classDate?: true
         roomId?: true
         lecturerId?: true
@@ -216634,10 +216712,12 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         createdBy: string | null
-        subjectClassId: string
+        subjectClassId: string | null
         periodType: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime: Date | null
+        endTime: Date | null
         classDate: Date
         roomId: string | null
         lecturerId: string | null
@@ -216677,6 +216757,8 @@ export namespace Prisma {
         periodType?: boolean
         startPeriod?: boolean
         endPeriod?: boolean
+        startTime?: boolean
+        endTime?: boolean
         classDate?: boolean
         roomId?: boolean
         lecturerId?: boolean
@@ -216685,12 +216767,14 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: boolean
         cancelReason?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
+        userProfiles?: boolean | ClassSchedule$userProfilesArgs<ExtArgs>
         originalSchedule?: boolean | ClassSchedule$originalScheduleArgs<ExtArgs>
         replacementSchedule?: boolean | ClassSchedule$replacementScheduleArgs<ExtArgs>
+        _count?: boolean | ClassScheduleCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classSchedule"]>;
     export type ClassScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -216705,6 +216789,8 @@ export namespace Prisma {
         periodType?: boolean
         startPeriod?: boolean
         endPeriod?: boolean
+        startTime?: boolean
+        endTime?: boolean
         classDate?: boolean
         roomId?: boolean
         lecturerId?: boolean
@@ -216713,7 +216799,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: boolean
         cancelReason?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
@@ -216732,6 +216818,8 @@ export namespace Prisma {
         periodType?: boolean
         startPeriod?: boolean
         endPeriod?: boolean
+        startTime?: boolean
+        endTime?: boolean
         classDate?: boolean
         roomId?: boolean
         lecturerId?: boolean
@@ -216740,7 +216828,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: boolean
         cancelReason?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
@@ -216759,6 +216847,8 @@ export namespace Prisma {
         periodType?: boolean
         startPeriod?: boolean
         endPeriod?: boolean
+        startTime?: boolean
+        endTime?: boolean
         classDate?: boolean
         roomId?: boolean
         lecturerId?: boolean
@@ -216768,24 +216858,26 @@ export namespace Prisma {
         originalScheduleId?: boolean
         cancelReason?: boolean
     };
-    export type ClassScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "periodType" | "startPeriod" | "endPeriod" | "classDate" | "roomId" | "lecturerId" | "extraLecturerId" | "notes" | "isReplacement" | "originalScheduleId" | "cancelReason", ExtArgs["result"]["classSchedule"]>;
+    export type ClassScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "periodType" | "startPeriod" | "endPeriod" | "startTime" | "endTime" | "classDate" | "roomId" | "lecturerId" | "extraLecturerId" | "notes" | "isReplacement" | "originalScheduleId" | "cancelReason", ExtArgs["result"]["classSchedule"]>;
     export type ClassScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
+        userProfiles?: boolean | ClassSchedule$userProfilesArgs<ExtArgs>
         originalSchedule?: boolean | ClassSchedule$originalScheduleArgs<ExtArgs>
         replacementSchedule?: boolean | ClassSchedule$replacementScheduleArgs<ExtArgs>
+        _count?: boolean | ClassScheduleCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ClassScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
         originalSchedule?: boolean | ClassSchedule$originalScheduleArgs<ExtArgs>
     };
     export type ClassScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
         lecturer?: boolean | ClassSchedule$lecturerArgs<ExtArgs>
         extraLecturer?: boolean | ClassSchedule$extraLecturerArgs<ExtArgs>
@@ -216794,10 +216886,11 @@ export namespace Prisma {
     export type $ClassSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ClassSchedule"
         objects: {
-            subjectClass: Prisma.$SubjectClassPayload<ExtArgs>
+            subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             room: Prisma.$RoomPayload<ExtArgs> | null
             lecturer: Prisma.$LecturerPayload<ExtArgs> | null
             extraLecturer: Prisma.$LecturerPayload<ExtArgs> | null
+            userProfiles: Prisma.$UserProfilePayload<ExtArgs>[]
             originalSchedule: Prisma.$ClassSchedulePayload<ExtArgs> | null
             replacementSchedule: Prisma.$ClassSchedulePayload<ExtArgs> | null
         }
@@ -216810,10 +216903,12 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             createdBy: string | null
-            subjectClassId: string
+            subjectClassId: string | null
             periodType: $Enums.PeriodType
             startPeriod: number
             endPeriod: number
+            startTime: Date | null
+            endTime: Date | null
             classDate: Date
             roomId: string | null
             lecturerId: string | null
@@ -217207,6 +217302,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * ClassSchedule.subjectClass
+     */
+    export type ClassSchedule$subjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClass
+         */
+        select?: SubjectClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClass
+         */
+        omit?: SubjectClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassInclude<ExtArgs> | null
+        where?: SubjectClassWhereInput
+    };
+    /**
      * ClassSchedule.room
      */
     export type ClassSchedule$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -217259,6 +217372,29 @@ export namespace Prisma {
          */
         include?: LecturerInclude<ExtArgs> | null
         where?: LecturerWhereInput
+    };
+    /**
+     * ClassSchedule.userProfiles
+     */
+    export type ClassSchedule$userProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the UserProfile
+         */
+        select?: UserProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the UserProfile
+         */
+        omit?: UserProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: UserProfileInclude<ExtArgs> | null
+        where?: UserProfileWhereInput
+        orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
+        cursor?: UserProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
     };
     /**
      * ClassSchedule.originalSchedule
@@ -328015,6 +328151,7 @@ export namespace Prisma {
         changeLog?: ChangeLogListRelationFilter
         surveySession?: SurveySessionListRelationFilter
         evaluationCriterionComments?: EvaluationCriterionCommentListRelationFilter
+        classSchedules?: ClassScheduleListRelationFilter
     };
     export type UserProfileOrderByWithRelationInput = {
         id?: SortOrder
@@ -328210,6 +328347,7 @@ export namespace Prisma {
         changeLog?: ChangeLogOrderByRelationAggregateInput
         surveySession?: SurveySessionOrderByRelationAggregateInput
         evaluationCriterionComments?: EvaluationCriterionCommentOrderByRelationAggregateInput
+        classSchedules?: ClassScheduleOrderByRelationAggregateInput
         _relevance?: UserProfileOrderByRelevanceInput
     };
     export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -328409,6 +328547,7 @@ export namespace Prisma {
         changeLog?: ChangeLogListRelationFilter
         surveySession?: SurveySessionListRelationFilter
         evaluationCriterionComments?: EvaluationCriterionCommentListRelationFilter
+        classSchedules?: ClassScheduleListRelationFilter
     }, "id" | "code" | "idCardNumber">;
     export type UserProfileOrderByWithAggregationInput = {
         id?: SortOrder
@@ -339404,10 +339543,12 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ClassSchedule"> | Date | string
         updatedAt?: DateTimeFilter<"ClassSchedule"> | Date | string
         createdBy?: UuidNullableFilter<"ClassSchedule"> | string | null
-        subjectClassId?: StringFilter<"ClassSchedule"> | string
+        subjectClassId?: StringNullableFilter<"ClassSchedule"> | string | null
         periodType?: EnumPeriodTypeFilter<"ClassSchedule"> | $Enums.PeriodType
         startPeriod?: IntFilter<"ClassSchedule"> | number
         endPeriod?: IntFilter<"ClassSchedule"> | number
+        startTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
+        endTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
         classDate?: DateTimeFilter<"ClassSchedule"> | Date | string
         roomId?: StringNullableFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
@@ -339416,10 +339557,11 @@ export namespace Prisma {
         isReplacement?: BoolFilter<"ClassSchedule"> | boolean
         originalScheduleId?: StringNullableFilter<"ClassSchedule"> | string | null
         cancelReason?: StringNullableFilter<"ClassSchedule"> | string | null
-        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+        subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        userProfiles?: UserProfileListRelationFilter
         originalSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         replacementSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
     };
@@ -339432,10 +339574,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        subjectClassId?: SortOrder
+        subjectClassId?: SortOrderInput | SortOrder
         periodType?: SortOrder
         startPeriod?: SortOrder
         endPeriod?: SortOrder
+        startTime?: SortOrderInput | SortOrder
+        endTime?: SortOrderInput | SortOrder
         classDate?: SortOrder
         roomId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
@@ -339448,6 +339592,7 @@ export namespace Prisma {
         room?: RoomOrderByWithRelationInput
         lecturer?: LecturerOrderByWithRelationInput
         extraLecturer?: LecturerOrderByWithRelationInput
+        userProfiles?: UserProfileOrderByRelationAggregateInput
         originalSchedule?: ClassScheduleOrderByWithRelationInput
         replacementSchedule?: ClassScheduleOrderByWithRelationInput
         _relevance?: ClassScheduleOrderByRelevanceInput
@@ -339465,10 +339610,12 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ClassSchedule"> | Date | string
         updatedAt?: DateTimeFilter<"ClassSchedule"> | Date | string
         createdBy?: UuidNullableFilter<"ClassSchedule"> | string | null
-        subjectClassId?: StringFilter<"ClassSchedule"> | string
+        subjectClassId?: StringNullableFilter<"ClassSchedule"> | string | null
         periodType?: EnumPeriodTypeFilter<"ClassSchedule"> | $Enums.PeriodType
         startPeriod?: IntFilter<"ClassSchedule"> | number
         endPeriod?: IntFilter<"ClassSchedule"> | number
+        startTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
+        endTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
         classDate?: DateTimeFilter<"ClassSchedule"> | Date | string
         roomId?: StringNullableFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
@@ -339476,10 +339623,11 @@ export namespace Prisma {
         notes?: StringNullableFilter<"ClassSchedule"> | string | null
         isReplacement?: BoolFilter<"ClassSchedule"> | boolean
         cancelReason?: StringNullableFilter<"ClassSchedule"> | string | null
-        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+        subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        userProfiles?: UserProfileListRelationFilter
         originalSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         replacementSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
     }, "id" | "code" | "originalScheduleId">;
@@ -339492,10 +339640,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
-        subjectClassId?: SortOrder
+        subjectClassId?: SortOrderInput | SortOrder
         periodType?: SortOrder
         startPeriod?: SortOrder
         endPeriod?: SortOrder
+        startTime?: SortOrderInput | SortOrder
+        endTime?: SortOrderInput | SortOrder
         classDate?: SortOrder
         roomId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
@@ -339522,10 +339672,12 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"ClassSchedule"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ClassSchedule"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"ClassSchedule"> | string | null
-        subjectClassId?: StringWithAggregatesFilter<"ClassSchedule"> | string
+        subjectClassId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         periodType?: EnumPeriodTypeWithAggregatesFilter<"ClassSchedule"> | $Enums.PeriodType
         startPeriod?: IntWithAggregatesFilter<"ClassSchedule"> | number
         endPeriod?: IntWithAggregatesFilter<"ClassSchedule"> | number
+        startTime?: DateTimeNullableWithAggregatesFilter<"ClassSchedule"> | Date | string | null
+        endTime?: DateTimeNullableWithAggregatesFilter<"ClassSchedule"> | Date | string | null
         classDate?: DateTimeWithAggregatesFilter<"ClassSchedule"> | Date | string
         roomId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
@@ -354030,6 +354182,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateInput = {
         id?: string
@@ -354190,6 +354343,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354350,6 +354504,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354510,6 +354665,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateManyInput = {
         id?: string
@@ -367191,14 +367347,17 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
@@ -367211,10 +367370,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -367223,6 +367384,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleUpdateInput = {
@@ -367237,14 +367399,17 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
@@ -367257,10 +367422,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -367269,6 +367436,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleCreateManyInput = {
@@ -367280,10 +367448,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -367305,6 +367475,8 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
@@ -367319,10 +367491,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -383784,6 +383958,11 @@ export namespace Prisma {
         some?: EvaluationCriterionCommentWhereInput
         none?: EvaluationCriterionCommentWhereInput
     };
+    export type ClassScheduleListRelationFilter = {
+        every?: ClassScheduleWhereInput
+        some?: ClassScheduleWhereInput
+        none?: ClassScheduleWhereInput
+    };
     export type RelativeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -383893,6 +384072,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type EvaluationCriterionCommentOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ClassScheduleOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type UserProfileOrderByRelevanceInput = {
@@ -391179,11 +391361,6 @@ export namespace Prisma {
         is?: TrainingLocationWhereInput | null
         isNot?: TrainingLocationWhereInput | null
     };
-    export type ClassScheduleListRelationFilter = {
-        every?: ClassScheduleWhereInput
-        some?: ClassScheduleWhereInput
-        none?: ClassScheduleWhereInput
-    };
     export type ExpertProfileListRelationFilter = {
         every?: ExpertProfileWhereInput
         some?: ExpertProfileWhereInput
@@ -391203,9 +391380,6 @@ export namespace Prisma {
         every?: SurveyWhereInput
         some?: SurveyWhereInput
         none?: SurveyWhereInput
-    };
-    export type ClassScheduleOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type ExpertProfileOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -391530,6 +391704,8 @@ export namespace Prisma {
         periodType?: SortOrder
         startPeriod?: SortOrder
         endPeriod?: SortOrder
+        startTime?: SortOrder
+        endTime?: SortOrder
         classDate?: SortOrder
         roomId?: SortOrder
         lecturerId?: SortOrder
@@ -391556,6 +391732,8 @@ export namespace Prisma {
         periodType?: SortOrder
         startPeriod?: SortOrder
         endPeriod?: SortOrder
+        startTime?: SortOrder
+        endTime?: SortOrder
         classDate?: SortOrder
         roomId?: SortOrder
         lecturerId?: SortOrder
@@ -391578,6 +391756,8 @@ export namespace Prisma {
         periodType?: SortOrder
         startPeriod?: SortOrder
         endPeriod?: SortOrder
+        startTime?: SortOrder
+        endTime?: SortOrder
         classDate?: SortOrder
         roomId?: SortOrder
         lecturerId?: SortOrder
@@ -401260,6 +401440,11 @@ export namespace Prisma {
         createMany?: EvaluationCriterionCommentCreateManyReviewerInputEnvelope
         connect?: EvaluationCriterionCommentWhereUniqueInput | EvaluationCriterionCommentWhereUniqueInput[]
     };
+    export type ClassScheduleCreateNestedManyWithoutUserProfilesInput = {
+        create?: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput> | ClassScheduleCreateWithoutUserProfilesInput[] | ClassScheduleUncheckedCreateWithoutUserProfilesInput[]
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutUserProfilesInput | ClassScheduleCreateOrConnectWithoutUserProfilesInput[]
+        connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+    };
     export type RelativeUncheckedCreateNestedManyWithoutUserProfileInput = {
         create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
         connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -401503,6 +401688,11 @@ export namespace Prisma {
         connectOrCreate?: EvaluationCriterionCommentCreateOrConnectWithoutReviewerInput | EvaluationCriterionCommentCreateOrConnectWithoutReviewerInput[]
         createMany?: EvaluationCriterionCommentCreateManyReviewerInputEnvelope
         connect?: EvaluationCriterionCommentWhereUniqueInput | EvaluationCriterionCommentWhereUniqueInput[]
+    };
+    export type ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput = {
+        create?: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput> | ClassScheduleCreateWithoutUserProfilesInput[] | ClassScheduleUncheckedCreateWithoutUserProfilesInput[]
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutUserProfilesInput | ClassScheduleCreateOrConnectWithoutUserProfilesInput[]
+        connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
     };
     export type NullableBoolFieldUpdateOperationsInput = {
         set?: boolean | null
@@ -402354,6 +402544,18 @@ export namespace Prisma {
         updateMany?: EvaluationCriterionCommentUpdateManyWithWhereWithoutReviewerInput | EvaluationCriterionCommentUpdateManyWithWhereWithoutReviewerInput[]
         deleteMany?: EvaluationCriterionCommentScalarWhereInput | EvaluationCriterionCommentScalarWhereInput[]
     };
+    export type ClassScheduleUpdateManyWithoutUserProfilesNestedInput = {
+        create?: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput> | ClassScheduleCreateWithoutUserProfilesInput[] | ClassScheduleUncheckedCreateWithoutUserProfilesInput[]
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutUserProfilesInput | ClassScheduleCreateOrConnectWithoutUserProfilesInput[]
+        upsert?: ClassScheduleUpsertWithWhereUniqueWithoutUserProfilesInput | ClassScheduleUpsertWithWhereUniqueWithoutUserProfilesInput[]
+        set?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        disconnect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        delete?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        update?: ClassScheduleUpdateWithWhereUniqueWithoutUserProfilesInput | ClassScheduleUpdateWithWhereUniqueWithoutUserProfilesInput[]
+        updateMany?: ClassScheduleUpdateManyWithWhereWithoutUserProfilesInput | ClassScheduleUpdateManyWithWhereWithoutUserProfilesInput[]
+        deleteMany?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
+    };
     export type RelativeUncheckedUpdateManyWithoutUserProfileNestedInput = {
         create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
         connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -402878,6 +403080,18 @@ export namespace Prisma {
         update?: EvaluationCriterionCommentUpdateWithWhereUniqueWithoutReviewerInput | EvaluationCriterionCommentUpdateWithWhereUniqueWithoutReviewerInput[]
         updateMany?: EvaluationCriterionCommentUpdateManyWithWhereWithoutReviewerInput | EvaluationCriterionCommentUpdateManyWithWhereWithoutReviewerInput[]
         deleteMany?: EvaluationCriterionCommentScalarWhereInput | EvaluationCriterionCommentScalarWhereInput[]
+    };
+    export type ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput = {
+        create?: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput> | ClassScheduleCreateWithoutUserProfilesInput[] | ClassScheduleUncheckedCreateWithoutUserProfilesInput[]
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutUserProfilesInput | ClassScheduleCreateOrConnectWithoutUserProfilesInput[]
+        upsert?: ClassScheduleUpsertWithWhereUniqueWithoutUserProfilesInput | ClassScheduleUpsertWithWhereUniqueWithoutUserProfilesInput[]
+        set?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        disconnect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        delete?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
+        update?: ClassScheduleUpdateWithWhereUniqueWithoutUserProfilesInput | ClassScheduleUpdateWithWhereUniqueWithoutUserProfilesInput[]
+        updateMany?: ClassScheduleUpdateManyWithWhereWithoutUserProfilesInput | ClassScheduleUpdateManyWithWhereWithoutUserProfilesInput[]
+        deleteMany?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
     };
     export type DM_HocHamCreateNestedOneWithoutHocHamInput = {
         create?: XOR<DM_HocHamCreateWithoutHocHamInput, DM_HocHamUncheckedCreateWithoutHocHamInput>
@@ -410946,6 +411160,11 @@ export namespace Prisma {
         connectOrCreate?: LecturerCreateOrConnectWithoutExtraClassSchedulesInput
         connect?: LecturerWhereUniqueInput
     };
+    export type UserProfileCreateNestedManyWithoutClassSchedulesInput = {
+        create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    };
     export type ClassScheduleCreateNestedOneWithoutReplacementScheduleInput = {
         create?: XOR<ClassScheduleCreateWithoutReplacementScheduleInput, ClassScheduleUncheckedCreateWithoutReplacementScheduleInput>
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutReplacementScheduleInput
@@ -410956,6 +411175,11 @@ export namespace Prisma {
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutOriginalScheduleInput
         connect?: ClassScheduleWhereUniqueInput
     };
+    export type UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput = {
+        create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    };
     export type ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput = {
         create?: XOR<ClassScheduleCreateWithoutOriginalScheduleInput, ClassScheduleUncheckedCreateWithoutOriginalScheduleInput>
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutOriginalScheduleInput
@@ -410964,10 +411188,12 @@ export namespace Prisma {
     export type EnumPeriodTypeFieldUpdateOperationsInput = {
         set?: $Enums.PeriodType
     };
-    export type SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput = {
+    export type SubjectClassUpdateOneWithoutClassSchedulesNestedInput = {
         create?: XOR<SubjectClassCreateWithoutClassSchedulesInput, SubjectClassUncheckedCreateWithoutClassSchedulesInput>
         connectOrCreate?: SubjectClassCreateOrConnectWithoutClassSchedulesInput
         upsert?: SubjectClassUpsertWithoutClassSchedulesInput
+        disconnect?: SubjectClassWhereInput | boolean
+        delete?: SubjectClassWhereInput | boolean
         connect?: SubjectClassWhereUniqueInput
         update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutClassSchedulesInput, SubjectClassUpdateWithoutClassSchedulesInput>, SubjectClassUncheckedUpdateWithoutClassSchedulesInput>
     };
@@ -410998,6 +411224,18 @@ export namespace Prisma {
         connect?: LecturerWhereUniqueInput
         update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutExtraClassSchedulesInput, LecturerUpdateWithoutExtraClassSchedulesInput>, LecturerUncheckedUpdateWithoutExtraClassSchedulesInput>
     };
+    export type UserProfileUpdateManyWithoutClassSchedulesNestedInput = {
+        create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
+        upsert?: UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput | UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput[]
+        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        update?: UserProfileUpdateWithWhereUniqueWithoutClassSchedulesInput | UserProfileUpdateWithWhereUniqueWithoutClassSchedulesInput[]
+        updateMany?: UserProfileUpdateManyWithWhereWithoutClassSchedulesInput | UserProfileUpdateManyWithWhereWithoutClassSchedulesInput[]
+        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+    };
     export type ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput = {
         create?: XOR<ClassScheduleCreateWithoutReplacementScheduleInput, ClassScheduleUncheckedCreateWithoutReplacementScheduleInput>
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutReplacementScheduleInput
@@ -411015,6 +411253,18 @@ export namespace Prisma {
         delete?: ClassScheduleWhereInput | boolean
         connect?: ClassScheduleWhereUniqueInput
         update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
+    };
+    export type UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput = {
+        create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
+        upsert?: UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput | UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput[]
+        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        update?: UserProfileUpdateWithWhereUniqueWithoutClassSchedulesInput | UserProfileUpdateWithWhereUniqueWithoutClassSchedulesInput[]
+        updateMany?: UserProfileUpdateManyWithWhereWithoutClassSchedulesInput | UserProfileUpdateManyWithWhereWithoutClassSchedulesInput[]
+        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
     };
     export type ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput = {
         create?: XOR<ClassScheduleCreateWithoutOriginalScheduleInput, ClassScheduleUncheckedCreateWithoutOriginalScheduleInput>
@@ -423933,6 +424183,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutChangeLogInput = {
         id?: string
@@ -424092,6 +424343,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutChangeLogInput = {
         where: UserProfileWhereUniqueInput
@@ -424264,6 +424516,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChangeLogInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -424423,6 +424676,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type GroupCreateWithoutUserProfileInput = {
         id?: string
@@ -427718,6 +427972,60 @@ export namespace Prisma {
         data: EvaluationCriterionCommentCreateManyReviewerInput | EvaluationCriterionCommentCreateManyReviewerInput[]
         skipDuplicates?: boolean
     };
+    export type ClassScheduleCreateWithoutUserProfilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        periodType?: $Enums.PeriodType
+        startPeriod: number
+        endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
+        classDate: Date | string
+        notes?: string | null
+        isReplacement?: boolean
+        cancelReason?: string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        room?: RoomCreateNestedOneWithoutClassSchedulesInput
+        lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
+        extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
+        replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+    };
+    export type ClassScheduleUncheckedCreateWithoutUserProfilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        subjectClassId?: string | null
+        periodType?: $Enums.PeriodType
+        startPeriod: number
+        endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
+        classDate: Date | string
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        notes?: string | null
+        isReplacement?: boolean
+        originalScheduleId?: string | null
+        cancelReason?: string | null
+        replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+    };
+    export type ClassScheduleCreateOrConnectWithoutUserProfilesInput = {
+        where: ClassScheduleWhereUniqueInput
+        create: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput>
+    };
     export type GroupUpsertWithoutUserProfileInput = {
         update: XOR<GroupUpdateWithoutUserProfileInput, GroupUncheckedUpdateWithoutUserProfileInput>
         create: XOR<GroupCreateWithoutUserProfileInput, GroupUncheckedCreateWithoutUserProfileInput>
@@ -430809,6 +431117,46 @@ export namespace Prisma {
         analysisCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
         evaluationCriterionId?: StringNullableFilter<"EvaluationCriterionComment"> | string | null
     };
+    export type ClassScheduleUpsertWithWhereUniqueWithoutUserProfilesInput = {
+        where: ClassScheduleWhereUniqueInput
+        update: XOR<ClassScheduleUpdateWithoutUserProfilesInput, ClassScheduleUncheckedUpdateWithoutUserProfilesInput>
+        create: XOR<ClassScheduleCreateWithoutUserProfilesInput, ClassScheduleUncheckedCreateWithoutUserProfilesInput>
+    };
+    export type ClassScheduleUpdateWithWhereUniqueWithoutUserProfilesInput = {
+        where: ClassScheduleWhereUniqueInput
+        data: XOR<ClassScheduleUpdateWithoutUserProfilesInput, ClassScheduleUncheckedUpdateWithoutUserProfilesInput>
+    };
+    export type ClassScheduleUpdateManyWithWhereWithoutUserProfilesInput = {
+        where: ClassScheduleScalarWhereInput
+        data: XOR<ClassScheduleUpdateManyMutationInput, ClassScheduleUncheckedUpdateManyWithoutUserProfilesInput>
+    };
+    export type ClassScheduleScalarWhereInput = {
+        AND?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
+        OR?: ClassScheduleScalarWhereInput[]
+        NOT?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
+        id?: StringFilter<"ClassSchedule"> | string
+        code?: StringNullableFilter<"ClassSchedule"> | string | null
+        active?: BoolFilter<"ClassSchedule"> | boolean
+        description?: StringNullableFilter<"ClassSchedule"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassSchedule"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassSchedule"> | Date | string
+        createdBy?: UuidNullableFilter<"ClassSchedule"> | string | null
+        subjectClassId?: StringNullableFilter<"ClassSchedule"> | string | null
+        periodType?: EnumPeriodTypeFilter<"ClassSchedule"> | $Enums.PeriodType
+        startPeriod?: IntFilter<"ClassSchedule"> | number
+        endPeriod?: IntFilter<"ClassSchedule"> | number
+        startTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
+        endTime?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
+        classDate?: DateTimeFilter<"ClassSchedule"> | Date | string
+        roomId?: StringNullableFilter<"ClassSchedule"> | string | null
+        lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
+        extraLecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
+        notes?: StringNullableFilter<"ClassSchedule"> | string | null
+        isReplacement?: BoolFilter<"ClassSchedule"> | boolean
+        originalScheduleId?: StringNullableFilter<"ClassSchedule"> | string | null
+        cancelReason?: StringNullableFilter<"ClassSchedule"> | string | null
+    };
     export type DM_HocHamCreateWithoutHocHamInput = {
         Id?: string
         sMa?: string | null
@@ -431007,6 +431355,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutHocHamInput = {
         id?: string
@@ -431166,6 +431515,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutHocHamInput = {
         where: UserProfileWhereUniqueInput
@@ -431383,6 +431733,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutHocHamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -431542,6 +431893,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_HocViCreateWithoutHocViInput = {
         Id?: string
@@ -431813,6 +432165,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutHocViInput = {
         id?: string
@@ -431972,6 +432325,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutHocViInput = {
         where: UserProfileWhereUniqueInput
@@ -432271,6 +432625,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutHocViInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -432430,6 +432785,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutRelativesInput = {
         id?: string
@@ -432589,6 +432945,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutRelativesInput = {
         id?: string
@@ -432748,6 +433105,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutRelativesInput = {
         where: UserProfileWhereUniqueInput
@@ -432920,6 +433278,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutRelativesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433079,6 +433438,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: string
@@ -433238,6 +433598,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: string
@@ -433397,6 +433758,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoLyLuanChinhTriInput = {
         where: UserProfileWhereUniqueInput
@@ -433595,6 +433957,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoLyLuanChinhTriInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433754,6 +434117,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_TrinhDoLyLuanChinhTriUpsertWithoutTrinhDoLyLuanChinhTriInput = {
         update: XOR<DM_TrinhDoLyLuanChinhTriUpdateWithoutTrinhDoLyLuanChinhTriInput, DM_TrinhDoLyLuanChinhTriUncheckedUpdateWithoutTrinhDoLyLuanChinhTriInput>
@@ -433944,6 +434308,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoQuanLyNhaNuocInput = {
         id?: string
@@ -434103,6 +434468,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoQuanLyNhaNuocInput = {
         where: UserProfileWhereUniqueInput
@@ -434301,6 +434667,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoQuanLyNhaNuocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -434460,6 +434827,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_TrinhDoQuanLyNhaNuocUpsertWithoutTrinhDoQuanLyNhaNuocInput = {
         update: XOR<DM_TrinhDoQuanLyNhaNuocUpdateWithoutTrinhDoQuanLyNhaNuocInput, DM_TrinhDoQuanLyNhaNuocUncheckedUpdateWithoutTrinhDoQuanLyNhaNuocInput>
@@ -434728,6 +435096,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNgoaiNguInput = {
         id?: string
@@ -434887,6 +435256,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNgoaiNguInput = {
         where: UserProfileWhereUniqueInput
@@ -435147,6 +435517,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNgoaiNguInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -435306,6 +435677,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_TrinhDoTinHocCreateWithoutTinHocInput = {
         Id?: string
@@ -435503,6 +435875,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutTinHocInput = {
         id?: string
@@ -435662,6 +436035,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutTinHocInput = {
         where: UserProfileWhereUniqueInput
@@ -435877,6 +436251,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTinHocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -436036,6 +436411,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: string
@@ -436195,6 +436571,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: string
@@ -436354,6 +436731,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutBoiDuongQuocPhongAnNinhInput = {
         where: UserProfileWhereUniqueInput
@@ -436526,6 +436904,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutBoiDuongQuocPhongAnNinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -436685,6 +437064,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_CapBacCreateWithoutCapBacInput = {
         Id?: string
@@ -436884,6 +437264,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutCapBacInput = {
         id?: string
@@ -437043,6 +437424,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutCapBacInput = {
         where: UserProfileWhereUniqueInput
@@ -437260,6 +437642,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCapBacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -437419,6 +437802,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_ChucVuCreateWithoutQuaTrinhCongTacInput = {
         Id?: string
@@ -437648,6 +438032,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput = {
         id?: string
@@ -437807,6 +438192,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCongTacInput = {
         where: UserProfileWhereUniqueInput
@@ -438059,6 +438445,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -438218,6 +438605,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_ChucVuCreateWithoutQuaTrinhCuDiCongTacInput = {
         Id?: string
@@ -438421,6 +438809,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
         id?: string
@@ -438580,6 +438969,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
         where: UserProfileWhereUniqueInput
@@ -438801,6 +439191,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -438960,6 +439351,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_LoaiHinhDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: string
@@ -439145,6 +439537,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: string
@@ -439304,6 +439697,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput = {
         where: UserProfileWhereUniqueInput
@@ -439507,6 +439901,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -439666,6 +440061,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutKhenThuongInput = {
         id?: string
@@ -439825,6 +440221,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutKhenThuongInput = {
         id?: string
@@ -439984,6 +440381,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutKhenThuongInput = {
         where: UserProfileWhereUniqueInput
@@ -440156,6 +440554,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKhenThuongInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440315,6 +440714,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutKyLuatInput = {
         id?: string
@@ -440474,6 +440874,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutKyLuatInput = {
         id?: string
@@ -440633,6 +441034,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutKyLuatInput = {
         where: UserProfileWhereUniqueInput
@@ -440805,6 +441207,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKyLuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440964,6 +441367,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutDoiTuongChinhSachInput = {
         id?: string
@@ -441123,6 +441527,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDoiTuongChinhSachInput = {
         id?: string
@@ -441282,6 +441687,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDoiTuongChinhSachInput = {
         where: UserProfileWhereUniqueInput
@@ -441454,6 +441860,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDoiTuongChinhSachInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -441613,6 +442020,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutKeKhaiTaiSanInput = {
         id?: string
@@ -441772,6 +442180,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutKeKhaiTaiSanInput = {
         id?: string
@@ -441931,6 +442340,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutKeKhaiTaiSanInput = {
         where: UserProfileWhereUniqueInput
@@ -442103,6 +442513,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutKeKhaiTaiSanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -442262,6 +442673,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_DanTocCreateWithoutTiengDanTocInput = {
         Id?: string
@@ -442465,6 +442877,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutTiengDanTocInput = {
         id?: string
@@ -442624,6 +443037,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutTiengDanTocInput = {
         where: UserProfileWhereUniqueInput
@@ -442845,6 +443259,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTiengDanTocInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -443004,6 +443419,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutChienDauInput = {
         id?: string
@@ -443163,6 +443579,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutChienDauInput = {
         id?: string
@@ -443322,6 +443739,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutChienDauInput = {
         where: UserProfileWhereUniqueInput
@@ -443494,6 +443912,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChienDauInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -443653,6 +444072,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_QuocGiaCreateWithoutNuocNgoaiInput = {
         Id?: string
@@ -443856,6 +444276,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDiNuocNgoaiInput = {
         id?: string
@@ -444015,6 +444436,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDiNuocNgoaiInput = {
         where: UserProfileWhereUniqueInput
@@ -444236,6 +444658,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDiNuocNgoaiInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -444395,6 +444818,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_LoaiThuongTatCreateWithoutThuongTatInput = {
         id?: string
@@ -444580,6 +445004,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutThuongTatInput = {
         id?: string
@@ -444739,6 +445164,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutThuongTatInput = {
         where: UserProfileWhereUniqueInput
@@ -444942,6 +445368,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutThuongTatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -445101,6 +445528,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileCreateWithoutDanhHieuInput = {
         id?: string
@@ -445260,6 +445688,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDanhHieuInput = {
         id?: string
@@ -445419,6 +445848,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDanhHieuInput = {
         where: UserProfileWhereUniqueInput
@@ -445591,6 +446021,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDanhHieuInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -445750,6 +446181,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_TruongDaoTaoBacDHCreateWithoutQuaTrinhHocTapInput = {
         id?: string
@@ -445989,6 +446421,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhHocTapInput = {
         id?: string
@@ -446148,6 +446581,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhHocTapInput = {
         where: UserProfileWhereUniqueInput
@@ -446415,6 +446849,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhHocTapInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -446574,6 +447009,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_ToChucXaHoiCreateWithoutToChucXaHoiInput = {
         id?: string
@@ -446759,6 +447195,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutToChucXaHoiInput = {
         id?: string
@@ -446918,6 +447355,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutToChucXaHoiInput = {
         where: UserProfileWhereUniqueInput
@@ -447121,6 +447559,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutToChucXaHoiInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -447280,6 +447719,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_NgachCreateWithoutQuaTrinhLuongInput = {
         id?: string
@@ -447491,6 +447931,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutQuaTrinhLuongInput = {
         id?: string
@@ -447650,6 +448091,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutQuaTrinhLuongInput = {
         where: UserProfileWhereUniqueInput
@@ -447884,6 +448326,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutQuaTrinhLuongInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -448043,6 +448486,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_NhanVienCreateWithoutGroupInput = {
         Id?: string
@@ -448312,6 +448756,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutGroupInput = {
         id?: string
@@ -448471,6 +448916,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutGroupInput = {
         where: UserProfileWhereUniqueInput
@@ -449085,6 +449531,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDocumentsUploadedInput = {
         id?: string
@@ -449244,6 +449691,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDocumentsUploadedInput = {
         where: UserProfileWhereUniqueInput
@@ -449407,6 +449855,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDocumentsApprovedInput = {
         id?: string
@@ -449566,6 +450015,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDocumentsApprovedInput = {
         where: UserProfileWhereUniqueInput
@@ -449799,6 +450249,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDocumentsUploadedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -449958,6 +450409,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUpsertWithoutDocumentsApprovedInput = {
         update: XOR<UserProfileUpdateWithoutDocumentsApprovedInput, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
@@ -450126,6 +450578,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDocumentsApprovedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -450285,6 +450738,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput = {
         where: DocumentTopicWhereUniqueInput
@@ -450678,6 +451132,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutFaqsUploadedInput = {
         id?: string
@@ -450837,6 +451292,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutFaqsUploadedInput = {
         where: UserProfileWhereUniqueInput
@@ -451000,6 +451456,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutFaqsApprovedInput = {
         id?: string
@@ -451159,6 +451616,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutFaqsApprovedInput = {
         where: UserProfileWhereUniqueInput
@@ -451372,6 +451830,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutFaqsUploadedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451531,6 +451990,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUpsertWithoutFaqsApprovedInput = {
         update: XOR<UserProfileUpdateWithoutFaqsApprovedInput, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
@@ -451699,6 +452159,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutFaqsApprovedInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451858,6 +452319,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type TopicCreateWithoutPromptsInput = {
         id?: string
@@ -452094,6 +452556,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutConversationsInput = {
         id?: string
@@ -452253,6 +452716,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutConversationsInput = {
         where: UserProfileWhereUniqueInput
@@ -452525,6 +452989,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutConversationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -452684,6 +453149,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserSessionUpsertWithoutConversationInput = {
         update: XOR<UserSessionUpdateWithoutConversationInput, UserSessionUncheckedUpdateWithoutConversationInput>
@@ -453419,6 +453885,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutRankInput = {
         id?: string
@@ -453578,6 +454045,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutRankInput = {
         where: UserProfileWhereUniqueInput
@@ -453807,6 +454275,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutLevelInput = {
         id?: string
@@ -453966,6 +454435,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutLevelInput = {
         where: UserProfileWhereUniqueInput
@@ -454146,6 +454616,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutPositionCPVInput = {
         id?: string
@@ -454305,6 +454776,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutPositionCPVInput = {
         where: UserProfileWhereUniqueInput
@@ -454595,6 +455067,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutAcademicRankTypeInput = {
         id?: string
@@ -454754,6 +455227,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutAcademicRankTypeInput = {
         where: UserProfileWhereUniqueInput
@@ -454985,6 +455459,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput = {
         id?: string
@@ -455144,6 +455619,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput = {
         where: UserProfileWhereUniqueInput
@@ -455375,6 +455851,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutEthnicityInput = {
         id?: string
@@ -455534,6 +456011,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutEthnicityInput = {
         where: UserProfileWhereUniqueInput
@@ -457295,6 +457773,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutReligionInput = {
         id?: string
@@ -457454,6 +457933,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutReligionInput = {
         where: UserProfileWhereUniqueInput
@@ -457738,6 +458218,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutGenderInput = {
         id?: string
@@ -457897,6 +458378,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutGenderInput = {
         where: UserProfileWhereUniqueInput
@@ -458244,6 +458726,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNationalityInput = {
         id?: string
@@ -458403,6 +458886,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNationalityInput = {
         where: UserProfileWhereUniqueInput
@@ -458645,6 +459129,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceHometownInput = {
         id?: string
@@ -458804,6 +459289,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -458971,6 +459457,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceOfBirthInput = {
         id?: string
@@ -459130,6 +459617,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -459297,6 +459785,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutProvincePermanentAddressInput = {
         id?: string
@@ -459456,6 +459945,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutProvincePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -459623,6 +460113,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutProvinceCurrentAddressInput = {
         id?: string
@@ -459782,6 +460273,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutProvinceCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -460068,6 +460560,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceHometownInput = {
         id?: string
@@ -460227,6 +460720,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -460394,6 +460888,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceOfBirthInput = {
         id?: string
@@ -460553,6 +461048,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -460720,6 +461216,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvincePermanentAddressInput = {
         id?: string
@@ -460879,6 +461376,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvincePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -461046,6 +461544,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewProvinceCurrentAddressInput = {
         id?: string
@@ -461205,6 +461704,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewProvinceCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -461475,6 +461975,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictHometownInput = {
         id?: string
@@ -461634,6 +462135,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -461801,6 +462303,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictOfBirthInput = {
         id?: string
@@ -461960,6 +462463,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -462127,6 +462631,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictPermanentAddressInput = {
         id?: string
@@ -462286,6 +462791,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictPermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -462453,6 +462959,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutDistrictCurrentAddressInput = {
         id?: string
@@ -462612,6 +463119,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutDistrictCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -462831,6 +463339,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneHometownInput = {
         id?: string
@@ -462990,6 +463499,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -463157,6 +463667,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneOfBirthInput = {
         id?: string
@@ -463316,6 +463827,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -463483,6 +463995,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutCommunePermanentAddressInput = {
         id?: string
@@ -463642,6 +464155,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutCommunePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -463809,6 +464323,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutCommuneCurrentAddressInput = {
         id?: string
@@ -463968,6 +464483,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutCommuneCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -464187,6 +464703,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneHometownInput = {
         id?: string
@@ -464346,6 +464863,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneHometownInput = {
         where: UserProfileWhereUniqueInput
@@ -464513,6 +465031,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneOfBirthInput = {
         id?: string
@@ -464672,6 +465191,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneOfBirthInput = {
         where: UserProfileWhereUniqueInput
@@ -464839,6 +465359,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommunePermanentAddressInput = {
         id?: string
@@ -464998,6 +465519,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommunePermanentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -465165,6 +465687,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNewCommuneCurrentAddressInput = {
         id?: string
@@ -465324,6 +465847,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNewCommuneCurrentAddressInput = {
         where: UserProfileWhereUniqueInput
@@ -468775,6 +469299,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput = {
         id?: string
@@ -468934,6 +469459,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutStudentSubjectScoreHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -469185,6 +469711,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -469344,6 +469871,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type StudentSubjectScoreCreateWithoutCertificatesInput = {
         id?: string
@@ -479926,6 +480454,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutSubjectVersionHistoryInput = {
         id?: string
@@ -480085,6 +480614,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutSubjectVersionHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -480372,6 +480902,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSubjectVersionHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -480531,6 +481062,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type SubjectInGroupCreateWithoutEquivalencyGroupInput = {
         id?: string
@@ -482906,6 +483438,8 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
@@ -482913,6 +483447,7 @@ export namespace Prisma {
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
@@ -482928,6 +483463,8 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -482936,6 +483473,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutSubjectClassInput = {
@@ -483982,31 +484520,6 @@ export namespace Prisma {
         where: ClassScheduleScalarWhereInput
         data: XOR<ClassScheduleUpdateManyMutationInput, ClassScheduleUncheckedUpdateManyWithoutSubjectClassInput>
     };
-    export type ClassScheduleScalarWhereInput = {
-        AND?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
-        OR?: ClassScheduleScalarWhereInput[]
-        NOT?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
-        id?: StringFilter<"ClassSchedule"> | string
-        code?: StringNullableFilter<"ClassSchedule"> | string | null
-        active?: BoolFilter<"ClassSchedule"> | boolean
-        description?: StringNullableFilter<"ClassSchedule"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ClassSchedule"> | Date | string | null
-        createdAt?: DateTimeFilter<"ClassSchedule"> | Date | string
-        updatedAt?: DateTimeFilter<"ClassSchedule"> | Date | string
-        createdBy?: UuidNullableFilter<"ClassSchedule"> | string | null
-        subjectClassId?: StringFilter<"ClassSchedule"> | string
-        periodType?: EnumPeriodTypeFilter<"ClassSchedule"> | $Enums.PeriodType
-        startPeriod?: IntFilter<"ClassSchedule"> | number
-        endPeriod?: IntFilter<"ClassSchedule"> | number
-        classDate?: DateTimeFilter<"ClassSchedule"> | Date | string
-        roomId?: StringNullableFilter<"ClassSchedule"> | string | null
-        lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
-        extraLecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
-        notes?: StringNullableFilter<"ClassSchedule"> | string | null
-        isReplacement?: BoolFilter<"ClassSchedule"> | boolean
-        originalScheduleId?: StringNullableFilter<"ClassSchedule"> | string | null
-        cancelReason?: StringNullableFilter<"ClassSchedule"> | string | null
-    };
     export type ThesisProjectUpsertWithWhereUniqueWithoutSubjectClassInput = {
         where: ThesisProjectWhereUniqueInput
         update: XOR<ThesisProjectUpdateWithoutSubjectClassInput, ThesisProjectUncheckedUpdateWithoutSubjectClassInput>
@@ -484464,6 +484977,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutSubjectClassHistoryInput = {
         id?: string
@@ -484623,6 +485137,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutSubjectClassHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -484908,6 +485423,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSubjectClassHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -485067,6 +485583,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type SubjectClassCreateWithoutSubjectClassTimesInput = {
         id?: string
@@ -485581,6 +486098,330 @@ export namespace Prisma {
         where: LecturerWhereUniqueInput
         create: XOR<LecturerCreateWithoutExtraClassSchedulesInput, LecturerUncheckedCreateWithoutExtraClassSchedulesInput>
     };
+    export type UserProfileCreateWithoutClassSchedulesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+    };
+    export type UserProfileUncheckedCreateWithoutClassSchedulesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+    };
+    export type UserProfileCreateOrConnectWithoutClassSchedulesInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput>
+    };
     export type ClassScheduleCreateWithoutReplacementScheduleInput = {
         id?: string
         code?: string | null
@@ -485593,14 +486434,17 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutReplacementScheduleInput = {
@@ -485612,10 +486456,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -485624,6 +486470,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
     };
     export type ClassScheduleCreateOrConnectWithoutReplacementScheduleInput = {
         where: ClassScheduleWhereUniqueInput
@@ -485641,14 +486488,17 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutOriginalScheduleInput = {
@@ -485660,10 +486510,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -485671,6 +486523,7 @@ export namespace Prisma {
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutOriginalScheduleInput = {
@@ -485989,6 +486842,19 @@ export namespace Prisma {
         evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
         analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
     };
+    export type UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput = {
+        where: UserProfileWhereUniqueInput
+        update: XOR<UserProfileUpdateWithoutClassSchedulesInput, UserProfileUncheckedUpdateWithoutClassSchedulesInput>
+        create: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput>
+    };
+    export type UserProfileUpdateWithWhereUniqueWithoutClassSchedulesInput = {
+        where: UserProfileWhereUniqueInput
+        data: XOR<UserProfileUpdateWithoutClassSchedulesInput, UserProfileUncheckedUpdateWithoutClassSchedulesInput>
+    };
+    export type UserProfileUpdateManyWithWhereWithoutClassSchedulesInput = {
+        where: UserProfileScalarWhereInput
+        data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutClassSchedulesInput>
+    };
     export type ClassScheduleUpsertWithoutReplacementScheduleInput = {
         update: XOR<ClassScheduleUpdateWithoutReplacementScheduleInput, ClassScheduleUncheckedUpdateWithoutReplacementScheduleInput>
         create: XOR<ClassScheduleCreateWithoutReplacementScheduleInput, ClassScheduleUncheckedCreateWithoutReplacementScheduleInput>
@@ -486010,14 +486876,17 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutReplacementScheduleInput = {
@@ -486029,10 +486898,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -486041,6 +486912,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
     };
     export type ClassScheduleUpsertWithoutOriginalScheduleInput = {
         update: XOR<ClassScheduleUpdateWithoutOriginalScheduleInput, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
@@ -486063,14 +486935,17 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput = {
@@ -486082,10 +486957,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -486093,6 +486970,7 @@ export namespace Prisma {
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type TrainingFormCreateWithoutTrainingObjectTypeInput = {
@@ -489296,13 +490174,16 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
@@ -489315,10 +490196,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         lecturerId?: string | null
         extraLecturerId?: string | null
@@ -489326,6 +490209,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutRoomInput = {
@@ -493265,6 +494149,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
         id?: string
@@ -493424,6 +494309,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutEducationAndTrainingInput = {
         where: UserProfileWhereUniqueInput
@@ -495146,6 +496032,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEducationAndTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -495305,6 +496192,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type TrainingLevelUpsertWithoutStudentsInput = {
         update: XOR<TrainingLevelUpdateWithoutStudentsInput, TrainingLevelUncheckedUpdateWithoutStudentsInput>
@@ -501665,6 +502553,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutLecturerInput = {
         id?: string
@@ -501824,6 +502713,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutLecturerInput = {
         where: UserProfileWhereUniqueInput
@@ -502345,13 +503235,16 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
@@ -502364,10 +503257,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         extraLecturerId?: string | null
@@ -502375,6 +503270,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutLecturerInput = {
@@ -502397,13 +503293,16 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
         room?: RoomCreateNestedOneWithoutClassSchedulesInput
         lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
     };
@@ -502416,10 +503315,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -502427,6 +503328,7 @@ export namespace Prisma {
         isReplacement?: boolean
         originalScheduleId?: string | null
         cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutExtraLecturerInput = {
@@ -503124,6 +504026,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -503283,6 +504186,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_DonViUpsertWithoutLecturersInput = {
         update: XOR<DM_DonViUpdateWithoutLecturersInput, DM_DonViUncheckedUpdateWithoutLecturersInput>
@@ -503874,6 +504778,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutLecturerHistoryInput = {
         id?: string
@@ -504033,6 +504938,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutLecturerHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -504311,6 +505217,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLecturerHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -504470,6 +505377,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_DonViUpsertWithoutLecturerHistoryInput = {
         update: XOR<DM_DonViUpdateWithoutLecturerHistoryInput, DM_DonViUncheckedUpdateWithoutLecturerHistoryInput>
@@ -511398,6 +512306,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutEvaluationCriterionCommentsInput = {
         id?: string
@@ -511557,6 +512466,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutEvaluationCriterionCommentsInput = {
         where: UserProfileWhereUniqueInput
@@ -511843,6 +512753,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEvaluationCriterionCommentsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -512002,6 +512913,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type RequirementCriterionUpsertWithoutEvaluationCriterionCommentInput = {
         update: XOR<RequirementCriterionUpdateWithoutEvaluationCriterionCommentInput, RequirementCriterionUncheckedUpdateWithoutEvaluationCriterionCommentInput>
@@ -513987,6 +514899,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutEvidenceFilesInput = {
         id?: string
@@ -514146,6 +515059,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutEvidenceFilesInput = {
         where: UserProfileWhereUniqueInput
@@ -514357,6 +515271,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEvidenceFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -514516,6 +515431,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type SurveyCreateWithoutSurveyObjectTypeInput = {
         id?: string
@@ -517278,6 +518194,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutSurveySessionInput = {
         id?: string
@@ -517437,6 +518354,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutSurveySessionInput = {
         where: UserProfileWhereUniqueInput
@@ -517896,6 +518814,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSurveySessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -518055,6 +518974,7 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type StudentUpsertWithoutSurveySessionsInput = {
         update: XOR<StudentUpdateWithoutSurveySessionsInput, StudentUncheckedUpdateWithoutSurveySessionsInput>
@@ -522210,6 +523130,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutStaffsInput = {
         id?: string
@@ -522369,6 +523290,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutStaffsInput = {
         where: UserProfileWhereUniqueInput
@@ -522737,6 +523659,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStaffsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522896,6 +523819,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_DonViUpsertWithoutStaffsInput = {
         update: XOR<DM_DonViUpdateWithoutStaffsInput, DM_DonViUncheckedUpdateWithoutStaffsInput>
@@ -523217,6 +524141,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutStaffHistoryInput = {
         id?: string
@@ -523376,6 +524301,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutStaffHistoryInput = {
         where: UserProfileWhereUniqueInput
@@ -523682,6 +524608,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutStaffHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -523841,6 +524768,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type DM_DonViUpsertWithoutStaffHistoryInput = {
         update: XOR<DM_DonViUpdateWithoutStaffHistoryInput, DM_DonViUncheckedUpdateWithoutStaffHistoryInput>
@@ -532009,6 +532937,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutTrinhDoHocVanInput = {
         id?: string
@@ -532168,6 +533097,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutTrinhDoHocVanInput = {
         where: UserProfileWhereUniqueInput
@@ -532725,6 +533655,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutChiHuyQuanLyInput = {
         id?: string
@@ -532884,6 +533815,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutChiHuyQuanLyInput = {
         where: UserProfileWhereUniqueInput
@@ -533064,6 +533996,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutChuyenMonKyThuatInput = {
         id?: string
@@ -533223,6 +534156,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutChuyenMonKyThuatInput = {
         where: UserProfileWhereUniqueInput
@@ -533403,6 +534337,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutSucKhoeInput = {
         id?: string
@@ -533562,6 +534497,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutSucKhoeInput = {
         where: UserProfileWhereUniqueInput
@@ -533742,6 +534678,7 @@ export namespace Prisma {
         changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileUncheckedCreateWithoutNhomMauInput = {
         id?: string
@@ -533901,6 +534838,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
         surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
     };
     export type UserProfileCreateOrConnectWithoutNhomMauInput = {
         where: UserProfileWhereUniqueInput
@@ -536810,6 +537748,80 @@ export namespace Prisma {
         analysisCriterionId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationCriterionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ClassScheduleUpdateWithoutUserProfilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        notes?: NullableStringFieldUpdateOperationsInput | string | null
+        isReplacement?: BoolFieldUpdateOperationsInput | boolean
+        cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
+        room?: RoomUpdateOneWithoutClassSchedulesNestedInput
+        lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
+        extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
+        replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+    };
+    export type ClassScheduleUncheckedUpdateWithoutUserProfilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        notes?: NullableStringFieldUpdateOperationsInput | string | null
+        isReplacement?: BoolFieldUpdateOperationsInput | boolean
+        originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+    };
+    export type ClassScheduleUncheckedUpdateManyWithoutUserProfilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        notes?: NullableStringFieldUpdateOperationsInput | string | null
+        isReplacement?: BoolFieldUpdateOperationsInput | boolean
+        originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type DM_NhanVienCreateManyGroupInput = {
         Id?: string
         sMa?: string | null
@@ -537267,6 +538279,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -537426,6 +538439,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutGroupInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538442,6 +539456,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538601,6 +539616,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539038,6 +540054,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539197,6 +540214,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539626,6 +540644,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutPositionCPVInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539785,6 +540804,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutPositionCPVInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540297,6 +541317,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540456,6 +541477,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -540911,6 +541933,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541070,6 +542093,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541524,6 +542548,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutEthnicityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541683,6 +542708,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutEthnicityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543732,6 +544758,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutReligionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -543891,6 +544918,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutReligionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544410,6 +545438,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutGenderInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544569,6 +545598,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutGenderInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545090,6 +546120,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNationalityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545249,6 +546280,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNationalityInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546052,6 +547084,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546211,6 +547244,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546488,6 +547522,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546647,6 +547682,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -546924,6 +547960,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547083,6 +548120,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547360,6 +548398,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -547519,6 +548558,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548322,6 +549362,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548481,6 +549522,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548758,6 +549800,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548917,6 +549960,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549194,6 +550238,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549353,6 +550398,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549630,6 +550676,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549789,6 +550836,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550580,6 +551628,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550739,6 +551788,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551016,6 +552066,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551175,6 +552226,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551452,6 +552504,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictPermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551611,6 +552664,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictPermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551888,6 +552942,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutDistrictCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552047,6 +553102,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutDistrictCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552796,6 +553852,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552955,6 +554012,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553232,6 +554290,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553391,6 +554450,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553668,6 +554728,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553827,6 +554888,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554104,6 +555166,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554263,6 +555326,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555012,6 +556076,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555171,6 +556236,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneHometownInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555448,6 +556514,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555607,6 +556674,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneOfBirthInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555884,6 +556952,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556043,6 +557112,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommunePermanentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556320,6 +557390,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNewCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556479,6 +557550,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNewCommuneCurrentAddressInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564078,6 +565150,8 @@ export namespace Prisma {
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -564351,6 +565425,8 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
@@ -564358,6 +565434,7 @@ export namespace Prisma {
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
@@ -564373,6 +565450,8 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564381,6 +565460,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -564395,6 +565475,8 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564910,6 +565992,445 @@ export namespace Prisma {
         surveyTopicId?: StringFieldUpdateOperationsInput | string
         additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type UserProfileUpdateWithoutClassSchedulesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutClassSchedulesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+    };
+    export type UserProfileUncheckedUpdateManyWithoutClassSchedulesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingCourseCreateManyTrainingObjectTypeInput = {
         id?: string
@@ -568146,10 +569667,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         lecturerId?: string | null
         extraLecturerId?: string | null
@@ -568582,13 +570105,16 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
@@ -568601,10 +570127,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568612,6 +570140,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutRoomInput = {
@@ -568623,10 +570152,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573283,10 +574814,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         extraLecturerId?: string | null
@@ -573304,10 +574837,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        subjectClassId: string
+        subjectClassId?: string | null
         periodType?: $Enums.PeriodType
         startPeriod: number
         endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
@@ -574016,13 +575551,16 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
@@ -574035,10 +575573,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574046,6 +575586,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutLecturerInput = {
@@ -574057,10 +575598,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574081,13 +575624,16 @@ export namespace Prisma {
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutClassSchedulesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
         room?: RoomUpdateOneWithoutClassSchedulesNestedInput
         lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
     };
@@ -574100,10 +575646,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574111,6 +575659,7 @@ export namespace Prisma {
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutExtraLecturerInput = {
@@ -574122,10 +575671,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
         startPeriod?: IntFieldUpdateOperationsInput | number
         endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582368,6 +583919,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutTrinhDoHocVanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -582527,6 +584079,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutTrinhDoHocVanInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -583382,6 +584935,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChiHuyQuanLyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -583541,6 +585095,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutChiHuyQuanLyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -583936,6 +585491,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutChuyenMonKyThuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -584095,6 +585651,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutChuyenMonKyThuatInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -584490,6 +586047,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutSucKhoeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -584649,6 +586207,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutSucKhoeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585044,6 +586603,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateWithoutNhomMauInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -585203,6 +586763,7 @@ export namespace Prisma {
         changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
         surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
     export type UserProfileUncheckedUpdateManyWithoutNhomMauInput = {
         id?: StringFieldUpdateOperationsInput | string

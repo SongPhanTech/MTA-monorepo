@@ -14,6 +14,8 @@ import { CalendarFilter } from './calendar-filter'
 
 export const TYPE_WORK_SCHEDULE_COLOR_OPTIONS = [
     { label: 'Lịch học lý thuyết', value: '#7bb3e6', type: PeriodType.THEORY },
+    { label: 'Lịch kiểm tra giảng dạy', value: '#b8e67b', type: PeriodType.CHECK },
+    { label: 'Lịch tuần học viện', value: '#c67be6', type: PeriodType.WEEK },
     { label: 'Lịch thi', value: '#e699a8', type: PeriodType.EXAM },
     { label: 'Lịch học thực hành', value: '#f5e080', type: PeriodType.PRACTICE },
     { label: 'Lịch học thí nghiệm', value: '#f5b366', type: PeriodType.LAB },
