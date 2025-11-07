@@ -1,10 +1,10 @@
 import { EyeOutlined } from '@ant-design/icons'
-import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { cn } from '@lib/utils'
 import { Survey } from '@workspace/db'
 import {
     useCountClusterSurvey,
@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabDotKhaoSatCum() {
+function TabDotKhaoSatCum({selectedId,setSelectedId}:{selectedId:string,setSelectedId:(value:string)=>void}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -225,6 +225,16 @@ function TabDotKhaoSatCum() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                                       onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    setSelectedId(record.id)
+                                },
+                                className: cn(
+                                    selectedId === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -234,12 +244,12 @@ function TabDotKhaoSatCum() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên đợt khảo sát',
+                                title: 'Tên đợt KS',
                                 dataIndex: 'name',
                                 type: 'input',
                             },
                             {
-                                title: 'Chủ đề khảo sát',
+                                title: 'Chủ đề KS',
                                 dataIndex: 'surveyTopicId',
                                 type: 'select',
                                 options: surveyTopicData?.map(({ id, name }) => ({
@@ -248,35 +258,6 @@ function TabDotKhaoSatCum() {
                                 })),
                                 render: (_, record) =>
                                     record?.surveyTopic ? record?.surveyTopic.name : '',
-                            },
-                            {
-                                title: 'Đối tượng được khảo sát',
-                                dataIndex: 'surveyObjectTypeId',
-                                render: (_, record) => {
-                                    return record?.surveyObjectType?.length
-                                },
-                            },
-                            {
-                                title: 'Đối tượng làm khảo sát',
-                                dataIndex: 'surveyObjectTypeId',
-                                type: 'select',
-                                options: surveyObjectTypeData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (_, record) => {
-                                    return record?.surveyObjectType?.length ? (
-                                        <HtmlTruncate key="explanation">
-                                            <ul>
-                                                {record?.surveyObjectType?.map((i: any) => (
-                                                    <li key={i.id}>- {i.name}</li>
-                                                ))}
-                                            </ul>
-                                        </HtmlTruncate>
-                                    ) : (
-                                        ''
-                                    )
-                                },
                             },
                             {
                                 title: 'Công khai',

@@ -108,6 +108,7 @@ function TabChuDeKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
+                    rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)

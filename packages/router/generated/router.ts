@@ -42,7 +42,7 @@ export default {
     "THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT": "/thiet-lap-khao-sat/danh-sach-khao-sat",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT_ID": "/thiet-lap-khao-sat/dot-khao-sat/[id]",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT": "/thiet-lap-khao-sat/dot-khao-sat",
-    "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
+    "THIET_LAP_KHAO_SAT_KHAO_SAT_CUM": "/thiet-lap-khao-sat/khao-sat-cum",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
   "QL_DAO_TAO": {

@@ -718,11 +718,16 @@ const NAVIGATION: NavigationType = {
                     // },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                        label: 'Đợt khảo sát',
+                        label: 'Khảo sát chung',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                        id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_KHAO_SAT_CUM,
+                        label: 'Khảo sát giảng viên',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_KHAO_SAT_CUM,
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                         label: 'Danh sách khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                     },

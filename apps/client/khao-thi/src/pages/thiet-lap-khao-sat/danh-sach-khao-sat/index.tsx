@@ -141,7 +141,7 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate key="explanation">
+                                <HtmlTruncate >
                                     <ul>
                                         {record?.subjectClasses?.map((i: any) => (
                                             <li key={i.id}>
