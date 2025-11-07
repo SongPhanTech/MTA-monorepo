@@ -314,7 +314,7 @@ export default function QuestionPage() {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (html: string) => (
-                                    <HtmlTruncate key="explanation">
+                                    <HtmlTruncate >
                                         <div
                                             dangerouslySetInnerHTML={{
                                                 __html: html
@@ -387,7 +387,7 @@ export default function QuestionPage() {
                                         record.type === QuestionType.SINGLE_CHOICE ? (
                                         <div>{record?.multipleChoiceOptions.length} lựa chọn</div>
                                     ) : (
-                                        <HtmlTruncate key="explanation">
+                                        <HtmlTruncate >
                                             <div
                                                 dangerouslySetInnerHTML={{
                                                     __html: record.explanation

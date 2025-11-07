@@ -72,7 +72,6 @@ export default function EvaluationCouncilTab() {
             },
             include: {
                 members: true,
-                evaluationCriterion: true,
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,

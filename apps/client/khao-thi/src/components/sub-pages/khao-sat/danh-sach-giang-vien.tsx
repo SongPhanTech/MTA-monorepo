@@ -6,7 +6,6 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
 import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
@@ -16,12 +15,11 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DetailSurveyPage() {
+export default function DetailSurveyPage({selectedId}:{selectedId:string}) {
     const { can, canSome } = useAbility()
 
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
-    const id = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -32,7 +30,7 @@ export default function DetailSurveyPage() {
     })
     const where = useMemo(
         () => ({
-            clusterSurveyId: id,
+            clusterSurveyId: selectedId,
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -60,9 +58,9 @@ export default function DetailSurveyPage() {
                   }
                 : {}),
         }),
-        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, id]
+        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, selectedId]
     )
-    const { data = [], refetch } = useFindManySurvey(
+    const { data = []} = useFindManySurvey(
         {
             where,
             include: {
@@ -91,7 +89,7 @@ export default function DetailSurveyPage() {
             skip: (currentPage - 1) * numberOfPages,
         },
         {
-            enabled: !!id,
+            enabled: !!selectedId,
         }
     )
 
@@ -154,7 +152,7 @@ export default function DetailSurveyPage() {
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Đối tượng được khảo sát',
+                            title: 'Giảng viên',
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => {
@@ -166,7 +164,7 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate key="explanation">
+                                <HtmlTruncate >
                                     <ul>
                                         {record?.subjectClasses?.map((i: any) => (
                                             <li key={i.id}>
@@ -295,18 +293,5 @@ export default function DetailSurveyPage() {
                 />
             </Col>
         </Row>
-    )
-}
-DetailSurveyPage.getLayout = function getLayout(page: React.ReactNode) {
-    return (
-        <DefaultLayout
-            breadcrumbList={[
-                { title: 'Thiết lập khảo sát' },
-                { title: 'Đợt khảo sát', href: 'thiet-lap-khao-sat/dot-khao-sat' },
-                { title: 'Chi tiết khảo sát cụm' },
-            ]}
-        >
-            {page}
-        </DefaultLayout>
     )
 }

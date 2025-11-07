@@ -7,7 +7,6 @@ import {
     useFindManySchoolYear,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
-    useFindUniqueSurvey,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, Radio, Row, TreeSelect } from 'antd'
 import { useMemo } from 'react'
@@ -72,23 +71,12 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                 children:
                     schoolYear.semesters.map((semester) => ({
                         value: semester.id,
-                        title: `${semester.name} - ${schoolYear?.name}`,
+                        title: `${semester.name}`,
                     })) || [],
             })) || []
         )
     }, [schoolYears])
 
-    const { data: survey } = useFindUniqueSurvey(
-        {
-            where: { id },
-            include: {
-                surveyObjectType: true,
-            },
-        },
-        {
-            enabled: !!id,
-        }
-    )
 
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())

@@ -110,8 +110,6 @@ function TabNhomCauHoi({
         hideSpinner()
     }
 
-    console.log('data', data)
-
     return (
         <div>
             <Row gutter={[16, 16]}>

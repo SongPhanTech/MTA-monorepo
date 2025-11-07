@@ -23,12 +23,10 @@ export default function EvaluationPeriodCriteriaAnalysis() {
                     some: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                analysisCriterions: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -60,12 +58,10 @@ export default function EvaluationPeriodCriteriaAnalysis() {
                 some: {
                     criteria: {
                         some: {
-                            criterionAssignments: {
-                                some: {
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
-                                        },
+                            analysisCriterions: {
+                                lecturer: {
+                                    userProfile: {
+                                        id: idProfile,
                                     },
                                 },
                             },
