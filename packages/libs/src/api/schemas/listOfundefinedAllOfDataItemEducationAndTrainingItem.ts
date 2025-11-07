@@ -22,6 +22,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItem = {
     /** @nullable */
     updatedAt?: string | null
     /** @nullable */
+    createdBy?: string | null
+    /** @nullable */
     note?: string | null
     /** @nullable */
     from?: string | null

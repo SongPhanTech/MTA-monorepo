@@ -22,6 +22,8 @@ export type GetClusterSurveyStatistics200ChoicesItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     answer: string
     requireExplanation: boolean
     /** @nullable */

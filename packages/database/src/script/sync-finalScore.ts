@@ -1,4 +1,4 @@
-import { calcFinalScore } from '@workspace/libs/utils'
+import { calcFinalScore } from '../../../libs/src/utils'
 import { PrismaClient } from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()

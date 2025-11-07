@@ -2019,9 +2019,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.23
-      '@workspace/libs':
-        specifier: workspace:*
-        version: link:../libs
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
