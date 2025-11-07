@@ -1,6 +1,7 @@
 import { getMinioUrl } from '@workspace/constant'
 import { createId } from '@workspace/db'
-import { Col, Image, Modal, Row } from 'antd'
+import { Button, Col, Flex, Image, message, Modal, Row } from 'antd'
+import Link from 'next/link'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type DocumentType =
@@ -329,8 +330,8 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     lang: 'vi',
                     customization: {
                         forcesave: false,
-                        toolbar: false, // Ẩn toàn bộ toolbar
-                        statusBar: false, // Ẩn thanh trạng thái dưới cùng
+                        toolbar: true, // Ẩn toàn bộ toolbar
+                        statusBar: true, // Ẩn thanh trạng thái dưới cùng
                         autosave: false,
                         logo: {
                             visible: false, // Ẩn logo
@@ -365,16 +366,11 @@ function getDocumentType(fileType: string): DocumentType {
 }
 
 const XemTaiLieu = () => {
-    const {
-        isOpen,
-        input,
-        onClose,
-        onChange,
-        onOpen: openXemTaiLieu,
-    } = useDisclosure<{
+    const { isOpen, input, onClose, onChange } = useDisclosure<{
         uri: string
         name?: string
         mimeType?: string
+        mode?: 'view' | 'edit'
     }>({
         tag: 'XemTaiLieu',
     })
@@ -401,12 +397,33 @@ const XemTaiLieu = () => {
         >
             <Row gutter={[10, 10]}>
                 <Col span={24}>
+                    <Flex justify="end" className="mb-2">
+                        <Button
+                            type="primary"
+                            onClick={async (e) => {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                const response = await fetch(documentUrl)
+                                if (!response.ok) return message.error('Lỗi khi tải file')
+                                const blob = await response.blob()
+                                const blobUrl = window.URL.createObjectURL(blob)
+                                const link = document.createElement('a')
+                                link.href = blobUrl
+                                link.setAttribute('download', input?.name || 'download')
+                                document.body.appendChild(link)
+                                link.click()
+                                link.parentNode?.removeChild(link)
+                            }}
+                        >
+                            Tải xuống
+                        </Button>
+                    </Flex>
                     {input?.uri && supportedDocFileTypes.includes(fileType) && (
                         <OnlyOfficeViewer
                             uri={documentUrl}
                             fileType={fileType}
                             title={input?.name}
-                            mode="view"
+                            mode={input?.mode || 'view'}
                         />
                     )}
                     {input?.uri && supportedImageFileTypes.includes(fileType) && (
@@ -421,7 +438,13 @@ const XemTaiLieu = () => {
                     {input?.uri &&
                         !supportedImageFileTypes.includes(fileType) &&
                         !supportedDocFileTypes.includes(fileType) && (
-                            <span>Không hỗ trợ xem tài liệu này. Vui lòng tải xuống để xem.</span>
+                            <span>
+                                Không hỗ trợ xem tài liệu này. Vui lòng{' '}
+                                <Link href={input.uri} className="text-primary">
+                                    tải xuống
+                                </Link>{' '}
+                                để xem.
+                            </span>
                         )}
                 </Col>
             </Row>

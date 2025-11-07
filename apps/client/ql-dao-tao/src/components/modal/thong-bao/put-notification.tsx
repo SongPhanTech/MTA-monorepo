@@ -1,25 +1,23 @@
 import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
-import DocumentPaths from '@components/commons/documentPaths'
+import DocumentPaths, { type UploadedFileItem } from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import type { Prisma } from '@workspace/db/client'
+import type { Notification } from '@workspace/db/client'
 import {
     useCreateNotification,
-    useFindUniqueNotification,
-    useUpdateNotification,
+    useFindUniqueNotification
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutNotification = Prisma.NotificationGetPayload<{
-    include: {
-        attachments: true
-    }
-}>
+export type PutNotification = Notification & {
+    attachments?: UploadedFileItem[]
+}
 const PutNotificationModal = () => {
     const [form] = Form.useForm<PutNotification>()
     const {
@@ -32,31 +30,72 @@ const PutNotificationModal = () => {
     })
 
     const attachments = Form.useWatch('attachments', form)
-    console.log('attachments', attachments)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: create } = useCreateNotification()
-    const { mutateAsync: update } = useUpdateNotification()
     async function onOk(value: PutNotification) {
         try {
             showSpinner()
             if (id) {
-                await update({
-                    data: {
-                        ...(({ attachments, ...rest }) => rest)(value),
-                        publishedAt: value.publishedAt
-                            ? dayjs(value.publishedAt).toDate()
-                            : undefined,
-                        expiresAt: value.expiresAt ? dayjs(value.expiresAt).toDate() : undefined,
+                const resUpdate = await sqlTransaction([
+                    {
+                        model: 'Notification',
+                        operation: 'update',
+                        data: {
+                            data: {
+                                attachments: {
+                                    deleteMany: {},
+                                },
+                            },
+                            where: { id },
+                        },
                     },
-                    where: { id },
-                })
+                    {
+                        model: 'Notification',
+                        operation: 'update',
+                        data: {
+                            data: {
+                                ...value,
+                                publishedAt: value.publishedAt
+                                    ? dayjs(value.publishedAt).toDate()
+                                    : undefined,
+                                expiresAt: value.expiresAt
+                                    ? dayjs(value.expiresAt).toDate()
+                                    : undefined,
+                                attachments: {
+                                    create: attachments?.map((file) => ({
+                                        name: file.name,
+                                        path: file.path,
+                                        size: file.size ? Number(file.size) : 0,
+                                        mimeType: file.mimeType || '',
+                                    })),
+                                },
+                            },
+                            where: { id },
+                        },
+                    },
+                ])
+                if (resUpdate.status !== 200) {
+                    throw new Error('Cập nhật thất bại')
+                }
                 message.success('Cập nhật thành công')
             } else {
                 await create({
                     data: {
-                        ...(({ attachments, ...rest }) => rest)(value),
+                        ...value,
+                        publishedAt: value.publishedAt
+                            ? dayjs(value.publishedAt).toDate()
+                            : undefined,
+                        expiresAt: value.expiresAt ? dayjs(value.expiresAt).toDate() : undefined,
+                        attachments: {
+                            create: attachments?.map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                size: file.size ? Number(file.size) : 0,
+                                mimeType: file.mimeType || '',
+                            })),
+                        },
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -66,11 +105,9 @@ const PutNotificationModal = () => {
             })
             onClose()
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            if (error?.info?.message || error?.message) {
+                message.error(error?.info?.message || error?.message)
+            } else message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
         }
@@ -91,6 +128,16 @@ const PutNotificationModal = () => {
         if (data) {
             form.setFieldsValue({
                 ...data,
+                publishedAt: data.publishedAt ? dayjs(data.publishedAt) : undefined,
+                expiresAt: data.expiresAt ? dayjs(data.expiresAt) : undefined,
+                attachments: data.attachments.map((file) => ({
+                    file: null,
+                    name: file.name,
+                    path: file.path,
+                    size: file.size ? BigInt(file.size) : BigInt(0),
+                    mimeType: file.mimeType || '',
+                    notificationId: id || '',
+                })),
             })
         } else {
             form.setFieldsValue({

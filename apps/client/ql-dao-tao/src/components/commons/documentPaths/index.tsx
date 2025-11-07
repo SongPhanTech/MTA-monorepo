@@ -28,7 +28,7 @@ interface DocumentPathsComponentProps {
     text?: string
 }
 
-interface UploadedFileItem {
+export type UploadedFileItem = {
     file: File | null
     name: string
     path: string
@@ -140,7 +140,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     }
 
     useEffect(() => {
-        const initial = data.map((file) => ({
+        const initial: UploadedFileItem[] = data.map((file) => ({
             file: null,
             name: file.name,
             path: file.path,

@@ -1,5 +1,5 @@
 import News from '@components/dashboard/news'
-import Notifications from '@components/dashboard/notifications'
+import ListNotification from '@components/dashboard/list-notifications'
 import StaffByOrg from '@components/dashboard/staff-by-org'
 import DefaultLayout from '@layouts/default-layout'
 import { LichCongTac } from '@workspace/ui'
@@ -27,7 +27,7 @@ function Page() {
                             <Title level={4}>Thông báo</Title>
                         </div>
                         <div className="flex-1 overflow-y-auto mb-2 p-2">
-                            <Notifications />
+                            <ListNotification />
                         </div>
                     </div>
                 </Col>

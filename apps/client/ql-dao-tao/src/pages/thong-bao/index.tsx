@@ -14,7 +14,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import Link from 'next/link'
@@ -32,9 +32,7 @@ export default function ThongBao() {
     })
 
     const { data = [], refetch } = useFindManyNotification({
-        where: {
-            code: { contains: filters.code, mode: 'insensitive' },
-        },
+        where: {},
         include: {
             attachments: true,
         },
@@ -116,8 +114,8 @@ export default function ThongBao() {
                         }}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
+                                title: 'TT',
+                                width: 35,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -125,18 +123,16 @@ export default function ThongBao() {
                             },
                             {
                                 title: 'Tiêu đề thông báo',
-                                align: 'center',
                                 dataIndex: 'title',
                                 type: 'input',
                             },
                             {
                                 title: 'Nội dung thông báo',
-                                align: 'center',
                                 dataIndex: 'content',
                                 type: 'input',
                                 render: (value) => (
                                     <div
-                                        className="max-h-20 overflow-auto"
+                                        className="max-h-10 overflow-auto"
                                         dangerouslySetInnerHTML={{ __html: value }}
                                     />
                                 ),
@@ -144,23 +140,23 @@ export default function ThongBao() {
                             {
                                 title: 'Ngày đăng',
                                 align: 'center',
-                                width: 250,
+                                width: 120,
                                 dataIndex: 'publishedAt',
                                 type: 'date',
-                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
+                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
                             },
                             {
                                 title: 'Ngày hết hạn',
                                 align: 'center',
-                                width: 250,
+                                width: 120,
                                 dataIndex: 'expiresAt',
                                 type: 'date',
-                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
+                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
                             },
                             {
                                 title: 'Tài liệu đính kèm',
                                 align: 'center',
-                                width: 250,
+                                width: 180,
                                 dataIndex: 'attachments',
                                 type: 'date',
                                 render: (_, record) =>
@@ -174,6 +170,19 @@ export default function ThongBao() {
                                         </p>
                                     ) : (
                                         'Không có tài liệu'
+                                    ),
+                            },
+                            {
+                                title: 'Trạng thái',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'active',
+                                type: 'date',
+                                render: (value) =>
+                                    value ? (
+                                        <Tag color="green">Hiển thị</Tag>
+                                    ) : (
+                                        <Tag color="red">Không hiển thị</Tag>
                                     ),
                             },
                             {
