@@ -12,7 +12,6 @@ import {
     useCountStandardCatalog,
     useDeleteCriterionCatalog,
     useDeleteStandardCatalog,
-    useFindManyScoreScaleCatalog,
     useFindManyStandardCatalog,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -89,9 +88,6 @@ export default function StandardCatalog() {
                             : { equals: filters.scoreScalesId },
                     }),
                 },
-                include: {
-                    scoreScale: true,
-                },
                 orderBy: [
                     ...emptyObjectIf(
                         [
@@ -116,8 +112,6 @@ export default function StandardCatalog() {
             deletedAt: null,
         },
     })
-
-    const { data: scoreScales } = useFindManyScoreScaleCatalog()
 
     const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{ id: string; count: number }>({
         tag: 'PutStandardCatalog',

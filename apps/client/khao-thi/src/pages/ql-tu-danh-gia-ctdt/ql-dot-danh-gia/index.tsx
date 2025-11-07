@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 import { Store, useStore } from '@tanstack/react-store'
 import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council'
 import EvaluationStandardTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-standard'
+import AssigmentOfAssessmentTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -36,6 +37,12 @@ export default function EvaluationPeriodTabPage() {
                 key: '3',
                 label: 'Tiêu chuẩn, tiêu chí',
                 children: <EvaluationStandardTab />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '4',
+                label: 'Phân công giảng viên',
+                children: <AssigmentOfAssessmentTab />,
                 disabled: !selectedEvaluationPeriodId,
             },
         ]
