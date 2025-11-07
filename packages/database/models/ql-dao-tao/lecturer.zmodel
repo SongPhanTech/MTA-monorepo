@@ -43,7 +43,7 @@ model Lecturer extends Base {
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  criterionAssignments        CriterionAssignment[]
+  evaluationCriterions        EvaluationCriterion[]
 
   @@schema("ql-dao-tao")
 }

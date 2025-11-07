@@ -48,31 +48,15 @@ enum AssignmentStatus {
   SUBMITTED    //Đã nộp
   REVISION     //Yêu cầu chỉnh sửa
   APPROVED     //Đã duyệt
-
-  @@schema("khao-thi")
-}
-
-//Phân công giảng viên đánh giá tiêu chí
-model CriterionAssignment extends Base {
-  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId       String
-  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
-  lecturerId                  String
-  deadline                    DateTime
-
-  status                      AssignmentStatus             @default(PENDING)
-  submittedAt                 DateTime?                    @default(now()) //Thời điểm nộp
-
-  deadlineHistories           DeadlineHistory[]
-  criterionAssignmentComments CriterionAssignmentComment[]
+  COMPLETED    //Hoàn thành
 
   @@schema("khao-thi")
 }
 
 //Comment 
-model CriterionAssignmentComment extends Base {
-  assignment             CriterionAssignment   @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  assignmentId           String
+model EvaluationCriterionComment extends Base {
+  evaluationCriterion    EvaluationCriterion   @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId  String
 
   reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
   reviewerId             String
@@ -80,25 +64,11 @@ model CriterionAssignmentComment extends Base {
   requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
   requirementCriterionId String?
 
-  content                String                @db.Text
+  content                String?               @db.Text
 
   @@schema("khao-thi")
 }
 
-//Lịch sử thay đổi deadline
-model DeadlineHistory extends Base {
-  criterionAssignment   CriterionAssignment @relation(fields: [criterionAssignmentId], references: [id], onDelete: Cascade)
-  criterionAssignmentId String
-
-  oldDeadline           DateTime?
-  newDeadline           DateTime
-
-  changedBy             UserProfile?        @relation(fields: [changedById], references: [id])
-  changedById           String?             //Người thay đổi deadline
-  reason                String?             @db.Text  //Lý do gia hạn
-
-  @@schema("khao-thi")
-}
 
 /// Danh mục yêu cầu
 model RequirementCriterionCatalog extends Base {
@@ -145,33 +115,39 @@ model EvaluationStandard extends Base {
 
 /// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
 model EvaluationCriterion extends Base {
-  standard              EvaluationStandard     @relation(fields: [standardId], references: [id], onDelete: Cascade)
-  standardId            String
-  name                  String
-  order                 Int
-  scoreScale            ScoreScaleCatalog      @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId          String
+  standard                    EvaluationStandard           @relation(fields: [standardId], references: [id], onDelete: Cascade)
+  standardId                  String
+  name                        String
+  order                       Int
+  scoreScale                  ScoreScaleCatalog            @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId                String
+
+  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String
+  deadline                    DateTime
+
+  status                      AssignmentStatus             @default(PENDING)
 
   /// (Nhóm) Hội đồng đánh giá
-  evaluationCouncil     EvaluationCouncil?     @relation(fields: [evaluationCouncilId], references: [id])
-  evaluationCouncilId   String?
+  evaluationCouncil           EvaluationCouncil?           @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncilId         String?
 
   /// Yêu cầu trong phiếu phân tích
-  requirementCriterions RequirementCriterion[]
+  requirementCriterions       RequirementCriterion[]
 
-  criterionAssignments  CriterionAssignment[]
+  evaluationCriterionComments EvaluationCriterionComment[]
 
   // Phiếu đánh giá
   /// 1. Mô tả hiện trạng
-  currentSituation      String                 @default("")
+  currentSituation            String                       @default("")
   /// 2. Điểm mạnh
-  strengths             String                 @default("")
+  strengths                   String                       @default("")
   /// 3. Điểm tồn tại
-  weakness              String                 @default("")
+  weakness                    String                       @default("")
   /// 4. Kế hoạch hành động
-  actionPlan            String                 @default("")
+  actionPlan                  String                       @default("")
   /// 5. Tự đánh giá
-  score                 Int?
+  score                       Int?
 
   @@unique([standardId, name])
   @@schema("khao-thi")
@@ -202,17 +178,18 @@ model Evidence extends Base {
 
 /// Yêu cầu trong phiếu phân tích tiêu chí
 model RequirementCriterion extends Base {
-  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId       String
-  order                       Int
-  name                        String
-  questions                   String[]
+  evaluationCriterion        EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId      String
+  order                      Int
+  name                       String
+  questions                  String[]
 
-  evidences                   AnalysisFormEvidence[]
-  evidencePlaces              String                       @default("")
-  collectionMethod            String                       @default("")
+  evidences                  AnalysisFormEvidence[]
+  evidencePlaces             String                       @default("")
+  collectionMethod           String                       @default("")
 
-  criterionAssignmentComments CriterionAssignmentComment[]
+  evaluationCriterionComment EvaluationCriterionComment[]
+
   @@schema("khao-thi")
 }
 
