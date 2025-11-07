@@ -947,6 +947,7 @@ const getSurveyObjects = createRoute({
                             educationAndTraining: models.StudentScalarSchema.extend({
                                 fixedClass: models.FixedClassScalarSchema.nullable(),
                             }).array(),
+                            surveySession: models.SurveySessionScalarSchema.array(),
                         })
                     ),
                 },
@@ -1094,6 +1095,7 @@ app.openapi(getSurveyObjects, async (c) => {
             lecturer: { include: { organization: true } },
             educationAndTraining: { include: { fixedClass: true } },
             staffs: { include: { organization: true } },
+            surveySession: { where: { surveyId: id } },
         },
         take: limit,
         skip: (page - 1) * limit,
@@ -1102,8 +1104,6 @@ app.openapi(getSurveyObjects, async (c) => {
     const count = await prisma.userProfile.count({
         where: { id: { in: [...profileIds] } },
     })
-
-    console.log(111, profiles.length)
 
     return c.json({ data: profiles, count }, 200)
 })
