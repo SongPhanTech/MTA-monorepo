@@ -3,20 +3,29 @@
  *
  * @version 1.0.0
  */
-export type BodyAddDocumentHybridAddDocumentHybridPost = {
-  id_document: string;
+export type BodyCreateOrUpdatePromptPromptsPost = {
+  code: string;
+  prompt_content: string;
+  description?: string;
+  /**
+   * @default true
+   */
+  active?: boolean;
+  status?: string;
+  reason?: string;
 };
-
-export type BodyChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-  {
-    id_document?: string;
-  };
 
 export type BodyFaqVectorizeFaqVectorizePost = {
   topic_id?: string;
 };
 
-export type BodyHoiDapFaqHoiDapFaqPost = {
+export type BodyGetFaqAnswerGetFaqAnswerPost = {
+  question: string;
+  topic_id?: string;
+  conversation_id?: string;
+};
+
+export type BodyHoiDapFaqEndpoint = {
   prompt?: string;
   topic_id?: string;
   conversation_id?: string;
@@ -41,6 +50,15 @@ export type BodyHoiDapV3EndpointHoiDapV3Post = {
 export type BodyHoiDapV4EndpointHoiDapV4Post = {
   prompt?: string;
   conversation_id?: string;
+  document_ids?: string[] | null;
+};
+
+export type BodyIndexDocumentV3IndexDocumentV3Post = {
+  id_document?: string;
+};
+
+export type BodyIndexDocumentV4IndexDocumentV4Post = {
+  id_document: string;
 };
 
 export type BodyOcrEndpointOcrPost = {
@@ -55,8 +73,12 @@ export type BodyRecommendByTopicIdRecommendByTopicIdPost = {
 };
 
 export type BodySyncDocumentMetadataSyncDocumentMetadataPost = {
-  id_document: string;
+  id: string;
   is_active: boolean;
+  /**
+   * @default document
+   */
+  type?: string;
 };
 
 export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
@@ -65,6 +87,14 @@ export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
 
 export type BodyTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = {
   prompt?: string;
+};
+
+export type BodyUpdatePromptByCodePromptsCodePut = {
+  prompt_content?: string;
+  description?: string;
+  active?: boolean;
+  status?: string;
+  reason?: string;
 };
 
 export type BodyUploadFileUploadPost = {
@@ -78,9 +108,15 @@ export type BodyXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = {
   id_document?: string;
 };
 
-export type BodyXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = {
-  id_document?: string;
-};
+export type BodyXoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3Post =
+  {
+    id_document?: string;
+  };
+
+export type BodyXoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4Post =
+  {
+    id_document?: string;
+  };
 
 export type HTTPValidationError = {
   detail?: ValidationError[];
