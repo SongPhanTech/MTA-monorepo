@@ -78,7 +78,6 @@ export type DMUngDung = BaseEntity & {
     /** @nullable */
     sRedirectDefault?: string | null
     bActive?: boolean
-    bDeleted?: boolean
     bSystem?: boolean
     /** @nullable */
     iDictionaryKey?: number | null

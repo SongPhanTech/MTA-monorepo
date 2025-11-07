@@ -55,6 +55,7 @@ import type { DMUngDungEditDtoState } from './dMUngDungEditDtoState'
 import type { DMUngDungNhomUngDungEditDto } from './dMUngDungNhomUngDungEditDto'
 import type { NguoiDungUngDungEditDto } from './nguoiDungUngDungEditDto'
 import type { NhomDuocXemUngDungEditDto } from './nhomDuocXemUngDungEditDto'
+import type { WebhookEventsAppEditDto } from './webhookEventsAppEditDto'
 
 export type DMUngDungEditDto = DMUngDung & {
     /** @nullable */
@@ -71,6 +72,10 @@ export type DMUngDungEditDto = DMUngDung & {
     sBaseUrl?: string | null
     /** @nullable */
     sRedirectUrl?: string[] | null
+    /** @nullable */
+    ListEventIds?: string | null
+    /** @nullable */
+    WebhookEventsApp?: WebhookEventsAppEditDto[] | null
     /** @nullable */
     readonly sTenNhomUngDungs?: string | null
     /** @nullable */

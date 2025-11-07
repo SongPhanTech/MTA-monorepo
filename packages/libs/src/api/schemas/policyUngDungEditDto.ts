@@ -58,4 +58,6 @@ export type PolicyUngDungEditDto = PolicyUngDung & {
     State?: PolicyUngDungEditDtoState
     /** @nullable */
     sTenUngDung?: string | null
+    /** @nullable */
+    sAppCode?: string | null
 }

@@ -52,6 +52,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 import type { Dashboard } from './dashboard'
 import type { DashboardEditDTOState } from './dashboardEditDTOState'
+import type { DashboardParamEditDto } from './dashboardParamEditDto'
 
 export type DashboardEditDTO = Dashboard & {
     /** @nullable */
@@ -62,4 +63,8 @@ export type DashboardEditDTO = Dashboard & {
     sDuongDanNhomBaoCao?: string | null
     /** @nullable */
     iSttNhomBaoCao?: number | null
+    /** @nullable */
+    sTenNguonDuLieu?: string | null
+    /** @nullable */
+    listDashboardParameter?: DashboardParamEditDto[] | null
 }

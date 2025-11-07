@@ -78,5 +78,9 @@ export type NhatKyDangNhapQTPM = BaseEntity & {
     /** @nullable */
     sRawUserAgent?: string | null
     /** @nullable */
+    sDevice?: string | null
+    /** @nullable */
+    sOS?: string | null
+    /** @nullable */
     sSessionId?: string | null
 }
