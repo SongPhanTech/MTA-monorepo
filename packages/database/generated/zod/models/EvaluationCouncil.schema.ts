@@ -30,7 +30,6 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     period: z.record(z.string(), z.unknown()),
     members: z.array(z.unknown()).optional(),
-    evaluationCriterion: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

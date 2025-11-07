@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const AssignmentStatusSchema = z.enum(["PENDING", "SUBMITTED", "REVISION", "APPROVED"])
+export const AnalysisCriterionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "criterionPeriodId", "lecturerId"])
