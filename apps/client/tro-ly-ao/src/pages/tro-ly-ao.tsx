@@ -26,7 +26,6 @@ export default function TroLyAo() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: 6, // Limit to 6 suggestions
     })
 
     const handleSend = async () => {
@@ -153,7 +152,7 @@ export default function TroLyAo() {
                                         styles={{ body: { padding: '12px 16px' } }}
                                     >
                                         <div className="flex items-start gap-2">
-                                            <p className="text-sm font-medium text-gray-800 m-0 flex-1">
+                                            <p className="text-sm font-medium text-gray-600 m-0 flex-1">
                                                 {topic.name}
                                             </p>
                                         </div>

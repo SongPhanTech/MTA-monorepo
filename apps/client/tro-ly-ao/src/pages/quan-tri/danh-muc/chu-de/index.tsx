@@ -32,36 +32,40 @@ function Page() {
         tag: 'PutTopic',
     })
 
-    const { data: totalCountTopic = 0 } = useCountTopic()
+    const whereCondition = {
+        AND: [
+            {
+                OR: [
+                    {
+                        name: {
+                            contains: filters.search,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                    {
+                        type: {
+                            contains: filters.search,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                    {
+                        description: {
+                            contains: filters.search,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                ],
+            },
+            ...(filters.isPinned !== null ? [{ isPinned: filters.isPinned }] : []),
+        ],
+    }
+
+    const { data: totalCountTopic = 0 } = useCountTopic({
+        where: whereCondition,
+    })
 
     const { data: topics = [] } = useFindManyTopic({
-        where: {
-            AND: [
-                {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.search,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            type: {
-                                contains: filters.search,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            description: {
-                                contains: filters.search,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                },
-                ...(filters.isPinned !== null ? [{ isPinned: filters.isPinned }] : []),
-            ],
-        },
+        where: whereCondition,
         skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
         take: tableParams.pagination.pageSize,
         orderBy: {
@@ -74,10 +78,12 @@ function Page() {
             ...prev,
             pagination: {
                 ...prev.pagination,
+                current: 1,
                 total: totalCountTopic,
             },
         }))
-    }, [totalCountTopic])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filters.search, filters.isPinned, totalCountTopic])
 
     const { mutateAsync: deleteTopic } = useDeleteTopic()
     const { mutateAsync: deletePrompts } = useDeleteManyPrompt()
