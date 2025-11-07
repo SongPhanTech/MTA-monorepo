@@ -2,14 +2,12 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { EVALUATION_SECRETARY_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 
 import { Col, Form, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutEvaluationSecretaryMemberType = EvaluationSecretaryMember
 
 const PutEvaluationSecretaryMember = () => {
     const [form] = Form.useForm<PutEvaluationSecretaryMemberType>()
