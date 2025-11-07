@@ -1,7 +1,6 @@
 import { getMinioUrl } from '@workspace/constant'
 import { createId } from '@workspace/db'
 import { Button, Col, Flex, Image, message, Modal, Row } from 'antd'
-import Link from 'next/link'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type DocumentType =
@@ -440,9 +439,9 @@ const XemTaiLieu = () => {
                         !supportedDocFileTypes.includes(fileType) && (
                             <span>
                                 Không hỗ trợ xem tài liệu này. Vui lòng{' '}
-                                <Link href={input.uri} className="text-primary">
+                                <a href={input.uri} className="text-primary">
                                     tải xuống
-                                </Link>{' '}
+                                </a>{' '}
                                 để xem.
                             </span>
                         )}
