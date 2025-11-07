@@ -6,7 +6,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { emptyObjectIf } from '@workspace/constant'
-import { useCountEvaluationStandard, useFindManyEvaluationStandard } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Form, Input, Row } from 'antd'
@@ -52,49 +51,49 @@ export default function EvaluationStandardTab() {
         [filters.searchText, filters.name]
     )
 
-    const { data } = useFindManyEvaluationStandard({
-        where: {
-            ...where,
-            deletedAt: null,
-            periodId: selectedEvaluationPeriodId,
-        },
-        include: {
-            criteria: {
-                where: {
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                },
-                orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                order: filters.order,
-                            },
-                        ],
-                        !!filters.order
-                    ),
-                    { order: 'asc' },
-                ],
-            },
-        },
-        orderBy: [{ order: 'asc' }],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+    // const { data } = useFindManyEvaluationStandard({
+    //     where: {
+    //         ...where,
+    //         deletedAt: null,
+    //         periodId: selectedEvaluationPeriodId,
+    //     },
+    //     include: {
+    //         criteria: {
+    //             where: {
+    //                 ...(filters.name && filters.name !== ''
+    //                     ? {
+    //                           name: {
+    //                               contains: filters.name,
+    //                               mode: 'insensitive' as const,
+    //                           },
+    //                       }
+    //                     : {}),
+    //             },
+    //             orderBy: [
+    //                 ...emptyObjectIf(
+    //                     [
+    //                         {
+    //                             order: filters.order,
+    //                         },
+    //                     ],
+    //                     !!filters.order
+    //                 ),
+    //                 { order: 'asc' },
+    //             ],
+    //         },
+    //     },
+    //     orderBy: [{ order: 'asc' }],
+    //     take: numberOfPages,
+    //     skip: (currentPage - 1) * numberOfPages,
+    // })
 
-    const { data: count } = useCountEvaluationStandard({
-        where: {
-            ...where,
-            deletedAt: null,
-            periodId: selectedEvaluationPeriodId,
-        },
-    })
+    // const { data: count } = useCountEvaluationStandard({
+    //     where: {
+    //         ...where,
+    //         deletedAt: null,
+    //         periodId: selectedEvaluationPeriodId,
+    //     },
+    // })
 
     const { onOpen: onOpenPutCriterionCatalog } = useDisclosure<{
         id: string

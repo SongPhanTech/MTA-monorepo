@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const EvaluationSecretaryMemberRoleSchema = z.enum(["HEAD_SECRETARY", "MEMBER"])
+export const CriterionPeriodOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name", "evaluationStandardId"])

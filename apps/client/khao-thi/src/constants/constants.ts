@@ -14,10 +14,7 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
     { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
 ]
-const EVALUATION_SECRETARY_MEMBER_ROLE = [
-    { label: 'Trưởng ban thư ký', value: $Enums.EvaluationSecretaryMemberRole.HEAD_SECRETARY },
-    { label: 'Uỷ viên', value: $Enums.EvaluationSecretaryMemberRole.MEMBER },
-]
+
 const SUBJECT_OBJECT = [
     {
         value: $Enums.SurveyObject.MILITARY_STUDENT,
@@ -44,5 +41,4 @@ export {
     API_MODEL_BASE_URL,
     EVALUATION_MEMBER_ROLE,
     SUBJECT_OBJECT,
-    EVALUATION_SECRETARY_MEMBER_ROLE,
 }
