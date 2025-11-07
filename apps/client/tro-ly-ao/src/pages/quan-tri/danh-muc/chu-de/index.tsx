@@ -10,7 +10,7 @@ import {
     useDeleteTopic,
     useFindManyTopic,
 } from '@workspace/db/hooks'
-import { Button, Input, message, Tooltip } from 'antd'
+import { Button, Input, message, Tooltip, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
@@ -19,8 +19,10 @@ function Page() {
     const { isSystemTopic } = useTopics()
     const [filters, setFilters] = useState<{
         search: string
+        isPinned?: boolean | null
     }>({
         search: '',
+        isPinned: null,
     })
     const [tableParams, setTableParams] = useState({
         pagination: { current: 1, pageSize: 10, total: 10 },
@@ -34,25 +36,30 @@ function Page() {
 
     const { data: topics = [] } = useFindManyTopic({
         where: {
-            OR: [
+            AND: [
                 {
-                    name: {
-                        contains: filters.search,
-                        mode: 'insensitive',
-                    },
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.search,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            type: {
+                                contains: filters.search,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            description: {
+                                contains: filters.search,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
                 },
-                {
-                    type: {
-                        contains: filters.search,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    description: {
-                        contains: filters.search,
-                        mode: 'insensitive',
-                    },
-                },
+                ...(filters.isPinned !== null ? [{ isPinned: filters.isPinned }] : []),
             ],
         },
         skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
@@ -130,6 +137,23 @@ function Page() {
                             }
                             style={{ width: 400 }}
                         />
+                        <Select
+                            placeholder="Lọc theo ghim"
+                            allowClear
+                            value={filters.isPinned}
+                            onChange={(value) =>
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    isPinned: value,
+                                }))
+                            }
+                            style={{ width: 200 }}
+                            options={[
+                                { label: 'Tất cả', value: null },
+                                { label: 'Đã ghim', value: true },
+                                { label: 'Chưa ghim', value: false },
+                            ]}
+                        />
                     </div>
                     <Table
                         rowKey="id"
@@ -172,6 +196,22 @@ function Page() {
                                     value?.length > 100
                                         ? `${value.slice(0, 100)}...`
                                         : value || 'Chưa có mô tả',
+                            },
+                            {
+                                title: 'Ghim',
+                                dataIndex: 'isPinned',
+                                width: 100,
+                                align: 'center',
+                                render: (value: boolean) =>
+                                    value ? (
+                                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-md text-sm font-medium">
+                                            Có
+                                        </span>
+                                    ) : (
+                                        <span className="px-2 py-1 bg-gray-100 text-gray-500 rounded-md text-sm">
+                                            Không
+                                        </span>
+                                    ),
                             },
                             // {
                             //     title: 'Ngày tạo',
