@@ -714,7 +714,6 @@ export default function Page() {
                         onSend={handleSend}
                         onStop={handleStop}
                         isFaqMode={isFaqMode}
-                        onToggleFaqMode={() => setIsFaqMode((prev) => !prev)}
                     />
                 </div>
             </div>
