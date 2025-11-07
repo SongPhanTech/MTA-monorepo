@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { models } from '@workspace/db/zod'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
 import { prisma } from '..'
@@ -13,6 +14,7 @@ import {
 import { SurveyStatisticSchema } from '../dto/survey-statistic.dto'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
+import { ListOf, PaginationQuerySchema } from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -825,7 +827,7 @@ app.openapi(getCompletionByHourOfDay, (c) => {
 
 const getSurveyStatistics = createRoute({
     operationId: 'get-survey-statistics',
-    path: '/surveys/{id}/statistics',
+    path: '/{id}/statistics',
     method: 'get',
     tags: ['Statistics'],
     summary: 'Thống kê câu trả lời cho từng câu hỏi trong một đợt khảo sát',
@@ -918,6 +920,192 @@ app.openapi(getSurveyStatistics, async (c) => {
     }
 
     return c.json(responseData, 200)
+})
+
+const getSurveyObjects = createRoute({
+    operationId: 'get-survey-objects',
+    path: '/objects',
+    method: 'get',
+    tags: ['Survey'],
+    summary: 'Danh sách người làm khảo sát',
+    request: {
+        query: PaginationQuerySchema.extend({ id: z.string() }),
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: ListOf(
+                        models.UserProfileScalarSchema.extend({
+                            lecturer: models.LecturerScalarSchema.extend({
+                                organization: models.DM_DonViScalarSchema,
+                            }).nullable(),
+                            staffs: models.StaffScalarSchema.extend({
+                                organization: models.DM_DonViScalarSchema,
+                            }).nullable(),
+                            educationAndTraining: models.StudentScalarSchema.extend({
+                                fixedClass: models.FixedClassScalarSchema.nullable(),
+                            }).array(),
+                        })
+                    ),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getSurveyObjects, async (c) => {
+    const { id, limit = 10, page = 1 } = c.req.valid('query')
+
+    const survey = await prisma.survey.findUnique({
+        where: { id },
+        include: {
+            surveyObjectType: {
+                include: {
+                    organizations: { select: { Id: true } },
+                    trainingFields: { select: { id: true } },
+                    trainingMajors: { select: { id: true } },
+                    trainingCourses: { select: { id: true } },
+                    fixedClasses: { select: { id: true } },
+                    subjectClasses: { select: { id: true } },
+                },
+            },
+        },
+    })
+
+    if (!survey) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const profileIds = new Set<string>()
+
+    for (const objectType of survey.surveyObjectType) {
+        const objectTypeProfiles = objectType.organizations.length
+            ? await prisma.userProfile.findMany({
+                  select: { id: true },
+                  where: {
+                      deletedAt: null,
+                      active: true,
+                      OR: [
+                          {
+                              lecturer: {
+                                  organizationId: {
+                                      in: objectType.organizations.map((org) => org.Id),
+                                  },
+                              },
+                          },
+                          {
+                              staffs: {
+                                  organizationId: {
+                                      in: objectType.organizations.map((org) => org.Id),
+                                  },
+                              },
+                          },
+                          {
+                              educationAndTraining: {
+                                  some: {
+                                      fixedClass: {
+                                          ...(objectType.fixedClasses.length
+                                              ? {
+                                                    id: {
+                                                        in: objectType.fixedClasses.map(
+                                                            (fc) => fc.id
+                                                        ),
+                                                    },
+                                                }
+                                              : {}),
+                                          ...(objectType.trainingCourses.length
+                                              ? {
+                                                    trainingCourseId: {
+                                                        in: objectType.trainingCourses.map(
+                                                            (tc) => tc.id
+                                                        ),
+                                                    },
+                                                }
+                                              : {}),
+                                          ...(objectType.trainingMajors.length ||
+                                          objectType.trainingFields.length
+                                              ? {
+                                                    curriculumVersion: {
+                                                        curriculum: {
+                                                            trainingMajor: {
+                                                                ...(objectType.trainingMajors.length
+                                                                    ? {
+                                                                          id: {
+                                                                              in: objectType.trainingMajors.map(
+                                                                                  (tm) => tm.id
+                                                                              ),
+                                                                          },
+                                                                      }
+                                                                    : {}),
+                                                                ...(objectType.trainingFields.length
+                                                                    ? {
+                                                                          trainingFieldId: {
+                                                                              in: objectType.trainingFields.map(
+                                                                                  (tf) => tf.id
+                                                                              ),
+                                                                          },
+                                                                      }
+                                                                    : {}),
+                                                            },
+                                                        },
+                                                    },
+                                                }
+                                              : {}),
+                                      },
+                                      ...(objectType.subjectClasses.length
+                                          ? {
+                                                subjectClassStudent: {
+                                                    some: {
+                                                        subjectClassId: {
+                                                            in: objectType.subjectClasses.map(
+                                                                (sc) => sc.id
+                                                            ),
+                                                        },
+                                                    },
+                                                },
+                                            }
+                                          : {}),
+                                  },
+                              },
+                          },
+                      ],
+                  },
+              })
+            : []
+
+        for (const { id } of objectTypeProfiles) {
+            profileIds.add(id)
+        }
+    }
+
+    const profiles = await prisma.userProfile.findMany({
+        where: { id: { in: [...profileIds] }, deletedAt: null, active: true },
+        include: {
+            lecturer: { include: { organization: true } },
+            educationAndTraining: { include: { fixedClass: true } },
+            staffs: { include: { organization: true } },
+        },
+        take: limit,
+        skip: (page - 1) * limit,
+    })
+
+    const count = await prisma.userProfile.count({
+        where: { id: { in: [...profileIds] } },
+    })
+
+    console.log(111, profiles.length)
+
+    return c.json({ data: profiles, count }, 200)
 })
 
 export default app
