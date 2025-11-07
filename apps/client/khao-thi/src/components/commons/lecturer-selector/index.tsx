@@ -3,15 +3,25 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { buildOrgTree } from '@lib/utils'
-import { useCountLecturer, useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
+import {
+    useCountLecturer,
+    useFindManyDM_DonVi,
+    useFindManyLecturer,
+    useFindUniqueLecturer,
+} from '@workspace/db/hooks'
 import { Popover } from 'antd'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-const LecturerSelector = () => {
+type LecturerSelectorProps = {
+    value?: string
+    onChange?: (value?: string) => void
+}
+
+const LecturerSelector = ({ value, onChange }: LecturerSelectorProps) => {
     const [visible, setVisible] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedLecturer, setSelectedLecturer] = useState(null)
+    const [selectedLecturer, setSelectedLecturer] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         organizationId: undefined,
@@ -19,27 +29,47 @@ const LecturerSelector = () => {
 
     const handleSelectLecturer = (record: any) => {
         setSelectedLecturer(record)
+        onChange?.(record?.id)
         setVisible(false)
     }
 
     const formatLecturerName = (record: any) => {
         const academicRank = record.userProfile?.academicRankType?.sTen || ''
         const degreeRank = record.userProfile?.academicDegreeType?.sTen || ''
-
         const fullName = record?.userProfile?.fullname
             ? record?.userProfile?.fullname
             : `${record?.userProfile?.firstName} ${record?.userProfile?.lastName}`
-
         const academicTitle = [academicRank, degreeRank].filter(Boolean).join('.')
-
         return `${academicTitle ? `${academicTitle} ` : ''}${fullName}`
     }
 
-    const { data: donViData = [] } = useFindManyDM_DonVi()
+    const { data: lecturerById } = useFindUniqueLecturer(
+        {
+            where: { id: value || '' },
+            include: {
+                organization: { select: { sTen: true } },
+                userProfile: {
+                    include: {
+                        academicRankType: { select: { sTen: true } },
+                        academicDegreeType: { select: { sTen: true } },
+                    },
+                },
+            },
+        },
+        { enabled: !!value }
+    )
 
-    const organizationTreeData = useMemo(() => {
-        return buildOrgTree(donViData)
-    }, [donViData])
+    useEffect(() => {
+        if (value && lecturerById) {
+            setSelectedLecturer(lecturerById as any)
+        }
+        if (!value) {
+            setSelectedLecturer(null)
+        }
+    }, [value, lecturerById])
+
+    const { data: donViData = [] } = useFindManyDM_DonVi()
+    const organizationTreeData = useMemo(() => buildOrgTree(donViData), [donViData])
 
     const { data = [], isLoading } = useFindManyLecturer(
         {
@@ -48,24 +78,9 @@ const LecturerSelector = () => {
                     ? {
                           userProfile: {
                               OR: [
-                                  {
-                                      fullname: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      firstName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
+                                  { fullname: { contains: filters.name, mode: 'insensitive' } },
+                                  { firstName: { contains: filters.name, mode: 'insensitive' } },
+                                  { lastName: { contains: filters.name, mode: 'insensitive' } },
                               ],
                           },
                       }
@@ -79,37 +94,19 @@ const LecturerSelector = () => {
                     : {}),
             },
             include: {
-                organization: {
-                    select: {
-                        sTen: true,
-                    },
-                },
+                organization: { select: { sTen: true } },
                 userProfile: {
                     include: {
-                        academicRankType: {
-                            select: {
-                                sTen: true,
-                            },
-                        },
-                        academicDegreeType: {
-                            select: {
-                                sTen: true,
-                            },
-                        },
+                        academicRankType: { select: { sTen: true } },
+                        academicDegreeType: { select: { sTen: true } },
                     },
                 },
             },
-            orderBy: {
-                userProfile: {
-                    firstName: 'asc',
-                },
-            },
+            orderBy: { userProfile: { firstName: 'asc' } },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
-        {
-            enabled: visible,
-        }
+        { enabled: visible }
     )
 
     const { data: count } = useCountLecturer(
@@ -119,24 +116,9 @@ const LecturerSelector = () => {
                     ? {
                           userProfile: {
                               OR: [
-                                  {
-                                      fullname: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      firstName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  },
+                                  { fullname: { contains: filters.name, mode: 'insensitive' } },
+                                  { firstName: { contains: filters.name, mode: 'insensitive' } },
+                                  { lastName: { contains: filters.name, mode: 'insensitive' } },
                               ],
                           },
                       }
@@ -150,9 +132,7 @@ const LecturerSelector = () => {
                     : {}),
             },
         },
-        {
-            enabled: visible,
-        }
+        { enabled: visible }
     )
 
     const content = (
@@ -162,9 +142,7 @@ const LecturerSelector = () => {
                 loading={isLoading}
                 filters={filters}
                 setFilters={setFilters}
-                onRow={(record) => ({
-                    onClick: () => handleSelectLecturer(record),
-                })}
+                onRow={(record) => ({ onClick: () => handleSelectLecturer(record) })}
                 columns={[
                     {
                         title: 'STT',
@@ -172,11 +150,7 @@ const LecturerSelector = () => {
                         align: 'center',
                         render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                     },
-                    {
-                        title: 'Mã giảng viên',
-                        width: 100,
-                        dataIndex: 'code',
-                    },
+                    { title: 'Mã giảng viên', width: 100, dataIndex: 'code' },
                     {
                         title: 'Tên giảng viên',
                         width: 230,
@@ -199,9 +173,8 @@ const LecturerSelector = () => {
                     pageSize: numberOfPages,
                     total: count,
                     onChange: (page, pageSize) => {
-                        if (numberOfPages === pageSize) {
-                            setCurrentPage(page)
-                        } else {
+                        if (numberOfPages === pageSize) setCurrentPage(page)
+                        else {
                             setCurrentPage(1)
                             setNumberOfPages(pageSize)
                         }
@@ -213,6 +186,12 @@ const LecturerSelector = () => {
         </div>
     )
 
+    const displayLabel = selectedLecturer
+        ? formatLecturerName(selectedLecturer)
+        : lecturerById
+          ? formatLecturerName(lecturerById as any)
+          : undefined
+
     return (
         <Popover
             content={content}
@@ -221,11 +200,7 @@ const LecturerSelector = () => {
             onOpenChange={setVisible}
             placement="bottomLeft"
         >
-            <Select
-                placeholder="Chọn giảng viên"
-                open={false}
-                value={selectedLecturer ? formatLecturerName(selectedLecturer) : undefined}
-            />
+            <Select placeholder="Chọn giảng viên" open={false} value={displayLabel} />
         </Popover>
     )
 }

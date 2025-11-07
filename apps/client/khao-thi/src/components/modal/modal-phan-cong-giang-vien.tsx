@@ -84,6 +84,7 @@ export default function CriteriaAssignmentModal() {
                     operation: 'create',
                     data: {
                         data: {
+                            criterionPeriodId: input?.criterionPeriodId,
                             lecturerId: values.lecturerId,
                             deadline: values.deadline,
                         },
@@ -94,6 +95,7 @@ export default function CriteriaAssignmentModal() {
                     operation: 'create',
                     data: {
                         data: {
+                            criterionPeriodId: input?.criterionPeriodId,
                             lecturerId: values.lecturerId,
                             deadline: values.deadline,
                         },
@@ -105,6 +107,8 @@ export default function CriteriaAssignmentModal() {
                 message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
                 return
             }
+
+            message.success(`${input?.criterionPeriodId ? 'Chỉnh sửa' : 'Thêm'} thành công`)
 
             queryClient.invalidateQueries({
                 queryKey: ['CriterionAssignment'],
