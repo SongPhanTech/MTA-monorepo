@@ -68,4 +68,6 @@ export type DashboardParamEditDto = DashboardParam & {
     sPhanLoaiDashboard?: string | null
     /** @nullable */
     bActiveDashboard?: boolean | null
+    /** @nullable */
+    sTenNguonDuLieu?: string | null
 }

@@ -61,7 +61,7 @@ export type Dashboard = BaseEntity & {
     /** @nullable */
     sMota?: string | null
     /** @nullable */
-    DM_NhomBCId?: string | null
+    sDM_NhomBCId?: string | null
     /** @nullable */
     sImageName?: string | null
     /** @nullable */
@@ -75,11 +75,16 @@ export type Dashboard = BaseEntity & {
     /** @nullable */
     ListParam?: string | null
     /** @nullable */
-    iFromLayout?: number | null
+    sTruyVan?: string | null
+    /** @nullable */
+    iFormLayout?: number | null
+    sDM_DuLieuNhapKhauId?: string
     /** @nullable */
     sChartType?: string | null
     /** @nullable */
     sChartConfig?: string | null
     /** @nullable */
     sLabelConfig?: string | null
+    /** @nullable */
+    bDeleted?: boolean | null
 }

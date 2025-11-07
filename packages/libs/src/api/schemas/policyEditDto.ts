@@ -72,38 +72,6 @@ export type PolicyEditDto = Policy & {
     /** @nullable */
     Policy_Time?: PolicyTimeEditDto[] | null
     /** @nullable */
-    bCoChuHoa?: boolean | null
-    /** @nullable */
-    bCoChuThuong?: boolean | null
-    /** @nullable */
-    bCoKiTuDacBiet?: boolean | null
-    /** @nullable */
-    bCoChuSo?: boolean | null
-    /** @nullable */
-    iDoDaiToiDa?: number | null
-    /** @nullable */
-    iDoDaiToiThieu?: number | null
-    /** @nullable */
-    iSoVongBam?: number | null
-    /** @nullable */
-    sDinhDangMK?: string | null
-    /** @nullable */
-    bKhongTrungTenDNhap?: boolean | null
-    /** @nullable */
-    bKhongTrungEmail?: boolean | null
-    /** @nullable */
-    iKhongDungGanDay?: number | null
-    /** @nullable */
-    bKhongChuaTenDNhap?: boolean | null
-    /** @nullable */
-    iSoluongChuSo?: number | null
-    /** @nullable */
-    sThuatToanBam?: string | null
-    /** @nullable */
-    iSoNgayHetHan?: number | null
-    /** @nullable */
-    iKhongDungMkhauGanDay?: number | null
-    /** @nullable */
     readonly sTenUngDungs?: string | null
     /** @nullable */
     readonly sDM_UngDungIds?: string | null

@@ -61,14 +61,15 @@ export type NhatKyQuanLyTK = BaseEntity & {
     sVaiTro?: string | null
     /** @nullable */
     dLogTime?: string | null
+    iState?: number
+    /** @nullable */
+    sReferenceName?: string | null
     /** @nullable */
     sActionType?: string | null
     /** @nullable */
     sActionName?: string | null
     /** @nullable */
     sDescription?: string | null
-    /** @nullable */
-    sClientId?: string | null
     /** @nullable */
     sIPAddress?: string | null
     /** @nullable */

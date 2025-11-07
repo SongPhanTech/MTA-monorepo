@@ -78,4 +78,6 @@ export type DashboardParam = BaseEntity & {
     sMethod?: string | null
     /** @nullable */
     iSTT?: number | null
+    /** @nullable */
+    sThamSoGhepId?: string | null
 }

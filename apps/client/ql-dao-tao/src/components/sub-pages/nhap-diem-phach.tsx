@@ -32,6 +32,7 @@ export default function NhapDiemPhach() {
         { enabled: !!selectedExamListId }
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <need selectedExamListId>
     useEffect(() => {
         if (examList) {
             form.setFieldsValue({
@@ -46,7 +47,7 @@ export default function NhapDiemPhach() {
                 ),
             })
         }
-    }, [examList, form])
+    }, [selectedExamListId, examList, form])
 
     const handleSave = () => {
         Modal.confirm({
@@ -64,10 +65,10 @@ export default function NhapDiemPhach() {
     // const listForm = Form.useWatch('list', form) || []
     const handleNhapDiem = async () => {
         const dataForm = form.getFieldsValue()
-        const dataSubmit = Object.entries(dataForm.list).map(([key, value_]) => {
+        const dataSubmit = Object.entries(dataForm.list).map(([key, value]) => {
             return {
                 id: key,
-                ...value_,
+                ...value,
             }
         })
         const res = await saveScore({

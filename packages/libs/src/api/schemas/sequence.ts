@@ -67,6 +67,5 @@ export type Sequence = BaseEntity & {
     iSequenceType?: number
     /** @nullable */
     sDescription?: string | null
-    iOrganizationUnitId?: number
     iSequenceCategory?: number
 }

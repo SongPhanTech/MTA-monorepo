@@ -50,6 +50,8 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
+
+import type { TVMucDoTruyCapTaiLieuEditDto } from './tVMucDoTruyCapTaiLieuEditDto'
 import type { TVTaiLieu } from './tVTaiLieu'
 import type { TVTaiLieuEditDtoState } from './tVTaiLieuEditDtoState'
 
@@ -58,4 +60,8 @@ export type TVTaiLieuEditDto = TVTaiLieu & {
     State?: TVTaiLieuEditDtoState
     /** @nullable */
     sTenNhomTaiLieu?: string | null
+    /** @nullable */
+    MucDoTruyCapTaiLieu?: TVMucDoTruyCapTaiLieuEditDto[] | null
+    /** @nullable */
+    MucDoTruyCapIds?: string[] | null
 }

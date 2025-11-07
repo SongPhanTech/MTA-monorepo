@@ -116,4 +116,6 @@ export type TVTaiLieu = BaseEntity & {
     sAvatar?: string | null
     /** @nullable */
     sAttachedFile?: string | null
+    /** @nullable */
+    sDM_EmployeeId?: string | null
 }

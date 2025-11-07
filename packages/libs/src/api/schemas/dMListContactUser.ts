@@ -55,8 +55,6 @@ import type { BaseEntity } from './baseEntity'
 export type DMListContactUser = BaseEntity & {
     Id?: string
     /** @nullable */
-    sTen?: string | null
-    /** @nullable */
     sUserId?: string | null
     /** @nullable */
     sContactId?: string | null

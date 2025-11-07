@@ -109,4 +109,8 @@ export type NhanVienEditDto = NhanVien & {
      * @nullable
      */
     sTenXaPhuongMoi?: string | null
+    /** @nullable */
+    sKeycloakId?: string | null
+    /** @nullable */
+    sUserName?: string | null
 }

@@ -100,4 +100,36 @@ export type Policy = BaseEntity & {
     iLT_FailureResetTimeUnit?: number | null
     /** @nullable */
     iMaximumTemporaryLock?: number | null
+    /** @nullable */
+    sThuatToanBam?: string | null
+    /** @nullable */
+    bCoChuHoa?: boolean | null
+    /** @nullable */
+    bCoChuThuong?: boolean | null
+    /** @nullable */
+    bCoKiTuDacBiet?: boolean | null
+    /** @nullable */
+    bCoChuSo?: boolean | null
+    /** @nullable */
+    iDoDaiToiDa?: number | null
+    /** @nullable */
+    iDoDaiToiThieu?: number | null
+    /** @nullable */
+    iSoVongBam?: number | null
+    /** @nullable */
+    sDinhDangMK?: string | null
+    /** @nullable */
+    bKhongTrungTenDNhap?: boolean | null
+    /** @nullable */
+    bKhongTrungEmail?: boolean | null
+    /** @nullable */
+    iKhongDungGanDay?: number | null
+    /** @nullable */
+    bKhongChuaTenDNhap?: boolean | null
+    /** @nullable */
+    iSoluongChuSo?: number | null
+    /** @nullable */
+    iSoNgayHetHan?: number | null
+    /** @nullable */
+    iKhongDungMkhauGanDay?: number | null
 }
