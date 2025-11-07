@@ -4378,6 +4378,10 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "String",
+                }, isPinned: {
+                    name: "isPinned",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, documents: {
                     name: "documents",
                     type: "DocumentTopic",

@@ -80658,6 +80658,7 @@ export namespace Prisma {
     updatedAt: Date | null
     name: string | null
     type: string | null
+    isPinned: boolean | null
   }
 
   export type TopicMaxAggregateOutputType = {
@@ -80670,6 +80671,7 @@ export namespace Prisma {
     updatedAt: Date | null
     name: string | null
     type: string | null
+    isPinned: boolean | null
   }
 
   export type TopicCountAggregateOutputType = {
@@ -80682,6 +80684,7 @@ export namespace Prisma {
     updatedAt: number
     name: number
     type: number
+    isPinned: number
     _all: number
   }
 
@@ -80696,6 +80699,7 @@ export namespace Prisma {
     updatedAt?: true
     name?: true
     type?: true
+    isPinned?: true
   }
 
   export type TopicMaxAggregateInputType = {
@@ -80708,6 +80712,7 @@ export namespace Prisma {
     updatedAt?: true
     name?: true
     type?: true
+    isPinned?: true
   }
 
   export type TopicCountAggregateInputType = {
@@ -80720,6 +80725,7 @@ export namespace Prisma {
     updatedAt?: true
     name?: true
     type?: true
+    isPinned?: true
     _all?: true
   }
 
@@ -80805,6 +80811,7 @@ export namespace Prisma {
     updatedAt: Date
     name: string
     type: string
+    isPinned: boolean
     _count: TopicCountAggregateOutputType | null
     _min: TopicMinAggregateOutputType | null
     _max: TopicMaxAggregateOutputType | null
@@ -80834,6 +80841,7 @@ export namespace Prisma {
     updatedAt?: boolean
     name?: boolean
     type?: boolean
+    isPinned?: boolean
     documents?: boolean | Topic$documentsArgs<ExtArgs>
     faqs?: boolean | Topic$faqsArgs<ExtArgs>
     prompts?: boolean | Topic$promptsArgs<ExtArgs>
@@ -80851,6 +80859,7 @@ export namespace Prisma {
     updatedAt?: boolean
     name?: boolean
     type?: boolean
+    isPinned?: boolean
   }, ExtArgs["result"]["topic"]>
 
   export type TopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -80863,6 +80872,7 @@ export namespace Prisma {
     updatedAt?: boolean
     name?: boolean
     type?: boolean
+    isPinned?: boolean
   }, ExtArgs["result"]["topic"]>
 
   export type TopicSelectScalar = {
@@ -80875,9 +80885,10 @@ export namespace Prisma {
     updatedAt?: boolean
     name?: boolean
     type?: boolean
+    isPinned?: boolean
   }
 
-  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "type", ExtArgs["result"]["topic"]>
+  export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "type" | "isPinned", ExtArgs["result"]["topic"]>
   export type TopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     documents?: boolean | Topic$documentsArgs<ExtArgs>
     faqs?: boolean | Topic$faqsArgs<ExtArgs>
@@ -80906,6 +80917,7 @@ export namespace Prisma {
       updatedAt: Date
       name: string
       type: string
+      isPinned: boolean
     }, ExtArgs["result"]["topic"]>
     composites: {}
   }
@@ -81342,6 +81354,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Topic", 'DateTime'>
     readonly name: FieldRef<"Topic", 'String'>
     readonly type: FieldRef<"Topic", 'String'>
+    readonly isPinned: FieldRef<"Topic", 'Boolean'>
   }
     
 
@@ -341841,7 +341854,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     name: 'name',
-    type: 'type'
+    type: 'type',
+    isPinned: 'isPinned'
   };
 
   export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
@@ -354367,6 +354381,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
     name?: StringFilter<"Topic"> | string
     type?: StringFilter<"Topic"> | string
+    isPinned?: BoolFilter<"Topic"> | boolean
     documents?: DocumentTopicListRelationFilter
     faqs?: FAQListRelationFilter
     prompts?: PromptListRelationFilter
@@ -354383,6 +354398,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+    isPinned?: SortOrder
     documents?: DocumentTopicOrderByRelationAggregateInput
     faqs?: FAQOrderByRelationAggregateInput
     prompts?: PromptOrderByRelationAggregateInput
@@ -354403,6 +354419,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
     name?: StringFilter<"Topic"> | string
     type?: StringFilter<"Topic"> | string
+    isPinned?: BoolFilter<"Topic"> | boolean
     documents?: DocumentTopicListRelationFilter
     faqs?: FAQListRelationFilter
     prompts?: PromptListRelationFilter
@@ -354419,6 +354436,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+    isPinned?: SortOrder
     _count?: TopicCountOrderByAggregateInput
     _max?: TopicMaxOrderByAggregateInput
     _min?: TopicMinOrderByAggregateInput
@@ -354437,6 +354455,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
     name?: StringWithAggregatesFilter<"Topic"> | string
     type?: StringWithAggregatesFilter<"Topic"> | string
+    isPinned?: BoolWithAggregatesFilter<"Topic"> | boolean
   }
 
   export type DocumentClassificationWhereInput = {
@@ -381125,6 +381144,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
@@ -381141,6 +381161,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
@@ -381157,6 +381178,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
@@ -381173,6 +381195,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
@@ -381189,6 +381212,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
   }
 
   export type TopicUpdateManyMutationInput = {
@@ -381201,6 +381225,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TopicUncheckedUpdateManyInput = {
@@ -381213,6 +381238,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DocumentClassificationCreateInput = {
@@ -409349,6 +409375,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+    isPinned?: SortOrder
   }
 
   export type TopicMaxOrderByAggregateInput = {
@@ -409361,6 +409388,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+    isPinned?: SortOrder
   }
 
   export type TopicMinOrderByAggregateInput = {
@@ -409373,6 +409401,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+    isPinned?: SortOrder
   }
 
   export type DocumentClassificationOrderByRelevanceInput = {
@@ -477794,6 +477823,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     faqs?: FAQCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
@@ -477809,6 +477839,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
@@ -477891,6 +477922,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
@@ -477906,6 +477938,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
@@ -477921,6 +477954,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
@@ -477936,6 +477970,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
@@ -478613,6 +478648,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
@@ -478628,6 +478664,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
@@ -479301,6 +479338,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
@@ -479316,6 +479354,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
@@ -479347,6 +479386,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
@@ -479362,6 +479402,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
@@ -479731,6 +479772,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
@@ -479746,6 +479788,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
+    isPinned?: boolean
     documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
@@ -480179,6 +480222,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
@@ -480194,6 +480238,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
     documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput

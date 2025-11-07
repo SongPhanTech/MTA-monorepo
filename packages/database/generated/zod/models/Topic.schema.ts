@@ -15,6 +15,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     type: z.string(),
+    isPinned: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     name: z.string(),
     type: z.string(),
+    isPinned: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -69,7 +71,8 @@ export const TopicPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     name: z.string(),
-    type: z.string()
+    type: z.string(),
+    isPinned: z.boolean()
 }).partial().passthrough();
 
 
@@ -77,7 +80,7 @@ export const TopicPrismaUpdateSchema = z.object({
  * `Topic` schema for create operations excluding foreign keys and relations.
  */
 export const TopicCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, isPinned: true
 });
 
 
@@ -85,7 +88,7 @@ export const TopicCreateScalarSchema = baseSchemaWithoutDefaults.partial({
  * `Topic` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const TopicCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, isPinned: true
 });
 
 
