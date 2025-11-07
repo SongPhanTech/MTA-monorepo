@@ -6,7 +6,6 @@ import type { CriterionCatalog } from '@workspace/db'
 import {
     useCountCriterionCatalog,
     useCreateCriterionCatalog,
-    useFindManyScoreScaleCatalog,
     useFindUniqueCriterionCatalog,
     useUpdateCriterionCatalog,
 } from '@workspace/db/hooks'
