@@ -31,13 +31,11 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     standard: z.record(z.string(), z.unknown()),
-    scoreScale: z.record(z.string(), z.unknown()),
     requirementCriterionCatalog: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     standardId: z.string(),
-    scoreScaleId: z.string(),
 }
 );
 

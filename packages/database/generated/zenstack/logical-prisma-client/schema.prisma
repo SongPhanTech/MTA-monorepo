@@ -380,11 +380,23 @@ enum PaymentStatus {
   @@schema("ql-dao-tao")
 }
 
-enum AssignmentStatus {
+enum EvaluationCriterionStatus {
   PENDING
   SUBMITTED
   REVISION
   APPROVED
+  COMPLETED
+
+  @@schema("khao-thi")
+}
+
+enum EvaluationStatus {
+  LOCK
+  PENDING
+  SUBMITTED
+  REVISION
+  APPROVED
+  COMPLETED
 
   @@schema("khao-thi")
 }
@@ -397,14 +409,6 @@ enum EvaluationMemberRole {
   SECRETARY
   MEMBER
   ADVISORY_BOARD
-
-  @@schema("khao-thi")
-}
-
-/// Vai trò của thành viên trong hội đồng thư ký
-enum EvaluationSecretaryMemberRole {
-  HEAD_SECRETARY
-  MEMBER
 
   @@schema("khao-thi")
 }
@@ -800,8 +804,7 @@ model UserProfile {
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
-  deadlineHistories             DeadlineHistory[]
-  criterionAssignmentComments   CriterionAssignmentComment[]
+  evaluationCriterionComments   EvaluationCriterionComment[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4463,12 +4466,12 @@ model Lecturer {
   reviewedThesisRegistrations StudentThesisRegistration[]
   expertProfile               ExpertProfile[]
   evaluationCouncilMember     EvaluationCouncilMember[]
-  evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
-  criterionAssignments        CriterionAssignment[]
+  evaluationCriterions        EvaluationCriterion[]
+  analysisCriterion           AnalysisCriterion[]
 
   @@schema("ql-dao-tao")
 }
@@ -4946,19 +4949,18 @@ model SupervisorPaymentRecord {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationPeriod {
-  id                         String                      @id() @default(cuid())
-  code                       String?                     @unique()
-  active                     Boolean                     @default(true)
-  description                String?                     @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime                    @default(now())
-  updatedAt                  DateTime                    @default(now()) @updatedAt()
-  name                       String
-  startDate                  DateTime                    @default(now())
-  endDate                    DateTime?
-  standards                  EvaluationStandard[]
-  councils                   EvaluationCouncil[]
-  evaluationSecretarYCouncil EvaluationSecretarYCouncil?
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  name        String
+  startDate   DateTime            @default(now())
+  endDate     DateTime?
+  standards   StandardPeriod[]
+  councils    EvaluationCouncil[]
 
   @@schema("khao-thi")
 }
@@ -4998,184 +5000,7 @@ model CriterionCatalog {
   standardId                  String
   order                       Int
   name                        String
-  scoreScale                  ScoreScaleCatalog             @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId                String
   requirementCriterionCatalog RequirementCriterionCatalog[]
-
-  @@unique([standardId, name])
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model CriterionAssignment {
-  id                          String                       @id() @default(cuid())
-  code                        String?                      @unique()
-  active                      Boolean                      @default(true)
-  description                 String?                      @db.Text()
-  deletedAt                   DateTime?
-  createdAt                   DateTime                     @default(now())
-  updatedAt                   DateTime                     @default(now()) @updatedAt()
-  evaluationCriterion         EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId       String
-  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
-  lecturerId                  String
-  deadline                    DateTime
-  status                      AssignmentStatus             @default(PENDING)
-  submittedAt                 DateTime?                    @default(now())
-  deadlineHistories           DeadlineHistory[]
-  criterionAssignmentComments CriterionAssignmentComment[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model CriterionAssignmentComment {
-  id           String              @id() @default(cuid())
-  code         String?             @unique()
-  active       Boolean             @default(true)
-  description  String?             @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @default(now()) @updatedAt()
-  assignment   CriterionAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  assignmentId String
-  reviewer     UserProfile         @relation(fields: [reviewerId], references: [id])
-  reviewerId   String
-  content      String              @db.Text()
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model DeadlineHistory {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  criterionAssignment   CriterionAssignment @relation(fields: [criterionAssignmentId], references: [id], onDelete: Cascade)
-  criterionAssignmentId String
-  oldDeadline           DateTime?
-  newDeadline           DateTime
-  changedBy             UserProfile?        @relation(fields: [changedById], references: [id])
-  changedById           String?
-  reason                String?             @db.Text()
-
-  @@schema("khao-thi")
-}
-
-/// Danh mục yêu cầu
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model RequirementCriterionCatalog {
-  id                 String           @id() @default(cuid())
-  code               String?          @unique()
-  active             Boolean          @default(true)
-  description        String?          @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @default(now()) @updatedAt()
-  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
-  criterionCatalogId String
-  order              Int
-  name               String
-  questions          String[]
-
-  @@unique([criterionCatalogId, name])
-  @@schema("khao-thi")
-}
-
-/// Danh mục thang điểm
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ScoreScaleCatalog {
-  id                  String                @id() @default(cuid())
-  code                String?               @unique()
-  active              Boolean               @default(true)
-  description         String?               @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @default(now()) @updatedAt()
-  name                String
-  minValue            Int
-  maxValue            Int
-  passFrom            Int?
-  criteria            CriterionCatalog[]
-  evaluationCriterion EvaluationCriterion[]
-
-  @@schema("khao-thi")
-}
-
-/// Tiêu chuẩn đánh giá của đợt (Bản sao/áp dụng từ StandardCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationStandard {
-  id          String                @id() @default(cuid())
-  code        String?               @unique()
-  active      Boolean               @default(true)
-  description String?               @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @default(now()) @updatedAt()
-  period      EvaluationPeriod      @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId    String
-  name        String
-  order       Int
-  /// Mở đầu
-  opening     String                @default("")
-  /// Kết luận
-  conclusion  String                @default("")
-  criteria    EvaluationCriterion[]
-
-  @@unique([periodId, name])
-  @@schema("khao-thi")
-}
-
-/// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationCriterion {
-  id                    String                 @id() @default(cuid())
-  code                  String?                @unique()
-  active                Boolean                @default(true)
-  description           String?                @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @default(now()) @updatedAt()
-  standard              EvaluationStandard     @relation(fields: [standardId], references: [id], onDelete: Cascade)
-  standardId            String
-  name                  String
-  order                 Int
-  scoreScale            ScoreScaleCatalog      @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId          String
-  /// (Nhóm) Hội đồng đánh giá
-  evaluationCouncil     EvaluationCouncil?     @relation(fields: [evaluationCouncilId], references: [id])
-  evaluationCouncilId   String?
-  /// Yêu cầu trong phiếu phân tích
-  requirementCriterions RequirementCriterion[]
-  criterionAssignments  CriterionAssignment[]
-  /// 1. Mô tả hiện trạng
-  currentSituation      String                 @default("")
-  /// 2. Điểm mạnh
-  strengths             String                 @default("")
-  /// 3. Điểm tồn tại
-  weakness              String                 @default("")
-  /// 4. Kế hoạch hành động
-  actionPlan            String                 @default("")
-  /// 5. Tự đánh giá
-  score                 Int?
 
   @@unique([standardId, name])
   @@schema("khao-thi")
@@ -5222,26 +5047,179 @@ model Evidence {
   @@schema("khao-thi")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCriterionComment {
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
+  reviewerId             String
+  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
+  requirementCriterionId String?
+  content                String?               @db.Text()
+  analysisCriterion      AnalysisCriterion?    @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId    String?
+  evaluationCriterion    EvaluationCriterion?  @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId  String?
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục yêu cầu
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model RequirementCriterionCatalog {
+  id                 String           @id() @default(cuid())
+  code               String?          @unique()
+  active             Boolean          @default(true)
+  description        String?          @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt()
+  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
+  criterionCatalogId String
+  order              Int
+  name               String
+  questions          String[]
+
+  @@unique([criterionCatalogId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chuẩn của đợt (Bản sao/áp dụng từ StandardCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StandardPeriod {
+  id          String            @id() @default(cuid())
+  code        String?           @unique()
+  active      Boolean           @default(true)
+  description String?           @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt()
+  period      EvaluationPeriod  @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId    String
+  name        String
+  order       Int
+  /// Mở đầu
+  opening     String            @default("")
+  /// Kết luận
+  conclusion  String            @default("")
+  criteria    CriterionPeriod[]
+
+  @@unique([periodId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chí của đợt (Bản sao/áp dụng từ StandardCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model CriterionPeriod {
+  id                   String               @id() @default(cuid())
+  code                 String?              @unique()
+  active               Boolean              @default(true)
+  description          String?              @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @default(now()) @updatedAt()
+  name                 String
+  order                Int
+  evaluationStandard   StandardPeriod       @relation(fields: [evaluationStandardId], references: [id])
+  evaluationStandardId String
+  analysisCriterions   AnalysisCriterion?
+  evaluationCriterion  EvaluationCriterion?
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu phân tích của đợt (Bản sao/áp dụng từ CriterionCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AnalysisCriterion {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique()
+  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+  status                      EvaluationCriterionStatus    @default(PENDING)
+  /// Yêu cầu trong phiếu phân tích
+  requirementCriterions       RequirementCriterion[]
+  evaluationCriterionComments EvaluationCriterionComment[]
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCriterion {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique()
+  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+  status                      EvaluationStatus             @default(LOCK)
+  evaluationCriterionComments EvaluationCriterionComment[]
+  /// 1. Mô tả hiện trạng
+  currentSituation            String                       @default("")
+  /// 2. Điểm mạnh
+  strengths                   String                       @default("")
+  /// 3. Điểm tồn tại
+  weakness                    String                       @default("")
+  /// 4. Kế hoạch hành động
+  actionPlan                  String                       @default("")
+  /// 5. Tự đánh giá
+  score                       Int?
+
+  @@schema("khao-thi")
+}
+
 /// Yêu cầu trong phiếu phân tích tiêu chí
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model RequirementCriterion {
-  id                    String                 @id() @default(cuid())
-  code                  String?                @unique()
-  active                Boolean                @default(true)
-  description           String?                @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @default(now()) @updatedAt()
-  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId String
-  order                 Int
-  name                  String
-  questions             String[]
-  evidences             AnalysisFormEvidence[]
-  evidencePlaces        String                 @default("")
-  collectionMethod      String                 @default("")
+  id                         String                       @id() @default(cuid())
+  code                       String?                      @unique()
+  active                     Boolean                      @default(true)
+  description                String?                      @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now()) @updatedAt()
+  analysisCriterion          AnalysisCriterion            @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId        String
+  order                      Int
+  name                       String
+  questions                  String[]
+  evidences                  AnalysisFormEvidence[]
+  evidencePlaces             String                       @default("")
+  collectionMethod           String                       @default("")
+  evaluationCriterionComment EvaluationCriterionComment[]
 
   @@schema("khao-thi")
 }
@@ -5273,18 +5251,17 @@ model AnalysisFormEvidence {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationCouncil {
-  id                  String                    @id() @default(cuid())
-  code                String?                   @unique()
-  active              Boolean                   @default(true)
-  description         String?                   @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime                  @default(now())
-  updatedAt           DateTime                  @default(now()) @updatedAt()
-  period              EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId            String
-  name                String
-  members             EvaluationCouncilMember[]
-  evaluationCriterion EvaluationCriterion[]
+  id          String                    @id() @default(cuid())
+  code        String?                   @unique()
+  active      Boolean                   @default(true)
+  description String?                   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @default(now()) @updatedAt()
+  period      EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId    String
+  name        String
+  members     EvaluationCouncilMember[]
 
   @@schema("khao-thi")
 }
@@ -5305,46 +5282,6 @@ model EvaluationCouncilMember {
   lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
   role                EvaluationMemberRole[]
-
-  @@schema("khao-thi")
-}
-
-/// Hội đồng thư ký
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationSecretarYCouncil {
-  id          String                      @id() @default(cuid())
-  code        String?                     @unique()
-  active      Boolean                     @default(true)
-  description String?                     @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime                    @default(now())
-  updatedAt   DateTime                    @default(now()) @updatedAt()
-  period      EvaluationPeriod            @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId    String                      @unique()
-  name        String
-  members     EvaluationSecretaryMember[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationSecretaryMember {
-  id                           String                        @id() @default(cuid())
-  code                         String?                       @unique()
-  active                       Boolean                       @default(true)
-  description                  String?                       @db.Text()
-  deletedAt                    DateTime?
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @default(now()) @updatedAt()
-  lecturer                     Lecturer                      @relation(fields: [lecturerId], references: [id])
-  lecturerId                   String
-  evaluationSecretarYCouncil   EvaluationSecretarYCouncil    @relation(fields: [evaluationSecretarYCouncilId], references: [id])
-  evaluationSecretarYCouncilId String
-  role                         EvaluationSecretaryMemberRole
 
   @@schema("khao-thi")
 }

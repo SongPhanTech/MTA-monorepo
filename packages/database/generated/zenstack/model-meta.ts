@@ -1250,15 +1250,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'profile',
-                }, deadlineHistories: {
-                    name: "deadlineHistories",
-                    type: "DeadlineHistory",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'changedBy',
-                }, criterionAssignmentComments: {
-                    name: "criterionAssignmentComments",
-                    type: "CriterionAssignmentComment",
+                }, evaluationCriterionComments: {
+                    name: "evaluationCriterionComments",
+                    type: "EvaluationCriterionComment",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'reviewer',
@@ -15086,12 +15080,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
-                }, evaluationSecretaryMember: {
-                    name: "evaluationSecretaryMember",
-                    type: "EvaluationSecretaryMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'lecturer',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -15119,9 +15107,15 @@ const metadata: ModelMeta = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SecondSupervisor" }] }],
                     backLink: 'secondSupervisor',
-                }, criterionAssignments: {
-                    name: "criterionAssignments",
-                    type: "CriterionAssignment",
+                }, evaluationCriterions: {
+                    name: "evaluationCriterions",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
+                }, analysisCriterion: {
+                    name: "analysisCriterion",
+                    type: "AnalysisCriterion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
@@ -16995,7 +16989,7 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, standards: {
                     name: "standards",
-                    type: "EvaluationStandard",
+                    type: "StandardPeriod",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'period',
@@ -17004,12 +16998,6 @@ const metadata: ModelMeta = {
                     type: "EvaluationCouncil",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'period',
-                }, evaluationSecretarYCouncil: {
-                    name: "evaluationSecretarYCouncil",
-                    type: "EvaluationSecretarYCouncil",
-                    isDataModel: true,
-                    isOptional: true,
                     backLink: 'period',
                 },
             }, uniqueConstraints: {
@@ -17132,634 +17120,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, scoreScale: {
-                    name: "scoreScale",
-                    type: "ScoreScaleCatalog",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'criteria',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scoreScaleId" },
-                }, scoreScaleId: {
-                    name: "scoreScaleId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'scoreScale',
                 }, requirementCriterionCatalog: {
                     name: "requirementCriterionCatalog",
                     type: "RequirementCriterionCatalog",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'criterionCatalog',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, standardId_name: {
-                    name: "standardId_name",
-                    fields: ["standardId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        criterionAssignment: {
-            name: 'CriterionAssignment', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'criterionAssignments',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "evaluationCriterionId" },
-                }, evaluationCriterionId: {
-                    name: "evaluationCriterionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evaluationCriterion',
-                }, lecturer: {
-                    name: "lecturer",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'criterionAssignments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lecturerId" },
-                }, lecturerId: {
-                    name: "lecturerId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'lecturer',
-                }, deadline: {
-                    name: "deadline",
-                    type: "DateTime",
-                }, status: {
-                    name: "status",
-                    type: "AssignmentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, submittedAt: {
-                    name: "submittedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, deadlineHistories: {
-                    name: "deadlineHistories",
-                    type: "DeadlineHistory",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'criterionAssignment',
-                }, criterionAssignmentComments: {
-                    name: "criterionAssignmentComments",
-                    type: "CriterionAssignmentComment",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'assignment',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        criterionAssignmentComment: {
-            name: 'CriterionAssignmentComment', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, assignment: {
-                    name: "assignment",
-                    type: "CriterionAssignment",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'criterionAssignmentComments',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "assignmentId" },
-                }, assignmentId: {
-                    name: "assignmentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'assignment',
-                }, reviewer: {
-                    name: "reviewer",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'criterionAssignmentComments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "reviewerId" },
-                }, reviewerId: {
-                    name: "reviewerId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'reviewer',
-                }, content: {
-                    name: "content",
-                    type: "String",
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        deadlineHistory: {
-            name: 'DeadlineHistory', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, criterionAssignment: {
-                    name: "criterionAssignment",
-                    type: "CriterionAssignment",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'deadlineHistories',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "criterionAssignmentId" },
-                }, criterionAssignmentId: {
-                    name: "criterionAssignmentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'criterionAssignment',
-                }, oldDeadline: {
-                    name: "oldDeadline",
-                    type: "DateTime",
-                    isOptional: true,
-                }, newDeadline: {
-                    name: "newDeadline",
-                    type: "DateTime",
-                }, changedBy: {
-                    name: "changedBy",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'deadlineHistories',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "changedById" },
-                }, changedById: {
-                    name: "changedById",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'changedBy',
-                }, reason: {
-                    name: "reason",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        requirementCriterionCatalog: {
-            name: 'RequirementCriterionCatalog', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, criterionCatalog: {
-                    name: "criterionCatalog",
-                    type: "CriterionCatalog",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'requirementCriterionCatalog',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "criterionCatalogId" },
-                }, criterionCatalogId: {
-                    name: "criterionCatalogId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'criterionCatalog',
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, questions: {
-                    name: "questions",
-                    type: "String",
-                    isArray: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, criterionCatalogId_name: {
-                    name: "criterionCatalogId_name",
-                    fields: ["criterionCatalogId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        scoreScaleCatalog: {
-            name: 'ScoreScaleCatalog', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, minValue: {
-                    name: "minValue",
-                    type: "Int",
-                }, maxValue: {
-                    name: "maxValue",
-                    type: "Int",
-                }, passFrom: {
-                    name: "passFrom",
-                    type: "Int",
-                    isOptional: true,
-                }, criteria: {
-                    name: "criteria",
-                    type: "CriterionCatalog",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'scoreScale',
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'scoreScale',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        evaluationStandard: {
-            name: 'EvaluationStandard', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, period: {
-                    name: "period",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'standards',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "periodId" },
-                }, periodId: {
-                    name: "periodId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'period',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, opening: {
-                    name: "opening",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, conclusion: {
-                    name: "conclusion",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, criteria: {
-                    name: "criteria",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'standard',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, periodId_name: {
-                    name: "periodId_name",
-                    fields: ["periodId", "name"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        evaluationCriterion: {
-            name: 'EvaluationCriterion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, standard: {
-                    name: "standard",
-                    type: "EvaluationStandard",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'criteria',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "standardId" },
-                }, standardId: {
-                    name: "standardId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'standard',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, scoreScale: {
-                    name: "scoreScale",
-                    type: "ScoreScaleCatalog",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'evaluationCriterion',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scoreScaleId" },
-                }, scoreScaleId: {
-                    name: "scoreScaleId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'scoreScale',
-                }, evaluationCouncil: {
-                    name: "evaluationCouncil",
-                    type: "EvaluationCouncil",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'evaluationCriterion',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationCouncilId" },
-                }, evaluationCouncilId: {
-                    name: "evaluationCouncilId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'evaluationCouncil',
-                }, requirementCriterions: {
-                    name: "requirementCriterions",
-                    type: "RequirementCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCriterion',
-                }, criterionAssignments: {
-                    name: "criterionAssignments",
-                    type: "CriterionAssignment",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCriterion',
-                }, currentSituation: {
-                    name: "currentSituation",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, strengths: {
-                    name: "strengths",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, weakness: {
-                    name: "weakness",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, actionPlan: {
-                    name: "actionPlan",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, score: {
-                    name: "score",
-                    type: "Int",
-                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17908,6 +17274,552 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
+        evaluationCriterionComment: {
+            name: 'EvaluationCriterionComment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'reviewer',
+                }, requirementCriterion: {
+                    name: "requirementCriterion",
+                    type: "RequirementCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'evaluationCriterionComment',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "requirementCriterionId" },
+                }, requirementCriterionId: {
+                    name: "requirementCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'requirementCriterion',
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, analysisCriterion: {
+                    name: "analysisCriterion",
+                    type: "AnalysisCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "analysisCriterionId" },
+                }, analysisCriterionId: {
+                    name: "analysisCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'analysisCriterion',
+                }, evaluationCriterion: {
+                    name: "evaluationCriterion",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationCriterionId" },
+                }, evaluationCriterionId: {
+                    name: "evaluationCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'evaluationCriterion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        requirementCriterionCatalog: {
+            name: 'RequirementCriterionCatalog', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, criterionCatalog: {
+                    name: "criterionCatalog",
+                    type: "CriterionCatalog",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'requirementCriterionCatalog',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionCatalogId" },
+                }, criterionCatalogId: {
+                    name: "criterionCatalogId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionCatalog',
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, questions: {
+                    name: "questions",
+                    type: "String",
+                    isArray: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionCatalogId_name: {
+                    name: "criterionCatalogId_name",
+                    fields: ["criterionCatalogId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        standardPeriod: {
+            name: 'StandardPeriod', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, period: {
+                    name: "period",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'standards',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "periodId" },
+                }, periodId: {
+                    name: "periodId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'period',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, opening: {
+                    name: "opening",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, conclusion: {
+                    name: "conclusion",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, criteria: {
+                    name: "criteria",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationStandard',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, periodId_name: {
+                    name: "periodId_name",
+                    fields: ["periodId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        criterionPeriod: {
+            name: 'CriterionPeriod', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, evaluationStandard: {
+                    name: "evaluationStandard",
+                    type: "StandardPeriod",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'criteria',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationStandardId" },
+                }, evaluationStandardId: {
+                    name: "evaluationStandardId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evaluationStandard',
+                }, analysisCriterions: {
+                    name: "analysisCriterions",
+                    type: "AnalysisCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'criterionPeriod',
+                }, evaluationCriterion: {
+                    name: "evaluationCriterion",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'criterionPeriod',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        analysisCriterion: {
+            name: 'AnalysisCriterion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, criterionPeriod: {
+                    name: "criterionPeriod",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'analysisCriterions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionPeriodId" },
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'criterionPeriod',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'analysisCriterion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationCriterionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, requirementCriterions: {
+                    name: "requirementCriterions",
+                    type: "RequirementCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'analysisCriterion',
+                }, evaluationCriterionComments: {
+                    name: "evaluationCriterionComments",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'analysisCriterion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    fields: ["criterionPeriodId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        evaluationCriterion: {
+            name: 'EvaluationCriterion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, criterionPeriod: {
+                    name: "criterionPeriod",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'evaluationCriterion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionPeriodId" },
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'criterionPeriod',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'evaluationCriterions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, evaluationCriterionComments: {
+                    name: "evaluationCriterionComments",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCriterion',
+                }, currentSituation: {
+                    name: "currentSituation",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, strengths: {
+                    name: "strengths",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, weakness: {
+                    name: "weakness",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, actionPlan: {
+                    name: "actionPlan",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    fields: ["criterionPeriodId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
         requirementCriterion: {
             name: 'RequirementCriterion', fields: {
                 id: {
@@ -17941,20 +17853,19 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
+                }, analysisCriterion: {
+                    name: "analysisCriterion",
+                    type: "AnalysisCriterion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'requirementCriterions',
                     isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "evaluationCriterionId" },
-                }, evaluationCriterionId: {
-                    name: "evaluationCriterionId",
+                    foreignKeyMapping: { "id": "analysisCriterionId" },
+                }, analysisCriterionId: {
+                    name: "analysisCriterionId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'evaluationCriterion',
+                    relationField: 'analysisCriterion',
                 }, order: {
                     name: "order",
                     type: "Int",
@@ -17979,6 +17890,12 @@ const metadata: ModelMeta = {
                     name: "collectionMethod",
                     type: "String",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, evaluationCriterionComment: {
+                    name: "evaluationCriterionComment",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'requirementCriterion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18125,12 +18042,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'evaluationCouncil',
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCouncil',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18207,152 +18118,6 @@ const metadata: ModelMeta = {
                     name: "role",
                     type: "EvaluationMemberRole",
                     isArray: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        evaluationSecretarYCouncil: {
-            name: 'EvaluationSecretarYCouncil', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, period: {
-                    name: "period",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'evaluationSecretarYCouncil',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "periodId" },
-                }, periodId: {
-                    name: "periodId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'period',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, members: {
-                    name: "members",
-                    type: "EvaluationSecretaryMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationSecretarYCouncil',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, periodId: {
-                    name: "periodId",
-                    fields: ["periodId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
-        },
-        evaluationSecretaryMember: {
-            name: 'EvaluationSecretaryMember', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, lecturer: {
-                    name: "lecturer",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'evaluationSecretaryMember',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lecturerId" },
-                }, lecturerId: {
-                    name: "lecturerId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'lecturer',
-                }, evaluationSecretarYCouncil: {
-                    name: "evaluationSecretarYCouncil",
-                    type: "EvaluationSecretarYCouncil",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'members',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationSecretarYCouncilId" },
-                }, evaluationSecretarYCouncilId: {
-                    name: "evaluationSecretarYCouncilId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evaluationSecretarYCouncil',
-                }, role: {
-                    name: "role",
-                    type: "EvaluationSecretaryMemberRole",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24566,11 +24331,9 @@ const metadata: ModelMeta = {
     deleteCascade: {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
-        evaluationPeriod: ['EvaluationStandard', 'EvaluationCouncil', 'EvaluationSecretarYCouncil'],
-        criterionAssignment: ['CriterionAssignmentComment', 'DeadlineHistory'],
-        evaluationStandard: ['EvaluationCriterion'],
-        evaluationCriterion: ['CriterionAssignment', 'RequirementCriterion'],
+        evaluationPeriod: ['StandardPeriod', 'EvaluationCouncil'],
         evidence: ['AnalysisFormEvidence'],
+        requirementCriterion: ['EvaluationCriterionComment'],
         evaluationCouncil: ['EvaluationCouncilMember'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],

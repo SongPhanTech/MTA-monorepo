@@ -34,7 +34,6 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     standards: z.array(z.unknown()).optional(),
     councils: z.array(z.unknown()).optional(),
-    evaluationSecretarYCouncil: z.record(z.string(), z.unknown()).optional(),
 }
 );
 

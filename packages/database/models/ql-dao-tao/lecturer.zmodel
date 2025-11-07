@@ -38,7 +38,6 @@ model Lecturer extends Base {
   reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
   expertProfile               ExpertProfile[]
   evaluationCouncilMember     EvaluationCouncilMember[]
-  evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
@@ -46,6 +45,8 @@ model Lecturer extends Base {
   evaluationCriterions        EvaluationCriterion[]
 
   @@schema("ql-dao-tao")
+
+	analysisCriterion AnalysisCriterion[]
 }
 
 model LecturerHistory extends Base {

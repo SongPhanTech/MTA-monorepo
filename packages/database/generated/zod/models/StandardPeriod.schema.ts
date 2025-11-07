@@ -44,29 +44,29 @@ const fkSchema = z.object({
 );
 
 /**
- * `EvaluationStandard` schema excluding foreign keys and relations.
+ * `StandardPeriod` schema excluding foreign keys and relations.
  */
-export const EvaluationStandardScalarSchema = baseSchema;
+export const StandardPeriodScalarSchema = baseSchema;
 
 
 /**
- * `EvaluationStandard` schema including all fields (scalar, foreign key, and relations) and validations.
+ * `StandardPeriod` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const EvaluationStandardSchema = EvaluationStandardScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const StandardPeriodSchema = StandardPeriodScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvaluationStandardPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const StandardPeriodPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
  * Schema used for validating Prisma update input. For internal use only.
  * @private
  */
-export const EvaluationStandardPrismaUpdateSchema = z.object({
+export const StandardPeriodPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
     active: z.boolean(),
@@ -82,27 +82,27 @@ export const EvaluationStandardPrismaUpdateSchema = z.object({
 
 
 /**
- * `EvaluationStandard` schema for create operations excluding foreign keys and relations.
+ * `StandardPeriod` schema for create operations excluding foreign keys and relations.
  */
-export const EvaluationStandardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const StandardPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, opening: true, conclusion: true
 });
 
 
 /**
- * `EvaluationStandard` schema for create operations including scalar fields, foreign key fields, and validations.
+ * `StandardPeriod` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const EvaluationStandardCreateSchema = EvaluationStandardCreateScalarSchema.merge(fkSchema);
+export const StandardPeriodCreateSchema = StandardPeriodCreateScalarSchema.merge(fkSchema);
 
 
 /**
- * `EvaluationStandard` schema for update operations excluding foreign keys and relations.
+ * `StandardPeriod` schema for update operations excluding foreign keys and relations.
  */
-export const EvaluationStandardUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const StandardPeriodUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
- * `EvaluationStandard` schema for update operations including scalar fields, foreign key fields, and validations.
+ * `StandardPeriod` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const EvaluationStandardUpdateSchema = EvaluationStandardUpdateScalarSchema.merge(fkSchema.partial());
+export const StandardPeriodUpdateSchema = StandardPeriodUpdateScalarSchema.merge(fkSchema.partial());
 

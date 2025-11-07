@@ -8,13 +8,12 @@ import '../ql-dao-tao/lecturer'
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod extends Base {
-  name                       String
-  startDate                  DateTime                    @default(now())
-  endDate                    DateTime?
+  name      String
+  startDate DateTime            @default(now())
+  endDate   DateTime?
 
-  standards                  EvaluationStandard[]
-  councils                   EvaluationCouncil[]
-  evaluationSecretarYCouncil EvaluationSecretarYCouncil?
+  standards StandardPeriod[]
+  councils  EvaluationCouncil[]
 
   @@schema("khao-thi")
 }
@@ -34,120 +33,8 @@ model CriterionCatalog extends Base {
   standardId                  String
   order                       Int
   name                        String
-  scoreScale                  ScoreScaleCatalog             @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId                String  // mặc định dùng thang đánh giá nào
 
   requirementCriterionCatalog RequirementCriterionCatalog[]
-
-  @@unique([standardId, name])
-  @@schema("khao-thi")
-}
-
-enum AssignmentStatus {
-  PENDING      //Chưa nộp
-  SUBMITTED    //Đã nộp
-  REVISION     //Yêu cầu chỉnh sửa
-  APPROVED     //Đã duyệt
-  COMPLETED    //Hoàn thành
-
-  @@schema("khao-thi")
-}
-
-//Comment 
-model EvaluationCriterionComment extends Base {
-  evaluationCriterion    EvaluationCriterion   @relation(fields: [evaluationCriterionId], references: [id])
-  evaluationCriterionId  String
-
-  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
-  reviewerId             String
-
-  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
-  requirementCriterionId String?
-
-  content                String?               @db.Text
-
-  @@schema("khao-thi")
-}
-
-
-/// Danh mục yêu cầu
-model RequirementCriterionCatalog extends Base {
-  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
-  criterionCatalogId String
-  order              Int
-  name               String
-  questions          String[]
-
-  @@unique([criterionCatalogId, name])
-  @@schema("khao-thi")
-}
-
-/// Danh mục thang điểm
-model ScoreScaleCatalog extends Base {
-  name                String // e.g. "Thang 1-7"
-  minValue            Int
-  maxValue            Int
-  passFrom            Int? // điểm từ bao nhiêu thì đạt
-
-  criteria            CriterionCatalog[]
-  evaluationCriterion EvaluationCriterion[]
-
-  @@schema("khao-thi")
-}
-
-/// Tiêu chuẩn đánh giá của đợt (Bản sao/áp dụng từ StandardCatalog)
-model EvaluationStandard extends Base {
-  period     EvaluationPeriod      @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId   String
-  name       String
-  order      Int
-
-  /// Mở đầu
-  opening    String                @default("")
-  /// Kết luận
-  conclusion String                @default("")
-
-  criteria   EvaluationCriterion[]
-
-  @@unique([periodId, name])
-  @@schema("khao-thi")
-}
-
-/// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
-model EvaluationCriterion extends Base {
-  standard                    EvaluationStandard           @relation(fields: [standardId], references: [id], onDelete: Cascade)
-  standardId                  String
-  name                        String
-  order                       Int
-  scoreScale                  ScoreScaleCatalog            @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId                String
-
-  lecturer                    Lecturer                     @relation(fields: [lecturerId], references: [id])
-  lecturerId                  String
-  deadline                    DateTime
-
-  status                      AssignmentStatus             @default(PENDING)
-
-  /// (Nhóm) Hội đồng đánh giá
-  evaluationCouncil           EvaluationCouncil?           @relation(fields: [evaluationCouncilId], references: [id])
-  evaluationCouncilId         String?
-
-  /// Yêu cầu trong phiếu phân tích
-  requirementCriterions       RequirementCriterion[]
-
-  evaluationCriterionComments EvaluationCriterionComment[]
-
-  // Phiếu đánh giá
-  /// 1. Mô tả hiện trạng
-  currentSituation            String                       @default("")
-  /// 2. Điểm mạnh
-  strengths                   String                       @default("")
-  /// 3. Điểm tồn tại
-  weakness                    String                       @default("")
-  /// 4. Kế hoạch hành động
-  actionPlan                  String                       @default("")
-  /// 5. Tự đánh giá
-  score                       Int?
 
   @@unique([standardId, name])
   @@schema("khao-thi")
@@ -176,10 +63,147 @@ model Evidence extends Base {
   @@schema("khao-thi")
 }
 
+enum EvaluationCriterionStatus {
+  PENDING      //Chưa nộp
+  SUBMITTED    //Đã nộp
+  REVISION     //Yêu cầu chỉnh sửa
+  APPROVED     //Đã duyệt
+  COMPLETED    //Hoàn thành
+
+  @@schema("khao-thi")
+}
+enum EvaluationStatus {
+  LOCK         //Khoá
+  PENDING      //Chưa nộp
+  SUBMITTED    //Đã nộp
+  REVISION     //Yêu cầu chỉnh sửa
+  APPROVED     //Đã duyệt
+  COMPLETED    //Hoàn thành
+
+  @@schema("khao-thi")
+}
+
+
+//Comment 
+model EvaluationCriterionComment extends Base {
+  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
+  reviewerId             String
+
+  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
+  requirementCriterionId String?
+
+  content                String?               @db.Text
+
+  analysisCriterion      AnalysisCriterion?     @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId    String?
+  evaluationCriterion     EvaluationCriterion? @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId   String?
+  
+  @@schema("khao-thi")
+}
+
+
+/// Danh mục yêu cầu
+model RequirementCriterionCatalog extends Base {
+  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
+  criterionCatalogId String
+  order              Int
+  name               String
+  questions          String[]
+
+  @@unique([criterionCatalogId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chuẩn của đợt (Bản sao/áp dụng từ StandardCatalog)
+model StandardPeriod extends Base {
+  period     EvaluationPeriod  @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId   String
+  name       String
+  order      Int
+
+  /// Mở đầu
+  opening    String            @default("")
+  /// Kết luận
+  conclusion String            @default("")
+
+  criteria   CriterionPeriod[]
+
+
+  @@unique([periodId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chí của đợt (Bản sao/áp dụng từ StandardCatalog)
+model CriterionPeriod extends Base {
+  name                 String
+  order                Int
+
+  evaluationStandard   StandardPeriod       @relation(fields: [evaluationStandardId], references: [id])
+  evaluationStandardId String
+  analysisCriterions   AnalysisCriterion?
+  evaluationCriterion  EvaluationCriterion?
+  @@schema("khao-thi")
+}
+
+
+
+
+/// Phiếu phân tích của đợt (Bản sao/áp dụng từ CriterionCatalog)
+model AnalysisCriterion extends Base {
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique
+
+  // người được phân công làm phiếu phân tích
+  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+
+  status                      EvaluationCriterionStatus             @default(PENDING)
+
+  /// Yêu cầu trong phiếu phân tích
+  requirementCriterions       RequirementCriterion[]
+
+  evaluationCriterionComments EvaluationCriterionComment[]
+
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
+model EvaluationCriterion extends Base {
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique
+
+  // người được phân công làm phiếu phân tích
+  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+
+  status                      EvaluationStatus             @default(LOCK)
+
+  evaluationCriterionComments EvaluationCriterionComment[]
+
+
+  // Phiếu đánh giá
+  /// 1. Mô tả hiện trạng
+  currentSituation            String                       @default("")
+  /// 2. Điểm mạnh
+  strengths                   String                       @default("")
+  /// 3. Điểm tồn tại
+  weakness                    String                       @default("")
+  /// 4. Kế hoạch hành động
+  actionPlan                  String                       @default("")
+  /// 5. Tự đánh giá
+  score                       Int?
+
+  @@schema("khao-thi")
+}
+
 /// Yêu cầu trong phiếu phân tích tiêu chí
 model RequirementCriterion extends Base {
-  evaluationCriterion        EvaluationCriterion          @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
-  evaluationCriterionId      String
+  analysisCriterion          AnalysisCriterion            @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId        String
   order                      Int
   name                       String
   questions                  String[]
@@ -219,12 +243,11 @@ enum EvaluationMemberRole {
 
 /// Hội đồng đánh giá
 model EvaluationCouncil extends Base {
-  period              EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId            String
-  name                String
+  period   EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId String
+  name     String
 
-  members             EvaluationCouncilMember[]
-  evaluationCriterion EvaluationCriterion[]
+  members  EvaluationCouncilMember[]
 
   @@schema("khao-thi")
 }
@@ -235,35 +258,6 @@ model EvaluationCouncilMember extends Base {
   lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
   role                EvaluationMemberRole[]
-
-  @@schema("khao-thi")
-}
-
-/// Hội đồng thư ký
-model EvaluationSecretarYCouncil extends Base {
-  period   EvaluationPeriod            @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId String                      @unique
-  name     String
-
-  members  EvaluationSecretaryMember[]
-
-  @@schema("khao-thi")
-}
-
-/// Vai trò của thành viên trong hội đồng thư ký
-enum EvaluationSecretaryMemberRole {
-  HEAD_SECRETARY // Trưởng ban thư ký
-  MEMBER // Uỷ viên
-
-  @@schema("khao-thi")
-}
-
-model EvaluationSecretaryMember extends Base {
-  lecturer                     Lecturer                      @relation(fields: [lecturerId], references: [id])
-  lecturerId                   String
-  evaluationSecretarYCouncil   EvaluationSecretarYCouncil    @relation(fields: [evaluationSecretarYCouncilId], references: [id])
-  evaluationSecretarYCouncilId String
-  role                         EvaluationSecretaryMemberRole
 
   @@schema("khao-thi")
 }

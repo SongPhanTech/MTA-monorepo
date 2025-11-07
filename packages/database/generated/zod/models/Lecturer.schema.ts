@@ -46,12 +46,12 @@ const relationSchema = z.object({
     reviewedThesisRegistrations: z.array(z.unknown()).optional(),
     expertProfile: z.array(z.unknown()).optional(),
     evaluationCouncilMember: z.array(z.unknown()).optional(),
-    evaluationSecretaryMember: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
     clusterSurvey: z.array(z.unknown()).optional(),
     examRoomsMain: z.array(z.unknown()).optional(),
     examRoomsExtra: z.array(z.unknown()).optional(),
-    criterionAssignments: z.array(z.unknown()).optional(),
+    evaluationCriterions: z.array(z.unknown()).optional(),
+    analysisCriterion: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

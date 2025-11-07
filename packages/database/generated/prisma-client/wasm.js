@@ -2931,114 +2931,7 @@ exports.Prisma.CriterionCatalogScalarFieldEnum = {
   updatedAt: 'updatedAt',
   standardId: 'standardId',
   order: 'order',
-  name: 'name',
-  scoreScaleId: 'scoreScaleId'
-};
-
-exports.Prisma.CriterionAssignmentScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  evaluationCriterionId: 'evaluationCriterionId',
-  lecturerId: 'lecturerId',
-  deadline: 'deadline',
-  status: 'status',
-  submittedAt: 'submittedAt'
-};
-
-exports.Prisma.CriterionAssignmentCommentScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  assignmentId: 'assignmentId',
-  reviewerId: 'reviewerId',
-  content: 'content'
-};
-
-exports.Prisma.DeadlineHistoryScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  criterionAssignmentId: 'criterionAssignmentId',
-  oldDeadline: 'oldDeadline',
-  newDeadline: 'newDeadline',
-  changedById: 'changedById',
-  reason: 'reason'
-};
-
-exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  criterionCatalogId: 'criterionCatalogId',
-  order: 'order',
-  name: 'name',
-  questions: 'questions'
-};
-
-exports.Prisma.ScoreScaleCatalogScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
-  minValue: 'minValue',
-  maxValue: 'maxValue',
-  passFrom: 'passFrom'
-};
-
-exports.Prisma.EvaluationStandardScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  periodId: 'periodId',
-  name: 'name',
-  order: 'order',
-  opening: 'opening',
-  conclusion: 'conclusion'
-};
-
-exports.Prisma.EvaluationCriterionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  standardId: 'standardId',
-  name: 'name',
-  order: 'order',
-  scoreScaleId: 'scoreScaleId',
-  evaluationCouncilId: 'evaluationCouncilId',
-  currentSituation: 'currentSituation',
-  strengths: 'strengths',
-  weakness: 'weakness',
-  actionPlan: 'actionPlan',
-  score: 'score'
+  name: 'name'
 };
 
 exports.Prisma.EvidenceCategoryScalarFieldEnum = {
@@ -3066,6 +2959,96 @@ exports.Prisma.EvidenceScalarFieldEnum = {
   issuer: 'issuer'
 };
 
+exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  reviewerId: 'reviewerId',
+  requirementCriterionId: 'requirementCriterionId',
+  content: 'content',
+  analysisCriterionId: 'analysisCriterionId',
+  evaluationCriterionId: 'evaluationCriterionId'
+};
+
+exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  criterionCatalogId: 'criterionCatalogId',
+  order: 'order',
+  name: 'name',
+  questions: 'questions'
+};
+
+exports.Prisma.StandardPeriodScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  periodId: 'periodId',
+  name: 'name',
+  order: 'order',
+  opening: 'opening',
+  conclusion: 'conclusion'
+};
+
+exports.Prisma.CriterionPeriodScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  order: 'order',
+  evaluationStandardId: 'evaluationStandardId'
+};
+
+exports.Prisma.AnalysisCriterionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline',
+  status: 'status'
+};
+
+exports.Prisma.EvaluationCriterionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline',
+  status: 'status',
+  currentSituation: 'currentSituation',
+  strengths: 'strengths',
+  weakness: 'weakness',
+  actionPlan: 'actionPlan',
+  score: 'score'
+};
+
 exports.Prisma.RequirementCriterionScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3074,7 +3057,7 @@ exports.Prisma.RequirementCriterionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  evaluationCriterionId: 'evaluationCriterionId',
+  analysisCriterionId: 'analysisCriterionId',
   order: 'order',
   name: 'name',
   questions: 'questions',
@@ -3117,31 +3100,6 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   updatedAt: 'updatedAt',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
-  role: 'role'
-};
-
-exports.Prisma.EvaluationSecretarYCouncilScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  periodId: 'periodId',
-  name: 'name'
-};
-
-exports.Prisma.EvaluationSecretaryMemberScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  lecturerId: 'lecturerId',
-  evaluationSecretarYCouncilId: 'evaluationSecretarYCouncilId',
   role: 'role'
 };
 
@@ -5940,74 +5898,7 @@ exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   standardId: 'standardId',
-  name: 'name',
-  scoreScaleId: 'scoreScaleId'
-};
-
-exports.Prisma.CriterionAssignmentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  evaluationCriterionId: 'evaluationCriterionId',
-  lecturerId: 'lecturerId'
-};
-
-exports.Prisma.CriterionAssignmentCommentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  assignmentId: 'assignmentId',
-  reviewerId: 'reviewerId',
-  content: 'content'
-};
-
-exports.Prisma.DeadlineHistoryOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  criterionAssignmentId: 'criterionAssignmentId',
-  changedById: 'changedById',
-  reason: 'reason'
-};
-
-exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  criterionCatalogId: 'criterionCatalogId',
-  name: 'name',
-  questions: 'questions'
-};
-
-exports.Prisma.ScoreScaleCatalogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
   name: 'name'
-};
-
-exports.Prisma.EvaluationStandardOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  periodId: 'periodId',
-  name: 'name',
-  opening: 'opening',
-  conclusion: 'conclusion'
-};
-
-exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  standardId: 'standardId',
-  name: 'name',
-  scoreScaleId: 'scoreScaleId',
-  evaluationCouncilId: 'evaluationCouncilId',
-  currentSituation: 'currentSituation',
-  strengths: 'strengths',
-  weakness: 'weakness',
-  actionPlan: 'actionPlan'
 };
 
 exports.Prisma.EvidenceCategoryOrderByRelevanceFieldEnum = {
@@ -6027,11 +5918,69 @@ exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
   issuer: 'issuer'
 };
 
+exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  reviewerId: 'reviewerId',
+  requirementCriterionId: 'requirementCriterionId',
+  content: 'content',
+  analysisCriterionId: 'analysisCriterionId',
+  evaluationCriterionId: 'evaluationCriterionId'
+};
+
+exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  criterionCatalogId: 'criterionCatalogId',
+  name: 'name',
+  questions: 'questions'
+};
+
+exports.Prisma.StandardPeriodOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  periodId: 'periodId',
+  name: 'name',
+  opening: 'opening',
+  conclusion: 'conclusion'
+};
+
+exports.Prisma.CriterionPeriodOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  evaluationStandardId: 'evaluationStandardId'
+};
+
+exports.Prisma.AnalysisCriterionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId'
+};
+
+exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  currentSituation: 'currentSituation',
+  strengths: 'strengths',
+  weakness: 'weakness',
+  actionPlan: 'actionPlan'
+};
+
 exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  evaluationCriterionId: 'evaluationCriterionId',
+  analysisCriterionId: 'analysisCriterionId',
   name: 'name',
   questions: 'questions',
   evidencePlaces: 'evidencePlaces',
@@ -6060,22 +6009,6 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   description: 'description',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId'
-};
-
-exports.Prisma.EvaluationSecretarYCouncilOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  periodId: 'periodId',
-  name: 'name'
-};
-
-exports.Prisma.EvaluationSecretaryMemberOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  lecturerId: 'lecturerId',
-  evaluationSecretarYCouncilId: 'evaluationSecretarYCouncilId'
 };
 
 exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
@@ -7019,11 +6952,21 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   FAILED: 'FAILED'
 };
 
-exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
+exports.EvaluationCriterionStatus = exports.$Enums.EvaluationCriterionStatus = {
   PENDING: 'PENDING',
   SUBMITTED: 'SUBMITTED',
   REVISION: 'REVISION',
-  APPROVED: 'APPROVED'
+  APPROVED: 'APPROVED',
+  COMPLETED: 'COMPLETED'
+};
+
+exports.EvaluationStatus = exports.$Enums.EvaluationStatus = {
+  LOCK: 'LOCK',
+  PENDING: 'PENDING',
+  SUBMITTED: 'SUBMITTED',
+  REVISION: 'REVISION',
+  APPROVED: 'APPROVED',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
@@ -7033,11 +6976,6 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   SECRETARY: 'SECRETARY',
   MEMBER: 'MEMBER',
   ADVISORY_BOARD: 'ADVISORY_BOARD'
-};
-
-exports.EvaluationSecretaryMemberRole = exports.$Enums.EvaluationSecretaryMemberRole = {
-  HEAD_SECRETARY: 'HEAD_SECRETARY',
-  MEMBER: 'MEMBER'
 };
 
 exports.SurveyObject = exports.$Enums.SurveyObject = {
@@ -7285,21 +7223,18 @@ exports.Prisma.ModelName = {
   EvaluationPeriod: 'EvaluationPeriod',
   StandardCatalog: 'StandardCatalog',
   CriterionCatalog: 'CriterionCatalog',
-  CriterionAssignment: 'CriterionAssignment',
-  CriterionAssignmentComment: 'CriterionAssignmentComment',
-  DeadlineHistory: 'DeadlineHistory',
-  RequirementCriterionCatalog: 'RequirementCriterionCatalog',
-  ScoreScaleCatalog: 'ScoreScaleCatalog',
-  EvaluationStandard: 'EvaluationStandard',
-  EvaluationCriterion: 'EvaluationCriterion',
   EvidenceCategory: 'EvidenceCategory',
   Evidence: 'Evidence',
+  EvaluationCriterionComment: 'EvaluationCriterionComment',
+  RequirementCriterionCatalog: 'RequirementCriterionCatalog',
+  StandardPeriod: 'StandardPeriod',
+  CriterionPeriod: 'CriterionPeriod',
+  AnalysisCriterion: 'AnalysisCriterion',
+  EvaluationCriterion: 'EvaluationCriterion',
   RequirementCriterion: 'RequirementCriterion',
   AnalysisFormEvidence: 'AnalysisFormEvidence',
   EvaluationCouncil: 'EvaluationCouncil',
   EvaluationCouncilMember: 'EvaluationCouncilMember',
-  EvaluationSecretarYCouncil: 'EvaluationSecretarYCouncil',
-  EvaluationSecretaryMember: 'EvaluationSecretaryMember',
   EvidenceFile: 'EvidenceFile',
   SurveyObjectType: 'SurveyObjectType',
   SurveyTopic: 'SurveyTopic',
