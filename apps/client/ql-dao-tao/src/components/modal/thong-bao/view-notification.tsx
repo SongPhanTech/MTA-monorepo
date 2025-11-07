@@ -61,7 +61,7 @@ const ViewNotificationModal = () => {
                     <p className="flex flex-col gap-1">
                         {data?.attachments.map((item) => (
                             <p
-                                className="text-primary"
+                                className="text-primary cursor-pointer hover:underline"
                                 key={item.id}
                                 onClick={() =>
                                     onOpenPreview({
