@@ -29,7 +29,6 @@
         "@tanstack/react-query": "catalog:",
         "@types/node": "catalog:",
         "@workspace/typescript-config": "workspace:*",
-        "@workspace/libs": "workspace:*",
         "@zenstackhq/openapi": "catalog:",
         "@zenstackhq/server": "catalog:",
         "@zenstackhq/tanstack-query": "catalog:",

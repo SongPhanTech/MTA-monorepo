@@ -21,6 +21,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     summary?: string | null

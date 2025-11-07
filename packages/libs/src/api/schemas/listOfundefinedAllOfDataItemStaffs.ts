@@ -23,6 +23,8 @@ export type ListOfundefinedAllOfDataItemStaffs = {
     /** @nullable */
     updatedAt?: string | null
     /** @nullable */
+    createdBy?: string | null
+    /** @nullable */
     from?: string | null
     organization: ListOfundefinedAllOfDataItemStaffsOrganization
 } | null

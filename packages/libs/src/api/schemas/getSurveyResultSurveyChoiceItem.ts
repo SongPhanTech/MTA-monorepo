@@ -18,6 +18,8 @@ export type GetSurveyResultSurveyChoiceItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     answer: string
     requireExplanation: boolean
 }

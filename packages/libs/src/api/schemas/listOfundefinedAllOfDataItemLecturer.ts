@@ -23,6 +23,8 @@ export type ListOfundefinedAllOfDataItemLecturer = {
     /** @nullable */
     updatedAt?: string | null
     /** @nullable */
+    createdBy?: string | null
+    /** @nullable */
     from?: string | null
     /** @nullable */
     lectureID?: string | null
