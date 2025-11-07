@@ -1,2 +1,2 @@
 export * from './put-notification'
-export * from './view-notification'
+export * from './danh-sach-thong-bao'

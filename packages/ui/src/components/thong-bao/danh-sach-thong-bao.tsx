@@ -3,7 +3,7 @@ import { useFindManyNotification } from '@workspace/db/hooks'
 import { Alert, Space } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function ListNotification() {
+function DanhSachThongBao() {
     const { data = [] } = useFindManyNotification()
     const { onOpen } = useDisclosure<string>({
         tag: 'ViewNotificationModal',
@@ -44,4 +44,4 @@ function ListNotification() {
     )
 }
 
-export default ListNotification
+export { DanhSachThongBao }
