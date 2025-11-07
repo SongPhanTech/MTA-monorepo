@@ -1630,6 +1630,7 @@ model Topic {
   updatedAt     DateTime        @default(now()) @updatedAt()
   name          String
   type          String
+  isPinned      Boolean         @default(false)
   documents     DocumentTopic[]
   faqs          FAQ[]
   prompts       Prompt[]

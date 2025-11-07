@@ -10,7 +10,7 @@ import {
     useUpdateManyPrompt,
     useUpdateTopic,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, message } from 'antd'
+import { Col, Form, Input, Modal, message, Checkbox, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
@@ -19,6 +19,7 @@ type TopicFormType = {
     name: string
     type: string
     description?: string
+    isPinned?: boolean
 }
 
 const PutTopic = () => {
@@ -101,6 +102,7 @@ const PutTopic = () => {
                 name: detail.name || undefined,
                 type: detail.type || undefined,
                 description: detail.description || undefined,
+                isPinned: detail.isPinned ?? false,
             })
         }
     }, [id, detail, form])
@@ -122,6 +124,7 @@ const PutTopic = () => {
                         name: values.name,
                         type: values.type,
                         description: values.description,
+                        isPinned: values.isPinned ?? false,
                     },
                 })
 
@@ -146,6 +149,7 @@ const PutTopic = () => {
                         name: values.name,
                         type: values.type,
                         description: values.description,
+                        isPinned: values.isPinned ?? false,
                     },
                 })
 
@@ -221,6 +225,15 @@ const PutTopic = () => {
                 <Col span={24}>
                     <FormItem form={form} name={'description'} label="Mô tả">
                         <Input.TextArea rows={4} placeholder="Nhập mô tả cho chủ đề" />
+                    </FormItem>
+                </Col>
+                <Col span={24}>
+                    <FormItem form={form} name={'isPinned'} valuePropName="checked">
+                        <Tooltip title="Chủ đề được ghim sẽ hiển thị làm câu hỏi gợi ý trên trang chủ hỏi đáp">
+                            <Checkbox>
+                                <span className="text-sm">Chủ đề gợi ý</span>
+                            </Checkbox>
+                        </Tooltip>
                     </FormItem>
                 </Col>
             </Form>

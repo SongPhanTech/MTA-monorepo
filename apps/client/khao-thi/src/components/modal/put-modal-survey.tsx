@@ -160,7 +160,7 @@ const PutSurveyModal = () => {
                             description: output.description,
                             additionalSuggestion: output.additionalSuggestion,
                             isPublic: output.isPublic,
-                            anonymous: !output.isPublic ? false:output.anonymous,
+                            anonymous: !output.isPublic ? false : output.anonymous,
                             surveyChoice: {
                                 createMany: {
                                     data: output.surveyChoice.map((item) => ({
@@ -195,10 +195,15 @@ const PutSurveyModal = () => {
                         data: {
                             code: output.code,
                             name: output.name.trim(),
-                            surveyObjectType:output?.surveyObjectTypes?.length >0? {
-                                connect:
-                                    output.surveyObjectTypes.map((item) => ({ id: item })) || [],
-                            }:{},
+                            surveyObjectType:
+                                output?.surveyObjectTypes?.length > 0
+                                    ? {
+                                          connect:
+                                              output.surveyObjectTypes.map((item) => ({
+                                                  id: item,
+                                              })) || [],
+                                      }
+                                    : {},
                             surveyTopic: {
                                 connect: {
                                     id: output.surveyTopicId,
@@ -208,7 +213,7 @@ const PutSurveyModal = () => {
                             endDate: output.endDate,
                             description: output.description,
                             isPublic: output.isPublic,
-                            anonymous: !output.isPublic ? false:output.anonymous,
+                            anonymous: !output.isPublic ? false : output.anonymous,
                             additionalSuggestion: output.additionalSuggestion,
                             surveyChoice: {
                                 createMany: {
@@ -236,7 +241,7 @@ const PutSurveyModal = () => {
 
             // refetch() lại danh sách level
         } catch (error: any) {
-            console.log(error);
+            console.log(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

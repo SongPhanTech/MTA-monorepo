@@ -119,7 +119,12 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="surveyObjectTypes" label="Đối tượng làm khảo sát" required>
+                <FormItem
+                    form={form}
+                    name="surveyObjectTypes"
+                    label="Đối tượng làm khảo sát"
+                    required
+                >
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}

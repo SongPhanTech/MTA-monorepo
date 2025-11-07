@@ -1,21 +1,12 @@
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
-import { useCreateConversation } from '@workspace/db/hooks'
+import { useCreateConversation, useFindManyTopic } from '@workspace/db/hooks'
 import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useRef, useState } from 'react'
 import { useUserSession } from '@/hooks/useUserSession'
-
-const SUGGESTED_QUESTIONS = [
-    'Điều kiện tuyển sinh vào học viện là gì?',
-    'Chương trình đào tạo có những ngành nào?',
-    'Quy chế thi cử như thế nào?',
-    'Chính sách hỗ trợ cho học viên?',
-    'Thông tin về cơ sở vật chất của học viện?',
-    'Lịch học và thời gian biểu ra sao?',
-]
 
 export default function TroLyAo() {
     const router = useRouter()
@@ -25,6 +16,18 @@ export default function TroLyAo() {
     const [input, setInput] = useState('')
     const { mutateAsync: createConversation } = useCreateConversation()
     const isProcessingRef = useRef(false)
+
+    // Fetch pinned topics for suggestions
+    const { data: pinnedTopics = [] } = useFindManyTopic({
+        where: {
+            isPinned: true,
+            active: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: 6, // Limit to 6 suggestions
+    })
 
     const handleSend = async () => {
         if (!input.trim() || loading || isProcessingRef.current) return
@@ -128,31 +131,37 @@ export default function TroLyAo() {
                     </div>
 
                     {/* Suggested questions */}
-                    <div className="w-full max-w-5xl mx-auto mb-8 px-4 md:px-6">
-                        <h3 className="text-lg font-medium text-gray-700 mb-4 text-center">
-                            Câu hỏi gợi ý
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {SUGGESTED_QUESTIONS.map((question) => (
-                                <Card
-                                    key={question}
-                                    className={`transition-all duration-200 ${
-                                        loading || isProcessingRef.current
-                                            ? 'cursor-not-allowed opacity-50 pointer-events-none'
-                                            : 'cursor-pointer hover:shadow-md hover:border-primary'
-                                    }`}
-                                    onClick={() =>
-                                        !loading &&
-                                        !isProcessingRef.current &&
-                                        handleSuggestionClick(question)
-                                    }
-                                    styles={{ body: { padding: '12px 16px' } }}
-                                >
-                                    <p className="text-sm text-gray-700 m-0">{question}</p>
-                                </Card>
-                            ))}
+                    {pinnedTopics.length > 0 && (
+                        <div className="w-full max-w-5xl mx-auto mb-8 px-4 md:px-6">
+                            <h3 className="text-lg font-medium text-gray-700 mb-4 text-center">
+                                Chủ đề thường gặp
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {pinnedTopics.map((topic) => (
+                                    <Card
+                                        key={topic.id}
+                                        className={`transition-all duration-200 ${
+                                            loading || isProcessingRef.current
+                                                ? 'cursor-not-allowed opacity-50 pointer-events-none'
+                                                : 'cursor-pointer hover:shadow-md hover:border-primary'
+                                        }`}
+                                        onClick={() =>
+                                            !loading &&
+                                            !isProcessingRef.current &&
+                                            handleSuggestionClick(topic.name)
+                                        }
+                                        styles={{ body: { padding: '12px 16px' } }}
+                                    >
+                                        <div className="flex items-start gap-2">
+                                            <p className="text-sm font-medium text-gray-800 m-0 flex-1">
+                                                {topic.name}
+                                            </p>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 <div className="relative">

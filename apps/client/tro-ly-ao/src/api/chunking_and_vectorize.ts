@@ -17,9 +17,28 @@ const postFormUrlEncoded = async (url: string, id_document: string) => {
 export const fetchChungkingAndVectorizeDocument = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,
+            // `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_document_v4`, // update api chungkingandvector
             id_document
         )
+    } catch (_error: any) {
+        return { status: 500, error: 'True', message: 'Lỗi gọi API' }
+    }
+}
+
+export const fetchChungkingAndVectorizeDocumentAll = async () => {
+    try {
+        const response = await axios.post(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_all_v4`)
+        return response.data
+    } catch (_error: any) {
+        return { status: 500, error: 'True', message: 'Lỗi gọi API' }
+    }
+}
+
+export const getStatusChungkingAndVectorizeDocument = async () => {
+    try {
+        const response = await axios.get(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_v4_status`)
+        return response.data
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API' }
     }

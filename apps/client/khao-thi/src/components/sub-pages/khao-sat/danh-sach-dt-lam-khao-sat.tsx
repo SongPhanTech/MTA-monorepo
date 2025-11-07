@@ -1,4 +1,4 @@
-import {  EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function DanhSachDoiTuong({selectedId}:{selectedId:string}) {
+function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)

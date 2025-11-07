@@ -828,7 +828,8 @@ exports.Prisma.TopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
-  type: 'type'
+  type: 'type',
+  isPinned: 'isPinned'
 };
 
 exports.Prisma.DocumentClassificationScalarFieldEnum = {

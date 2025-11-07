@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function CauHoiKhaoSat({id}: {id: string}) {
+function CauHoiKhaoSat({ id }: { id: string }) {
     const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)

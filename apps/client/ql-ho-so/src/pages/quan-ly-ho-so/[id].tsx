@@ -1037,7 +1037,7 @@ export default function UpdateUserPage() {
 
     // Hàm fill thông tin từ dữ liệu cccdUserProfileData
     const fillUserInfo = useCallback(
-        async(userData: any) => {
+        async (userData: any) => {
             if (!userData) return
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
@@ -1058,8 +1058,8 @@ export default function UpdateUserPage() {
                 staffTypeId: userData.staffs?.staffTypeId,
                 lecturerTypeId: userData.lecturer?.lecturerTypeId,
             })
-            if(userData?.avatar){
-                const imageUrl = await getLInkImage();
+            if (userData?.avatar) {
+                const imageUrl = await getLInkImage()
                 const avatarFile: UploadFile = {
                     uid: '-1',
                     name: 'avatar.jpg',
@@ -1075,21 +1075,21 @@ export default function UpdateUserPage() {
         const res = await axios.get(
             `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/employee/${id}/image`,
             {
-                responseType: 'blob', 
+                responseType: 'blob',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'K-TenantCode': window.tenantCode || 'dev',
                     'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
                 },
                 params: {
-                    h:100,
-                    w:100,
+                    h: 100,
+                    w: 100,
                     appCode: process.env.NEXT_PUBLIC_APP_CODE,
                     tenantCode: window.tenantCode || 'dev',
-                }
+                },
             }
         )
-        if(res?.status === 200) {
+        if (res?.status === 200) {
             return URL.createObjectURL(res.data)
         }
 
