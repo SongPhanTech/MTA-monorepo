@@ -7167,7 +7167,8 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
-  Practice: 'Practice'
+  Practice: 'Practice',
+  Graduation: 'Graduation'
 };
 
 exports.EquivalencySide = exports.$Enums.EquivalencySide = {

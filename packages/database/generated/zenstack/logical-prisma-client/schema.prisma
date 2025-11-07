@@ -141,6 +141,7 @@ enum SubjectVersionType {
   Research
   Project
   Practice
+  Graduation
 
   @@schema("ql-dao-tao")
 }

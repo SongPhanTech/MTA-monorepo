@@ -1397,7 +1397,8 @@ export const SubjectVersionType: {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
-  Practice: 'Practice'
+  Practice: 'Practice',
+  Graduation: 'Graduation'
 };
 
 export type SubjectVersionType = (typeof SubjectVersionType)[keyof typeof SubjectVersionType]

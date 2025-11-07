@@ -593,6 +593,7 @@ enum SubjectVersionType {
   Research // Chuyên đề nghiên cứu
   Project // Luận văn/Đồ án
   Practice // Thí nghiệm/Thực hành
+  Graduation // Thi tốt nghiệp
 
   @@schema("ql-dao-tao")
 }

@@ -28,6 +28,27 @@ export interface ParseSubjectResult {
     errors: ParseSheetError[]
 }
 
+const subjectRequirementTypes: Record<string, $Enums.SubjectRequirementType> = {
+    'Bắt buộc': $Enums.SubjectRequirementType.Mandatory,
+    'Tự chọn': $Enums.SubjectRequirementType.Optional,
+}
+
+const subjectVersionTypes: Record<string, $Enums.SubjectVersionType> = {
+    Thường: $Enums.SubjectVersionType.Normal,
+    'Thực tập': $Enums.SubjectVersionType.Internship,
+    'Thực hành': $Enums.SubjectVersionType.Practice,
+    'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
+    'Luận văn-Đề án': $Enums.SubjectVersionType.Project,
+    'Thi tốt nghiệp': $Enums.SubjectVersionType.Graduation,
+    'Thí nghiệm/Thực hành': $Enums.SubjectVersionType.Practice,
+}
+
+const examTypes: Record<string, $Enums.ExamType> = {
+    'Thi vấn đáp': $Enums.ExamType.Oral,
+    'Thi viết': $Enums.ExamType.OfflineWritten,
+    Khác: $Enums.ExamType.Other,
+}
+
 export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => {
     const wb = read(file)
     const sheetName = wb.SheetNames[0]
@@ -102,27 +123,6 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         return !Number.isNaN(parsed) ? parsed : undefined
     }
 
-    // Parse exam type từ text
-    const parseExamType = (value: string | null | undefined): $Enums.ExamType => {
-        const trimmed = value?.trim()
-        if (!trimmed) return $Enums.ExamType.OfflineWritten
-
-        if (trimmed === 'Thi viết') {
-            return $Enums.ExamType.OfflineWritten
-        }
-        if (trimmed === 'Thi vấn đáp') {
-            return $Enums.ExamType.Oral
-        }
-        if (trimmed === 'Khác') {
-            return $Enums.ExamType.Other
-        }
-        // if (trimmed.includes('đồ án') || trimmed.includes('luận văn')) {
-        //     return $Enums.ExamType.Project
-        // }
-
-        return $Enums.ExamType.OfflineWritten
-    }
-
     for (const row of rows) {
         const rowNumber = row.__rowNum__ + 1
         const knowledgeBlock = row[cols.knowledgeBlock]?.trim()
@@ -174,26 +174,64 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
 
         // Parse loại bắt buộc
         const requiredText = row[cols.required]?.trim()
-        const type =
-            requiredText === 'Tự chọn'
-                ? $Enums.SubjectRequirementType.Optional
-                : $Enums.SubjectRequirementType.Mandatory
+        if (!requiredText) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.required}${rowNumber}`,
+                message: 'Loại môn học không được để trống',
+            })
+            continue
+        }
 
-        // Parse exam type
-        const examType = parseExamType(row[cols.examType])
+        const type = subjectRequirementTypes[requiredText]
+        if (!type) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.subjectVersionType}${rowNumber}`,
+                message: `Loại môn học không tồn tại [${Object.keys(subjectRequirementTypes).join(', ')}]`,
+            })
+            continue
+        }
+
+        const examTypeText = row[cols.examType]?.trim()
+        if (!examTypeText) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.subjectVersionType}${rowNumber}`,
+                message: 'Hình thức thi không được để trống',
+            })
+            continue
+        }
+
+        const examType = examTypes[examTypeText]
+        if (!examType) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.subjectVersionType}${rowNumber}`,
+                message: `Hình thức thi không tồn tại [${Object.keys(examTypes).join(', ')}]`,
+            })
+            continue
+        }
 
         // Xác định subject version type
         const subjectVersionText = row[cols.subjectVersionType]?.trim()
-        let subjectVersionType: $Enums.SubjectVersionType = $Enums.SubjectVersionType.Normal
-        if (subjectVersionText === 'Thực tập') {
-            subjectVersionType = $Enums.SubjectVersionType.Internship
-        } else if (subjectVersionText === 'Chuyên đề nghiên cứu') {
-            subjectVersionType = $Enums.SubjectVersionType.Research
-        } else if (subjectVersionText === 'Luận văn-Đề án') {
-            subjectVersionType = $Enums.SubjectVersionType.Project
-        } else if (subjectVersionText === 'Thi tốt nghiệp') {
-            // TODO: add this subject version type
-            subjectVersionType = $Enums.SubjectVersionType.Normal
+        if (!subjectVersionText) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.subjectVersionType}${rowNumber}`,
+                message: 'Loại môn học không được để trống',
+            })
+            continue
+        }
+
+        const subjectVersionType = subjectVersionTypes[subjectVersionText]
+        if (!subjectVersionType) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.subjectVersionType}${rowNumber}`,
+                message: `Loại môn học không tồn tại [${Object.keys(subjectVersionTypes).join(', ')}]`,
+            })
+            continue
         }
 
         // Parse số tiết chi tiết
