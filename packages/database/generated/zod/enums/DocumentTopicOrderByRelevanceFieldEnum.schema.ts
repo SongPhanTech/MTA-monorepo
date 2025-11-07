@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DocumentTopicOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "documentId", "topicId"])
+export const DocumentTopicOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "documentId", "topicId"])

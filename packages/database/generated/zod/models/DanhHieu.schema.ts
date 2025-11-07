@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     ten: z.string().nullish(),
     thoiGian: z.coerce.date().nullish(),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     ten: z.string().nullish(),
     thoiGian: z.coerce.date().nullish(),
 }
@@ -69,6 +71,7 @@ export const DanhHieuPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     ten: z.string().nullish(),
     thoiGian: z.coerce.date().nullish()
 }).partial().passthrough();
@@ -78,7 +81,7 @@ export const DanhHieuPrismaUpdateSchema = z.object({
  * `DanhHieu` schema for create operations excluding foreign keys and relations.
  */
 export const DanhHieuCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

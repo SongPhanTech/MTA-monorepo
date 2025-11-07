@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const AcademicWarningScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "studentId", "semesterId", "level", "increasedFrom", "decreasedFrom"])
+export const AcademicWarningScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "studentId", "semesterId", "level", "increasedFrom", "decreasedFrom"])

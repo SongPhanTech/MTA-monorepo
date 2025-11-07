@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.number().nullish(),
@@ -93,6 +95,7 @@ export const FixedClassPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     summary: z.string().nullish(),
     startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
@@ -105,7 +108,7 @@ export const FixedClassPrismaUpdateSchema = z.object({
  * `FixedClass` schema for create operations excluding foreign keys and relations.
  */
 export const FixedClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, graduated: true, initSize: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, graduated: true, initSize: true
 });
 
 

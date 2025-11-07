@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const HocViOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "academicDegreeTypeId", "nationalityId", "linhVuc", "truongId", "userProfileId"])
+export const HocViOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "academicDegreeTypeId", "nationalityId", "linhVuc", "truongId", "userProfileId"])

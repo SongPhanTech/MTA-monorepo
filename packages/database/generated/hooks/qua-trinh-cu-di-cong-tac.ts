@@ -327,7 +327,7 @@ export function useSuspenseCountQuaTrinhCuDiCongTac<TArgs extends Prisma.QuaTrin
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('QuaTrinhCuDiCongTac', `${endpoint}/quaTrinhCuDiCongTac/count`, args, options, fetch);
 }
 
-export function useCheckQuaTrinhCuDiCongTac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; donVi?: string; chucVuId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckQuaTrinhCuDiCongTac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; donVi?: string; chucVuId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('QuaTrinhCuDiCongTac', `${endpoint}/quaTrinhCuDiCongTac/check`, args, options, fetch);
 }

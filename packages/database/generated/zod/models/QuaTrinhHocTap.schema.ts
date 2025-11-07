@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     ketQua: z.string().nullish(),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     ketQua: z.string().nullish(),
@@ -79,6 +81,7 @@ export const QuaTrinhHocTapPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     ketQua: z.string().nullish(),
@@ -90,7 +93,7 @@ export const QuaTrinhHocTapPrismaUpdateSchema = z.object({
  * `QuaTrinhHocTap` schema for create operations excluding foreign keys and relations.
  */
 export const QuaTrinhHocTapCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

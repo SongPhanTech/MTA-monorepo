@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const AcademicActionRuleSetScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "configId"])
+export const AcademicActionRuleSetScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "configId"])

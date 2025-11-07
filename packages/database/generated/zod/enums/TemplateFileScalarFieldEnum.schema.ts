@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const TemplateFileScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "path", "fileType", "extensions", "numberField"])
+export const TemplateFileScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "path", "fileType", "extensions", "numberField"])

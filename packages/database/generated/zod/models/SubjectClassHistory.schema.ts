@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
@@ -81,6 +83,7 @@ export const SubjectClassHistoryPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
@@ -95,7 +98,7 @@ export const SubjectClassHistoryPrismaUpdateSchema = z.object({
  * `SubjectClassHistory` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

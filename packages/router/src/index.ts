@@ -586,6 +586,12 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO,
+                label: 'Thông báo',
+                path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
+                description: 'Quản lý thông báo đào tạo',
+            },
         ],
         label: 'Quản lý đào tạo',
     },

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DM_TinhTrangCongTacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const DM_TinhTrangCongTacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

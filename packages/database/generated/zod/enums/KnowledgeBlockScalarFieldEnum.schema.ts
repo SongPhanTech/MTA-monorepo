@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const KnowledgeBlockScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "subjectVersionId", "name"])
+export const KnowledgeBlockScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "subjectVersionId", "name"])

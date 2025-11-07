@@ -39,6 +39,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Config$createdBy,
                 }, key: {
                     name: "key",
                     type: "ConfigKey",
@@ -146,6 +152,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$UserProfile$createdBy,
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",
@@ -1220,6 +1232,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$HocHam$createdBy,
                 }, academicRankType: {
                     name: "academicRankType",
                     type: "DM_HocHam",
@@ -1304,6 +1322,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$HocVi$createdBy,
                 }, academicDegreeType: {
                     name: "academicDegreeType",
                     type: "DM_HocVi",
@@ -1408,6 +1432,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Relative$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1488,6 +1518,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrinhDoLyLuanChinhTri$createdBy,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -1572,6 +1608,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrinhDoQuanLyNhaNuoc$createdBy,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -1656,6 +1698,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NgoaiNgu$createdBy,
                 }, ngonNgu: {
                     name: "ngonNgu",
                     type: "DM_NgoaiNgu",
@@ -1752,6 +1800,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TinHoc$createdBy,
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -1834,6 +1888,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$BoiDuongQuocPhongAnNinh$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1900,6 +1960,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CapBac$createdBy,
                 }, noiRaQuyetDinh: {
                     name: "noiRaQuyetDinh",
                     type: "String",
@@ -1978,6 +2044,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuaTrinhCongTac$createdBy,
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -2092,6 +2164,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuaTrinhCuDiCongTac$createdBy,
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -2169,6 +2247,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuaTrinhCuDiDaoTao$createdBy,
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -2255,6 +2339,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KhenThuong$createdBy,
                 }, hinhThucKhenThuong: {
                     name: "hinhThucKhenThuong",
                     type: "String",
@@ -2333,6 +2423,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KyLuat$createdBy,
                 }, hinhThucKyLuat: {
                     name: "hinhThucKyLuat",
                     type: "String",
@@ -2411,6 +2507,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DoiTuongChinhSach$createdBy,
                 }, tenDoiTuong: {
                     name: "tenDoiTuong",
                     type: "String",
@@ -2481,6 +2583,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KeKhaiTaiSan$createdBy,
                 }, loai: {
                     name: "loai",
                     type: "String",
@@ -2547,6 +2655,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TiengDanToc$createdBy,
                 }, danToc: {
                     name: "danToc",
                     type: "DM_DanToc",
@@ -2627,6 +2741,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ChienDau$createdBy,
                 }, cuongVi: {
                     name: "cuongVi",
                     type: "String",
@@ -2709,6 +2829,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NuocNgoai$createdBy,
                 }, tenNuoc: {
                     name: "tenNuoc",
                     type: "DM_QuocGia",
@@ -2787,6 +2913,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ThuongTat$createdBy,
                 }, loai: {
                     name: "loai",
                     type: "DM_LoaiThuongTat",
@@ -2873,6 +3005,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DanhHieu$createdBy,
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -2935,6 +3073,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuaTrinhHocTap$createdBy,
                 }, tenTruong: {
                     name: "tenTruong",
                     type: "DM_TruongDaoTaoBacDH",
@@ -3043,6 +3187,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ToChucXaHoi$createdBy,
                 }, ten: {
                     name: "ten",
                     type: "DM_ToChucXaHoi",
@@ -3121,6 +3271,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuaTrinhLuong$createdBy,
                 }, tuNgay: {
                     name: "tuNgay",
                     type: "DateTime",
@@ -3222,6 +3378,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Group$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3286,6 +3448,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Role$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3345,6 +3513,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Permission$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3407,6 +3581,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ChatBotConfig$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3458,6 +3638,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$UserSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3518,6 +3704,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Document$createdBy,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -3636,6 +3828,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DocumentTopic$createdBy,
                 }, document: {
                     name: "document",
                     type: "Document",
@@ -3705,6 +3903,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$FAQ$createdBy,
                 }, question: {
                     name: "question",
                     type: "String",
@@ -3805,6 +4009,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Prompt$createdBy,
                 }, prompt: {
                     name: "prompt",
                     type: "String",
@@ -3873,6 +4083,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Conversation$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3967,6 +4183,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Message$createdBy,
                 }, conversationId: {
                     name: "conversationId",
                     type: "String",
@@ -4036,6 +4258,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CitationMessage$createdBy,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -4108,6 +4336,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Topic$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4184,6 +4418,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DocumentClassification$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5774,12 +6014,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'group',
-                }, notification: {
-                    name: "notification",
-                    type: "Notification",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'createdBy',
                 }, feedback: {
                     name: "feedback",
                     type: "Feedback",
@@ -7144,6 +7378,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentScoreConvert$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -7210,6 +7450,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectScoreConvert$createdBy,
                 }, studentScoreConvert: {
                     name: "studentScoreConvert",
                     type: "StudentScoreConvert",
@@ -7283,6 +7529,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentSubjectScore$createdBy,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -7472,6 +7724,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentSubjectScoreHistory$createdBy,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -7584,6 +7842,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedCertificateOnStudentSubjectScore$createdBy,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -7653,6 +7917,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedCertificate$createdBy,
                 }, certificate: {
                     name: "certificate",
                     type: "Certificate",
@@ -7751,6 +8021,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedAwardOnStudentSubjectScore$createdBy,
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -7820,6 +8096,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedAward$createdBy,
                 }, award: {
                     name: "award",
                     type: "Award",
@@ -7909,6 +8191,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SchoolYear$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -7985,6 +8273,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Semester$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8119,6 +8413,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Milestone$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8190,6 +8490,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingLanguage$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8247,6 +8553,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingCourse$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8552,6 +8864,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$FixedClass$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8760,6 +9078,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Curriculum$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -8871,6 +9195,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CurriculumVersion$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9098,6 +9428,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Subject$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9190,6 +9526,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectVersionCategory$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9241,6 +9583,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectVersion$createdBy,
                 }, isLocked: {
                     name: "isLocked",
                     type: "Boolean",
@@ -9524,6 +9872,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectVersionHistory$createdBy,
                 }, subjectVersion: {
                     name: "subjectVersion",
                     type: "SubjectVersion",
@@ -9596,6 +9950,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EquivalencyGroup$createdBy,
                 }, subjects: {
                     name: "subjects",
                     type: "SubjectInGroup",
@@ -9644,6 +10004,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectInGroup$createdBy,
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -9718,6 +10084,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingBlockSubject$createdBy,
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -9798,6 +10170,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClassRegisterSessionCredit$createdBy,
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -9880,6 +10258,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClassRegisterSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9966,6 +10350,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClassRegisterLogs$createdBy,
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -10374,6 +10764,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectClassHistory$createdBy,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -10470,6 +10866,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectClassTime$createdBy,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -10533,6 +10935,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClassSchedule$createdBy,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -10677,6 +11085,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingObjectType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10834,6 +11248,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PriorityObject$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10889,6 +11309,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10943,6 +11369,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingLevel$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11009,6 +11441,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingForm$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11069,6 +11507,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingLocation$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11163,6 +11607,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Building$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11232,6 +11682,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Room$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11344,6 +11800,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingField$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11439,6 +11901,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingFieldOnTrainingObjectType$createdBy,
                 }, trainingField: {
                     name: "trainingField",
                     type: "TrainingField",
@@ -11508,6 +11976,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingMajor$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11665,6 +12139,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingMajorOnTrainingObjectType$createdBy,
                 }, trainingMajor: {
                     name: "trainingMajor",
                     type: "TrainingMajor",
@@ -11734,6 +12214,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingBlock$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11812,6 +12298,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingBlockOnCurriculumVersion$createdBy,
                 }, trainingBlock: {
                     name: "trainingBlock",
                     type: "TrainingBlock",
@@ -11911,6 +12403,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingTime$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11962,6 +12460,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Certificate$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12023,6 +12527,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CertificateOnSubject$createdBy,
                 }, finalScore: {
                     name: "finalScore",
                     type: "Float",
@@ -12092,6 +12602,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Award$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12157,6 +12673,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DiplomaType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12230,6 +12752,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScoreConvert$createdBy,
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -12306,6 +12834,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingKPI$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12351,6 +12885,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Student$createdBy,
                 }, note: {
                     name: "note",
                     type: "String",
@@ -13087,6 +13627,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Notification$createdBy,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -13134,18 +13680,6 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'notifications',
                     isRelationOwner: true,
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "DM_NhanVien",
-                    isDataModel: true,
-                    backLink: 'notification',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "createdById" },
-                }, createdById: {
-                    name: "createdById",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'createdBy',
                 }, attachments: {
                     name: "attachments",
                     type: "DocumentFile",
@@ -13194,6 +13728,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DocumentFile$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13516,6 +14056,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionConfig$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13591,6 +14137,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionRuleSet$createdBy,
                 }, config: {
                     name: "config",
                     type: "AcademicActionConfig",
@@ -13651,6 +14203,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionCondition$createdBy,
                 }, ruleSet: {
                     name: "ruleSet",
                     type: "AcademicActionRuleSet",
@@ -13731,6 +14289,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentAcademicDecision$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -13859,6 +14423,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingScoreSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13938,6 +14508,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentTrainingScore$createdBy,
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
@@ -14020,6 +14596,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$LecturerType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14080,6 +14662,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14140,6 +14728,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffPosition$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14197,6 +14791,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Lecturer$createdBy,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -14396,6 +14996,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$LecturerHistory$createdBy,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -14499,6 +15105,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ResearchProject$createdBy,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -14618,6 +15230,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentResearchRegistration$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14725,6 +15343,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ThesisSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14834,6 +15458,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ThesisProject$createdBy,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -15082,6 +15712,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DefenseSession$createdBy,
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
@@ -15133,6 +15769,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentThesisRegistration$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -15264,6 +15906,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExpertProfile$createdBy,
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -15417,6 +16065,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Decision$createdBy,
                 }, issueDate: {
                     name: "issueDate",
                     type: "DateTime",
@@ -15483,6 +16137,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Invitation$createdBy,
                 }, sentDate: {
                     name: "sentDate",
                     type: "DateTime",
@@ -15548,6 +16208,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Council$createdBy,
                 }, proposedDate: {
                     name: "proposedDate",
                     type: "DateTime",
@@ -15627,6 +16293,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CouncilMember$createdBy,
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -15711,6 +16383,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DefenseRecord$createdBy,
                 }, finalScore: {
                     name: "finalScore",
                     type: "Decimal",
@@ -15786,6 +16464,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$LibrarySubmission$createdBy,
                 }, submissionDate: {
                     name: "submissionDate",
                     type: "DateTime",
@@ -15863,6 +16547,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DefaultCouncilRolePayAmount$createdBy,
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -15914,6 +16604,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PaymentRecord$createdBy,
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
@@ -16000,6 +16696,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SupervisorPaymentRecord$createdBy,
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
@@ -16081,6 +16783,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationPeriod$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16146,6 +16854,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StandardCatalog$createdBy,
                 }, order: {
                     name: "order",
                     type: "Int",
@@ -16200,6 +16914,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CriterionCatalog$createdBy,
                 }, standard: {
                     name: "standard",
                     type: "StandardCatalog",
@@ -16269,6 +16989,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvidenceCategory$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16320,6 +17046,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Evidence$createdBy,
                 }, category: {
                     name: "category",
                     type: "EvidenceCategory",
@@ -16395,6 +17127,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCriterionComment$createdBy,
                 }, reviewer: {
                     name: "reviewer",
                     type: "UserProfile",
@@ -16496,6 +17234,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RequirementCriterionCatalog$createdBy,
                 }, criterionCatalog: {
                     name: "criterionCatalog",
                     type: "CriterionCatalog",
@@ -16563,6 +17307,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StandardPeriod$createdBy,
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -16641,6 +17391,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CriterionPeriod$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16713,6 +17469,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AnalysisCriterion$createdBy,
                 }, criterionPeriod: {
                     name: "criterionPeriod",
                     type: "CriterionPeriod",
@@ -16804,6 +17566,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCriterion$createdBy,
                 }, criterionPeriod: {
                     name: "criterionPeriod",
                     type: "CriterionPeriod",
@@ -16909,6 +17677,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RequirementCriterion$createdBy,
                 }, analysisCriterion: {
                     name: "analysisCriterion",
                     type: "AnalysisCriterion",
@@ -16993,6 +17767,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AnalysisFormEvidence$createdBy,
                 }, requirementCriterion: {
                     name: "requirementCriterion",
                     type: "RequirementCriterion",
@@ -17066,6 +17846,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCouncil$createdBy,
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -17130,6 +17916,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCouncilMember$createdBy,
                 }, evaluationCouncil: {
                     name: "evaluationCouncil",
                     type: "EvaluationCouncil",
@@ -17201,6 +17993,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvidenceFile$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17281,6 +18079,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyObjectType$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17392,6 +18196,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyTopic$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17456,6 +18266,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyQuestionGroup$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17514,6 +18330,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClusterSurvey$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17622,6 +18444,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Survey$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17758,6 +18586,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyQuestion$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17838,6 +18672,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyChoice$createdBy,
                 }, answer: {
                     name: "answer",
                     type: "String",
@@ -17920,6 +18760,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveySession$createdBy,
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -18041,6 +18887,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyResponse$createdBy,
                 }, surveySession: {
                     name: "surveySession",
                     type: "SurveySession",
@@ -18136,6 +18988,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuestionBank$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18214,6 +19072,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Difficulty$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18275,6 +19139,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KnowledgeBlock$createdBy,
                 }, subjectVersion: {
                     name: "subjectVersion",
                     type: "SubjectVersion",
@@ -18347,6 +19217,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Question$createdBy,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -18472,6 +19348,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$MultipleChoiceOption$createdBy,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -18537,6 +19419,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$FillInBlankSlot$createdBy,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -18601,6 +19489,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OrderingItem$createdBy,
                 }, questionId: {
                     name: "questionId",
                     type: "String",
@@ -18665,6 +19559,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Exam$createdBy,
                 }, status: {
                     name: "status",
                     type: "ExamStatus",
@@ -18773,6 +19673,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamRoom$createdBy,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -18854,6 +19760,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamList$createdBy,
                 }, examRoom: {
                     name: "examRoom",
                     type: "ExamRoom",
@@ -18960,6 +19872,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TestStructureRule$createdBy,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -19057,6 +19975,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamBank$createdBy,
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -19123,6 +20047,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamBankQuestion$createdBy,
                 }, examBankId: {
                     name: "examBankId",
                     type: "String",
@@ -19200,6 +20130,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamPaper$createdBy,
                 }, examList: {
                     name: "examList",
                     type: "ExamList",
@@ -19278,6 +20214,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Staff$createdBy,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -19381,6 +20323,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffHistory$createdBy,
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -19482,6 +20430,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Scholarship$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19572,6 +20526,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScholarshipCriteria$createdBy,
                 }, scholarshipId: {
                     name: "scholarshipId",
                     type: "String",
@@ -19648,6 +20608,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ScholarshipAward$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -19738,6 +20704,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19814,6 +20786,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentGraduationApplication$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -19975,6 +20953,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ApplicationDowngraded$createdBy,
                 }, studentGraduationApplication: {
                     name: "studentGraduationApplication",
                     type: "StudentGraduationApplication",
@@ -20051,6 +21035,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ApplicationCheckResult$createdBy,
                 }, studentGraduationApplication: {
                     name: "studentGraduationApplication",
                     type: "StudentGraduationApplication",
@@ -20130,6 +21120,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationDecision$createdBy,
                 }, application: {
                     name: "application",
                     type: "StudentGraduationApplication",
@@ -20288,6 +21284,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicRankingConvert$createdBy,
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -20406,6 +21408,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationRankDowngradeRule$createdBy,
                 }, initialRank: {
                     name: "initialRank",
                     type: "AcademicRankingConvert",
@@ -20466,6 +21474,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GraduationRankDowngradeCondition$createdBy,
                 }, downgradeRule: {
                     name: "downgradeRule",
                     type: "GraduationRankDowngradeRule",
@@ -20545,6 +21559,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RankingCondition$createdBy,
                 }, ranking: {
                     name: "ranking",
                     type: "AcademicRankingConvert",
@@ -20623,6 +21643,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DiplomaVerificationApplication$createdBy,
                 }, fullname: {
                     name: "fullname",
                     type: "String",
@@ -20754,6 +21780,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Note$createdBy,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -20848,6 +21880,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NoteFolder$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20939,6 +21977,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NoteTag$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20998,6 +22042,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$NoteReminder$createdBy,
                 }, title: {
                     name: "title",
                     type: "String",
@@ -21075,6 +22125,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicWarningRule$createdBy,
                 }, field: {
                     name: "field",
                     type: "CriteriaField",
@@ -21165,6 +22221,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicWarning$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -21249,6 +22311,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DisciplinaryWarning$createdBy,
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -21331,6 +22399,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DisciplinaryWarningReason$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21389,6 +22463,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Feedback$createdBy,
                 }, content: {
                     name: "content",
                     type: "String",
@@ -21452,6 +22532,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TrinhDoHocVan$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21506,6 +22592,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TrinhDoLyLuanChinhTri$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21560,6 +22652,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TrinhDoQuanLyNhaNuoc$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21614,6 +22712,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TinhTrangHonNhan$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21662,6 +22766,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TrangThaiLamViec$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21710,6 +22820,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_HinhThucKhenThuongChinhQuyen$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21758,6 +22874,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_HinhThucKhenThuongDang$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21806,6 +22928,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_XepLoaiDanhGiaCanBo$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21854,6 +22982,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_XepLoaiDanhGiaChatLuongDangVien$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21902,6 +23036,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_LoaiHinhCongTac$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -21956,6 +23096,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TinhTrangCongTac$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22004,6 +23150,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_LoaiHinhDiHocTap$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22058,6 +23210,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TinhTrangDiHocTap$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22106,6 +23264,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_NuocCuDiHocTap$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22154,6 +23318,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChucDanhCMNVGiangVien$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22202,6 +23372,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChucDanhCMNVNghienCuuVien$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22250,6 +23426,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChucDanhCMNVKySu$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22298,6 +23480,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_TruongDaoTaoBacDH$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22358,6 +23546,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChuyenNganhDaoTaoBacDH$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22412,6 +23606,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChiHuyQuanLy$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22466,6 +23666,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ChuyenMonKyThuat$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22520,6 +23726,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_SucKhoe$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22574,6 +23786,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_NhomMau$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22628,6 +23846,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_LoaiThuongTat$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22682,6 +23906,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_NganhHoc$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22736,6 +23966,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_ToChucXaHoi$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22790,6 +24026,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_Ngach$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22844,6 +24086,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_BacLuong$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22898,6 +24146,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TemplateFile$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
@@ -22962,6 +24216,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$BlockedIp$createdBy,
                 }, ipAddress: {
                     name: "ipAddress",
                     type: "String",
@@ -23005,11 +24265,863 @@ const metadata: ModelMeta = {
 
 };
 
+function $default$Config$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$UserProfile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$HocHam$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$HocVi$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Relative$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrinhDoLyLuanChinhTri$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrinhDoQuanLyNhaNuoc$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$NgoaiNgu$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TinHoc$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$BoiDuongQuocPhongAnNinh$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CapBac$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuaTrinhCongTac$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuaTrinhCuDiCongTac$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuaTrinhCuDiDaoTao$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KhenThuong$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KyLuat$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DoiTuongChinhSach$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KeKhaiTaiSan$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TiengDanToc$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ChienDau$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$NuocNgoai$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ThuongTat$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DanhHieu$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuaTrinhHocTap$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ToChucXaHoi$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuaTrinhLuong$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Group$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Role$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Permission$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ChatBotConfig$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$UserSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Document$createdBy(user: any): unknown {
+    return user?.id;
+}
+
 function $default$Document$uploadedById(user: any): unknown {
     return user?.id;
 }
 
+function $default$DocumentTopic$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$FAQ$createdBy(user: any): unknown {
+    return user?.id;
+}
+
 function $default$FAQ$uploadedById(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Prompt$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Conversation$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Message$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CitationMessage$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Topic$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DocumentClassification$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentScoreConvert$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectScoreConvert$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentSubjectScore$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentSubjectScoreHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ArchivedCertificateOnStudentSubjectScore$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ArchivedCertificate$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ArchivedAwardOnStudentSubjectScore$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ArchivedAward$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SchoolYear$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Semester$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Milestone$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingLanguage$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingCourse$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$FixedClass$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Curriculum$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CurriculumVersion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Subject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectVersionCategory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectVersion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectVersionHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EquivalencyGroup$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectInGroup$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingBlockSubject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClassRegisterSessionCredit$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClassRegisterSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClassRegisterLogs$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectClassHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectClassTime$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClassSchedule$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingObjectType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$PriorityObject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingLevel$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingForm$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingLocation$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Building$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Room$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingField$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingFieldOnTrainingObjectType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingMajor$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingMajorOnTrainingObjectType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingBlock$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingBlockOnCurriculumVersion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingTime$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Certificate$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CertificateOnSubject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Award$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DiplomaType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScoreConvert$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingKPI$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Student$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Notification$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DocumentFile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicActionConfig$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicActionRuleSet$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicActionCondition$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentAcademicDecision$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingScoreSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentTrainingScore$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$LecturerType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StaffType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StaffPosition$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Lecturer$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$LecturerHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ResearchProject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentResearchRegistration$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ThesisSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ThesisProject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DefenseSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentThesisRegistration$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExpertProfile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Decision$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Invitation$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Council$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CouncilMember$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DefenseRecord$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$LibrarySubmission$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DefaultCouncilRolePayAmount$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$PaymentRecord$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SupervisorPaymentRecord$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StandardCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CriterionCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvidenceCategory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Evidence$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCriterionComment$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RequirementCriterionCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StandardPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CriterionPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AnalysisCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RequirementCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AnalysisFormEvidence$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCouncil$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCouncilMember$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvidenceFile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyObjectType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyTopic$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyQuestionGroup$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClusterSurvey$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Survey$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyQuestion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyChoice$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveySession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyResponse$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuestionBank$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Difficulty$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KnowledgeBlock$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Question$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$MultipleChoiceOption$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$FillInBlankSlot$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$OrderingItem$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Exam$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamRoom$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamList$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TestStructureRule$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamBank$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamBankQuestion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamPaper$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Staff$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StaffHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Scholarship$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScholarshipCriteria$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ScholarshipAward$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GraduationSession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentGraduationApplication$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ApplicationDowngraded$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ApplicationCheckResult$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GraduationDecision$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicRankingConvert$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GraduationRankDowngradeRule$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GraduationRankDowngradeCondition$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RankingCondition$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DiplomaVerificationApplication$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Note$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$NoteFolder$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$NoteTag$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$NoteReminder$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicWarningRule$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AcademicWarning$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DisciplinaryWarning$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DisciplinaryWarningReason$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Feedback$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TrinhDoHocVan$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TrinhDoLyLuanChinhTri$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TrinhDoQuanLyNhaNuoc$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TinhTrangHonNhan$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TrangThaiLamViec$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_HinhThucKhenThuongChinhQuyen$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_HinhThucKhenThuongDang$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_XepLoaiDanhGiaCanBo$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_XepLoaiDanhGiaChatLuongDangVien$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_LoaiHinhCongTac$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TinhTrangCongTac$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_LoaiHinhDiHocTap$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TinhTrangDiHocTap$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_NuocCuDiHocTap$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChucDanhCMNVGiangVien$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChucDanhCMNVNghienCuuVien$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChucDanhCMNVKySu$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_TruongDaoTaoBacDH$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChuyenNganhDaoTaoBacDH$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChiHuyQuanLy$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ChuyenMonKyThuat$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_SucKhoe$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_NhomMau$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_LoaiThuongTat$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_NganhHoc$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_ToChucXaHoi$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_Ngach$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DM_BacLuong$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TemplateFile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$BlockedIp$createdBy(user: any): unknown {
     return user?.id;
 }
 export default metadata;

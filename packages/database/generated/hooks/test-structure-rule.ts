@@ -328,7 +328,7 @@ export function useSuspenseCountTestStructureRule<TArgs extends Prisma.TestStruc
 }
 import type { QuestionType } from '../zenstack/models';
 
-export function useCheckTestStructureRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; examId?: string; questionBankId?: string; knowledgeBlockId?: string; questionType?: QuestionType; count?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTestStructureRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examId?: string; questionBankId?: string; knowledgeBlockId?: string; questionType?: QuestionType; count?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TestStructureRule', `${endpoint}/testStructureRule/check`, args, options, fetch);
 }

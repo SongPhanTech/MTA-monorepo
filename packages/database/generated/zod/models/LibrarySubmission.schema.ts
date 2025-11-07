@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     submissionDate: z.coerce.date().default(() => new Date()),
     isHardcopy: z.boolean().default(false),
     isSoftcopy: z.boolean().default(false),
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     submissionDate: z.coerce.date(),
     isHardcopy: z.boolean(),
     isSoftcopy: z.boolean(),
@@ -75,6 +77,7 @@ export const LibrarySubmissionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     submissionDate: z.coerce.date(),
     isHardcopy: z.boolean(),
     isSoftcopy: z.boolean(),
@@ -87,7 +90,7 @@ export const LibrarySubmissionPrismaUpdateSchema = z.object({
  * `LibrarySubmission` schema for create operations excluding foreign keys and relations.
  */
 export const LibrarySubmissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, submissionDate: true, isHardcopy: true, isSoftcopy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, submissionDate: true, isHardcopy: true, isSoftcopy: true
 });
 
 

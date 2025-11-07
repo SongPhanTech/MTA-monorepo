@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     color: z.string().nullish(),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     color: z.string().nullish(),
 }
@@ -65,6 +67,7 @@ export const NoteTagPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     color: z.string().nullish()
 }).partial().passthrough();
@@ -74,7 +77,7 @@ export const NoteTagPrismaUpdateSchema = z.object({
  * `NoteTag` schema for create operations excluding foreign keys and relations.
  */
 export const NoteTagCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
@@ -82,7 +85,7 @@ export const NoteTagCreateScalarSchema = baseSchemaWithoutDefaults.partial({
  * `NoteTag` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const NoteTagCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

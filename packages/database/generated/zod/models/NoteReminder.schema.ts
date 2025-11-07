@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     reminderTime: z.coerce.date(),
     isCompleted: z.boolean().default(false),
@@ -31,6 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     reminderTime: z.coerce.date(),
     isCompleted: z.boolean(),
@@ -79,6 +81,7 @@ export const NoteReminderPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     reminderTime: z.coerce.date(),
     isCompleted: z.boolean(),
@@ -92,7 +95,7 @@ export const NoteReminderPrismaUpdateSchema = z.object({
  * `NoteReminder` schema for create operations excluding foreign keys and relations.
  */
 export const NoteReminderCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, isCompleted: true, repeatType: true, isNotified: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isCompleted: true, repeatType: true, isNotified: true
 });
 
 

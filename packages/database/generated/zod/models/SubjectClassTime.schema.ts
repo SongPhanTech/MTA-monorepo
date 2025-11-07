@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     dayOfWeek: z.number(),
     startPeriod: z.number(),
     endPeriod: z.number(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     dayOfWeek: z.number(),
     startPeriod: z.number(),
     endPeriod: z.number(),
@@ -71,6 +73,7 @@ export const SubjectClassTimePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     dayOfWeek: z.union([z.number(), z.record(z.string(), z.unknown())]),
     startPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
     endPeriod: z.union([z.number(), z.record(z.string(), z.unknown())])
@@ -81,7 +84,7 @@ export const SubjectClassTimePrismaUpdateSchema = z.object({
  * `SubjectClassTime` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassTimeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

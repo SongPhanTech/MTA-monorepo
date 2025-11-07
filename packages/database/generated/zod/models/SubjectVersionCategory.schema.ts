@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
 }
 ).strict();
@@ -24,6 +25,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
 }
 ).strict();
@@ -63,6 +65,7 @@ export const SubjectVersionCategoryPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string()
 }).partial().passthrough();
 
@@ -71,7 +74,7 @@ export const SubjectVersionCategoryPrismaUpdateSchema = z.object({
  * `SubjectVersionCategory` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectVersionCategoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
@@ -79,7 +82,7 @@ export const SubjectVersionCategoryCreateScalarSchema = baseSchemaWithoutDefault
  * `SubjectVersionCategory` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const SubjectVersionCategoryCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

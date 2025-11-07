@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     proposedDate: z.coerce.date().default(() => new Date()),
     status: CouncilProposalStatusSchema,
 }
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     proposedDate: z.coerce.date(),
     status: CouncilProposalStatusSchema,
 }
@@ -73,6 +75,7 @@ export const CouncilPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     proposedDate: z.coerce.date(),
     status: CouncilProposalStatusSchema
 }).partial().passthrough();
@@ -82,7 +85,7 @@ export const CouncilPrismaUpdateSchema = z.object({
  * `Council` schema for create operations excluding foreign keys and relations.
  */
 export const CouncilCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, proposedDate: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, proposedDate: true, status: true
 });
 
 

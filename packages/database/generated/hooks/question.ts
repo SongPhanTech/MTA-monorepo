@@ -328,7 +328,7 @@ export function useSuspenseCountQuestion<TArgs extends Prisma.QuestionCountArgs,
 }
 import type { QuestionType } from '../zenstack/models';
 
-export function useCheckQuestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; content?: string; type?: QuestionType; explanation?: string; isAutoGraded?: boolean; questionBankId?: string; knowledgeBlockId?: string; difficultyId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckQuestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; content?: string; type?: QuestionType; explanation?: string; isAutoGraded?: boolean; questionBankId?: string; knowledgeBlockId?: string; difficultyId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Question', `${endpoint}/question/check`, args, options, fetch);
 }

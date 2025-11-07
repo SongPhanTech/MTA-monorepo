@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const EquivalencyGroupScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt"])
+export const EquivalencyGroupScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy"])

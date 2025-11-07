@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const GraduationRankDowngradeRuleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "initialRankId"])
+export const GraduationRankDowngradeRuleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "initialRankId"])

@@ -327,7 +327,7 @@ export function useSuspenseCountDifficulty<TArgs extends Prisma.DifficultyCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Difficulty', `${endpoint}/difficulty/count`, args, options, fetch);
 }
 
-export function useCheckDifficulty<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; level?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDifficulty<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; level?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Difficulty', `${endpoint}/difficulty/check`, args, options, fetch);
 }

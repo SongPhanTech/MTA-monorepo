@@ -6,6 +6,7 @@ abstract model Base {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt @default(now())
+  createdBy   String?   @db.Uuid @default(auth().id)
   // TODO: change this
   @@allow('all', auth() != null)
 

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ChatBotConfigScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "value"])
+export const ChatBotConfigScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "value"])

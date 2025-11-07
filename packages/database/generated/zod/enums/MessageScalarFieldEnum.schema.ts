@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const MessageScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "conversationId", "content", "sender"])
+export const MessageScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "conversationId", "content", "sender"])

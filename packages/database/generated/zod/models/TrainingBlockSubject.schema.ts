@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     semester: z.number().nullish(),
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     semester: z.number().nullish(),
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
@@ -77,6 +79,7 @@ export const TrainingBlockSubjectPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     semester: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
@@ -88,7 +91,7 @@ export const TrainingBlockSubjectPrismaUpdateSchema = z.object({
  * `TrainingBlockSubject` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingBlockSubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true
 });
 
 

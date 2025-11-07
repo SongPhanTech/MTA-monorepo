@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: z.array(SurveyObjectSchema),
 }
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: z.array(SurveyObjectSchema),
 }
@@ -74,6 +76,7 @@ export const SurveyObjectTypePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     type: z.array(SurveyObjectSchema)
 }).partial().passthrough();
@@ -83,7 +86,7 @@ export const SurveyObjectTypePrismaUpdateSchema = z.object({
  * `SurveyObjectType` schema for create operations excluding foreign keys and relations.
  */
 export const SurveyObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true
 });
 
 
@@ -91,7 +94,7 @@ export const SurveyObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.part
  * `SurveyObjectType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const SurveyObjectTypeCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true
 });
 
 

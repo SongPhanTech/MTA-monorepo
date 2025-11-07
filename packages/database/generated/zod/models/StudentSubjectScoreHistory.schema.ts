@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     attendanceScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     midtermScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     examScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
@@ -48,6 +49,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     attendanceScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     midtermScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     examScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
@@ -115,6 +117,7 @@ export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     attendanceScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
     midtermScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
     examScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
@@ -145,7 +148,7 @@ export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
  * `StudentSubjectScoreHistory` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSubjectScoreHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

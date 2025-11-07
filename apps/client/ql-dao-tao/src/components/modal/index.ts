@@ -205,3 +205,4 @@ export {
     ModalCauHinhLuanVan,
 }
 export * from './ke-hoach-dao-tao'
+export * from './thong-bao'

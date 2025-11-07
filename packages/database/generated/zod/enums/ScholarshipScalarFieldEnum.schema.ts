@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ScholarshipScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "rankOrder", "baseAmount", "multiplier", "effectiveFrom", "effectiveTo", "trainingCourseId"])
+export const ScholarshipScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "rankOrder", "baseAmount", "multiplier", "effectiveFrom", "effectiveTo", "trainingCourseId"])

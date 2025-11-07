@@ -327,7 +327,7 @@ export function useSuspenseCountArchivedAwardOnStudentSubjectScore<TArgs extends
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ArchivedAwardOnStudentSubjectScore', `${endpoint}/archivedAwardOnStudentSubjectScore/count`, args, options, fetch);
 }
 
-export function useCheckArchivedAwardOnStudentSubjectScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; studentSubjectScoreId?: string; archivedAwardId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckArchivedAwardOnStudentSubjectScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentSubjectScoreId?: string; archivedAwardId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ArchivedAwardOnStudentSubjectScore', `${endpoint}/archivedAwardOnStudentSubjectScore/check`, args, options, fetch);
 }

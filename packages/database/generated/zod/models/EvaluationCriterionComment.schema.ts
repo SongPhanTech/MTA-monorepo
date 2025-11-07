@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish(),
 }
 ).strict();
@@ -24,6 +25,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish(),
 }
 ).strict();
@@ -73,6 +75,7 @@ export const EvaluationCriterionCommentPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish()
 }).partial().passthrough();
 
@@ -81,7 +84,7 @@ export const EvaluationCriterionCommentPrismaUpdateSchema = z.object({
  * `EvaluationCriterionComment` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationCriterionCommentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const AnalysisFormEvidenceScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "requirementCriterionId", "evidenceId", "order"])
+export const AnalysisFormEvidenceScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "requirementCriterionId", "evidenceId", "order"])

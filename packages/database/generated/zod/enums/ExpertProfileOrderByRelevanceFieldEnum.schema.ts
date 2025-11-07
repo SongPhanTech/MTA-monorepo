@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ExpertProfileOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "lecturerId", "name", "academicRank", "academicDegree", "organization", "position", "specialization", "workplace", "phone", "email", "bankAccountNumber", "bankName"])
+export const ExpertProfileOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "lecturerId", "name", "academicRank", "academicDegree", "organization", "position", "specialization", "workplace", "phone", "email", "bankAccountNumber", "bankName"])

@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     bLaNguoiDung: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
@@ -97,6 +98,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     bLaNguoiDung: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
@@ -322,6 +324,7 @@ export const UserProfilePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     bLaNguoiDung: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
@@ -403,7 +406,7 @@ export const UserProfilePrismaUpdateSchema = z.object({
  * `UserProfile` schema for create operations excluding foreign keys and relations.
  */
 export const UserProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     order: z.number(),
     opening: z.string().default(""),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     order: z.number(),
     opening: z.string(),
@@ -74,6 +76,7 @@ export const StandardPeriodPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     opening: z.string(),
@@ -85,7 +88,7 @@ export const StandardPeriodPrismaUpdateSchema = z.object({
  * `StandardPeriod` schema for create operations excluding foreign keys and relations.
  */
 export const StandardPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, opening: true, conclusion: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, opening: true, conclusion: true
 });
 
 

@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startYear: z.number().nullish(),
     endYear: z.number().nullish(),
@@ -48,6 +49,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startYear: z.number().nullish(),
     endYear: z.number().nullish(),
@@ -130,6 +132,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     endYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
@@ -161,7 +164,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
  * `TrainingCourse` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingCourseCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, scoreToRetain: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, scoreToRetain: true
 });
 
 

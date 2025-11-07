@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     status: ExamStatusSchema,
     lockExamSessions: z.boolean().default(false),
     duration: z.number().nullish(),
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     status: ExamStatusSchema,
     lockExamSessions: z.boolean(),
     duration: z.number().nullish(),
@@ -81,6 +83,7 @@ export const ExamPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     status: ExamStatusSchema,
     lockExamSessions: z.boolean(),
     duration: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
@@ -92,7 +95,7 @@ export const ExamPrismaUpdateSchema = z.object({
  * `Exam` schema for create operations excluding foreign keys and relations.
  */
 export const ExamCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, lockExamSessions: true, session: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, lockExamSessions: true, session: true
 });
 
 

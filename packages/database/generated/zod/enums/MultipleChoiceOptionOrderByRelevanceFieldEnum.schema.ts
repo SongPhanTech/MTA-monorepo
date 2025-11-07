@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const MultipleChoiceOptionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "questionId", "content"])
+export const MultipleChoiceOptionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "questionId", "content"])

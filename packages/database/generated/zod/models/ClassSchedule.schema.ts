@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.number(),
     endPeriod: z.number(),
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.number(),
     endPeriod: z.number(),
@@ -90,6 +92,7 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
     endPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -104,7 +107,7 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
  * `ClassSchedule` schema for create operations excluding foreign keys and relations.
  */
 export const ClassScheduleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, periodType: true, isReplacement: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, periodType: true, isReplacement: true
 });
 
 

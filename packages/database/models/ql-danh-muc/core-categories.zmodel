@@ -186,7 +186,6 @@ model DM_NhanVien extends CoreBase {
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
 
-  notification        Notification[]
   feedback            Feedback[]
 
   @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ApplicationDowngradedScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "studentGraduationApplicationId", "fromId"])
+export const ApplicationDowngradedScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "studentGraduationApplicationId", "fromId"])

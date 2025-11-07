@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     priority: z.number().default(0),
     electiveCreditsRequired: z.number().default(0),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     priority: z.number(),
     electiveCreditsRequired: z.number(),
 }
@@ -74,6 +76,7 @@ export const TrainingBlockOnCurriculumVersionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     priority: z.union([z.number(), z.record(z.string(), z.unknown())]),
     electiveCreditsRequired: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
@@ -83,7 +86,7 @@ export const TrainingBlockOnCurriculumVersionPrismaUpdateSchema = z.object({
  * `TrainingBlockOnCurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingBlockOnCurriculumVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, priority: true, electiveCreditsRequired: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, priority: true, electiveCreditsRequired: true
 });
 
 

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const QuaTrinhCuDiCongTacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "donVi", "chucVuId", "userProfileId"])
+export const QuaTrinhCuDiCongTacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "donVi", "chucVuId", "userProfileId"])

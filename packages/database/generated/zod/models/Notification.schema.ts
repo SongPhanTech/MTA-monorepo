@@ -16,6 +16,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     content: z.string(),
     type: NotificationTypeSchema,
@@ -33,6 +34,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     content: z.string(),
     type: NotificationTypeSchema,
@@ -46,12 +48,7 @@ const relationSchema = z.object({
     targetCourses: z.array(z.unknown()).optional(),
     targetClasses: z.array(z.unknown()).optional(),
     targetStudents: z.array(z.unknown()).optional(),
-    createdBy: z.record(z.string(), z.unknown()),
     attachments: z.array(z.unknown()).optional(),
-}
-);
-const fkSchema = z.object({
-    createdById: z.string().uuid(),
 }
 );
 
@@ -64,7 +61,7 @@ export const NotificationScalarSchema = baseSchema;
 /**
  * `Notification` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const NotificationSchema = NotificationScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const NotificationSchema = NotificationScalarSchema.merge(relationSchema.partial());
 
 
 /**
@@ -86,6 +83,7 @@ export const NotificationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     content: z.string(),
     type: NotificationTypeSchema,
@@ -100,14 +98,16 @@ export const NotificationPrismaUpdateSchema = z.object({
  * `Notification` schema for create operations excluding foreign keys and relations.
  */
 export const NotificationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true, priority: true, publishedAt: true, targetAll: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, priority: true, publishedAt: true, targetAll: true
 });
 
 
 /**
  * `Notification` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const NotificationCreateSchema = NotificationCreateScalarSchema.merge(fkSchema);
+export const NotificationCreateSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, priority: true, publishedAt: true, targetAll: true
+});
 
 
 /**
@@ -119,5 +119,5 @@ export const NotificationUpdateScalarSchema = baseSchemaWithoutDefaults.partial(
 /**
  * `Notification` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const NotificationUpdateSchema = NotificationUpdateScalarSchema.merge(fkSchema.partial());
+export const NotificationUpdateSchema = NotificationUpdateScalarSchema;
 

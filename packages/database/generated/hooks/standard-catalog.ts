@@ -327,7 +327,7 @@ export function useSuspenseCountStandardCatalog<TArgs extends Prisma.StandardCat
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StandardCatalog', `${endpoint}/standardCatalog/count`, args, options, fetch);
 }
 
-export function useCheckStandardCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; order?: number; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStandardCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; order?: number; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StandardCatalog', `${endpoint}/standardCatalog/check`, args, options, fetch);
 }

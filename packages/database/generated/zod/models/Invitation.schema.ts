@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     sentDate: z.coerce.date().default(() => new Date()),
     isConfirmed: z.boolean().default(false),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     sentDate: z.coerce.date(),
     isConfirmed: z.boolean(),
 }
@@ -69,6 +71,7 @@ export const InvitationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     sentDate: z.coerce.date(),
     isConfirmed: z.boolean()
 }).partial().passthrough();
@@ -78,7 +81,7 @@ export const InvitationPrismaUpdateSchema = z.object({
  * `Invitation` schema for create operations excluding foreign keys and relations.
  */
 export const InvitationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, sentDate: true, isConfirmed: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, sentDate: true, isConfirmed: true
 });
 
 

@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     amount: DecimalSchema,
     gpaAtAward: z.number(),
     priorityRank: z.number(),
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     amount: DecimalSchema,
     gpaAtAward: z.number(),
     priorityRank: z.number(),
@@ -77,6 +79,7 @@ export const ScholarshipAwardPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     amount: DecimalSchema,
     gpaAtAward: z.union([z.number(), z.record(z.string(), z.unknown())]),
     priorityRank: z.union([z.number(), z.record(z.string(), z.unknown())])
@@ -87,7 +90,7 @@ export const ScholarshipAwardPrismaUpdateSchema = z.object({
  * `ScholarshipAward` schema for create operations excluding foreign keys and relations.
  */
 export const ScholarshipAwardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

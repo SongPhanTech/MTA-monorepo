@@ -17,6 +17,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     applicationDate: z.coerce.date().default(() => new Date()),
     status: ApplicationStatusSchema,
     graduation: z.boolean().nullish(),
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     applicationDate: z.coerce.date(),
     status: ApplicationStatusSchema,
     graduation: z.boolean().nullish(),
@@ -92,6 +94,7 @@ export const StudentGraduationApplicationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     applicationDate: z.coerce.date(),
     status: ApplicationStatusSchema,
     graduation: z.boolean().nullish(),
@@ -104,7 +107,7 @@ export const StudentGraduationApplicationPrismaUpdateSchema = z.object({
  * `StudentGraduationApplication` schema for create operations excluding foreign keys and relations.
  */
 export const StudentGraduationApplicationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, applicationDate: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, applicationDate: true, status: true
 });
 
 
