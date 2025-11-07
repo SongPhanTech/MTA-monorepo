@@ -231,9 +231,7 @@ const PutTopic = () => {
                     <FormItem form={form} name={'isPinned'} valuePropName="checked">
                         <Tooltip title="Chủ đề được ghim sẽ hiển thị làm câu hỏi gợi ý trên trang chủ hỏi đáp">
                             <Checkbox>
-                                <span className="text-sm">
-                                    Ghim chủ đề này (hiển thị làm gợi ý khi mới vào hỏi đáp)
-                                </span>
+                                <span className="text-sm">Chủ đề gợi ý</span>
                             </Checkbox>
                         </Tooltip>
                     </FormItem>

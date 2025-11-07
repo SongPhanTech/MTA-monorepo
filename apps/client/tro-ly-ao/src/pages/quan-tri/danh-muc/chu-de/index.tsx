@@ -1,4 +1,4 @@
-import { EditOutlined } from '@ant-design/icons'
+import { CheckOutlined, EditOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
@@ -138,7 +138,7 @@ function Page() {
                             style={{ width: 400 }}
                         />
                         <Select
-                            placeholder="Lọc theo ghim"
+                            placeholder="Gợi ý"
                             allowClear
                             value={filters.isPinned}
                             onChange={(value) =>
@@ -149,9 +149,8 @@ function Page() {
                             }
                             style={{ width: 200 }}
                             options={[
-                                { label: 'Tất cả', value: null },
-                                { label: 'Đã ghim', value: true },
-                                { label: 'Chưa ghim', value: false },
+                                { label: 'Gợi ý', value: true },
+                                { label: 'Không gợi ý', value: false },
                             ]}
                         />
                     </div>
@@ -198,20 +197,12 @@ function Page() {
                                         : value || 'Chưa có mô tả',
                             },
                             {
-                                title: 'Ghim',
+                                title: 'Gợi ý',
                                 dataIndex: 'isPinned',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 render: (value: boolean) =>
-                                    value ? (
-                                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-md text-sm font-medium">
-                                            Có
-                                        </span>
-                                    ) : (
-                                        <span className="px-2 py-1 bg-gray-100 text-gray-500 rounded-md text-sm">
-                                            Không
-                                        </span>
-                                    ),
+                                    value && <CheckOutlined className="text-green-600 text-lg" />,
                             },
                             // {
                             //     title: 'Ngày tạo',

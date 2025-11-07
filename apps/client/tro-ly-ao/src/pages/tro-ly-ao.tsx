@@ -134,7 +134,7 @@ export default function TroLyAo() {
                     {pinnedTopics.length > 0 && (
                         <div className="w-full max-w-5xl mx-auto mb-8 px-4 md:px-6">
                             <h3 className="text-lg font-medium text-gray-700 mb-4 text-center">
-                                Chủ đề gợi ý
+                                Chủ đề thường gặp
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {pinnedTopics.map((topic) => (
@@ -156,15 +156,7 @@ export default function TroLyAo() {
                                             <p className="text-sm font-medium text-gray-800 m-0 flex-1">
                                                 {topic.name}
                                             </p>
-                                            <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium flex-shrink-0">
-                                                Ghim
-                                            </span>
                                         </div>
-                                        {topic.description && (
-                                            <p className="text-xs text-gray-500 mt-1 m-0 line-clamp-2">
-                                                {topic.description}
-                                            </p>
-                                        )}
                                     </Card>
                                 ))}
                             </div>
