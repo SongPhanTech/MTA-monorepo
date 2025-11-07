@@ -4,7 +4,8 @@ import FormItem from '@components/commons/form-item'
 import LecturerSelector from '@components/commons/lecturer-selector'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useFindManyLecturer, useFindUniqueEvaluationCriterion } from '@workspace/db/hooks'
+import { useFindUniqueCriterionPeriod } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -19,7 +20,7 @@ export default function CriteriaAssignmentModal() {
     const [form] = Form.useForm<CriteriaAssignmentModalFormType>()
 
     const { isOpen, onClose, input } = useDisclosure<{
-        evaluationCriterionId?: string
+        criterionPeriodId?: string
     }>({
         tag: 'CriteriaAssignmentModal',
         onClose() {
@@ -29,89 +30,80 @@ export default function CriteriaAssignmentModal() {
 
     const { hideSpinner, showSpinner } = useSpinner()
 
-    const { data: lecturers = [] } = useFindManyLecturer({
-        where: {
-            deletedAt: null,
-        },
-        include: {
-            userProfile: {
-                include: {
-                    academicDegreeType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
-                },
-            },
-        },
-    })
-
-    const { data: initValue } = useFindUniqueEvaluationCriterion(
+    const { data: initValue } = useFindUniqueCriterionPeriod(
         {
             where: {
-                id: input?.evaluationCriterionId,
+                id: input?.criterionPeriodId,
             },
             include: {
-                criterionAssignments: {
-                    select: {
-                        lecturerId: true,
-                        deadline: true,
-                        id: true,
-                    },
-                },
+                analysisCriterions: true,
             },
         },
         {
-            enabled: !!input?.evaluationCriterionId,
+            enabled: !!input?.criterionPeriodId,
         }
     )
 
     useEffect(() => {
         if (initValue) {
             form.setFieldsValue({
-                lecturerId: initValue.criterionAssignments[0]?.lecturerId,
-                deadline: initValue.criterionAssignments[0]?.deadline
-                    ? dayjs(initValue.criterionAssignments[0]?.deadline)
+                lecturerId: initValue.analysisCriterions?.lecturerId || '',
+                deadline: initValue.analysisCriterions?.deadline
+                    ? dayjs(initValue.analysisCriterions?.deadline)
                     : undefined,
             })
         }
     }, [initValue, form])
 
-    const { mutateAsync: createCriterionAssignment } = useCreateCriterionAssignment()
-    const { mutateAsync: updateCriterionAssignment } = useUpdateCriterionAssignment()
-
     const onOk = async (values: CriteriaAssignmentModalFormType) => {
         try {
             showSpinner()
-            if (!values || !input?.evaluationCriterionId) return
+            if (!values || !input?.criterionPeriodId) return
 
-            const existingAssignment = initValue?.criterionAssignments?.[0]
+            const res = await sqlTransaction([
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'delete',
+                    data: {
+                        where: {
+                            criterionPeriodId: input?.criterionPeriodId,
+                        },
+                    },
+                },
+                {
+                    model: 'EvaluationCriterion',
+                    operation: 'delete',
+                    data: {
+                        where: {
+                            criterionPeriodId: input?.criterionPeriodId,
+                        },
+                    },
+                },
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'create',
+                    data: {
+                        data: {
+                            lecturerId: values.lecturerId,
+                            deadline: values.deadline,
+                        },
+                    },
+                },
+                {
+                    model: 'EvaluationCriterion',
+                    operation: 'create',
+                    data: {
+                        data: {
+                            lecturerId: values.lecturerId,
+                            deadline: values.deadline,
+                        },
+                    },
+                },
+            ])
 
-            if (existingAssignment?.id) {
-                await updateCriterionAssignment({
-                    where: {
-                        id: existingAssignment.id,
-                    },
-                    data: {
-                        lecturerId: values.lecturerId,
-                        deadline: dayjs(values.deadline).toDate(),
-                    },
-                })
-                message.success('Cập nhật phân công giảng viên thành công')
-            } else {
-                await createCriterionAssignment({
-                    data: {
-                        evaluationCriterionId: input.evaluationCriterionId,
-                        lecturerId: values.lecturerId,
-                        deadline: dayjs(values.deadline).toDate(),
-                    },
-                })
-                message.success('Thêm phân công giảng viên thành công')
+            if (res.status !== 200) {
+                message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+                return
             }
 
             queryClient.invalidateQueries({
@@ -131,7 +123,7 @@ export default function CriteriaAssignmentModal() {
 
     return (
         <PutFormModal
-            title={input?.evaluationCriterionId ? 'Chỉnh sửa giảng viên' : 'Thêm giảng viên'}
+            title={input?.criterionPeriodId ? 'Chỉnh sửa giảng viên' : 'Thêm giảng viên'}
             open={isOpen}
             onCancel={onClose}
             form={form}

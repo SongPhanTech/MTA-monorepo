@@ -72,6 +72,7 @@ enum EvaluationCriterionStatus {
 
   @@schema("khao-thi")
 }
+
 enum EvaluationStatus {
   LOCK         //Khoá
   PENDING      //Chưa nộp
@@ -94,11 +95,11 @@ model EvaluationCriterionComment extends Base {
 
   content                String?               @db.Text
 
-  analysisCriterion      AnalysisCriterion?     @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterion      AnalysisCriterion?    @relation(fields: [analysisCriterionId], references: [id])
   analysisCriterionId    String?
-  evaluationCriterion     EvaluationCriterion? @relation(fields: [evaluationCriterionId], references: [id])
-  evaluationCriterionId   String?
-  
+  evaluationCriterion    EvaluationCriterion?  @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId  String?
+
   @@schema("khao-thi")
 }
 
@@ -146,9 +147,6 @@ model CriterionPeriod extends Base {
   @@schema("khao-thi")
 }
 
-
-
-
 /// Phiếu phân tích của đợt (Bản sao/áp dụng từ CriterionCatalog)
 model AnalysisCriterion extends Base {
   criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
@@ -159,7 +157,7 @@ model AnalysisCriterion extends Base {
   lecturerId                  String?
   deadline                    DateTime?
 
-  status                      EvaluationCriterionStatus             @default(PENDING)
+  status                      EvaluationCriterionStatus    @default(PENDING)
 
   /// Yêu cầu trong phiếu phân tích
   requirementCriterions       RequirementCriterion[]
