@@ -1,17 +1,28 @@
+import CommentList from '@components/commons/comment-list'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
-import { Button } from 'antd'
+import { Badge, Button } from 'antd'
+import { MessageCircle } from 'lucide-react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number }) => {
+    const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
+
     const { onOpen } = useDisclosure<{
         id?: string
         analysisCriterionId?: string
     }>({
         tag: 'PutTieuChiMinhChungModal',
     })
+
+    const toggleCommentRow = (recordId: string) => {
+        setExpandedRowKeys((prev) =>
+            prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
+        )
+    }
 
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto p-4">
@@ -136,6 +147,11 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                         width: 100,
                                         align: 'center',
                                         render: (__, record) => {
+                                            const commentCount =
+                                                record.evaluationCriterionComment?.length || 0
+
+                                            const isExpanded = expandedRowKeys.includes(record.id)
+
                                             return (
                                                 <div className="flex gap-2 items-center justify-center">
                                                     <EditIcon
@@ -149,6 +165,18 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                                         }}
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
+                                                    {commentCount > 0 && (
+                                                        <Badge count={commentCount} size="small">
+                                                            <MessageCircle
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    toggleCommentRow(record.id)
+                                                                }}
+                                                            />
+                                                        </Badge>
+                                                    )}
                                                 </div>
                                             )
                                         },
@@ -156,6 +184,26 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                 ]}
                                 data={item?.analysisCriterions?.requirementCriterions || []}
                                 pagination={false}
+                                expandable={{
+                                    expandedRowKeys: expandedRowKeys,
+                                    expandedRowRender: (record) => {
+                                        return (
+                                            <div className="px-4 py-3">
+                                                <CommentList
+                                                    comments={
+                                                        record.evaluationCriterionComment || []
+                                                    }
+                                                />
+                                            </div>
+                                        )
+                                    },
+                                    rowExpandable: (record) =>
+                                        (record?.evaluationCriterionComment?.length || 0) > 0,
+                                    onExpand: (expanded, record) => {
+                                        toggleCommentRow(record.id)
+                                    },
+                                    expandIcon: () => null,
+                                }}
                             />
                         </div>
                     </div>

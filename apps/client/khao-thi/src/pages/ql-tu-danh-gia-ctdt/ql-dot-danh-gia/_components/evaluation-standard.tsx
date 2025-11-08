@@ -46,7 +46,7 @@ export default function EvaluationStandardTab() {
         [filters.searchText, filters.name]
     )
 
-    const { data } = useFindManyStandardPeriod(
+    const { data, isLoading } = useFindManyStandardPeriod(
         {
             where: {
                 ...where,
@@ -138,6 +138,7 @@ export default function EvaluationStandardTab() {
                         setFilters(value)
                         setCurrentPage(1)
                     }}
+                    loading={isLoading}
                     scroll={{ y: 'calc(100vh - 260px)' }}
                     columns={[
                         {

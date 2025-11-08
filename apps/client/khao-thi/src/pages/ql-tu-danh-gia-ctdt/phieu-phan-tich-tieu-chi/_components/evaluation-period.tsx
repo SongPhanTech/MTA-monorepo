@@ -16,7 +16,7 @@ export default function EvaluationPeriodCriteriaAnalysis() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data: assignments = [] } = useFindManyEvaluationPeriod(
+    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
         {
             where: {
                 standards: {
@@ -78,6 +78,7 @@ export default function EvaluationPeriodCriteriaAnalysis() {
                 <Table
                     rowKey="id"
                     data={assignments}
+                    loading={isLoading}
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: [selectedEvaluationPeriodId as Key],

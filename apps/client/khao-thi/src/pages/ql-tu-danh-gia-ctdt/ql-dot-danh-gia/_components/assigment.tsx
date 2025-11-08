@@ -51,7 +51,7 @@ export default function AssigmentOfAssessmentTab() {
         },
     })
 
-    const { data } = useFindUniqueEvaluationPeriod(
+    const { data, isLoading } = useFindUniqueEvaluationPeriod(
         {
             where: { id: selectedEvaluationPeriodId },
             include: {
@@ -209,6 +209,7 @@ export default function AssigmentOfAssessmentTab() {
                         defaultExpandAll
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
+                        loading={isLoading}
                         data={tableData}
                         pagination={false}
                         scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
