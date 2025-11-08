@@ -6,6 +6,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { cn } from '@lib/utils'
 import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
@@ -15,7 +16,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DetailSurveyPage({selectedId}:{selectedId:string}) {
+export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{selectedId:string,surveyId:string,setSurveyId:(value:string)=>void}) {
     const { can, canSome } = useAbility()
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -143,6 +144,16 @@ export default function DetailSurveyPage({selectedId}:{selectedId:string}) {
                         setFilters(value)
                         setCurrentPage(1)
                     }}
+                                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    setSurveyId(record.id)
+                                },
+                                className: cn(
+                                    surveyId === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
+                        }}
                     columns={[
                         {
                             title: 'STT',
