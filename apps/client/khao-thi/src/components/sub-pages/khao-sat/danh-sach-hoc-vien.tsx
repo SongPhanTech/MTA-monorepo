@@ -4,43 +4,97 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useCountUserProfile, useFindManyUserProfile } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { Col, Row } from 'antd'
+import { Col, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import {  useMemo, useState } from 'react'
 
-function DanhSachHọcVien({ surveyId }: { surveyId: string }) {
+function DanhSachHocVien({ surveyId }: { surveyId: string }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
-        surveyObjectTypeId: undefined,
-        surveyTopicId: undefined,
-        startDate: undefined,
-        endDate: undefined,
-        isPublic: undefined,
-        anonymous: undefined,
+        code: '',
+        idCardNumber:'',
+        phoneNumber:'',
+        statusSurvey:undefined
     })
     const router = useRouter()
-const where = useMemo(()=>{
-return {
-            educationAndTraining: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            subjectClass: {
-                                survey: {
-                                    some: {
-                                        id: surveyId,
+    const where = useMemo(()=>{
+    return {
+                educationAndTraining: {
+                    some: {
+                        subjectClassStudent: {
+                            some: {
+                                subjectClass: {
+                                    survey: {
+                                        some: {
+                                            id: surveyId,
+                                
+                                        },
                                     },
                                 },
                             },
                         },
                     },
                 },
-            },
-        }
-},[surveyId]
+                ...(
+                    filters.statusSurvey && filters.statusSurvey?.length===1 &&filters.statusSurvey[0]===true&&{
+                        surveySession: {
+                            some: {
+                                surveyId: surveyId,
+                            },
+                        }
+                    }
+                ),
+                   ...(
+                    filters.statusSurvey && filters.statusSurvey?.length===1 &&filters.statusSurvey[0]===false&&{
+                        surveySession: {
+                            none: {
+                                surveyId: surveyId,
+                            },
+                        }
+                    }
+                ),
+                
+                ...(filters.name&&{
+                    OR:[
+                        {
+                            firstName: {
+                                contains: filters.name,
+                                mode: 'insensitive' as const,
+                            },
+                        },
+                        {
+                            lastName: {
+                                contains: filters.name,
+                                mode: 'insensitive' as const,
+                            },
+                        }
+                    ]
+                }),
+                  ...(filters.code&&{
+                         code: {
+                                contains: filters.code,
+                                mode: 'insensitive' as const,
+                            },
+                }),
+                   ...(filters.idCardNumber&&{
+                         idCardNumber: {
+                                contains: filters.idCardNumber,
+                                mode: 'insensitive' as const,
+                            },
+                            
+                }),
+                  ...(filters.phoneNumber&&{
+                         phoneNumber: {
+                                contains: filters.phoneNumber,
+                                mode: 'insensitive' as const,
+                            },
+                            
+                }),
+            }
+    },[surveyId,filters]
     
 ) 
     const { data } = useFindManyUserProfile({
@@ -52,13 +106,20 @@ return {
                         include: {
                             subjectClass: {
                                 include: {
-                                    survey: true,
+                                    survey: {
+                                        include: {
+                                            surveySessions: true,
+                                        }
+                                    },
                                 },
                             },
                         },
                     },
                 },
             },
+            surveySession: {
+                where: { surveyId }
+            }
         },
         orderBy: { 
             firstName: 'asc',
@@ -69,6 +130,13 @@ return {
       const { data: count } = useCountUserProfile({
         where:{...where,deletedAt: null},
     })
+
+    const checkStatus=(record:any)=>{
+        if(record?.surveySession?.length===1){
+          return <Tag color="green">{'Đã làm'}</Tag>
+        }
+        return <Tag color={'red'}>{'Chưa làm'}</Tag>
+    }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -93,30 +161,48 @@ return {
                             },
                             {
                                 title: 'Mã người làm KS',
-                                dataIndex: 'name',
+                                dataIndex: 'code',
+                                type:'input',
                                 render: (_, record) => record?.code || '',
                             },
                             {
                                 title: 'Người làm khảo sát',
                                 dataIndex: 'name',
+                                type:'input',
                                 render: (_, record) => {
-                                    return `${record?.firstName || ''} ${record?.lastName || ''}`
+                                    return `${record?.lastName || ''} ${record?.firstName || ''}`
                                 },
                             },
                             {
                                 title: 'CCCD',
-                                dataIndex: 'name',
+                                dataIndex: 'idCardNumber',
+                                 type:'input',
                                 render: (_, record) => record?.idCardNumber || '',
                             },
                             {
                                 title: 'SĐT',
                                 dataIndex: 'phoneNumber',
+                                 type:'input',
                                 render: (_, record) => record?.phoneNumber || '',
                             },
-
                             {
                                 title: 'Trạng thái KS',
-                                dataIndex: '',
+                                dataIndex: 'statusSurvey',
+                                align: 'center',
+                                 type:'select',
+                                 options: [
+                                    {
+                                        value: true,
+                                        label: 'Đã làm',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Chưa làm',
+                                    },
+                                ],
+                                render:(__,record)=>{
+                                    return checkStatus(record)
+                                }
                             },
                         ]}
                         data={data || []}
@@ -140,4 +226,4 @@ return {
     )
 }
 
-export default DanhSachHọcVien
+export default DanhSachHocVien

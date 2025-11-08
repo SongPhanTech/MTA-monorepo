@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
-import {   Col,Row } from 'antd'
+import {   Col,Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import {  useMemo, useState } from 'react'
 
@@ -85,12 +85,13 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
                                     {
                                     title: 'Trạng thái KS',
                                     dataIndex: '',
+                                    align: 'center',
+                                    render: (_, record) => {
+                                        return <Tag color={record?.surveySession ?'green':'red'}>
+                                            {record?.surveySession?'Đã làm':'Chưa làm'}
+                                        </Tag>
+                                    },
                                 },
-
-                                
-                                
-                   
-                          
                         ]}
                         data={data?.data ||[]}
                         pagination={{
