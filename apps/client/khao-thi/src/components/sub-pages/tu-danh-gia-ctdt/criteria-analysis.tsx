@@ -1,9 +1,13 @@
 import CommentList from '@components/commons/comment-list'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import { getStatusEvaluation } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
-import { Badge, Button } from 'antd'
+import { $Enums } from '@workspace/db/client'
+import { useUpdateAnalysisCriterion } from '@workspace/db/hooks'
+import { Badge, Button, message, Popconfirm, Tag } from 'antd'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -18,10 +22,34 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
         tag: 'PutTieuChiMinhChungModal',
     })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
             prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
         )
+    }
+
+    const { mutateAsync: updateCriterion } = useUpdateAnalysisCriterion()
+
+    const handleSubmitCriterion = async (analysisCriterionId: string) => {
+        try {
+            showSpinner()
+            await updateCriterion({
+                where: {
+                    id: analysisCriterionId,
+                },
+                data: {
+                    status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                },
+            })
+
+            message.success('Nộp tiêu chí thành công.')
+        } catch (error) {
+            message.error('Nộp tiêu chí thất bại. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
     }
 
     return (
@@ -31,23 +59,48 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                 <span>{data?.name}</span>
             </div>
             {data?.criteria?.map((item, idx: number) => {
+                if (!item.analysisCriterions) return null
+                const status = item.analysisCriterions?.status
+                const statusConfig = getStatusEvaluation(status)
+
                 return (
                     <div key={item.id} className="ml-4 mb-6">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="text-base">
+                            <div className="text-base flex items-center gap-2">
                                 <span className="font-bold">Tiêu chí {idx + 1}: </span>
                                 <span>{item?.name}</span>
+                                <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
                             </div>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    onOpen({
-                                        analysisCriterionId: item.analysisCriterions?.id,
-                                    })
-                                }
-                            >
-                                Thêm mới
-                            </Button>
+                            <div className="flex gap-2">
+                                <Popconfirm
+                                    title="Xác nhận nộp tiêu chí"
+                                    description="Bạn chắc chắn muốn nộp tiêu chí này?"
+                                    onConfirm={() => {
+                                        const id = item.analysisCriterions?.id
+                                        if (id) {
+                                            handleSubmitCriterion(id)
+                                        }
+                                    }}
+                                    okText="Đồng ý"
+                                    cancelText="Hủy"
+                                    placement="topRight"
+                                >
+                                    <Button type="primary" className="bg-blue-500">
+                                        Nộp tiêu chí
+                                    </Button>
+                                </Popconfirm>
+
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        onOpen({
+                                            analysisCriterionId: item.analysisCriterions?.id,
+                                        })
+                                    }
+                                >
+                                    Thêm mới
+                                </Button>
+                            </div>
                         </div>
                         <div>
                             <Table
@@ -149,8 +202,6 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                         render: (__, record) => {
                                             const commentCount =
                                                 record.evaluationCriterionComment?.length || 0
-
-                                            const isExpanded = expandedRowKeys.includes(record.id)
 
                                             return (
                                                 <div className="flex gap-2 items-center justify-center">
