@@ -1,7 +1,7 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
 import { Button, Collapse, Form, message } from 'antd'
-import '../tu-danh-gia/index.css'
+// import '../tu-danh-gia/index.css'
 import { useEffect } from 'react'
 import type { EvaluationCriterion } from '@workspace/db'
 import { sqlTransaction } from '@workspace/libs/api/model'

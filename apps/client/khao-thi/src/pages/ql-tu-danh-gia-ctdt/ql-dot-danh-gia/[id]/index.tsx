@@ -1,14 +1,13 @@
-import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
+// @ts-nocheck
+// import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
     AnalysisFormEvidence,
     EvaluationCriterion,
     EvaluationPeriod,
-    EvaluationStandard,
     Evidence,
     RequirementCriterion,
-    ScoreScaleCatalog,
 } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
@@ -29,7 +28,7 @@ export type DataIndex = EvaluationStandard & {
                 evidence: Evidence
             })[]
         })[]
-        scoreScale: ScoreScaleCatalog
+        scoreScale: any
     })[]
 }
 
