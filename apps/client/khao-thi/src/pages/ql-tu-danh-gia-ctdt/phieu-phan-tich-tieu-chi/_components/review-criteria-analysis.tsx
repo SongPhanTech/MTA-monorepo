@@ -50,13 +50,17 @@ export default function ReviewCriteriaAnalysis() {
                         criteria: {
                             where: {
                                 analysisCriterions: {
-                                    status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                                    status: {
+                                        not: $Enums.EvaluationCriterionStatus.PENDING,
+                                    },
                                 },
                             },
                             include: {
                                 analysisCriterions: {
                                     where: {
-                                        status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                                        status: {
+                                            not: $Enums.EvaluationCriterionStatus.PENDING,
+                                        },
                                     },
                                     include: {
                                         lecturer: {

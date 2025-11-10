@@ -82,9 +82,9 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
                 },
             })
 
-            // form.resetFields()
-            // toggleCommentRow(requirementCriterionId)
-            // message.success('Gửi yêu cầu chỉnh sửa tiêu chí thành công')
+            form.resetFields()
+            toggleCommentRow(requirementCriterionId)
+            message.success('Gửi yêu cầu chỉnh sửa tiêu chí thành công')
         } catch (error) {
             message.error('Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại')
         } finally {
