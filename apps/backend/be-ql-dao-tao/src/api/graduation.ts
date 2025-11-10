@@ -816,30 +816,28 @@ app.openapi(graduationSessionDecision, async (c) => {
         },
     })
 
-    const data = graduationDecisions.map((graduationDecision) => {
+    const data = graduationDecisions.map((graduationDecision, idx) => {
         const curriculumVersion =
             graduationDecision.student.curriculumVersion ||
             graduationDecision.student.fixedClass?.curriculumVersion
 
         const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth
-        const monthShort = dateOfBirth
-            ? dateOfBirth.toLocaleString('en-US', { month: 'short' })
-            : null // "Nov"
 
         return {
+            no: idx + 1,
             ...graduationDecision,
             originalDiplomaNumber: graduationDecision.originalDiplomaNumber,
             diplomaNumber: graduationDecision.diplomaNumber,
             diplomaIssueDate: graduationDecision.diplomaIssueDate,
             fullname: graduationDecision.student.userProfile.fullname,
             FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
+            gender: graduationDecision.student.userProfile.gender?.sTen,
             dayOfBirth: dateOfBirth ? dateOfBirth.getDate() : null,
             monthOfBirth: dateOfBirth ? dateOfBirth.getMonth() + 1 : null,
             mmmOfBirth: dateOfBirth
                 ? dateOfBirth.toLocaleString('en-US', { month: 'short' })
                 : null,
             yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
-            gender: graduationDecision.student.userProfile.gender?.sTen,
             trainingMajor: graduationDecision.trainingMajor?.name,
             classification: graduationDecision.finalRanking.classification,
             classificationEnglish: graduationDecision.finalRanking.classificationEnglish,
