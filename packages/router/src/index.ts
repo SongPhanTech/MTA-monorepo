@@ -728,7 +728,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
-                        label: 'Danh sách khảo sát',
+                        label: 'Khảo sát của tôi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                     },
                 ],
