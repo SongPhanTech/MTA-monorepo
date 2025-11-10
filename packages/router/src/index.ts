@@ -471,9 +471,9 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        label: 'Danh mục luận văn',
+                        label: 'Danh mục luận văn/đề án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        description: 'Danh mục luận văn',
+                        description: 'Danh mục luận văn/đề án',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,

@@ -26,8 +26,9 @@ import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'a
 import type React from 'react'
 import { useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { CouncilRole } from '@workspace/db/client'
 // import { getMinioUrl } from '@workspace/constant'
 
 export default function PostgraduateProject() {
@@ -135,61 +136,250 @@ export default function PostgraduateProject() {
         message.info('Tính năng đang trong quá trình phát triển')
     }
     const saoQDHDLV = async () => {
+        showSpinner()
         const presentDay = dayjs().format('DD/MM/YYYY')
         const ngayQD = presentDay.split('/')[0]
         const thangQD = presentDay.split('/')[1]
         const namQD = presentDay.split('/')[2]
-        if (!students?.length) {
+        if (!students?.length && !allStudents?.length) {
             message.error('Không có dữ liệu để sao QĐ HDLV')
             return
         }
-        const allSheetOptions = allStudents?.map((student) => {
-            const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-            const coSupervisor =
-                student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
-            const cbgd1 = supervisor ? `1. ${supervisor}` : ''
-            const cbgd2 = coSupervisor ? `2. ${coSupervisor}` : ''
-            let cbhdFinal = cbgd1
-            if (cbgd2) {
-                cbhdFinal += `\n ${cbgd2}`
-            }
-            const data = {
-                ngayQD: ngayQD,
-                thangQD: thangQD,
-                namQD: namQD,
-                type:
-                    student?.thesisRegistrations?.[0]?.thesisProject?.description
-                        ?.split('-')[1]
-                        .trim()
-                        .split(':')[1] || '',
-                khoa: student?.fixedClass?.trainingCourse?.name || '',
-                chuyennganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
-                nganh:
-                    student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-                        ?.name || '',
-                detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
-                hoten: student?.userProfile?.fullname,
-                canbohuongdan: cbhdFinal,
-                khoaquanly:
-                    student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
-                ngay: ngayQD,
-                thang: thangQD,
-                nam: namQD,
-            }
-            return {
-                sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-                data: data,
-            }
-        })
-        await exportFromTemplate({
-            templateUrl: '/lms/templates/chuong-trinh-dao-tao/BanSaoQDHuongDanLuanVan.xlsx',
-            sheets: allSheetOptions ?? [],
-            fileName: 'BanSaoQDHuongDanLuanVan',
-            mergeSheetsToOne: true,
-            sheetName: 'BanSaoQDHuongDanLuanVan',
-        })
-        message.success('Xuất file thành công')
+        try {
+            const allSheetOptions = allStudents?.map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+                const coSupervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name
+
+                const data = {
+                    ngayQD: ngayQD,
+                    thangQD: thangQD,
+                    namQD: namQD,
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1] || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    hoten: student?.userProfile?.fullname,
+                    canbohuongdan1: supervisor ? `1. ${supervisor}` : '',
+                    canbohuongdan2: coSupervisor ? `2. ${coSupervisor}` : '',
+                    khoaquanli:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.organization?.sTen || '',
+                    ngay: ngayQD,
+                    thang: thangQD,
+                    nam: namQD,
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 40, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/BanSaoQDHuongDanLuanVan.xlsx',
+                sheets: allSheetOptions ?? [],
+                fileName: 'BanSaoQDHuongDanLuanVan',
+                mergeSheetsToOne: true,
+                sheetName: 'BanSaoQDHuongDanLuanVan',
+            })
+            message.success('Xuất file thành công')
+        } catch (error) {
+            message.error('Vui lòng kiểm tra lại dữ liệu đầu vào')
+        } finally {
+            hideSpinner()
+        }
+    }
+    const giaymoihdlv = async () => {
+        showSpinner()
+        const presentDay = dayjs().format('DD/MM/YYYY')
+        const ngay = presentDay.split('/')[0]
+        const thang = presentDay.split('/')[1]
+        const nam = presentDay.split('/')[2]
+        if (!students?.length && !allStudents?.length) {
+            message.error('Không có dữ liệu để tạo giấy mời HDLV')
+            return
+        }
+        try {
+            const allSheetOptions = allStudents?.map((student) => {
+                const supervisor =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+
+                const data = {
+                    ngay: ngay,
+                    thang: thang,
+                    nam: nam,
+                    tenhocvien: student?.userProfile?.fullname,
+                    tenhuongdan: supervisor ? ` ${supervisor}` : '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    type:
+                        student?.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 25, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/GiayMoiHDLV.xlsx',
+                sheets: allSheetOptions ?? [],
+                fileName: 'GiayMoiHDLV',
+                mergeSheetsToOne: true,
+                sheetName: 'GiayMoiHDLV',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+    const hosobvlv = async () => {
+        showSpinner()
+        try {
+            const allSheetOptions = allStudents?.map((student) => {
+                const thanhvienhoidong =
+                    student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
+                const phanbien1 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_1
+                )
+                const phanbien2 = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.REVIEWER_2
+                )
+                const chutich = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.CHAIRMAN
+                )
+                const thuky = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.SECRETARY
+                )
+                const uyvien = thanhvienhoidong?.find(
+                    (member) => member.role === CouncilRole.MEMBER
+                )
+                const data = {
+                    tenhocvien: student.userProfile?.fullname || '',
+                    type:
+                        student.thesisRegistrations?.[0]?.thesisProject?.description
+                            ?.split('-')[1]
+                            .trim()
+                            .split(':')[1]
+                            .trim()
+                            .toLowerCase() || '',
+                    khoa: student?.fixedClass?.trainingCourse?.name || '',
+                    chuyennganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                        '',
+                    nganh:
+                        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || '',
+                    ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                        ? dayjs(
+                              student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                          ).format('DD/MM/YYYY')
+                        : '',
+                    phanbien1: phanbien1?.expert?.name || '',
+                    phanbien2: phanbien2?.expert?.name || '',
+                    chutich: chutich?.expert?.name || '',
+                    thuky: thuky?.expert?.name || '',
+                    uyvien: uyvien?.expert?.name || '',
+                }
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                return {
+                    sheet: `${student.userProfile?.code}`,
+                    data: data,
+                    tableStartCell: { row: 104, col: 1 },
+                    rows: [gapRow],
+                }
+            })
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/HoSoBVLVTN.xlsx',
+                sheets: allSheetOptions ?? [],
+                fileName: 'Hosobvlv',
+                mergeSheetsToOne: true,
+                sheetName: 'Hosobvlv',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+    const danhsachbaove = async () => {
+        showSpinner()
+        try {
+            const allSheetOptions = allStudents?.map((student, index) => {
+                const row: TableRow[] = [
+                    {
+                        cells: [
+                            { value: index + 1, border: true },
+                            {
+                                value:
+                                    student?.fixedClass?.curriculumVersion?.curriculum
+                                        ?.trainingMajor?.name || '',
+                                border: true,
+                            },
+                            { value: student?.trainingObjectType?.name || '', border: true },
+                            { value: student.userProfile?.firstName, border: true },
+                            { value: student.userProfile?.lastName, border: true },
+                            { value: '', border: true },
+                            {
+                                value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+                                    ? dayjs(
+                                          student?.thesisRegistrations?.[0]?.thesisProject
+                                              ?.defenseDate
+                                      ).format('DD/MM/YYYY')
+                                    : '',
+                                border: true,
+                            },
+                            { value: '' },
+                            {
+                                value:
+                                    student?.thesisRegistrations?.[0]?.thesisProject?.room?.name ||
+                                    '',
+                                border: true,
+                            },
+                            { value: '', border: true },
+                            { value: '', border: true },
+                            { value: '', border: true },
+                        ],
+                    },
+                ]
+                return {
+                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                }
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     const buttonList = [
         {
@@ -205,7 +395,7 @@ export default function PostgraduateProject() {
         {
             id: 3,
             label: 'Giấy mời HDLV',
-            onClick: () => defaultButtonClick(),
+            onClick: async () => await giaymoihdlv(),
         },
         {
             id: 5,
@@ -230,12 +420,12 @@ export default function PostgraduateProject() {
         {
             id: 8,
             label: 'Hồ sơ BV LV',
-            onClick: () => defaultButtonClick(),
+            onClick: async () => await hosobvlv(),
         },
         {
             id: 9,
             label: 'Danh sách bảo vệ',
-            onClick: () => defaultButtonClick(),
+            onClick: async () => await danhsachbaove(),
         },
         {
             id: 10,
@@ -354,6 +544,7 @@ export default function PostgraduateProject() {
                                         trainingMajor: {
                                             include: { trainingField: true },
                                         },
+                                        trainingObjectType: true,
                                     },
                                 },
                             },
@@ -368,6 +559,8 @@ export default function PostgraduateProject() {
                                 organization: true,
                                 supervisor: true,
                                 coSupervisor: true,
+                                room: true,
+                                council: { include: { members: { include: { expert: true } } } },
                             },
                         },
                     },
@@ -500,6 +693,7 @@ export default function PostgraduateProject() {
                                     <Button
                                         type="primary"
                                         onClick={() => {
+                                            setNeedAllStudents(true)
                                             setQueryFixedClasses(fixedClassesSelected)
 
                                             if (!hasClickedFetch) {
