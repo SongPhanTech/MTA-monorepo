@@ -476,10 +476,10 @@ const PutLichVaSuKienModal = () => {
         try {
             console.log('Deleting regular single event:', payload.id)
             await deleteClassSchedule({ where: { id: payload.id } })
-            message.success('Xóa công việc thành công')
+            message.success('Xóa sự kiện thành công')
         } catch (error) {
             // console.error('Regular delete failed:', error)
-            message.error('Xóa công việc thất bại')
+            message.error('Xóa sự kiện thất bại')
         } finally {
             setIsDeleting(false)
         }

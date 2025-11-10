@@ -166,12 +166,16 @@ const convertApiToCalendarEventReactBigCalendar = (
     return apiData.map((event) => {
         const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
         const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-        const start = dayjs(event.classDate)
-            .set('hour', dayjs(startPeriod.startTime).hour())
-            .set('minute', dayjs(startPeriod.startTime).minute())
-        const end = dayjs(event.classDate)
-            .set('hour', dayjs(endPeriod.endTime).hour())
-            .set('minute', dayjs(endPeriod.endTime).minute())
+        const start = event?.startTime
+            ? dayjs(event.startTime)
+            : dayjs(event.classDate)
+                  .set('hour', dayjs(startPeriod?.startTime).hour())
+                  .set('minute', dayjs(startPeriod?.startTime).minute())
+        const end = event?.endTime
+            ? dayjs(event.endTime)
+            : dayjs(event.classDate)
+                  .set('hour', dayjs(endPeriod?.endTime).hour())
+                  .set('minute', dayjs(endPeriod?.endTime).minute())
 
         return {
             id: event.id,
@@ -369,12 +373,16 @@ export function LichCongTac({
             // Handle multi-day events
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-            const start = dayjs(event.classDate)
-                .set('hour', dayjs(startPeriod.startTime).hour())
-                .set('minute', dayjs(startPeriod.startTime).minute())
-            const end = dayjs(event.classDate)
-                .set('hour', dayjs(endPeriod.endTime).hour())
-                .set('minute', dayjs(endPeriod.endTime).minute())
+            const start = event?.startTime
+                ? dayjs(event.startTime)
+                : dayjs(event.classDate)
+                      .set('hour', dayjs(startPeriod?.startTime).hour())
+                      .set('minute', dayjs(startPeriod?.startTime).minute())
+            const end = event?.endTime
+                ? dayjs(event.endTime)
+                : dayjs(event.classDate)
+                      .set('hour', dayjs(endPeriod?.endTime).hour())
+                      .set('minute', dayjs(endPeriod?.endTime).minute())
             let current = start
 
             while (current.isSameOrBefore(end, 'day')) {
@@ -476,12 +484,16 @@ export function LichCongTac({
         return eventsDataTableCalendar.map((event) => {
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-            const start = dayjs(event.classDate)
-                .set('hour', dayjs(startPeriod.startTime).hour())
-                .set('minute', dayjs(startPeriod.startTime).minute())
-            const end = dayjs(event.classDate)
-                .set('hour', dayjs(endPeriod.endTime).hour())
-                .set('minute', dayjs(endPeriod.endTime).minute())
+            const start = event?.startTime
+                ? dayjs(event.startTime)
+                : dayjs(event.classDate)
+                      .set('hour', dayjs(startPeriod?.startTime).hour())
+                      .set('minute', dayjs(startPeriod?.startTime).minute())
+            const end = event?.endTime
+                ? dayjs(event.endTime)
+                : dayjs(event.classDate)
+                      .set('hour', dayjs(endPeriod?.endTime).hour())
+                      .set('minute', dayjs(endPeriod?.endTime).minute())
             return {
                 id: event.id,
                 startTime: start.toISOString(),
