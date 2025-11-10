@@ -65,6 +65,60 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        suggestion: {
+            name: 'Suggestion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Suggestion$createdBy,
+                }, key: {
+                    name: "key",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         changeLog: {
             name: 'ChangeLog', fields: {
                 id: {
@@ -24310,6 +24364,10 @@ const metadata: ModelMeta = {
 };
 
 function $default$Config$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Suggestion$createdBy(user: any): unknown {
     return user?.id;
 }
 

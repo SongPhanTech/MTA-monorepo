@@ -286,6 +286,12 @@ export function LichCongTac({
                             },
                         },
                     },
+                    {
+                        periodType: 'WEEK',
+                    },
+                    {
+                        periodType: 'CHECK',
+                    },
                 ],
                 periodType: {
                     in: selectedColors

@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 export * from './Config.schema';
+export * from './Suggestion.schema';
 export * from './ChangeLog.schema';
 export * from './UserProfile.schema';
 export * from './HocHam.schema';

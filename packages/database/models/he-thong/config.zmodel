@@ -27,3 +27,9 @@ model Config extends Base {
     value String
     @@schema("he-thong")
 }
+
+model Suggestion extends Base {
+    key   String
+    value String
+    @@schema("he-thong")
+}

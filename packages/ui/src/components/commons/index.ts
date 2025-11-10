@@ -1,2 +1,5 @@
 export * from './Button'
 export * from './widget-chatbot'
+export * from './input-suggestion'
+export * from './put-modal'
+export * from './form-item'

@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Config = $Result.DefaultSelection<Prisma.$ConfigPayload>
 /**
+ * Model Suggestion
+ * 
+ */
+export type Suggestion = $Result.DefaultSelection<Prisma.$SuggestionPayload>
+/**
  * Model ChangeLog
  * 
  */
@@ -2222,6 +2227,16 @@ export class PrismaClient<
     * ```
     */
   get config(): Prisma.ConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.suggestion`: Exposes CRUD operations for the **Suggestion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Suggestions
+    * const suggestions = await prisma.suggestion.findMany()
+    * ```
+    */
+  get suggestion(): Prisma.SuggestionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.changeLog`: Exposes CRUD operations for the **ChangeLog** model.
@@ -5143,6 +5158,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Config: 'Config',
+    Suggestion: 'Suggestion',
     ChangeLog: 'ChangeLog',
     UserProfile: 'UserProfile',
     HocHam: 'HocHam',
@@ -5409,7 +5425,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "testStructureRule" | "examBank" | "examBankQuestion" | "examPaper" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5484,6 +5500,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ConfigCountArgs<ExtArgs>
             result: $Utils.Optional<ConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      Suggestion: {
+        payload: Prisma.$SuggestionPayload<ExtArgs>
+        fields: Prisma.SuggestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SuggestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SuggestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          findFirst: {
+            args: Prisma.SuggestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SuggestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          findMany: {
+            args: Prisma.SuggestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          create: {
+            args: Prisma.SuggestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          createMany: {
+            args: Prisma.SuggestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SuggestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          delete: {
+            args: Prisma.SuggestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          update: {
+            args: Prisma.SuggestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SuggestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SuggestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SuggestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SuggestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuggestionPayload>
+          }
+          aggregate: {
+            args: Prisma.SuggestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSuggestion>
+          }
+          groupBy: {
+            args: Prisma.SuggestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SuggestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SuggestionCountArgs<ExtArgs>
+            result: $Utils.Optional<SuggestionCountAggregateOutputType> | number
           }
         }
       }
@@ -23928,6 +24018,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     config?: ConfigOmit
+    suggestion?: SuggestionOmit
     changeLog?: ChangeLogOmit
     userProfile?: UserProfileOmit
     hocHam?: HocHamOmit
@@ -32435,6 +32526,1066 @@ export namespace Prisma {
      * Omit specific fields from the Config
      */
     omit?: ConfigOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Suggestion
+   */
+
+  export type AggregateSuggestion = {
+    _count: SuggestionCountAggregateOutputType | null
+    _min: SuggestionMinAggregateOutputType | null
+    _max: SuggestionMaxAggregateOutputType | null
+  }
+
+  export type SuggestionMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    key: string | null
+    value: string | null
+  }
+
+  export type SuggestionMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    key: string | null
+    value: string | null
+  }
+
+  export type SuggestionCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    key: number
+    value: number
+    _all: number
+  }
+
+
+  export type SuggestionMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    key?: true
+    value?: true
+  }
+
+  export type SuggestionMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    key?: true
+    value?: true
+  }
+
+  export type SuggestionCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    key?: true
+    value?: true
+    _all?: true
+  }
+
+  export type SuggestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Suggestion to aggregate.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Suggestions
+    **/
+    _count?: true | SuggestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SuggestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SuggestionMaxAggregateInputType
+  }
+
+  export type GetSuggestionAggregateType<T extends SuggestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSuggestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSuggestion[P]>
+      : GetScalarType<T[P], AggregateSuggestion[P]>
+  }
+
+
+
+
+  export type SuggestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuggestionWhereInput
+    orderBy?: SuggestionOrderByWithAggregationInput | SuggestionOrderByWithAggregationInput[]
+    by: SuggestionScalarFieldEnum[] | SuggestionScalarFieldEnum
+    having?: SuggestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SuggestionCountAggregateInputType | true
+    _min?: SuggestionMinAggregateInputType
+    _max?: SuggestionMaxAggregateInputType
+  }
+
+  export type SuggestionGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    key: string
+    value: string
+    _count: SuggestionCountAggregateOutputType | null
+    _min: SuggestionMinAggregateOutputType | null
+    _max: SuggestionMaxAggregateOutputType | null
+  }
+
+  type GetSuggestionGroupByPayload<T extends SuggestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SuggestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SuggestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SuggestionGroupByOutputType[P]>
+            : GetScalarType<T[P], SuggestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SuggestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    key?: boolean
+    value?: boolean
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    key?: boolean
+    value?: boolean
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    key?: boolean
+    value?: boolean
+  }, ExtArgs["result"]["suggestion"]>
+
+  export type SuggestionSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    key?: boolean
+    value?: boolean
+  }
+
+  export type SuggestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "key" | "value", ExtArgs["result"]["suggestion"]>
+
+  export type $SuggestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Suggestion"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      key: string
+      value: string
+    }, ExtArgs["result"]["suggestion"]>
+    composites: {}
+  }
+
+  type SuggestionGetPayload<S extends boolean | null | undefined | SuggestionDefaultArgs> = $Result.GetResult<Prisma.$SuggestionPayload, S>
+
+  type SuggestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SuggestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SuggestionCountAggregateInputType | true
+    }
+
+  export interface SuggestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Suggestion'], meta: { name: 'Suggestion' } }
+    /**
+     * Find zero or one Suggestion that matches the filter.
+     * @param {SuggestionFindUniqueArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SuggestionFindUniqueArgs>(args: SelectSubset<T, SuggestionFindUniqueArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Suggestion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SuggestionFindUniqueOrThrowArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SuggestionFindUniqueOrThrowArgs>(args: SelectSubset<T, SuggestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggestion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindFirstArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SuggestionFindFirstArgs>(args?: SelectSubset<T, SuggestionFindFirstArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Suggestion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindFirstOrThrowArgs} args - Arguments to find a Suggestion
+     * @example
+     * // Get one Suggestion
+     * const suggestion = await prisma.suggestion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SuggestionFindFirstOrThrowArgs>(args?: SelectSubset<T, SuggestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Suggestions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Suggestions
+     * const suggestions = await prisma.suggestion.findMany()
+     * 
+     * // Get first 10 Suggestions
+     * const suggestions = await prisma.suggestion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SuggestionFindManyArgs>(args?: SelectSubset<T, SuggestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Suggestion.
+     * @param {SuggestionCreateArgs} args - Arguments to create a Suggestion.
+     * @example
+     * // Create one Suggestion
+     * const Suggestion = await prisma.suggestion.create({
+     *   data: {
+     *     // ... data to create a Suggestion
+     *   }
+     * })
+     * 
+     */
+    create<T extends SuggestionCreateArgs>(args: SelectSubset<T, SuggestionCreateArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Suggestions.
+     * @param {SuggestionCreateManyArgs} args - Arguments to create many Suggestions.
+     * @example
+     * // Create many Suggestions
+     * const suggestion = await prisma.suggestion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SuggestionCreateManyArgs>(args?: SelectSubset<T, SuggestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Suggestions and returns the data saved in the database.
+     * @param {SuggestionCreateManyAndReturnArgs} args - Arguments to create many Suggestions.
+     * @example
+     * // Create many Suggestions
+     * const suggestion = await prisma.suggestion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Suggestions and only return the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SuggestionCreateManyAndReturnArgs>(args?: SelectSubset<T, SuggestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Suggestion.
+     * @param {SuggestionDeleteArgs} args - Arguments to delete one Suggestion.
+     * @example
+     * // Delete one Suggestion
+     * const Suggestion = await prisma.suggestion.delete({
+     *   where: {
+     *     // ... filter to delete one Suggestion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SuggestionDeleteArgs>(args: SelectSubset<T, SuggestionDeleteArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Suggestion.
+     * @param {SuggestionUpdateArgs} args - Arguments to update one Suggestion.
+     * @example
+     * // Update one Suggestion
+     * const suggestion = await prisma.suggestion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SuggestionUpdateArgs>(args: SelectSubset<T, SuggestionUpdateArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Suggestions.
+     * @param {SuggestionDeleteManyArgs} args - Arguments to filter Suggestions to delete.
+     * @example
+     * // Delete a few Suggestions
+     * const { count } = await prisma.suggestion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SuggestionDeleteManyArgs>(args?: SelectSubset<T, SuggestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Suggestions
+     * const suggestion = await prisma.suggestion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SuggestionUpdateManyArgs>(args: SelectSubset<T, SuggestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Suggestions and returns the data updated in the database.
+     * @param {SuggestionUpdateManyAndReturnArgs} args - Arguments to update many Suggestions.
+     * @example
+     * // Update many Suggestions
+     * const suggestion = await prisma.suggestion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Suggestions and only return the `id`
+     * const suggestionWithIdOnly = await prisma.suggestion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SuggestionUpdateManyAndReturnArgs>(args: SelectSubset<T, SuggestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Suggestion.
+     * @param {SuggestionUpsertArgs} args - Arguments to update or create a Suggestion.
+     * @example
+     * // Update or create a Suggestion
+     * const suggestion = await prisma.suggestion.upsert({
+     *   create: {
+     *     // ... data to create a Suggestion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Suggestion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SuggestionUpsertArgs>(args: SelectSubset<T, SuggestionUpsertArgs<ExtArgs>>): Prisma__SuggestionClient<$Result.GetResult<Prisma.$SuggestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Suggestions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionCountArgs} args - Arguments to filter Suggestions to count.
+     * @example
+     * // Count the number of Suggestions
+     * const count = await prisma.suggestion.count({
+     *   where: {
+     *     // ... the filter for the Suggestions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SuggestionCountArgs>(
+      args?: Subset<T, SuggestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SuggestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Suggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SuggestionAggregateArgs>(args: Subset<T, SuggestionAggregateArgs>): Prisma.PrismaPromise<GetSuggestionAggregateType<T>>
+
+    /**
+     * Group by Suggestion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuggestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SuggestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SuggestionGroupByArgs['orderBy'] }
+        : { orderBy?: SuggestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SuggestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSuggestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Suggestion model
+   */
+  readonly fields: SuggestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Suggestion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SuggestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Suggestion model
+   */
+  interface SuggestionFieldRefs {
+    readonly id: FieldRef<"Suggestion", 'String'>
+    readonly code: FieldRef<"Suggestion", 'String'>
+    readonly active: FieldRef<"Suggestion", 'Boolean'>
+    readonly description: FieldRef<"Suggestion", 'String'>
+    readonly deletedAt: FieldRef<"Suggestion", 'DateTime'>
+    readonly createdAt: FieldRef<"Suggestion", 'DateTime'>
+    readonly updatedAt: FieldRef<"Suggestion", 'DateTime'>
+    readonly createdBy: FieldRef<"Suggestion", 'String'>
+    readonly key: FieldRef<"Suggestion", 'String'>
+    readonly value: FieldRef<"Suggestion", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Suggestion findUnique
+   */
+  export type SuggestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion findUniqueOrThrow
+   */
+  export type SuggestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion findFirst
+   */
+  export type SuggestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suggestions.
+     */
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion findFirstOrThrow
+   */
+  export type SuggestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter, which Suggestion to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Suggestions.
+     */
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion findMany
+   */
+  export type SuggestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter, which Suggestions to fetch.
+     */
+    where?: SuggestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Suggestions to fetch.
+     */
+    orderBy?: SuggestionOrderByWithRelationInput | SuggestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Suggestions.
+     */
+    cursor?: SuggestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Suggestions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Suggestions.
+     */
+    skip?: number
+    distinct?: SuggestionScalarFieldEnum | SuggestionScalarFieldEnum[]
+  }
+
+  /**
+   * Suggestion create
+   */
+  export type SuggestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Suggestion.
+     */
+    data: XOR<SuggestionCreateInput, SuggestionUncheckedCreateInput>
+  }
+
+  /**
+   * Suggestion createMany
+   */
+  export type SuggestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Suggestions.
+     */
+    data: SuggestionCreateManyInput | SuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Suggestion createManyAndReturn
+   */
+  export type SuggestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Suggestions.
+     */
+    data: SuggestionCreateManyInput | SuggestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Suggestion update
+   */
+  export type SuggestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Suggestion.
+     */
+    data: XOR<SuggestionUpdateInput, SuggestionUncheckedUpdateInput>
+    /**
+     * Choose, which Suggestion to update.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion updateMany
+   */
+  export type SuggestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Suggestions.
+     */
+    data: XOR<SuggestionUpdateManyMutationInput, SuggestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Suggestions to update
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Suggestion updateManyAndReturn
+   */
+  export type SuggestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The data used to update Suggestions.
+     */
+    data: XOR<SuggestionUpdateManyMutationInput, SuggestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Suggestions to update
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Suggestion upsert
+   */
+  export type SuggestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Suggestion to update in case it exists.
+     */
+    where: SuggestionWhereUniqueInput
+    /**
+     * In case the Suggestion found by the `where` argument doesn't exist, create a new Suggestion with this data.
+     */
+    create: XOR<SuggestionCreateInput, SuggestionUncheckedCreateInput>
+    /**
+     * In case the Suggestion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SuggestionUpdateInput, SuggestionUncheckedUpdateInput>
+  }
+
+  /**
+   * Suggestion delete
+   */
+  export type SuggestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
+    /**
+     * Filter which Suggestion to delete.
+     */
+    where: SuggestionWhereUniqueInput
+  }
+
+  /**
+   * Suggestion deleteMany
+   */
+  export type SuggestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Suggestions to delete
+     */
+    where?: SuggestionWhereInput
+    /**
+     * Limit how many Suggestions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Suggestion without action
+   */
+  export type SuggestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Suggestion
+     */
+    select?: SuggestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Suggestion
+     */
+    omit?: SuggestionOmit<ExtArgs> | null
   }
 
 
@@ -343993,6 +345144,22 @@ export namespace Prisma {
   export type ConfigScalarFieldEnum = (typeof ConfigScalarFieldEnum)[keyof typeof ConfigScalarFieldEnum]
 
 
+  export const SuggestionScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    key: 'key',
+    value: 'value'
+  };
+
+  export type SuggestionScalarFieldEnum = (typeof SuggestionScalarFieldEnum)[keyof typeof SuggestionScalarFieldEnum]
+
+
   export const ChangeLogScalarFieldEnum: {
     id: 'id',
     tableName: 'tableName',
@@ -349030,6 +350197,18 @@ export namespace Prisma {
   export type ConfigOrderByRelevanceFieldEnum = (typeof ConfigOrderByRelevanceFieldEnum)[keyof typeof ConfigOrderByRelevanceFieldEnum]
 
 
+  export const SuggestionOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    key: 'key',
+    value: 'value'
+  };
+
+  export type SuggestionOrderByRelevanceFieldEnum = (typeof SuggestionOrderByRelevanceFieldEnum)[keyof typeof SuggestionOrderByRelevanceFieldEnum]
+
+
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -353360,6 +354539,84 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"Config"> | string | null
     key?: EnumConfigKeyWithAggregatesFilter<"Config"> | $Enums.ConfigKey
     value?: StringWithAggregatesFilter<"Config"> | string
+  }
+
+  export type SuggestionWhereInput = {
+    AND?: SuggestionWhereInput | SuggestionWhereInput[]
+    OR?: SuggestionWhereInput[]
+    NOT?: SuggestionWhereInput | SuggestionWhereInput[]
+    id?: StringFilter<"Suggestion"> | string
+    code?: StringNullableFilter<"Suggestion"> | string | null
+    active?: BoolFilter<"Suggestion"> | boolean
+    description?: StringNullableFilter<"Suggestion"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Suggestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"Suggestion"> | Date | string
+    updatedAt?: DateTimeFilter<"Suggestion"> | Date | string
+    createdBy?: UuidNullableFilter<"Suggestion"> | string | null
+    key?: StringFilter<"Suggestion"> | string
+    value?: StringFilter<"Suggestion"> | string
+  }
+
+  export type SuggestionOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    _relevance?: SuggestionOrderByRelevanceInput
+  }
+
+  export type SuggestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: SuggestionWhereInput | SuggestionWhereInput[]
+    OR?: SuggestionWhereInput[]
+    NOT?: SuggestionWhereInput | SuggestionWhereInput[]
+    active?: BoolFilter<"Suggestion"> | boolean
+    description?: StringNullableFilter<"Suggestion"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Suggestion"> | Date | string | null
+    createdAt?: DateTimeFilter<"Suggestion"> | Date | string
+    updatedAt?: DateTimeFilter<"Suggestion"> | Date | string
+    createdBy?: UuidNullableFilter<"Suggestion"> | string | null
+    key?: StringFilter<"Suggestion"> | string
+    value?: StringFilter<"Suggestion"> | string
+  }, "id" | "code">
+
+  export type SuggestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    _count?: SuggestionCountOrderByAggregateInput
+    _max?: SuggestionMaxOrderByAggregateInput
+    _min?: SuggestionMinOrderByAggregateInput
+  }
+
+  export type SuggestionScalarWhereWithAggregatesInput = {
+    AND?: SuggestionScalarWhereWithAggregatesInput | SuggestionScalarWhereWithAggregatesInput[]
+    OR?: SuggestionScalarWhereWithAggregatesInput[]
+    NOT?: SuggestionScalarWhereWithAggregatesInput | SuggestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Suggestion"> | string
+    code?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    active?: BoolWithAggregatesFilter<"Suggestion"> | boolean
+    description?: StringNullableWithAggregatesFilter<"Suggestion"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Suggestion"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Suggestion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Suggestion"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"Suggestion"> | string | null
+    key?: StringWithAggregatesFilter<"Suggestion"> | string
+    value?: StringWithAggregatesFilter<"Suggestion"> | string
   }
 
   export type ChangeLogWhereInput = {
@@ -380679,6 +381936,97 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     key?: EnumConfigKeyFieldUpdateOperationsInput | $Enums.ConfigKey
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SuggestionCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    key: string
+    value: string
+  }
+
+  export type SuggestionUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    key: string
+    value: string
+  }
+
+  export type SuggestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SuggestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SuggestionCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    key: string
+    value: string
+  }
+
+  export type SuggestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SuggestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
   }
 
@@ -412090,6 +413438,51 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumConfigKeyFilter<$PrismaModel>
     _max?: NestedEnumConfigKeyFilter<$PrismaModel>
+  }
+
+  export type SuggestionOrderByRelevanceInput = {
+    fields: SuggestionOrderByRelevanceFieldEnum | SuggestionOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SuggestionCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+  }
+
+  export type SuggestionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+  }
+
+  export type SuggestionMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<

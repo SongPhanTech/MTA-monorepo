@@ -133,6 +133,19 @@ exports.Prisma.ConfigScalarFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.SuggestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  key: 'key',
+  value: 'value'
+};
+
 exports.Prisma.ChangeLogScalarFieldEnum = {
   id: 'id',
   tableName: 'tableName',
@@ -4411,6 +4424,15 @@ exports.Prisma.ConfigOrderByRelevanceFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.SuggestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  key: 'key',
+  value: 'value'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
@@ -7497,6 +7519,7 @@ exports.TemplateFileType = exports.$Enums.TemplateFileType = {
 
 exports.Prisma.ModelName = {
   Config: 'Config',
+  Suggestion: 'Suggestion',
   ChangeLog: 'ChangeLog',
   UserProfile: 'UserProfile',
   HocHam: 'HocHam',

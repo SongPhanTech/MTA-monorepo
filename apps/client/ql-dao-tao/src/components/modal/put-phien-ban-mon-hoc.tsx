@@ -23,13 +23,7 @@ import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
-// declare global {
-//     interface Window {
-//         contextData: {
-//             userId: string
-//         }
-//     }
-// }
+
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
 }
@@ -345,9 +339,7 @@ const PutVersionSubjectModal = () => {
                         action: HistorySubjectVersionType.UPDATE,
                         updatedBy: {
                             connect: {
-                                id:
-                                    window?.contextData?.userId ??
-                                    'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                                id: window?.contextData?.userId,
                             },
                         },
                         subjectVersion: {
@@ -380,9 +372,7 @@ const PutVersionSubjectModal = () => {
                     active: true,
                     updatedBy: {
                         connect: {
-                            id:
-                                window?.contextData?.userId ??
-                                'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                            id: window?.contextData?.userId,
                         },
                     },
                     subjectVersion: {

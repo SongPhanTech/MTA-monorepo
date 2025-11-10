@@ -586,6 +586,21 @@ model Config {
   @@schema("he-thong")
 }
 
+model Suggestion {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  createdBy   String?   @db.Uuid()
+  key         String
+  value       String
+
+  @@schema("he-thong")
+}
+
 model ChangeLog {
   id            String      @id() @default(cuid())
   tableName     String

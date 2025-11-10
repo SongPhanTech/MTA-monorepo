@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 export * from './config';
+export * from './suggestion';
 export * from './change-log';
 export * from './user-profile';
 export * from './hoc-ham';
