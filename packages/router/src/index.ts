@@ -753,11 +753,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Quản lý minh chứng',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                     },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                        label: 'Hội đồng đánh giá',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                    },
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    //     label: 'Hội đồng đánh giá',
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    // },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                         label: 'Quản lý đợt tự đánh giá',

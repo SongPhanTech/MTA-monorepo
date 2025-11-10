@@ -34,6 +34,36 @@ const SUBJECT_OBJECT = [
     },
 ]
 
+const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
+    switch (status) {
+        case $Enums.EvaluationCriterionStatus.PENDING:
+            return {
+                color: 'yellow',
+                label: 'Chờ duyệt',
+            }
+        case $Enums.EvaluationCriterionStatus.SUBMITTED:
+            return {
+                color: 'blue',
+                label: 'Đã nộp',
+            }
+        case $Enums.EvaluationCriterionStatus.REVISION:
+            return {
+                color: 'orange',
+                label: 'Yêu cầu sửa đổi',
+            }
+        case $Enums.EvaluationCriterionStatus.APPROVED:
+            return {
+                color: 'green',
+                label: 'Đã duyệt',
+            }
+        case $Enums.EvaluationCriterionStatus.COMPLETED:
+            return {
+                color: 'purple',
+                label: 'Hoàn thành',
+            }
+    }
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -41,4 +71,5 @@ export {
     API_MODEL_BASE_URL,
     EVALUATION_MEMBER_ROLE,
     SUBJECT_OBJECT,
+    getStatusEvaluation,
 }
