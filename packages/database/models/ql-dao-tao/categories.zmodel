@@ -58,9 +58,9 @@ model PriorityObject extends Base {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType extends Base {
-  name     String    @unique
+  name              String              @unique
 
-  students Student[]
+  curriculumVersion CurriculumVersion[]
 
   @@schema("ql-dao-tao")
 }
@@ -70,9 +70,7 @@ model TrainingLevel extends Base {
   name               String               @unique
 
   curriculumVersion  CurriculumVersion[]
-  students           Student[]
   trainingObjectType TrainingObjectType[]
-
   @@schema("ql-dao-tao")
 }
 
@@ -80,7 +78,6 @@ model TrainingLevel extends Base {
 model TrainingForm extends Base {
   name               String               @unique
 
-  students           Student[]
   trainingObjectType TrainingObjectType[]
   @@schema("ql-dao-tao")
 }

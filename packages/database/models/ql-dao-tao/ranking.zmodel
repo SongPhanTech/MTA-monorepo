@@ -117,7 +117,7 @@ model GraduationDecision extends Base {
   studentId             String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
 
   decisionDate          DateTime                     @default(now()) @db.Date
-  notes                 String?          // Ghi chú của hội đồng
+  notes                 String?  // Ghi chú của hội đồng
 
   // Thông tin tại thời điểm tốt nghiệp (snapshot)
   finalGpa              Decimal                      @db.Decimal(5, 2)            // GPA cuối cùng
@@ -127,7 +127,7 @@ model GraduationDecision extends Base {
   finalRankingId        String
 
   diplomaType           DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId         String?          // curriculumVersion.diplomaId
+  diplomaTypeId         String?  // curriculumVersion.diplomaId
   originalDiplomaNumber String?                      @unique // Số vào sổ gốc văn bằng
   diplomaNumber         String?                      @unique // Số hiệu văn bằng
   diplomaIssueDate      DateTime?                    @db.Date      // Ngày cấp bằng
@@ -150,6 +150,7 @@ enum RankingContext {
 /// Xếp loại học tập/Xếp loại tốt nghiệp
 model AcademicRankingConvert extends Base {
   classification               String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
+  classificationEnglish        String?          // Xếp loại: Excellent; Distinction; Average; BelowAverage; Poor
   context                      RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
   rankOrder                    Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
 
