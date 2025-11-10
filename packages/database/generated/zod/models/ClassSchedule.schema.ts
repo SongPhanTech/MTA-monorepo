@@ -22,6 +22,7 @@ const baseSchema = z.object({
     startTime: z.coerce.date().nullish(),
     endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean().default(false),
     cancelReason: z.string().nullish(),
@@ -42,6 +43,7 @@ const baseSchemaWithoutDefaults = z.object({
     startTime: z.coerce.date().nullish(),
     endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean(),
     cancelReason: z.string().nullish(),
@@ -104,6 +106,7 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
     startTime: z.coerce.date().nullish(),
     endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean(),
     cancelReason: z.string().nullish()

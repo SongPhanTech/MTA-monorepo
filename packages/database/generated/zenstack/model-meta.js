@@ -11631,6 +11631,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'classSchedules',
                     isRelationOwner: true,
+                }, location: {
+                    name: "location",
+                    type: "String",
+                    isOptional: true,
                 }, notes: {
                     name: "notes",
                     type: "String",

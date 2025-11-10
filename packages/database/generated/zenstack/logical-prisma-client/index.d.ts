@@ -7797,6 +7797,7 @@ export namespace Prisma {
         roomId: 'roomId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
+        location: 'location',
         notes: 'notes',
         isReplacement: 'isReplacement',
         originalScheduleId: 'originalScheduleId',
@@ -11121,6 +11122,7 @@ export namespace Prisma {
         roomId: 'roomId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
+        location: 'location',
         notes: 'notes',
         originalScheduleId: 'originalScheduleId',
         cancelReason: 'cancelReason'
@@ -53098,6 +53100,7 @@ export namespace Prisma {
         readonly roomId: FieldRef<"ClassSchedule", 'String'>;
         readonly lecturerId: FieldRef<"ClassSchedule", 'String'>;
         readonly extraLecturerId: FieldRef<"ClassSchedule", 'String'>;
+        readonly location: FieldRef<"ClassSchedule", 'String'>;
         readonly notes: FieldRef<"ClassSchedule", 'String'>;
         readonly isReplacement: FieldRef<"ClassSchedule", 'Boolean'>;
         readonly originalScheduleId: FieldRef<"ClassSchedule", 'String'>;
@@ -217604,6 +217607,7 @@ export namespace Prisma {
         roomId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
+        location: string | null
         notes: string | null
         isReplacement: boolean | null
         originalScheduleId: string | null
@@ -217628,6 +217632,7 @@ export namespace Prisma {
         roomId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
+        location: string | null
         notes: string | null
         isReplacement: boolean | null
         originalScheduleId: string | null
@@ -217652,6 +217657,7 @@ export namespace Prisma {
         roomId: number
         lecturerId: number
         extraLecturerId: number
+        location: number
         notes: number
         isReplacement: number
         originalScheduleId: number
@@ -217685,6 +217691,7 @@ export namespace Prisma {
         roomId?: true
         lecturerId?: true
         extraLecturerId?: true
+        location?: true
         notes?: true
         isReplacement?: true
         originalScheduleId?: true
@@ -217709,6 +217716,7 @@ export namespace Prisma {
         roomId?: true
         lecturerId?: true
         extraLecturerId?: true
+        location?: true
         notes?: true
         isReplacement?: true
         originalScheduleId?: true
@@ -217733,6 +217741,7 @@ export namespace Prisma {
         roomId?: true
         lecturerId?: true
         extraLecturerId?: true
+        location?: true
         notes?: true
         isReplacement?: true
         originalScheduleId?: true
@@ -217838,6 +217847,7 @@ export namespace Prisma {
         roomId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
+        location: string | null
         notes: string | null
         isReplacement: boolean
         originalScheduleId: string | null
@@ -217879,6 +217889,7 @@ export namespace Prisma {
         roomId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
+        location?: boolean
         notes?: boolean
         isReplacement?: boolean
         originalScheduleId?: boolean
@@ -217911,6 +217922,7 @@ export namespace Prisma {
         roomId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
+        location?: boolean
         notes?: boolean
         isReplacement?: boolean
         originalScheduleId?: boolean
@@ -217940,6 +217952,7 @@ export namespace Prisma {
         roomId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
+        location?: boolean
         notes?: boolean
         isReplacement?: boolean
         originalScheduleId?: boolean
@@ -217969,12 +217982,13 @@ export namespace Prisma {
         roomId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
+        location?: boolean
         notes?: boolean
         isReplacement?: boolean
         originalScheduleId?: boolean
         cancelReason?: boolean
     };
-    export type ClassScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "periodType" | "startPeriod" | "endPeriod" | "startTime" | "endTime" | "classDate" | "roomId" | "lecturerId" | "extraLecturerId" | "notes" | "isReplacement" | "originalScheduleId" | "cancelReason", ExtArgs["result"]["classSchedule"]>;
+    export type ClassScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "periodType" | "startPeriod" | "endPeriod" | "startTime" | "endTime" | "classDate" | "roomId" | "lecturerId" | "extraLecturerId" | "location" | "notes" | "isReplacement" | "originalScheduleId" | "cancelReason", ExtArgs["result"]["classSchedule"]>;
     export type ClassScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ClassSchedule$subjectClassArgs<ExtArgs>
         room?: boolean | ClassSchedule$roomArgs<ExtArgs>
@@ -218029,6 +218043,7 @@ export namespace Prisma {
             roomId: string | null
             lecturerId: string | null
             extraLecturerId: string | null
+            location: string | null
             notes: string | null
             isReplacement: boolean
             originalScheduleId: string | null
@@ -340809,6 +340824,7 @@ export namespace Prisma {
         roomId?: StringNullableFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
         extraLecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
+        location?: StringNullableFilter<"ClassSchedule"> | string | null
         notes?: StringNullableFilter<"ClassSchedule"> | string | null
         isReplacement?: BoolFilter<"ClassSchedule"> | boolean
         originalScheduleId?: StringNullableFilter<"ClassSchedule"> | string | null
@@ -340840,6 +340856,7 @@ export namespace Prisma {
         roomId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
+        location?: SortOrderInput | SortOrder
         notes?: SortOrderInput | SortOrder
         isReplacement?: SortOrder
         originalScheduleId?: SortOrderInput | SortOrder
@@ -340876,6 +340893,7 @@ export namespace Prisma {
         roomId?: StringNullableFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
         extraLecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
+        location?: StringNullableFilter<"ClassSchedule"> | string | null
         notes?: StringNullableFilter<"ClassSchedule"> | string | null
         isReplacement?: BoolFilter<"ClassSchedule"> | boolean
         cancelReason?: StringNullableFilter<"ClassSchedule"> | string | null
@@ -340906,6 +340924,7 @@ export namespace Prisma {
         roomId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
+        location?: SortOrderInput | SortOrder
         notes?: SortOrderInput | SortOrder
         isReplacement?: SortOrder
         originalScheduleId?: SortOrderInput | SortOrder
@@ -340938,6 +340957,7 @@ export namespace Prisma {
         roomId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         extraLecturerId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
+        location?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         notes?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
         isReplacement?: BoolWithAggregatesFilter<"ClassSchedule"> | boolean
         originalScheduleId?: StringNullableWithAggregatesFilter<"ClassSchedule"> | string | null
@@ -368701,6 +368721,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -368731,6 +368752,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -368753,6 +368775,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -368783,6 +368806,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -368809,6 +368833,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -368829,6 +368854,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -368852,6 +368878,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -393112,6 +393139,7 @@ export namespace Prisma {
         roomId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
+        location?: SortOrder
         notes?: SortOrder
         isReplacement?: SortOrder
         originalScheduleId?: SortOrder
@@ -393140,6 +393168,7 @@ export namespace Prisma {
         roomId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
+        location?: SortOrder
         notes?: SortOrder
         isReplacement?: SortOrder
         originalScheduleId?: SortOrder
@@ -393164,6 +393193,7 @@ export namespace Prisma {
         roomId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
+        location?: SortOrder
         notes?: SortOrder
         isReplacement?: SortOrder
         originalScheduleId?: SortOrder
@@ -429444,6 +429474,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -429473,6 +429504,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -432609,6 +432641,7 @@ export namespace Prisma {
         roomId?: StringNullableFilter<"ClassSchedule"> | string | null
         lecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
         extraLecturerId?: StringNullableFilter<"ClassSchedule"> | string | null
+        location?: StringNullableFilter<"ClassSchedule"> | string | null
         notes?: StringNullableFilter<"ClassSchedule"> | string | null
         isReplacement?: BoolFilter<"ClassSchedule"> | boolean
         originalScheduleId?: StringNullableFilter<"ClassSchedule"> | string | null
@@ -484913,6 +484946,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -484941,6 +484975,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -487909,6 +487944,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -487938,6 +487974,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -487963,6 +488000,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -487992,6 +488030,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -488351,6 +488390,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -488380,6 +488420,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -488410,6 +488451,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -488439,6 +488481,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -491649,6 +491692,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -491677,6 +491721,7 @@ export namespace Prisma {
         classDate: Date | string
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -504793,6 +504838,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -504821,6 +504867,7 @@ export namespace Prisma {
         classDate: Date | string
         roomId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -504851,6 +504898,7 @@ export namespace Prisma {
         startTime?: Date | string | null
         endTime?: Date | string | null
         classDate: Date | string
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         cancelReason?: string | null
@@ -504879,6 +504927,7 @@ export namespace Prisma {
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -539431,6 +539480,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -539460,6 +539510,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -539485,6 +539536,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566852,6 +566904,7 @@ export namespace Prisma {
         roomId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -567124,6 +567177,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567152,6 +567206,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567177,6 +567232,7 @@ export namespace Prisma {
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571372,6 +571428,7 @@ export namespace Prisma {
         classDate: Date | string
         lecturerId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -571804,6 +571861,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571832,6 +571890,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571857,6 +571916,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576531,6 +576591,7 @@ export namespace Prisma {
         classDate: Date | string
         roomId?: string | null
         extraLecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -576554,6 +576615,7 @@ export namespace Prisma {
         classDate: Date | string
         roomId?: string | null
         lecturerId?: string | null
+        location?: string | null
         notes?: string | null
         isReplacement?: boolean
         originalScheduleId?: string | null
@@ -577262,6 +577324,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577290,6 +577353,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577315,6 +577379,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577335,6 +577400,7 @@ export namespace Prisma {
         startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577363,6 +577429,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577388,6 +577455,7 @@ export namespace Prisma {
         classDate?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
         notes?: NullableStringFieldUpdateOperationsInput | string | null
         isReplacement?: BoolFieldUpdateOperationsInput | boolean
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null

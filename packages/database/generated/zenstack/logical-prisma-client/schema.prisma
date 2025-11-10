@@ -3550,6 +3550,7 @@ model ClassSchedule {
   extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId     String?
   userProfiles        UserProfile[]
+  location            String?
   notes               String?
   isReplacement       Boolean        @default(false)
   originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])

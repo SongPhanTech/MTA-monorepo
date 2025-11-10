@@ -11086,6 +11086,10 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'classSchedules',
                     isRelationOwner: true,
+                }, location: {
+                    name: "location",
+                    type: "String",
+                    isOptional: true,
                 }, notes: {
                     name: "notes",
                     type: "String",

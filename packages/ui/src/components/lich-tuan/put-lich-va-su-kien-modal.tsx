@@ -1,5 +1,5 @@
 import { CalendarOutlined } from '@ant-design/icons'
-import { PeriodType } from '@workspace/db/client'
+import { type ClassSchedule, PeriodType } from '@workspace/db/client'
 import {
     useCreateClassSchedule,
     useDeleteClassSchedule,
@@ -9,7 +9,7 @@ import {
     useUpdateClassSchedule,
     useUpdateManyClassSchedule,
 } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, DatePicker, Form, Input, Row, Select, Tooltip, message } from 'antd'
+import { Button, Checkbox, Col, DatePicker, Form, Input, Row, Select, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -17,18 +17,9 @@ import { FormItem, InputSuggestion, PutFormModal, type PutModalFormType } from '
 import { CollapsibleField } from './collapsible-field'
 import { TYPE_WORK_SCHEDULE_COLOR_OPTIONS } from './lich-tuan'
 export type PutLichVaSuKienFormType = {
-    id?: string
-    startTime?: Dayjs
-    endTime?: Dayjs
-    content?: string
-    location?: string
-    host?: string[]
-    attendees?: string[]
-    color?: string
-    note?: string
-    type?: PeriodType // PERSONAL, WEEKLY, OTHER
     allDay?: boolean
-} & PutModalFormType
+} & ClassSchedule &
+    PutModalFormType
 
 const PutLichVaSuKienModal = () => {
     const {
@@ -59,6 +50,12 @@ const PutLichVaSuKienModal = () => {
             },
             include: {
                 userProfiles: true,
+                room: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         },
         {
@@ -66,11 +63,7 @@ const PutLichVaSuKienModal = () => {
         }
     )
 
-    const { data: profiles = [] } = useFindManyUserProfile({
-        include: {
-            
-        },
-    })
+    const { data: profiles = [] } = useFindManyUserProfile({})
 
     const { mutateAsync: deleteClassSchedule } = useDeleteClassSchedule({
         onError: (error: any) => {
@@ -119,13 +112,13 @@ const PutLichVaSuKienModal = () => {
 
     const onFinish = async (values: PutLichVaSuKienFormType, keepOpen = false) => {
         // Kiểm tra tên sự kiện (content) - bắt buộc phải có
-        if (!values.content || values.content.trim() === '') {
+        if (!values.notes || values.notes.trim() === '') {
             message.error('Vui lòng nhập nội dung công việc')
             return
         }
 
-        let finalStartTime = values.startTime
-        let finalEndTime = values.endTime
+        let finalStartTime = values.startTime ? dayjs(values.startTime) : undefined
+        let finalEndTime = values.endTime ? dayjs(values.endTime) : undefined
 
         // Handle all day events
         if (values.allDay) {
@@ -289,9 +282,7 @@ const PutLichVaSuKienModal = () => {
             }
 
             form.setFieldsValue({
-                color: TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
                 type: payload?.type || PeriodType.WEEK,
-                host: defaultHost,
                 startTime: defaultStartTime,
                 endTime: defaultEndTime,
                 allDay: defaultAllDay, // Use calculated allDay value based on selection type
@@ -304,66 +295,60 @@ const PutLichVaSuKienModal = () => {
         setTimeout(async () => {
             try {
                 // Separate profile IDs from custom text for host and attendees
-                const hostData = separateProfilesAndCustomText(values.host || [])
-                const attendeesData = separateProfilesAndCustomText(values.attendees || [])
+                // const hostData = separateProfilesAndCustomText(values.host || [])
+                // const attendeesData = separateProfilesAndCustomText(values.attendees || [])
                 if (payload?.id) {
-                    // Update the main event
-                    // Close modal immediately before mutation if requested
                     if (!keepOpen && typeof onClose === 'function') {
                         onClose()
                     }
                     await updateClassSchedule({
                         where: { id: payload.id },
                         data: {
-                            notes: values.content?.trim() || '',
+                            notes: values.notes?.trim() || '',
                             startTime: dayjs(finalStartTime).toISOString(),
                             endTime: dayjs(finalEndTime).toISOString(),
                             location: values.location?.trim() || '',
-                            host: hostData.customTexts,
-                            attendees: attendeesData.customTexts,
-                            hostProfile: {
-                                set: hostData.profileIds.map((id) => ({ id })),
-                            },
-                            attendeesProfile: {
-                                set: attendeesData.profileIds.map((id) => ({
-                                    id,
-                                })),
-                            },
-                            type: (event?.periodType as PeriodType) || PeriodType.WEEK,
+                            // host: hostData.customTexts,
+                            // attendees: attendeesData.customTexts,
+                            // hostProfile: {
+                            //     set: hostData.profileIds.map((id) => ({ id })),
+                            // },
+                            // attendeesProfile: {
+                            //     set: attendeesData.profileIds.map((id) => ({
+                            //         id,
+                            //     })),
+                            // },
+                            periodType: (event?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
                     // Show success message
                     message.success('Cập nhật sự kiện thành công')
                 } else {
-                    // Create the main event
-                    const baseData = {
-                        content: values.content?.trim() || '',
-                        startTime: dayjs(finalStartTime).toISOString(),
-                        endTime: dayjs(finalEndTime).toISOString(),
-                        color:
-                            values.color || TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
-                        note: values.note?.trim() || '',
-                        location: values.location?.trim() || '',
-                        host: hostData.customTexts,
-                        attendees: attendeesData.customTexts,
-                        hostProfile: {
-                            connect: hostData.profileIds.map((id) => ({
-                                id,
-                            })),
-                        },
-                        attendeesProfile: {
-                            connect: attendeesData.profileIds.map((id) => ({
-                                id,
-                            })),
-                        },
-                        type: (payload?.type as PeriodType) || PeriodType.WEEK,
-                    }
-
-                    // Close modal immediately before mutation if requested
                     if (!keepOpen && typeof onClose === 'function') {
                         onClose()
                     }
-                    await createClassSchedule({ data: baseData })
+                    await createClassSchedule({
+                        data: {
+                            notes: values.notes?.trim() || '',
+                            startTime: dayjs(finalStartTime).toISOString(),
+                            endTime: dayjs(finalEndTime).toISOString(),
+                            description: values.description?.trim() || '',
+                            location: values.location?.trim() || '',
+                            // host: hostData.customTexts,
+                            // attendees: attendeesData.customTexts,
+                            // hostProfile: {
+                            //     connect: hostData.profileIds.map((id) => ({
+                            //         id,
+                            //     })),
+                            // },
+                            // attendeesProfile: {
+                            //     connect: attendeesData.profileIds.map((id) => ({
+                            //         id,
+                            //     })),
+                            // },
+                            periodType: (payload?.periodType as PeriodType) || PeriodType.WEEK,
+                        },
+                    })
                     // Show success message
                     message.success('Tạo sự kiện thành công')
                 }
@@ -383,10 +368,6 @@ const PutLichVaSuKienModal = () => {
     }
 
     const handleDelete = async () => {
-        console.log('Delete handler called:', {
-            payloadId: payload?.id,
-        })
-
         if (!payload?.id || isDeleting) {
             // console.error('No payload.id found or already deleting')
             return
@@ -410,12 +391,7 @@ const PutLichVaSuKienModal = () => {
 
     useEffect(() => {
         if (payload?.id && event) {
-            const hostValues = combineProfilesAndCustomText(event.hostProfile, event.host)
-            const attendeesValues = combineProfilesAndCustomText(
-                event.attendeesProfile,
-                event.attendees
-            )
-
+            // const hostValues = combineProfilesAndCustomText(event.hostProfile, event.host)
             // Kiểm tra có phải sự kiện cả ngày (00:00 đến 23:59)
             const isAllDay = (() => {
                 if (!event.startTime || !event.endTime) return false
@@ -431,34 +407,19 @@ const PutLichVaSuKienModal = () => {
                 const isEndOfDay = endTime.isSame(endTime.endOf('day'))
 
                 const isValidEndTime = isEndAtNightTime || isEndOfDay
-
-                console.log('Kiểm tra cả ngày:', {
-                    startTime: event.startTime,
-                    endTime: event.endTime,
-                    startHour: startTime.hour(),
-                    startMinute: startTime.minute(),
-                    endHour: endTime.hour(),
-                    endMinute: endTime.minute(),
-                    isStartOfDay,
-                    isEndAtNightTime,
-                    isEndOfDay,
-                    isValidEndTime,
-                    result: isStartOfDay && isValidEndTime,
-                })
-
                 return isStartOfDay && isValidEndTime
             })()
 
             form.setFieldsValue({
                 id: payload.id,
-                content: event.notes || '',
+                notes: event.notes || '',
                 startTime: event.startTime ? dayjs(event.startTime) : undefined,
                 endTime: event.endTime ? dayjs(event.endTime) : undefined,
-                note: event.notes || '',
+                description: event.description || '',
                 location: event?.location ?? event?.room?.name ?? '',
-                host: hostValues,
-                attendees: attendeesValues,
-                type: event.periodType || PeriodType.WEEK,
+                // host: hostValues,
+                userProfiles: [],
+                periodType: event.periodType || PeriodType.WEEK,
                 allDay: isAllDay,
             })
         } else if (!payload?.id && isOpen) {
@@ -563,9 +524,7 @@ const PutLichVaSuKienModal = () => {
             }
 
             form.setFieldsValue({
-                color: TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
-                type: payload?.type || PeriodType.WEEK,
-                host: defaultHost,
+                periodType: payload?.periodType || PeriodType.WEEK,
                 startTime: defaultStartTime,
                 endTime: defaultEndTime,
                 allDay: defaultAllDay, // Use calculated allDay value based on selection type
@@ -579,8 +538,8 @@ const PutLichVaSuKienModal = () => {
         payload?.type,
         payload?.slot,
         userIdLogin,
-        combineProfilesAndCustomText,
-        isSingleDaySchedule,
+        // combineProfilesAndCustomText,
+        // isSingleDaySchedule,
     ])
     return (
         <PutFormModal
@@ -660,12 +619,12 @@ const PutLichVaSuKienModal = () => {
 
             <Col span={24}>
                 <FormItem
-                    name="content"
+                    name="notes"
                     form={form}
                     rules={[
                         {
                             required: true,
-                            message: 'Vui lòng nhập nội dung công việc',
+                            message: 'Vui lòng nhập nội dung',
                         },
                         {
                             whitespace: true,
@@ -768,7 +727,7 @@ const PutLichVaSuKienModal = () => {
                                 showTime={
                                     !allDayValue
                                         ? {
-                                              defaultValue: dayjs('00:00', 'HH:mm'),
+                                              defaultValue: dayjs('07:00', 'HH:mm'),
                                           }
                                         : false
                                 }
@@ -797,7 +756,7 @@ const PutLichVaSuKienModal = () => {
                                 showTime={
                                     !allDayValue
                                         ? {
-                                              defaultValue: dayjs('00:00', 'HH:mm'),
+                                              defaultValue: dayjs('17:00', 'HH:mm'),
                                           }
                                         : false
                                 }
@@ -846,15 +805,9 @@ const PutLichVaSuKienModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={4}>
-                        <FormItem name="color" form={form}>
+                        <FormItem name="periodType" form={form}>
                             <Select
                                 disabled={isLoading}
-                                value={
-                                    form.getFieldValue('color') ||
-                                    TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value ||
-                                    '#b3d4fc'
-                                }
-                                onChange={(value) => form.setFieldsValue({ color: value })}
                                 suffixIcon={null}
                                 className="text-center"
                                 style={{
@@ -914,108 +867,14 @@ const PutLichVaSuKienModal = () => {
                     </Col>
                 </Row>
             </CollapsibleField>
-
-            <Col span={24}>
-                <FormItem name="host" form={form}>
+            {/* <Col span={24}>
+                <FormItem name="userProfiles" form={form}>
                     <Select
                         disabled={isLoading}
                         mode="tags"
                         allowClear
                         className="w-full modern-borderless-input"
-                        placeholder="Chọn người chủ trì hoặc nhập tên tùy chỉnh"
-                        maxTagCount={2}
-                        maxTagPlaceholder={(omittedValues) => (
-                            <Tooltip
-                                styles={{ root: { pointerEvents: 'none' } }}
-                                title={omittedValues
-                                    .map(({ value }) => {
-                                        const profile = profiles.find((p) => p.id === value)
-                                        return profile
-                                            ? profile.fullname ||
-                                                  `${profile.firstName} ${profile.lastName}`
-                                            : value
-                                    })
-                                    .join(', ')}
-                            >
-                                <span>+{omittedValues.length}</span>
-                            </Tooltip>
-                        )}
-                        options={(() => {
-                            // Sort profiles: logged-in user first for PERSONAL type
-                            const sortedProfiles = [...profiles]
-                            if (payload?.type === PeriodType.PERSONAL && userIdLogin) {
-                                sortedProfiles.sort((a, b) => {
-                                    if (a.id === userIdLogin) return -1
-                                    if (b.id === userIdLogin) return 1
-                                    return 0
-                                })
-                            }
-                            return sortedProfiles.map((profile) => ({
-                                label: (
-                                    <span style={{ color: '#333333' }}>
-                                        {profile.fullname ||
-                                            `${profile.firstName} ${profile.lastName}`}
-                                        {profile.organization?.name && (
-                                            <span
-                                                style={{
-                                                    // color: '#1890ff',
-                                                    marginLeft: '8px',
-                                                }}
-                                                className="text-primary"
-                                            >
-                                                ({profile.organization.name})
-                                            </span>
-                                        )}
-                                    </span>
-                                ),
-                                value: profile.id,
-                            }))
-                        })()}
-                        showSearch
-                        filterOption={(input, option) => {
-                            // Find the profile data by option value (profile.id)
-                            const profile = profiles.find((p) => p.id === option?.value)
-                            if (!profile) return false
-
-                            const fullname =
-                                profile.fullname || `${profile.firstName} ${profile.lastName}`
-                            const orgName = profile.organization?.name || ''
-                            const searchText = `${fullname} ${orgName}`.toLowerCase()
-
-                            return searchText.includes(input.toLowerCase())
-                        }}
-                        tokenSeparators={[',', ';']}
-                        onDeselect={(value) => {
-                            // Prevent removing logged-in user for PERSONAL type
-                            if (payload?.type === PeriodType.WEEK && value === userIdLogin) {
-                                setTimeout(() => {
-                                    const currentHosts = form.getFieldValue('host') || []
-                                    if (!currentHosts.includes(userIdLogin)) {
-                                        form.setFieldsValue({
-                                            host: [...currentHosts, userIdLogin],
-                                        })
-                                    }
-                                }, 0)
-                            }
-                        }}
-                        onClear={() => {
-                            if (payload?.type === PeriodType.WEEK && userIdLogin) {
-                                setTimeout(() => {
-                                    form.setFieldsValue({ host: [userIdLogin] })
-                                }, 0)
-                            }
-                        }}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem name="attendees" form={form}>
-                    <Select
-                        disabled={isLoading}
-                        mode="tags"
-                        allowClear
-                        className="w-full modern-borderless-input"
-                        placeholder="Chọn thành phần tham dự hoặc nhập tên tùy chỉnh"
+                        placeholder="Chọn người tham hoặc nhập tên tùy chỉnh"
                         maxTagCount={2}
                         maxTagPlaceholder={(omittedValues) => (
                             <Tooltip
@@ -1067,7 +926,7 @@ const PutLichVaSuKienModal = () => {
                         tokenSeparators={[',', ';']}
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={24}>
                 <FormItem name="location" form={form}>
                     <InputSuggestion
@@ -1079,7 +938,7 @@ const PutLichVaSuKienModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem name="note" form={form}>
+                <FormItem name="description" form={form}>
                     <Input.TextArea
                         disabled={isLoading}
                         rows={3}

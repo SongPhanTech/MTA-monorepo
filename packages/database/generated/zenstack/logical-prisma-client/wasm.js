@@ -2084,6 +2084,7 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   isReplacement: 'isReplacement',
   originalScheduleId: 'originalScheduleId',
@@ -5663,6 +5664,7 @@ exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   originalScheduleId: 'originalScheduleId',
   cancelReason: 'cancelReason'
