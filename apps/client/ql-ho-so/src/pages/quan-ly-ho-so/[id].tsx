@@ -350,7 +350,23 @@ export default function UpdateUserPage() {
     function findLatestQuyetDinh(list: any[]) {
         if (list.length === 0) return null
         return list.reduce((latest, current) =>
-            new Date(current.ngayNhanQuyetDinh) > new Date(latest.ngayNhanQuyetDinh)
+            new Date(current.ngayNhanQuyetDinh) >= new Date(latest.ngayNhanQuyetDinh)
+                ? current
+                : latest
+        )
+    }
+        function findLatestHocVi(list: any[]) {
+        if (list.length === 0) return null
+        return list.reduce((latest, current) =>
+            current.year >= latest.year
+                ? current
+                : latest
+        )
+    }
+            function findLatestHocHam(list: any[]) {
+        if (list.length === 0) return null
+        return list.reduce((latest, current) =>
+            new Date(current.from) >= new Date(latest.from)
                 ? current
                 : latest
         )
@@ -414,11 +430,26 @@ export default function UpdateUserPage() {
                 console.log(error)
             })
             let rank = null
+            let hocvi=null
+            let hocham=null
             if (values.capBac?.length > 0) {
                 if (values.capBac?.length === 1) {
                     rank = values.capBac[0]
                 }
                 rank = findLatestQuyetDinh(values?.capBac)
+            }
+
+            if (values.hocVi?.length > 0) {
+                if (values.hocVi?.length === 1) {
+                    hocvi = values.hocVi[0]
+                }
+                hocvi = findLatestHocVi(values?.hocVi)
+            }
+            if (values.hocHam?.length > 0) {
+                if (values.hocHam?.length === 1) {
+                    hocham = values.hocHam[0]
+                }
+                hocham = findLatestHocHam(values?.hocHam)
             }
             // if (res.status === 200) {
             let listTransaction: any = [
@@ -512,6 +543,8 @@ export default function UpdateUserPage() {
                                 : null,
                             avatar: form.getFieldValue('avatar'),
                             rankId: rank?.capBacId ?? undefined,
+                            academicRankTypeId: hocham?.hocHamId ?? undefined,
+                            academicDegreeTypeId: hocvi?.hocViId ?? undefined,
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {

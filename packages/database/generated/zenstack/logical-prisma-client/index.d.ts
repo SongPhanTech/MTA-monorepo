@@ -8209,6 +8209,7 @@ export namespace Prisma {
         notificationId: 'notificationId',
         decisionId: 'decisionId',
         defenseRecordId: 'defenseRecordId',
+        librarySubmissionId: 'librarySubmissionId',
         diplomaFrontId: 'diplomaFrontId',
         diplomaBackId: 'diplomaBackId',
         diplomaVerificationId: 'diplomaVerificationId',
@@ -11326,6 +11327,7 @@ export namespace Prisma {
         notificationId: 'notificationId',
         decisionId: 'decisionId',
         defenseRecordId: 'defenseRecordId',
+        librarySubmissionId: 'librarySubmissionId',
         diplomaFrontId: 'diplomaFrontId',
         diplomaBackId: 'diplomaBackId',
         diplomaVerificationId: 'diplomaVerificationId',
@@ -62789,6 +62791,7 @@ export namespace Prisma {
         notification<T extends DocumentFile$notificationArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$notificationArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         decision<T extends DocumentFile$decisionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$decisionArgs<ExtArgs>>): Prisma__DecisionClient<$Result.GetResult<Prisma.$DecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         defenseRecord<T extends DocumentFile$defenseRecordArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$defenseRecordArgs<ExtArgs>>): Prisma__DefenseRecordClient<$Result.GetResult<Prisma.$DefenseRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        librarySubmission<T extends DocumentFile$librarySubmissionArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$librarySubmissionArgs<ExtArgs>>): Prisma__LibrarySubmissionClient<$Result.GetResult<Prisma.$LibrarySubmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         diplomaFront<T extends DocumentFile$diplomaFrontArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaFrontArgs<ExtArgs>>): Prisma__GraduationDecisionClient<$Result.GetResult<Prisma.$GraduationDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         diplomaBack<T extends DocumentFile$diplomaBackArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaBackArgs<ExtArgs>>): Prisma__GraduationDecisionClient<$Result.GetResult<Prisma.$GraduationDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         diplomaVerification<T extends DocumentFile$diplomaVerificationArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaVerificationArgs<ExtArgs>>): Prisma__DiplomaVerificationApplicationClient<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -62845,6 +62848,7 @@ export namespace Prisma {
         readonly notificationId: FieldRef<"DocumentFile", 'String'>;
         readonly decisionId: FieldRef<"DocumentFile", 'String'>;
         readonly defenseRecordId: FieldRef<"DocumentFile", 'String'>;
+        readonly librarySubmissionId: FieldRef<"DocumentFile", 'String'>;
         readonly diplomaFrontId: FieldRef<"DocumentFile", 'String'>;
         readonly diplomaBackId: FieldRef<"DocumentFile", 'String'>;
         readonly diplomaVerificationId: FieldRef<"DocumentFile", 'String'>;
@@ -72159,6 +72163,7 @@ export namespace Prisma {
     export interface Prisma__LibrarySubmissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         thesis<T extends ThesisProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProjectDefaultArgs<ExtArgs>>): Prisma__ThesisProjectClient<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        documentFile<T extends LibrarySubmission$documentFileArgs<ExtArgs> = {}>(args?: Subset<T, LibrarySubmission$documentFileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -132177,6 +132182,30 @@ export namespace Prisma {
      * DefenseRecordCountOutputType without action
      */
     export type DefenseRecordCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DocumentFileWhereInput
+    };
+    /**
+     * Count Type LibrarySubmissionCountOutputType
+     */
+    export type LibrarySubmissionCountOutputType = {
+        documentFile: number
+    };
+    export type LibrarySubmissionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        documentFile?: boolean | LibrarySubmissionCountOutputTypeCountDocumentFileArgs
+    };
+    /**
+     * LibrarySubmissionCountOutputType without action
+     */
+    export type LibrarySubmissionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the LibrarySubmissionCountOutputType
+         */
+        select?: LibrarySubmissionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * LibrarySubmissionCountOutputType without action
+     */
+    export type LibrarySubmissionCountOutputTypeCountDocumentFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DocumentFileWhereInput
     };
     /**
@@ -238129,6 +238158,7 @@ export namespace Prisma {
         notificationId: string | null
         decisionId: string | null
         defenseRecordId: string | null
+        librarySubmissionId: string | null
         diplomaFrontId: string | null
         diplomaBackId: string | null
         diplomaVerificationId: string | null
@@ -238161,6 +238191,7 @@ export namespace Prisma {
         notificationId: string | null
         decisionId: string | null
         defenseRecordId: string | null
+        librarySubmissionId: string | null
         diplomaFrontId: string | null
         diplomaBackId: string | null
         diplomaVerificationId: string | null
@@ -238193,6 +238224,7 @@ export namespace Prisma {
         notificationId: number
         decisionId: number
         defenseRecordId: number
+        librarySubmissionId: number
         diplomaFrontId: number
         diplomaBackId: number
         diplomaVerificationId: number
@@ -238232,6 +238264,7 @@ export namespace Prisma {
         notificationId?: true
         decisionId?: true
         defenseRecordId?: true
+        librarySubmissionId?: true
         diplomaFrontId?: true
         diplomaBackId?: true
         diplomaVerificationId?: true
@@ -238264,6 +238297,7 @@ export namespace Prisma {
         notificationId?: true
         decisionId?: true
         defenseRecordId?: true
+        librarySubmissionId?: true
         diplomaFrontId?: true
         diplomaBackId?: true
         diplomaVerificationId?: true
@@ -238296,6 +238330,7 @@ export namespace Prisma {
         notificationId?: true
         decisionId?: true
         defenseRecordId?: true
+        librarySubmissionId?: true
         diplomaFrontId?: true
         diplomaBackId?: true
         diplomaVerificationId?: true
@@ -238409,6 +238444,7 @@ export namespace Prisma {
         notificationId: string | null
         decisionId: string | null
         defenseRecordId: string | null
+        librarySubmissionId: string | null
         diplomaFrontId: string | null
         diplomaBackId: string | null
         diplomaVerificationId: string | null
@@ -238458,6 +238494,7 @@ export namespace Prisma {
         notificationId?: boolean
         decisionId?: boolean
         defenseRecordId?: boolean
+        librarySubmissionId?: boolean
         diplomaFrontId?: boolean
         diplomaBackId?: boolean
         diplomaVerificationId?: boolean
@@ -238476,6 +238513,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238508,6 +238546,7 @@ export namespace Prisma {
         notificationId?: boolean
         decisionId?: boolean
         defenseRecordId?: boolean
+        librarySubmissionId?: boolean
         diplomaFrontId?: boolean
         diplomaBackId?: boolean
         diplomaVerificationId?: boolean
@@ -238526,6 +238565,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238558,6 +238598,7 @@ export namespace Prisma {
         notificationId?: boolean
         decisionId?: boolean
         defenseRecordId?: boolean
+        librarySubmissionId?: boolean
         diplomaFrontId?: boolean
         diplomaBackId?: boolean
         diplomaVerificationId?: boolean
@@ -238576,6 +238617,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238608,6 +238650,7 @@ export namespace Prisma {
         notificationId?: boolean
         decisionId?: boolean
         defenseRecordId?: boolean
+        librarySubmissionId?: boolean
         diplomaFrontId?: boolean
         diplomaBackId?: boolean
         diplomaVerificationId?: boolean
@@ -238617,7 +238660,7 @@ export namespace Prisma {
         studentScoreConvertId?: boolean
         noteId?: boolean
     };
-    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "noteId", ExtArgs["result"]["documentFile"]>;
+    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "noteId", ExtArgs["result"]["documentFile"]>;
     export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
@@ -238629,6 +238672,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238649,6 +238693,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238669,6 +238714,7 @@ export namespace Prisma {
         notification?: boolean | DocumentFile$notificationArgs<ExtArgs>
         decision?: boolean | DocumentFile$decisionArgs<ExtArgs>
         defenseRecord?: boolean | DocumentFile$defenseRecordArgs<ExtArgs>
+        librarySubmission?: boolean | DocumentFile$librarySubmissionArgs<ExtArgs>
         diplomaFront?: boolean | DocumentFile$diplomaFrontArgs<ExtArgs>
         diplomaBack?: boolean | DocumentFile$diplomaBackArgs<ExtArgs>
         diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
@@ -238691,6 +238737,7 @@ export namespace Prisma {
             notification: Prisma.$NotificationPayload<ExtArgs> | null
             decision: Prisma.$DecisionPayload<ExtArgs> | null
             defenseRecord: Prisma.$DefenseRecordPayload<ExtArgs> | null
+            librarySubmission: Prisma.$LibrarySubmissionPayload<ExtArgs> | null
             diplomaFront: Prisma.$GraduationDecisionPayload<ExtArgs> | null
             diplomaBack: Prisma.$GraduationDecisionPayload<ExtArgs> | null
             diplomaVerification: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs> | null
@@ -238723,6 +238770,7 @@ export namespace Prisma {
             notificationId: string | null
             decisionId: string | null
             defenseRecordId: string | null
+            librarySubmissionId: string | null
             diplomaFrontId: string | null
             diplomaBackId: string | null
             diplomaVerificationId: string | null
@@ -239294,6 +239342,24 @@ export namespace Prisma {
          */
         include?: DefenseRecordInclude<ExtArgs> | null
         where?: DefenseRecordWhereInput
+    };
+    /**
+     * DocumentFile.librarySubmission
+     */
+    export type DocumentFile$librarySubmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the LibrarySubmission
+         */
+        select?: LibrarySubmissionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the LibrarySubmission
+         */
+        omit?: LibrarySubmissionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: LibrarySubmissionInclude<ExtArgs> | null
+        where?: LibrarySubmissionWhereInput
     };
     /**
      * DocumentFile.diplomaFront
@@ -257851,6 +257917,8 @@ export namespace Prisma {
         thesisId?: boolean
         confirmedById?: boolean
         thesis?: boolean | ThesisProjectDefaultArgs<ExtArgs>
+        documentFile?: boolean | LibrarySubmission$documentFileArgs<ExtArgs>
+        _count?: boolean | LibrarySubmissionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["librarySubmission"]>;
     export type LibrarySubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -257905,6 +257973,8 @@ export namespace Prisma {
     export type LibrarySubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "submissionDate" | "isHardcopy" | "isSoftcopy" | "librarianNote" | "thesisId" | "confirmedById", ExtArgs["result"]["librarySubmission"]>;
     export type LibrarySubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         thesis?: boolean | ThesisProjectDefaultArgs<ExtArgs>
+        documentFile?: boolean | LibrarySubmission$documentFileArgs<ExtArgs>
+        _count?: boolean | LibrarySubmissionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type LibrarySubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         thesis?: boolean | ThesisProjectDefaultArgs<ExtArgs>
@@ -257916,6 +257986,7 @@ export namespace Prisma {
         name: "LibrarySubmission"
         objects: {
             thesis: Prisma.$ThesisProjectPayload<ExtArgs>
+            documentFile: Prisma.$DocumentFilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -258315,6 +258386,29 @@ export namespace Prisma {
          * Limit how many LibrarySubmissions to delete.
          */
         limit?: number
+    };
+    /**
+     * LibrarySubmission.documentFile
+     */
+    export type LibrarySubmission$documentFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DocumentFile
+         */
+        select?: DocumentFileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DocumentFile
+         */
+        omit?: DocumentFileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DocumentFileInclude<ExtArgs> | null
+        where?: DocumentFileWhereInput
+        orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+        cursor?: DocumentFileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
     };
     /**
      * LibrarySubmission without action
@@ -342488,6 +342582,7 @@ export namespace Prisma {
         notificationId?: StringNullableFilter<"DocumentFile"> | string | null
         decisionId?: StringNullableFilter<"DocumentFile"> | string | null
         defenseRecordId?: StringNullableFilter<"DocumentFile"> | string | null
+        librarySubmissionId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaFrontId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaBackId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaVerificationId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -342506,6 +342601,7 @@ export namespace Prisma {
         notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
         decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
         defenseRecord?: XOR<DefenseRecordNullableScalarRelationFilter, DefenseRecordWhereInput> | null
+        librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
         diplomaFront?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
         diplomaBack?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
         diplomaVerification?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
@@ -342538,6 +342634,7 @@ export namespace Prisma {
         notificationId?: SortOrderInput | SortOrder
         decisionId?: SortOrderInput | SortOrder
         defenseRecordId?: SortOrderInput | SortOrder
+        librarySubmissionId?: SortOrderInput | SortOrder
         diplomaFrontId?: SortOrderInput | SortOrder
         diplomaBackId?: SortOrderInput | SortOrder
         diplomaVerificationId?: SortOrderInput | SortOrder
@@ -342556,6 +342653,7 @@ export namespace Prisma {
         notification?: NotificationOrderByWithRelationInput
         decision?: DecisionOrderByWithRelationInput
         defenseRecord?: DefenseRecordOrderByWithRelationInput
+        librarySubmission?: LibrarySubmissionOrderByWithRelationInput
         diplomaFront?: GraduationDecisionOrderByWithRelationInput
         diplomaBack?: GraduationDecisionOrderByWithRelationInput
         diplomaVerification?: DiplomaVerificationApplicationOrderByWithRelationInput
@@ -342597,6 +342695,7 @@ export namespace Prisma {
         notificationId?: StringNullableFilter<"DocumentFile"> | string | null
         decisionId?: StringNullableFilter<"DocumentFile"> | string | null
         defenseRecordId?: StringNullableFilter<"DocumentFile"> | string | null
+        librarySubmissionId?: StringNullableFilter<"DocumentFile"> | string | null
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -342610,6 +342709,7 @@ export namespace Prisma {
         notification?: XOR<NotificationNullableScalarRelationFilter, NotificationWhereInput> | null
         decision?: XOR<DecisionNullableScalarRelationFilter, DecisionWhereInput> | null
         defenseRecord?: XOR<DefenseRecordNullableScalarRelationFilter, DefenseRecordWhereInput> | null
+        librarySubmission?: XOR<LibrarySubmissionNullableScalarRelationFilter, LibrarySubmissionWhereInput> | null
         diplomaFront?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
         diplomaBack?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
         diplomaVerification?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
@@ -342642,6 +342742,7 @@ export namespace Prisma {
         notificationId?: SortOrderInput | SortOrder
         decisionId?: SortOrderInput | SortOrder
         defenseRecordId?: SortOrderInput | SortOrder
+        librarySubmissionId?: SortOrderInput | SortOrder
         diplomaFrontId?: SortOrderInput | SortOrder
         diplomaBackId?: SortOrderInput | SortOrder
         diplomaVerificationId?: SortOrderInput | SortOrder
@@ -342682,6 +342783,7 @@ export namespace Prisma {
         notificationId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         decisionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         defenseRecordId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+        librarySubmissionId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         diplomaFrontId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         diplomaBackId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         diplomaVerificationId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
@@ -345204,6 +345306,7 @@ export namespace Prisma {
         thesisId?: StringFilter<"LibrarySubmission"> | string
         confirmedById?: StringNullableFilter<"LibrarySubmission"> | string | null
         thesis?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
+        documentFile?: DocumentFileListRelationFilter
     };
     export type LibrarySubmissionOrderByWithRelationInput = {
         id?: SortOrder
@@ -345221,6 +345324,7 @@ export namespace Prisma {
         thesisId?: SortOrder
         confirmedById?: SortOrderInput | SortOrder
         thesis?: ThesisProjectOrderByWithRelationInput
+        documentFile?: DocumentFileOrderByRelationAggregateInput
         _relevance?: LibrarySubmissionOrderByRelevanceInput
     };
     export type LibrarySubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -345242,6 +345346,7 @@ export namespace Prisma {
         librarianNote?: StringNullableFilter<"LibrarySubmission"> | string | null
         confirmedById?: StringNullableFilter<"LibrarySubmission"> | string | null
         thesis?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
+        documentFile?: DocumentFileListRelationFilter
     }, "id" | "code" | "thesisId">;
     export type LibrarySubmissionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -370717,6 +370822,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -370749,6 +370855,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -370781,6 +370888,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -370813,6 +370921,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -370845,6 +370954,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -370891,6 +371001,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -373732,6 +373843,7 @@ export namespace Prisma {
         librarianNote?: string | null
         confirmedById?: string | null
         thesis: ThesisProjectCreateNestedOneWithoutLibrarySubmissionInput
+        documentFile?: DocumentFileCreateNestedManyWithoutLibrarySubmissionInput
     };
     export type LibrarySubmissionUncheckedCreateInput = {
         id?: string
@@ -373748,6 +373860,7 @@ export namespace Prisma {
         librarianNote?: string | null
         thesisId: string
         confirmedById?: string | null
+        documentFile?: DocumentFileUncheckedCreateNestedManyWithoutLibrarySubmissionInput
     };
     export type LibrarySubmissionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373764,6 +373877,7 @@ export namespace Prisma {
         librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
         confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
         thesis?: ThesisProjectUpdateOneRequiredWithoutLibrarySubmissionNestedInput
+        documentFile?: DocumentFileUpdateManyWithoutLibrarySubmissionNestedInput
     };
     export type LibrarySubmissionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373780,6 +373894,7 @@ export namespace Prisma {
         librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
         thesisId?: StringFieldUpdateOperationsInput | string
         confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
+        documentFile?: DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionNestedInput
     };
     export type LibrarySubmissionCreateManyInput = {
         id?: string
@@ -393674,6 +393789,10 @@ export namespace Prisma {
         is?: DefenseRecordWhereInput | null
         isNot?: DefenseRecordWhereInput | null
     };
+    export type LibrarySubmissionNullableScalarRelationFilter = {
+        is?: LibrarySubmissionWhereInput | null
+        isNot?: LibrarySubmissionWhereInput | null
+    };
     export type DiplomaVerificationApplicationNullableScalarRelationFilter = {
         is?: DiplomaVerificationApplicationWhereInput | null
         isNot?: DiplomaVerificationApplicationWhereInput | null
@@ -393718,6 +393837,7 @@ export namespace Prisma {
         notificationId?: SortOrder
         decisionId?: SortOrder
         defenseRecordId?: SortOrder
+        librarySubmissionId?: SortOrder
         diplomaFrontId?: SortOrder
         diplomaBackId?: SortOrder
         diplomaVerificationId?: SortOrder
@@ -393753,6 +393873,7 @@ export namespace Prisma {
         notificationId?: SortOrder
         decisionId?: SortOrder
         defenseRecordId?: SortOrder
+        librarySubmissionId?: SortOrder
         diplomaFrontId?: SortOrder
         diplomaBackId?: SortOrder
         diplomaVerificationId?: SortOrder
@@ -393785,6 +393906,7 @@ export namespace Prisma {
         notificationId?: SortOrder
         decisionId?: SortOrder
         defenseRecordId?: SortOrder
+        librarySubmissionId?: SortOrder
         diplomaFrontId?: SortOrder
         diplomaBackId?: SortOrder
         diplomaVerificationId?: SortOrder
@@ -394832,10 +394954,6 @@ export namespace Prisma {
     export type DefenseSessionNullableScalarRelationFilter = {
         is?: DefenseSessionWhereInput | null
         isNot?: DefenseSessionWhereInput | null
-    };
-    export type LibrarySubmissionNullableScalarRelationFilter = {
-        is?: LibrarySubmissionWhereInput | null
-        isNot?: LibrarySubmissionWhereInput | null
     };
     export type DecisionListRelationFilter = {
         every?: DecisionWhereInput
@@ -414712,6 +414830,11 @@ export namespace Prisma {
         connectOrCreate?: DefenseRecordCreateOrConnectWithoutDocumentsInput
         connect?: DefenseRecordWhereUniqueInput
     };
+    export type LibrarySubmissionCreateNestedOneWithoutDocumentFileInput = {
+        create?: XOR<LibrarySubmissionCreateWithoutDocumentFileInput, LibrarySubmissionUncheckedCreateWithoutDocumentFileInput>
+        connectOrCreate?: LibrarySubmissionCreateOrConnectWithoutDocumentFileInput
+        connect?: LibrarySubmissionWhereUniqueInput
+    };
     export type GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput = {
         create?: XOR<GraduationDecisionCreateWithoutDiplomaFrontInput, GraduationDecisionUncheckedCreateWithoutDiplomaFrontInput>
         connectOrCreate?: GraduationDecisionCreateOrConnectWithoutDiplomaFrontInput
@@ -414848,6 +414971,15 @@ export namespace Prisma {
         delete?: DefenseRecordWhereInput | boolean
         connect?: DefenseRecordWhereUniqueInput
         update?: XOR<XOR<DefenseRecordUpdateToOneWithWhereWithoutDocumentsInput, DefenseRecordUpdateWithoutDocumentsInput>, DefenseRecordUncheckedUpdateWithoutDocumentsInput>
+    };
+    export type LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput = {
+        create?: XOR<LibrarySubmissionCreateWithoutDocumentFileInput, LibrarySubmissionUncheckedCreateWithoutDocumentFileInput>
+        connectOrCreate?: LibrarySubmissionCreateOrConnectWithoutDocumentFileInput
+        upsert?: LibrarySubmissionUpsertWithoutDocumentFileInput
+        disconnect?: LibrarySubmissionWhereInput | boolean
+        delete?: LibrarySubmissionWhereInput | boolean
+        connect?: LibrarySubmissionWhereUniqueInput
+        update?: XOR<XOR<LibrarySubmissionUpdateToOneWithWhereWithoutDocumentFileInput, LibrarySubmissionUpdateWithoutDocumentFileInput>, LibrarySubmissionUncheckedUpdateWithoutDocumentFileInput>
     };
     export type GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput = {
         create?: XOR<GraduationDecisionCreateWithoutDiplomaFrontInput, GraduationDecisionUncheckedCreateWithoutDiplomaFrontInput>
@@ -417360,12 +417492,50 @@ export namespace Prisma {
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutLibrarySubmissionInput
         connect?: ThesisProjectWhereUniqueInput
     };
+    export type DocumentFileCreateNestedManyWithoutLibrarySubmissionInput = {
+        create?: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput> | DocumentFileCreateWithoutLibrarySubmissionInput[] | DocumentFileUncheckedCreateWithoutLibrarySubmissionInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutLibrarySubmissionInput | DocumentFileCreateOrConnectWithoutLibrarySubmissionInput[]
+        createMany?: DocumentFileCreateManyLibrarySubmissionInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    };
+    export type DocumentFileUncheckedCreateNestedManyWithoutLibrarySubmissionInput = {
+        create?: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput> | DocumentFileCreateWithoutLibrarySubmissionInput[] | DocumentFileUncheckedCreateWithoutLibrarySubmissionInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutLibrarySubmissionInput | DocumentFileCreateOrConnectWithoutLibrarySubmissionInput[]
+        createMany?: DocumentFileCreateManyLibrarySubmissionInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    };
     export type ThesisProjectUpdateOneRequiredWithoutLibrarySubmissionNestedInput = {
         create?: XOR<ThesisProjectCreateWithoutLibrarySubmissionInput, ThesisProjectUncheckedCreateWithoutLibrarySubmissionInput>
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutLibrarySubmissionInput
         upsert?: ThesisProjectUpsertWithoutLibrarySubmissionInput
         connect?: ThesisProjectWhereUniqueInput
         update?: XOR<XOR<ThesisProjectUpdateToOneWithWhereWithoutLibrarySubmissionInput, ThesisProjectUpdateWithoutLibrarySubmissionInput>, ThesisProjectUncheckedUpdateWithoutLibrarySubmissionInput>
+    };
+    export type DocumentFileUpdateManyWithoutLibrarySubmissionNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput> | DocumentFileCreateWithoutLibrarySubmissionInput[] | DocumentFileUncheckedCreateWithoutLibrarySubmissionInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutLibrarySubmissionInput | DocumentFileCreateOrConnectWithoutLibrarySubmissionInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput | DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput[]
+        createMany?: DocumentFileCreateManyLibrarySubmissionInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutLibrarySubmissionInput | DocumentFileUpdateWithWhereUniqueWithoutLibrarySubmissionInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput> | DocumentFileCreateWithoutLibrarySubmissionInput[] | DocumentFileUncheckedCreateWithoutLibrarySubmissionInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutLibrarySubmissionInput | DocumentFileCreateOrConnectWithoutLibrarySubmissionInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput | DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput[]
+        createMany?: DocumentFileCreateManyLibrarySubmissionInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutLibrarySubmissionInput | DocumentFileUpdateWithWhereUniqueWithoutLibrarySubmissionInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
     export type ExpertProfileCreateNestedOneWithoutPaymentsInput = {
         create?: XOR<ExpertProfileCreateWithoutPaymentsInput, ExpertProfileUncheckedCreateWithoutPaymentsInput>
@@ -467234,6 +467404,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -467265,6 +467436,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -467509,6 +467681,7 @@ export namespace Prisma {
         notificationId?: StringNullableFilter<"DocumentFile"> | string | null
         decisionId?: StringNullableFilter<"DocumentFile"> | string | null
         defenseRecordId?: StringNullableFilter<"DocumentFile"> | string | null
+        librarySubmissionId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaFrontId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaBackId?: StringNullableFilter<"DocumentFile"> | string | null
         diplomaVerificationId?: StringNullableFilter<"DocumentFile"> | string | null
@@ -470317,6 +470490,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -470348,6 +470522,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -471045,6 +471220,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -471076,6 +471252,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -473635,6 +473812,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -473666,6 +473844,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -476500,6 +476679,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -476531,6 +476711,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -477134,6 +477315,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -477165,6 +477347,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -479390,6 +479573,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -479421,6 +479605,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -490603,6 +490788,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -490634,6 +490820,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -498128,6 +498315,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -498159,6 +498347,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -498791,6 +498980,42 @@ export namespace Prisma {
     export type DefenseRecordCreateOrConnectWithoutDocumentsInput = {
         where: DefenseRecordWhereUniqueInput
         create: XOR<DefenseRecordCreateWithoutDocumentsInput, DefenseRecordUncheckedCreateWithoutDocumentsInput>
+    };
+    export type LibrarySubmissionCreateWithoutDocumentFileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        submissionDate?: Date | string
+        isHardcopy?: boolean
+        isSoftcopy?: boolean
+        librarianNote?: string | null
+        confirmedById?: string | null
+        thesis: ThesisProjectCreateNestedOneWithoutLibrarySubmissionInput
+    };
+    export type LibrarySubmissionUncheckedCreateWithoutDocumentFileInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        submissionDate?: Date | string
+        isHardcopy?: boolean
+        isSoftcopy?: boolean
+        librarianNote?: string | null
+        thesisId: string
+        confirmedById?: string | null
+    };
+    export type LibrarySubmissionCreateOrConnectWithoutDocumentFileInput = {
+        where: LibrarySubmissionWhereUniqueInput
+        create: XOR<LibrarySubmissionCreateWithoutDocumentFileInput, LibrarySubmissionUncheckedCreateWithoutDocumentFileInput>
     };
     export type GraduationDecisionCreateWithoutDiplomaFrontInput = {
         id?: string
@@ -499795,6 +500020,47 @@ export namespace Prisma {
         comments?: NullableStringFieldUpdateOperationsInput | string | null
         isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
         thesisId?: StringFieldUpdateOperationsInput | string
+    };
+    export type LibrarySubmissionUpsertWithoutDocumentFileInput = {
+        update: XOR<LibrarySubmissionUpdateWithoutDocumentFileInput, LibrarySubmissionUncheckedUpdateWithoutDocumentFileInput>
+        create: XOR<LibrarySubmissionCreateWithoutDocumentFileInput, LibrarySubmissionUncheckedCreateWithoutDocumentFileInput>
+        where?: LibrarySubmissionWhereInput
+    };
+    export type LibrarySubmissionUpdateToOneWithWhereWithoutDocumentFileInput = {
+        where?: LibrarySubmissionWhereInput
+        data: XOR<LibrarySubmissionUpdateWithoutDocumentFileInput, LibrarySubmissionUncheckedUpdateWithoutDocumentFileInput>
+    };
+    export type LibrarySubmissionUpdateWithoutDocumentFileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        submissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        isHardcopy?: BoolFieldUpdateOperationsInput | boolean
+        isSoftcopy?: BoolFieldUpdateOperationsInput | boolean
+        librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
+        confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
+        thesis?: ThesisProjectUpdateOneRequiredWithoutLibrarySubmissionNestedInput
+    };
+    export type LibrarySubmissionUncheckedUpdateWithoutDocumentFileInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        submissionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        isHardcopy?: BoolFieldUpdateOperationsInput | boolean
+        isSoftcopy?: BoolFieldUpdateOperationsInput | boolean
+        librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisId?: StringFieldUpdateOperationsInput | string
+        confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type GraduationDecisionUpsertWithoutDiplomaFrontInput = {
         update: XOR<GraduationDecisionUpdateWithoutDiplomaFrontInput, GraduationDecisionUncheckedUpdateWithoutDiplomaFrontInput>
@@ -501045,6 +501311,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -501076,6 +501343,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -507346,6 +507614,7 @@ export namespace Prisma {
         isSoftcopy?: boolean
         librarianNote?: string | null
         confirmedById?: string | null
+        documentFile?: DocumentFileCreateNestedManyWithoutLibrarySubmissionInput
     };
     export type LibrarySubmissionUncheckedCreateWithoutThesisInput = {
         id?: string
@@ -507361,6 +507630,7 @@ export namespace Prisma {
         isSoftcopy?: boolean
         librarianNote?: string | null
         confirmedById?: string | null
+        documentFile?: DocumentFileUncheckedCreateNestedManyWithoutLibrarySubmissionInput
     };
     export type LibrarySubmissionCreateOrConnectWithoutThesisInput = {
         where: LibrarySubmissionWhereUniqueInput
@@ -508056,6 +508326,7 @@ export namespace Prisma {
         isSoftcopy?: BoolFieldUpdateOperationsInput | boolean
         librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
         confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
+        documentFile?: DocumentFileUpdateManyWithoutLibrarySubmissionNestedInput
     };
     export type LibrarySubmissionUncheckedUpdateWithoutThesisInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -508071,6 +508342,7 @@ export namespace Prisma {
         isSoftcopy?: BoolFieldUpdateOperationsInput | boolean
         librarianNote?: NullableStringFieldUpdateOperationsInput | string | null
         confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
+        documentFile?: DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionNestedInput
     };
     export type DecisionUpsertWithWhereUniqueWithoutThesisProjectInput = {
         where: DecisionWhereUniqueInput
@@ -509807,6 +510079,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -509838,6 +510111,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         notificationId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -510783,6 +511057,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -510814,6 +511089,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         notificationId?: string | null
         decisionId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -511009,6 +511285,78 @@ export namespace Prisma {
         where: ThesisProjectWhereUniqueInput
         create: XOR<ThesisProjectCreateWithoutLibrarySubmissionInput, ThesisProjectUncheckedCreateWithoutLibrarySubmissionInput>
     };
+    export type DocumentFileCreateWithoutLibrarySubmissionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+        trainingCourse?: TrainingCourseCreateNestedOneWithoutDocumentFilesInput
+        archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+        curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+        subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+        notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+        decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+        diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+        diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+        trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        note?: NoteCreateNestedOneWithoutAttachmentsInput
+    };
+    export type DocumentFileUncheckedCreateWithoutLibrarySubmissionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
+    };
+    export type DocumentFileCreateOrConnectWithoutLibrarySubmissionInput = {
+        where: DocumentFileWhereUniqueInput
+        create: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput>
+    };
+    export type DocumentFileCreateManyLibrarySubmissionInputEnvelope = {
+        data: DocumentFileCreateManyLibrarySubmissionInput | DocumentFileCreateManyLibrarySubmissionInput[]
+        skipDuplicates?: boolean
+    };
     export type ThesisProjectUpsertWithoutLibrarySubmissionInput = {
         update: XOR<ThesisProjectUpdateWithoutLibrarySubmissionInput, ThesisProjectUncheckedUpdateWithoutLibrarySubmissionInput>
         create: XOR<ThesisProjectCreateWithoutLibrarySubmissionInput, ThesisProjectUncheckedCreateWithoutLibrarySubmissionInput>
@@ -511093,6 +511441,19 @@ export namespace Prisma {
         decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
         registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
         supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type DocumentFileUpsertWithWhereUniqueWithoutLibrarySubmissionInput = {
+        where: DocumentFileWhereUniqueInput
+        update: XOR<DocumentFileUpdateWithoutLibrarySubmissionInput, DocumentFileUncheckedUpdateWithoutLibrarySubmissionInput>
+        create: XOR<DocumentFileCreateWithoutLibrarySubmissionInput, DocumentFileUncheckedCreateWithoutLibrarySubmissionInput>
+    };
+    export type DocumentFileUpdateWithWhereUniqueWithoutLibrarySubmissionInput = {
+        where: DocumentFileWhereUniqueInput
+        data: XOR<DocumentFileUpdateWithoutLibrarySubmissionInput, DocumentFileUncheckedUpdateWithoutLibrarySubmissionInput>
+    };
+    export type DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput = {
+        where: DocumentFileScalarWhereInput
+        data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput>
     };
     export type ExpertProfileCreateWithoutPaymentsInput = {
         id?: string
@@ -527940,6 +528301,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
@@ -527971,6 +528333,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
         diplomaVerificationFrontId?: string | null
@@ -528006,6 +528369,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
@@ -528037,6 +528401,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaVerificationId?: string | null
         diplomaVerificationFrontId?: string | null
@@ -528448,6 +528813,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
@@ -528479,6 +528845,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528519,6 +528886,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
@@ -528550,6 +528918,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529527,6 +529896,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
@@ -529558,6 +529928,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationFrontId?: string | null
@@ -529597,6 +529968,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -529628,6 +530000,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -529663,6 +530036,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -529694,6 +530068,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -529901,6 +530276,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -529932,6 +530308,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529972,6 +530349,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -530003,6 +530381,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530403,6 +530782,7 @@ export namespace Prisma {
         notification?: NotificationCreateNestedOneWithoutAttachmentsInput
         decision?: DecisionCreateNestedOneWithoutDocumentFileInput
         defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
         diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
         diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
         diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
@@ -530434,6 +530814,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -557925,6 +558306,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -557969,6 +558351,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -558000,6 +558383,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558031,6 +558415,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558494,6 +558879,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -558536,6 +558922,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -558567,6 +558954,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558598,6 +558986,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558662,6 +559051,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -558704,6 +559094,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -558735,6 +559126,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558766,6 +559158,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560506,6 +560899,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -561090,6 +561484,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -561121,6 +561516,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561152,6 +561548,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561824,6 +562221,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -561934,6 +562332,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -561965,6 +562364,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561996,6 +562396,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562142,6 +562543,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -562306,6 +562708,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -562337,6 +562740,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562368,6 +562772,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563464,6 +563869,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -564503,6 +564909,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -564534,6 +564941,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564565,6 +564973,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570257,6 +570666,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -570442,6 +570852,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -570473,6 +570884,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570504,6 +570916,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573388,6 +573801,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -573824,6 +574238,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -573855,6 +574270,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -573886,6 +574302,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574105,6 +574522,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -574136,6 +574554,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -574167,6 +574586,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -574198,6 +574618,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577558,6 +577979,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         notificationId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -577589,6 +578011,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -577620,6 +578043,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577651,6 +578075,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577876,6 +578301,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: string | null
         notificationId?: string | null
         decisionId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -577907,6 +578333,7 @@ export namespace Prisma {
         studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -577938,6 +578365,7 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577969,6 +578397,135 @@ export namespace Prisma {
         studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentFileCreateManyLibrarySubmissionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
+    };
+    export type DocumentFileUpdateWithoutLibrarySubmissionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+        trainingCourse?: TrainingCourseUpdateOneWithoutDocumentFilesNestedInput
+        archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+        curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+        subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+        notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+        decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+        diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+        trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        note?: NoteUpdateOneWithoutAttachmentsNestedInput
+    };
+    export type DocumentFileUncheckedUpdateWithoutLibrarySubmissionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582974,6 +583531,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationFrontId?: string | null
@@ -583005,6 +583563,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
@@ -583036,6 +583595,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583067,6 +583627,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583098,6 +583659,7 @@ export namespace Prisma {
         notificationId?: string | null
         decisionId?: string | null
         defenseRecordId?: string | null
+        librarySubmissionId?: string | null
         diplomaFrontId?: string | null
         diplomaBackId?: string | null
         diplomaVerificationId?: string | null
@@ -583181,6 +583743,7 @@ export namespace Prisma {
         notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
         decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
         defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
         diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
         diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
         diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
@@ -583212,6 +583775,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583243,6 +583807,7 @@ export namespace Prisma {
         notificationId?: NullableStringFieldUpdateOperationsInput | string | null
         decisionId?: NullableStringFieldUpdateOperationsInput | string | null
         defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
         diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null

@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import type { Prisma } from '@workspace/db'
 import { models } from '@workspace/db/zod'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
@@ -929,7 +930,17 @@ const getSurveyObjects = createRoute({
     tags: ['Survey'],
     summary: 'Danh sách người làm khảo sát',
     request: {
-        query: PaginationQuerySchema.extend({ id: z.string() }),
+        query: PaginationQuerySchema.extend({
+            id: z.string(),
+            fullname: z.string().optional(),
+            organizationId: z.string().optional(),
+            lecturerCode: z.string().optional(),
+            staffCode: z.string().optional(),
+            studentCode: z.string().optional(),
+            fixedClassIds: z.string().array().optional(),
+            trainingCourseIds: z.string().array().optional(),
+            taken: z.boolean().optional(),
+        }),
     },
     responses: {
         200: {
@@ -945,7 +956,15 @@ const getSurveyObjects = createRoute({
                                 organization: models.DM_DonViScalarSchema,
                             }).nullable(),
                             educationAndTraining: models.StudentScalarSchema.extend({
-                                fixedClass: models.FixedClassScalarSchema.nullable(),
+                                fixedClass: models.FixedClassScalarSchema.extend({
+                                    curriculumVersion: models.CurriculumVersionScalarSchema.extend({
+                                        curriculum: models.CurriculumScalarSchema.extend({
+                                            trainingMajor: models.TrainingMajorScalarSchema.extend({
+                                                trainingField: models.TrainingFieldScalarSchema,
+                                            }),
+                                        }),
+                                    }).nullable(),
+                                }).nullable(),
                             }).array(),
                             surveySession: models.SurveySessionScalarSchema.optional(),
                         })
@@ -965,7 +984,7 @@ const getSurveyObjects = createRoute({
 })
 
 app.openapi(getSurveyObjects, async (c) => {
-    const { id, limit = 10, page = 1 } = c.req.valid('query')
+    const { id, limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const survey = await prisma.survey.findUnique({
         where: { id },
@@ -996,24 +1015,45 @@ app.openapi(getSurveyObjects, async (c) => {
                   where: {
                       deletedAt: null,
                       active: true,
+                      ...(q.fullname
+                          ? { fullname: { contains: q.fullname, mode: 'insensitive' } }
+                          : {}),
                       OR: [
                           {
                               lecturer: {
+                                  ...(q.lecturerCode
+                                      ? { code: { contains: q.lecturerCode, mode: 'insensitive' } }
+                                      : {}),
                                   organizationId: {
-                                      in: objectType.organizations.map((org) => org.Id),
+                                      in: q.organizationId
+                                          ? [q.organizationId]
+                                          : objectType.organizations.map((org) => org.Id),
                                   },
                               },
                           },
                           {
                               staffs: {
+                                  ...(q.staffCode
+                                      ? { code: { contains: q.staffCode, mode: 'insensitive' } }
+                                      : {}),
                                   organizationId: {
-                                      in: objectType.organizations.map((org) => org.Id),
+                                      in: q.organizationId
+                                          ? [q.organizationId]
+                                          : objectType.organizations.map((org) => org.Id),
                                   },
                               },
                           },
                           {
                               educationAndTraining: {
                                   some: {
+                                      ...(q.studentCode
+                                          ? {
+                                                code: {
+                                                    contains: q.studentCode,
+                                                    mode: 'insensitive',
+                                                },
+                                            }
+                                          : {}),
                                       fixedClass: {
                                           ...(objectType.fixedClasses.length
                                               ? {
@@ -1024,12 +1064,24 @@ app.openapi(getSurveyObjects, async (c) => {
                                                     },
                                                 }
                                               : {}),
+                                          ...(q.fixedClassIds
+                                              ? {
+                                                    id: { in: q.fixedClassIds },
+                                                }
+                                              : {}),
                                           ...(objectType.trainingCourses.length
                                               ? {
                                                     trainingCourseId: {
                                                         in: objectType.trainingCourses.map(
                                                             (tc) => tc.id
                                                         ),
+                                                    },
+                                                }
+                                              : {}),
+                                          ...(q.trainingCourseIds
+                                              ? {
+                                                    trainingCourseId: {
+                                                        in: q.trainingCourseIds,
                                                     },
                                                 }
                                               : {}),
@@ -1089,21 +1141,42 @@ app.openapi(getSurveyObjects, async (c) => {
         }
     }
 
+    const where: Prisma.UserProfileWhereInput = {
+        id: { in: [...profileIds] },
+        deletedAt: null,
+        active: true,
+        ...(q.taken === true ? { surveySession: { some: { surveyId: id } } } : {}),
+        ...(q.taken === false ? { surveySession: { none: { surveyId: id } } } : {}),
+    }
+
     const profiles = await prisma.userProfile.findMany({
-        where: { id: { in: [...profileIds] }, deletedAt: null, active: true },
+        where,
         include: {
             lecturer: { include: { organization: true } },
-            educationAndTraining: { include: { fixedClass: true } },
+            educationAndTraining: {
+                include: {
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: { curriculum: { include: { trainingMajor: true } } },
+                            },
+                        },
+                    },
+                },
+            },
             staffs: { include: { organization: true } },
             surveySession: { where: { surveyId: id } },
         },
         take: limit,
         skip: (page - 1) * limit,
+        orderBy: [
+            { lecturer: { organizationId: 'asc' } },
+            { staffs: { organizationId: 'asc' } },
+            { firstName: 'asc' },
+        ],
     })
 
-    const count = await prisma.userProfile.count({
-        where: { id: { in: [...profileIds] } },
-    })
+    const count = await prisma.userProfile.count({ where })
 
     const data = profiles.map((profile) => ({
         ...profile,
@@ -1111,6 +1184,203 @@ app.openapi(getSurveyObjects, async (c) => {
     }))
 
     return c.json({ data, count }, 200)
+})
+
+const getSurveysByProfile = createRoute({
+    operationId: 'get-surveys-of-profile',
+    path: '/of-profile/{id}',
+    method: 'get',
+    tags: ['Survey'],
+    summary: 'Danh sách khảo sát cần làm',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: PaginationQuerySchema.extend({
+            name: z.string().optional(),
+            taken: z.boolean().optional(),
+            lecturerName: z.string().optional(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: ListOf(
+                        models.SurveyScalarSchema.extend({
+                            lecture: models.LecturerScalarSchema.extend({
+                                organization: models.DM_DonViScalarSchema,
+                            }).nullable(),
+                            surveyTopic: models.SurveyTopicScalarSchema,
+                        })
+                    ),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getSurveysByProfile, async (c) => {
+    const { id } = c.req.valid('param')
+    const { limit = 10, page = 1, ...q } = c.req.valid('query')
+
+    const profile = await prisma.userProfile.findUniqueOrThrow({
+        where: { id },
+        include: {
+            lecturer: true,
+            staffs: true,
+            educationAndTraining: {
+                include: {
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: {
+                                    curriculum: {
+                                        include: {
+                                            trainingMajor: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    subjectClassStudent: {
+                        select: { subjectClassId: true },
+                        where: { subjectClassId: { not: null } },
+                    },
+                },
+            },
+        },
+    })
+
+    // Build the logic to find surveys targeted at the user based on their roles.
+    // A user can be a lecturer, a staff member, or a student (with one or more educational records).
+
+    // 1. Match by Organization (for Lecturers/Staff)
+    const organizationId = profile.lecturer?.organizationId ?? profile.staffs?.organizationId
+
+    // 2. Match by Student Education Records
+    // A survey is relevant to a student if ONE of the survey's "SurveyObjectTypes" matches
+    // the student's educational context (e.g., class, course, major).
+    // An object type matches a student if ALL of its defined criteria are met by the student.
+    // For each criterion (e.g., fixedClasses), if the object type does not specify any, it is
+    // considered a wildcard and matches all students for that criterion.
+    // This is implemented with the `{ OR: [{ relation: { none: {} } }, { relation: { some: { ... } } }] }` pattern.
+    const studentWhereClauses: Prisma.SurveyWhereInput[] = profile.educationAndTraining
+        .map((et) => {
+            const studentCriteria: Prisma.SurveyObjectTypeWhereInput[] = []
+
+            if (et.fixedClassId) {
+                studentCriteria.push({
+                    OR: [
+                        { fixedClasses: { none: {} } },
+                        { fixedClasses: { some: { id: et.fixedClassId } } },
+                    ],
+                })
+            }
+            if (et.fixedClass?.trainingCourseId) {
+                studentCriteria.push({
+                    OR: [
+                        { trainingCourses: { none: {} } },
+                        { trainingCourses: { some: { id: et.fixedClass.trainingCourseId } } },
+                    ],
+                })
+            }
+            if (et.fixedClass?.curriculumVersion?.curriculum?.trainingMajorId) {
+                studentCriteria.push({
+                    OR: [
+                        { trainingMajors: { none: {} } },
+                        {
+                            trainingMajors: {
+                                some: {
+                                    id: et.fixedClass.curriculumVersion.curriculum.trainingMajorId,
+                                },
+                            },
+                        },
+                    ],
+                })
+            }
+            if (et.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingFieldId) {
+                studentCriteria.push({
+                    OR: [
+                        { trainingFields: { none: {} } },
+                        {
+                            trainingFields: {
+                                some: {
+                                    id: et.fixedClass.curriculumVersion.curriculum.trainingMajor
+                                        .trainingFieldId,
+                                },
+                            },
+                        },
+                    ],
+                })
+            }
+            const subjectClassIds = et.subjectClassStudent?.map((scs) => scs.subjectClassId)
+            if (subjectClassIds?.length) {
+                studentCriteria.push({
+                    OR: [
+                        { subjectClasses: { none: {} } },
+                        { subjectClasses: { some: { id: { in: subjectClassIds as string[] } } } },
+                    ],
+                })
+            }
+
+            if (studentCriteria.length === 0) {
+                return null
+            }
+
+            return { surveyObjectType: { some: { AND: studentCriteria } } }
+        })
+        .filter(Boolean) as Prisma.SurveyWhereInput[]
+
+    // Combine all matching conditions.
+    // A survey is a match if it's public OR if it matches the user's audience criteria.
+    const audienceMatch: Prisma.SurveyWhereInput = { OR: [] }
+    if (organizationId) {
+        audienceMatch.OR?.push({
+            surveyObjectType: { some: { organizations: { some: { Id: organizationId } } } },
+        })
+    }
+    if (studentWhereClauses.length > 0) {
+        audienceMatch.OR?.push(...studentWhereClauses)
+    }
+
+    const where: Prisma.SurveyWhereInput = {
+        ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
+        ...(q.lecturerName
+            ? { lecturer: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } }
+            : {}),
+        deletedAt: null,
+        startDate: { lte: new Date() },
+    }
+
+    if (audienceMatch.OR?.length) {
+        where.AND = [{ OR: [{ isPublic: true }, audienceMatch] }]
+    } else {
+        where.isPublic = true
+    }
+
+    const surveys = await prisma.survey.findMany({
+        where,
+        include: {
+            lecture: { include: { organization: true } },
+            surveyTopic: true,
+        },
+        take: limit,
+        skip: (page - 1) * limit,
+        orderBy: { createdAt: 'desc' },
+    })
+
+    const count = await prisma.survey.count({ where })
+
+    return c.json({ data: surveys, count }, 200)
 })
 
 export default app

@@ -43,6 +43,9 @@ model DocumentFile extends Base {
   defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId            String?
 
+  librarySubmission          LibrarySubmission?              @relation(fields: [librarySubmissionId], references: [id])
+  librarySubmissionId        String?
+
   diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
   diplomaFrontId             String?                         @unique
   diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])

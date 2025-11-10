@@ -57,7 +57,7 @@ model ThesisSession extends Base {
 
 // Bảng đồ án
 model ThesisProject extends Base {
-  title              String?                        // Tên đồ án
+  title              String?                       // Tên đồ án
   titleEN            String?                       // Tên đồ án (Tiếng Anh)
   summary            String?                     @db.Text() // Tóm tắt đồ án
   objectives         String?                     @db.Text() // Mục tiêu
@@ -104,7 +104,7 @@ model ThesisProject extends Base {
   defenseSessionId   String?
   
   // Thời gian
-  registrationStart  DateTime?                      // Thời gian mở đăng ký
+  registrationStart  DateTime?                     // Thời gian mở đăng ký
   registrationEnd    DateTime?                     // Thời gian đóng đăng ký
   projectStart       DateTime?                     // Thời gian bắt đầu thực hiện
   projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
@@ -294,14 +294,16 @@ model DefenseRecord extends Base {
 
 /// Quản lý việc nộp Luận văn cho Thư viện
 model LibrarySubmission extends Base {
-  submissionDate DateTime      @default(now())
-  isHardcopy     Boolean       @default(false) // Đã nộp bản cứng
-  isSoftcopy     Boolean       @default(false) // Đã nộp bản mềm
+  submissionDate DateTime       @default(now())
+  isHardcopy     Boolean        @default(false) // Đã nộp bản cứng
+  isSoftcopy     Boolean        @default(false) // Đã nộp bản mềm
   librarianNote  String?
 
-  thesis         ThesisProject @relation(fields: [thesisId], references: [id])
-  thesisId       String        @unique
+  thesis         ThesisProject  @relation(fields: [thesisId], references: [id])
+  thesisId       String         @unique
   confirmedById  String? // ID của thủ thư đã xác nhận
+
+  documentFile   DocumentFile[]
 
   @@schema("ql-dao-tao")
 }

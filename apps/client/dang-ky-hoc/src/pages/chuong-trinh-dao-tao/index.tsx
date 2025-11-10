@@ -1,16 +1,18 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
+import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Prisma, SubjectVersion } from '@workspace/db'
+import { $Enums, type Prisma, type SubjectVersion, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
+import { cn } from '@workspace/ui/lib/utils'
 import { Col, Divider, Row, Tag } from 'antd'
 import { useMemo, useState } from 'react'
 export default function TrainingProgramSubjects() {
@@ -127,9 +129,9 @@ export default function TrainingProgramSubjects() {
     )
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
-            curriculumVersionId: id,
             curriculumVersion: {
                 deletedAt: null,
+                id: id,
             },
             ...where,
         },

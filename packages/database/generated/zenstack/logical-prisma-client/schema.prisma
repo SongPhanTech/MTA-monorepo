@@ -4310,6 +4310,8 @@ model DocumentFile {
   decisionId                 String?
   defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId            String?
+  librarySubmission          LibrarySubmission?              @relation(fields: [librarySubmissionId], references: [id])
+  librarySubmissionId        String?
   diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
   diplomaFrontId             String?                         @unique()
   diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
@@ -4982,21 +4984,22 @@ model DefenseRecord {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model LibrarySubmission {
-  id             String        @id() @default(cuid())
-  code           String?       @unique()
-  active         Boolean       @default(true)
-  description    String?       @db.Text()
+  id             String         @id() @default(cuid())
+  code           String?        @unique()
+  active         Boolean        @default(true)
+  description    String?        @db.Text()
   deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @default(now()) @updatedAt()
-  createdBy      String?       @default("") @db.Uuid()
-  submissionDate DateTime      @default(now())
-  isHardcopy     Boolean       @default(false)
-  isSoftcopy     Boolean       @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt()
+  createdBy      String?        @default("") @db.Uuid()
+  submissionDate DateTime       @default(now())
+  isHardcopy     Boolean        @default(false)
+  isSoftcopy     Boolean        @default(false)
   librarianNote  String?
-  thesis         ThesisProject @relation(fields: [thesisId], references: [id])
-  thesisId       String        @unique()
+  thesis         ThesisProject  @relation(fields: [thesisId], references: [id])
+  thesisId       String         @unique()
   confirmedById  String?
+  documentFile   DocumentFile[]
 
   @@schema("ql-dao-tao")
 }

@@ -1,24 +1,20 @@
 import Loading from '@components/commons/loading'
-import { useMenuList } from '@hooks/menu-list'
 import { useSession } from '@workspace/auth/react'
+import { ROUTER_PATH } from '@workspace/router'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { env } from '@/env'
 
 const IndexPage: NextPage = () => {
-    const menus = useMenuList()
     const { status, goToLastPage } = useSession()
     const router = useRouter()
+
     useEffect(() => {
         if (status === 'authenticated') {
-            if (goToLastPage(env.NEXT_PUBLIC_BASE_PATH)) return
-            const firstMenu = menus.flat()
-            if (firstMenu.length > 0 && firstMenu[0].path) {
-                router.push(firstMenu[0].path)
-            }
+            if (goToLastPage('dangkyhoc')) return
+            router.push(ROUTER_PATH.DANG_KY_HOC.HOME)
         }
-    }, [status, goToLastPage, menus.flat, router.push])
+    }, [status, router.push, goToLastPage])
     return <Loading />
 }
 export default IndexPage
