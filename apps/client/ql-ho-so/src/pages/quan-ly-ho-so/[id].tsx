@@ -387,7 +387,7 @@ export default function UpdateUserPage() {
         ...values
     }: SubmitForm) => {
         if (!values) return
-        if (fileList.length > 0) {
+        if (fileList?.length > 0) {
             const file: any = fileList[0]
             const formData = new FormData()
             formData.append('file', file?.originFileObj)
@@ -426,6 +426,8 @@ export default function UpdateUserPage() {
                 sEmail: values?.email || '',
                 Id: id,
                 sAvatarId: form.getFieldValue('avatar'),
+                bLaHocVien: values.bLaHocVien||false,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
             }).catch((error) => {
                 console.log(error)
             })
@@ -1075,6 +1077,7 @@ export default function UpdateUserPage() {
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
                 ...userData,
+                bLaHocVien: !!userData.bLaHocVien,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
                 idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
                 idCardExpirationDate: userData.idCardExpirationDate
@@ -1099,7 +1102,7 @@ export default function UpdateUserPage() {
                     status: 'done',
                     url: imageUrl, // Sử dụng getMinioUrl để tạo URL hiển thị
                 }
-                setFileList([avatarFile])
+                // setFileList([avatarFile])
             }
         },
         [form]

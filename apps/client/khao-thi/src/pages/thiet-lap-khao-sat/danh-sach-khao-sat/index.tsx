@@ -217,8 +217,11 @@ export default function DetailSurveyPage() {
                                             placement="top"
                                         >
                                             <EyeOutlined
-                                                disabled={surveySessions?.length > 0}
                                                 onClick={() => {
+                                                    if(surveySessions?.length > 0){
+                                                        router.push(`/xem-lai/private/${id}`)
+                                                        return
+                                                    }
                                                     if (!isPublic) {
                                                         router.push(`/lam-khao-sat/private/${id}`)
                                                     } else {

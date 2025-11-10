@@ -471,9 +471,9 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        label: 'Danh mục luận văn',
+                        label: 'Danh mục luận văn/đề án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        description: 'Danh mục luận văn',
+                        description: 'Danh mục luận văn/đề án',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
@@ -728,7 +728,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
-                        label: 'Danh sách khảo sát',
+                        label: 'Khảo sát của tôi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                     },
                 ],
@@ -753,11 +753,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Quản lý minh chứng',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                     },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                        label: 'Hội đồng đánh giá',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                    },
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    //     label: 'Hội đồng đánh giá',
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    // },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                         label: 'Quản lý đợt tự đánh giá',

@@ -468,6 +468,8 @@ export default function CreateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 sAvatarId: form.getFieldValue('avatar'),
+                bLaHocVien: values.bLaHocVien||false,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
             })
             if (res?.status === 200) {
                 let rank = null
