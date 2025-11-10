@@ -930,7 +930,17 @@ const getSurveyObjects = createRoute({
     tags: ['Survey'],
     summary: 'Danh sách người làm khảo sát',
     request: {
-        query: PaginationQuerySchema.extend({ id: z.string() }),
+        query: PaginationQuerySchema.extend({
+            id: z.string(),
+            fullname: z.string().optional(),
+            organizationId: z.string().optional(),
+            lecturerCode: z.string().optional(),
+            staffCode: z.string().optional(),
+            studentCode: z.string().optional(),
+            fixedClassIds: z.string().array().optional(),
+            trainingCourseIds: z.string().array().optional(),
+            taken: z.boolean().optional(),
+        }),
     },
     responses: {
         200: {
@@ -946,7 +956,15 @@ const getSurveyObjects = createRoute({
                                 organization: models.DM_DonViScalarSchema,
                             }).nullable(),
                             educationAndTraining: models.StudentScalarSchema.extend({
-                                fixedClass: models.FixedClassScalarSchema.nullable(),
+                                fixedClass: models.FixedClassScalarSchema.extend({
+                                    curriculumVersion: models.CurriculumVersionScalarSchema.extend({
+                                        curriculum: models.CurriculumScalarSchema.extend({
+                                            trainingMajor: models.TrainingMajorScalarSchema.extend({
+                                                trainingField: models.TrainingFieldScalarSchema,
+                                            }),
+                                        }),
+                                    }).nullable(),
+                                }).nullable(),
                             }).array(),
                             surveySession: models.SurveySessionScalarSchema.optional(),
                         })
@@ -966,7 +984,7 @@ const getSurveyObjects = createRoute({
 })
 
 app.openapi(getSurveyObjects, async (c) => {
-    const { id, limit = 10, page = 1 } = c.req.valid('query')
+    const { id, limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const survey = await prisma.survey.findUnique({
         where: { id },
@@ -997,24 +1015,45 @@ app.openapi(getSurveyObjects, async (c) => {
                   where: {
                       deletedAt: null,
                       active: true,
+                      ...(q.fullname
+                          ? { fullname: { contains: q.fullname, mode: 'insensitive' } }
+                          : {}),
                       OR: [
                           {
                               lecturer: {
+                                  ...(q.lecturerCode
+                                      ? { code: { contains: q.lecturerCode, mode: 'insensitive' } }
+                                      : {}),
                                   organizationId: {
-                                      in: objectType.organizations.map((org) => org.Id),
+                                      in: q.organizationId
+                                          ? [q.organizationId]
+                                          : objectType.organizations.map((org) => org.Id),
                                   },
                               },
                           },
                           {
                               staffs: {
+                                  ...(q.staffCode
+                                      ? { code: { contains: q.staffCode, mode: 'insensitive' } }
+                                      : {}),
                                   organizationId: {
-                                      in: objectType.organizations.map((org) => org.Id),
+                                      in: q.organizationId
+                                          ? [q.organizationId]
+                                          : objectType.organizations.map((org) => org.Id),
                                   },
                               },
                           },
                           {
                               educationAndTraining: {
                                   some: {
+                                      ...(q.studentCode
+                                          ? {
+                                                code: {
+                                                    contains: q.studentCode,
+                                                    mode: 'insensitive',
+                                                },
+                                            }
+                                          : {}),
                                       fixedClass: {
                                           ...(objectType.fixedClasses.length
                                               ? {
@@ -1025,12 +1064,24 @@ app.openapi(getSurveyObjects, async (c) => {
                                                     },
                                                 }
                                               : {}),
+                                          ...(q.fixedClassIds
+                                              ? {
+                                                    id: { in: q.fixedClassIds },
+                                                }
+                                              : {}),
                                           ...(objectType.trainingCourses.length
                                               ? {
                                                     trainingCourseId: {
                                                         in: objectType.trainingCourses.map(
                                                             (tc) => tc.id
                                                         ),
+                                                    },
+                                                }
+                                              : {}),
+                                          ...(q.trainingCourseIds
+                                              ? {
+                                                    trainingCourseId: {
+                                                        in: q.trainingCourseIds,
                                                     },
                                                 }
                                               : {}),
@@ -1090,21 +1141,42 @@ app.openapi(getSurveyObjects, async (c) => {
         }
     }
 
+    const where: Prisma.UserProfileWhereInput = {
+        id: { in: [...profileIds] },
+        deletedAt: null,
+        active: true,
+        ...(q.taken === true ? { surveySession: { some: { surveyId: id } } } : {}),
+        ...(q.taken === false ? { surveySession: { none: { surveyId: id } } } : {}),
+    }
+
     const profiles = await prisma.userProfile.findMany({
-        where: { id: { in: [...profileIds] }, deletedAt: null, active: true },
+        where,
         include: {
             lecturer: { include: { organization: true } },
-            educationAndTraining: { include: { fixedClass: true } },
+            educationAndTraining: {
+                include: {
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: { curriculum: { include: { trainingMajor: true } } },
+                            },
+                        },
+                    },
+                },
+            },
             staffs: { include: { organization: true } },
             surveySession: { where: { surveyId: id } },
         },
         take: limit,
         skip: (page - 1) * limit,
+        orderBy: [
+            { lecturer: { organizationId: 'asc' } },
+            { staffs: { organizationId: 'asc' } },
+            { firstName: 'asc' },
+        ],
     })
 
-    const count = await prisma.userProfile.count({
-        where: { id: { in: [...profileIds] } },
-    })
+    const count = await prisma.userProfile.count({ where })
 
     const data = profiles.map((profile) => ({
         ...profile,
@@ -1122,7 +1194,11 @@ const getSurveysByProfile = createRoute({
     summary: 'Danh sách khảo sát cần làm',
     request: {
         params: z.object({ id: z.string() }),
-        query: PaginationQuerySchema,
+        query: PaginationQuerySchema.extend({
+            name: z.string().optional(),
+            taken: z.boolean().optional(),
+            lecturerName: z.string().optional(),
+        }),
     },
     responses: {
         200: {
@@ -1153,7 +1229,7 @@ const getSurveysByProfile = createRoute({
 
 app.openapi(getSurveysByProfile, async (c) => {
     const { id } = c.req.valid('param')
-    const { limit = 10, page = 1 } = c.req.valid('query')
+    const { limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const profile = await prisma.userProfile.findUniqueOrThrow({
         where: { id },
@@ -1277,9 +1353,12 @@ app.openapi(getSurveysByProfile, async (c) => {
     }
 
     const where: Prisma.SurveyWhereInput = {
+        ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
+        ...(q.lecturerName
+            ? { lecturer: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } }
+            : {}),
         deletedAt: null,
         startDate: { lte: new Date() },
-        OR: [{ endDate: null }, { endDate: { gte: new Date() } }],
     }
 
     if (audienceMatch.OR?.length) {
@@ -1296,6 +1375,7 @@ app.openapi(getSurveysByProfile, async (c) => {
         },
         take: limit,
         skip: (page - 1) * limit,
+        orderBy: { createdAt: 'desc' },
     })
 
     const count = await prisma.survey.count({ where })

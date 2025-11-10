@@ -8,4 +8,7 @@
 export type GetSurveysOfProfileParams = {
     page?: number | null
     limit?: number | null
+    name?: string
+    taken?: boolean
+    lecturerName?: string
 }

@@ -14611,6 +14611,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'defenseRecord',
+                }, librarySubmission: {
+                    name: "librarySubmission",
+                    type: "LibrarySubmission",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "librarySubmissionId" },
+                }, librarySubmissionId: {
+                    name: "librarySubmissionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'librarySubmission',
                 }, diplomaFront: {
                     name: "diplomaFront",
                     type: "GraduationDecision",
@@ -17402,6 +17417,12 @@ const metadata = {
                     name: "confirmedById",
                     type: "String",
                     isOptional: true,
+                }, documentFile: {
+                    name: "documentFile",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'librarySubmission',
                 },
             }, uniqueConstraints: {
                 id: {

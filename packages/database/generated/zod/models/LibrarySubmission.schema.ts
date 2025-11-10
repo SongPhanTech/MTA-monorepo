@@ -39,6 +39,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     thesis: z.record(z.string(), z.unknown()),
+    documentFile: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
