@@ -103,7 +103,7 @@ export default function LichTuanThang() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'THEM') && (
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG, 'THEM') && (
                                     <Button
                                         onClick={() =>
                                             onOpenPutLichVaSuKienModal({
@@ -176,13 +176,13 @@ export default function LichTuanThang() {
                                 width: 100,
                                 align: 'center',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
                                     'SUA',
                                     'XOA'
                                 ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'SUA') && (
+                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG, 'SUA') && (
                                             <EditIcon
                                                 onClick={() =>
                                                     onOpenPutLichVaSuKienModal({
@@ -193,7 +193,7 @@ export default function LichTuanThang() {
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'XOA') && (
+                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG, 'XOA') && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(id),
