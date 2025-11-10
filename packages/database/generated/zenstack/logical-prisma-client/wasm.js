@@ -1796,6 +1796,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   requiredCredits: 'requiredCredits',
@@ -2426,10 +2427,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -3805,6 +3803,7 @@ exports.Prisma.AcademicRankingConvertScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   context: 'context',
   rankOrder: 'rankOrder',
   baseScore: 'baseScore',
@@ -5504,6 +5503,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   jobPosition: 'jobPosition',
@@ -5885,10 +5885,7 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId'
@@ -6727,6 +6724,7 @@ exports.Prisma.AcademicRankingConvertOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   trainingCourseId: 'trainingCourseId'
 };
 

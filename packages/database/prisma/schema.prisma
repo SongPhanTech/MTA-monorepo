@@ -2806,6 +2806,8 @@ model CurriculumVersion {
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId                  String
+  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId                   String
   diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
@@ -3282,16 +3284,16 @@ model PriorityObject {
 
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 model TrainingType {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
-  students    Student[]
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  createdBy         String?             @db.Uuid()
+  name              String              @unique()
+  curriculumVersion CurriculumVersion[]
 
   @@schema("ql-dao-tao")
 }
@@ -3308,7 +3310,6 @@ model TrainingLevel {
   createdBy          String?              @db.Uuid()
   name               String               @unique()
   curriculumVersion  CurriculumVersion[]
-  students           Student[]
   trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
@@ -3325,7 +3326,6 @@ model TrainingForm {
   updatedAt          DateTime             @default(now()) @updatedAt()
   createdBy          String?              @db.Uuid()
   name               String               @unique()
-  students           Student[]
   trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
@@ -3735,14 +3735,8 @@ model Student {
   subjectClassStudent            StudentSubjectScore[]
   userProfileId                  String
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
-  trainingLevel                  TrainingLevel?                   @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId                String?
   trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId           String?
-  trainingType                   TrainingType?                    @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId                 String?
-  trainingForm                   TrainingForm?                    @relation(fields: [trainingFormId], references: [id])
-  trainingFormId                 String?
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
   curriculumVersion              CurriculumVersion?               @relation("CurriculumVersion", fields: [curriculumVersionId], references: [id])
@@ -5698,6 +5692,7 @@ model AcademicRankingConvert {
   updatedAt                    DateTime                       @default(now()) @updatedAt()
   createdBy                    String?                        @db.Uuid()
   classification               String
+  classificationEnglish        String?
   context                      RankingContext
   rankOrder                    Int
   baseScore                    AcademicRankingBaseType

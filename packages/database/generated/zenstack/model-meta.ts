@@ -9799,6 +9799,19 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingLevel',
+                }, trainingType: {
+                    name: "trainingType",
+                    type: "TrainingType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'curriculumVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingTypeId" },
+                }, trainingTypeId: {
+                    name: "trainingTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingType',
                 }, trainingTime: {
                     name: "trainingTime",
                     type: "TrainingTime",
@@ -11965,9 +11978,9 @@ const metadata: ModelMeta = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
-                }, students: {
-                    name: "students",
-                    type: "Student",
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingType',
@@ -12035,12 +12048,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingLevel',
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLevel',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -12105,12 +12112,6 @@ const metadata: ModelMeta = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingForm',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13792,21 +13793,6 @@ const metadata: ModelMeta = {
                     backLink: 'educationAndTraining',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
-                }, trainingLevel: {
-                    name: "trainingLevel",
-                    type: "TrainingLevel",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingLevelId" },
-                }, trainingLevelId: {
-                    name: "trainingLevelId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingLevel',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13822,36 +13808,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
-                }, trainingType: {
-                    name: "trainingType",
-                    type: "TrainingType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingTypeId" },
-                }, trainingTypeId: {
-                    name: "trainingTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingType',
-                }, trainingForm: {
-                    name: "trainingForm",
-                    type: "TrainingForm",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFormId" },
-                }, trainingFormId: {
-                    name: "trainingFormId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingForm',
                 }, registrationArea: {
                     name: "registrationArea",
                     type: "DM_KhuVuc_DiaLy",
@@ -22553,6 +22509,10 @@ const metadata: ModelMeta = {
                 }, classification: {
                     name: "classification",
                     type: "String",
+                }, classificationEnglish: {
+                    name: "classificationEnglish",
+                    type: "String",
+                    isOptional: true,
                 }, context: {
                     name: "context",
                     type: "RankingContext",

@@ -518,6 +518,8 @@ model CurriculumVersion extends Base {
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId                  String
+  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
   trainingTimeId                   String
 
