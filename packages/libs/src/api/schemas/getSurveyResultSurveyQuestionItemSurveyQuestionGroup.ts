@@ -21,5 +21,7 @@ export type GetSurveyResultSurveyQuestionItemSurveyQuestionGroup = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
 } | null

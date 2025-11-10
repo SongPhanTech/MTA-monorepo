@@ -1,14 +1,9 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@components/commons/typeFilter'
-import CreateIcon from '@components/icons/create'
-import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { emptyObjectIf } from '@workspace/constant'
-import { useCountEvaluationStandard, useFindManyEvaluationStandard } from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { useCountStandardPeriod, useFindManyStandardPeriod } from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Row } from 'antd'
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -16,7 +11,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationStandardTab() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
-    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -52,55 +46,31 @@ export default function EvaluationStandardTab() {
         [filters.searchText, filters.name]
     )
 
-    const { data } = useFindManyEvaluationStandard({
-        where: {
-            ...where,
-            deletedAt: null,
-            periodId: selectedEvaluationPeriodId,
-        },
-        include: {
-            criteria: {
-                where: {
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                },
-                orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                order: filters.order,
-                            },
-                        ],
-                        !!filters.order
-                    ),
-                    { order: 'asc' },
-                ],
+    const { data, isLoading } = useFindManyStandardPeriod(
+        {
+            where: {
+                ...where,
+                periodId: selectedEvaluationPeriodId,
             },
+            include: {
+                criteria: true,
+            },
+            orderBy: {
+                order: 'asc',
+            },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: [{ order: 'asc' }],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+        {
+            enabled: !!selectedEvaluationPeriodId,
+        }
+    )
 
-    const { data: count } = useCountEvaluationStandard({
+    const { data: count } = useCountStandardPeriod({
         where: {
             ...where,
-            deletedAt: null,
             periodId: selectedEvaluationPeriodId,
         },
-    })
-
-    const { onOpen: onOpenPutCriterionCatalog } = useDisclosure<{
-        id: string
-        standardId: string
-    }>({
-        tag: 'PutCriterionCatalog',
     })
 
     return (
@@ -168,25 +138,8 @@ export default function EvaluationStandardTab() {
                         setFilters(value)
                         setCurrentPage(1)
                     }}
-                    headerRight={(record) => (
-                        <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
-                            {can(
-                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                'THEM'
-                            ) && (
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutCriterionCatalog({
-                                            id: '',
-                                            standardId: record?.id,
-                                        })
-                                    }}
-                                    title="Thêm mới phiên bản"
-                                />
-                            )}
-                        </div>
-                    )}
+                    loading={isLoading}
+                    scroll={{ y: 'calc(100vh - 260px)' }}
                     columns={[
                         {
                             title: 'Thứ tự',
@@ -200,31 +153,6 @@ export default function EvaluationStandardTab() {
                             dataIndex: 'name',
                             type: 'input',
                             width: 300,
-                        },
-                        {
-                            title: 'Thao tác',
-                            width: 20,
-                            render: (_, record) => {
-                                return (
-                                    <Row className="justify-end gap-2 px-3">
-                                        {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                            'SUA'
-                                        ) && (
-                                            <EditIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    onOpenPutCriterionCatalog({
-                                                        id: record?.id,
-                                                        standardId: record?.standardId,
-                                                    })
-                                                }}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        )}
-                                    </Row>
-                                )
-                            },
                         },
                     ]}
                     data={data}

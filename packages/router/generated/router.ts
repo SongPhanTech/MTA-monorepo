@@ -42,7 +42,7 @@ export default {
     "THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT": "/thiet-lap-khao-sat/danh-sach-khao-sat",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT_ID": "/thiet-lap-khao-sat/dot-khao-sat/[id]",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT": "/thiet-lap-khao-sat/dot-khao-sat",
-    "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
+    "THIET_LAP_KHAO_SAT_KHAO_SAT_CUM": "/thiet-lap-khao-sat/khao-sat-cum",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
   "QL_DAO_TAO": {
@@ -125,6 +125,7 @@ export default {
     "QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN": "/quan-ly-ho-so/danh-sach-giang-vien",
     "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
+    "THONG_BAO": "/thong-bao",
     "TO_CHUC_THI_DANH_SACH_THI": "/to-chuc-thi/danh-sach-thi",
     "TO_CHUC_THI_LAP_DANH_SANH_THI": "/to-chuc-thi/lap-danh-sanh-thi",
     "XET_TOT_NGHIEP_PHU_LUC_VAN_BANG": "/xet-tot-nghiep/phu-luc-van-bang",

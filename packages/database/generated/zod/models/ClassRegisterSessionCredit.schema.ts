@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     minCredit: z.number().default(0),
     maxCredit: z.number().default(25),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     minCredit: z.number(),
     maxCredit: z.number(),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -81,6 +83,7 @@ export const ClassRegisterSessionCreditPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     minCredit: z.union([z.number(), z.record(z.string(), z.unknown())]),
     maxCredit: z.union([z.number(), z.record(z.string(), z.unknown())]),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -95,7 +98,7 @@ export const ClassRegisterSessionCreditPrismaUpdateSchema = z.object({
  * `ClassRegisterSessionCredit` schema for create operations excluding foreign keys and relations.
  */
 export const ClassRegisterSessionCreditCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, minCredit: true, maxCredit: true, baseScore: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, minCredit: true, maxCredit: true, baseScore: true
 });
 
 

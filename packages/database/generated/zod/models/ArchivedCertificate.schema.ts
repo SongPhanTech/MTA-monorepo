@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     finalScore: z.number(),
     score: z.number(),
     issuedBy: z.string(),
@@ -31,6 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     finalScore: z.number(),
     score: z.number(),
     issuedBy: z.string(),
@@ -83,6 +85,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     finalScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
     score: z.union([z.number(), z.record(z.string(), z.unknown())]),
     issuedBy: z.string(),
@@ -96,7 +99,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
  * `ArchivedCertificate` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedCertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
 });
 
 

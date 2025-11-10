@@ -1,4 +1,4 @@
-import {  EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -6,6 +6,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { cn } from '@lib/utils'
 import {
     useCountSurvey,
     useFindManySurvey,
@@ -21,7 +22,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabDotKhaoSat() {
+function TabDotKhaoSat({selectedId,setSelectedId}:{selectedId:string,setSelectedId:(value:string)=>void}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -177,16 +178,16 @@ function TabDotKhaoSat() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        //            onRow={(record) => {
-                        //     return {
-                        //         onClick: () => {
-                        //             setSelectedId(record.id)
-                        //         },
-                        //         className: cn(
-                        //             selectedId === record.id ? 'bg-orange-200' : ''
-                        //         ),
-                        //     }
-                        // }}
+                                   onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    setSelectedId(record.id)
+                                },
+                                className: cn(
+                                    selectedId === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -221,7 +222,7 @@ function TabDotKhaoSat() {
                                 })),
                                 render: (_, record) => {
                                     return record?.surveyObjectType?.length ? (
-                                        <HtmlTruncate key="explanation">
+                                        <HtmlTruncate >
                                             <ul>
                                                 {record?.surveyObjectType?.map((i: any) => (
                                                     <li key={i.id}>- {i.name}</li>
@@ -279,9 +280,17 @@ function TabDotKhaoSat() {
                                 dataIndex: 'startDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.startDate
+                                                ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
 
                             {
@@ -289,9 +298,17 @@ function TabDotKhaoSat() {
                                 dataIndex: 'endDate',
                                 type: 'date',
                                 width: 120,
-                                render: (_, record) =>{
-                                    return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
-                                }
+                                render: (_, record) => {
+                                    return (
+                                        <div
+                                            className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                        >
+                                            {record?.endDate
+                                                ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                                : ''}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -342,11 +359,12 @@ function TabDotKhaoSat() {
                                             !!isPublic && (
                                                 <Tooltip
                                                     className="mr-2"
-                                                    title={'Xem đề khảo sát'}
+                                                    title={'Lấy đường dẫn khảo sát công khai'}
                                                     placement="top"
                                                 >
                                                     <EyeOutlined
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
                                                             onOpenKhaoSat({
                                                                 dataTable: surveyObjectType,
                                                                 id: id,

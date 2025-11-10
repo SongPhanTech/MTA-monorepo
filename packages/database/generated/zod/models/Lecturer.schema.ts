@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
     serviceDate: z.coerce.date().nullish(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
     serviceDate: z.coerce.date().nullish(),
@@ -46,12 +48,12 @@ const relationSchema = z.object({
     reviewedThesisRegistrations: z.array(z.unknown()).optional(),
     expertProfile: z.array(z.unknown()).optional(),
     evaluationCouncilMember: z.array(z.unknown()).optional(),
-    evaluationSecretaryMember: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
     clusterSurvey: z.array(z.unknown()).optional(),
     examRoomsMain: z.array(z.unknown()).optional(),
     examRoomsExtra: z.array(z.unknown()).optional(),
-    criterionAssignments: z.array(z.unknown()).optional(),
+    evaluationCriterions: z.array(z.unknown()).optional(),
+    analysisCriterion: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -92,6 +94,7 @@ export const LecturerPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
     serviceDate: z.coerce.date().nullish()
@@ -102,7 +105,7 @@ export const LecturerPrismaUpdateSchema = z.object({
  * `Lecturer` schema for create operations excluding foreign keys and relations.
  */
 export const LecturerCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

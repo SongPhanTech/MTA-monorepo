@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
     questions: z.array(z.string()),
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
     questions: z.array(z.string()),
@@ -36,12 +38,13 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    evaluationCriterion: z.record(z.string(), z.unknown()),
+    analysisCriterion: z.record(z.string(), z.unknown()),
     evidences: z.array(z.unknown()).optional(),
+    evaluationCriterionComment: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    evaluationCriterionId: z.string(),
+    analysisCriterionId: z.string(),
 }
 );
 
@@ -76,6 +79,7 @@ export const RequirementCriterionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     name: z.string(),
     questions: z.array(z.string()),
@@ -88,7 +92,7 @@ export const RequirementCriterionPrismaUpdateSchema = z.object({
  * `RequirementCriterion` schema for create operations excluding foreign keys and relations.
  */
 export const RequirementCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, questions: true, evidencePlaces: true, collectionMethod: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, questions: true, evidencePlaces: true, collectionMethod: true
 });
 
 

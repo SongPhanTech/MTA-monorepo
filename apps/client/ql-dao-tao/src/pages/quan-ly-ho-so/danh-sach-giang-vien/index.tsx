@@ -428,8 +428,10 @@ export default function UserProfilePageLecture() {
                                                 ) && (
                                                     <Tooltip title="Xem chi tiết" placement="top">
                                                         <Eye
-                                                            onClick={()=>{
-                                                                router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${id}`)
+                                                            onClick={() => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${id}`
+                                                                )
                                                             }}
                                                             size={16}
                                                             strokeWidth={1.5}

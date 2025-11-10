@@ -250,8 +250,8 @@ model UserProfile extends Base {
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
   surveySession                 SurveySession[]
-  deadlineHistories             DeadlineHistory[]
-  criterionAssignmentComments   CriterionAssignmentComment[]
+  evaluationCriterionComments   EvaluationCriterionComment[]
+  classSchedules                ClassSchedule[]
 
   @@auth()
   @@schema("ql-nguoi-dung")

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const EquivalencyGroupOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description"])
+export const EquivalencyGroupOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy"])

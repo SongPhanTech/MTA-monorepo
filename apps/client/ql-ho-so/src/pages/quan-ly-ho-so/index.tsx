@@ -396,9 +396,9 @@ export default function UserProfilePageDs() {
                                 width: 120,
                                 type: 'input',
                                 dataIndex: 'capBac',
-                                render: (__, record) =>{
-                                   return record?.rank ? record?.rank?.sTen : ''
-                                }
+                                render: (__, record) => {
+                                    return record?.rank ? record?.rank?.sTen : ''
+                                },
                             },
                             {
                                 title: 'SĐT',

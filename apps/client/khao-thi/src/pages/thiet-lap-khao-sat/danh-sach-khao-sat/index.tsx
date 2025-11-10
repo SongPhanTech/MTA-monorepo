@@ -13,7 +13,6 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 export default function DetailSurveyPage() {
-
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
     const { data: session } = useSession()
@@ -142,7 +141,7 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate key="explanation">
+                                <HtmlTruncate >
                                     <ul>
                                         {record?.subjectClasses?.map((i: any) => (
                                             <li key={i.id}>
@@ -153,14 +152,22 @@ export default function DetailSurveyPage() {
                                 </HtmlTruncate>
                             ),
                         },
-                         {
+                        {
                             title: 'Ngày bắt đầu',
                             dataIndex: 'startDate',
                             type: 'date',
                             width: 120,
-                            render: (_, record) =>{
-                                return   (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.startDate? dayjs(record?.startDate).format('DD/MM/YYYY'):''}</div>)
-                            }
+                            render: (_, record) => {
+                                return (
+                                    <div
+                                        className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                    >
+                                        {record?.startDate
+                                            ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                            : ''}
+                                    </div>
+                                )
+                            },
                         },
 
                         {
@@ -168,16 +175,32 @@ export default function DetailSurveyPage() {
                             dataIndex: 'endDate',
                             type: 'date',
                             width: 120,
-                            render: (_, record) =>{
-                                return  (<div className={`${dayjs().isAfter(record?.endDate)? 'text-red-500' : ''}`}>{record?.endDate? dayjs(record?.endDate).format('DD/MM/YYYY'):''}</div>)
-                            }
+                            render: (_, record) => {
+                                return (
+                                    <div
+                                        className={`${dayjs().isAfter(record?.endDate) ? 'text-red-500' : ''}`}
+                                    >
+                                        {record?.endDate
+                                            ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                            : ''}
+                                    </div>
+                                )
+                            },
                         },
                         {
                             title: 'Trạng thái',
                             align: 'center',
-                            width:120,
+                            width: 120,
                             render: (_, record) => {
-                                return <Tag color={record?.surveySessions?.length>0 ? 'green' : 'default'}>{record?.surveySessions?.length>0 ? 'Đã làm' : 'Chưa làm'}</Tag>
+                                return (
+                                    <Tag
+                                        color={
+                                            record?.surveySessions?.length > 0 ? 'green' : 'default'
+                                        }
+                                    >
+                                        {record?.surveySessions?.length > 0 ? 'Đã làm' : 'Chưa làm'}
+                                    </Tag>
+                                )
                             },
                         },
 
@@ -185,15 +208,7 @@ export default function DetailSurveyPage() {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
-                            render: (
-                                _,
-                                {
-                                    id,
-                                    isPublic,
-                                    surveyQuestion,
-                                    surveySessions,
-                                }
-                            ) => (
+                            render: (_, { id, isPublic, surveyQuestion, surveySessions }) => (
                                 <Row className="justify-end gap-2">
                                     {surveyQuestion?.length > 0 && (
                                         <Tooltip
@@ -202,7 +217,7 @@ export default function DetailSurveyPage() {
                                             placement="top"
                                         >
                                             <EyeOutlined
-                                            disabled={surveySessions?.length>0}
+                                                disabled={surveySessions?.length > 0}
                                                 onClick={() => {
                                                     if (!isPublic) {
                                                         router.push(`/lam-khao-sat/private/${id}`)

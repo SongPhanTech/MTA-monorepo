@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const FeedbackScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "content", "status", "satisfaction", "userId"])
+export const FeedbackScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "content", "status", "satisfaction", "userId"])

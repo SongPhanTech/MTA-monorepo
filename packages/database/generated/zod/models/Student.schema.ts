@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -55,6 +56,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -169,6 +171,7 @@ export const StudentPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -206,7 +209,7 @@ export const StudentPrismaUpdateSchema = z.object({
  * `Student` schema for create operations excluding foreign keys and relations.
  */
 export const StudentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, foreignLangPass: true, ITCertificationPass: true, strengthTrainingPass: true, militaryTrainingPass: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, foreignLangPass: true, ITCertificationPass: true, strengthTrainingPass: true, militaryTrainingPass: true
 });
 
 

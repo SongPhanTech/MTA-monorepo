@@ -21,6 +21,8 @@ export type GraduationCheckResultTrainingMajor = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     englishName?: string | null

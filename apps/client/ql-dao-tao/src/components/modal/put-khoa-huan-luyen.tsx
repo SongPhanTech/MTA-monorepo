@@ -584,9 +584,7 @@ const PutTrainingCourseModal = () => {
                             options={semesterData.map((i) => {
                                 return {
                                     value: i.id,
-                                    label: [i?.name]
-                                        .filter(Boolean)
-                                        .join(' - '),
+                                    label: [i?.name].filter(Boolean).join(' - '),
                                 }
                             })}
                             disabled={isGeneralInfoLocked}

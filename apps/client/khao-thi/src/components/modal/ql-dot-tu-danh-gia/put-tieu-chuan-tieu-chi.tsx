@@ -4,7 +4,7 @@ import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { createId, type EvaluationPeriod } from '@workspace/db'
-import { useFindManyEvaluationStandard, useFindManyStandardCatalog } from '@workspace/db/hooks'
+import { useFindManyStandardCatalog, useFindManyStandardPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
@@ -75,7 +75,6 @@ const PutTieuChuanTieuChi = () => {
                 select: {
                     id: true,
                     name: true,
-                    scoreScaleId: true,
                     requirementCriterionCatalog: {
                         select: {
                             id: true,
@@ -94,7 +93,7 @@ const PutTieuChuanTieuChi = () => {
         },
     })
 
-    const { data: existingStandards } = useFindManyEvaluationStandard(
+    const { data: existingStandards } = useFindManyStandardPeriod(
         {
             where: {
                 periodId: selectedEvaluationPeriodId,
@@ -102,7 +101,11 @@ const PutTieuChuanTieuChi = () => {
             include: {
                 criteria: {
                     include: {
-                        requirementCriterions: true,
+                        analysisCriterions: {
+                            include: {
+                                requirementCriterions: true,
+                            },
+                        },
                     },
                     orderBy: {
                         order: 'asc',
@@ -152,7 +155,7 @@ const PutTieuChuanTieuChi = () => {
                         )
                         if (catalogCriterion) {
                             selectedKeys.push(catalogCriterion.id)
-                            criterion.requirementCriterions.forEach((req) => {
+                            criterion.analysisCriterions?.requirementCriterions?.forEach((req) => {
                                 const catalogReq =
                                     catalogCriterion.requirementCriterionCatalog.find(
                                         (r) => r.name === req.name
@@ -178,7 +181,7 @@ const PutTieuChuanTieuChi = () => {
 
     const onCheck = (checked: string[]) => {
         setCheckedKeys(checked)
-        const filtered = filterTree(treeData, checkedKeys as string[])
+        const filtered = filterTree(treeData, checked as string[])
         setCatalogSelected(filtered as TreeData)
     }
 
@@ -186,10 +189,13 @@ const PutTieuChuanTieuChi = () => {
         const standards = catalogSelected.map((s, i1) => {
             const standardId = createId()
             const criteria = s.children.map((c, i2) => {
+                const criterionPeriodId = createId()
+                const analysisCriterionId = createId()
                 const evaluationCriterionId = createId()
+
                 const requirements = c.children.map(({ name, questions }, i3) => {
                     return {
-                        evaluationCriterionId,
+                        analysisCriterionId,
                         id: createId(),
                         order: i3 + 1,
                         name: name,
@@ -197,12 +203,12 @@ const PutTieuChuanTieuChi = () => {
                     }
                 })
                 return {
-                    standardId,
-                    id: evaluationCriterionId,
+                    criterionPeriodId,
+                    analysisCriterionId,
+                    evaluationCriterionId,
                     order: i2 + 1,
                     name: c.name,
-                    scoreScaleId: c.scoreScaleId,
-                    requirementCriterionCatalog: requirements,
+                    requirements,
                 }
             })
 
@@ -220,12 +226,27 @@ const PutTieuChuanTieuChi = () => {
             if (id) {
                 const res = await sqlTransaction([
                     {
-                        model: 'RequirementCriterion' as const,
+                        model: 'RequirementCriterion',
                         operation: 'deleteMany',
                         data: {
                             where: {
-                                evaluationCriterion: {
-                                    standard: {
+                                analysisCriterion: {
+                                    criterionPeriod: {
+                                        evaluationStandard: {
+                                            periodId: selectedEvaluationPeriodId,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        model: 'AnalysisCriterion',
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                criterionPeriod: {
+                                    evaluationStandard: {
                                         periodId: selectedEvaluationPeriodId,
                                     },
                                 },
@@ -233,18 +254,31 @@ const PutTieuChuanTieuChi = () => {
                         },
                     },
                     {
-                        model: 'EvaluationCriterion' as const,
+                        model: 'EvaluationCriterion',
                         operation: 'deleteMany',
                         data: {
                             where: {
-                                standard: {
+                                criterionPeriod: {
+                                    evaluationStandard: {
+                                        periodId: selectedEvaluationPeriodId,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        model: 'CriterionPeriod',
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                evaluationStandard: {
                                     periodId: selectedEvaluationPeriodId,
                                 },
                             },
                         },
                     },
                     {
-                        model: 'EvaluationStandard' as const,
+                        model: 'StandardPeriod',
                         operation: 'deleteMany',
                         data: {
                             where: {
@@ -253,10 +287,45 @@ const PutTieuChuanTieuChi = () => {
                         },
                     },
                     {
-                        model: 'EvaluationStandard' as const,
+                        model: 'StandardPeriod',
                         operation: 'createMany',
                         data: {
                             data: standards.map(({ criteria, ...standard }) => standard),
+                        },
+                    },
+                    {
+                        model: 'CriterionPeriod',
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.map(
+                                    ({
+                                        requirements,
+                                        analysisCriterionId,
+                                        evaluationCriterionId,
+                                        criterionPeriodId,
+                                        ...criterion
+                                    }) => ({
+                                        id: criterionPeriodId,
+                                        evaluationStandardId: standard.id,
+                                        ...criterion,
+                                    })
+                                )
+                            ),
+                        },
+                    },
+                    {
+                        model: 'AnalysisCriterion' as const,
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.map(
+                                    ({ analysisCriterionId, criterionPeriodId }) => ({
+                                        id: analysisCriterionId,
+                                        criterionPeriodId: criterionPeriodId,
+                                    })
+                                )
+                            ),
                         },
                     },
                     {
@@ -265,7 +334,10 @@ const PutTieuChuanTieuChi = () => {
                         data: {
                             data: standards.flatMap((standard) =>
                                 standard.criteria.map(
-                                    ({ requirementCriterionCatalog, ...criterion }) => criterion
+                                    ({ evaluationCriterionId, criterionPeriodId }) => ({
+                                        id: evaluationCriterionId,
+                                        criterionPeriodId: criterionPeriodId,
+                                    })
                                 )
                             ),
                         },
@@ -275,9 +347,7 @@ const PutTieuChuanTieuChi = () => {
                         operation: 'createMany',
                         data: {
                             data: standards.flatMap((standard) =>
-                                standard.criteria.flatMap(
-                                    ({ requirementCriterionCatalog }) => requirementCriterionCatalog
-                                )
+                                standard.criteria.flatMap(({ requirements }) => requirements)
                             ),
                         },
                     },
@@ -292,10 +362,45 @@ const PutTieuChuanTieuChi = () => {
             } else {
                 const res = await sqlTransaction([
                     {
-                        model: 'EvaluationStandard',
+                        model: 'StandardPeriod',
                         operation: 'createMany',
                         data: {
                             data: standards.map(({ criteria, ...standard }) => standard),
+                        },
+                    },
+                    {
+                        model: 'CriterionPeriod',
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.map(
+                                    ({
+                                        requirements,
+                                        analysisCriterionId,
+                                        evaluationCriterionId,
+                                        criterionPeriodId,
+                                        ...criterion
+                                    }) => ({
+                                        id: criterionPeriodId,
+                                        evaluationStandardId: standard.id,
+                                        ...criterion,
+                                    })
+                                )
+                            ),
+                        },
+                    },
+                    {
+                        model: 'AnalysisCriterion',
+                        operation: 'createMany',
+                        data: {
+                            data: standards.flatMap((standard) =>
+                                standard.criteria.map(
+                                    ({ analysisCriterionId, criterionPeriodId }) => ({
+                                        id: analysisCriterionId,
+                                        criterionPeriodId: criterionPeriodId,
+                                    })
+                                )
+                            ),
                         },
                     },
                     {
@@ -304,7 +409,10 @@ const PutTieuChuanTieuChi = () => {
                         data: {
                             data: standards.flatMap((standard) =>
                                 standard.criteria.map(
-                                    ({ requirementCriterionCatalog, ...criterion }) => criterion
+                                    ({ evaluationCriterionId, criterionPeriodId }) => ({
+                                        id: evaluationCriterionId,
+                                        criterionPeriodId: criterionPeriodId,
+                                    })
                                 )
                             ),
                         },
@@ -314,9 +422,7 @@ const PutTieuChuanTieuChi = () => {
                         operation: 'createMany',
                         data: {
                             data: standards.flatMap((standard) =>
-                                standard.criteria.flatMap(
-                                    ({ requirementCriterionCatalog }) => requirementCriterionCatalog
-                                )
+                                standard.criteria.flatMap(({ requirements }) => requirements)
                             ),
                         },
                     },
@@ -329,9 +435,11 @@ const PutTieuChuanTieuChi = () => {
 
                 message.success('Thêm mới thành công')
             }
+
             queryClient.invalidateQueries({
-                queryKey: ['EvaluationStandard'],
+                queryKey: ['StandardPeriod'],
             })
+
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')

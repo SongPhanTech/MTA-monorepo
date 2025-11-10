@@ -4,13 +4,12 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { createId, type AnalysisFormEvidence, type RequirementCriterion } from '@workspace/db'
 import {
-    createId,
-    type AnalysisFormEvidence,
-    type Evidence,
-    type RequirementCriterion,
-} from '@workspace/db'
-import { useFindManyEvidence, useFindUniqueRequirementCriterion } from '@workspace/db/hooks'
+    useCreateRequirementCriterion,
+    useFindManyEvidence,
+    useFindUniqueRequirementCriterion,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
 import { Button, Col, Form, Input, InputNumber, type InputRef, message } from 'antd'
@@ -45,7 +44,7 @@ const PutTieuChiMinhChungModal = () => {
 
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
-        evaluationCriterionId: string
+        analysisCriterionId?: string
     }>({
         tag: 'PutTieuChiMinhChungModal',
         onClose: form.resetFields,
@@ -78,6 +77,8 @@ const PutTieuChiMinhChungModal = () => {
         }
     )
 
+    const { mutateAsync: createRequirementCriterion } = useCreateRequirementCriterion()
+
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
@@ -98,93 +99,101 @@ const PutTieuChiMinhChungModal = () => {
         if (!output) return
         try {
             showSpinner()
+
             if (input?.id) {
-                const { onlyInA: onlyInNew, onlyInB: onlyInOld } = diffArrays(
-                    items,
-                    initialValue?.evidences?.length
-                        ? initialValue.evidences.map(
-                              (i: { evidenceId: string; evidence: Evidence }) => ({
-                                  value: i?.evidenceId,
-                                  label: i?.evidence?.name,
-                              })
-                          )
-                        : [],
+                const currentEvidenceIds = initialValue?.evidences?.map((e) => e.evidenceId) || []
+                const newEvidenceIds = items.map((i) => i.value)
+
+                const { onlyInA: toCreate, onlyInB: toDelete } = diffArrays(
+                    newEvidenceIds.map((id) => ({ value: id })),
+                    currentEvidenceIds.map((id) => ({ value: id })),
                     'value'
                 )
 
-                let listTransition: any[] = []
+                const listTransition: any[] = [
+                    {
+                        model: 'RequirementCriterion',
+                        operation: 'update',
+                        data: {
+                            where: { id: input.id },
+                            data: {
+                                name: output.name,
+                                questions: output.questions,
+                                evidencePlaces: output.evidencePlaces || '',
+                                collectionMethod: output.collectionMethod || '',
+                            },
+                        },
+                    },
+                ]
 
-                if (onlyInOld.length) {
-                    listTransition = [
-                        ...listTransition,
-                        ...onlyInOld.map((i) => ({
+                if (toDelete.length > 0) {
+                    listTransition.push(
+                        ...toDelete.map((item) => ({
                             model: 'AnalysisFormEvidence',
                             operation: 'delete',
                             data: {
                                 where: {
                                     requirementCriterionId_evidenceId: {
                                         requirementCriterionId: input.id,
-                                        evidenceId: i.value,
+                                        evidenceId: item.value,
                                     },
                                 },
                             },
-                        })),
-                    ]
+                        }))
+                    )
                 }
 
-                if (onlyInNew.length) {
-                    listTransition = [
-                        ...listTransition,
-                        ...onlyInNew.map((i) => ({
-                            model: 'AnalysisFormEvidence',
-                            operation: 'create',
-                            data: {
+                if (toCreate.length > 0) {
+                    listTransition.push(
+                        ...toCreate.map((item) => {
+                            const index = newEvidenceIds.indexOf(item.value)
+                            return {
+                                model: 'AnalysisFormEvidence',
+                                operation: 'create',
                                 data: {
-                                    requirementCriterionId: input.id,
-                                    evidenceId: i.value,
-                                    order: 1,
+                                    data: {
+                                        requirementCriterionId: input.id,
+                                        evidenceId: item.value,
+                                        order: index + 1,
+                                    },
                                 },
-                            },
-                        })),
-                    ]
+                            }
+                        })
+                    )
                 }
 
-                listTransition = [
-                    ...listTransition,
-                    ...items.map((i, index: number) => ({
-                        model: 'AnalysisFormEvidence',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                requirementCriterionId_evidenceId: {
-                                    requirementCriterionId: input.id,
-                                    evidenceId: i.value,
-                                },
-                            },
-                            data: {
-                                order: index + 1,
-                            },
-                        },
-                    })),
-                    {
-                        model: 'RequirementCriterion',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: input.id,
-                            },
-                            data: {
-                                name: output.name,
-                                questions: output.questions,
-                                evidencePlaces: output.evidencePlaces,
-                                collectionMethod: output.collectionMethod,
-                            },
-                        },
-                    },
-                ]
+                const evidencesToUpdate = newEvidenceIds.filter(
+                    (id) => !toCreate.some((item) => item.value === id)
+                )
 
-                if (listTransition?.length) {
-                    await sqlTransaction(listTransition)
+                if (evidencesToUpdate.length > 0) {
+                    listTransition.push(
+                        ...evidencesToUpdate.map((evidenceId) => {
+                            const index = newEvidenceIds.indexOf(evidenceId)
+                            return {
+                                model: 'AnalysisFormEvidence',
+                                operation: 'update',
+                                data: {
+                                    where: {
+                                        requirementCriterionId_evidenceId: {
+                                            requirementCriterionId: input.id,
+                                            evidenceId: evidenceId,
+                                        },
+                                    },
+                                    data: {
+                                        order: index + 1,
+                                    },
+                                },
+                            }
+                        })
+                    )
+                }
+
+                const res = await sqlTransaction(listTransition)
+
+                if (res.status !== 200) {
+                    message.error('Cập nhật thất bại, vui lòng thử lại sau!')
+                    return
                 }
 
                 message.success('Cập nhật thành công')
@@ -198,11 +207,7 @@ const PutTieuChiMinhChungModal = () => {
                         data: {
                             data: {
                                 id: id,
-                                evaluationCriterion: {
-                                    connect: {
-                                        id: input?.evaluationCriterionId,
-                                    },
-                                },
+                                analysisCriterionId: input?.analysisCriterionId,
                                 name: output.name,
                                 order: Number(output.order),
                                 questions: output.questions,
@@ -214,23 +219,26 @@ const PutTieuChiMinhChungModal = () => {
                 ]
 
                 if (items.length > 0) {
-                    const evidenceTransactions = items.map((i, index: number) => ({
-                        model: 'AnalysisFormEvidence',
-                        operation: 'create',
-                        data: {
+                    listTransition.push(
+                        ...items.map((item, index) => ({
+                            model: 'AnalysisFormEvidence',
+                            operation: 'create',
                             data: {
-                                requirementCriterionId: id,
-                                evidenceId: i.value,
-                                order: index + 1,
+                                data: {
+                                    requirementCriterionId: id,
+                                    evidenceId: item.value,
+                                    order: index + 1,
+                                },
                             },
-                        },
-                    }))
-
-                    listTransition.push(...evidenceTransactions)
+                        }))
+                    )
                 }
 
-                await sqlTransaction(listTransition)
-
+                const res = await sqlTransaction(listTransition)
+                if (res.status !== 200) {
+                    message.error('Thêm mới thất bại, vui lòng thử lại sau!')
+                    return
+                }
                 message.success('Thêm mới thành công')
             }
 
@@ -239,13 +247,13 @@ const PutTieuChiMinhChungModal = () => {
             })
 
             queryClient.invalidateQueries({
-                queryKey: ['RequirementCriterion'],
+                queryKey: ['AnalysisFormEvidence'],
             })
 
             onClose()
         } catch (error: any) {
-            if (error?.infor?.messgae) {
-                message.error(error?.infor?.message)
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
                 return
             }
             message.error('Có lỗi xảy ra, vui lòng thử lại sau!')
@@ -253,7 +261,6 @@ const PutTieuChiMinhChungModal = () => {
             hideSpinner()
         }
     }
-
     const DraggableItem = ({
         item,
         index,

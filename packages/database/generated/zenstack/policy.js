@@ -2072,97 +2072,6 @@ const policy = {
                 update: {},
             },
         },
-        criterionAssignment: {
-            modelLevel: {
-                read: { guard: CriterionAssignment_read, },
-                create: { guard: CriterionAssignment_create, inputChecker: CriterionAssignment_create_input, },
-                update: { guard: CriterionAssignment_update, },
-                postUpdate: { guard: CriterionAssignment_postUpdate, },
-                delete: { guard: CriterionAssignment_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        criterionAssignmentComment: {
-            modelLevel: {
-                read: { guard: CriterionAssignmentComment_read, },
-                create: { guard: CriterionAssignmentComment_create, inputChecker: CriterionAssignmentComment_create_input, },
-                update: { guard: CriterionAssignmentComment_update, },
-                postUpdate: { guard: CriterionAssignmentComment_postUpdate, },
-                delete: { guard: CriterionAssignmentComment_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        deadlineHistory: {
-            modelLevel: {
-                read: { guard: DeadlineHistory_read, },
-                create: { guard: DeadlineHistory_create, inputChecker: DeadlineHistory_create_input, },
-                update: { guard: DeadlineHistory_update, },
-                postUpdate: { guard: DeadlineHistory_postUpdate, },
-                delete: { guard: DeadlineHistory_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        requirementCriterionCatalog: {
-            modelLevel: {
-                read: { guard: RequirementCriterionCatalog_read, },
-                create: { guard: RequirementCriterionCatalog_create, inputChecker: RequirementCriterionCatalog_create_input, },
-                update: { guard: RequirementCriterionCatalog_update, },
-                postUpdate: { guard: RequirementCriterionCatalog_postUpdate, },
-                delete: { guard: RequirementCriterionCatalog_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        scoreScaleCatalog: {
-            modelLevel: {
-                read: { guard: ScoreScaleCatalog_read, },
-                create: { guard: ScoreScaleCatalog_create, inputChecker: ScoreScaleCatalog_create_input, },
-                update: { guard: ScoreScaleCatalog_update, },
-                postUpdate: { guard: ScoreScaleCatalog_postUpdate, },
-                delete: { guard: ScoreScaleCatalog_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        evaluationStandard: {
-            modelLevel: {
-                read: { guard: EvaluationStandard_read, },
-                create: { guard: EvaluationStandard_create, inputChecker: EvaluationStandard_create_input, },
-                update: { guard: EvaluationStandard_update, },
-                postUpdate: { guard: EvaluationStandard_postUpdate, },
-                delete: { guard: EvaluationStandard_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        evaluationCriterion: {
-            modelLevel: {
-                read: { guard: EvaluationCriterion_read, },
-                create: { guard: EvaluationCriterion_create, inputChecker: EvaluationCriterion_create_input, },
-                update: { guard: EvaluationCriterion_update, },
-                postUpdate: { guard: EvaluationCriterion_postUpdate, },
-                delete: { guard: EvaluationCriterion_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         evidenceCategory: {
             modelLevel: {
                 read: { guard: EvidenceCategory_read, },
@@ -2183,6 +2092,84 @@ const policy = {
                 update: { guard: Evidence_update, },
                 postUpdate: { guard: Evidence_postUpdate, },
                 delete: { guard: Evidence_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        evaluationCriterionComment: {
+            modelLevel: {
+                read: { guard: EvaluationCriterionComment_read, },
+                create: { guard: EvaluationCriterionComment_create, inputChecker: EvaluationCriterionComment_create_input, },
+                update: { guard: EvaluationCriterionComment_update, },
+                postUpdate: { guard: EvaluationCriterionComment_postUpdate, },
+                delete: { guard: EvaluationCriterionComment_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        requirementCriterionCatalog: {
+            modelLevel: {
+                read: { guard: RequirementCriterionCatalog_read, },
+                create: { guard: RequirementCriterionCatalog_create, inputChecker: RequirementCriterionCatalog_create_input, },
+                update: { guard: RequirementCriterionCatalog_update, },
+                postUpdate: { guard: RequirementCriterionCatalog_postUpdate, },
+                delete: { guard: RequirementCriterionCatalog_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        standardPeriod: {
+            modelLevel: {
+                read: { guard: StandardPeriod_read, },
+                create: { guard: StandardPeriod_create, inputChecker: StandardPeriod_create_input, },
+                update: { guard: StandardPeriod_update, },
+                postUpdate: { guard: StandardPeriod_postUpdate, },
+                delete: { guard: StandardPeriod_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        criterionPeriod: {
+            modelLevel: {
+                read: { guard: CriterionPeriod_read, },
+                create: { guard: CriterionPeriod_create, inputChecker: CriterionPeriod_create_input, },
+                update: { guard: CriterionPeriod_update, },
+                postUpdate: { guard: CriterionPeriod_postUpdate, },
+                delete: { guard: CriterionPeriod_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        analysisCriterion: {
+            modelLevel: {
+                read: { guard: AnalysisCriterion_read, },
+                create: { guard: AnalysisCriterion_create, inputChecker: AnalysisCriterion_create_input, },
+                update: { guard: AnalysisCriterion_update, },
+                postUpdate: { guard: AnalysisCriterion_postUpdate, },
+                delete: { guard: AnalysisCriterion_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        evaluationCriterion: {
+            modelLevel: {
+                read: { guard: EvaluationCriterion_read, },
+                create: { guard: EvaluationCriterion_create, inputChecker: EvaluationCriterion_create_input, },
+                update: { guard: EvaluationCriterion_update, },
+                postUpdate: { guard: EvaluationCriterion_postUpdate, },
+                delete: { guard: EvaluationCriterion_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -2235,32 +2222,6 @@ const policy = {
                 update: { guard: EvaluationCouncilMember_update, },
                 postUpdate: { guard: EvaluationCouncilMember_postUpdate, },
                 delete: { guard: EvaluationCouncilMember_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        evaluationSecretarYCouncil: {
-            modelLevel: {
-                read: { guard: EvaluationSecretarYCouncil_read, },
-                create: { guard: EvaluationSecretarYCouncil_create, inputChecker: EvaluationSecretarYCouncil_create_input, },
-                update: { guard: EvaluationSecretarYCouncil_update, },
-                postUpdate: { guard: EvaluationSecretarYCouncil_postUpdate, },
-                delete: { guard: EvaluationSecretarYCouncil_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        evaluationSecretaryMember: {
-            modelLevel: {
-                read: { guard: EvaluationSecretaryMember_read, },
-                create: { guard: EvaluationSecretaryMember_create, inputChecker: EvaluationSecretaryMember_create_input, },
-                update: { guard: EvaluationSecretaryMember_update, },
-                postUpdate: { guard: EvaluationSecretaryMember_postUpdate, },
-                delete: { guard: EvaluationSecretaryMember_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3442,21 +3403,18 @@ const policy = {
         evaluationPeriod: { hasValidation: false },
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
-        criterionAssignment: { hasValidation: false },
-        criterionAssignmentComment: { hasValidation: false },
-        deadlineHistory: { hasValidation: false },
-        requirementCriterionCatalog: { hasValidation: false },
-        scoreScaleCatalog: { hasValidation: false },
-        evaluationStandard: { hasValidation: false },
-        evaluationCriterion: { hasValidation: false },
         evidenceCategory: { hasValidation: false },
         evidence: { hasValidation: false },
+        evaluationCriterionComment: { hasValidation: false },
+        requirementCriterionCatalog: { hasValidation: false },
+        standardPeriod: { hasValidation: false },
+        criterionPeriod: { hasValidation: false },
+        analysisCriterion: { hasValidation: false },
+        evaluationCriterion: { hasValidation: false },
         requirementCriterion: { hasValidation: false },
         analysisFormEvidence: { hasValidation: false },
         evaluationCouncil: { hasValidation: false },
         evaluationCouncilMember: { hasValidation: false },
-        evaluationSecretarYCouncil: { hasValidation: false },
-        evaluationSecretaryMember: { hasValidation: false },
         evidenceFile: { hasValidation: false },
         surveyObjectType: { hasValidation: false },
         surveyTopic: { hasValidation: false },
@@ -15894,552 +15852,6 @@ function $check_CriterionCatalog_delete(input, context) {
     }
     return false;
 }
-function CriterionAssignment_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_CriterionAssignment_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignment_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignment_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignment_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function CriterionAssignment_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignment_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignment_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_CriterionAssignment_postUpdate(input, context) {
-    return true;
-}
-function CriterionAssignment_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignment_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignmentComment_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_CriterionAssignmentComment_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignmentComment_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignmentComment_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignmentComment_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function CriterionAssignmentComment_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignmentComment_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CriterionAssignmentComment_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_CriterionAssignmentComment_postUpdate(input, context) {
-    return true;
-}
-function CriterionAssignmentComment_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CriterionAssignmentComment_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DeadlineHistory_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DeadlineHistory_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DeadlineHistory_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DeadlineHistory_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DeadlineHistory_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DeadlineHistory_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DeadlineHistory_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DeadlineHistory_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DeadlineHistory_postUpdate(input, context) {
-    return true;
-}
-function DeadlineHistory_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DeadlineHistory_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RequirementCriterionCatalog_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_RequirementCriterionCatalog_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RequirementCriterionCatalog_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RequirementCriterionCatalog_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RequirementCriterionCatalog_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function RequirementCriterionCatalog_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RequirementCriterionCatalog_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RequirementCriterionCatalog_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_RequirementCriterionCatalog_postUpdate(input, context) {
-    return true;
-}
-function RequirementCriterionCatalog_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RequirementCriterionCatalog_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScoreScaleCatalog_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ScoreScaleCatalog_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScoreScaleCatalog_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScoreScaleCatalog_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScoreScaleCatalog_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ScoreScaleCatalog_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScoreScaleCatalog_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScoreScaleCatalog_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ScoreScaleCatalog_postUpdate(input, context) {
-    return true;
-}
-function ScoreScaleCatalog_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScoreScaleCatalog_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationStandard_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_EvaluationStandard_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationStandard_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationStandard_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationStandard_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function EvaluationStandard_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationStandard_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationStandard_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_EvaluationStandard_postUpdate(input, context) {
-    return true;
-}
-function EvaluationStandard_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationStandard_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationCriterion_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_EvaluationCriterion_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationCriterion_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationCriterion_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationCriterion_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function EvaluationCriterion_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationCriterion_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationCriterion_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_EvaluationCriterion_postUpdate(input, context) {
-    return true;
-}
-function EvaluationCriterion_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationCriterion_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
 function EvidenceCategory_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -16589,6 +16001,474 @@ function Evidence_delete(context, db) {
     return { OR: [] };
 }
 function $check_Evidence_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterionComment_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_EvaluationCriterionComment_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterionComment_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterionComment_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterionComment_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function EvaluationCriterionComment_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterionComment_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterionComment_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_EvaluationCriterionComment_postUpdate(input, context) {
+    return true;
+}
+function EvaluationCriterionComment_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterionComment_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RequirementCriterionCatalog_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_RequirementCriterionCatalog_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RequirementCriterionCatalog_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RequirementCriterionCatalog_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RequirementCriterionCatalog_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function RequirementCriterionCatalog_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RequirementCriterionCatalog_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RequirementCriterionCatalog_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_RequirementCriterionCatalog_postUpdate(input, context) {
+    return true;
+}
+function RequirementCriterionCatalog_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RequirementCriterionCatalog_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StandardPeriod_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StandardPeriod_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StandardPeriod_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StandardPeriod_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StandardPeriod_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StandardPeriod_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StandardPeriod_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StandardPeriod_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StandardPeriod_postUpdate(input, context) {
+    return true;
+}
+function StandardPeriod_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StandardPeriod_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionPeriod_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_CriterionPeriod_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionPeriod_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionPeriod_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionPeriod_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function CriterionPeriod_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionPeriod_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CriterionPeriod_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_CriterionPeriod_postUpdate(input, context) {
+    return true;
+}
+function CriterionPeriod_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CriterionPeriod_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AnalysisCriterion_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AnalysisCriterion_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AnalysisCriterion_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AnalysisCriterion_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AnalysisCriterion_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AnalysisCriterion_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AnalysisCriterion_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AnalysisCriterion_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AnalysisCriterion_postUpdate(input, context) {
+    return true;
+}
+function AnalysisCriterion_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AnalysisCriterion_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterion_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_EvaluationCriterion_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterion_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterion_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterion_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function EvaluationCriterion_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterion_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function EvaluationCriterion_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_EvaluationCriterion_postUpdate(input, context) {
+    return true;
+}
+function EvaluationCriterion_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_EvaluationCriterion_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16901,162 +16781,6 @@ function EvaluationCouncilMember_delete(context, db) {
     return { OR: [] };
 }
 function $check_EvaluationCouncilMember_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretarYCouncil_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_EvaluationSecretarYCouncil_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretarYCouncil_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretarYCouncil_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretarYCouncil_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function EvaluationSecretarYCouncil_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretarYCouncil_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretarYCouncil_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_EvaluationSecretarYCouncil_postUpdate(input, context) {
-    return true;
-}
-function EvaluationSecretarYCouncil_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretarYCouncil_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretaryMember_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_EvaluationSecretaryMember_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretaryMember_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretaryMember_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretaryMember_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function EvaluationSecretaryMember_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretaryMember_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function EvaluationSecretaryMember_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_EvaluationSecretaryMember_postUpdate(input, context) {
-    return true;
-}
-function EvaluationSecretaryMember_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_EvaluationSecretaryMember_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

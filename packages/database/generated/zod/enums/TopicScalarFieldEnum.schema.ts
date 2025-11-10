@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const TopicScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "type"])
+export const TopicScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "type", "isPinned"])

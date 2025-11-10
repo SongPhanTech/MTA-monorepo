@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DM_ChucDanhCMNVNghienCuuVienScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name"])
+export const DM_ChucDanhCMNVNghienCuuVienScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name"])

@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DifficultyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const DifficultyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

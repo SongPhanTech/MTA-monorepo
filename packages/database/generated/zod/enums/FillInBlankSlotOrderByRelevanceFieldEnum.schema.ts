@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const FillInBlankSlotOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "questionId", "correctAnswer"])
+export const FillInBlankSlotOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "questionId", "correctAnswer"])

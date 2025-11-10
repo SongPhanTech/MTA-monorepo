@@ -6,11 +6,10 @@ import type { CriterionCatalog } from '@workspace/db'
 import {
     useCountCriterionCatalog,
     useCreateCriterionCatalog,
-    useFindManyScoreScaleCatalog,
     useFindUniqueCriterionCatalog,
     useUpdateCriterionCatalog,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutCriterionCatalogType = CriterionCatalog
@@ -36,7 +35,6 @@ const PutCriterionCatalog = () => {
                 name: output.name.trim(),
                 standardId: input?.standardId || '',
                 description: output.description,
-                scoreScaleId: output.scoreScaleId,
             }
             if (input?.id) {
                 await updateCriterionCatalog({
@@ -86,13 +84,6 @@ const PutCriterionCatalog = () => {
         { enabled: !!input?.standardId }
     )
 
-    const { data: scoreScaleCatalogData } = useFindManyScoreScaleCatalog(
-        {},
-        {
-            enabled: !!input?.standardId,
-        }
-    )
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
@@ -128,17 +119,6 @@ const PutCriterionCatalog = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên tiêu chí" required>
                     <Input placeholder="Nhập tên tiêu chí" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="scoreScaleId" label="Thang điểm" required>
-                    <Select
-                        options={scoreScaleCatalogData?.map(({ id, name, passFrom }) => ({
-                            value: id,
-                            label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
-                        }))}
-                        placeholder="Chọn thang điểm"
-                    />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -1,4 +1,4 @@
-import { ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, FileSearchOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
@@ -11,7 +11,6 @@ interface ChatInputProps {
     onDelete?: () => void
     onStop?: () => void
     isFaqMode?: boolean
-    onToggleFaqMode?: () => void
 }
 
 export default function ChatInput({
@@ -19,10 +18,8 @@ export default function ChatInput({
     loading,
     onInputChange,
     onSend,
-    onDelete,
     onStop,
     isFaqMode = false,
-    onToggleFaqMode,
 }: ChatInputProps) {
     const _router = useRouter()
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -82,15 +79,15 @@ export default function ChatInput({
                         />
 
                         <div className="flex justify-between items-center px-1">
-                            <Tooltip title="Câu hỏi thường gặp">
+                            <Tooltip title="Chọn tài liệu tham khảo">
                                 <Button
-                                    onClick={onToggleFaqMode}
+                                    onClick={() => console.log('tài liệu')}
                                     className={`w-9 h-9 rounded-full flex items-center justify-center border-0 transition-all duration-200 ${
                                         isFaqMode
                                             ? 'bg-primary text-white hover:bg-primary/90 shadow-md'
                                             : 'bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-700'
                                     }`}
-                                    icon={<QuestionCircleOutlined style={{ fontSize: 16 }} />}
+                                    icon={<FileSearchOutlined style={{ fontSize: 16 }} />}
                                 />
                             </Tooltip>
                             {loading ? (

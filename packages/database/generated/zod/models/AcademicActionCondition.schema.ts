@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
     invert: z.boolean().default(false),
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
     invert: z.boolean(),
@@ -81,6 +83,7 @@ export const AcademicActionConditionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
     invert: z.boolean(),
@@ -95,7 +98,7 @@ export const AcademicActionConditionPrismaUpdateSchema = z.object({
  * `AcademicActionCondition` schema for create operations excluding foreign keys and relations.
  */
 export const AcademicActionConditionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, invert: true, tuple: true
 });
 
 

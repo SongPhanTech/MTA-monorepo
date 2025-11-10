@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     issueDate: z.coerce.date(),
     type: DecisionTypeSchema,
 }
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     issueDate: z.coerce.date(),
     type: DecisionTypeSchema,
 }
@@ -71,6 +73,7 @@ export const DecisionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     issueDate: z.coerce.date(),
     type: DecisionTypeSchema
 }).partial().passthrough();
@@ -80,7 +83,7 @@ export const DecisionPrismaUpdateSchema = z.object({
  * `Decision` schema for create operations excluding foreign keys and relations.
  */
 export const DecisionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

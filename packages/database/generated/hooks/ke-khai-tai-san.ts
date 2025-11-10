@@ -327,7 +327,7 @@ export function useSuspenseCountKeKhaiTaiSan<TArgs extends Prisma.KeKhaiTaiSanCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('KeKhaiTaiSan', `${endpoint}/keKhaiTaiSan/count`, args, options, fetch);
 }
 
-export function useCheckKeKhaiTaiSan<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; loai?: string; tenDot?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckKeKhaiTaiSan<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; loai?: string; tenDot?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('KeKhaiTaiSan', `${endpoint}/keKhaiTaiSan/check`, args, options, fetch);
 }

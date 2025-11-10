@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
@@ -33,6 +34,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
@@ -88,6 +90,7 @@ export const ThesisSessionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
@@ -105,7 +108,7 @@ export const ThesisSessionPrismaUpdateSchema = z.object({
  * `ThesisSession` schema for create operations excluding foreign keys and relations.
  */
 export const ThesisSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

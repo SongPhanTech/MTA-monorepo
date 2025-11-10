@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const KnowledgeBlockOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "subjectVersionId", "name"])
+export const KnowledgeBlockOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "subjectVersionId", "name"])

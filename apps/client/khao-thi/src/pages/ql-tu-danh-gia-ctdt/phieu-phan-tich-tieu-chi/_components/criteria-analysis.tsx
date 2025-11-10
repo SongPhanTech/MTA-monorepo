@@ -5,24 +5,30 @@ import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type {
     AnalysisFormEvidence,
-    EvaluationCriterion,
-    EvaluationStandard,
+    AnalysisCriterion,
+    CriterionPeriod,
     Evidence,
+    EvaluationCriterionComment,
     RequirementCriterion,
-    ScoreScaleCatalog,
+    StandardPeriod,
 } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
-export type DataTabType = EvaluationStandard & {
-    criteria: (EvaluationCriterion & {
-        requirementCriterions: (RequirementCriterion & {
-            evidences: (AnalysisFormEvidence & {
-                evidence: Evidence
-            })[]
-        })[]
-        scoreScale: ScoreScaleCatalog
+export type DataTabType = StandardPeriod & {
+    criteria: (CriterionPeriod & {
+        analysisCriterions?:
+            | (AnalysisCriterion & {
+                  requirementCriterions: (RequirementCriterion & {
+                      evidences: (AnalysisFormEvidence & {
+                          evidence: Evidence
+                      })[]
+                      evaluationCriterionComment?: EvaluationCriterionComment[]
+                  })[]
+                  evaluationCriterionComments?: EvaluationCriterionComment[]
+              })
+            | null
     })[]
 }
 
@@ -40,12 +46,10 @@ export default function CriteriaAnalysisWrite() {
                     some: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                analysisCriterions: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -59,12 +63,10 @@ export default function CriteriaAnalysisWrite() {
                     where: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                analysisCriterions: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -74,33 +76,50 @@ export default function CriteriaAnalysisWrite() {
                     include: {
                         criteria: {
                             where: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                analysisCriterions: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
                             },
                             include: {
-                                requirementCriterions: {
+                                analysisCriterions: {
                                     include: {
-                                        evidences: {
+                                        requirementCriterions: {
                                             include: {
-                                                evidence: true,
+                                                evidences: {
+                                                    include: {
+                                                        evidence: true,
+                                                    },
+                                                    orderBy: {
+                                                        order: 'asc',
+                                                    },
+                                                },
+                                                evaluationCriterionComment: {
+                                                    include: {
+                                                        reviewer: true,
+                                                    },
+                                                    orderBy: {
+                                                        createdAt: 'desc',
+                                                    },
+                                                },
                                             },
                                             orderBy: {
                                                 order: 'asc',
                                             },
                                         },
-                                    },
-                                    orderBy: {
-                                        order: 'asc',
+                                        evaluationCriterionComments: {
+                                            include: {
+                                                reviewer: true,
+                                            },
+                                            orderBy: {
+                                                createdAt: 'desc',
+                                            },
+                                        },
                                     },
                                 },
-                                scoreScale: true,
                             },
                             orderBy: {
                                 order: 'asc',
@@ -120,7 +139,7 @@ export default function CriteriaAnalysisWrite() {
 
     const dataTab = useMemo(() => {
         if (data) {
-            return data.standards.map((standard: DataTabType) => {
+            return data.standards.map((standard) => {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,

@@ -72,4 +72,6 @@ export type AuditingLog = BaseEntity & {
     sRawUserAgent?: string | null
     /** @nullable */
     sObjectId?: string | null
+    /** @nullable */
+    AppCode?: string | null
 }

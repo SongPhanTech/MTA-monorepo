@@ -14,6 +14,98 @@ type QueryFnOptions = {
   signal?: AbortController["signal"];
 };
 
+export type HealthCheckHealthGetError = Fetcher.ErrorWrapper<undefined>;
+
+export type HealthCheckHealthGetVariables = ChatContext["fetcherOptions"];
+
+/**
+ * Check API health status and database connections. Tests PostgreSQL and Qdrant connectivity.
+ */
+export const fetchHealthCheckHealthGet = (
+  variables: HealthCheckHealthGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, HealthCheckHealthGetError, undefined, {}, {}, {}>({
+    url: "/health",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Check API health status and database connections. Tests PostgreSQL and Qdrant connectivity.
+ */
+export function healthCheckHealthGetQuery(
+  variables: HealthCheckHealthGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function healthCheckHealthGetQuery(
+  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function healthCheckHealthGetQuery(
+  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/health",
+      operationId: "healthCheckHealthGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchHealthCheckHealthGet(variables, signal),
+  };
+}
+
+/**
+ * Check API health status and database connections. Tests PostgreSQL and Qdrant connectivity.
+ */
+export const useSuspenseHealthCheckHealthGet = <TData = void,>(
+  variables: HealthCheckHealthGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, HealthCheckHealthGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<void, HealthCheckHealthGetError, TData>({
+    ...healthCheckHealthGetQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Check API health status and database connections. Tests PostgreSQL and Qdrant connectivity.
+ */
+export const useHealthCheckHealthGet = <TData = void,>(
+  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, HealthCheckHealthGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<void, HealthCheckHealthGetError, TData>({
+    ...healthCheckHealthGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type HoiDapV2EndpointHoiDapV2PostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
@@ -23,7 +115,7 @@ export type HoiDapV2EndpointHoiDapV2PostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Answer questions with intent routing and clarification using LangChain-based RAG
+ * Answer questions with intent routing and clarification using LangChain-based RAG. Includes query reformulation and intent classification.
  */
 export const fetchHoiDapV2EndpointHoiDapV2Post = (
   variables: HoiDapV2EndpointHoiDapV2PostVariables,
@@ -37,7 +129,7 @@ export const fetchHoiDapV2EndpointHoiDapV2Post = (
   });
 
 /**
- * Answer questions with intent routing and clarification using LangChain-based RAG
+ * Answer questions with intent routing and clarification using LangChain-based RAG. Includes query reformulation and intent classification.
  */
 export const useHoiDapV2EndpointHoiDapV2Post = (
   options?: Omit<
@@ -70,7 +162,7 @@ export type HoiDapV3EndpointHoiDapV3PostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Answer using preloaded LlamaIndex engine with AutoMergingRetriever (loads once)
+ * Answer using preloaded LlamaIndex engine with AutoMergingRetriever. Uses hierarchical chunking and FAQ cache. Index loads once at startup.
  */
 export const fetchHoiDapV3EndpointHoiDapV3Post = (
   variables: HoiDapV3EndpointHoiDapV3PostVariables,
@@ -84,7 +176,7 @@ export const fetchHoiDapV3EndpointHoiDapV3Post = (
   });
 
 /**
- * Answer using preloaded LlamaIndex engine with AutoMergingRetriever (loads once)
+ * Answer using preloaded LlamaIndex engine with AutoMergingRetriever. Uses hierarchical chunking and FAQ cache. Index loads once at startup.
  */
 export const useHoiDapV3EndpointHoiDapV3Post = (
   options?: Omit<
@@ -117,7 +209,7 @@ export type HoiDapV4EndpointHoiDapV4PostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Answer using BM42 sparse + dense embeddings with reranking (hybrid search)
+ * Answer using BM42 sparse + dense embeddings with reranking. Uses semantic chunking and FAQ cache. Best for complex queries requiring both keyword and semantic matching.
  */
 export const fetchHoiDapV4EndpointHoiDapV4Post = (
   variables: HoiDapV4EndpointHoiDapV4PostVariables,
@@ -131,7 +223,7 @@ export const fetchHoiDapV4EndpointHoiDapV4Post = (
   });
 
 /**
- * Answer using BM42 sparse + dense embeddings with reranking (hybrid search)
+ * Answer using BM42 sparse + dense embeddings with reranking. Uses semantic chunking and FAQ cache. Best for complex queries requiring both keyword and semantic matching.
  */
 export const useHoiDapV4EndpointHoiDapV4Post = (
   options?: Omit<
@@ -163,7 +255,7 @@ export type HoiDapHoiDapPostError = Fetcher.ErrorWrapper<{
 export type HoiDapHoiDapPostVariables = ChatContext["fetcherOptions"];
 
 /**
- * Answer using legacy LangChain RAG against DB_FOR_ALL collection
+ * Legacy QA endpoint using LangChain RAG against DB_FOR_ALL collection. Requires topic_id. Use v2/v3/v4 for better performance.
  */
 export const fetchHoiDapHoiDapPost = (
   variables: HoiDapHoiDapPostVariables,
@@ -177,7 +269,7 @@ export const fetchHoiDapHoiDapPost = (
   });
 
 /**
- * Answer using legacy LangChain RAG against DB_FOR_ALL collection
+ * Legacy QA endpoint using LangChain RAG against DB_FOR_ALL collection. Requires topic_id. Use v2/v3/v4 for better performance.
  */
 export const useHoiDapHoiDapPost = (
   options?: Omit<
@@ -201,6 +293,99 @@ export const useHoiDapHoiDapPost = (
   });
 };
 
+export type GetFaqAnswerGetFaqAnswerPostError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type GetFaqAnswerGetFaqAnswerPostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Get FAQ answer when user clicks on a specific question. Returns answer directly from database (filtered by ACTIVE=True).
+ */
+export const fetchGetFaqAnswerGetFaqAnswerPost = (
+  variables: GetFaqAnswerGetFaqAnswerPostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, GetFaqAnswerGetFaqAnswerPostError, undefined, {}, {}, {}>({
+    url: "/get_faq_answer",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Get FAQ answer when user clicks on a specific question. Returns answer directly from database (filtered by ACTIVE=True).
+ */
+export const useGetFaqAnswerGetFaqAnswerPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      GetFaqAnswerGetFaqAnswerPostError,
+      GetFaqAnswerGetFaqAnswerPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    GetFaqAnswerGetFaqAnswerPostError,
+    GetFaqAnswerGetFaqAnswerPostVariables
+  >({
+    mutationFn: (variables: GetFaqAnswerGetFaqAnswerPostVariables) =>
+      fetchGetFaqAnswerGetFaqAnswerPost(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type HoiDapFaqEndpointError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type HoiDapFaqEndpointVariables = ChatContext["fetcherOptions"];
+
+/**
+ * Answer frequently asked questions from the FAQ collection using vector search. Filters by topic_id and ACTIVE=True.
+ */
+export const fetchHoiDapFaqEndpoint = (
+  variables: HoiDapFaqEndpointVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, HoiDapFaqEndpointError, undefined, {}, {}, {}>({
+    url: "/hoi_dap_faq",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Answer frequently asked questions from the FAQ collection using vector search. Filters by topic_id and ACTIVE=True.
+ */
+export const useHoiDapFaqEndpoint = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      HoiDapFaqEndpointError,
+      HoiDapFaqEndpointVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    HoiDapFaqEndpointError,
+    HoiDapFaqEndpointVariables
+  >({
+    mutationFn: (variables: HoiDapFaqEndpointVariables) =>
+      fetchHoiDapFaqEndpoint(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
 export type FaqVectorizeFaqVectorizePostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
@@ -210,7 +395,7 @@ export type FaqVectorizeFaqVectorizePostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup
+ * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
  */
 export const fetchFaqVectorizeFaqVectorizePost = (
   variables: FaqVectorizeFaqVectorizePostVariables,
@@ -224,7 +409,7 @@ export const fetchFaqVectorizeFaqVectorizePost = (
   });
 
 /**
- * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup
+ * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
  */
 export const useFaqVectorizeFaqVectorizePost = (
   options?: Omit<
@@ -248,6 +433,98 @@ export const useFaqVectorizeFaqVectorizePost = (
   });
 };
 
+export type GetTopicsGetTopicsGetError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetTopicsGetTopicsGetVariables = ChatContext["fetcherOptions"];
+
+/**
+ * Get list of all available topics for user selection. Returns topics with id, name, type, and description.
+ */
+export const fetchGetTopicsGetTopicsGet = (
+  variables: GetTopicsGetTopicsGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, GetTopicsGetTopicsGetError, undefined, {}, {}, {}>({
+    url: "/get_topics",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Get list of all available topics for user selection. Returns topics with id, name, type, and description.
+ */
+export function getTopicsGetTopicsGetQuery(
+  variables: GetTopicsGetTopicsGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function getTopicsGetTopicsGetQuery(
+  variables: GetTopicsGetTopicsGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function getTopicsGetTopicsGetQuery(
+  variables: GetTopicsGetTopicsGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/get_topics",
+      operationId: "getTopicsGetTopicsGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetTopicsGetTopicsGet(variables, signal),
+  };
+}
+
+/**
+ * Get list of all available topics for user selection. Returns topics with id, name, type, and description.
+ */
+export const useSuspenseGetTopicsGetTopicsGet = <TData = void,>(
+  variables: GetTopicsGetTopicsGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetTopicsGetTopicsGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<void, GetTopicsGetTopicsGetError, TData>({
+    ...getTopicsGetTopicsGetQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Get list of all available topics for user selection. Returns topics with id, name, type, and description.
+ */
+export const useGetTopicsGetTopicsGet = <TData = void,>(
+  variables: GetTopicsGetTopicsGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetTopicsGetTopicsGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<void, GetTopicsGetTopicsGetError, TData>({
+    ...getTopicsGetTopicsGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type RecommendByTopicIdRecommendByTopicIdPostError =
   Fetcher.ErrorWrapper<{
     status: 422;
@@ -257,6 +534,9 @@ export type RecommendByTopicIdRecommendByTopicIdPostError =
 export type RecommendByTopicIdRecommendByTopicIdPostVariables =
   ChatContext["fetcherOptions"];
 
+/**
+ * Get list of FAQ questions for a specific topic (filtered by ACTIVE=True). Returns streaming response with questions marked with --SUGGESTION_FAQ--- prefix.
+ */
 export const fetchRecommendByTopicIdRecommendByTopicIdPost = (
   variables: RecommendByTopicIdRecommendByTopicIdPostVariables,
   signal?: AbortSignal,
@@ -270,6 +550,9 @@ export const fetchRecommendByTopicIdRecommendByTopicIdPost = (
     {}
   >({ url: "/recommend_by_topic_id", method: "post", ...variables, signal });
 
+/**
+ * Get list of FAQ questions for a specific topic (filtered by ACTIVE=True). Returns streaming response with questions marked with --SUGGESTION_FAQ--- prefix.
+ */
 export const useRecommendByTopicIdRecommendByTopicIdPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
@@ -301,7 +584,7 @@ export type ReloadFaqReloadFaqPostError = Fetcher.ErrorWrapper<undefined>;
 export type ReloadFaqReloadFaqPostVariables = ChatContext["fetcherOptions"];
 
 /**
- * Vectorize all FAQ records again for fast lookup
+ * Wipe and rebuild FAQ collection. Vectorizes all active FAQ records from all topics. Use after bulk FAQ updates.
  */
 export const fetchReloadFaqReloadFaqPost = (
   variables: ReloadFaqReloadFaqPostVariables,
@@ -315,7 +598,7 @@ export const fetchReloadFaqReloadFaqPost = (
   });
 
 /**
- * Vectorize all FAQ records again for fast lookup
+ * Wipe and rebuild FAQ collection. Vectorizes all active FAQ records from all topics. Use after bulk FAQ updates.
  */
 export const useReloadFaqReloadFaqPost = (
   options?: Omit<
@@ -339,36 +622,131 @@ export const useReloadFaqReloadFaqPost = (
   });
 };
 
-export type HoiDapFaqHoiDapFaqPostError = Fetcher.ErrorWrapper<{
+export type GetAllPromptsPromptsGetError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetAllPromptsPromptsGetVariables = ChatContext["fetcherOptions"];
+
+/**
+ * Get list of all prompts from database. Returns prompts filtered by code (rag/no-rag) and excludes deleted ones.
+ */
+export const fetchGetAllPromptsPromptsGet = (
+  variables: GetAllPromptsPromptsGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, GetAllPromptsPromptsGetError, undefined, {}, {}, {}>({
+    url: "/prompts",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Get list of all prompts from database. Returns prompts filtered by code (rag/no-rag) and excludes deleted ones.
+ */
+export function getAllPromptsPromptsGetQuery(
+  variables: GetAllPromptsPromptsGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function getAllPromptsPromptsGetQuery(
+  variables: GetAllPromptsPromptsGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function getAllPromptsPromptsGetQuery(
+  variables: GetAllPromptsPromptsGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/prompts",
+      operationId: "getAllPromptsPromptsGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetAllPromptsPromptsGet(variables, signal),
+  };
+}
+
+/**
+ * Get list of all prompts from database. Returns prompts filtered by code (rag/no-rag) and excludes deleted ones.
+ */
+export const useSuspenseGetAllPromptsPromptsGet = <TData = void,>(
+  variables: GetAllPromptsPromptsGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetAllPromptsPromptsGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<void, GetAllPromptsPromptsGetError, TData>(
+    {
+      ...getAllPromptsPromptsGetQuery(deepMerge(fetcherOptions, variables)),
+      ...options,
+      ...queryOptions,
+    },
+  );
+};
+
+/**
+ * Get list of all prompts from database. Returns prompts filtered by code (rag/no-rag) and excludes deleted ones.
+ */
+export const useGetAllPromptsPromptsGet = <TData = void,>(
+  variables: GetAllPromptsPromptsGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetAllPromptsPromptsGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<void, GetAllPromptsPromptsGetError, TData>({
+    ...getAllPromptsPromptsGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type CreateOrUpdatePromptPromptsPostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
 }>;
 
-export type HoiDapFaqHoiDapFaqPostVariables = ChatContext["fetcherOptions"];
+export type CreateOrUpdatePromptPromptsPostVariables =
+  ChatContext["fetcherOptions"];
 
 /**
- * Answer frequently asked questions from the FAQ collection
+ * Create a new prompt or update existing one by code. If code exists, updates it; otherwise creates new.
  */
-export const fetchHoiDapFaqHoiDapFaqPost = (
-  variables: HoiDapFaqHoiDapFaqPostVariables,
+export const fetchCreateOrUpdatePromptPromptsPost = (
+  variables: CreateOrUpdatePromptPromptsPostVariables,
   signal?: AbortSignal,
 ) =>
-  chatFetch<void, HoiDapFaqHoiDapFaqPostError, undefined, {}, {}, {}>({
-    url: "/hoi_dap_faq",
+  chatFetch<void, CreateOrUpdatePromptPromptsPostError, undefined, {}, {}, {}>({
+    url: "/prompts",
     method: "post",
     ...variables,
     signal,
   });
 
 /**
- * Answer frequently asked questions from the FAQ collection
+ * Create a new prompt or update existing one by code. If code exists, updates it; otherwise creates new.
  */
-export const useHoiDapFaqHoiDapFaqPost = (
+export const useCreateOrUpdatePromptPromptsPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       void,
-      HoiDapFaqHoiDapFaqPostError,
-      HoiDapFaqHoiDapFaqPostVariables
+      CreateOrUpdatePromptPromptsPostError,
+      CreateOrUpdatePromptPromptsPostVariables
     >,
     "mutationFn"
   >,
@@ -376,11 +754,332 @@ export const useHoiDapFaqHoiDapFaqPost = (
   const { fetcherOptions } = useChatContext();
   return reactQuery.useMutation<
     void,
-    HoiDapFaqHoiDapFaqPostError,
-    HoiDapFaqHoiDapFaqPostVariables
+    CreateOrUpdatePromptPromptsPostError,
+    CreateOrUpdatePromptPromptsPostVariables
   >({
-    mutationFn: (variables: HoiDapFaqHoiDapFaqPostVariables) =>
-      fetchHoiDapFaqHoiDapFaqPost(deepMerge(fetcherOptions, variables)),
+    mutationFn: (variables: CreateOrUpdatePromptPromptsPostVariables) =>
+      fetchCreateOrUpdatePromptPromptsPost(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type GetPromptByCodePromptsCodeGetPathParams = {
+  code: string;
+};
+
+export type GetPromptByCodePromptsCodeGetError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type GetPromptByCodePromptsCodeGetVariables = {
+  pathParams: GetPromptByCodePromptsCodeGetPathParams;
+} & ChatContext["fetcherOptions"];
+
+/**
+ * Get a specific prompt by its code (rag or no-rag). Initializes from template if not found.
+ */
+export const fetchGetPromptByCodePromptsCodeGet = (
+  variables: GetPromptByCodePromptsCodeGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    GetPromptByCodePromptsCodeGetError,
+    undefined,
+    {},
+    {},
+    GetPromptByCodePromptsCodeGetPathParams
+  >({ url: "/prompts/{code}", method: "get", ...variables, signal });
+
+/**
+ * Get a specific prompt by its code (rag or no-rag). Initializes from template if not found.
+ */
+export function getPromptByCodePromptsCodeGetQuery(
+  variables: GetPromptByCodePromptsCodeGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function getPromptByCodePromptsCodeGetQuery(
+  variables: GetPromptByCodePromptsCodeGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function getPromptByCodePromptsCodeGetQuery(
+  variables: GetPromptByCodePromptsCodeGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/prompts/{code}",
+      operationId: "getPromptByCodePromptsCodeGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetPromptByCodePromptsCodeGet(variables, signal),
+  };
+}
+
+/**
+ * Get a specific prompt by its code (rag or no-rag). Initializes from template if not found.
+ */
+export const useSuspenseGetPromptByCodePromptsCodeGet = <TData = void,>(
+  variables: GetPromptByCodePromptsCodeGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetPromptByCodePromptsCodeGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<
+    void,
+    GetPromptByCodePromptsCodeGetError,
+    TData
+  >({
+    ...getPromptByCodePromptsCodeGetQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Get a specific prompt by its code (rag or no-rag). Initializes from template if not found.
+ */
+export const useGetPromptByCodePromptsCodeGet = <TData = void,>(
+  variables: GetPromptByCodePromptsCodeGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<void, GetPromptByCodePromptsCodeGetError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<void, GetPromptByCodePromptsCodeGetError, TData>({
+    ...getPromptByCodePromptsCodeGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type UpdatePromptByCodePromptsCodePutPathParams = {
+  code: string;
+};
+
+export type UpdatePromptByCodePromptsCodePutError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type UpdatePromptByCodePromptsCodePutVariables = {
+  pathParams: UpdatePromptByCodePromptsCodePutPathParams;
+} & ChatContext["fetcherOptions"];
+
+/**
+ * Update an existing prompt by code. Can update prompt content, description, active status, status, or reason.
+ */
+export const fetchUpdatePromptByCodePromptsCodePut = (
+  variables: UpdatePromptByCodePromptsCodePutVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    UpdatePromptByCodePromptsCodePutError,
+    undefined,
+    {},
+    {},
+    UpdatePromptByCodePromptsCodePutPathParams
+  >({ url: "/prompts/{code}", method: "put", ...variables, signal });
+
+/**
+ * Update an existing prompt by code. Can update prompt content, description, active status, status, or reason.
+ */
+export const useUpdatePromptByCodePromptsCodePut = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      UpdatePromptByCodePromptsCodePutError,
+      UpdatePromptByCodePromptsCodePutVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    UpdatePromptByCodePromptsCodePutError,
+    UpdatePromptByCodePromptsCodePutVariables
+  >({
+    mutationFn: (variables: UpdatePromptByCodePromptsCodePutVariables) =>
+      fetchUpdatePromptByCodePromptsCodePut(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type DeletePromptByCodePromptsCodeDeletePathParams = {
+  code: string;
+};
+
+export type DeletePromptByCodePromptsCodeDeleteError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type DeletePromptByCodePromptsCodeDeleteVariables = {
+  pathParams: DeletePromptByCodePromptsCodeDeletePathParams;
+} & ChatContext["fetcherOptions"];
+
+/**
+ * Soft delete a prompt by code. Sets deletedAt timestamp instead of hard deleting.
+ */
+export const fetchDeletePromptByCodePromptsCodeDelete = (
+  variables: DeletePromptByCodePromptsCodeDeleteVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    DeletePromptByCodePromptsCodeDeleteError,
+    undefined,
+    {},
+    {},
+    DeletePromptByCodePromptsCodeDeletePathParams
+  >({ url: "/prompts/{code}", method: "delete", ...variables, signal });
+
+/**
+ * Soft delete a prompt by code. Sets deletedAt timestamp instead of hard deleting.
+ */
+export const useDeletePromptByCodePromptsCodeDelete = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      DeletePromptByCodePromptsCodeDeleteError,
+      DeletePromptByCodePromptsCodeDeleteVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    DeletePromptByCodePromptsCodeDeleteError,
+    DeletePromptByCodePromptsCodeDeleteVariables
+  >({
+    mutationFn: (variables: DeletePromptByCodePromptsCodeDeleteVariables) =>
+      fetchDeletePromptByCodePromptsCodeDelete(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type ReloadPromptsCachePromptsReloadPostError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type ReloadPromptsCachePromptsReloadPostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Manually reload prompts cache from database. Use after updating prompts to refresh cache without restarting server.
+ */
+export const fetchReloadPromptsCachePromptsReloadPost = (
+  variables: ReloadPromptsCachePromptsReloadPostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    ReloadPromptsCachePromptsReloadPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/prompts/reload", method: "post", ...variables, signal });
+
+/**
+ * Manually reload prompts cache from database. Use after updating prompts to refresh cache without restarting server.
+ */
+export const useReloadPromptsCachePromptsReloadPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      ReloadPromptsCachePromptsReloadPostError,
+      ReloadPromptsCachePromptsReloadPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    ReloadPromptsCachePromptsReloadPostError,
+    ReloadPromptsCachePromptsReloadPostVariables
+  >({
+    mutationFn: (variables: ReloadPromptsCachePromptsReloadPostVariables) =>
+      fetchReloadPromptsCachePromptsReloadPost(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type IndexDocumentV3IndexDocumentV3PostError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type IndexDocumentV3IndexDocumentV3PostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Index a single document into v3 collection using hierarchical chunking. Updates docstore and reloads engine.
+ */
+export const fetchIndexDocumentV3IndexDocumentV3Post = (
+  variables: IndexDocumentV3IndexDocumentV3PostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    IndexDocumentV3IndexDocumentV3PostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/index_document_v3", method: "post", ...variables, signal });
+
+/**
+ * Index a single document into v3 collection using hierarchical chunking. Updates docstore and reloads engine.
+ */
+export const useIndexDocumentV3IndexDocumentV3Post = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      IndexDocumentV3IndexDocumentV3PostError,
+      IndexDocumentV3IndexDocumentV3PostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    IndexDocumentV3IndexDocumentV3PostError,
+    IndexDocumentV3IndexDocumentV3PostVariables
+  >({
+    mutationFn: (variables: IndexDocumentV3IndexDocumentV3PostVariables) =>
+      fetchIndexDocumentV3IndexDocumentV3Post(
+        deepMerge(fetcherOptions, variables),
+      ),
     ...options,
   });
 };
@@ -395,7 +1094,7 @@ export type SyncDocumentMetadataSyncDocumentMetadataPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Update metadata in vector store after backend changes (called by backend)
+ * Update ACTIVE status in vector stores after database changes. Supports both documents (v3, v4) and FAQ. Automatically reloads engines.
  */
 export const fetchSyncDocumentMetadataSyncDocumentMetadataPost = (
   variables: SyncDocumentMetadataSyncDocumentMetadataPostVariables,
@@ -411,7 +1110,7 @@ export const fetchSyncDocumentMetadataSyncDocumentMetadataPost = (
   >({ url: "/sync_document_metadata", method: "post", ...variables, signal });
 
 /**
- * Update metadata in vector store after backend changes (called by backend)
+ * Update ACTIVE status in vector stores after database changes. Supports both documents (v3, v4) and FAQ. Automatically reloads engines.
  */
 export const useSyncDocumentMetadataSyncDocumentMetadataPost = (
   options?: Omit<
@@ -439,189 +1138,33 @@ export const useSyncDocumentMetadataSyncDocumentMetadataPost = (
   });
 };
 
-export type ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError =
-  Fetcher.ErrorWrapper<{
-    status: 422;
-    payload: Schemas.HTTPValidationError;
-  }>;
+export type IndexAllIndexAllV3PostError = Fetcher.ErrorWrapper<undefined>;
 
-export type ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables =
-  ChatContext["fetcherOptions"];
+export type IndexAllIndexAllV3PostVariables = ChatContext["fetcherOptions"];
 
 /**
- * Hierarchical chunking and vectorization into LlamaIndex collection, sync docstore
+ * Wipe and rebuild v3 LlamaIndex vector store and docstore from all documents. Uses hierarchical chunking.
  */
-export const fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-  (
-    variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
-    signal?: AbortSignal,
-  ) =>
-    chatFetch<
-      void,
-      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-      undefined,
-      {},
-      {},
-      {}
-    >({
-      url: "/chungking_and_vectorize_document",
-      method: "post",
-      ...variables,
-      signal,
-    });
-
-/**
- * Hierarchical chunking and vectorization into LlamaIndex collection, sync docstore
- */
-export const useChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
-  (
-    options?: Omit<
-      reactQuery.UseMutationOptions<
-        void,
-        ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-        ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
-      >,
-      "mutationFn"
-    >,
-  ) => {
-    const { fetcherOptions } = useChatContext();
-    return reactQuery.useMutation<
-      void,
-      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostError,
-      ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables
-    >({
-      mutationFn: (
-        variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
-      ) =>
-        fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
-          deepMerge(fetcherOptions, variables),
-        ),
-      ...options,
-    });
-  };
-
-export type IndexAllHybridIndexAllHybridPostError =
-  Fetcher.ErrorWrapper<undefined>;
-
-export type IndexAllHybridIndexAllHybridPostVariables =
-  ChatContext["fetcherOptions"];
-
-/**
- * Wipe and rebuild hybrid index (BM42 + dense embeddings) with semantic chunking
- */
-export const fetchIndexAllHybridIndexAllHybridPost = (
-  variables: IndexAllHybridIndexAllHybridPostVariables,
+export const fetchIndexAllIndexAllV3Post = (
+  variables: IndexAllIndexAllV3PostVariables,
   signal?: AbortSignal,
 ) =>
-  chatFetch<void, IndexAllHybridIndexAllHybridPostError, undefined, {}, {}, {}>(
-    { url: "/index_all_hybrid", method: "post", ...variables, signal },
-  );
-
-/**
- * Wipe and rebuild hybrid index (BM42 + dense embeddings) with semantic chunking
- */
-export const useIndexAllHybridIndexAllHybridPost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      IndexAllHybridIndexAllHybridPostError,
-      IndexAllHybridIndexAllHybridPostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useChatContext();
-  return reactQuery.useMutation<
-    void,
-    IndexAllHybridIndexAllHybridPostError,
-    IndexAllHybridIndexAllHybridPostVariables
-  >({
-    mutationFn: (variables: IndexAllHybridIndexAllHybridPostVariables) =>
-      fetchIndexAllHybridIndexAllHybridPost(
-        deepMerge(fetcherOptions, variables),
-      ),
-    ...options,
-  });
-};
-
-export type AddDocumentHybridAddDocumentHybridPostError = Fetcher.ErrorWrapper<{
-  status: 422;
-  payload: Schemas.HTTPValidationError;
-}>;
-
-export type AddDocumentHybridAddDocumentHybridPostVariables =
-  ChatContext["fetcherOptions"];
-
-/**
- * Index a document to Hybrid index (BM42 + dense), persist storage, reload engine
- */
-export const fetchAddDocumentHybridAddDocumentHybridPost = (
-  variables: AddDocumentHybridAddDocumentHybridPostVariables,
-  signal?: AbortSignal,
-) =>
-  chatFetch<
-    void,
-    AddDocumentHybridAddDocumentHybridPostError,
-    undefined,
-    {},
-    {},
-    {}
-  >({ url: "/add_document_hybrid", method: "post", ...variables, signal });
-
-/**
- * Index a document to Hybrid index (BM42 + dense), persist storage, reload engine
- */
-export const useAddDocumentHybridAddDocumentHybridPost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      AddDocumentHybridAddDocumentHybridPostError,
-      AddDocumentHybridAddDocumentHybridPostVariables
-    >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useChatContext();
-  return reactQuery.useMutation<
-    void,
-    AddDocumentHybridAddDocumentHybridPostError,
-    AddDocumentHybridAddDocumentHybridPostVariables
-  >({
-    mutationFn: (variables: AddDocumentHybridAddDocumentHybridPostVariables) =>
-      fetchAddDocumentHybridAddDocumentHybridPost(
-        deepMerge(fetcherOptions, variables),
-      ),
-    ...options,
-  });
-};
-
-export type IndexAllIndexAllPostError = Fetcher.ErrorWrapper<undefined>;
-
-export type IndexAllIndexAllPostVariables = ChatContext["fetcherOptions"];
-
-/**
- * Wipe and rebuild LlamaIndex vector + docstore from all documents
- */
-export const fetchIndexAllIndexAllPost = (
-  variables: IndexAllIndexAllPostVariables,
-  signal?: AbortSignal,
-) =>
-  chatFetch<void, IndexAllIndexAllPostError, undefined, {}, {}, {}>({
-    url: "/index_all",
+  chatFetch<void, IndexAllIndexAllV3PostError, undefined, {}, {}, {}>({
+    url: "/index_all_v3",
     method: "post",
     ...variables,
     signal,
   });
 
 /**
- * Wipe and rebuild LlamaIndex vector + docstore from all documents
+ * Wipe and rebuild v3 LlamaIndex vector store and docstore from all documents. Uses hierarchical chunking.
  */
-export const useIndexAllIndexAllPost = (
+export const useIndexAllIndexAllV3Post = (
   options?: Omit<
     reactQuery.UseMutationOptions<
       void,
-      IndexAllIndexAllPostError,
-      IndexAllIndexAllPostVariables
+      IndexAllIndexAllV3PostError,
+      IndexAllIndexAllV3PostVariables
     >,
     "mutationFn"
   >,
@@ -629,11 +1172,313 @@ export const useIndexAllIndexAllPost = (
   const { fetcherOptions } = useChatContext();
   return reactQuery.useMutation<
     void,
-    IndexAllIndexAllPostError,
-    IndexAllIndexAllPostVariables
+    IndexAllIndexAllV3PostError,
+    IndexAllIndexAllV3PostVariables
   >({
-    mutationFn: (variables: IndexAllIndexAllPostVariables) =>
-      fetchIndexAllIndexAllPost(deepMerge(fetcherOptions, variables)),
+    mutationFn: (variables: IndexAllIndexAllV3PostVariables) =>
+      fetchIndexAllIndexAllV3Post(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type IndexAllHybridIndexAllV4PostError = Fetcher.ErrorWrapper<undefined>;
+
+export type IndexAllHybridIndexAllV4PostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Wipe and rebuild v4 hybrid index (BM42 sparse + dense embeddings) with semantic chunking. Best for complex queries. Note: Semantic chunking is slower but produces better quality chunks. Returns immediately and runs indexing in background.
+ */
+export const fetchIndexAllHybridIndexAllV4Post = (
+  variables: IndexAllHybridIndexAllV4PostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, IndexAllHybridIndexAllV4PostError, undefined, {}, {}, {}>({
+    url: "/index_all_v4",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+/**
+ * Wipe and rebuild v4 hybrid index (BM42 sparse + dense embeddings) with semantic chunking. Best for complex queries. Note: Semantic chunking is slower but produces better quality chunks. Returns immediately and runs indexing in background.
+ */
+export const useIndexAllHybridIndexAllV4Post = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      IndexAllHybridIndexAllV4PostError,
+      IndexAllHybridIndexAllV4PostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    IndexAllHybridIndexAllV4PostError,
+    IndexAllHybridIndexAllV4PostVariables
+  >({
+    mutationFn: (variables: IndexAllHybridIndexAllV4PostVariables) =>
+      fetchIndexAllHybridIndexAllV4Post(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type IndexDocumentV4IndexDocumentV4PostError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type IndexDocumentV4IndexDocumentV4PostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Index a single document into v4 hybrid collection (BM42 sparse + dense embeddings). Uses semantic chunking.
+ */
+export const fetchIndexDocumentV4IndexDocumentV4Post = (
+  variables: IndexDocumentV4IndexDocumentV4PostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    IndexDocumentV4IndexDocumentV4PostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/index_document_v4", method: "post", ...variables, signal });
+
+/**
+ * Index a single document into v4 hybrid collection (BM42 sparse + dense embeddings). Uses semantic chunking.
+ */
+export const useIndexDocumentV4IndexDocumentV4Post = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      IndexDocumentV4IndexDocumentV4PostError,
+      IndexDocumentV4IndexDocumentV4PostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    IndexDocumentV4IndexDocumentV4PostError,
+    IndexDocumentV4IndexDocumentV4PostVariables
+  >({
+    mutationFn: (variables: IndexDocumentV4IndexDocumentV4PostVariables) =>
+      fetchIndexDocumentV4IndexDocumentV4Post(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type GetIndexV4StatusIndexV4StatusGetError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type GetIndexV4StatusIndexV4StatusGetVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Check the status of background v4 hybrid indexing task. Returns current status (starting/processing/completed/error) and progress information.
+ */
+export const fetchGetIndexV4StatusIndexV4StatusGet = (
+  variables: GetIndexV4StatusIndexV4StatusGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<void, GetIndexV4StatusIndexV4StatusGetError, undefined, {}, {}, {}>(
+    { url: "/index_v4_status", method: "get", ...variables, signal },
+  );
+
+/**
+ * Check the status of background v4 hybrid indexing task. Returns current status (starting/processing/completed/error) and progress information.
+ */
+export function getIndexV4StatusIndexV4StatusGetQuery(
+  variables: GetIndexV4StatusIndexV4StatusGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function getIndexV4StatusIndexV4StatusGetQuery(
+  variables: GetIndexV4StatusIndexV4StatusGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function getIndexV4StatusIndexV4StatusGetQuery(
+  variables: GetIndexV4StatusIndexV4StatusGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/index_v4_status",
+      operationId: "getIndexV4StatusIndexV4StatusGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetIndexV4StatusIndexV4StatusGet(variables, signal),
+  };
+}
+
+/**
+ * Check the status of background v4 hybrid indexing task. Returns current status (starting/processing/completed/error) and progress information.
+ */
+export const useSuspenseGetIndexV4StatusIndexV4StatusGet = <TData = void,>(
+  variables: GetIndexV4StatusIndexV4StatusGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      void,
+      GetIndexV4StatusIndexV4StatusGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<
+    void,
+    GetIndexV4StatusIndexV4StatusGetError,
+    TData
+  >({
+    ...getIndexV4StatusIndexV4StatusGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Check the status of background v4 hybrid indexing task. Returns current status (starting/processing/completed/error) and progress information.
+ */
+export const useGetIndexV4StatusIndexV4StatusGet = <TData = void,>(
+  variables: GetIndexV4StatusIndexV4StatusGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      void,
+      GetIndexV4StatusIndexV4StatusGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<
+    void,
+    GetIndexV4StatusIndexV4StatusGetError,
+    TData
+  >({
+    ...getIndexV4StatusIndexV4StatusGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type CheckSyncStatusCheckSyncStatusPostError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type CheckSyncStatusCheckSyncStatusPostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Check synchronization status between PostgreSQL database and Qdrant vector stores (v3, v4, FAQ). Detects mismatches.
+ */
+export const fetchCheckSyncStatusCheckSyncStatusPost = (
+  variables: CheckSyncStatusCheckSyncStatusPostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    CheckSyncStatusCheckSyncStatusPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/check_sync_status", method: "post", ...variables, signal });
+
+/**
+ * Check synchronization status between PostgreSQL database and Qdrant vector stores (v3, v4, FAQ). Detects mismatches.
+ */
+export const useCheckSyncStatusCheckSyncStatusPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      CheckSyncStatusCheckSyncStatusPostError,
+      CheckSyncStatusCheckSyncStatusPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    CheckSyncStatusCheckSyncStatusPostError,
+    CheckSyncStatusCheckSyncStatusPostVariables
+  >({
+    mutationFn: (variables: CheckSyncStatusCheckSyncStatusPostVariables) =>
+      fetchCheckSyncStatusCheckSyncStatusPost(
+        deepMerge(fetcherOptions, variables),
+      ),
+    ...options,
+  });
+};
+
+export type ResyncAllFromDbResyncAllFromDbPostError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type ResyncAllFromDbResyncAllFromDbPostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Rebuild all vector stores (v3, v4, FAQ) from database. Use when DB-Vector mismatch detected. Handles empty database by clearing vector stores.
+ */
+export const fetchResyncAllFromDbResyncAllFromDbPost = (
+  variables: ResyncAllFromDbResyncAllFromDbPostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    ResyncAllFromDbResyncAllFromDbPostError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/resync_all_from_db", method: "post", ...variables, signal });
+
+/**
+ * Rebuild all vector stores (v3, v4, FAQ) from database. Use when DB-Vector mismatch detected. Handles empty database by clearing vector stores.
+ */
+export const useResyncAllFromDbResyncAllFromDbPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      void,
+      ResyncAllFromDbResyncAllFromDbPostError,
+      ResyncAllFromDbResyncAllFromDbPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    void,
+    ResyncAllFromDbResyncAllFromDbPostError,
+    ResyncAllFromDbResyncAllFromDbPostVariables
+  >({
+    mutationFn: (variables: ResyncAllFromDbResyncAllFromDbPostVariables) =>
+      fetchResyncAllFromDbResyncAllFromDbPost(
+        deepMerge(fetcherOptions, variables),
+      ),
     ...options,
   });
 };
@@ -647,7 +1492,7 @@ export type TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Search by keywords using BM25 and return top results
+ * Search documents by keywords using BM25 algorithm. Returns top matching document IDs. Fast keyword-based search.
  */
 export const fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
   variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables,
@@ -663,7 +1508,7 @@ export const fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
   >({ url: "/tim_kiem_theo_tu_khoa", method: "post", ...variables, signal });
 
 /**
- * Search by keywords using BM25 and return top results
+ * Search documents by keywords using BM25 algorithm. Returns top matching document IDs. Fast keyword-based search.
  */
 export const useTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
   options?: Omit<
@@ -694,7 +1539,7 @@ export type ReloadBm25ReloadBm25PostError = Fetcher.ErrorWrapper<undefined>;
 export type ReloadBm25ReloadBm25PostVariables = ChatContext["fetcherOptions"];
 
 /**
- * Manually reload the BM25 model from PostgreSQL without restarting the server
+ * Manually reload the BM25 model from PostgreSQL without restarting the server. Use after document updates.
  */
 export const fetchReloadBm25ReloadBm25Post = (
   variables: ReloadBm25ReloadBm25PostVariables,
@@ -708,7 +1553,7 @@ export const fetchReloadBm25ReloadBm25Post = (
   });
 
 /**
- * Manually reload the BM25 model from PostgreSQL without restarting the server
+ * Manually reload the BM25 model from PostgreSQL without restarting the server. Use after document updates.
  */
 export const useReloadBm25ReloadBm25Post = (
   options?: Omit<
@@ -742,7 +1587,7 @@ export type TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Semantic search in Qdrant DB_FOR_ALL collection, returns document IDs
+ * Semantic search in Qdrant DB_FOR_ALL_LLAMAINDEX collection using embeddings. Returns document IDs matching query meaning.
  */
 export const fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
   variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables,
@@ -758,7 +1603,7 @@ export const fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
   >({ url: "/tim_kiem_theo_ngu_nghia", method: "post", ...variables, signal });
 
 /**
- * Semantic search in Qdrant DB_FOR_ALL collection, returns document IDs
+ * Semantic search in Qdrant DB_FOR_ALL_LLAMAINDEX collection using embeddings. Returns document IDs matching query meaning.
  */
 export const useTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
   options?: Omit<
@@ -786,65 +1631,127 @@ export const useTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
   });
 };
 
-export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError =
+export type XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostError =
   Fetcher.ErrorWrapper<{
     status: 422;
     payload: Schemas.HTTPValidationError;
   }>;
 
-export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables =
+export type XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Delete document from both vector store and docstore by ID_DOCUMENT
+ * Delete document from v3 LlamaIndex vector store and docstore by ID_DOCUMENT. Removes all nodes and vectors associated with document.
  */
-export const fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost =
+export const fetchXoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3Post =
   (
-    variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
+    variables: XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostVariables,
     signal?: AbortSignal,
   ) =>
     chatFetch<
       void,
-      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
+      XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostError,
       undefined,
       {},
       {},
       {}
     >({
-      url: "/xoa_ban_ghi_trong_vector_db_hoi_dap",
+      url: "/xoa_ban_ghi_trong_vector_db_hoi_dap_v3",
       method: "post",
       ...variables,
       signal,
     });
 
 /**
- * Delete document from both vector store and docstore by ID_DOCUMENT
+ * Delete document from v3 LlamaIndex vector store and docstore by ID_DOCUMENT. Removes all nodes and vectors associated with document.
  */
-export const useXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = (
-  options?: Omit<
-    reactQuery.UseMutationOptions<
-      void,
-      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
-      XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
+export const useXoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3Post =
+  (
+    options?: Omit<
+      reactQuery.UseMutationOptions<
+        void,
+        XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostError,
+        XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostVariables
+      >,
+      "mutationFn"
     >,
-    "mutationFn"
-  >,
-) => {
-  const { fetcherOptions } = useChatContext();
-  return reactQuery.useMutation<
-    void,
-    XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostError,
-    XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables
-  >({
-    mutationFn: (
-      variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
-    ) =>
-      fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost(
-        deepMerge(fetcherOptions, variables),
-      ),
-    ...options,
-  });
-};
+  ) => {
+    const { fetcherOptions } = useChatContext();
+    return reactQuery.useMutation<
+      void,
+      XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostError,
+      XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostVariables
+    >({
+      mutationFn: (
+        variables: XoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3PostVariables,
+      ) =>
+        fetchXoaBanGhiTrongVectorDbHoiDapV3XoaBanGhiTrongVectorDbHoiDapV3Post(
+          deepMerge(fetcherOptions, variables),
+        ),
+      ...options,
+    });
+  };
+
+export type XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostError =
+  Fetcher.ErrorWrapper<{
+    status: 422;
+    payload: Schemas.HTTPValidationError;
+  }>;
+
+export type XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Delete document from v4 Hybrid vector store (BM42 + Dense) by ID_DOCUMENT. Removes all nodes and vectors associated with document.
+ */
+export const fetchXoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4Post =
+  (
+    variables: XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostVariables,
+    signal?: AbortSignal,
+  ) =>
+    chatFetch<
+      void,
+      XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostError,
+      undefined,
+      {},
+      {},
+      {}
+    >({
+      url: "/xoa_ban_ghi_trong_vector_db_hoi_dap_v4",
+      method: "post",
+      ...variables,
+      signal,
+    });
+
+/**
+ * Delete document from v4 Hybrid vector store (BM42 + Dense) by ID_DOCUMENT. Removes all nodes and vectors associated with document.
+ */
+export const useXoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4Post =
+  (
+    options?: Omit<
+      reactQuery.UseMutationOptions<
+        void,
+        XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostError,
+        XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostVariables
+      >,
+      "mutationFn"
+    >,
+  ) => {
+    const { fetcherOptions } = useChatContext();
+    return reactQuery.useMutation<
+      void,
+      XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostError,
+      XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostVariables
+    >({
+      mutationFn: (
+        variables: XoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4PostVariables,
+      ) =>
+        fetchXoaBanGhiTrongVectorDbHoiDapV4XoaBanGhiTrongVectorDbHoiDapV4Post(
+          deepMerge(fetcherOptions, variables),
+        ),
+      ...options,
+    });
+  };
 
 export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostError =
   Fetcher.ErrorWrapper<{
@@ -856,7 +1763,7 @@ export type XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Delete vector points by ID_DOCUMENT in FAQ collection
+ * Delete FAQ vector points by ID_DOCUMENT in FAQ collection. Note: FAQ uses FAQ_ID or TOPIC_ID, not ID_DOCUMENT.
  */
 export const fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
   variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
@@ -872,7 +1779,7 @@ export const fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
   >({ url: "/xoa_ban_ghi_trong_db_faq", method: "post", ...variables, signal });
 
 /**
- * Delete vector points by ID_DOCUMENT in FAQ collection
+ * Delete FAQ vector points by ID_DOCUMENT in FAQ collection. Note: FAQ uses FAQ_ID or TOPIC_ID, not ID_DOCUMENT.
  */
 export const useXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
   options?: Omit<
@@ -915,7 +1822,7 @@ export type GetCitationContentCitationDocumentIdGetVariables = {
 } & ChatContext["fetcherOptions"];
 
 /**
- * Return full document content by document_id for detailed citation view
+ * Get full document content by document_id for detailed citation view. Used when user clicks on a citation to see full source.
  */
 export const fetchGetCitationContentCitationDocumentIdGet = (
   variables: GetCitationContentCitationDocumentIdGetVariables,
@@ -931,7 +1838,7 @@ export const fetchGetCitationContentCitationDocumentIdGet = (
   >({ url: "/citation/{documentId}", method: "get", ...variables, signal });
 
 /**
- * Return full document content by document_id for detailed citation view
+ * Get full document content by document_id for detailed citation view. Used when user clicks on a citation to see full source.
  */
 export function getCitationContentCitationDocumentIdGetQuery(
   variables: GetCitationContentCitationDocumentIdGetVariables,
@@ -969,7 +1876,7 @@ export function getCitationContentCitationDocumentIdGetQuery(
 }
 
 /**
- * Return full document content by document_id for detailed citation view
+ * Get full document content by document_id for detailed citation view. Used when user clicks on a citation to see full source.
  */
 export const useSuspenseGetCitationContentCitationDocumentIdGet = <
   TData = void,
@@ -999,7 +1906,7 @@ export const useSuspenseGetCitationContentCitationDocumentIdGet = <
 };
 
 /**
- * Return full document content by document_id for detailed citation view
+ * Get full document content by document_id for detailed citation view. Used when user clicks on a citation to see full source.
  */
 export const useGetCitationContentCitationDocumentIdGet = <TData = void,>(
   variables:
@@ -1039,6 +1946,9 @@ export type UploadFileUploadPostVariables = {
   body: Schemas.BodyUploadFileUploadPost;
 } & ChatContext["fetcherOptions"];
 
+/**
+ * Upload file (PDF, JPG, PNG, JPEG) for async OCR processing. Returns task_id to check status. Uses Celery for background processing.
+ */
 export const fetchUploadFileUploadPost = (
   variables: UploadFileUploadPostVariables,
   signal?: AbortSignal,
@@ -1052,6 +1962,9 @@ export const fetchUploadFileUploadPost = (
     {}
   >({ url: "/upload", method: "post", ...variables, signal });
 
+/**
+ * Upload file (PDF, JPG, PNG, JPEG) for async OCR processing. Returns task_id to check status. Uses Celery for background processing.
+ */
 export const useUploadFileUploadPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
@@ -1087,6 +2000,9 @@ export type GetResultResultTaskIdGetVariables = {
   pathParams: GetResultResultTaskIdGetPathParams;
 } & ChatContext["fetcherOptions"];
 
+/**
+ * Get OCR processing result by task_id. Returns status (processing/done/error) and extracted text when complete.
+ */
 export const fetchGetResultResultTaskIdGet = (
   variables: GetResultResultTaskIdGetVariables,
   signal?: AbortSignal,
@@ -1100,6 +2016,9 @@ export const fetchGetResultResultTaskIdGet = (
     GetResultResultTaskIdGetPathParams
   >({ url: "/result/{taskId}", method: "get", ...variables, signal });
 
+/**
+ * Get OCR processing result by task_id. Returns status (processing/done/error) and extracted text when complete.
+ */
 export function getResultResultTaskIdGetQuery(
   variables: GetResultResultTaskIdGetVariables,
 ): {
@@ -1131,6 +2050,9 @@ export function getResultResultTaskIdGetQuery(
   };
 }
 
+/**
+ * Get OCR processing result by task_id. Returns status (processing/done/error) and extracted text when complete.
+ */
 export const useSuspenseGetResultResultTaskIdGet = <TData = void,>(
   variables: GetResultResultTaskIdGetVariables,
   options?: Omit<
@@ -1150,6 +2072,9 @@ export const useSuspenseGetResultResultTaskIdGet = <TData = void,>(
   });
 };
 
+/**
+ * Get OCR processing result by task_id. Returns status (processing/done/error) and extracted text when complete.
+ */
 export const useGetResultResultTaskIdGet = <TData = void,>(
   variables: GetResultResultTaskIdGetVariables | reactQuery.SkipToken,
   options?: Omit<
@@ -1182,6 +2107,9 @@ export type CancelTaskCancelTaskIdPostVariables = {
   pathParams: CancelTaskCancelTaskIdPostPathParams;
 } & ChatContext["fetcherOptions"];
 
+/**
+ * Cancel a specific OCR task and cleanup temporary files and Redis cache.
+ */
 export const fetchCancelTaskCancelTaskIdPost = (
   variables: CancelTaskCancelTaskIdPostVariables,
   signal?: AbortSignal,
@@ -1195,6 +2123,9 @@ export const fetchCancelTaskCancelTaskIdPost = (
     CancelTaskCancelTaskIdPostPathParams
   >({ url: "/cancel/{taskId}", method: "post", ...variables, signal });
 
+/**
+ * Cancel a specific OCR task and cleanup temporary files and Redis cache.
+ */
 export const useCancelTaskCancelTaskIdPost = (
   options?: Omit<
     reactQuery.UseMutationOptions<
@@ -1223,8 +2154,7 @@ export type CancelAllTasksCancelAllPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Cancel tất cả OCR tasks đang chạy, pending, reserved, scheduled
- * Cleanup tất cả files tạm và Redis cache
+ * Cancel all OCR tasks (active, pending, reserved, scheduled) and cleanup all temporary files and Redis cache.
  */
 export const fetchCancelAllTasksCancelAllPost = (
   variables: CancelAllTasksCancelAllPostVariables,
@@ -1238,8 +2168,7 @@ export const fetchCancelAllTasksCancelAllPost = (
   });
 
 /**
- * Cancel tất cả OCR tasks đang chạy, pending, reserved, scheduled
- * Cleanup tất cả files tạm và Redis cache
+ * Cancel all OCR tasks (active, pending, reserved, scheduled) and cleanup all temporary files and Redis cache.
  */
 export const useCancelAllTasksCancelAllPost = (
   options?: Omit<
@@ -1273,7 +2202,7 @@ export type OcrEndpointOcrPostVariables = {
 } & ChatContext["fetcherOptions"];
 
 /**
- * Receive a file and forward to external OCR service, return extracted text
+ * Synchronous OCR endpoint that forwards file to external OCR service and returns extracted text immediately. For testing/small files. Use /upload for large files.
  */
 export const fetchOcrEndpointOcrPost = (
   variables: OcrEndpointOcrPostVariables,
@@ -1289,7 +2218,7 @@ export const fetchOcrEndpointOcrPost = (
   >({ url: "/ocr", method: "post", ...variables, signal });
 
 /**
- * Receive a file and forward to external OCR service, return extracted text
+ * Synchronous OCR endpoint that forwards file to external OCR service and returns extracted text immediately. For testing/small files. Use /upload for large files.
  */
 export const useOcrEndpointOcrPost = (
   options?: Omit<
@@ -1313,99 +2242,34 @@ export const useOcrEndpointOcrPost = (
   });
 };
 
-export type HealthCheckHealthGetError = Fetcher.ErrorWrapper<undefined>;
-
-export type HealthCheckHealthGetVariables = ChatContext["fetcherOptions"];
-
-/**
- * Check API health status and database connections
- */
-export const fetchHealthCheckHealthGet = (
-  variables: HealthCheckHealthGetVariables,
-  signal?: AbortSignal,
-) =>
-  chatFetch<void, HealthCheckHealthGetError, undefined, {}, {}, {}>({
-    url: "/health",
-    method: "get",
-    ...variables,
-    signal,
-  });
-
-/**
- * Check API health status and database connections
- */
-export function healthCheckHealthGetQuery(
-  variables: HealthCheckHealthGetVariables,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn: (options: QueryFnOptions) => Promise<void>;
-};
-
-export function healthCheckHealthGetQuery(
-  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
-};
-
-export function healthCheckHealthGetQuery(
-  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
-) {
-  return {
-    queryKey: queryKeyFn({
-      path: "/health",
-      operationId: "healthCheckHealthGet",
-      variables,
-    }),
-    queryFn:
-      variables === reactQuery.skipToken
-        ? reactQuery.skipToken
-        : ({ signal }: QueryFnOptions) =>
-            fetchHealthCheckHealthGet(variables, signal),
-  };
-}
-
-/**
- * Check API health status and database connections
- */
-export const useSuspenseHealthCheckHealthGet = <TData = void,>(
-  variables: HealthCheckHealthGetVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<void, HealthCheckHealthGetError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useChatContext(options);
-  return reactQuery.useSuspenseQuery<void, HealthCheckHealthGetError, TData>({
-    ...healthCheckHealthGetQuery(deepMerge(fetcherOptions, variables)),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-/**
- * Check API health status and database connections
- */
-export const useHealthCheckHealthGet = <TData = void,>(
-  variables: HealthCheckHealthGetVariables | reactQuery.SkipToken,
-  options?: Omit<
-    reactQuery.UseQueryOptions<void, HealthCheckHealthGetError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useChatContext(options);
-  return reactQuery.useQuery<void, HealthCheckHealthGetError, TData>({
-    ...healthCheckHealthGetQuery(
-      variables === reactQuery.skipToken
-        ? variables
-        : deepMerge(fetcherOptions, variables),
-    ),
-    ...options,
-    ...queryOptions,
-  });
-};
-
 export type QueryOperation =
+  | {
+      path: "/health";
+      operationId: "healthCheckHealthGet";
+      variables: HealthCheckHealthGetVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/get_topics";
+      operationId: "getTopicsGetTopicsGet";
+      variables: GetTopicsGetTopicsGetVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/prompts";
+      operationId: "getAllPromptsPromptsGet";
+      variables: GetAllPromptsPromptsGetVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/prompts/{code}";
+      operationId: "getPromptByCodePromptsCodeGet";
+      variables: GetPromptByCodePromptsCodeGetVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/index_v4_status";
+      operationId: "getIndexV4StatusIndexV4StatusGet";
+      variables:
+        | GetIndexV4StatusIndexV4StatusGetVariables
+        | reactQuery.SkipToken;
+    }
   | {
       path: "/citation/{documentId}";
       operationId: "getCitationContentCitationDocumentIdGet";
@@ -1417,9 +2281,4 @@ export type QueryOperation =
       path: "/result/{taskId}";
       operationId: "getResultResultTaskIdGet";
       variables: GetResultResultTaskIdGetVariables | reactQuery.SkipToken;
-    }
-  | {
-      path: "/health";
-      operationId: "healthCheckHealthGet";
-      variables: HealthCheckHealthGetVariables | reactQuery.SkipToken;
     };

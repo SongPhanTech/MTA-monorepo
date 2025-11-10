@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     hinhThucKyLuat: z.string().nullish(),
     capKyLuat: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     hinhThucKyLuat: z.string().nullish(),
     capKyLuat: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
@@ -77,6 +79,7 @@ export const KyLuatPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     hinhThucKyLuat: z.string().nullish(),
     capKyLuat: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
@@ -90,7 +93,7 @@ export const KyLuatPrismaUpdateSchema = z.object({
  * `KyLuat` schema for create operations excluding foreign keys and relations.
  */
 export const KyLuatCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

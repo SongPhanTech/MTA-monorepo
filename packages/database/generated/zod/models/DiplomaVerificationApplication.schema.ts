@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     fullname: z.string(),
     idCardNumber: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -41,6 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     fullname: z.string(),
     idCardNumber: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -102,6 +104,7 @@ export const DiplomaVerificationApplicationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     fullname: z.string(),
     idCardNumber: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -125,7 +128,7 @@ export const DiplomaVerificationApplicationPrismaUpdateSchema = z.object({
  * `DiplomaVerificationApplication` schema for create operations excluding foreign keys and relations.
  */
 export const DiplomaVerificationApplicationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
 });
 
 

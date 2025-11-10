@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     summary: z.string(),
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     summary: z.string(),
@@ -89,6 +91,7 @@ export const TrainingMajorPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
     summary: z.string(),
@@ -102,7 +105,7 @@ export const TrainingMajorPrismaUpdateSchema = z.object({
  * `TrainingMajor` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingMajorCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, numberCreditsMajor: true, numberCreditsRequired: true, numberCreditsElective: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, numberCreditsMajor: true, numberCreditsRequired: true, numberCreditsElective: true
 });
 
 

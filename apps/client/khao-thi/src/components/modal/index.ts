@@ -11,8 +11,6 @@ import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutEvaluationCouncil from './put-evaluation-council'
 import PutEvaluationCouncilMember from './put-evaluation-council-member'
-import PutEvaluationSecretarYCouncil from './put-evaluation-secretar-council'
-import PutEvaluationSecretaryMember from './put-evaluation-secretar-council-member'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutEvidence from './put-minh-chung'
 import PutSurveyModal from './put-modal-survey'
@@ -24,7 +22,6 @@ import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
 import PutEvidenceCategory from './put-nhom-minh-chung'
 import PutQuestionModal from './put-question-modal'
-import PutScoreScaleCatalog from './put-thang-diem'
 import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
 import PutStandardCatalog from './put-tieu-chuan-ctdt'
 import PutRequirementCriterionCatalog from './put-yeu-cau'
@@ -53,7 +50,6 @@ export {
     PutCriterionCatalog,
     PutRequirementCriterionCatalog,
     PutEvaluationPeriod,
-    PutScoreScaleCatalog,
     PutEvidenceCategory,
     PutEvidence,
     AddEvidenceToPeriod,
@@ -61,8 +57,6 @@ export {
     PutEvaluationCouncil,
     PutEvaluationCouncilMember,
     ModalPrintDotDanhGia,
-    PutEvaluationSecretarYCouncil,
-    PutEvaluationSecretaryMember,
     ThongTinKhaoSatModal,
     CriteriaAssignmentModal,
     PutTieuChiMinhChungModal,

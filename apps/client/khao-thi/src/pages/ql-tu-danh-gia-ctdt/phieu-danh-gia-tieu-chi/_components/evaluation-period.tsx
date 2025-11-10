@@ -16,19 +16,17 @@ export default function EvaluationPeriodCriteriaEvaluation() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data: assignments = [] } = useFindManyEvaluationPeriod(
+    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
         {
             where: {
                 standards: {
                     some: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                evaluationCriterion: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -60,12 +58,10 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                 some: {
                     criteria: {
                         some: {
-                            criterionAssignments: {
-                                some: {
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
-                                        },
+                            evaluationCriterion: {
+                                lecturer: {
+                                    userProfile: {
+                                        id: idProfile,
                                     },
                                 },
                             },
@@ -82,6 +78,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                 <Table
                     rowKey="id"
                     data={assignments}
+                    loading={isLoading}
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: [selectedEvaluationPeriodId as Key],

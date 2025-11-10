@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const AcademicWarningRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "tuple", "trainingCourseId"])
+export const AcademicWarningRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "tuple", "trainingCourseId"])

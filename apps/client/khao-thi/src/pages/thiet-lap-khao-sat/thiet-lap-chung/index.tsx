@@ -28,13 +28,20 @@ function Page() {
         {
             key: '3',
             label: 'Nhóm câu hỏi khảo sát',
-            children: <TabNhomCauHoi selectedID={selectedID} setSelectedID={(value)=>{setSelectedID(value)}} />,
+            children: (
+                <TabNhomCauHoi
+                    selectedID={selectedID}
+                    setSelectedID={(value) => {
+                        setSelectedID(value)
+                    }}
+                />
+            ),
         },
-            {
+        {
             key: '4',
             label: 'Câu hỏi khảo sát',
-            children: <CauHoiKhaoSat id={selectedID}  />,
-            disabled: !selectedID
+            children: <CauHoiKhaoSat id={selectedID} />,
+            disabled: !selectedID,
         },
     ]
     return <Tabs defaultActiveKey="1" items={items} onChange={onChange} type="card" />

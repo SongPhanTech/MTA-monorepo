@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const SurveyChoiceScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "answer", "requireExplanation", "surveyId", "clusterSurveyId"])
+export const SurveyChoiceScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "answer", "requireExplanation", "surveyId", "clusterSurveyId"])

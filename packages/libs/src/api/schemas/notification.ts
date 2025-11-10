@@ -55,55 +55,57 @@ import type { BaseEntity } from './baseEntity'
 export type Notification = BaseEntity & {
     Id?: string
     /**
-     * @minLength 0
-     * @maxLength 50
+     * Mã Ứng dụng gửi thông báo
      * @nullable
      */
     sFromAppCode?: string | null
     /**
-     * @minLength 0
-     * @maxLength 50
+     * Mã Ứng dụng nhận thông báo
      * @nullable
      */
     sAppCode?: string | null
     /**
-     * @minLength 0
-     * @maxLength 50
+     * Giá trị dùng để lọc gom nhóm các thông báo giống nhau thành 1
      * @nullable
      */
     sUniqueID?: string | null
+    /** @nullable */
+    sTenantCode?: string | null
     /**
-     * @minLength 0
-     * @maxLength 50
+     * Id của người gửi
      * @nullable
      */
-    sTenantCode?: string | null
-    /** @nullable */
     sUserId?: string | null
     /**
-     * @minLength 0
-     * @maxLength 255
+     * Tên đăng nhập của người gửi
      * @nullable
      */
     sUserName?: string | null
     /** @nullable */
     dLogTime?: string | null
-    /** @nullable */
+    /**
+     * Mô tả nội dung thông báo
+     * @nullable
+     */
     sMessage?: string | null
     /**
-     * @minLength 0
-     * @maxLength 500
+     * Click vào thông báo link điều hướng đến trang tương ứng
      * @nullable
      */
     sLink?: string | null
-    /** @nullable */
-    sExtraData?: string | null
-    /** @nullable */
-    iType?: number | null
     /**
-     * @minLength 0
-     * @maxLength 50
+     * Dữ liệu thông báo gửi thêm về client dạng json để client xử lý theo nghiệp vụ
      * @nullable
      */
-    sIPAddress?: string | null
+    sExtraData?: string | null
+    /**
+     * 0: Thông báo chung,1: Thông báo hệ thống,2: Thông báo riêng cho ứng dụng gửi
+     * @nullable
+     */
+    iType?: number | null
+    /**
+     * Tên thông báo. Người dùng có thể dựa vào tên thông báo để xử lý nghiệp vụ
+     * @nullable
+     */
+    sActionName?: string | null
 }

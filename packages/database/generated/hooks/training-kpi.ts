@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingKPI<TArgs extends Prisma.TrainingKPICoun
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingKPI', `${endpoint}/trainingKPI/count`, args, options, fetch);
 }
 
-export function useCheckTrainingKPI<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingKPI<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingKPI', `${endpoint}/trainingKPI/check`, args, options, fetch);
 }

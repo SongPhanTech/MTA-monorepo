@@ -81,7 +81,6 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     group: z.record(z.string(), z.unknown()).optional(),
-    notification: z.array(z.unknown()).optional(),
     feedback: z.array(z.unknown()).optional(),
 }
 );

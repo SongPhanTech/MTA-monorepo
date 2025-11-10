@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const PromptScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "prompt", "status", "topicId", "reason"])
+export const PromptScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "prompt", "status", "topicId", "reason"])

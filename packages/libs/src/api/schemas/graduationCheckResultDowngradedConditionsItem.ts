@@ -20,6 +20,8 @@ export type GraduationCheckResultDowngradedConditionsItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     field: GraduationCheckResultDowngradedConditionsItemField
     operator: GraduationCheckResultDowngradedConditionsItemOperator
     invert?: boolean

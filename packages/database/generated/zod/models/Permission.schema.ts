@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     permissionType: PermissionTypeSchema,
     disabled: z.boolean().default(false),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     permissionType: PermissionTypeSchema,
     disabled: z.boolean(),
@@ -68,6 +70,7 @@ export const PermissionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     permissionType: PermissionTypeSchema,
     disabled: z.boolean()
@@ -78,7 +81,7 @@ export const PermissionPrismaUpdateSchema = z.object({
  * `Permission` schema for create operations excluding foreign keys and relations.
  */
 export const PermissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, disabled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, disabled: true
 });
 
 
@@ -86,7 +89,7 @@ export const PermissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
  * `Permission` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const PermissionCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, disabled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, disabled: true
 });
 
 

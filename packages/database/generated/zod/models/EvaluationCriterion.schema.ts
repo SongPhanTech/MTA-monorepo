@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod';
+import { EvaluationStatus } from '../../zenstack/models';
+import { EvaluationStatusSchema } from '../enums/EvaluationStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -13,8 +15,9 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    order: z.number(),
+    createdBy: z.string().uuid().nullish(),
+    deadline: z.coerce.date().nullish(),
+    status: EvaluationStatusSchema,
     currentSituation: z.string().default(""),
     strengths: z.string().default(""),
     weakness: z.string().default(""),
@@ -30,8 +33,9 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    name: z.string(),
-    order: z.number(),
+    createdBy: z.string().uuid().nullish(),
+    deadline: z.coerce.date().nullish(),
+    status: EvaluationStatusSchema,
     currentSituation: z.string(),
     strengths: z.string(),
     weakness: z.string(),
@@ -40,17 +44,14 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    standard: z.record(z.string(), z.unknown()),
-    scoreScale: z.record(z.string(), z.unknown()),
-    evaluationCouncil: z.record(z.string(), z.unknown()).optional(),
-    requirementCriterions: z.array(z.unknown()).optional(),
-    criterionAssignments: z.array(z.unknown()).optional(),
+    criterionPeriod: z.record(z.string(), z.unknown()),
+    lecturer: z.record(z.string(), z.unknown()).optional(),
+    evaluationCriterionComments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    standardId: z.string(),
-    scoreScaleId: z.string(),
-    evaluationCouncilId: z.string().nullish(),
+    criterionPeriodId: z.string(),
+    lecturerId: z.string().nullish(),
 }
 );
 
@@ -85,8 +86,9 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    name: z.string(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdBy: z.string().uuid().nullish(),
+    deadline: z.coerce.date().nullish(),
+    status: EvaluationStatusSchema,
     currentSituation: z.string(),
     strengths: z.string(),
     weakness: z.string(),
@@ -99,7 +101,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
  * `EvaluationCriterion` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
 });
 
 

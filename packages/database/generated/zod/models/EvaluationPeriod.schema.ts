@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date().default(() => new Date()),
     endDate: z.coerce.date().nullish(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
@@ -34,7 +36,6 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     standards: z.array(z.unknown()).optional(),
     councils: z.array(z.unknown()).optional(),
-    evaluationSecretarYCouncil: z.record(z.string(), z.unknown()).optional(),
 }
 );
 
@@ -69,6 +70,7 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish()
@@ -79,7 +81,7 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
  * `EvaluationPeriod` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, startDate: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true
 });
 
 
@@ -87,7 +89,7 @@ export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.part
  * `EvaluationPeriod` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const EvaluationPeriodCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, startDate: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true
 });
 
 

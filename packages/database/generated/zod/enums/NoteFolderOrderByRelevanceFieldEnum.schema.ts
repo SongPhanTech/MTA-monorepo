@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const NoteFolderOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name", "icon", "studentId", "parentId"])
+export const NoteFolderOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "icon", "studentId", "parentId"])

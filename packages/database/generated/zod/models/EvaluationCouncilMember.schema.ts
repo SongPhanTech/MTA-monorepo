@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     role: z.array(EvaluationMemberRoleSchema),
 }
 ).strict();
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     role: z.array(EvaluationMemberRoleSchema),
 }
 ).strict();
@@ -70,6 +72,7 @@ export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     role: z.array(EvaluationMemberRoleSchema)
 }).partial().passthrough();
 
@@ -78,7 +81,7 @@ export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
  * `EvaluationCouncilMember` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationCouncilMemberCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, role: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, role: true
 });
 
 

@@ -328,7 +328,7 @@ export function useSuspenseCountGraduationSession<TArgs extends Prisma.Graduatio
 }
 import type { GraduationSessionStatus } from '../zenstack/models';
 
-export function useCheckGraduationSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; trainingObjectTypeId?: string; status?: GraduationSessionStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckGraduationSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; trainingObjectTypeId?: string; status?: GraduationSessionStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('GraduationSession', `${endpoint}/graduationSession/check`, args, options, fetch);
 }

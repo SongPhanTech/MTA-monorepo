@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     fileType: TemplateFileTypeSchema.nullish(),
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     fileType: TemplateFileTypeSchema.nullish(),
@@ -68,6 +70,7 @@ export const TemplateFilePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     fileType: TemplateFileTypeSchema.nullish(),
@@ -80,7 +83,7 @@ export const TemplateFilePrismaUpdateSchema = z.object({
  * `TemplateFile` schema for create operations excluding foreign keys and relations.
  */
 export const TemplateFileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, numberField: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, numberField: true
 });
 
 
@@ -88,7 +91,7 @@ export const TemplateFileCreateScalarSchema = baseSchemaWithoutDefaults.partial(
  * `TemplateFile` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const TemplateFileCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, numberField: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, numberField: true
 });
 
 

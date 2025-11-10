@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     level: z.number(),
     increasedFrom: z.number().nullish(),
     decreasedFrom: z.number().nullish(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     level: z.number(),
     increasedFrom: z.number().nullish(),
     decreasedFrom: z.number().nullish(),
@@ -74,6 +76,7 @@ export const AcademicWarningPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     level: z.union([z.number(), z.record(z.string(), z.unknown())]),
     increasedFrom: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     decreasedFrom: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
@@ -84,7 +87,7 @@ export const AcademicWarningPrismaUpdateSchema = z.object({
  * `AcademicWarning` schema for create operations excluding foreign keys and relations.
  */
 export const AcademicWarningCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

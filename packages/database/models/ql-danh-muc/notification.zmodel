@@ -47,10 +47,6 @@ model Notification extends Base {
   targetClasses  FixedClass[]         // Gửi cho các lớp cụ thể
   targetStudents Student[]            // Gửi cho sinh viên cụ thể
 
-  // Thông tin tác giả
-  createdBy      DM_NhanVien          @relation(fields: [createdById], references: [Id])
-  createdById    String               @db.Uuid
-
   // Tệp đính kèm
   attachments    DocumentFile[]
 

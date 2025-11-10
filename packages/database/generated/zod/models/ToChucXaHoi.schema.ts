@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     congViec: z.string().nullish(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     congViec: z.string().nullish(),
@@ -73,6 +75,7 @@ export const ToChucXaHoiPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     congViec: z.string().nullish()
@@ -83,7 +86,7 @@ export const ToChucXaHoiPrismaUpdateSchema = z.object({
  * `ToChucXaHoi` schema for create operations excluding foreign keys and relations.
  */
 export const ToChucXaHoiCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

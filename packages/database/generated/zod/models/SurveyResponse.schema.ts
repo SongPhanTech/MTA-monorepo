@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     answerText: z.string().nullish(),
     explanation: z.string().nullish(),
     answeredAt: z.coerce.date().default(() => new Date()),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     answerText: z.string().nullish(),
     explanation: z.string().nullish(),
     answeredAt: z.coerce.date(),
@@ -75,6 +77,7 @@ export const SurveyResponsePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     answerText: z.string().nullish(),
     explanation: z.string().nullish(),
     answeredAt: z.coerce.date()
@@ -85,7 +88,7 @@ export const SurveyResponsePrismaUpdateSchema = z.object({
  * `SurveyResponse` schema for create operations excluding foreign keys and relations.
  */
 export const SurveyResponseCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, answeredAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, answeredAt: true
 });
 
 

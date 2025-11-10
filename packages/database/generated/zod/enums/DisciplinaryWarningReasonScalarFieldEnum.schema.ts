@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DisciplinaryWarningReasonScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "severityLevel"])
+export const DisciplinaryWarningReasonScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "severityLevel"])

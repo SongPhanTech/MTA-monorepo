@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const MilestoneScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "startPeriod", "period", "startDate", "endDate", "schoolYearId"])
+export const MilestoneScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "startPeriod", "period", "startDate", "endDate", "schoolYearId"])

@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     status: FeedbackStatusSchema,
     satisfaction: SatisfactionSchema,
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     status: FeedbackStatusSchema,
     satisfaction: SatisfactionSchema,
@@ -73,6 +75,7 @@ export const FeedbackPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     status: FeedbackStatusSchema,
     satisfaction: SatisfactionSchema
@@ -83,7 +86,7 @@ export const FeedbackPrismaUpdateSchema = z.object({
  * `Feedback` schema for create operations excluding foreign keys and relations.
  */
 export const FeedbackCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

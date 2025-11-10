@@ -51,12 +51,15 @@ import type {
     GetPublicSurvey400,
     GetPublicSurvey404,
     GetSurveyCompletionByHourOfDayParams,
+    GetSurveyObjects404,
+    GetSurveyObjectsParams,
     GetSurveyResult,
     GetSurveyStatistics200,
     GetSurveyStatistics404,
     GetSurveyStatisticsBySemester404,
     GetSurveyStatisticsBySemesterParams,
     HourlyAggregateResponse,
+    ListOfundefined,
     ParticipationByTypeResponse,
     SavePublicSurvey400,
     SavePublicSurvey404,
@@ -2110,7 +2113,7 @@ export type getSurveyStatisticsResponse = getSurveyStatisticsResponseComposite &
 }
 
 export const getGetSurveyStatisticsUrl = (id: string) => {
-    return `/api/survey/surveys/${id}/statistics`
+    return `/api/survey/${id}/statistics`
 }
 
 export const getSurveyStatistics = async (
@@ -2124,7 +2127,7 @@ export const getSurveyStatistics = async (
 }
 
 export const getGetSurveyStatisticsQueryKey = (id: string) => {
-    return [`/api/survey/surveys/${id}/statistics`] as const
+    return [`/api/survey/${id}/statistics`] as const
 }
 
 export const getGetSurveyStatisticsQueryOptions = <
@@ -2231,6 +2234,169 @@ export function useGetSurveyStatistics<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetSurveyStatisticsQueryOptions(id, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Danh sách người làm khảo sát
+ */
+export type getSurveyObjectsResponse200 = {
+    data: ListOfundefined
+    status: 200
+}
+
+export type getSurveyObjectsResponse404 = {
+    data: GetSurveyObjects404
+    status: 404
+}
+
+export type getSurveyObjectsResponseComposite =
+    | getSurveyObjectsResponse200
+    | getSurveyObjectsResponse404
+
+export type getSurveyObjectsResponse = getSurveyObjectsResponseComposite & {
+    headers: Headers
+}
+
+export const getGetSurveyObjectsUrl = (params: GetSurveyObjectsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/survey/objects?${stringifiedParams}`
+        : '/api/survey/objects'
+}
+
+export const getSurveyObjects = async (
+    params: GetSurveyObjectsParams,
+    options?: RequestInit
+): Promise<getSurveyObjectsResponse> => {
+    return customExamFetch<getSurveyObjectsResponse>(getGetSurveyObjectsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetSurveyObjectsQueryKey = (params: GetSurveyObjectsParams) => {
+    return ['/api/survey/objects', ...(params ? [params] : [])] as const
+}
+
+export const getGetSurveyObjectsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError = GetSurveyObjects404,
+>(
+    params: GetSurveyObjectsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetSurveyObjectsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyObjects>>> = ({ signal }) =>
+        getSurveyObjects(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getSurveyObjects>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSurveyObjectsQueryResult = NonNullable<Awaited<ReturnType<typeof getSurveyObjects>>>
+export type GetSurveyObjectsQueryError = GetSurveyObjects404
+
+export function useGetSurveyObjects<
+    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError = GetSurveyObjects404,
+>(
+    params: GetSurveyObjectsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveyObjects>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveyObjects>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyObjects<
+    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError = GetSurveyObjects404,
+>(
+    params: GetSurveyObjectsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveyObjects>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveyObjects>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyObjects<
+    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError = GetSurveyObjects404,
+>(
+    params: GetSurveyObjectsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách người làm khảo sát
+ */
+
+export function useGetSurveyObjects<
+    TData = Awaited<ReturnType<typeof getSurveyObjects>>,
+    TError = GetSurveyObjects404,
+>(
+    params: GetSurveyObjectsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveyObjects>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetSurveyObjectsQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

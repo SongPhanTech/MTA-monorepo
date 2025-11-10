@@ -13,7 +13,9 @@ import ReactMarkdown from 'react-markdown'
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 import ChatInput from '@components/commons/input-chat-bot'
 import CitationTooltip from '@components/commons/citation-tooltip'
+import FAQCitationTooltip from '@components/commons/faq-citation-tooltip'
 import DocumentSidebar from '@components/commons/document-sidebar'
+import FAQSidebar from '@components/commons/faq-sidebar'
 import ChatLayout from '@layouts/chat-layout'
 
 interface Citation {
@@ -23,14 +25,31 @@ interface Citation {
     metadata?: any
 }
 
-function parseResponseWithCitations(text: string): { answer: string; citations: Citation[] } {
+interface FAQCitation {
+    index: number
+    content: string
+    faq_id: string
+    score?: number
+    source: string
+}
+
+// Transform FAQ content: Q: -> Câu hỏi:, A: -> Câu trả lời:
+function transformFAQContent(content: string): string {
+    return content.replace(/^Q:/gm, 'Câu hỏi:').replace(/^A:/gm, 'Câu trả lời:')
+}
+
+function parseResponseWithCitations(text: string): {
+    answer: string
+    citations: Citation[]
+    faqCitations: FAQCitation[]
+} {
     try {
         // Tìm vị trí của separator "---CITATIONS---"
         const separatorIndex = text.indexOf('---CITATIONS---')
 
         if (separatorIndex === -1) {
             // Nếu không có citations, trả về toàn bộ text
-            return { answer: text, citations: [] }
+            return { answer: text, citations: [], faqCitations: [] }
         }
 
         // Phần trước: answer content
@@ -39,19 +58,34 @@ function parseResponseWithCitations(text: string): { answer: string; citations: 
         const citationsText = text.substring(separatorIndex + '---CITATIONS---'.length).trim()
 
         let citations: Citation[] = []
+        let faqCitations: FAQCitation[] = []
+
         if (citationsText) {
             try {
                 const parsed = JSON.parse(citationsText)
-                citations = parsed.citations || []
+                const allCitations = parsed.citations || []
+
+                // Phân loại citations theo source
+                for (const citation of allCitations) {
+                    if (citation.source === 'FAQ') {
+                        // Transform FAQ content before saving
+                        faqCitations.push({
+                            ...citation,
+                            content: transformFAQContent(citation.content),
+                        })
+                    } else {
+                        citations.push(citation)
+                    }
+                }
             } catch (e) {
                 // console.error('Failed to parse citations JSON:', e)
             }
         }
 
-        return { answer, citations }
+        return { answer, citations, faqCitations }
     } catch (error) {
         console.error('Error parsing response:', error)
-        return { answer: text, citations: [] }
+        return { answer: text, citations: [], faqCitations: [] }
     }
 }
 
@@ -67,6 +101,7 @@ export default function Page() {
             role: string
             content: string
             citations?: Citation[]
+            faqCitations?: FAQCitation[]
         }[]
     >([])
     const [loading, setLoading] = useState(false)
@@ -77,6 +112,7 @@ export default function Page() {
     const [hasAutoReplied, setHasAutoReplied] = useState(false)
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
     const [selectedCitationContent, setSelectedCitationContent] = useState<string | null>(null)
+    const [selectedFaqData, setSelectedFaqData] = useState<FAQCitation | null>(null)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -206,14 +242,14 @@ export default function Page() {
                             accumulatedText += chunk
 
                             // Parse citations và answer từ accumulated text
-                            const { answer, citations } =
+                            const { answer, citations, faqCitations } =
                                 parseResponseWithCitations(accumulatedText)
 
                             // Cập nhật toàn bộ message của BOT với answer (chỉ để hiển thị real-time)
                             setMessages((prev) =>
                                 prev.map((msg) =>
                                     msg.id === botMessageId
-                                        ? { ...msg, content: answer, citations }
+                                        ? { ...msg, content: answer, citations, faqCitations }
                                         : msg
                                 )
                             )
@@ -221,7 +257,8 @@ export default function Page() {
 
                         setIsStreaming(false) // Kết thúc streaming
 
-                        const { citations } = parseResponseWithCitations(accumulatedText)
+                        const { citations, faqCitations } =
+                            parseResponseWithCitations(accumulatedText)
 
                         await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -237,7 +274,22 @@ export default function Page() {
                                   .find((msg) => msg.sender === MessageSender.BOT)
                             : null
 
-                        if (latestBotMessage && citations.length > 0) {
+                        if (latestBotMessage && (citations.length > 0 || faqCitations.length > 0)) {
+                            const allCitationsToCreate = [
+                                ...citations.map((citation: Citation) => ({
+                                    content: citation.content,
+                                    index: citation.index,
+                                    documentId: citation.document_id,
+                                    documentType: 'DOCUMENT',
+                                })),
+                                ...faqCitations.map((faqCitation: FAQCitation) => ({
+                                    content: faqCitation.content,
+                                    index: faqCitation.index,
+                                    documentId: faqCitation.faq_id,
+                                    documentType: 'FAQ',
+                                })),
+                            ]
+
                             await updateConversation({
                                 where: { id: id as string },
                                 data: {
@@ -246,11 +298,7 @@ export default function Page() {
                                             where: { id: latestBotMessage.id },
                                             data: {
                                                 citations: {
-                                                    create: citations.map((citation: Citation) => ({
-                                                        content: citation.content,
-                                                        index: citation.index,
-                                                        documentId: citation.document_id,
-                                                    })),
+                                                    create: allCitationsToCreate,
                                                 },
                                             },
                                         },
@@ -261,13 +309,14 @@ export default function Page() {
                     } else {
                         // Fallback nếu không có stream
                         const fullText = await response.text()
-                        const { answer, citations } = parseResponseWithCitations(fullText)
+                        const { answer, citations, faqCitations } =
+                            parseResponseWithCitations(fullText)
                         botReply = answer
 
                         setMessages((prev) =>
                             prev.map((msg) =>
                                 msg.id === botMessageId
-                                    ? { ...msg, content: botReply, citations }
+                                    ? { ...msg, content: botReply, citations, faqCitations }
                                     : msg
                             )
                         )
@@ -287,7 +336,22 @@ export default function Page() {
                                   .find((msg) => msg.sender === MessageSender.BOT)
                             : null
 
-                        if (latestBotMessage && citations.length > 0) {
+                        if (latestBotMessage && (citations.length > 0 || faqCitations.length > 0)) {
+                            const allCitationsToCreate = [
+                                ...citations.map((citation: Citation) => ({
+                                    content: citation.content,
+                                    index: citation.index,
+                                    documentId: citation.document_id,
+                                    documentType: 'DOCUMENT',
+                                })),
+                                ...faqCitations.map((faqCitation: FAQCitation) => ({
+                                    content: faqCitation.content,
+                                    index: faqCitation.index,
+                                    documentId: faqCitation.faq_id,
+                                    documentType: 'FAQ',
+                                })),
+                            ]
+
                             await updateConversation({
                                 where: { id: id as string },
                                 data: {
@@ -296,11 +360,7 @@ export default function Page() {
                                             where: { id: latestBotMessage.id },
                                             data: {
                                                 citations: {
-                                                    create: citations.map((citation: Citation) => ({
-                                                        content: citation.content,
-                                                        index: citation.index,
-                                                        documentId: citation.document_id,
-                                                    })),
+                                                    create: allCitationsToCreate,
                                                 },
                                             },
                                         },
@@ -368,11 +428,22 @@ export default function Page() {
     const handleCitationClick = (citation: Citation) => {
         setSelectedDocumentId(citation.document_id)
         setSelectedCitationContent(citation.content)
+        setSelectedFaqData(null) // Close FAQ sidebar if open
+    }
+
+    const handleFaqCitationClick = (faqCitation: FAQCitation) => {
+        setSelectedFaqData(faqCitation)
+        setSelectedDocumentId(null) // Close document sidebar if open
+        setSelectedCitationContent(null)
     }
 
     const handleCloseSidebar = () => {
         setSelectedDocumentId(null)
         setSelectedCitationContent(null)
+    }
+
+    const handleCloseFaqSidebar = () => {
+        setSelectedFaqData(null)
     }
 
     useEffect(() => {
@@ -381,18 +452,38 @@ export default function Page() {
                 (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
             )
 
-            const mappedMessages = sortedMessages.map((msg) => ({
-                id: Number(msg.id),
-                role: msg.sender === 'USER' ? 'USER' : 'BOT',
-                content: msg.content || '',
-                citations:
-                    msg.citations?.map((citation) => ({
-                        index: citation.index || 0,
-                        content: citation.content || '',
-                        document_id: citation.documentId || '',
-                        metadata: {},
-                    })) || [],
-            }))
+            const mappedMessages = sortedMessages.map((msg) => {
+                const documentCitations: Citation[] = []
+                const faqCitations: FAQCitation[] = []
+
+                // Separate citations by documentType
+                msg.citations?.forEach((citation) => {
+                    if (citation.documentType === 'FAQ') {
+                        faqCitations.push({
+                            index: citation.index || 0,
+                            content: citation.content || '',
+                            faq_id: citation.documentId || '',
+                            source: 'FAQ', // Always FAQ for documentType === 'FAQ'
+                            score: undefined,
+                        })
+                    } else {
+                        documentCitations.push({
+                            index: citation.index || 0,
+                            content: citation.content || '',
+                            document_id: citation.documentId || '',
+                            metadata: {},
+                        })
+                    }
+                })
+
+                return {
+                    id: Number(msg.id),
+                    role: msg.sender === 'USER' ? 'USER' : 'BOT',
+                    content: msg.content || '',
+                    citations: documentCitations,
+                    faqCitations: faqCitations,
+                }
+            })
             setMessages(mappedMessages)
         }
     }, [messageList])
@@ -412,6 +503,7 @@ export default function Page() {
         setHasAutoReplied(false)
         setSelectedDocumentId(null)
         setSelectedCitationContent(null)
+        setSelectedFaqData(null)
     }, [id])
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
@@ -524,14 +616,17 @@ export default function Page() {
                                                                     {msg.content}
                                                                 </ReactMarkdown>
                                                             </div>
-                                                            {msg.citations &&
-                                                                msg.citations.length > 0 && (
-                                                                    <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-gray-300">
-                                                                        <span className="text-xs text-gray-600 font-semibold mr-1 flex items-center">
-                                                                            <FileTextOutlined className="mr-1" />
-                                                                            Tài liệu tham khảo:
-                                                                        </span>
-                                                                        {[...msg.citations]
+                                                            {(msg.citations &&
+                                                                msg.citations.length > 0) ||
+                                                            (msg.faqCitations &&
+                                                                msg.faqCitations.length > 0) ? (
+                                                                <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-gray-300">
+                                                                    <span className="text-xs text-gray-600 font-semibold mr-1 flex items-center">
+                                                                        <FileTextOutlined className="mr-1" />
+                                                                        Tài liệu tham khảo:
+                                                                    </span>
+                                                                    {msg.citations &&
+                                                                        [...msg.citations]
                                                                             .sort(
                                                                                 (a, b) =>
                                                                                     a.index -
@@ -539,7 +634,7 @@ export default function Page() {
                                                                             )
                                                                             .map((citation) => (
                                                                                 <CitationTooltip
-                                                                                    key={`${citation.document_id}-${citation.index}`}
+                                                                                    key={`doc-${citation.document_id}-${citation.index}`}
                                                                                     citation={
                                                                                         citation
                                                                                     }
@@ -550,8 +645,28 @@ export default function Page() {
                                                                                     }
                                                                                 />
                                                                             ))}
-                                                                    </div>
-                                                                )}
+                                                                    {msg.faqCitations &&
+                                                                        [...msg.faqCitations]
+                                                                            .sort(
+                                                                                (a, b) =>
+                                                                                    a.index -
+                                                                                    b.index
+                                                                            )
+                                                                            .map((faqCitation) => (
+                                                                                <FAQCitationTooltip
+                                                                                    key={`faq-${faqCitation.faq_id}-${faqCitation.index}`}
+                                                                                    citation={
+                                                                                        faqCitation
+                                                                                    }
+                                                                                    onClick={() =>
+                                                                                        handleFaqCitationClick(
+                                                                                            faqCitation
+                                                                                        )
+                                                                                    }
+                                                                                />
+                                                                            ))}
+                                                                </div>
+                                                            ) : null}
                                                         </div>
                                                     )}
                                                     <Button
@@ -599,7 +714,6 @@ export default function Page() {
                         onSend={handleSend}
                         onStop={handleStop}
                         isFaqMode={isFaqMode}
-                        onToggleFaqMode={() => setIsFaqMode((prev) => !prev)}
                     />
                 </div>
             </div>
@@ -609,6 +723,7 @@ export default function Page() {
                 citationContent={selectedCitationContent}
                 onClose={handleCloseSidebar}
             />
+            <FAQSidebar faqData={selectedFaqData} onClose={handleCloseFaqSidebar} />
         </div>
     )
 }

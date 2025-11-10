@@ -1624,7 +1624,10 @@ export default function PhanCongGiangDay({
                                             countSubjectClassOfficial > 0 &&
                                             countSubjectClassOfficial < countSubjectClass
                                         }
-                                        checked={countSubjectClassOfficial === countSubjectClass}
+                                        checked={
+                                            countSubjectClassOfficial > 0 &&
+                                            countSubjectClassOfficial === countSubjectClass
+                                        }
                                         onChange={async (e) => {
                                             try {
                                                 await sqlTransaction([

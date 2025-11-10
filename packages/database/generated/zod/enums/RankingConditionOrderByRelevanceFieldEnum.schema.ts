@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const RankingConditionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "rankingId", "tuple"])
+export const RankingConditionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "rankingId", "tuple"])

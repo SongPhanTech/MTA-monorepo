@@ -19,7 +19,13 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabNhomCauHoi({selectedID,setSelectedID}:{selectedID:string, setSelectedID:React.Dispatch<React.SetStateAction<string>>}) {
+function TabNhomCauHoi({
+    selectedID,
+    setSelectedID,
+}: {
+    selectedID: string
+    setSelectedID: React.Dispatch<React.SetStateAction<string>>
+}) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -104,8 +110,6 @@ function TabNhomCauHoi({selectedID,setSelectedID}:{selectedID:string, setSelecte
         hideSpinner()
     }
 
-    console.log('data', data)
-
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -129,14 +133,12 @@ function TabNhomCauHoi({selectedID,setSelectedID}:{selectedID:string, setSelecte
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                            onRow={(record) => {
+                        onRow={(record) => {
                             return {
                                 onClick: () => {
                                     setSelectedID(record.id)
                                 },
-                                className: cn(
-                                    selectedID === record.id ? 'bg-orange-200' : ''
-                                ),
+                                className: cn(selectedID === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
                         // onRowClick={({ id }) => {

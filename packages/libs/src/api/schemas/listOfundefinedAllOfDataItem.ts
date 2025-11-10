@@ -5,6 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItem } from './listOfundefinedAllOfDataItemEducationAndTrainingItem'
+import type { ListOfundefinedAllOfDataItemLecturer } from './listOfundefinedAllOfDataItemLecturer'
+import type { ListOfundefinedAllOfDataItemStaffs } from './listOfundefinedAllOfDataItemStaffs'
+import type { ListOfundefinedAllOfDataItemSurveySession } from './listOfundefinedAllOfDataItemSurveySession'
+
 export type ListOfundefinedAllOfDataItem = {
     id: string
     /** @nullable */
@@ -18,6 +23,8 @@ export type ListOfundefinedAllOfDataItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     /** @nullable */
     bLaNguoiDung?: boolean | null
     /** @nullable */
@@ -163,4 +170,10 @@ export type ListOfundefinedAllOfDataItem = {
     familyPhone?: string | null
     /** @nullable */
     familyName?: string | null
+    /** @nullable */
+    lecturer: ListOfundefinedAllOfDataItemLecturer
+    /** @nullable */
+    staffs: ListOfundefinedAllOfDataItemStaffs
+    educationAndTraining: ListOfundefinedAllOfDataItemEducationAndTrainingItem[]
+    surveySession?: ListOfundefinedAllOfDataItemSurveySession
 }

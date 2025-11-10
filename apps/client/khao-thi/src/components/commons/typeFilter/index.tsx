@@ -1,142 +1,145 @@
 import type {
-  AcademicActionType,
-  ApplicationStatus,
-  CriteriaField,
-  CriteriaOperator,
-  DecisionStatus,
-  ExamStatus,
-  ExamType,
-  GraduationSessionStatus,
-  QuestionType,
-  SemesterType,
-  SubjectClassSchedule,
-  SurveyQuestionType,
-} from "@workspace/db";
-import type { ColumnsType } from "antd/es/table";
+    AcademicActionType,
+    ApplicationStatus,
+    CriteriaField,
+    CriteriaOperator,
+    DecisionStatus,
+    ExamStatus,
+    ExamType,
+    GraduationSessionStatus,
+    QuestionType,
+    SemesterType,
+    SubjectClassSchedule,
+    SurveyQuestionType,
+} from '@workspace/db'
+import type { ColumnsType } from 'antd/es/table'
 
 export type FilterProps = {
-  searchText?: string;
-  trainingObjectTypes?: string[];
-  name?: string | "";
-  code?: string | "";
-  sort?: string;
-  numberCreditsMajor?: "asc" | "desc";
-  numberCreditsRequired?: "asc" | "desc";
-  numberCreditsElective?: "asc" | "desc";
-  organization?: string[];
-  organizationId?: string;
-  trainingCourses?: string[];
-  numberOfSemesters?: "asc" | "desc";
-  requiredCredits?: "asc" | "desc";
-  electiveCredits?: "asc" | "desc";
-  trainingTime?: string[];
-  trainingMajors?: string[];
-  credit?: "asc" | "desc";
-  semester?: "asc" | "desc";
-  period?: "asc" | "desc";
-  numberOfTheory?: "asc" | "desc";
-  numberOfSelfStudy?: "asc" | "desc";
-  numberOfPractice?: "asc" | "desc";
-  numberOfReview?: "asc" | "desc";
-  numberOfExam?: "asc" | "desc";
-  examType?: ExamType[];
-  fixedClass?: string[];
-  trainingCourse?: string[];
-  actionTaken?: AcademicActionType[];
-  status?: DecisionStatus[];
-  admissionQuota?: "asc" | "desc";
-  semesterStart?: string;
-  curriculumVersion?: string[];
-  managementOrganization?: string[];
-  graduated?: boolean;
-  trainingLevel?: string[];
-  startYear?: "asc" | "desc";
-  gender?: string[];
-  trainingField?: string[];
-  dateOfBirth?: Date[];
-  academicRankType?: string[];
-  academicDegreeType?: string[];
-  rankId?: string[];
-  officerNumber?: string;
-  lecturerType?: string[];
-  staffType?: string[];
-  bonusScore?: "asc" | "desc";
-  finalScore?: "asc" | "desc";
-  count?: "asc" | "desc";
-  publishDate?: Date[];
-  scholarship?: string[];
-  decisionDate?: Date[];
-  trainingCourseId?: string | null;
-  semesterStartId?: string | null;
-  trainingMajorId?: string | null;
-  lecturerId?: string[];
-  maxStudent?: "asc" | "desc";
-  subjectClassStudent?: "asc" | "desc";
-  mainLecturer?: string;
-  extraLecturer?: string;
-  enterGradeLecturer?: string;
-  schedule?: SubjectClassSchedule[];
-  room?: string;
-  applicationDate?: Date[];
-  statusApplication?: ApplicationStatus[];
-  active?: boolean[];
-  numberOfOther?: "asc" | "desc";
-  managementOrganizationId?: string;
-  floor?: "asc" | "desc";
-  roomNumber?: "asc" | "desc";
-  trainingObjectId?: string | null;
-  fixedClassId?: string | null;
-  schoolYearId?: string | null | undefined;
-  semesterType?: SemesterType[];
-  severityLevel?: "asc" | "desc";
-  sessionDate?: Date[];
-  applicationStart?: Date[];
-  applicationEnd?: Date[];
-  statusGraduationSession?: GraduationSessionStatus[];
-  field?: CriteriaField[];
-  operator?: CriteriaOperator[];
-  semesterId?: string | null;
-  subjectName?: string;
-  scoreDeadline?: Date[];
-  examScoreDeadline?: Date[];
-  startDate?: Date[];
-  examDate?: Date[];
-  endDate?: Date[];
-  englishName?: string | "";
-  subjectVersionId?: string[];
-  content?: string | "";
-  questionType?: QuestionType[];
-  explanation?: string | "";
-  point?: "asc" | "desc";
-  level?: "asc" | "desc";
-  difficultyId?: string | null;
-  knowledgeBlockId?: string | null;
-  title?: string | "";
-  startTime?: string;
-  duration?: "asc" | "desc";
-  passScore?: "asc" | "desc";
-  examStatus?: ExamStatus[];
-  questionBankId?: string | null;
-  questionPoint?: "asc" | "desc";
-  surveyQuestionType?: SurveyQuestionType[];
-  surveyId?: string;
-  surveyObjectTypeId?: string[];
-  surveyTopicId?: string[];
-  subjectClass?: string[];
-  order?: "asc" | "desc";
-  scoreScalesId?: string[];
-  hasExam?: boolean;
-  examCode?: string;
-  score?: "asc" | "desc";
-  surveyQuestionGroupId?: string[];
-  isPublic?: boolean[];
-  anonymous?: boolean[];
-};
+    searchText?: string
+    trainingObjectTypes?: string[]
+    name?: string | ''
+    code?: string | ''
+    sort?: string
+    idCardNumber?: string,
+    phoneNumber?: string,
+    numberCreditsMajor?: 'asc' | 'desc'
+    numberCreditsRequired?: 'asc' | 'desc'
+    numberCreditsElective?: 'asc' | 'desc'
+    organization?: string[]
+    organizationId?: string
+    trainingCourses?: string[]
+    numberOfSemesters?: 'asc' | 'desc'
+    requiredCredits?: 'asc' | 'desc'
+    electiveCredits?: 'asc' | 'desc'
+    trainingTime?: string[]
+    trainingMajors?: string[]
+    credit?: 'asc' | 'desc'
+    semester?: 'asc' | 'desc'
+    period?: 'asc' | 'desc'
+    numberOfTheory?: 'asc' | 'desc'
+    numberOfSelfStudy?: 'asc' | 'desc'
+    numberOfPractice?: 'asc' | 'desc'
+    numberOfReview?: 'asc' | 'desc'
+    numberOfExam?: 'asc' | 'desc'
+    examType?: ExamType[]
+    fixedClass?: string[]
+    trainingCourse?: string[]
+    actionTaken?: AcademicActionType[]
+    status?: DecisionStatus[]
+    admissionQuota?: 'asc' | 'desc'
+    semesterStart?: string
+    curriculumVersion?: string[]
+    managementOrganization?: string[]
+    graduated?: boolean
+    trainingLevel?: string[]
+    startYear?: 'asc' | 'desc'
+    gender?: string[]
+    trainingField?: string[]
+    dateOfBirth?: Date[]
+    academicRankType?: string[]
+    academicDegreeType?: string[]
+    rankId?: string[]
+    officerNumber?: string
+    lecturerType?: string[]
+    staffType?: string[]
+    bonusScore?: 'asc' | 'desc'
+    finalScore?: 'asc' | 'desc'
+    count?: 'asc' | 'desc'
+    publishDate?: Date[]
+    scholarship?: string[]
+    decisionDate?: Date[]
+    trainingCourseId?: string | null
+    semesterStartId?: string | null
+    trainingMajorId?: string | null
+    lecturerId?: string[]
+    maxStudent?: 'asc' | 'desc'
+    subjectClassStudent?: 'asc' | 'desc'
+    mainLecturer?: string
+    extraLecturer?: string
+    enterGradeLecturer?: string
+    schedule?: SubjectClassSchedule[]
+    room?: string
+    applicationDate?: Date[]
+    statusApplication?: ApplicationStatus[]
+    active?: boolean[]
+    numberOfOther?: 'asc' | 'desc'
+    managementOrganizationId?: string
+    floor?: 'asc' | 'desc'
+    roomNumber?: 'asc' | 'desc'
+    trainingObjectId?: string | null
+    fixedClassId?: string | null
+    schoolYearId?: string | null | undefined
+    semesterType?: SemesterType[]
+    severityLevel?: 'asc' | 'desc'
+    sessionDate?: Date[]
+    applicationStart?: Date[]
+    applicationEnd?: Date[]
+    statusGraduationSession?: GraduationSessionStatus[]
+    field?: CriteriaField[]
+    operator?: CriteriaOperator[]
+    semesterId?: string | null
+    subjectName?: string
+    scoreDeadline?: Date[]
+    examScoreDeadline?: Date[]
+    startDate?: Date[]
+    examDate?: Date[]
+    endDate?: Date[]
+    englishName?: string | ''
+    subjectVersionId?: string[]
+    content?: string | ''
+    questionType?: QuestionType[]
+    explanation?: string | ''
+    point?: 'asc' | 'desc'
+    level?: 'asc' | 'desc'
+    difficultyId?: string | null
+    knowledgeBlockId?: string | null
+    title?: string | ''
+    startTime?: string
+    duration?: 'asc' | 'desc'
+    passScore?: 'asc' | 'desc'
+    examStatus?: ExamStatus[]
+    questionBankId?: string | null
+    questionPoint?: 'asc' | 'desc'
+    surveyQuestionType?: SurveyQuestionType[]
+    surveyId?: string
+    surveyObjectTypeId?: string[]
+    surveyTopicId?: string[]
+    subjectClass?: string[]
+    order?: 'asc' | 'desc'
+    scoreScalesId?: string[]
+    hasExam?: boolean
+    examCode?: string
+    score?: 'asc' | 'desc'
+    surveyQuestionGroupId?: string[]
+    isPublic?: boolean[]
+    anonymous?: boolean[]
+    statusSurvey?:boolean[]
+}
 
 export type ColumnTypeProps = ColumnsType & {
-  type?: string;
-  distinctFilters?: string[];
-  options?: any[];
-  dataIndex?: string;
-  slot?: any;
-};
+    type?: string
+    distinctFilters?: string[]
+    options?: any[]
+    dataIndex?: string
+    slot?: any
+}

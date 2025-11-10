@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const HocHamScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "academicRankTypeId", "noiCap", "soQuyetDinh", "from", "to", "userProfileId"])
+export const HocHamScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "academicRankTypeId", "noiCap", "soQuyetDinh", "from", "to", "userProfileId"])

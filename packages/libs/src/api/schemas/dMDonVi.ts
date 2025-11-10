@@ -63,8 +63,6 @@ export type DMDonVi = BaseEntity & {
     /** @nullable */
     sTruongDonVi?: string | null
     /** @nullable */
-    sTenVietTat?: string | null
-    /** @nullable */
     sChucNangNhiemVu?: string | null
     /** @nullable */
     sDiaChi?: string | null

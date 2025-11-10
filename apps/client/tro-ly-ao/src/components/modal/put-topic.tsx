@@ -10,7 +10,7 @@ import {
     useUpdateManyPrompt,
     useUpdateTopic,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, Modal, message } from 'antd'
+import { Col, Form, Input, Modal, message, Checkbox, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
@@ -19,11 +19,13 @@ type TopicFormType = {
     name: string
     type: string
     description?: string
+    isPinned?: boolean
 }
 
 const PutTopic = () => {
     const { isTopicTypeExists } = useTopics()
     const [hasUserEditedType, setHasUserEditedType] = useState(false)
+    const [isPinned, setIsPinned] = useState(false)
     const {
         isOpen,
         onClose,
@@ -44,13 +46,6 @@ const PutTopic = () => {
 
     const [form] = Form.useForm<TopicFormType>()
     const nameValue = Form.useWatch('name', form)
-
-    useEffect(() => {
-        if (isOpen && !id) {
-            form.resetFields()
-            setHasUserEditedType(false)
-        }
-    }, [isOpen, id, form])
 
     const removeVietnameseTones = (str: string): string => {
         const from =
@@ -96,14 +91,23 @@ const PutTopic = () => {
     }
 
     useEffect(() => {
-        if (id && detail) {
-            form.setFieldsValue({
-                name: detail.name || undefined,
-                type: detail.type || undefined,
-                description: detail.description || undefined,
-            })
+        if (isOpen) {
+            if (id && detail) {
+                const pinnedValue = detail.isPinned === true
+                setIsPinned(pinnedValue)
+                form.setFieldsValue({
+                    name: detail.name || undefined,
+                    type: detail.type || undefined,
+                    description: detail.description || undefined,
+                    isPinned: pinnedValue,
+                })
+            } else if (!id) {
+                setIsPinned(false)
+                form.resetFields()
+                setHasUserEditedType(false)
+            }
         }
-    }, [id, detail, form])
+    }, [isOpen, id, detail, form])
 
     const { data: existingPrompt } = useFindFirstPrompt({
         where: {
@@ -112,6 +116,10 @@ const PutTopic = () => {
     })
 
     const onFinish = async (values: TopicFormType) => {
+        const finalValues = {
+            ...values,
+            isPinned: isPinned,
+        }
         try {
             if (id) {
                 await update({
@@ -119,14 +127,14 @@ const PutTopic = () => {
                         id,
                     },
                     data: {
-                        name: values.name,
-                        type: values.type,
-                        description: values.description,
+                        name: finalValues.name,
+                        type: finalValues.type,
+                        description: finalValues.description,
+                        isPinned: finalValues.isPinned,
                     },
                 })
 
-                // Tạo lại prompt template dựa trên tên mới
-                const updatedPrompt = getDefaultPromptTemplate(values.name)
+                const updatedPrompt = getDefaultPromptTemplate(finalValues.name)
 
                 if (existingPrompt) {
                     await updatePrompt({
@@ -143,14 +151,15 @@ const PutTopic = () => {
             } else {
                 const newTopic = await create({
                     data: {
-                        name: values.name,
-                        type: values.type,
-                        description: values.description,
+                        name: finalValues.name,
+                        type: finalValues.type,
+                        description: finalValues.description,
+                        isPinned: finalValues.isPinned,
                     },
                 })
 
                 if (newTopic) {
-                    const defaultPrompt = getDefaultPromptTemplate(values.name)
+                    const defaultPrompt = getDefaultPromptTemplate(finalValues.name)
                     await createPrompt({
                         data: {
                             prompt: defaultPrompt,
@@ -178,7 +187,14 @@ const PutTopic = () => {
             cancelText="Hủy"
             onOk={form.submit}
         >
-            <Form form={form} onFinish={onFinish} layout="vertical">
+            <Form
+                form={form}
+                onFinish={onFinish}
+                layout="vertical"
+                initialValues={{
+                    isPinned: false,
+                }}
+            >
                 <Col span={24}>
                     <FormItem
                         form={form}
@@ -222,6 +238,20 @@ const PutTopic = () => {
                     <FormItem form={form} name={'description'} label="Mô tả">
                         <Input.TextArea rows={4} placeholder="Nhập mô tả cho chủ đề" />
                     </FormItem>
+                </Col>
+                <Col span={24}>
+                    <Tooltip title="Chủ đề được ghim sẽ hiển thị làm câu hỏi gợi ý trên trang chủ hỏi đáp">
+                        <Checkbox
+                            checked={isPinned}
+                            onChange={(e) => {
+                                const newValue = e.target.checked
+                                setIsPinned(newValue)
+                                form.setFieldValue('isPinned', newValue)
+                            }}
+                        >
+                            <span className="text-sm">Chủ đề gợi ý</span>
+                        </Checkbox>
+                    </Tooltip>
                 </Col>
             </Form>
         </Modal>

@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { Prisma } from '@workspace/db'
+import { calcFinalScore } from '@workspace/libs/utils'
 import { prisma } from '..'
 
 const app = new OpenAPIHono({ strict: false })
@@ -179,15 +180,99 @@ const saveExamScore = createRoute({
 })
 
 app.openapi(saveExamScore, async (c) => {
-    const updates = c.req.valid('json')
+    const payload = c.req.valid('json')
+    const map = new Map(payload.map((u) => [u.id, u.score]))
+
+    const examPapers = await prisma.examPaper.findMany({
+        where: {
+            id: { in: payload.map((u) => u.id) },
+        },
+        select: {
+            id: true,
+            studentSubjectScore: {
+                select: {
+                    certificates: {
+                        select: {
+                            archivedCertificate: {
+                                select: {
+                                    finalScore: true,
+                                },
+                            },
+                        },
+                    },
+                    awards: {
+                        select: {
+                            archivedAward: {
+                                select: {
+                                    bonusScore: true,
+                                },
+                            },
+                        },
+                    },
+                    attendanceScore: true,
+                    midtermScore: true,
+                    examScore: true,
+                    student: {
+                        select: {
+                            fixedClass: {
+                                select: {
+                                    trainingCourse: {
+                                        select: {
+                                            coef_1: true,
+                                            coef_2: true,
+                                            coef_3: true,
+                                            scoreToPass: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const defaultCoef = {
+        coef_1: 0.1,
+        coef_2: 0.3,
+        coef_3: 0.6,
+        scoreToPass: 4,
+    }
+
+    const updates = examPapers.map((p) => {
+        const examScore = map.get(p.id) || null
+
+        const finalScore = calcFinalScore(
+            p.studentSubjectScore.student.fixedClass?.trainingCourse || defaultCoef,
+            { ...p.studentSubjectScore, examScore }
+        )
+
+        return {
+            examPaperId: p.id,
+            examScore,
+            finalScore,
+        }
+    })
 
     await prisma.$executeRawUnsafe(`
         UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
-        SET "examScore" = data."score"
+        SET
+            "examScore" = data."examScore",
+            "finalScore" = data."finalScore",
+            "updatedAt" = NOW()
         FROM (
             VALUES
-            ${updates.map((u) => `('${u.id}', ${u.score})`).join(',\n')}
-        ) AS data("examPaperId", "score")
+            ${updates
+                .map(
+                    (u) => `(
+                        '${u.examPaperId}',
+                        ${u.examScore === null ? 'NULL::double precision' : u.examScore},
+                        ${u.finalScore === null ? 'NULL::double precision' : u.finalScore}
+                    )`
+                )
+                .join(',\n')}
+        ) AS data("examPaperId", "examScore", "finalScore")
         JOIN "khao-thi"."ExamPaper" AS es
             ON es."id" = data."examPaperId"
         WHERE sss."id" = es."studentSubjectScoreId";
