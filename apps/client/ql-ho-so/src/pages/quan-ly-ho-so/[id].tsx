@@ -543,8 +543,8 @@ export default function UpdateUserPage() {
                                 : null,
                             avatar: form.getFieldValue('avatar'),
                             rankId: rank?.capBacId ?? undefined,
-                            academicRankTypeId: hocham?.hocHamId ?? undefined,
-                            academicDegreeTypeId: hocvi?.hocViId ?? undefined,
+                            academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
+                            academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? undefined,
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {

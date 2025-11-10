@@ -42,14 +42,51 @@ export default function ExpertProfile() {
                 ? { name: { contains: filters.name, mode: 'insensitive' as const } }
                 : {}),
             ...(filters.academicRank
-                ? { academicRank: { contains: filters.academicRank, mode: 'insensitive' as const } }
-                : {}),
-            ...(filters.academicDegree
                 ? {
-                      academicDegree: {
-                          contains: filters.academicDegree,
-                          mode: 'insensitive' as const,
-                      },
+                      OR: [
+                          {
+                              academicRank: {
+                                  contains: filters.academicRank,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                          {
+                              lecturer: {
+                                  userProfile: {
+                                      academicRankType: {
+                                          sTen: {
+                                              contains: filters.academicRank,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+                      ...(filters.academicDegree
+                ? {
+                      OR: [
+                          {
+                              academicDegree: {
+                                  contains: filters.academicDegree,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                          {
+                              lecturer: {
+                                  userProfile: {
+                                      academicDegreeType: {
+                                          sTen: {
+                                              contains: filters.academicDegree,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      ],
                   }
                 : {}),
             ...(filters.specialization
@@ -70,21 +107,24 @@ export default function ExpertProfile() {
                 ? { email: { contains: filters.email, mode: 'insensitive' as const } }
                 : {}),
         }),
-        [
-            filters.code,
-            filters.name,
-            filters.academicRank,
-            filters.academicDegree,
-            filters.specialization,
-            filters.workplace,
-            filters.phone,
-            filters.email,
-        ]
+        [filters]
     )
 
     const { data: expertProfileData } = useFindManyExpertProfile({
         where,
-        include: { lecturer: { include: { userProfile: true } } },
+        include: {
+            lecturer: {
+                include: {
+                    userProfile: {
+                        include: {
+                            rank: true,
+                            academicDegreeType: true,
+                            academicRankType: true,
+                        },
+                    },
+                },
+            },
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -181,6 +221,9 @@ export default function ExpertProfile() {
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
+                                render: (__, record) =>
+                                    record.lecturer?.userProfile?.academicRankType?.sTen ||
+                                    record?.academicRank,
                             },
                             {
                                 title: 'Hàm vị',
@@ -188,6 +231,9 @@ export default function ExpertProfile() {
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
+                                render: (__, record) =>
+                                    record.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                                    record?.academicDegree,
                             },
                             {
                                 title: 'Chuyên ngành',

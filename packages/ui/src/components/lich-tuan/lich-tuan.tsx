@@ -175,7 +175,7 @@ const convertApiToCalendarEventReactBigCalendar = (
 
         return {
             id: event.id,
-            title: event.subjectClass.name || '',
+            title: event?.subjectClass?.name || '',
             start: start.toDate(),
             end: end.toDate(),
             location: event.subjectClass?.room?.name || '',
@@ -492,7 +492,7 @@ export function LichCongTac({
                     TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
                         ?.value || '#1890ff',
                 host: [event.lecturerId, event.extraLecturerId].filter(Boolean) as string[],
-                attendees: event.subjectClass.subjectClassStudent.map((scs) => scs.student.id),
+                attendees: event?.subjectClass?.subjectClassStudent.map((scs) => scs.student.id),
                 hostProfile: transformProfileDataTableCalendar(
                     [
                         event.subjectClass?.mainLecturer?.userProfile,

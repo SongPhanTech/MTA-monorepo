@@ -521,8 +521,8 @@ export default function CreateUserPage() {
                         fullname:
                             `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                         rankId: rank?.capBacId ?? undefined,
-                        academicDegreeTypeId: hocvi?.hocViId ?? undefined,
-                        academicRankTypeId: hocham?.hocHamId ?? undefined,
+                        academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
+                        academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
                         ...emptyObjectIf(
                             {
                                 hocVi: {
