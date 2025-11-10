@@ -287,12 +287,6 @@ type Props = {
     documentServerUrl?: string // Mặc định là http://localhost
 }
 
-declare global {
-    interface Window {
-        docEditor: any
-    }
-}
-
 const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode = 'view' }: Props) => {
     useEffect(() => {
         const id = createId()

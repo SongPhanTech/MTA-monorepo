@@ -9,19 +9,7 @@ import {
     useUpdateClassSchedule,
     useUpdateManyClassSchedule,
 } from '@workspace/db/hooks'
-import {
-    App,
-    Button,
-    Checkbox,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    Row,
-    Select,
-    Tooltip,
-    message
-} from 'antd'
+import { Button, Checkbox, Col, DatePicker, Form, Input, Row, Select, Tooltip, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,7 +26,7 @@ export type PutLichVaSuKienFormType = {
     attendees?: string[]
     color?: string
     note?: string
-    type?: string // PERSONAL, WEEKLY, OTHER
+    type?: PeriodType // PERSONAL, WEEKLY, OTHER
     allDay?: boolean
 } & PutModalFormType
 
@@ -55,27 +43,15 @@ const PutLichVaSuKienModal = () => {
         }
         source?: 'single-day' | 'multi-day' // single-day: chỉ 1 ngày, multi-day: nhiều ngày
         type: PeriodType //PERSONAL, WEEKLY, OTHER
-        canCreate?: boolean
-        canUpdate?: boolean
-        canDelete?: boolean
     }>({
         tag: 'PutLichVaSuKienModal',
     })
-    const { modal } = App.useApp()
-    const { data: profile } = useGetMe()
-    const userIdLogin = profile?.data?.profile?.id || ''
+    const userIdLogin = window?.contextData?.userId || ''
     const [isLoading, setIsLoading] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     const [form] = Form.useForm<PutLichVaSuKienFormType>()
-    const [originalValues, setOriginalValues] = useState<{
-        content?: string
-        note?: string
-        endTime?: string
-        color?: string
-    }>({})
     const isSingleDaySchedule = payload?.source === 'single-day' // Kiểm tra có phải lịch 1 ngày không
     const allDayValue = Form.useWatch('allDay', form)
-    const startTimeValue = Form.useWatch('startTime', form)
     const { data: event } = useFindUniqueClassSchedule(
         {
             where: {
@@ -91,7 +67,9 @@ const PutLichVaSuKienModal = () => {
     )
 
     const { data: profiles = [] } = useFindManyUserProfile({
-        include: {},
+        include: {
+            
+        },
     })
 
     const { mutateAsync: deleteClassSchedule } = useDeleteClassSchedule({
@@ -119,7 +97,6 @@ const PutLichVaSuKienModal = () => {
     const separateProfilesAndCustomText = (values: string[]) => {
         const profileIds: string[] = []
         const customTexts: string[] = []
-
         values.forEach((value) => {
             const isProfileId = profiles.some((profile) => profile.id === value)
             if (isProfileId) {
@@ -139,48 +116,6 @@ const PutLichVaSuKienModal = () => {
         },
         []
     )
-
-    // Kiểm tra các trường nào đã thay đổi
-    const getFieldChanges = (values: PutLichVaSuKienFormType) => {
-        // Hàm phụ so sánh 2 mảng
-        const arraysEqual = (a: string[] = [], b: string[] = []) => {
-            if (a.length !== b.length) return false
-            return a.every((val) => b.includes(val)) && b.every((val) => a.includes(val))
-        }
-
-        // Lấy host/attendees gốc từ sự kiện
-        const originalHost = combineProfilesAndCustomText(event?.hostProfile, event?.host)
-        const originalAttendees = combineProfilesAndCustomText(
-            event?.attendeesProfile,
-            event?.attendees
-        )
-
-        const changes = {
-            contentChanged: originalValues.content !== values.content?.trim(),
-            noteChanged: originalValues.note !== values.note?.trim(),
-            startTimeChanged:
-                (event?.startTime ? dayjs(event.startTime).toISOString() : '') !==
-                (values.startTime ? values.startTime.toISOString() : ''),
-            endTimeChanged:
-                originalValues.endTime !== (values.endTime ? values.endTime.toISOString() : ''),
-            colorChanged: originalValues.color !== values.color,
-            locationChanged: (event?.location || '') !== (values.location?.trim() || ''),
-            hostChanged: !arraysEqual(originalHost, values.host || []),
-            attendeesChanged: !arraysEqual(originalAttendees, values.attendees || []),
-        }
-
-        const requiresConfirmation =
-            changes.contentChanged ||
-            changes.noteChanged ||
-            changes.startTimeChanged ||
-            changes.endTimeChanged ||
-            changes.locationChanged ||
-            changes.hostChanged ||
-            changes.attendeesChanged
-        const autoApplyToAll = changes.colorChanged && !requiresConfirmation
-
-        return { ...changes, requiresConfirmation, autoApplyToAll }
-    }
 
     const onFinish = async (values: PutLichVaSuKienFormType, keepOpen = false) => {
         // Kiểm tra tên sự kiện (content) - bắt buộc phải có
@@ -255,7 +190,7 @@ const PutLichVaSuKienModal = () => {
         if (keepOpen) {
             // Clear form for next event when "Lưu & Tiếp tục"
             const defaultHost =
-                payload?.type === PeriodType.PERSONAL && userIdLogin ? [userIdLogin] : []
+                payload?.type === PeriodType.WEEK && userIdLogin ? [userIdLogin] : []
 
             form.resetFields()
             // Set default values for new event
@@ -355,7 +290,7 @@ const PutLichVaSuKienModal = () => {
 
             form.setFieldsValue({
                 color: TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
-                type: payload?.type || PeriodType.OTHER,
+                type: payload?.type || PeriodType.WEEK,
                 host: defaultHost,
                 startTime: defaultStartTime,
                 endTime: defaultEndTime,
@@ -383,11 +318,6 @@ const PutLichVaSuKienModal = () => {
                             notes: values.content?.trim() || '',
                             startTime: dayjs(finalStartTime).toISOString(),
                             endTime: dayjs(finalEndTime).toISOString(),
-                            color:
-                                values.color ||
-                                TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value ||
-                                '#b3d4fc',
-                            note: values.note?.trim() || '',
                             location: values.location?.trim() || '',
                             host: hostData.customTexts,
                             attendees: attendeesData.customTexts,
@@ -399,7 +329,7 @@ const PutLichVaSuKienModal = () => {
                                     id,
                                 })),
                             },
-                            type: (event?.type as PeriodType) || PeriodType.OTHER,
+                            type: (event?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
                     // Show success message
@@ -426,7 +356,7 @@ const PutLichVaSuKienModal = () => {
                                 id,
                             })),
                         },
-                        type: (payload?.type as PeriodType) || PeriodType.OTHER,
+                        type: (payload?.type as PeriodType) || PeriodType.WEEK,
                     }
 
                     // Close modal immediately before mutation if requested
@@ -478,7 +408,6 @@ const PutLichVaSuKienModal = () => {
         onClose()
     }
 
-    
     useEffect(() => {
         if (payload?.id && event) {
             const hostValues = combineProfilesAndCustomText(event.hostProfile, event.host)
@@ -522,35 +451,22 @@ const PutLichVaSuKienModal = () => {
 
             form.setFieldsValue({
                 id: payload.id,
-                content: event.content || '',
-                startTime: event.startTime && dayjs(event.startTime),
-                endTime: event.endTime && dayjs(event.endTime),
-                color: event?.color || TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
-                note: event.note || '',
-                location: event.location || '',
+                content: event.notes || '',
+                startTime: event.startTime ? dayjs(event.startTime) : undefined,
+                endTime: event.endTime ? dayjs(event.endTime) : undefined,
+                note: event.notes || '',
+                location: event?.location ?? event?.room?.name ?? '',
                 host: hostValues,
                 attendees: attendeesValues,
-                type: event.type || PeriodType.OTHER,
+                type: event.periodType || PeriodType.WEEK,
                 allDay: isAllDay,
-            })
-
-            // Store original values for field change detection
-            setOriginalValues({
-                content: event.content || '',
-                note: event.note || '',
-                endTime: event.endTime ? dayjs(event.endTime).toISOString() : '',
-                color: event.color || TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
             })
         } else if (!payload?.id && isOpen) {
             // Chỉ reset form khi modal mở và không có ID (tạo mới)
             const defaultHost =
-                payload?.type === PeriodType.PERSONAL && userIdLogin ? [userIdLogin] : []
+                payload?.type === PeriodType.WEEK && userIdLogin ? [userIdLogin] : []
 
             form.resetFields()
-
-            // Reset states for new event
-            setOriginalValues({})
-
             // Set giá trị mặc định sau khi reset
             const slotStartTime = payload?.slot?.startTime
                 ? dayjs(payload.slot.startTime)
@@ -648,7 +564,7 @@ const PutLichVaSuKienModal = () => {
 
             form.setFieldsValue({
                 color: TYPE_WORK_SCHEDULE_COLOR_OPTIONS[0]?.value || '#b3d4fc',
-                type: payload?.type || PeriodType.OTHER,
+                type: payload?.type || PeriodType.WEEK,
                 host: defaultHost,
                 startTime: defaultStartTime,
                 endTime: defaultEndTime,
@@ -681,8 +597,7 @@ const PutLichVaSuKienModal = () => {
             initialValues={undefined}
             footer={
                 <div className="flex justify-between gap-2">
-                    {(payload?.canDelete && !!payload?.id) ||
-                    (!!payload?.id && payload?.id === event?.createdBy) ? (
+                    {!!payload?.id && payload?.id === event?.createdBy ? (
                         <Button
                             danger
                             type="primary"
@@ -695,9 +610,7 @@ const PutLichVaSuKienModal = () => {
                     ) : (
                         <p />
                     )}
-                    {((payload?.canUpdate && !!payload?.id) ||
-                        (payload?.canCreate && !payload?.id) ||
-                        (!!payload?.id && payload?.id === event?.createdBy)) && (
+                    {(!payload?.id || (!!payload?.id && payload?.id === event?.createdBy)) && (
                         <div className="flex gap-2">
                             <Button onClick={onClose}>Huỷ</Button>
                             <Button
@@ -1074,7 +987,7 @@ const PutLichVaSuKienModal = () => {
                         tokenSeparators={[',', ';']}
                         onDeselect={(value) => {
                             // Prevent removing logged-in user for PERSONAL type
-                            if (payload?.type === PeriodType.PERSONAL && value === userIdLogin) {
+                            if (payload?.type === PeriodType.WEEK && value === userIdLogin) {
                                 setTimeout(() => {
                                     const currentHosts = form.getFieldValue('host') || []
                                     if (!currentHosts.includes(userIdLogin)) {
@@ -1086,8 +999,7 @@ const PutLichVaSuKienModal = () => {
                             }
                         }}
                         onClear={() => {
-                            // Re-add logged-in user for PERSONAL type when cleared
-                            if (payload?.type === PeriodType.PERSONAL && userIdLogin) {
+                            if (payload?.type === PeriodType.WEEK && userIdLogin) {
                                 setTimeout(() => {
                                     form.setFieldsValue({ host: [userIdLogin] })
                                 }, 0)
@@ -1166,7 +1078,6 @@ const PutLichVaSuKienModal = () => {
                     />
                 </FormItem>
             </Col>
-
             <Col span={24}>
                 <FormItem name="note" form={form}>
                     <Input.TextArea

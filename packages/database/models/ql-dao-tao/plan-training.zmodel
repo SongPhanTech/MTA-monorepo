@@ -976,6 +976,8 @@ model ClassSchedule extends Base {
 
   userProfiles        UserProfile[]  // Người tham gia thêm
 
+  location            String?        // Địa điểm cụ thể nếu có
+
   notes               String?         
 
   // Thông tin học bù
