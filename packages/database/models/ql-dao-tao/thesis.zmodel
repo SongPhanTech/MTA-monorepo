@@ -55,6 +55,12 @@ model ThesisSession extends Base {
   @@schema("ql-dao-tao")
 }
 
+enum ThesisType {
+  THESIS // Luận văn
+  PROJECT // Đồ án
+  @@schema("ql-dao-tao")
+}
+
 // Bảng đồ án
 model ThesisProject extends Base {
   title              String?                       // Tên đồ án
@@ -66,7 +72,7 @@ model ThesisProject extends Base {
   expectedResults    String?                     @db.Text() // Kết quả mong đợi
   requirements       String?                     @db.Text() // Yêu cầu với học viên
   technologies       String?                     @db.Text() // Công nghệ sử dụng
-
+  thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
 
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
@@ -110,7 +116,8 @@ model ThesisProject extends Base {
   projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
 
   defenseRecord      DefenseRecord?
-  librarySubmission  LibrarySubmission?
+  librarySubmission  LibrarySubmission?  @relation(fields: [librarySubmissionId], references: [id])
+  librarySubmissionId String?
 
   decisions          Decision[]
   registrations      StudentThesisRegistration[]
