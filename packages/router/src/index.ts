@@ -592,6 +592,18 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
                 description: 'Quản lý thông báo đào tạo',
             },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
+                label: 'Lịch tuần tháng',
+                path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
+                description: 'Quản lý lịch tuần tháng',
+            },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
+                label: 'Lịch kiểm tra giảng dạy',
+                path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
+                description: 'Quản lý lịch kiểm tra giảng dạy',
+            },
         ],
         label: 'Quản lý đào tạo',
     },
