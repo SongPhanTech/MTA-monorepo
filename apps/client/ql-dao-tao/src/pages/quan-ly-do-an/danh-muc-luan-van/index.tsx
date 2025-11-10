@@ -93,7 +93,10 @@ export default function PostgraduateProject() {
     const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([])
     const [needAllStudents, setNeedAllStudents] = useState<boolean>(false)
     const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false)
-    const { onOpen: openModalCauHinhLuanVan } = useDisclosure<{ thesisProjectId: string }>({
+    const { onOpen: openModalCauHinhLuanVan } = useDisclosure<{
+        thesisProjectId: string
+        thesisSessionId: string
+    }>({
         tag: 'ModalCauHinhLuanVan',
     })
     const { data: sDm_Donvi } = useFindManyDM_DonVi()
@@ -338,17 +341,30 @@ export default function PostgraduateProject() {
                 const row: TableRow[] = [
                     {
                         cells: [
-                            { value: index + 1, border: true },
+                            { value: index + 1, border: true, align: 'center' },
                             {
                                 value:
                                     student?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.name || '',
                                 border: true,
+                                align: 'center',
                             },
-                            { value: student?.trainingObjectType?.name || '', border: true },
-                            { value: student.userProfile?.firstName, border: true },
-                            { value: student.userProfile?.lastName, border: true },
-                            { value: '', border: true },
+                            {
+                                value: student?.trainingObjectType?.name || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value: student.userProfile?.firstName || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            {
+                                value: student.userProfile?.lastName || '',
+                                border: true,
+                                align: 'center',
+                            },
+                            { value: '', border: true, align: 'center' },
                             {
                                 value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                                     ? dayjs(
@@ -357,13 +373,25 @@ export default function PostgraduateProject() {
                                       ).format('DD/MM/YYYY')
                                     : '',
                                 border: true,
+                                align: 'center',
                             },
-                            { value: '' },
+                            {
+                                value: student?.thesisRegistrations?.[0]?.thesisProject
+                                    ?.defenseSession?.startTime
+                                    ? dayjs(
+                                          student?.thesisRegistrations?.[0]?.thesisProject
+                                              ?.defenseSession?.startTime
+                                      ).format('HH:mm')
+                                    : '',
+                                border: true,
+                                align: 'center',
+                            },
                             {
                                 value:
                                     student?.thesisRegistrations?.[0]?.thesisProject?.room?.name ||
                                     '',
                                 border: true,
+                                align: 'center',
                             },
                             { value: '', border: true },
                             { value: '', border: true },
@@ -371,9 +399,37 @@ export default function PostgraduateProject() {
                         ],
                     },
                 ]
+                const gapRow: TableRow = {
+                    cells: [{ value: null, border: false }],
+                }
+                const totalRow: TableRow = {
+                    cells: [
+                        {
+                            value: `(Tổng số: ${allStudents?.length} học viên)`,
+                            align: 'center',
+                            colSpan: 13,
+                            border: false,
+                            bold: true,
+                        },
+                    ],
+                }
                 return {
                     sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+                    data: {
+                        dotxet:
+                            student.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
+                            '',
+                    },
+                    tableStartCell: { row: 7, col: 1 },
+                    rows: [...row, gapRow, totalRow],
                 }
+            })
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/DanhSachBaoVe.xlsx',
+                sheets: allSheetOptions ?? [],
+                fileName: 'DanhSachBaoVe',
+                mergeSheetsToOne: true,
+                sheetName: 'DanhSachBaoVe',
             })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -556,6 +612,8 @@ export default function PostgraduateProject() {
                     include: {
                         thesisProject: {
                             include: {
+                                defenseSession: true,
+                                thesisSession: true,
                                 organization: true,
                                 supervisor: true,
                                 coSupervisor: true,
@@ -1068,6 +1126,8 @@ export default function PostgraduateProject() {
                                                             thesisProjectId:
                                                                 record?.thesisRegistrations?.[0]
                                                                     ?.thesisProject?.id,
+                                                            thesisSessionId:
+                                                                thesisSessionSelected?.id || '',
                                                         })
                                                     }}
                                                 />
@@ -1078,7 +1138,7 @@ export default function PostgraduateProject() {
                                 },
                             },
                         ]}
-                        data={students}
+                        data={students || []}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

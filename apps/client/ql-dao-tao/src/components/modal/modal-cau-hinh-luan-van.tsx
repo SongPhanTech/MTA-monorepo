@@ -13,7 +13,6 @@ import {
     useFindManyExpertProfile,
     useFindManyRoom,
     useFindUniqueThesisProject,
-    useUpdateCouncilMember,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
@@ -56,6 +55,7 @@ const ModalCauHinhLuanVan = () => {
     const [form] = Form.useForm<ModalCauHinhLuanVanType>()
     const { isOpen, onClose, input } = useDisclosure<{
         thesisProjectId: string
+        thesisSessionId: string
     }>({
         tag: 'ModalCauHinhLuanVan',
         onClose: form.resetFields,
@@ -87,6 +87,7 @@ const ModalCauHinhLuanVan = () => {
                 defenseDate: data.defenseDate,
                 room: { connect: { id: data.roomId } },
                 defenseSession: { connect: { id: data.sessionId } },
+                thesisSession: { connect: { id: input?.thesisSessionId } },
             }
 
             if (thesisProjectData?.councilId) {
@@ -176,6 +177,7 @@ const ModalCauHinhLuanVan = () => {
                     council: {
                         connect: { id: councilId },
                     },
+                    thesisSession: { connect: { id: input?.thesisSessionId } },
                 }
 
                 await updateThesisProject({
@@ -201,7 +203,6 @@ const ModalCauHinhLuanVan = () => {
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const { mutateAsync: createCouncil } = useCreateCouncil()
     const { mutateAsync: createCouncilMember } = useCreateCouncilMember()
-    const { mutateAsync: updateCouncilMember } = useUpdateCouncilMember()
     const { mutateAsync: deleteCouncilMember } = useDeleteCouncilMember()
     const { data: thesisProjectData } = useFindUniqueThesisProject({
         where: { id: input?.thesisProjectId },
