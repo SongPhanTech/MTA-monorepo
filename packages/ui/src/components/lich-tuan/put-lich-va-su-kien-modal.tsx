@@ -416,16 +416,12 @@ const PutLichVaSuKienModal = () => {
                             startTime: dayjs(finalStartTime).toISOString(),
                             endTime: dayjs(finalEndTime).toISOString(),
                             location: values.location?.trim() || '',
-                            // host: hostData.customTexts,
-                            // attendees: attendeesData.customTexts,
-                            // hostProfile: {
-                            //     set: hostData.profileIds.map((id) => ({ id })),
-                            // },
-                            // attendeesProfile: {
-                            //     set: attendeesData.profileIds.map((id) => ({
-                            //         id,
-                            //     })),
-                            // },
+                            roomId: values.roomId || null,
+                            description: values.description?.trim() || '',
+                            subjectClassId: (selectedSubjectClassId as string) || null,
+                            startPeriod: values.startPeriod ?? 0,
+                            endPeriod: values.endPeriod ?? 0,
+                            classDate: dayjs(finalStartTime).startOf('day').toISOString(),
                             periodType: (event?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
@@ -439,21 +435,11 @@ const PutLichVaSuKienModal = () => {
                             endTime: dayjs(finalEndTime).toISOString(),
                             description: values.description?.trim() || '',
                             location: values.location?.trim() || '',
-                            // host: hostData.customTexts,
-                            // attendees: attendeesData.customTexts,
-                            // hostProfile: {
-                            //     connect: hostData.profileIds.map((id) => ({
-                            //         id,
-                            //     })),
-                            // },
-                            // attendeesProfile: {
-                            //     connect: attendeesData.profileIds.map((id) => ({
-                            //         id,
-                            //     })),
-                            // },
+                            roomId: values.roomId || null,
+                            subjectClassId: (selectedSubjectClassId as string) || null,
+                            startPeriod: values.startPeriod ?? 0,
+                            endPeriod: values.endPeriod ?? 0,
                             classDate: dayjs(finalStartTime).startOf('day').toISOString(),
-                            startPeriod: 0,
-                            endPeriod: 0,
                             periodType: (payload?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
