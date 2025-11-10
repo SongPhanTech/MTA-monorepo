@@ -173,7 +173,7 @@ export default function EvaluationPeriod() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 30,
+                                width: 50,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
