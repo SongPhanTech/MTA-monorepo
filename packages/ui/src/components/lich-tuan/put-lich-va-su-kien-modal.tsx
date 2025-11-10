@@ -3,19 +3,36 @@ import { type ClassSchedule, PeriodType } from '@workspace/db/client'
 import {
     useCreateClassSchedule,
     useDeleteClassSchedule,
-    useDeleteManyClassSchedule,
+    useFindManyClassSchedule,
+    useFindManySubjectClass,
     useFindManyUserProfile,
     useFindUniqueClassSchedule,
     useUpdateClassSchedule,
-    useUpdateManyClassSchedule,
 } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, DatePicker, Form, Input, Row, Select, message } from 'antd'
+import { cn } from '@workspace/ui/lib/utils'
+import {
+    Button,
+    Checkbox,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    message,
+    Row,
+    Select,
+    Table,
+    Tabs,
+} from 'antd'
+import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs, { type Dayjs } from 'dayjs'
-import { useCallback, useEffect, useState } from 'react'
+import { Key, useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { FormItem, InputSuggestion, PutFormModal, type PutModalFormType } from '../commons'
+import { useSemesterStore } from '../select-semester'
+import { useTrainingObjectTypeStore } from '../select-training-object-type'
 import { CollapsibleField } from './collapsible-field'
 import { TYPE_WORK_SCHEDULE_COLOR_OPTIONS } from './lich-tuan'
+
 export type PutLichVaSuKienFormType = {
     allDay?: boolean
 } & ClassSchedule &
@@ -33,13 +50,14 @@ const PutLichVaSuKienModal = () => {
             endTime: Dayjs
         }
         source?: 'single-day' | 'multi-day' // single-day: chỉ 1 ngày, multi-day: nhiều ngày
-        type: PeriodType //PERSONAL, WEEKLY, OTHER
+        periodType: PeriodType //PERSONAL, WEEKLY, OTHER
     }>({
         tag: 'PutLichVaSuKienModal',
     })
-    const userIdLogin = window?.contextData?.userId || ''
     const [isLoading, setIsLoading] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
+    const [selectedSubjectClassId, setSelectedSubjectClassId] = useState<Key>()
+    const [selectedClassSchedule, setSelectedClassSchedule] = useState<Key>()
     const [form] = Form.useForm<PutLichVaSuKienFormType>()
     const isSingleDaySchedule = payload?.source === 'single-day' // Kiểm tra có phải lịch 1 ngày không
     const allDayValue = Form.useWatch('allDay', form)
@@ -70,17 +88,113 @@ const PutLichVaSuKienModal = () => {
             message.error(`Xóa sự kiện thất bại: ${error.message}`)
         },
     })
-    const { mutateAsync: deleteManyClassSchedule } = useDeleteManyClassSchedule({
-        // Không hiển thị lỗi khi xóa hàng loạt vì đã có phương án dự phòng
-    })
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: semesterId } = useSemesterStore()
+
+    const { data: subjectClasses = [] } = useFindManySubjectClass(
+        {
+            where: {
+                trainingObjectTypeId,
+                semesterId,
+                status: 'OFFICIAL',
+                cancelled: false,
+                deletedAt: null,
+            },
+            select: {
+                id: true,
+                code: true,
+                name: true,
+                subjectClassTimes: {
+                    select: {
+                        dayOfWeek: true,
+                        startPeriod: true,
+                        endPeriod: true,
+                    },
+                },
+                room: {
+                    select: {
+                        name: true,
+                    },
+                },
+                mainLecturer: {
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                extraLecturer: {
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                _count: {
+                    select: {
+                        subjectClassStudent: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!trainingObjectTypeId && !!semesterId && payload?.periodType === 'CHECK',
+        }
+    )
+
+    const { data: classSchedules = [] } = useFindManyClassSchedule(
+        {
+            where: {
+                subjectClass: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    status: 'OFFICIAL',
+                    cancelled: false,
+                    deletedAt: null,
+                    id: selectedSubjectClassId ? String(selectedSubjectClassId) : undefined,
+                },
+            },
+            select: {
+                id: true,
+                classDate: true,
+                startPeriod: true,
+                endPeriod: true,
+                periodType: true,
+                subjectClass: {
+                    select: {
+                        id: true,
+                        code: true,
+                        name: true,
+                    },
+                },
+                roomId: true,
+                room: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled:
+                !!trainingObjectTypeId &&
+                !!semesterId &&
+                payload?.periodType === 'CHECK' &&
+                !!selectedSubjectClassId,
+        }
+    )
+
     const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule({
         onError: (error: any) => {
             message.error(`Cập nhật sự kiện thất bại: ${error.message}`)
         },
     })
-    const { mutateAsync: updateManyClassSchedule } = useUpdateManyClassSchedule({
-        // Không hiển thị lỗi khi cập nhật hàng loạt vì đã có phương án dự phòng
-    })
+
     const { mutateAsync: createClassSchedule } = useCreateClassSchedule({
         onError: (error: any) => {
             message.error(`Tạo sự kiện thất bại: ${error.message}`)
@@ -182,9 +296,6 @@ const PutLichVaSuKienModal = () => {
         // Don't close modal immediately, do it after API calls complete
         if (keepOpen) {
             // Clear form for next event when "Lưu & Tiếp tục"
-            const defaultHost =
-                payload?.type === PeriodType.WEEK && userIdLogin ? [userIdLogin] : []
-
             form.resetFields()
             // Set default values for new event
             const slotStartTime = payload?.slot?.startTime
@@ -282,7 +393,7 @@ const PutLichVaSuKienModal = () => {
             }
 
             form.setFieldsValue({
-                type: payload?.type || PeriodType.WEEK,
+                periodType: payload?.periodType || PeriodType.WEEK,
                 startTime: defaultStartTime,
                 endTime: defaultEndTime,
                 allDay: defaultAllDay, // Use calculated allDay value based on selection type
@@ -298,9 +409,6 @@ const PutLichVaSuKienModal = () => {
                 // const hostData = separateProfilesAndCustomText(values.host || [])
                 // const attendeesData = separateProfilesAndCustomText(values.attendees || [])
                 if (payload?.id) {
-                    if (!keepOpen && typeof onClose === 'function') {
-                        onClose()
-                    }
                     await updateClassSchedule({
                         where: { id: payload.id },
                         data: {
@@ -324,9 +432,6 @@ const PutLichVaSuKienModal = () => {
                     // Show success message
                     message.success('Cập nhật sự kiện thành công')
                 } else {
-                    if (!keepOpen && typeof onClose === 'function') {
-                        onClose()
-                    }
                     await createClassSchedule({
                         data: {
                             notes: values.notes?.trim() || '',
@@ -346,6 +451,9 @@ const PutLichVaSuKienModal = () => {
                             //         id,
                             //     })),
                             // },
+                            classDate: dayjs(finalStartTime).startOf('day').toISOString(),
+                            startPeriod: 0,
+                            endPeriod: 0,
                             periodType: (payload?.periodType as PeriodType) || PeriodType.WEEK,
                         },
                     })
@@ -355,6 +463,9 @@ const PutLichVaSuKienModal = () => {
                 // message.success(
                 //     `${payload?.id ? 'Cập nhật' : 'Thêm mới'} thành công`
                 // )
+                if (!keepOpen && typeof onClose === 'function') {
+                    onClose()
+                }
             } catch (error) {
                 // console.error('Save error:', error)
                 message.error(`${payload?.id ? 'Cập nhật' : 'Thêm mới'} thất bại`)
@@ -424,9 +535,6 @@ const PutLichVaSuKienModal = () => {
             })
         } else if (!payload?.id && isOpen) {
             // Chỉ reset form khi modal mở và không có ID (tạo mới)
-            const defaultHost =
-                payload?.type === PeriodType.WEEK && userIdLogin ? [userIdLogin] : []
-
             form.resetFields()
             // Set giá trị mặc định sau khi reset
             const slotStartTime = payload?.slot?.startTime
@@ -530,17 +638,7 @@ const PutLichVaSuKienModal = () => {
                 allDay: defaultAllDay, // Use calculated allDay value based on selection type
             })
         }
-    }, [
-        payload?.id,
-        event,
-        form,
-        isOpen,
-        payload?.type,
-        payload?.slot,
-        userIdLogin,
-        // combineProfilesAndCustomText,
-        // isSingleDaySchedule,
-    ])
+    }, [payload?.id, event, form, isOpen, payload?.periodType, payload?.slot])
     return (
         <PutFormModal
             open={isOpen}
@@ -551,12 +649,16 @@ const PutLichVaSuKienModal = () => {
                 form.resetFields()
                 onClose()
             }}
+            title="Lịch và sự kiện"
             closable={false}
-            width={480}
+            className={cn(payload?.periodType === 'CHECK' ? 'w-[85vw]' : 'w-[600px]')}
             initialValues={undefined}
+            formProps={{
+                disabled: payload?.periodType === 'CHECK',
+            }}
             footer={
                 <div className="flex justify-between gap-2">
-                    {!!payload?.id && payload?.id === event?.createdBy ? (
+                    {!!payload?.id && (
                         <Button
                             danger
                             type="primary"
@@ -566,37 +668,180 @@ const PutLichVaSuKienModal = () => {
                         >
                             Xoá
                         </Button>
-                    ) : (
-                        <p />
                     )}
-                    {(!payload?.id || (!!payload?.id && payload?.id === event?.createdBy)) && (
-                        <div className="flex gap-2">
-                            <Button onClick={onClose}>Huỷ</Button>
+                    <div className="flex gap-2">
+                        <Button onClick={onClose}>Huỷ</Button>
+                        <Button type="primary" onClick={() => form.submit()} loading={isLoading}>
+                            Lưu
+                        </Button>
+                        {isSingleDaySchedule && !payload?.id && (
                             <Button
                                 type="primary"
-                                onClick={() => form.submit()}
+                                onClick={() => {
+                                    form.validateFields().then((values) => onFinish(values, true))
+                                }}
                                 loading={isLoading}
                             >
-                                Lưu
+                                Lưu & Tiếp tục
                             </Button>
-                            {isSingleDaySchedule && !payload?.id && (
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        form.validateFields().then((values) =>
-                                            onFinish(values, true)
-                                        )
-                                    }}
-                                    loading={isLoading}
-                                >
-                                    Lưu & Tiếp tục
-                                </Button>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             }
         >
+            {payload?.periodType === 'CHECK' && (
+                <Col span={24}>
+                    <Tabs>
+                        <Tabs.TabPane tab="Lớp môn học" key="1">
+                            <Table
+                                rowSelection={{
+                                    type: 'radio',
+                                    onChange: (selectedRowKeys) => {
+                                        const selectedClass = selectedRowKeys[0]
+                                        if (!selectedClass) return
+                                        setSelectedSubjectClassId(selectedClass)
+                                    },
+                                    selectedRowKeys: selectedSubjectClassId
+                                        ? [selectedSubjectClassId]
+                                        : [],
+                                    getCheckboxProps(record) {
+                                        return {
+                                            disabled: false,
+                                        }
+                                    },
+                                }}
+                                onRow={(record) => {
+                                    return {
+                                        onClick: () => {
+                                            setSelectedSubjectClassId(record.id)
+                                        },
+                                    }
+                                }}
+                                rowKey={'id'}
+                                dataSource={subjectClasses}
+                                columns={[
+                                    {
+                                        title: 'TT',
+                                        width: 35,
+                                    },
+                                    {
+                                        title: 'Mã LMH',
+                                        dataIndex: 'code',
+                                    },
+                                    {
+                                        title: 'Môn học',
+                                        dataIndex: 'name',
+                                    },
+                                    {
+                                        title: 'Phòng học',
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            return record.room?.name || ''
+                                        },
+                                    },
+                                    {
+                                        title: 'Thời khoá biểu',
+                                        width: 250,
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            return record.subjectClassTimes?.map?.((tkb) => {
+                                                return (
+                                                    <p>
+                                                        {tkb.dayOfWeek === 8
+                                                            ? 'CN'
+                                                            : `T${tkb.dayOfWeek}`}{' '}
+                                                        - {tkb.startPeriod} - {tkb.endPeriod}
+                                                    </p>
+                                                )
+                                            })
+                                        },
+                                    },
+                                    {
+                                        title: 'Giảng viên 1',
+                                        render: (_, record) => {
+                                            return record.mainLecturer?.userProfile?.fullname || ''
+                                        },
+                                    },
+                                    {
+                                        title: 'Giảng viên 2',
+                                        render: (_, record) => {
+                                            return record.extraLecturer?.userProfile?.fullname || ''
+                                        },
+                                    },
+                                    {
+                                        title: 'Sĩ số',
+                                        render: (_, record) => {
+                                            return record._count?.subjectClassStudent || 0
+                                        },
+                                    },
+                                ]}
+                            />
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Tiết học" key="2">
+                            <Table
+                                rowSelection={{
+                                    type: 'radio',
+                                    onChange: (selectedRowKeys) => {
+                                        const selectedSchedule = selectedRowKeys[0]
+                                        if (!selectedSchedule) return
+                                        setSelectedClassSchedule(selectedSchedule)
+                                    },
+                                    selectedRowKeys: selectedClassSchedule
+                                        ? [selectedClassSchedule]
+                                        : [],
+                                    getCheckboxProps(record) {
+                                        return {
+                                            disabled: false,
+                                        }
+                                    },
+                                }}
+                                rowKey={'id'}
+                                dataSource={classSchedules}
+                                onRow={(record) => {
+                                    return {
+                                        onClick: () => {
+                                            setSelectedClassSchedule(record.id)
+                                            form.setFieldsValue({
+                                                allDay: false,
+                                                startPeriod: record.startPeriod,
+                                                endPeriod: record.endPeriod,
+                                                classDate: record.classDate,
+                                                notes: `Kiểm tra giảng dạy lớp ${record.subjectClass?.name}`,
+                                                periodType: 'CHECK',
+                                                roomId: record.roomId,
+                                                location: record.room?.name || '',
+                                                description: '',
+                                            })
+                                        },
+                                    }
+                                }}
+                                columns={[
+                                    {
+                                        title: 'TT',
+                                        width: 35,
+                                    },
+                                    {
+                                        title: 'Ngày học',
+                                        render: (_, record) => {
+                                            return dayjs(record.classDate).format('dddd DD/MM/YYYY')
+                                        },
+                                    },
+                                    {
+                                        title: 'Tiết học',
+                                        render: (_, record) => {
+                                            return (
+                                                <>
+                                                    {record.startPeriod} - {record.endPeriod}
+                                                </>
+                                            )
+                                        },
+                                    },
+                                ]}
+                            />
+                        </Tabs.TabPane>
+                    </Tabs>
+                </Col>
+            )}
             {/* Hiển thị ngày cho lịch 1 ngày */}
             {isSingleDaySchedule && payload?.slot?.startTime && (
                 <Col span={24}>
@@ -616,34 +861,10 @@ const PutLichVaSuKienModal = () => {
                     </div>
                 </Col>
             )}
-
-            <Col span={24}>
-                <FormItem
-                    name="notes"
-                    form={form}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập nội dung',
-                        },
-                        {
-                            whitespace: true,
-                            message: 'Nội dung công việc không được để trống',
-                        },
-                    ]}
-                >
-                    <Input.TextArea
-                        disabled={isLoading}
-                        rows={3}
-                        style={{ resize: 'none' }}
-                        placeholder="Nhập nội dung công việc"
-                    />
-                </FormItem>
-            </Col>
-
             <CollapsibleField
                 title=""
                 icon={<CalendarOutlined />}
+                defaultExpanded
                 summary={
                     <div
                         style={{
@@ -713,10 +934,10 @@ const PutLichVaSuKienModal = () => {
                 }
             >
                 <Row gutter={[12, 12]}>
-                    <Col span={10}>
+                    <Col span={8}>
                         <FormItem name="startTime" form={form}>
                             <DatePicker
-                                disabled={isLoading}
+                                locale={locale}
                                 className="w-full"
                                 format={{
                                     format: allDayValue ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm',
@@ -742,11 +963,11 @@ const PutLichVaSuKienModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={10}>
+                    <Col span={8}>
                         <FormItem name="endTime" form={form}>
                             <DatePicker
                                 needConfirm={false}
-                                disabled={isLoading}
+                                locale={locale}
                                 className="w-full"
                                 format={{
                                     format: allDayValue ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm',
@@ -804,12 +1025,11 @@ const PutLichVaSuKienModal = () => {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={4}>
+                    <Col span={8}>
                         <FormItem name="periodType" form={form}>
                             <Select
-                                disabled={isLoading}
+                                disabled
                                 suffixIcon={null}
-                                className="text-center"
                                 style={{
                                     textAlign: 'center',
                                 }}
@@ -818,12 +1038,7 @@ const PutLichVaSuKienModal = () => {
                                 }}
                                 options={TYPE_WORK_SCHEDULE_COLOR_OPTIONS?.map((opt) => ({
                                     label: (
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
+                                        <div className="flex items-center gap-2">
                                             <span
                                                 style={{
                                                     display: 'inline-block',
@@ -836,101 +1051,65 @@ const PutLichVaSuKienModal = () => {
                                                     minWidth: '13px',
                                                 }}
                                             />
+                                            {` ${opt.label}`}
                                         </div>
                                     ),
-                                    value: opt.value,
+                                    value: opt.type,
                                 }))}
                             />
                         </FormItem>
                     </Col>
-                    <Col span={10}>
-                        <FormItem name="allDay" form={form} valuePropName="checked">
-                            <Checkbox
-                                onChange={(e) => {
-                                    const checked = e.target.checked
-                                    form.setFieldsValue({ allDay: checked })
+                    {payload?.periodType !== 'CHECK' && (
+                        <Col span={10}>
+                            <FormItem name="allDay" form={form} valuePropName="checked">
+                                <Checkbox
+                                    onChange={(e) => {
+                                        const checked = e.target.checked
+                                        form.setFieldsValue({ allDay: checked })
 
-                                    const startTime = form.getFieldValue('startTime')
-                                    const endTime = form.getFieldValue('endTime')
+                                        const startTime = form.getFieldValue('startTime')
+                                        const endTime = form.getFieldValue('endTime')
 
-                                    if (checked && startTime && endTime) {
-                                        form.setFieldsValue({
-                                            startTime: dayjs(startTime).startOf('day'),
-                                            endTime: dayjs(endTime).endOf('day'),
-                                        })
-                                    }
-                                }}
-                            >
-                                Cả ngày
-                            </Checkbox>
-                        </FormItem>
-                    </Col>
+                                        if (checked && startTime && endTime) {
+                                            form.setFieldsValue({
+                                                startTime: dayjs(startTime).startOf('day'),
+                                                endTime: dayjs(endTime).endOf('day'),
+                                            })
+                                        }
+                                    }}
+                                >
+                                    Cả ngày
+                                </Checkbox>
+                            </FormItem>
+                        </Col>
+                    )}
                 </Row>
             </CollapsibleField>
-            {/* <Col span={24}>
-                <FormItem name="userProfiles" form={form}>
-                    <Select
-                        disabled={isLoading}
-                        mode="tags"
-                        allowClear
-                        className="w-full modern-borderless-input"
-                        placeholder="Chọn người tham hoặc nhập tên tùy chỉnh"
-                        maxTagCount={2}
-                        maxTagPlaceholder={(omittedValues) => (
-                            <Tooltip
-                                styles={{ root: { pointerEvents: 'none' } }}
-                                title={omittedValues
-                                    .map(({ value }) => {
-                                        const profile = profiles.find((p) => p.id === value)
-                                        return profile
-                                            ? profile.fullname ||
-                                                  `${profile.firstName} ${profile.lastName}`
-                                            : value
-                                    })
-                                    .join(', ')}
-                            >
-                                <span>+{omittedValues.length}</span>
-                            </Tooltip>
-                        )}
-                        options={profiles.map((profile) => ({
-                            label: (
-                                <span style={{ color: '#333333' }}>
-                                    {profile.fullname || `${profile.firstName} ${profile.lastName}`}
-                                    {profile.organization?.name && (
-                                        <span
-                                            style={{
-                                                marginLeft: '8px',
-                                            }}
-                                            className="text-primary"
-                                        >
-                                            ({profile.organization.name})
-                                        </span>
-                                    )}
-                                </span>
-                            ),
-                            value: profile.id,
-                        }))}
-                        showSearch
-                        filterOption={(input, option) => {
-                            // Find the profile data by option value (profile.id)
-                            const profile = profiles.find((p) => p.id === option?.value)
-                            if (!profile) return false
-
-                            const fullname =
-                                profile.fullname || `${profile.firstName} ${profile.lastName}`
-                            const orgName = profile.organization?.name || ''
-                            const searchText = `${fullname} ${orgName}`.toLowerCase()
-
-                            return searchText.includes(input.toLowerCase())
-                        }}
-                        tokenSeparators={[',', ';']}
+            <Col span={24}>
+                <FormItem
+                    name="notes"
+                    form={form}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập nội dung',
+                        },
+                        {
+                            whitespace: true,
+                            message: 'Nội dung công việc không được để trống',
+                        },
+                    ]}
+                >
+                    <Input.TextArea
+                        rows={3}
+                        style={{ resize: 'none' }}
+                        placeholder="Nhập nội dung công việc"
                     />
                 </FormItem>
-            </Col> */}
+            </Col>
             <Col span={24}>
                 <FormItem name="location" form={form}>
                     <InputSuggestion
-                        disabled={isLoading}
                         className="w-full modern-borderless-input"
                         placeholder="Nhập địa điểm"
                         suggestionKey="event_location"
@@ -940,7 +1119,6 @@ const PutLichVaSuKienModal = () => {
             <Col span={24}>
                 <FormItem name="description" form={form}>
                     <Input.TextArea
-                        disabled={isLoading}
                         rows={3}
                         className="w-full modern-borderless-input"
                         placeholder="Nhập ghi chú"
@@ -948,6 +1126,58 @@ const PutLichVaSuKienModal = () => {
                     />
                 </FormItem>
             </Col>
+            <style>
+                {`
+                .ant-input[disabled] {
+                    background-color: #fff !important; /* giữ trắng */
+                    color: rgba(0,0,0,0.85) !important; /* giữ màu chữ */
+                    opacity: 1 !important; /* bỏ mờ */
+                    cursor: default !important;
+                }
+                /* Select */
+                .ant-select-disabled.ant-select {
+                background-color: #fff !important;
+                opacity: 1 !important;
+                }
+                .ant-select-disabled .ant-select-selector {
+                background-color: #fff !important;
+                color: rgba(0, 0, 0, 0.88) !important;
+                opacity: 1 !important;
+                cursor: default !important;
+                }
+
+                .ant-input-number-disabled {
+                    background-color: #fff !important;
+                    color: rgba(0, 0, 0, 0.88) !important;
+                    opacity: 1 !important;
+                    cursor: default !important;
+                }
+                .ant-input-number-disabled .ant-input-number-input {
+                    color: rgba(0, 0, 0, 0.88) !important;
+                    cursor: default !important;
+                }
+
+                /* DatePicker */
+                .ant-picker-disabled {
+                background-color: #fff !important;
+                color: rgba(0, 0, 0, 0.88) !important;
+                opacity: 1 !important;
+                cursor: default !important;
+                }
+
+                /* TreeSelect */
+                .ant-select-disabled.ant-select-tree {
+                background-color: #fff !important;
+                opacity: 1 !important;
+                }
+                .ant-select-disabled.ant-select-tree .ant-select-selector {
+                background-color: #fff !important;
+                color: rgba(0, 0, 0, 0.88) !important;
+                opacity: 1 !important;
+                cursor: default !important;
+                }
+                `}
+            </style>
         </PutFormModal>
     )
 }

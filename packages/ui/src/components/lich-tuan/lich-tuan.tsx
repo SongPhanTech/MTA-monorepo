@@ -175,7 +175,7 @@ const convertApiToCalendarEventReactBigCalendar = (
 
         return {
             id: event.id,
-            title: event?.subjectClass?.name || '',
+            title: event?.subjectClass?.name ?? event?.notes ?? '',
             start: start.toDate(),
             end: end.toDate(),
             location: event.subjectClass?.room?.name || '',
@@ -252,100 +252,98 @@ export function LichCongTac({
 
     // Shared query config
 
-    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule(
-        {
-            where: {
-                OR: [
-                    {
-                        subjectClass: {
-                            subjectClassStudent: {
-                                some: {
-                                    student: {
-                                        userProfileId: profileIdLogin,
-                                    },
+    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
+        where: {
+            OR: [
+                {
+                    subjectClass: {
+                        subjectClassStudent: {
+                            some: {
+                                student: {
+                                    userProfileId: profileIdLogin,
                                 },
                             },
                         },
                     },
-                    {
-                        lecturer: {
+                },
+                {
+                    lecturer: {
+                        userProfileId: profileIdLogin,
+                    },
+                },
+                {
+                    subjectClass: {
+                        mainLecturer: {
                             userProfileId: profileIdLogin,
                         },
                     },
-                    {
-                        subjectClass: {
-                            mainLecturer: {
-                                userProfileId: profileIdLogin,
-                            },
-                        },
-                    },
-                    {
-                        subjectClass: {
-                            extraLecturer: {
-                                userProfileId: profileIdLogin,
-                            },
-                        },
-                    },
-                    {
-                        periodType: 'WEEK',
-                    },
-                    {
-                        periodType: 'CHECK',
-                    },
-                ],
-                periodType: {
-                    in: selectedColors
-                        .map((color) => {
-                            const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
-                                (opt) => opt.value === color
-                            )?.type
-                            return type
-                        })
-                        .filter(Boolean) as PeriodType[],
                 },
-            },
-            include: {
-                subjectClass: {
-                    select: {
-                        name: true,
-                        code: true,
-                        room: true,
-                        mainLecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        id: true,
-                                        fullname: true,
-                                        firstName: true,
-                                        lastName: true,
-                                    },
-                                },
-                            },
-                        },
+                {
+                    subjectClass: {
                         extraLecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        id: true,
-                                        fullname: true,
-                                        firstName: true,
-                                        lastName: true,
-                                    },
+                            userProfileId: profileIdLogin,
+                        },
+                    },
+                },
+                {
+                    periodType: 'WEEK',
+                },
+                {
+                    periodType: 'CHECK',
+                },
+            ],
+            periodType: {
+                in: selectedColors
+                    .map((color) => {
+                        const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
+                            (opt) => opt.value === color
+                        )?.type
+                        return type
+                    })
+                    .filter(Boolean) as PeriodType[],
+            },
+        },
+        include: {
+            subjectClass: {
+                select: {
+                    name: true,
+                    code: true,
+                    room: true,
+                    mainLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true,
+                                    fullname: true,
+                                    firstName: true,
+                                    lastName: true,
                                 },
                             },
                         },
-                        subjectClassStudent: {
-                            select: {
-                                student: {
-                                    select: {
-                                        id: true,
-                                        userProfile: {
-                                            select: {
-                                                id: true,
-                                                fullname: true,
-                                                firstName: true,
-                                                lastName: true,
-                                            },
+                    },
+                    extraLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true,
+                                    fullname: true,
+                                    firstName: true,
+                                    lastName: true,
+                                },
+                            },
+                        },
+                    },
+                    subjectClassStudent: {
+                        select: {
+                            student: {
+                                select: {
+                                    id: true,
+                                    userProfile: {
+                                        select: {
+                                            id: true,
+                                            fullname: true,
+                                            firstName: true,
+                                            lastName: true,
                                         },
                                     },
                                 },
@@ -355,10 +353,7 @@ export function LichCongTac({
                 },
             },
         },
-        {
-            enabled: !!profileIdLogin,
-        }
-    )
+    })
 
     // Convert events data to calendar filter format
     const calendarEvents = useMemo(() => {
@@ -370,7 +365,7 @@ export function LichCongTac({
             const color =
                 TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
                     ?.value || '#1890ff'
-            const title = event.subjectClass?.name || ''
+            const title = event?.subjectClass?.name ?? event?.notes ?? ''
             // Handle multi-day events
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]

@@ -5,23 +5,20 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
-import type { DocumentFile } from '@workspace/db/client'
 import {
-    useCountNotification,
-    useFindManyNotification,
-    useUpdateNotification,
+    useCountClassSchedule,
+    useFindManyClassSchedule,
+    useUpdateClassSchedule,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import Link from 'next/link'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function ThongBao() {
+export default function LichKiemTraGiangDay() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -31,10 +28,12 @@ export default function ThongBao() {
         name: '',
     })
 
-    const { data = [], refetch } = useFindManyNotification({
-        where: {},
+    const { data = [], refetch } = useFindManyClassSchedule({
+        where: {
+            periodType: 'CHECK',
+        },
         include: {
-            attachments: true,
+            subjectClass: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -43,10 +42,10 @@ export default function ThongBao() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountNotification({
+    const { data: count } = useCountClassSchedule({
         where: {
-            code: { contains: filters.code, mode: 'insensitive' },
             deletedAt: null,
+            periodType: 'CHECK',
         },
     })
 
@@ -57,7 +56,7 @@ export default function ThongBao() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: 'PutNotificationModal',
+        tag: 'PutLichTuanThangModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -66,11 +65,11 @@ export default function ThongBao() {
         onOpen()
     }
 
-    const { mutateAsync: updateNotification } = useUpdateNotification()
+    const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateNotification({
+            await updateClassSchedule({
                 where: {
                     id,
                 },
@@ -88,6 +87,11 @@ export default function ThongBao() {
             hideSpinner()
         }
     }
+
+    const { onOpen: onOpenPutLichVaSuKienModal } = useDisclosure({
+        tag: 'PutLichVaSuKienModal',
+    })
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -96,7 +100,14 @@ export default function ThongBao() {
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'THEM') && (
-                                    <Button onClick={handleModal} type="primary">
+                                    <Button
+                                        onClick={() =>
+                                            onOpenPutLichVaSuKienModal({
+                                                periodType: 'CHECK',
+                                            })
+                                        }
+                                        type="primary"
+                                    >
                                         Thêm mới
                                     </Button>
                                 )}
@@ -122,71 +133,43 @@ export default function ThongBao() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tiêu đề thông báo',
-                                dataIndex: 'title',
+                                title: 'Ngày',
+                                dataIndex: 'classDate',
+                                width: 150,
                                 type: 'input',
-                            },
-                            {
-                                title: 'Nội dung thông báo',
-                                dataIndex: 'content',
-                                type: 'input',
-                                render: (value) => (
-                                    <div
-                                        className="max-h-10 overflow-auto"
-                                        dangerouslySetInnerHTML={{ __html: value }}
-                                    />
-                                ),
-                            },
-                            {
-                                title: 'Ngày đăng',
                                 align: 'center',
-                                width: 120,
-                                dataIndex: 'publishedAt',
-                                type: 'date',
-                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
-                            },
-                            {
-                                title: 'Ngày hết hạn',
-                                align: 'center',
-                                width: 120,
-                                dataIndex: 'expiresAt',
-                                type: 'date',
-                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
-                            },
-                            {
-                                title: 'Tài liệu đính kèm',
-                                width: 180,
-                                dataIndex: 'attachments',
-                                type: 'date',
                                 render: (_, record) =>
-                                    record.attachments && record.attachments.length > 0 ? (
-                                        <p className="flex flex-col gap-1">
-                                            {record.attachments.map((item: DocumentFile) => (
-                                                <Link href={getMinioUrl(item.path)} className="line-clamp-1">
-                                                    - {item.name}
-                                                </Link>
-                                            ))}
-                                        </p>
-                                    ) : (
-                                        'Không có tài liệu'
-                                    ),
+                                    record.classDate
+                                        ? dayjs(record.classDate).format('DD/MM/YYYY')
+                                        : '-',
                             },
                             {
-                                title: 'Trạng thái',
+                                title: 'Thời gian',
+                                width: 150,
+                                type: 'input',
                                 align: 'center',
-                                width: 120,
-                                dataIndex: 'active',
-                                type: 'date',
-                                render: (value) =>
-                                    value ? (
-                                        <Tag color="green">Hiển thị</Tag>
-                                    ) : (
-                                        <Tag color="red">Không hiển thị</Tag>
-                                    ),
+                                render: (_, record) =>
+                                    record.startTime && record.endTime
+                                        ? `${dayjs(record.startTime).format('HH:mm')} - ${dayjs(
+                                              record.endTime
+                                          ).format('HH:mm')}`
+                                        : '-',
+                            },
+                            {
+                                title: 'Địa điểm',
+                                dataIndex: 'location',
+                                align: 'center',
+                                width: 250,
+                            },
+                            {
+                                title: 'Nội dung',
+                                align: 'center',
+                                dataIndex: 'notes',
+                                type: 'input',
                             },
                             {
                                 title: 'Thao tác',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO,
@@ -197,7 +180,12 @@ export default function ThongBao() {
                                     <Row className="justify-center gap-2">
                                         {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'SUA') && (
                                             <EditIcon
-                                                onClick={onOpen.bind(null, id)}
+                                                onClick={() =>
+                                                    onOpenPutLichVaSuKienModal({
+                                                        periodType: 'CHECK',
+                                                        id,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
@@ -235,6 +223,6 @@ export default function ThongBao() {
     )
 }
 
-ThongBao.getLayout = function getLayout(page: React.ReactElement) {
+LichKiemTraGiangDay.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

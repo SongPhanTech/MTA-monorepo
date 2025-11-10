@@ -13,6 +13,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -103,7 +104,14 @@ export default function LichTuanThang() {
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'THEM') && (
-                                    <Button onClick={onOpenPutLichVaSuKienModal} type="primary">
+                                    <Button
+                                        onClick={() =>
+                                            onOpenPutLichVaSuKienModal({
+                                                periodType: 'WEEK',
+                                            })
+                                        }
+                                        type="primary"
+                                    >
                                         Thêm mới
                                     </Button>
                                 )}
@@ -133,17 +141,29 @@ export default function LichTuanThang() {
                                 dataIndex: 'classDate',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
+                                render: (_, record) =>
+                                    record.classDate
+                                        ? dayjs(record.classDate).format('DD/MM/YYYY')
+                                        : '-',
                             },
                             {
                                 title: 'Thời gian',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
+                                render: (_, record) =>
+                                    record.startTime && record.endTime
+                                        ? `${dayjs(record.startTime).format('HH:mm')} - ${dayjs(
+                                              record.endTime
+                                          ).format('HH:mm')}`
+                                        : '-',
                             },
                             {
                                 title: 'Địa điểm',
                                 dataIndex: 'location',
+                                align: 'center',
                                 width: 250,
-                                type: 'date',
                             },
                             {
                                 title: 'Nội dung',
@@ -153,7 +173,7 @@ export default function LichTuanThang() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO,
@@ -164,7 +184,12 @@ export default function LichTuanThang() {
                                     <Row className="justify-center gap-2">
                                         {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_BAO, 'SUA') && (
                                             <EditIcon
-                                                onClick={onOpen.bind(null, id)}
+                                                onClick={() =>
+                                                    onOpenPutLichVaSuKienModal({
+                                                        periodType: 'WEEK',
+                                                        id,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
