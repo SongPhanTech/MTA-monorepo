@@ -1,8 +1,8 @@
 import { DownOutlined } from '@ant-design/icons'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import type { TableProps as TableAntdProps } from 'antd'
-import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import Table, { type ColumnOption } from '../table'
 
@@ -24,7 +24,7 @@ export type Data<T, ChildKey extends keyof T> = T &
 type TableProps<T, ChildKey extends keyof T> = {
     data?: Data<T, ChildKey>[]
     columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
-        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date'
+        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date' | 'cmp'
         distinctFilters?: string[]
         options?: ColumnOption[]
     })[]
@@ -34,6 +34,7 @@ type TableProps<T, ChildKey extends keyof T> = {
           })
         | false
     headerTitleKey: keyof T | ((record: T) => ReactNode)
+    headerColumn?: ColumnType<Data<T, ChildKey>>[]
     onRow?: (data: T, index?: number) => React.HTMLAttributes<any> & React.TdHTMLAttributes<any>
     onRowClick?: (record: T) => void
     expandable?: TableAntdProps<T>['expandable']
@@ -49,10 +50,9 @@ type TableProps<T, ChildKey extends keyof T> = {
     childrenFieldName: ChildKey
     onRowDoubleClick?: (record: T) => void
     defaultExpandAll?: boolean
-    headerColSpan?: number | ((record: T, totalColumns: number) => number)
 } & Omit<
     TableAntdProps,
-    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName'
+    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName' | 'number'
 >
 
 const TableCollapse = <
@@ -66,6 +66,7 @@ const TableCollapse = <
     data = [],
     columns = [],
     headerTitleKey,
+    headerColumn,
     headerRight,
     pagination,
     onRowClick,
@@ -81,7 +82,6 @@ const TableCollapse = <
     defaultExpandAll,
     filters,
     setFilters,
-    headerColSpan,
     ...rest
 }: TableProps<T, ChildKey>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -171,10 +171,9 @@ const TableCollapse = <
     const restColumns = useMemo(() => {
         const baseColumns = [
             {
-                title: 'STT',
+                title: 'TT',
                 align: 'center',
-                width: 50,
-                fixed: 'left',
+                width: 35,
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
@@ -192,76 +191,55 @@ const TableCollapse = <
                 },
             },
             ...columns,
-        ] as Array<
-            (ColumnGroupType<T> | ColumnType<T>) & {
-                type?: string
-                distinctFilters?: string[]
-                options?: ColumnOption[]
-            }
-        >
+        ]
 
         // Merge onCell for colSpan handling
         return baseColumns?.map((col, index) => ({
             ...col,
             onCell: (record: T) => {
-                const isParent = Array.isArray(record[childrenFieldName])
-                if (!headerColSpan) {
-                    if (isParent) {
-                        if (index === 0)
-                            return { colspan: baseColumns.length - 1, ...col.onCell?.(record) }
-                        return { colspan: 0, hidden: true, ...col.onCell?.(record) }
-                    }
-                    return {
-                        colspan: 1,
-                        ...col.onCell?.(record),
-                    }
-                }
-                if (isParent) {
-                    if (index === 0) {
+                const isParent = record.$type === 'parent'
+                if (isParent && headerColumn && headerColumn.length > 0) {
+                    const headerCol = headerColumn[index]
+                    if (headerCol) {
                         return {
-                            colspan: headerColSpan,
-                            ...col.onCell?.(record),
+                            colSpan: headerCol.colSpan || 1,
                         }
-                    }
-                    if (
-                        index > 0 &&
-                        index <
-                            (typeof headerColSpan === 'number'
-                                ? headerColSpan
-                                : (headerColSpan?.(record, baseColumns.length) ?? 2))
-                    ) {
-                        return {
-                            ...col.onCell?.(record),
-                            hidden: true, // Ẩn cột nếu là cha
-                            colspan: 0, // Không hiển thị cột này nếu là cha
-                        }
-                    }
-                    return {
-                        ...col.onCell?.(record),
-                        colspan: 1, // Không hiển thị cột này nếu là cha
                     }
                 }
                 return {
-                    colspan: 1,
-                    ...col.onCell?.(record),
+                    colSpan: isParent ? (index === 0 ? baseColumns.length : 0) : 1,
                 }
             },
+            render: (text: any, record: Data<T, ChildKey>, idx: number) => {
+                const isParent = record.$type === 'parent'
+                if (isParent && headerColumn && headerColumn.length > 0) {
+                    const headerCol = headerColumn[index]
+                    if (headerCol) {
+                        return headerCol?.render?.(text, record, idx)
+                    }
+                }
+                // Nếu là child thì hiển thị dữ liệu bình thường
+                if (col.render) {
+                    return col.render(text, record, index)
+                }
+                return text
+            },
         }))
-    }, [columns, childrenFieldName, allChildren, currentPage, pagination, headerColSpan])
+    }, [columns, allChildren, currentPage, pagination, headerColumn])
 
     return (
         <>
             <Table
                 id={id}
                 rowKey={rowKey}
-                className="mt-4"
+                className="mt-2"
                 // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
                 // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
-                scroll={{
-                    x: 'max-content',
-                    y: scrollable ? maxHeight : undefined,
-                }}
+                // scroll={{
+                //     x: 'max-content',
+                //     y: scrollable ? maxHeight : undefined,
+                // }}
                 bordered
                 data={dataWithKey}
                 pagination={pagination}
@@ -288,8 +266,11 @@ const TableCollapse = <
                             }
                         },
                         style: { cursor: 'pointer' },
-                        className: record.id === selectedRow ? 'bg-blue-100' : '',
-                        ...rest.onRow?.(record, index), // Chuyển tiếp các props onRow khác nếu có
+                        className:
+                            record.id && selectedRow && record.id === selectedRow
+                                ? 'bg-blue-100'
+                                : '',
+                        ...rest.onRow?.(record, index),
                     }
                 }}
                 expandable={{
@@ -303,7 +284,7 @@ const TableCollapse = <
                     expandIcon: ({ expanded, onExpand, record }) => {
                         const children = record[childrenFieldName]
                         return Array.isArray(children) ? (
-                            <div className="flex w-full">
+                            <div className="flex">
                                 {children.length > 0 && (
                                     <DownOutlined
                                         onClick={(e) => {
@@ -320,27 +301,27 @@ const TableCollapse = <
                                         }}
                                     />
                                 )}
-
-                                <div className="flex w-full items-center justify-between">
-                                    <strong className="select-none sticky left-[30px]">
-                                        {typeof headerTitleKey === 'function'
-                                            ? headerTitleKey(record as T)
-                                            : ((record as T)[
-                                                  headerTitleKey as keyof T
-                                              ] as ReactNode)}
-                                    </strong>
-                                    <div
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="select-none sticky right-[11px]"
-                                    >
-                                        {headerRight?.(record as T)}
+                                {!headerColumn && (
+                                    <div className="flex w-full items-center justify-between">
+                                        <strong className="select-none sticky left-[30px]">
+                                            {typeof headerTitleKey === 'function'
+                                                ? headerTitleKey(record as T)
+                                                : ((record as T)[
+                                                      headerTitleKey as keyof T
+                                                  ] as ReactNode)}
+                                        </strong>
+                                        <div
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="select-none sticky right-[11px]"
+                                        >
+                                            {headerRight?.(record as T)}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         ) : null
                     },
                     childrenColumnName: childrenFieldName as string,
-                    expandIconColumnIndex: 0,
                     ...expandable,
                 }}
                 {...rest}
@@ -352,6 +333,9 @@ const TableCollapse = <
                 {`
                 .indent-level-1 {
                     display: none !important
+                }
+                .ant-table-cell[colspan] {
+                    text-align: left !important;
                 }
                 .ant-table-row > td:first-child:not(:hover) {
                     background-color: white;

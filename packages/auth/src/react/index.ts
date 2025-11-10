@@ -35,9 +35,9 @@ const fetchSession = async (): Promise<{
             error: null,
         }
     } catch (error) {
-        if (process.env.NODE_ENV !== 'development') {
+        // if (process.env.NODE_ENV !== 'development') {
             signIn()
-        }
+        // }
         return {
             status: 'unauthenticated',
             data: null,
