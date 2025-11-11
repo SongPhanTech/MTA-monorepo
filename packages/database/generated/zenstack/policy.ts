@@ -37,6 +37,7 @@ import { StudentTrainingType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
 import { ThesisProjectStatus } from "../prisma-client";
+import { ThesisType } from "../prisma-client";
 import { StudentThesisRegistrationStatus } from "../prisma-client";
 import { DecisionType } from "../prisma-client";
 import { CouncilProposalStatus } from "../prisma-client";

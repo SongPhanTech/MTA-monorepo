@@ -16372,6 +16372,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, thesisType: {
+                    name: "thesisType",
+                    type: "ThesisType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, status: {
                     name: "status",
                     type: "ThesisProjectStatus",
@@ -19563,6 +19567,7 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',
+                    isRelationOwner: true,
                 }, surveyQuestion: {
                     name: "surveyQuestion",
                     type: "SurveyQuestion",
@@ -19738,21 +19743,6 @@ const metadata: ModelMeta = {
                 }, requireExplanation: {
                     name: "requireExplanation",
                     type: "Boolean",
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'surveyChoice',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyId" },
-                }, surveyId: {
-                    name: "surveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'survey',
                 }, clusterSurvey: {
                     name: "clusterSurvey",
                     type: "ClusterSurvey",
@@ -19768,6 +19758,13 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'clusterSurvey',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyChoice',
+                    isRelationOwner: true,
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",

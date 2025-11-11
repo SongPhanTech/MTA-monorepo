@@ -137,30 +137,38 @@ export const calcFinalScore = (
         }
     }>
 ): Decimal | null => {
-    const rawFinalScore =
-        subjectScore.examScore === null
-            ? null
-            : subjectScore.examScore < coef?.scoreToPass
-              ? subjectScore.examScore
-              : Math.min(
-                    (subjectScore.attendanceScore || 0) * coef?.coef_1 +
-                        (subjectScore.midtermScore || 0) * coef?.coef_2 +
-                        subjectScore.examScore * coef?.coef_3,
-                    10
-                )
-
+    // 1. Find max certificate final score
     const maxCertFinalScore = subjectScore.certificates?.length
-        ? Math.max(
+        ? Decimal.max(
               ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-          )
+          ).toDecimalPlaces(1)
         : null
 
-    if (rawFinalScore === null && maxCertFinalScore === null) {
-        return null
+    // 2. Check if all score is 0
+    if (
+        (subjectScore.attendanceScore ?? subjectScore.midtermScore ?? subjectScore.examScore) === 0
+    ) {
+        return maxCertFinalScore || new Decimal(0)
     }
 
-    if (rawFinalScore && maxCertFinalScore === null && rawFinalScore < coef?.scoreToPass) {
-        return new Decimal(rawFinalScore)
+    // 3. Check if any score is null
+    if (!subjectScore.attendanceScore || !subjectScore.midtermScore || !subjectScore.examScore) {
+        return maxCertFinalScore || null
+    }
+
+    // 4. Calculate final score
+    const finalScore =
+        subjectScore.examScore < coef?.scoreToPass
+            ? subjectScore.examScore
+            : Math.min(
+                  subjectScore.attendanceScore * coef?.coef_1 +
+                      subjectScore.midtermScore * coef?.coef_2 +
+                      subjectScore.examScore * coef?.coef_3,
+                  10
+              )
+
+    if (maxCertFinalScore === null && finalScore < coef?.scoreToPass) {
+        return new Decimal(finalScore).toDecimalPlaces(1)
     }
 
     const bonusScore = subjectScore.awards.reduce(
@@ -169,7 +177,7 @@ export const calcFinalScore = (
     )
 
     return Decimal.min(
-        Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore,
+        Decimal.max(finalScore, maxCertFinalScore || 0).add(bonusScore),
         10
     ).toDecimalPlaces(1)
 }
