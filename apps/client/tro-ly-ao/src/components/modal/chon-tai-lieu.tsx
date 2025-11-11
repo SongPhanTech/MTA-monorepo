@@ -1,19 +1,25 @@
-import { FileTextOutlined } from '@ant-design/icons'
-import { useFindManyDocument } from '@workspace/db/hooks'
-import { Input, Modal, Table, Tag } from 'antd'
+import { useTopics } from '@/hooks/useTopics'
+import { EyeOutlined } from '@ant-design/icons'
+import { useFindManyDocument, useFindManyDocumentClassification } from '@workspace/db/hooks'
+import { Button, Input, Modal, Select, Table, Tag, Tooltip } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import DocumentSidebar from '../commons/document-sidebar'
+import { FileUploadIcon } from '../commons/upload'
 
 interface Document {
     id: string
     title?: string | null
     fileType?: string | null
+    classificationId?: string | null
     classification?: {
+        id: string
         name: string
     } | null
     topics?: {
         topic: {
+            id: string
             name: string
         }
     }[]
@@ -34,14 +40,44 @@ const ChonTaiLieu = () => {
 
     const [searchText, setSearchText] = useState('')
     const [tempSelectedIds, setTempSelectedIds] = useState<string[]>(selectedDocumentIds)
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
+    const [topicFilter, setTopicFilter] = useState<string | undefined>(undefined)
+    const [classificationFilter, setClassificationFilter] = useState<string | undefined>(undefined)
 
-    // Fetch approved documents only
+    const { selectableTopicOptions } = useTopics()
+    const { data: classifications = [] } = useFindManyDocumentClassification({})
+
+    const buildWhereClause = () => {
+        const where: any = {
+            status: 'APPROVE',
+            active: true,
+        }
+
+        if (searchText.trim()) {
+            where.title = {
+                contains: searchText,
+                mode: 'insensitive',
+            }
+        }
+
+        if (topicFilter) {
+            where.topics = {
+                some: {
+                    topicId: topicFilter,
+                },
+            }
+        }
+
+        if (classificationFilter) {
+            where.classificationId = classificationFilter
+        }
+
+        return where
+    }
+
     const { data: documents = [], isLoading } = useFindManyDocument(
         {
-            where: {
-                status: 'APPROVE',
-                active: true,
-            },
+            where: buildWhereClause(),
             include: {
                 classification: true,
                 topics: {
@@ -59,44 +95,42 @@ const ChonTaiLieu = () => {
         }
     )
 
-    // Filter documents by search text
-    const filteredDocuments = useMemo(() => {
-        if (!searchText.trim()) return documents
-
-        const lowerSearch = searchText.toLowerCase()
-        return documents.filter((doc) => doc.title?.toLowerCase().includes(lowerSearch))
-    }, [documents, searchText])
-
     const columns: ColumnsType<Document> = [
         {
             title: 'Tiêu đề',
             dataIndex: 'title',
             key: 'title',
-            render: (title: string) => (
+            render: (title: string, record) => (
                 <div className="flex items-center gap-2">
-                    <FileTextOutlined className="text-primary" />
+                    <FileUploadIcon fileType={record.fileType} className="w-[24px] h-[24px]" />
                     <span className="font-medium">{title || 'Không có tiêu đề'}</span>
                 </div>
             ),
         },
         {
-            title: 'Chủ đề',
+            title: 'Loại tài liệu',
             dataIndex: 'topics',
             key: 'topics',
-            width: 250,
-            render: (topics: Document['topics']) => (
-                <div className="flex flex-wrap gap-1">
-                    {topics && topics.length > 0 ? (
-                        topics.map((t, idx) => (
+            width: 200,
+            render: (topics: Document['topics']) => {
+                if (!topics || topics.length === 0) {
+                    return <span className="text-gray-400">Chưa phân loại</span>
+                }
+                const maxDisplay = 1
+                const displayTopics = topics.slice(0, maxDisplay)
+                const remaining = topics.length - maxDisplay
+
+                return (
+                    <div className="flex flex-wrap gap-1">
+                        {displayTopics.map((t, idx) => (
                             <Tag key={idx} color="blue">
                                 {t.topic.name}
                             </Tag>
-                        ))
-                    ) : (
-                        <span className="text-gray-400">Không có</span>
-                    )}
-                </div>
-            ),
+                        ))}
+                        {remaining > 0 && <Tag color="default">+{remaining}</Tag>}
+                    </div>
+                )
+            },
         },
         {
             title: 'Phân loại',
@@ -109,6 +143,26 @@ const ChonTaiLieu = () => {
                 ) : (
                     <span className="text-gray-400">Không có</span>
                 ),
+        },
+        {
+            title: 'Thao tác',
+            key: 'action',
+            width: 80,
+            fixed: 'right',
+            align: 'center',
+            render: (_, record) => (
+                <Tooltip title="Xem tài liệu" placement="left">
+                    <Button
+                        type="text"
+                        icon={<EyeOutlined />}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedDocumentId(record.id)
+                        }}
+                        className="text-blue-600 hover:text-blue-700 text-lg"
+                    />
+                </Tooltip>
+            ),
         },
     ]
 
@@ -127,6 +181,8 @@ const ChonTaiLieu = () => {
     const handleCancel = () => {
         setTempSelectedIds(selectedDocumentIds)
         setSearchText('')
+        setTopicFilter(undefined)
+        setClassificationFilter(undefined)
         onClose()
     }
 
@@ -140,27 +196,47 @@ const ChonTaiLieu = () => {
 
     return (
         <Modal
-            title={
-                <div className="flex items-center gap-2">
-                    <FileTextOutlined className="text-primary" />
-                    <span>Chọn tài liệu tham khảo</span>
-                </div>
-            }
+            title={'Chọn tài liệu tham khảo'}
             open={isOpen}
             onOk={handleOk}
             onCancel={handleCancel}
             width={900}
             okText="Xác nhận"
             cancelText="Hủy"
-            bodyStyle={{ padding: '16px' }}
+            styles={{ body: { padding: '16px' } }}
         >
-            <div className="mb-4">
-                <Input.Search
-                    placeholder="Tìm kiếm tài liệu theo tiêu đề..."
+            <div className="mb-4 space-y-2">
+                <Input
+                    placeholder="Tìm theo tên tài liệu"
+                    allowClear
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
-                    allowClear
+                    className="w-full"
                 />
+                <div className="flex items-center gap-2 flex-wrap">
+                    <Select
+                        placeholder="Loại tài liệu"
+                        allowClear
+                        className="flex-1 min-w-[150px]"
+                        value={topicFilter}
+                        onChange={(value) => setTopicFilter(value)}
+                        options={selectableTopicOptions.map((topic) => ({
+                            label: topic.name,
+                            value: topic.id,
+                        }))}
+                    />
+                    <Select
+                        placeholder="Phân loại"
+                        allowClear
+                        className="flex-1 min-w-[150px]"
+                        value={classificationFilter}
+                        onChange={(value) => setClassificationFilter(value)}
+                        options={classifications.map((classification) => ({
+                            label: classification.name,
+                            value: classification.id,
+                        }))}
+                    />
+                </div>
             </div>
 
             <div className="mb-2">
@@ -175,7 +251,7 @@ const ChonTaiLieu = () => {
                     ...rowSelection,
                 }}
                 columns={columns}
-                dataSource={filteredDocuments}
+                dataSource={documents}
                 rowKey="id"
                 loading={isLoading}
                 pagination={{
@@ -183,7 +259,7 @@ const ChonTaiLieu = () => {
                     showSizeChanger: false,
                     showTotal: (total) => `Tổng ${total} tài liệu`,
                 }}
-                scroll={{ y: 400 }}
+                scroll={{ x: 800, y: 400 }}
                 onRow={(record) => ({
                     onClick: () => {
                         const isSelected = tempSelectedIds.includes(record.id)
@@ -195,6 +271,12 @@ const ChonTaiLieu = () => {
                     },
                     style: { cursor: 'pointer' },
                 })}
+            />
+
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={null}
+                onClose={() => setSelectedDocumentId(null)}
             />
         </Modal>
     )
