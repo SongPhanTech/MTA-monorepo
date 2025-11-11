@@ -2644,6 +2644,7 @@ export type StudentTrainingType = $Enums.StudentTrainingType;
 export type ResearchProjectStatus = $Enums.ResearchProjectStatus;
 export type RegistrationStatus = $Enums.RegistrationStatus;
 export type ThesisProjectStatus = $Enums.ThesisProjectStatus;
+export type ThesisType = $Enums.ThesisType;
 export type StudentThesisRegistrationStatus = $Enums.StudentThesisRegistrationStatus;
 export type DecisionType = $Enums.DecisionType;
 export type CouncilProposalStatus = $Enums.CouncilProposalStatus;
@@ -5066,6 +5067,7 @@ export const StudentTrainingType: typeof $Enums.StudentTrainingType;
 export const ResearchProjectStatus: typeof $Enums.ResearchProjectStatus;
 export const RegistrationStatus: typeof $Enums.RegistrationStatus;
 export const ThesisProjectStatus: typeof $Enums.ThesisProjectStatus;
+export const ThesisType: typeof $Enums.ThesisType;
 export const StudentThesisRegistrationStatus: typeof $Enums.StudentThesisRegistrationStatus;
 export const DecisionType: typeof $Enums.DecisionType;
 export const CouncilProposalStatus: typeof $Enums.CouncilProposalStatus;
@@ -5345,6 +5347,11 @@ export namespace $Enums {
         CANCELED: 'CANCELED'
     };
     export type ThesisProjectStatus = (typeof ThesisProjectStatus)[keyof typeof ThesisProjectStatus];
+    export const ThesisType: {
+        THESIS: 'THESIS',
+        PROJECT: 'PROJECT'
+    };
+    export type ThesisType = (typeof ThesisType)[keyof typeof ThesisType];
     export const StudentThesisRegistrationStatus: {
         PENDING: 'PENDING',
         ACCEPTED: 'ACCEPTED',
@@ -8492,6 +8499,7 @@ export namespace Prisma {
         expectedResults: 'expectedResults',
         requirements: 'requirements',
         technologies: 'technologies',
+        thesisType: 'thesisType',
         status: 'status',
         subjectClassId: 'subjectClassId',
         thesisSessionId: 'thesisSessionId',
@@ -9007,7 +9015,6 @@ export namespace Prisma {
         createdBy: 'createdBy',
         answer: 'answer',
         requireExplanation: 'requireExplanation',
-        surveyId: 'surveyId',
         clusterSurveyId: 'clusterSurveyId'
     };
     export const SurveySessionScalarFieldEnum: {
@@ -11836,7 +11843,6 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         answer: 'answer',
-        surveyId: 'surveyId',
         clusterSurveyId: 'clusterSurveyId'
     };
     export const SurveySessionOrderByRelevanceFieldEnum: {
@@ -69118,6 +69124,7 @@ export namespace Prisma {
         readonly expectedResults: FieldRef<"ThesisProject", 'String'>;
         readonly requirements: FieldRef<"ThesisProject", 'String'>;
         readonly technologies: FieldRef<"ThesisProject", 'String'>;
+        readonly thesisType: FieldRef<"ThesisProject", 'ThesisType'>;
         readonly status: FieldRef<"ThesisProject", 'ThesisProjectStatus'>;
         readonly subjectClassId: FieldRef<"ThesisProject", 'String'>;
         readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>;
@@ -82613,8 +82620,8 @@ export namespace Prisma {
      */
     export interface Prisma__SurveyChoiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        survey<T extends SurveyChoice$surveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyChoice$surveyArgs<ExtArgs>>): Prisma__SurveyClient<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         clusterSurvey<T extends SurveyChoice$clusterSurveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyChoice$clusterSurveyArgs<ExtArgs>>): Prisma__ClusterSurveyClient<$Result.GetResult<Prisma.$ClusterSurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        survey<T extends SurveyChoice$surveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyChoice$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyResponses<T extends SurveyChoice$surveyResponsesArgs<ExtArgs> = {}>(args?: Subset<T, SurveyChoice$surveyResponsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -82652,7 +82659,6 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"SurveyChoice", 'String'>;
         readonly answer: FieldRef<"SurveyChoice", 'String'>;
         readonly requireExplanation: FieldRef<"SurveyChoice", 'Boolean'>;
-        readonly surveyId: FieldRef<"SurveyChoice", 'String'>;
         readonly clusterSurveyId: FieldRef<"SurveyChoice", 'String'>;
     }
 
@@ -133272,9 +133278,11 @@ export namespace Prisma {
      * Count Type SurveyChoiceCountOutputType
      */
     export type SurveyChoiceCountOutputType = {
+        survey: number
         surveyResponses: number
     };
     export type SurveyChoiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        survey?: boolean | SurveyChoiceCountOutputTypeCountSurveyArgs
         surveyResponses?: boolean | SurveyChoiceCountOutputTypeCountSurveyResponsesArgs
     };
     /**
@@ -133285,6 +133293,12 @@ export namespace Prisma {
          * Select specific fields to fetch from the SurveyChoiceCountOutputType
          */
         select?: SurveyChoiceCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * SurveyChoiceCountOutputType without action
+     */
+    export type SurveyChoiceCountOutputTypeCountSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SurveyWhereInput
     };
     /**
      * SurveyChoiceCountOutputType without action
@@ -251350,6 +251364,7 @@ export namespace Prisma {
         expectedResults: string | null
         requirements: string | null
         technologies: string | null
+        thesisType: $Enums.ThesisType | null
         status: $Enums.ThesisProjectStatus | null
         subjectClassId: string | null
         thesisSessionId: string | null
@@ -251384,6 +251399,7 @@ export namespace Prisma {
         expectedResults: string | null
         requirements: string | null
         technologies: string | null
+        thesisType: $Enums.ThesisType | null
         status: $Enums.ThesisProjectStatus | null
         subjectClassId: string | null
         thesisSessionId: string | null
@@ -251418,6 +251434,7 @@ export namespace Prisma {
         expectedResults: number
         requirements: number
         technologies: number
+        thesisType: number
         status: number
         subjectClassId: number
         thesisSessionId: number
@@ -251459,6 +251476,7 @@ export namespace Prisma {
         expectedResults?: true
         requirements?: true
         technologies?: true
+        thesisType?: true
         status?: true
         subjectClassId?: true
         thesisSessionId?: true
@@ -251493,6 +251511,7 @@ export namespace Prisma {
         expectedResults?: true
         requirements?: true
         technologies?: true
+        thesisType?: true
         status?: true
         subjectClassId?: true
         thesisSessionId?: true
@@ -251527,6 +251546,7 @@ export namespace Prisma {
         expectedResults?: true
         requirements?: true
         technologies?: true
+        thesisType?: true
         status?: true
         subjectClassId?: true
         thesisSessionId?: true
@@ -251642,6 +251662,7 @@ export namespace Prisma {
         expectedResults: string | null
         requirements: string | null
         technologies: string | null
+        thesisType: $Enums.ThesisType
         status: $Enums.ThesisProjectStatus
         subjectClassId: string | null
         thesisSessionId: string | null
@@ -251693,6 +251714,7 @@ export namespace Prisma {
         expectedResults?: boolean
         requirements?: boolean
         technologies?: boolean
+        thesisType?: boolean
         status?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
@@ -251741,6 +251763,7 @@ export namespace Prisma {
         expectedResults?: boolean
         requirements?: boolean
         technologies?: boolean
+        thesisType?: boolean
         status?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
@@ -251783,6 +251806,7 @@ export namespace Prisma {
         expectedResults?: boolean
         requirements?: boolean
         technologies?: boolean
+        thesisType?: boolean
         status?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
@@ -251825,6 +251849,7 @@ export namespace Prisma {
         expectedResults?: boolean
         requirements?: boolean
         technologies?: boolean
+        thesisType?: boolean
         status?: boolean
         subjectClassId?: boolean
         thesisSessionId?: boolean
@@ -251841,7 +251866,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "status" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
         thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
@@ -251928,6 +251953,7 @@ export namespace Prisma {
             expectedResults: string | null
             requirements: string | null
             technologies: string | null
+            thesisType: $Enums.ThesisType
             status: $Enums.ThesisProjectStatus
             subjectClassId: string | null
             thesisSessionId: string | null
@@ -277896,7 +277922,6 @@ export namespace Prisma {
         createdBy: string | null
         answer: string | null
         requireExplanation: boolean | null
-        surveyId: string | null
         clusterSurveyId: string | null
     };
     export type SurveyChoiceMaxAggregateOutputType = {
@@ -277910,7 +277935,6 @@ export namespace Prisma {
         createdBy: string | null
         answer: string | null
         requireExplanation: boolean | null
-        surveyId: string | null
         clusterSurveyId: string | null
     };
     export type SurveyChoiceCountAggregateOutputType = {
@@ -277924,7 +277948,6 @@ export namespace Prisma {
         createdBy: number
         answer: number
         requireExplanation: number
-        surveyId: number
         clusterSurveyId: number
         _all: number
     };
@@ -277939,7 +277962,6 @@ export namespace Prisma {
         createdBy?: true
         answer?: true
         requireExplanation?: true
-        surveyId?: true
         clusterSurveyId?: true
     };
     export type SurveyChoiceMaxAggregateInputType = {
@@ -277953,7 +277975,6 @@ export namespace Prisma {
         createdBy?: true
         answer?: true
         requireExplanation?: true
-        surveyId?: true
         clusterSurveyId?: true
     };
     export type SurveyChoiceCountAggregateInputType = {
@@ -277967,7 +277988,6 @@ export namespace Prisma {
         createdBy?: true
         answer?: true
         requireExplanation?: true
-        surveyId?: true
         clusterSurveyId?: true
         _all?: true
     };
@@ -278048,7 +278068,6 @@ export namespace Prisma {
         createdBy: string | null
         answer: string
         requireExplanation: boolean
-        surveyId: string | null
         clusterSurveyId: string | null
         _count: SurveyChoiceCountAggregateOutputType | null
         _min: SurveyChoiceMinAggregateOutputType | null
@@ -278077,10 +278096,9 @@ export namespace Prisma {
         createdBy?: boolean
         answer?: boolean
         requireExplanation?: boolean
-        surveyId?: boolean
         clusterSurveyId?: boolean
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
+        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         surveyResponses?: boolean | SurveyChoice$surveyResponsesArgs<ExtArgs>
         _count?: boolean | SurveyChoiceCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyChoice"]>;
@@ -278095,9 +278113,7 @@ export namespace Prisma {
         createdBy?: boolean
         answer?: boolean
         requireExplanation?: boolean
-        surveyId?: boolean
         clusterSurveyId?: boolean
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
     }, ExtArgs["result"]["surveyChoice"]>;
     export type SurveyChoiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -278111,9 +278127,7 @@ export namespace Prisma {
         createdBy?: boolean
         answer?: boolean
         requireExplanation?: boolean
-        surveyId?: boolean
         clusterSurveyId?: boolean
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
     }, ExtArgs["result"]["surveyChoice"]>;
     export type SurveyChoiceSelectScalar = {
@@ -278127,29 +278141,26 @@ export namespace Prisma {
         createdBy?: boolean
         answer?: boolean
         requireExplanation?: boolean
-        surveyId?: boolean
         clusterSurveyId?: boolean
     };
-    export type SurveyChoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "answer" | "requireExplanation" | "surveyId" | "clusterSurveyId", ExtArgs["result"]["surveyChoice"]>;
+    export type SurveyChoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "answer" | "requireExplanation" | "clusterSurveyId", ExtArgs["result"]["surveyChoice"]>;
     export type SurveyChoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
+        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         surveyResponses?: boolean | SurveyChoice$surveyResponsesArgs<ExtArgs>
         _count?: boolean | SurveyChoiceCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SurveyChoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
     };
     export type SurveyChoiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        survey?: boolean | SurveyChoice$surveyArgs<ExtArgs>
         clusterSurvey?: boolean | SurveyChoice$clusterSurveyArgs<ExtArgs>
     };
     export type $SurveyChoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SurveyChoice"
         objects: {
-            survey: Prisma.$SurveyPayload<ExtArgs> | null
             clusterSurvey: Prisma.$ClusterSurveyPayload<ExtArgs> | null
+            survey: Prisma.$SurveyPayload<ExtArgs>[]
             surveyResponses: Prisma.$SurveyResponsePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -278163,7 +278174,6 @@ export namespace Prisma {
             createdBy: string | null
             answer: string
             requireExplanation: boolean
-            surveyId: string | null
             clusterSurveyId: string | null
         }, ExtArgs["result"]["surveyChoice"]>
         composites: {}
@@ -278550,24 +278560,6 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * SurveyChoice.survey
-     */
-    export type SurveyChoice$surveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Survey
-         */
-        select?: SurveySelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Survey
-         */
-        omit?: SurveyOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SurveyInclude<ExtArgs> | null
-        where?: SurveyWhereInput
-    };
-    /**
      * SurveyChoice.clusterSurvey
      */
     export type SurveyChoice$clusterSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -278584,6 +278576,29 @@ export namespace Prisma {
          */
         include?: ClusterSurveyInclude<ExtArgs> | null
         where?: ClusterSurveyWhereInput
+    };
+    /**
+     * SurveyChoice.survey
+     */
+    export type SurveyChoice$surveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Survey
+         */
+        select?: SurveySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Survey
+         */
+        omit?: SurveyOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SurveyInclude<ExtArgs> | null
+        where?: SurveyWhereInput
+        orderBy?: SurveyOrderByWithRelationInput | SurveyOrderByWithRelationInput[]
+        cursor?: SurveyWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SurveyScalarFieldEnum | SurveyScalarFieldEnum[]
     };
     /**
      * SurveyChoice.surveyResponses
@@ -328678,6 +328693,14 @@ export namespace Prisma {
      */
     export type ListEnumRegistrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RegistrationStatus[]'>;
     /**
+     * Reference to a field of type 'ThesisType'
+     */
+    export type EnumThesisTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ThesisType'>;
+    /**
+     * Reference to a field of type 'ThesisType[]'
+     */
+    export type ListEnumThesisTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ThesisType[]'>;
+    /**
      * Reference to a field of type 'ThesisProjectStatus'
      */
     export type EnumThesisProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ThesisProjectStatus'>;
@@ -345293,6 +345316,7 @@ export namespace Prisma {
         expectedResults?: StringNullableFilter<"ThesisProject"> | string | null
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -345340,6 +345364,7 @@ export namespace Prisma {
         expectedResults?: SortOrderInput | SortOrder
         requirements?: SortOrderInput | SortOrder
         technologies?: SortOrderInput | SortOrder
+        thesisType?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
@@ -345391,6 +345416,7 @@ export namespace Prisma {
         expectedResults?: StringNullableFilter<"ThesisProject"> | string | null
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -345438,6 +345464,7 @@ export namespace Prisma {
         expectedResults?: SortOrderInput | SortOrder
         requirements?: SortOrderInput | SortOrder
         technologies?: SortOrderInput | SortOrder
+        thesisType?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         thesisSessionId?: SortOrderInput | SortOrder
@@ -345480,6 +345507,7 @@ export namespace Prisma {
         expectedResults?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         requirements?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         technologies?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        thesisType?: EnumThesisTypeWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisType
         status?: EnumThesisProjectStatusWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
         subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -348727,10 +348755,9 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SurveyChoice"> | string | null
         answer?: StringFilter<"SurveyChoice"> | string
         requireExplanation?: BoolFilter<"SurveyChoice"> | boolean
-        surveyId?: StringNullableFilter<"SurveyChoice"> | string | null
         clusterSurveyId?: StringNullableFilter<"SurveyChoice"> | string | null
-        survey?: XOR<SurveyNullableScalarRelationFilter, SurveyWhereInput> | null
         clusterSurvey?: XOR<ClusterSurveyNullableScalarRelationFilter, ClusterSurveyWhereInput> | null
+        survey?: SurveyListRelationFilter
         surveyResponses?: SurveyResponseListRelationFilter
     };
     export type SurveyChoiceOrderByWithRelationInput = {
@@ -348744,10 +348771,9 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         answer?: SortOrder
         requireExplanation?: SortOrder
-        surveyId?: SortOrderInput | SortOrder
         clusterSurveyId?: SortOrderInput | SortOrder
-        survey?: SurveyOrderByWithRelationInput
         clusterSurvey?: ClusterSurveyOrderByWithRelationInput
+        survey?: SurveyOrderByRelationAggregateInput
         surveyResponses?: SurveyResponseOrderByRelationAggregateInput
         _relevance?: SurveyChoiceOrderByRelevanceInput
     };
@@ -348765,10 +348791,9 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SurveyChoice"> | string | null
         answer?: StringFilter<"SurveyChoice"> | string
         requireExplanation?: BoolFilter<"SurveyChoice"> | boolean
-        surveyId?: StringNullableFilter<"SurveyChoice"> | string | null
         clusterSurveyId?: StringNullableFilter<"SurveyChoice"> | string | null
-        survey?: XOR<SurveyNullableScalarRelationFilter, SurveyWhereInput> | null
         clusterSurvey?: XOR<ClusterSurveyNullableScalarRelationFilter, ClusterSurveyWhereInput> | null
+        survey?: SurveyListRelationFilter
         surveyResponses?: SurveyResponseListRelationFilter
     }, "id" | "code">;
     export type SurveyChoiceOrderByWithAggregationInput = {
@@ -348782,7 +348807,6 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         answer?: SortOrder
         requireExplanation?: SortOrder
-        surveyId?: SortOrderInput | SortOrder
         clusterSurveyId?: SortOrderInput | SortOrder
         _count?: SurveyChoiceCountOrderByAggregateInput
         _max?: SurveyChoiceMaxOrderByAggregateInput
@@ -348802,7 +348826,6 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"SurveyChoice"> | string | null
         answer?: StringWithAggregatesFilter<"SurveyChoice"> | string
         requireExplanation?: BoolWithAggregatesFilter<"SurveyChoice"> | boolean
-        surveyId?: StringNullableWithAggregatesFilter<"SurveyChoice"> | string | null
         clusterSurveyId?: StringNullableWithAggregatesFilter<"SurveyChoice"> | string | null
     };
     export type SurveySessionWhereInput = {
@@ -373774,6 +373797,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -373813,6 +373837,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -373852,6 +373877,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -373891,6 +373917,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -373930,6 +373957,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -373964,6 +373992,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -373990,6 +374019,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -377627,8 +377657,8 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        survey?: SurveyCreateNestedOneWithoutSurveyChoiceInput
         clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveyChoiceInput
+        survey?: SurveyCreateNestedManyWithoutSurveyChoiceInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceUncheckedCreateInput = {
@@ -377642,8 +377672,8 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        surveyId?: string | null
         clusterSurveyId?: string | null
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyChoiceInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceUpdateInput = {
@@ -377657,8 +377687,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        survey?: SurveyUpdateOneWithoutSurveyChoiceNestedInput
         clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveyChoiceNestedInput
+        survey?: SurveyUpdateManyWithoutSurveyChoiceNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SurveyChoiceUncheckedUpdateInput = {
@@ -377672,8 +377702,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        surveyId?: NullableStringFieldUpdateOperationsInput | string | null
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyChoiceNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SurveyChoiceCreateManyInput = {
@@ -377687,7 +377717,6 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        surveyId?: string | null
         clusterSurveyId?: string | null
     };
     export type SurveyChoiceUpdateManyMutationInput = {
@@ -377713,7 +377742,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        surveyId?: NullableStringFieldUpdateOperationsInput | string | null
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveySessionCreateInput = {
@@ -396059,6 +396087,12 @@ export namespace Prisma {
         defenseDecisionDate?: SortOrder
         chief?: SortOrder
     };
+    export type EnumThesisTypeFilter<$PrismaModel = never> = {
+        equals?: $Enums.ThesisType | EnumThesisTypeFieldRefInput<$PrismaModel>
+        in?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        not?: NestedEnumThesisTypeFilter<$PrismaModel> | $Enums.ThesisType
+    };
     export type EnumThesisProjectStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisProjectStatus | EnumThesisProjectStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ThesisProjectStatus[] | ListEnumThesisProjectStatusFieldRefInput<$PrismaModel>
@@ -396120,6 +396154,7 @@ export namespace Prisma {
         expectedResults?: SortOrder
         requirements?: SortOrder
         technologies?: SortOrder
+        thesisType?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
@@ -396157,6 +396192,7 @@ export namespace Prisma {
         expectedResults?: SortOrder
         requirements?: SortOrder
         technologies?: SortOrder
+        thesisType?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
@@ -396191,6 +396227,7 @@ export namespace Prisma {
         expectedResults?: SortOrder
         requirements?: SortOrder
         technologies?: SortOrder
+        thesisType?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
         thesisSessionId?: SortOrder
@@ -396209,6 +396246,15 @@ export namespace Prisma {
     };
     export type ThesisProjectSumOrderByAggregateInput = {
         maxStudents?: SortOrder
+    };
+    export type EnumThesisTypeWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ThesisType | EnumThesisTypeFieldRefInput<$PrismaModel>
+        in?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        not?: NestedEnumThesisTypeWithAggregatesFilter<$PrismaModel> | $Enums.ThesisType
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumThesisTypeFilter<$PrismaModel>
+        _max?: NestedEnumThesisTypeFilter<$PrismaModel>
     };
     export type EnumThesisProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisProjectStatus | EnumThesisProjectStatusFieldRefInput<$PrismaModel>
@@ -398309,10 +398355,6 @@ export namespace Prisma {
         _min?: NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
         _max?: NestedEnumSurveyQuestionTypeFilter<$PrismaModel>
     };
-    export type SurveyNullableScalarRelationFilter = {
-        is?: SurveyWhereInput | null
-        isNot?: SurveyWhereInput | null
-    };
     export type SurveyChoiceOrderByRelevanceInput = {
         fields: SurveyChoiceOrderByRelevanceFieldEnum | SurveyChoiceOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -398329,7 +398371,6 @@ export namespace Prisma {
         createdBy?: SortOrder
         answer?: SortOrder
         requireExplanation?: SortOrder
-        surveyId?: SortOrder
         clusterSurveyId?: SortOrder
     };
     export type SurveyChoiceMaxOrderByAggregateInput = {
@@ -398343,7 +398384,6 @@ export namespace Prisma {
         createdBy?: SortOrder
         answer?: SortOrder
         requireExplanation?: SortOrder
-        surveyId?: SortOrder
         clusterSurveyId?: SortOrder
     };
     export type SurveyChoiceMinOrderByAggregateInput = {
@@ -398357,7 +398397,6 @@ export namespace Prisma {
         createdBy?: SortOrder
         answer?: SortOrder
         requireExplanation?: SortOrder
-        surveyId?: SortOrder
         clusterSurveyId?: SortOrder
     };
     export type SurveyScalarRelationFilter = {
@@ -417637,6 +417676,9 @@ export namespace Prisma {
         createMany?: SupervisorPaymentRecordCreateManyThesisProjectInputEnvelope
         connect?: SupervisorPaymentRecordWhereUniqueInput | SupervisorPaymentRecordWhereUniqueInput[]
     };
+    export type EnumThesisTypeFieldUpdateOperationsInput = {
+        set?: $Enums.ThesisType
+    };
     export type EnumThesisProjectStatusFieldUpdateOperationsInput = {
         set?: $Enums.ThesisProjectStatus
     };
@@ -420204,7 +420246,6 @@ export namespace Prisma {
     export type SurveyChoiceCreateNestedManyWithoutSurveyInput = {
         create?: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput> | SurveyChoiceCreateWithoutSurveyInput[] | SurveyChoiceUncheckedCreateWithoutSurveyInput[]
         connectOrCreate?: SurveyChoiceCreateOrConnectWithoutSurveyInput | SurveyChoiceCreateOrConnectWithoutSurveyInput[]
-        createMany?: SurveyChoiceCreateManySurveyInputEnvelope
         connect?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
     };
     export type SurveyQuestionCreateNestedManyWithoutSurveyInput = {
@@ -420236,7 +420277,6 @@ export namespace Prisma {
     export type SurveyChoiceUncheckedCreateNestedManyWithoutSurveyInput = {
         create?: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput> | SurveyChoiceCreateWithoutSurveyInput[] | SurveyChoiceUncheckedCreateWithoutSurveyInput[]
         connectOrCreate?: SurveyChoiceCreateOrConnectWithoutSurveyInput | SurveyChoiceCreateOrConnectWithoutSurveyInput[]
-        createMany?: SurveyChoiceCreateManySurveyInputEnvelope
         connect?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
     };
     export type SurveyQuestionUncheckedCreateNestedManyWithoutSurveyInput = {
@@ -420294,7 +420334,6 @@ export namespace Prisma {
         create?: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput> | SurveyChoiceCreateWithoutSurveyInput[] | SurveyChoiceUncheckedCreateWithoutSurveyInput[]
         connectOrCreate?: SurveyChoiceCreateOrConnectWithoutSurveyInput | SurveyChoiceCreateOrConnectWithoutSurveyInput[]
         upsert?: SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput | SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput[]
-        createMany?: SurveyChoiceCreateManySurveyInputEnvelope
         set?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
         disconnect?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
         delete?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
@@ -420365,7 +420404,6 @@ export namespace Prisma {
         create?: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput> | SurveyChoiceCreateWithoutSurveyInput[] | SurveyChoiceUncheckedCreateWithoutSurveyInput[]
         connectOrCreate?: SurveyChoiceCreateOrConnectWithoutSurveyInput | SurveyChoiceCreateOrConnectWithoutSurveyInput[]
         upsert?: SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput | SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput[]
-        createMany?: SurveyChoiceCreateManySurveyInputEnvelope
         set?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
         disconnect?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
         delete?: SurveyChoiceWhereUniqueInput | SurveyChoiceWhereUniqueInput[]
@@ -420520,15 +420558,15 @@ export namespace Prisma {
         updateMany?: SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput | SurveyResponseUpdateManyWithWhereWithoutSurveyQuestionInput[]
         deleteMany?: SurveyResponseScalarWhereInput | SurveyResponseScalarWhereInput[]
     };
-    export type SurveyCreateNestedOneWithoutSurveyChoiceInput = {
-        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput>
-        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput
-        connect?: SurveyWhereUniqueInput
-    };
     export type ClusterSurveyCreateNestedOneWithoutSurveyChoiceInput = {
         create?: XOR<ClusterSurveyCreateWithoutSurveyChoiceInput, ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput>
         connectOrCreate?: ClusterSurveyCreateOrConnectWithoutSurveyChoiceInput
         connect?: ClusterSurveyWhereUniqueInput
+    };
+    export type SurveyCreateNestedManyWithoutSurveyChoiceInput = {
+        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput> | SurveyCreateWithoutSurveyChoiceInput[] | SurveyUncheckedCreateWithoutSurveyChoiceInput[]
+        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput | SurveyCreateOrConnectWithoutSurveyChoiceInput[]
+        connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
     };
     export type SurveyResponseCreateNestedManyWithoutSurveyChoiceInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveyChoiceInput, SurveyResponseUncheckedCreateWithoutSurveyChoiceInput> | SurveyResponseCreateWithoutSurveyChoiceInput[] | SurveyResponseUncheckedCreateWithoutSurveyChoiceInput[]
@@ -420536,20 +420574,16 @@ export namespace Prisma {
         createMany?: SurveyResponseCreateManySurveyChoiceInputEnvelope
         connect?: SurveyResponseWhereUniqueInput | SurveyResponseWhereUniqueInput[]
     };
+    export type SurveyUncheckedCreateNestedManyWithoutSurveyChoiceInput = {
+        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput> | SurveyCreateWithoutSurveyChoiceInput[] | SurveyUncheckedCreateWithoutSurveyChoiceInput[]
+        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput | SurveyCreateOrConnectWithoutSurveyChoiceInput[]
+        connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    };
     export type SurveyResponseUncheckedCreateNestedManyWithoutSurveyChoiceInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveyChoiceInput, SurveyResponseUncheckedCreateWithoutSurveyChoiceInput> | SurveyResponseCreateWithoutSurveyChoiceInput[] | SurveyResponseUncheckedCreateWithoutSurveyChoiceInput[]
         connectOrCreate?: SurveyResponseCreateOrConnectWithoutSurveyChoiceInput | SurveyResponseCreateOrConnectWithoutSurveyChoiceInput[]
         createMany?: SurveyResponseCreateManySurveyChoiceInputEnvelope
         connect?: SurveyResponseWhereUniqueInput | SurveyResponseWhereUniqueInput[]
-    };
-    export type SurveyUpdateOneWithoutSurveyChoiceNestedInput = {
-        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput>
-        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput
-        upsert?: SurveyUpsertWithoutSurveyChoiceInput
-        disconnect?: SurveyWhereInput | boolean
-        delete?: SurveyWhereInput | boolean
-        connect?: SurveyWhereUniqueInput
-        update?: XOR<XOR<SurveyUpdateToOneWithWhereWithoutSurveyChoiceInput, SurveyUpdateWithoutSurveyChoiceInput>, SurveyUncheckedUpdateWithoutSurveyChoiceInput>
     };
     export type ClusterSurveyUpdateOneWithoutSurveyChoiceNestedInput = {
         create?: XOR<ClusterSurveyCreateWithoutSurveyChoiceInput, ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput>
@@ -420559,6 +420593,18 @@ export namespace Prisma {
         delete?: ClusterSurveyWhereInput | boolean
         connect?: ClusterSurveyWhereUniqueInput
         update?: XOR<XOR<ClusterSurveyUpdateToOneWithWhereWithoutSurveyChoiceInput, ClusterSurveyUpdateWithoutSurveyChoiceInput>, ClusterSurveyUncheckedUpdateWithoutSurveyChoiceInput>
+    };
+    export type SurveyUpdateManyWithoutSurveyChoiceNestedInput = {
+        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput> | SurveyCreateWithoutSurveyChoiceInput[] | SurveyUncheckedCreateWithoutSurveyChoiceInput[]
+        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput | SurveyCreateOrConnectWithoutSurveyChoiceInput[]
+        upsert?: SurveyUpsertWithWhereUniqueWithoutSurveyChoiceInput | SurveyUpsertWithWhereUniqueWithoutSurveyChoiceInput[]
+        set?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        disconnect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        delete?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        update?: SurveyUpdateWithWhereUniqueWithoutSurveyChoiceInput | SurveyUpdateWithWhereUniqueWithoutSurveyChoiceInput[]
+        updateMany?: SurveyUpdateManyWithWhereWithoutSurveyChoiceInput | SurveyUpdateManyWithWhereWithoutSurveyChoiceInput[]
+        deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
     };
     export type SurveyResponseUpdateManyWithoutSurveyChoiceNestedInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveyChoiceInput, SurveyResponseUncheckedCreateWithoutSurveyChoiceInput> | SurveyResponseCreateWithoutSurveyChoiceInput[] | SurveyResponseUncheckedCreateWithoutSurveyChoiceInput[]
@@ -420572,6 +420618,18 @@ export namespace Prisma {
         update?: SurveyResponseUpdateWithWhereUniqueWithoutSurveyChoiceInput | SurveyResponseUpdateWithWhereUniqueWithoutSurveyChoiceInput[]
         updateMany?: SurveyResponseUpdateManyWithWhereWithoutSurveyChoiceInput | SurveyResponseUpdateManyWithWhereWithoutSurveyChoiceInput[]
         deleteMany?: SurveyResponseScalarWhereInput | SurveyResponseScalarWhereInput[]
+    };
+    export type SurveyUncheckedUpdateManyWithoutSurveyChoiceNestedInput = {
+        create?: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput> | SurveyCreateWithoutSurveyChoiceInput[] | SurveyUncheckedCreateWithoutSurveyChoiceInput[]
+        connectOrCreate?: SurveyCreateOrConnectWithoutSurveyChoiceInput | SurveyCreateOrConnectWithoutSurveyChoiceInput[]
+        upsert?: SurveyUpsertWithWhereUniqueWithoutSurveyChoiceInput | SurveyUpsertWithWhereUniqueWithoutSurveyChoiceInput[]
+        set?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        disconnect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        delete?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+        update?: SurveyUpdateWithWhereUniqueWithoutSurveyChoiceInput | SurveyUpdateWithWhereUniqueWithoutSurveyChoiceInput[]
+        updateMany?: SurveyUpdateManyWithWhereWithoutSurveyChoiceInput | SurveyUpdateManyWithWhereWithoutSurveyChoiceInput[]
+        deleteMany?: SurveyScalarWhereInput | SurveyScalarWhereInput[]
     };
     export type SurveyResponseUncheckedUpdateManyWithoutSurveyChoiceNestedInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveyChoiceInput, SurveyResponseUncheckedCreateWithoutSurveyChoiceInput> | SurveyResponseCreateWithoutSurveyChoiceInput[] | SurveyResponseUncheckedCreateWithoutSurveyChoiceInput[]
@@ -424933,11 +424991,26 @@ export namespace Prisma {
         _min?: NestedEnumRegistrationStatusFilter<$PrismaModel>
         _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
     };
+    export type NestedEnumThesisTypeFilter<$PrismaModel = never> = {
+        equals?: $Enums.ThesisType | EnumThesisTypeFieldRefInput<$PrismaModel>
+        in?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        not?: NestedEnumThesisTypeFilter<$PrismaModel> | $Enums.ThesisType
+    };
     export type NestedEnumThesisProjectStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisProjectStatus | EnumThesisProjectStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ThesisProjectStatus[] | ListEnumThesisProjectStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ThesisProjectStatus[] | ListEnumThesisProjectStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumThesisProjectStatusFilter<$PrismaModel> | $Enums.ThesisProjectStatus
+    };
+    export type NestedEnumThesisTypeWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ThesisType | EnumThesisTypeFieldRefInput<$PrismaModel>
+        in?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ThesisType[] | ListEnumThesisTypeFieldRefInput<$PrismaModel>
+        not?: NestedEnumThesisTypeWithAggregatesFilter<$PrismaModel> | $Enums.ThesisType
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumThesisTypeFilter<$PrismaModel>
+        _max?: NestedEnumThesisTypeFilter<$PrismaModel>
     };
     export type NestedEnumThesisProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisProjectStatus | EnumThesisProjectStatusFieldRefInput<$PrismaModel>
@@ -458016,6 +458089,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -458054,6 +458128,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -458538,6 +458613,7 @@ export namespace Prisma {
         expectedResults?: StringNullableFilter<"ThesisProject"> | string | null
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
         subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
         thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -484663,6 +484739,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -484701,6 +484778,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         thesisSessionId?: string | null
         supervisorId?: string | null
@@ -490845,6 +490923,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -490883,6 +490962,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -507196,6 +507276,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -507234,6 +507315,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         supervisorId?: string | null
@@ -508777,6 +508859,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -508815,6 +508898,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -509092,6 +509176,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -509130,6 +509215,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -509509,6 +509595,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -509547,6 +509634,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509817,6 +509905,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -509855,6 +509944,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -509901,6 +509991,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -509939,6 +510030,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -510476,6 +510568,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -510514,6 +510607,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -510578,6 +510672,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -510616,6 +510711,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510769,6 +510865,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -510807,6 +510904,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -511302,6 +511400,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -511340,6 +511439,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -511463,6 +511563,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -511501,6 +511602,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -511552,6 +511654,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -511590,6 +511693,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -511713,6 +511817,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -511751,6 +511856,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512004,6 +512110,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         maxStudents?: number | null
         defenseDate?: Date | string | null
@@ -512042,6 +512149,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -512157,6 +512265,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512195,6 +512304,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -517306,7 +517416,7 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        survey?: SurveyCreateNestedOneWithoutSurveyChoiceInput
+        survey?: SurveyCreateNestedManyWithoutSurveyChoiceInput
         surveyResponses?: SurveyResponseCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceUncheckedCreateWithoutClusterSurveyInput = {
@@ -517320,7 +517430,7 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        surveyId?: string | null
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyChoiceInput
         surveyResponses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceCreateOrConnectWithoutClusterSurveyInput = {
@@ -517507,7 +517617,6 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SurveyChoice"> | string | null
         answer?: StringFilter<"SurveyChoice"> | string
         requireExplanation?: BoolFilter<"SurveyChoice"> | boolean
-        surveyId?: StringNullableFilter<"SurveyChoice"> | string | null
         clusterSurveyId?: StringNullableFilter<"SurveyChoice"> | string | null
     };
     export type SurveyQuestionUpsertWithWhereUniqueWithoutClusterSurveyInput = {
@@ -517817,10 +517926,6 @@ export namespace Prisma {
     export type SurveyChoiceCreateOrConnectWithoutSurveyInput = {
         where: SurveyChoiceWhereUniqueInput
         create: XOR<SurveyChoiceCreateWithoutSurveyInput, SurveyChoiceUncheckedCreateWithoutSurveyInput>
-    };
-    export type SurveyChoiceCreateManySurveyInputEnvelope = {
-        data: SurveyChoiceCreateManySurveyInput | SurveyChoiceCreateManySurveyInput[]
-        skipDuplicates?: boolean
     };
     export type SurveyQuestionCreateWithoutSurveyInput = {
         id?: string
@@ -518423,6 +518528,52 @@ export namespace Prisma {
         surveyChoiceId?: StringNullableFilter<"SurveyResponse"> | string | null
         answeredAt?: DateTimeFilter<"SurveyResponse"> | Date | string
     };
+    export type ClusterSurveyCreateWithoutSurveyChoiceInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        additionalSuggestion: boolean
+        startDate: Date | string
+        endDate?: Date | string | null
+        isPublic?: boolean
+        anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
+        lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
+        surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
+        surveys?: SurveyCreateNestedManyWithoutClusterSurveyInput
+    };
+    export type ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        additionalSuggestion: boolean
+        startDate: Date | string
+        endDate?: Date | string | null
+        isPublic?: boolean
+        anonymous?: boolean
+        surveyTopicId: string
+        surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
+        lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
+        surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
+        surveys?: SurveyUncheckedCreateNestedManyWithoutClusterSurveyInput
+    };
+    export type ClusterSurveyCreateOrConnectWithoutSurveyChoiceInput = {
+        where: ClusterSurveyWhereUniqueInput
+        create: XOR<ClusterSurveyCreateWithoutSurveyChoiceInput, ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput>
+    };
     export type SurveyCreateWithoutSurveyChoiceInput = {
         id?: string
         code?: string | null
@@ -518473,52 +518624,6 @@ export namespace Prisma {
         where: SurveyWhereUniqueInput
         create: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput>
     };
-    export type ClusterSurveyCreateWithoutSurveyChoiceInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-        additionalSuggestion: boolean
-        startDate: Date | string
-        endDate?: Date | string | null
-        isPublic?: boolean
-        anonymous?: boolean
-        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
-        surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
-        lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
-        surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
-        surveys?: SurveyCreateNestedManyWithoutClusterSurveyInput
-    };
-    export type ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-        additionalSuggestion: boolean
-        startDate: Date | string
-        endDate?: Date | string | null
-        isPublic?: boolean
-        anonymous?: boolean
-        surveyTopicId: string
-        surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
-        surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
-        surveys?: SurveyUncheckedCreateNestedManyWithoutClusterSurveyInput
-    };
-    export type ClusterSurveyCreateOrConnectWithoutSurveyChoiceInput = {
-        where: ClusterSurveyWhereUniqueInput
-        create: XOR<ClusterSurveyCreateWithoutSurveyChoiceInput, ClusterSurveyUncheckedCreateWithoutSurveyChoiceInput>
-    };
     export type SurveyResponseCreateWithoutSurveyChoiceInput = {
         id?: string
         code?: string | null
@@ -518556,61 +518661,6 @@ export namespace Prisma {
     export type SurveyResponseCreateManySurveyChoiceInputEnvelope = {
         data: SurveyResponseCreateManySurveyChoiceInput | SurveyResponseCreateManySurveyChoiceInput[]
         skipDuplicates?: boolean
-    };
-    export type SurveyUpsertWithoutSurveyChoiceInput = {
-        update: XOR<SurveyUpdateWithoutSurveyChoiceInput, SurveyUncheckedUpdateWithoutSurveyChoiceInput>
-        create: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput>
-        where?: SurveyWhereInput
-    };
-    export type SurveyUpdateToOneWithWhereWithoutSurveyChoiceInput = {
-        where?: SurveyWhereInput
-        data: XOR<SurveyUpdateWithoutSurveyChoiceInput, SurveyUncheckedUpdateWithoutSurveyChoiceInput>
-    };
-    export type SurveyUpdateWithoutSurveyChoiceInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        isPublic?: BoolFieldUpdateOperationsInput | boolean
-        anonymous?: BoolFieldUpdateOperationsInput | boolean
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
-        surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
-        subjectClasses?: SubjectClassUpdateManyWithoutSurveyNestedInput
-        lecture?: LecturerUpdateOneWithoutSurveyNestedInput
-        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
-        surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
-        surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
-        clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
-    };
-    export type SurveyUncheckedUpdateWithoutSurveyChoiceInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        isPublic?: BoolFieldUpdateOperationsInput | boolean
-        anonymous?: BoolFieldUpdateOperationsInput | boolean
-        lectureId?: NullableStringFieldUpdateOperationsInput | string | null
-        surveyTopicId?: StringFieldUpdateOperationsInput | string
-        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
-        clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
-        surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
-        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyNestedInput
-        surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
-        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyNestedInput
     };
     export type ClusterSurveyUpsertWithoutSurveyChoiceInput = {
         update: XOR<ClusterSurveyUpdateWithoutSurveyChoiceInput, ClusterSurveyUncheckedUpdateWithoutSurveyChoiceInput>
@@ -518662,6 +518712,19 @@ export namespace Prisma {
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveys?: SurveyUncheckedUpdateManyWithoutClusterSurveyNestedInput
+    };
+    export type SurveyUpsertWithWhereUniqueWithoutSurveyChoiceInput = {
+        where: SurveyWhereUniqueInput
+        update: XOR<SurveyUpdateWithoutSurveyChoiceInput, SurveyUncheckedUpdateWithoutSurveyChoiceInput>
+        create: XOR<SurveyCreateWithoutSurveyChoiceInput, SurveyUncheckedCreateWithoutSurveyChoiceInput>
+    };
+    export type SurveyUpdateWithWhereUniqueWithoutSurveyChoiceInput = {
+        where: SurveyWhereUniqueInput
+        data: XOR<SurveyUpdateWithoutSurveyChoiceInput, SurveyUncheckedUpdateWithoutSurveyChoiceInput>
+    };
+    export type SurveyUpdateManyWithWhereWithoutSurveyChoiceInput = {
+        where: SurveyScalarWhereInput
+        data: XOR<SurveyUpdateManyMutationInput, SurveyUncheckedUpdateManyWithoutSurveyChoiceInput>
     };
     export type SurveyResponseUpsertWithWhereUniqueWithoutSurveyChoiceInput = {
         where: SurveyResponseWhereUniqueInput
@@ -519956,8 +520019,8 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        survey?: SurveyCreateNestedOneWithoutSurveyChoiceInput
         clusterSurvey?: ClusterSurveyCreateNestedOneWithoutSurveyChoiceInput
+        survey?: SurveyCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceUncheckedCreateWithoutSurveyResponsesInput = {
         id?: string
@@ -519970,8 +520033,8 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        surveyId?: string | null
         clusterSurveyId?: string | null
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyChoiceInput
     };
     export type SurveyChoiceCreateOrConnectWithoutSurveyResponsesInput = {
         where: SurveyChoiceWhereUniqueInput
@@ -520081,8 +520144,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        survey?: SurveyUpdateOneWithoutSurveyChoiceNestedInput
         clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveyChoiceNestedInput
+        survey?: SurveyUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SurveyChoiceUncheckedUpdateWithoutSurveyResponsesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -520095,8 +520158,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        surveyId?: NullableStringFieldUpdateOperationsInput | string | null
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SubjectVersionCreateWithoutQuestionBanksInput = {
         id?: string
@@ -543744,6 +543807,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -544644,6 +544708,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -544682,6 +544747,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544720,6 +544786,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -565785,6 +565852,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         thesisSessionId?: string | null
         supervisorId?: string | null
@@ -566113,6 +566181,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -566151,6 +566220,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566189,6 +566259,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -569649,6 +569720,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -570009,6 +570081,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -570047,6 +570120,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570085,6 +570159,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576435,6 +576510,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         supervisorId?: string | null
@@ -576468,6 +576544,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -576506,6 +576583,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576544,6 +576622,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576769,6 +576848,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -576802,6 +576882,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -576840,6 +576921,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576878,6 +576960,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576911,6 +576994,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -576944,6 +577028,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -577089,6 +577174,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -577127,6 +577213,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577165,6 +577252,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577198,6 +577286,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -577236,6 +577325,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577274,6 +577364,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577711,6 +577802,7 @@ export namespace Prisma {
         expectedResults?: string | null
         requirements?: string | null
         technologies?: string | null
+        thesisType?: $Enums.ThesisType
         status?: $Enums.ThesisProjectStatus
         subjectClassId?: string | null
         thesisSessionId?: string | null
@@ -577756,6 +577848,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
         defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -577794,6 +577887,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577832,6 +577926,7 @@ export namespace Prisma {
         expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579953,7 +580048,6 @@ export namespace Prisma {
         createdBy?: string | null
         answer: string
         requireExplanation: boolean
-        surveyId?: string | null
     };
     export type SurveyCreateManyClusterSurveyInput = {
         id?: string
@@ -580116,7 +580210,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        survey?: SurveyUpdateOneWithoutSurveyChoiceNestedInput
+        survey?: SurveyUpdateManyWithoutSurveyChoiceNestedInput
         surveyResponses?: SurveyResponseUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SurveyChoiceUncheckedUpdateWithoutClusterSurveyInput = {
@@ -580130,7 +580224,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        surveyId?: NullableStringFieldUpdateOperationsInput | string | null
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyChoiceNestedInput
         surveyResponses?: SurveyResponseUncheckedUpdateManyWithoutSurveyChoiceNestedInput
     };
     export type SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyInput = {
@@ -580144,7 +580238,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: StringFieldUpdateOperationsInput | string
         requireExplanation?: BoolFieldUpdateOperationsInput | boolean
-        surveyId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveyQuestionUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580252,19 +580345,6 @@ export namespace Prisma {
         lectureId?: NullableStringFieldUpdateOperationsInput | string | null
         surveyTopicId?: StringFieldUpdateOperationsInput | string
         additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
-    };
-    export type SurveyChoiceCreateManySurveyInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        answer: string
-        requireExplanation: boolean
-        clusterSurveyId?: string | null
     };
     export type SurveySessionCreateManySurveyInput = {
         id?: string
@@ -580816,6 +580896,71 @@ export namespace Prisma {
         answerText?: string | null
         explanation?: string | null
         answeredAt?: Date | string
+    };
+    export type SurveyUpdateWithoutSurveyChoiceInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectType?: SurveyObjectTypeUpdateManyWithoutSurveyNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutSurveyNestedInput
+        lecture?: LecturerUpdateOneWithoutSurveyNestedInput
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyNestedInput
+        surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyNestedInput
+        clusterSurvey?: ClusterSurveyUpdateOneWithoutSurveysNestedInput
+    };
+    export type SurveyUncheckedUpdateWithoutSurveyChoiceInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
+        lectureId?: NullableStringFieldUpdateOperationsInput | string | null
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+        surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutSurveyNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyNestedInput
+        surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyNestedInput
+    };
+    export type SurveyUncheckedUpdateManyWithoutSurveyChoiceInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
+        lectureId?: NullableStringFieldUpdateOperationsInput | string | null
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveyResponseUpdateWithoutSurveyChoiceInput = {
         id?: StringFieldUpdateOperationsInput | string

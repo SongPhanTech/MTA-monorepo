@@ -121,7 +121,11 @@ app.openapi(createClusterSurvey, async (c) => {
                     connect: lecturerIds.map((id) => ({ id })),
                 },
             },
+            include: {
+                surveyChoice: true,
+            },
         })
+
         const lecturers = await tx.lecturer.findMany({
             where: {
                 id: {
@@ -162,6 +166,11 @@ app.openapi(createClusterSurvey, async (c) => {
                     surveyQuestion: {
                         connect: surveyQuestionIds.map((id) => ({ id })),
                     },
+                    surveyChoice: {
+                        connect: cluster.surveyChoice.map((choice) => ({
+                            id: choice.id,
+                        })),
+                    },
                     surveyObjectType: {
                         connect: surveyObjectTypeIds.map((id) => ({ id })),
                     },
@@ -175,15 +184,6 @@ app.openapi(createClusterSurvey, async (c) => {
                 },
             })
         }
-
-        await tx.surveyChoice.createMany({
-            data: surveys.flatMap((survey) =>
-                surveyChoices.map((choice) => ({
-                    ...choice,
-                    surveyId: survey.id,
-                }))
-            ),
-        })
     })
 
     return c.json({ message: 'Success' })

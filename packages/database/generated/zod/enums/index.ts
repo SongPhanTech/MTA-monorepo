@@ -541,6 +541,7 @@ export * from './DecisionStatus.schema';
 export * from './TrainingScoreStatus.schema';
 export * from './ResearchProjectStatus.schema';
 export * from './RegistrationStatus.schema';
+export * from './ThesisType.schema';
 export * from './ThesisProjectStatus.schema';
 export * from './StudentThesisRegistrationStatus.schema';
 export * from './DecisionType.schema';

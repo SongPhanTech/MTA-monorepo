@@ -326,9 +326,9 @@ export function useSuspenseCountThesisProject<TArgs extends Prisma.ThesisProject
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ThesisProject', `${endpoint}/thesisProject/count`, args, options, fetch);
 }
-import type { ThesisProjectStatus } from '../zenstack/models';
+import type { ThesisType, ThesisProjectStatus } from '../zenstack/models';
 
-export function useCheckThesisProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; titleEN?: string; summary?: string; objectives?: string; scope?: string; methodology?: string; expectedResults?: string; requirements?: string; technologies?: string; status?: ThesisProjectStatus; subjectClassId?: string; thesisSessionId?: string; supervisorId?: string; coSupervisorId?: string; organizationId?: string; maxStudents?: number; councilId?: string; roomId?: string; defenseSessionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckThesisProject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; titleEN?: string; summary?: string; objectives?: string; scope?: string; methodology?: string; expectedResults?: string; requirements?: string; technologies?: string; thesisType?: ThesisType; status?: ThesisProjectStatus; subjectClassId?: string; thesisSessionId?: string; supervisorId?: string; coSupervisorId?: string; organizationId?: string; maxStudents?: number; councilId?: string; roomId?: string; defenseSessionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ThesisProject', `${endpoint}/thesisProject/check`, args, options, fetch);
 }

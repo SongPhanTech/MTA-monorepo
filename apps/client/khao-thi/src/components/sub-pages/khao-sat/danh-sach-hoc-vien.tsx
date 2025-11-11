@@ -8,7 +8,7 @@ import { Col, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-function DanhSachHocVien({ surveyId }: { surveyId: string }) {
+function DanhSachHocVien({ selectedId,surveyId }: {selectedId:string, surveyId: string }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -22,7 +22,8 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
     const router = useRouter()
     const where = useMemo(() => {
         return {
-            educationAndTraining: {
+            ...(surveyId?{
+                     educationAndTraining: {
                 some: {
                     subjectClassStudent: {
                         some: {
@@ -36,7 +37,25 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                         },
                     },
                 },
-            },
+            }
+            }:{
+                     educationAndTraining: {
+                some: {
+                    subjectClassStudent: {
+                        some: {
+                            subjectClass: {
+                                survey: {
+                                    some: {
+                                        clusterSurveyId: selectedId,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            }
+            })
+       ,
             ...(filters.statusSurvey &&
                 filters.statusSurvey?.length === 1 &&
                 filters.statusSurvey[0] === true && {
