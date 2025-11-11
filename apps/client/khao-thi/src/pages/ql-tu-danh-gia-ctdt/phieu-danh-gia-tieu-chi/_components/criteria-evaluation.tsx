@@ -55,7 +55,7 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             some: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.PENDING,
+                                    // status: $Enums.EvaluationStatus.PENDING,
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
@@ -69,13 +69,16 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.PENDING,
+                                    // status: $Enums.EvaluationStatus.PENDING,
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
                                         },
                                     },
                                 },
+                            },
+                            include: {
+                                evaluationCriterion: true,
                             },
                             orderBy: {
                                 order: 'asc',

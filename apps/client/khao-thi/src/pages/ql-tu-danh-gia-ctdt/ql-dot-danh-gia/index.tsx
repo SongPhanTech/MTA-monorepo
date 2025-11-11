@@ -6,6 +6,8 @@ import { Store, useStore } from '@tanstack/react-store'
 import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council'
 import EvaluationStandardTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-standard'
 import AssigmentOfAssessmentTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -17,11 +19,11 @@ export const evaluationPeriodStore = new Store<EvaluationPeriodStoreState>({
 
 export default function EvaluationPeriodTabPage() {
     const [activeKey, setActiveKey] = useState('1')
-
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { can } = useAbility()
 
     const tabItems = useMemo(() => {
-        return [
+        const tabs = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
@@ -39,14 +41,19 @@ export default function EvaluationPeriodTabPage() {
                 children: <EvaluationStandardTab />,
                 disabled: !selectedEvaluationPeriodId,
             },
-            {
+        ]
+
+        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'DUYET')) {
+            tabs.push({
                 key: '4',
                 label: 'Phân công giảng viên',
                 children: <AssigmentOfAssessmentTab />,
                 disabled: !selectedEvaluationPeriodId,
-            },
-        ]
-    }, [selectedEvaluationPeriodId])
+            })
+        }
+
+        return tabs
+    }, [selectedEvaluationPeriodId, can])
 
     return (
         <Row gutter={[12, 0]}>

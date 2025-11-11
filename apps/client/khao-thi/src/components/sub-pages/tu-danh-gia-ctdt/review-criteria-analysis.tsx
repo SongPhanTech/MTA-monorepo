@@ -10,18 +10,28 @@ import { $Enums, type EvaluationCriterionComment } from '@workspace/db/client'
 import {
     useCreateEvaluationCriterionComment,
     useUpdateAnalysisCriterion,
+    useUpdateEvaluationCriterion,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Form, message, Tooltip } from 'antd'
 import { SquareX } from 'lucide-react'
 import { useState } from 'react'
 
 type CommentType = EvaluationCriterionComment
 
-const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType; idx: number }) => {
+type Props = {
+    data: ReviewDataTabType
+    idx: number
+    role: 'BAN_TU_VAN' | 'THU_KY'
+}
+
+const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const { can } = useAbility()
 
     const [form] = Form.useForm<CommentType>()
 
@@ -32,6 +42,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
     }
 
     const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
+    const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
+    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
 
     const handleApproveCriterionAnalysis = async (analysisCriterionId: string) => {
         try {
@@ -52,8 +64,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
             hideSpinner()
         }
     }
-
-    const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
 
     const handleRejectCriterionAnalysis = async (
         analysisCriterionId: string,
@@ -87,6 +97,38 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
             message.success('Gửi yêu cầu chỉnh sửa tiêu chí thành công')
         } catch (error) {
             message.error('Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleApproveCriterionAnalysisFinal = async (
+        analysisCriterionId: string,
+        criterionPeriodId: string
+    ) => {
+        try {
+            showSpinner()
+            await updateAnalysisCriterion({
+                where: {
+                    id: analysisCriterionId,
+                },
+                data: {
+                    status: $Enums.EvaluationCriterionStatus.COMPLETED,
+                },
+            })
+
+            await updateEvaluationCriterion({
+                where: {
+                    criterionPeriodId: criterionPeriodId,
+                },
+                data: {
+                    status: $Enums.EvaluationStatus.PENDING,
+                },
+            })
+
+            message.success('Phê duyệt tiêu chí thành công')
+        } catch (error) {
+            message.error('Phê duyệt tiêu chí thất bại, vui lòng thử lại')
         } finally {
             hideSpinner()
         }
@@ -155,7 +197,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
                                         ],
                                     },
                                     {
-                                        title: 'Thông tin, minh chứng',
+                                        title: 'Thông tin minh chứng',
                                         children: [
                                             {
                                                 title: 'Tên minh chứng',
@@ -214,25 +256,63 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: { data: ReviewDataTabType;
                                         render: (__, record) => {
                                             return (
                                                 <div className="flex gap-2 items-center justify-center">
-                                                    <ApproveIcon
-                                                        onClick={() =>
-                                                            handleApproveCriterionAnalysis(
-                                                                record.analysisCriterionId
-                                                            )
-                                                        }
-                                                    />
-                                                    <Tooltip title="Yêu cầu chỉnh sửa">
-                                                        <SquareX
-                                                            size={16}
-                                                            strokeWidth={1.5}
-                                                            className={
-                                                                'text-red-600 cursor-pointer'
-                                                            }
-                                                            onClick={() => {
-                                                                toggleCommentRow(record.id)
-                                                            }}
-                                                        />
-                                                    </Tooltip>
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                        'DUYET'
+                                                    ) && (
+                                                        <>
+                                                            {role === 'BAN_TU_VAN' && (
+                                                                <ApproveIcon
+                                                                    popConfirm={{
+                                                                        onConfirm: (e) => {
+                                                                            e?.stopPropagation()
+                                                                            handleApproveCriterionAnalysis(
+                                                                                record.analysisCriterionId
+                                                                            )
+                                                                        },
+                                                                        onCancel: (e) => {
+                                                                            e?.stopPropagation()
+                                                                        },
+                                                                    }}
+                                                                />
+                                                            )}
+
+                                                            {role === 'THU_KY' && (
+                                                                <ApproveIcon
+                                                                    popConfirm={{
+                                                                        onConfirm: (e) => {
+                                                                            e?.stopPropagation()
+                                                                            handleApproveCriterionAnalysisFinal(
+                                                                                record.analysisCriterionId,
+                                                                                item.id
+                                                                            )
+                                                                        },
+                                                                        onCancel: (e) => {
+                                                                            e?.stopPropagation()
+                                                                        },
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </>
+                                                    )}
+
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                        'DUYET'
+                                                    ) && (
+                                                        <Tooltip title="Yêu cầu chỉnh sửa">
+                                                            <SquareX
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                className={
+                                                                    'text-red-600 cursor-pointer'
+                                                                }
+                                                                onClick={() => {
+                                                                    toggleCommentRow(record.id)
+                                                                }}
+                                                            />
+                                                        </Tooltip>
+                                                    )}
                                                 </div>
                                             )
                                         },

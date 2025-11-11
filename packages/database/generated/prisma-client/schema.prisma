@@ -338,6 +338,13 @@ enum ThesisProjectStatus {
   @@schema("ql-dao-tao")
 }
 
+enum ThesisType {
+  THESIS
+  PROJECT
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentThesisRegistrationStatus {
   PENDING
   ACCEPTED
@@ -4293,6 +4300,7 @@ model ThesisProject {
   expectedResults    String?                     @db.Text()
   requirements       String?                     @db.Text()
   technologies       String?                     @db.Text()
+  thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId     String?
@@ -5072,10 +5080,9 @@ model SurveyChoice {
   createdBy          String?          @db.Uuid()
   answer             String
   requireExplanation Boolean
-  survey             Survey?          @relation(fields: [surveyId], references: [id])
-  surveyId           String?
   clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId    String?
+  survey             Survey[]
   surveyResponses    SurveyResponse[]
 
   @@schema("khao-thi")

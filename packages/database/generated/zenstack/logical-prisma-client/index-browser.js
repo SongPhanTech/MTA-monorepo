@@ -2820,6 +2820,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   expectedResults: 'expectedResults',
   requirements: 'requirements',
   technologies: 'technologies',
+  thesisType: 'thesisType',
   status: 'status',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
@@ -3370,7 +3371,6 @@ exports.Prisma.SurveyChoiceScalarFieldEnum = {
   createdBy: 'createdBy',
   answer: 'answer',
   requireExplanation: 'requireExplanation',
-  surveyId: 'surveyId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -6454,7 +6454,6 @@ exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   answer: 'answer',
-  surveyId: 'surveyId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -7359,6 +7358,11 @@ exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   CANCELLED: 'CANCELLED'
+};
+
+exports.ThesisType = exports.$Enums.ThesisType = {
+  THESIS: 'THESIS',
+  PROJECT: 'PROJECT'
 };
 
 exports.ThesisProjectStatus = exports.$Enums.ThesisProjectStatus = {

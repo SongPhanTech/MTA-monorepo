@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -9,6 +8,7 @@ import { useSession } from '@workspace/auth/react'
 import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
 import { Col, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
@@ -213,13 +213,15 @@ export default function DetailSurveyPage() {
                                     {surveyQuestion?.length > 0 && (
                                         <Tooltip
                                             className="mr-2"
-                                            title={'Làm khảo sát'}
+                                            title={surveySessions?.length > 0 ? 'Xem khảo sát' : 'Làm khảo sát'}
                                             placement="top"
                                         >
-                                            <EyeOutlined
-                                                onClick={() => {
-                                                    if (surveySessions?.length > 0) {
-                                                        router.push(`/xem-lai/private/${id}`)
+                                            <div   
+                                            className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
+                                            
+                                            onClick={() => {
+                                                    if(surveySessions?.length > 0){
+                                                        router.push(`/xem-lai-khao-sat/${id}`)
                                                         return
                                                     }
                                                     if (!isPublic) {
@@ -227,9 +229,12 @@ export default function DetailSurveyPage() {
                                                     } else {
                                                         router.push(`/lam-khao-sat/${id}`)
                                                     }
-                                                }}
+                                                }}>
+                                                <ArrowRight
                                                 style={{ fontSize: '16px' }}
                                             />
+                                            </div>
+                                          
                                         </Tooltip>
                                     )}
                                 </Row>

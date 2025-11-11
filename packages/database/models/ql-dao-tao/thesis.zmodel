@@ -116,8 +116,7 @@ model ThesisProject extends Base {
   projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
 
   defenseRecord      DefenseRecord?
-  librarySubmission  LibrarySubmission?  @relation(fields: [librarySubmissionId], references: [id])
-  librarySubmissionId String?
+  librarySubmission  LibrarySubmission?
 
   decisions          Decision[]
   registrations      StudentThesisRegistration[]

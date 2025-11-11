@@ -276,6 +276,7 @@ export default function DetailSurveyPage({
                                             onClick={() => onOpen({ id, type: 'one' })}
                                             className="text-sm text-blue-700 cursor-pointer mr-2"
                                         />
+                                       
                                     )}
 
                                     {can(
