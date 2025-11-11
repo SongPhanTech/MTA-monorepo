@@ -36,7 +36,13 @@ export type ReviewDataTabType = StandardPeriod & {
     })[]
 }
 
-export default function ReviewCriteriaAnalysis() {
+type ReviewCriteriaAnalysisProps = {
+    userRole?: 'BAN_TU_VAN' | 'THU_KY'
+}
+
+export default function ReviewCriteriaAnalysis({
+    userRole = 'BAN_TU_VAN',
+}: ReviewCriteriaAnalysisProps) {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data } = useFindUniqueEvaluationPeriod(
@@ -135,6 +141,7 @@ export default function ReviewCriteriaAnalysis() {
                         key={standard.id}
                         data={standard as ReviewDataTabType}
                         idx={standard.order}
+                        role={userRole}
                     />
                 ),
             }))
