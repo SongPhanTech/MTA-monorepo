@@ -121,20 +121,14 @@ export default function CreateUserPage() {
         )
     }
 
-            function findLatestHocVi(list: any[]) {
+    function findLatestHocVi(list: any[]) {
         if (list.length === 0) return null
-        return list.reduce((latest, current) =>
-            current.year >= latest.year
-                ? current
-                : latest
-        )
+        return list.reduce((latest, current) => (current.year >= latest.year ? current : latest))
     }
-            function findLatestHocHam(list: any[]) {
+    function findLatestHocHam(list: any[]) {
         if (list.length === 0) return null
         return list.reduce((latest, current) =>
-            new Date(current.from) >= new Date(latest.from)
-                ? current
-                : latest
+            new Date(current.from) >= new Date(latest.from) ? current : latest
         )
     }
     const listTabs: itemType[] = [
@@ -468,13 +462,13 @@ export default function CreateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 sAvatarId: form.getFieldValue('avatar'),
-                bLaHocVien: values.bLaHocVien||false,
+                bLaHocVien: values.bLaHocVien || false,
                 bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
             })
             if (res?.status === 200) {
                 let rank = null
-                 let hocvi = null
-                  let hocham = null
+                let hocvi = null
+                let hocham = null
                 if (values.capBac?.length > 0) {
                     if (values.capBac?.length === 1) {
                         rank = values.capBac[0]
@@ -482,18 +476,18 @@ export default function CreateUserPage() {
                     rank = findLatestQuyetDinh(values?.capBac)
                 }
 
-                      if (values.hocVi?.length > 0) {
-                if (values.hocVi?.length === 1) {
-                    hocvi = values.hocVi[0]
+                if (values.hocVi?.length > 0) {
+                    if (values.hocVi?.length === 1) {
+                        hocvi = values.hocVi[0]
+                    }
+                    hocvi = findLatestHocVi(values?.hocVi)
                 }
-                hocvi = findLatestHocVi(values?.hocVi)
-            }
-            if (values.hocHam?.length > 0) {
-                if (values.hocHam?.length === 1) {
-                    hocham = values.hocHam[0]
+                if (values.hocHam?.length > 0) {
+                    if (values.hocHam?.length === 1) {
+                        hocham = values.hocHam[0]
+                    }
+                    hocham = findLatestHocHam(values?.hocHam)
                 }
-                hocham = findLatestHocHam(values?.hocHam)
-            }
                 const resProfile = await createUserProfile({
                     data: {
                         ...values,

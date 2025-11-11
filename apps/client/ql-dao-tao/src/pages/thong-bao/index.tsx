@@ -162,7 +162,10 @@ export default function ThongBao() {
                                     record.attachments && record.attachments.length > 0 ? (
                                         <p className="flex flex-col gap-1">
                                             {record.attachments.map((item: DocumentFile) => (
-                                                <Link href={getMinioUrl(item.path)} className="line-clamp-1">
+                                                <Link
+                                                    href={getMinioUrl(item.path)}
+                                                    className="line-clamp-1"
+                                                >
                                                     - {item.name}
                                                 </Link>
                                             ))}

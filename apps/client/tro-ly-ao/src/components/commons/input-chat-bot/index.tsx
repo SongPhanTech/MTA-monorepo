@@ -1,7 +1,15 @@
-import { ArrowUpOutlined, FileSearchOutlined } from '@ant-design/icons'
-import { Button, Tooltip } from 'antd'
+import {
+    ArrowUpOutlined,
+    DeleteOutlined,
+    FileSearchOutlined,
+    FileTextOutlined,
+    MoreOutlined,
+} from '@ant-design/icons'
+import { useFindManyDocument } from '@workspace/db/hooks'
+import { Button, Dropdown, type MenuProps, Tag, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ChatInputProps {
     input: string
@@ -11,6 +19,8 @@ interface ChatInputProps {
     onDelete?: () => void
     onStop?: () => void
     isFaqMode?: boolean
+    selectedDocumentIds?: string[]
+    onDocumentIdsChange?: (documentIds: string[]) => void
 }
 
 export default function ChatInput({
@@ -20,9 +30,67 @@ export default function ChatInput({
     onSend,
     onStop,
     isFaqMode = false,
+    selectedDocumentIds = [],
+    onDocumentIdsChange,
 }: ChatInputProps) {
     const _router = useRouter()
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+    const callbackRef = useRef(onDocumentIdsChange)
+
+    // Update callback ref
+    useEffect(() => {
+        callbackRef.current = onDocumentIdsChange
+    }, [onDocumentIdsChange])
+
+    const { onOpen } = useDisclosure<
+        { ids: string[]; callback: (ids: string[]) => void },
+        string[]
+    >({
+        tag: 'ChonTaiLieu',
+    })
+
+    const openDocumentModal = () => {
+        onOpen({
+            ids: selectedDocumentIds,
+            callback: (newIds: string[]) => {
+                callbackRef.current?.(newIds)
+            },
+        })
+    }
+
+    const handleClearAll = () => {
+        onDocumentIdsChange?.([])
+    }
+
+    const dropdownMenuItems: MenuProps['items'] = [
+        {
+            key: 'clear-all',
+            label: 'Xóa toàn bộ tài liệu',
+            icon: <DeleteOutlined />,
+            danger: true,
+            onClick: handleClearAll,
+        },
+    ]
+
+    // Fetch selected documents to display their titles
+    const { data: fetchedDocuments = [] } = useFindManyDocument(
+        {
+            where: {
+                id: { in: selectedDocumentIds },
+            },
+            select: {
+                id: true,
+                title: true,
+            },
+        },
+        {
+            enabled: selectedDocumentIds.length > 0,
+            staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+        }
+    )
+
+    // Filter to only show documents that are still in selectedDocumentIds to avoid flash
+    const selectedDocuments = fetchedDocuments.filter((doc) => selectedDocumentIds.includes(doc.id))
 
     const resizeTextarea = () => {
         if (textareaRef.current) {
@@ -61,6 +129,61 @@ export default function ChatInput({
 
             <div className="w-full flex justify-center pb-4">
                 <div className="w-full max-w-5xl px-4 md:px-6">
+                    {/* Selected Documents Tags - Horizontal scroll without scrollbar, fixed menu button */}
+                    {selectedDocumentIds.length > 0 && (
+                        <div className="mb-2 flex gap-2 items-center relative">
+                            {/* Scrollable tags container */}
+                            <div
+                                className="flex gap-2 overflow-x-auto flex-1"
+                                style={{
+                                    scrollbarWidth: 'none',
+                                    msOverflowStyle: 'none',
+                                }}
+                            >
+                                <style jsx>{`
+                                    div::-webkit-scrollbar {
+                                        display: none;
+                                    }
+                                `}</style>
+                                {selectedDocuments.map((doc) => (
+                                    <Tag
+                                        key={doc.id}
+                                        closable
+                                        onClose={() => {
+                                            const newIds = selectedDocumentIds.filter(
+                                                (id) => id !== doc.id
+                                            )
+                                            onDocumentIdsChange?.(newIds)
+                                        }}
+                                        icon={<FileTextOutlined />}
+                                        className="flex items-center gap-1 m-0 flex-shrink-0"
+                                        style={{
+                                            backgroundColor: '#D9EDE4',
+                                            borderColor: '#00AA55',
+                                            // color: '#00AA55',
+                                            padding: '4px 8px',
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        <span className="max-w-[200px] truncate inline-block">
+                                            {doc.title || 'Không có tiêu đề'}
+                                        </span>
+                                    </Tag>
+                                ))}
+                            </div>
+                            {/* Fixed menu button at the end */}
+                            <Dropdown menu={{ items: dropdownMenuItems }} trigger={['click']}>
+                                <Button
+                                    type="text"
+                                    size="small"
+                                    icon={<MoreOutlined style={{ fontSize: 16 }} />}
+                                    className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-all duration-200"
+                                    style={{ padding: 0, minWidth: 'auto', border: 'none' }}
+                                />
+                            </Dropdown>
+                        </div>
+                    )}
+
                     <div className="rounded-2xl border border-gray-300 px-3 py-2 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:border-primary/60 focus-within:border-primary hover:bg-white hover:shadow-md">
                         <textarea
                             ref={textareaRef}
@@ -81,9 +204,9 @@ export default function ChatInput({
                         <div className="flex justify-between items-center px-1">
                             <Tooltip title="Chọn tài liệu tham khảo">
                                 <Button
-                                    onClick={() => console.log('tài liệu')}
+                                    onClick={openDocumentModal}
                                     className={`w-9 h-9 rounded-full flex items-center justify-center border-0 transition-all duration-200 ${
-                                        isFaqMode
+                                        selectedDocumentIds.length > 0
                                             ? 'bg-primary text-white hover:bg-primary/90 shadow-md'
                                             : 'bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-700'
                                     }`}

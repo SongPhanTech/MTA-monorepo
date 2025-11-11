@@ -203,11 +203,7 @@ const evaluateScore = (score: number | null, scoreScale: any) => {
     }
 }
 
-const EvaluationResult = ({
-    score,
-}: {
-    score: number | null
-}) => {
+const EvaluationResult = ({ score }: { score: number | null }) => {
     const evaluation = evaluateScore(score, scoreScale)
 
     return (

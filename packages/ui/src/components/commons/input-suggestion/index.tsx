@@ -45,8 +45,7 @@ import { forwardRef, useMemo, useState } from 'react'
 
 export type SuggestionMode = 'personal' | 'global'
 
-export interface InputSuggestionProps
-    extends Omit<AutoCompleteProps, 'options'> {
+export interface InputSuggestionProps extends Omit<AutoCompleteProps, 'options'> {
     suggestionKey: string
     suggestionMode?: SuggestionMode
     value?: string
@@ -54,25 +53,13 @@ export interface InputSuggestionProps
 }
 
 const InputSuggestion = forwardRef<any, InputSuggestionProps>(
-    (
-        {
-            suggestionKey,
-            suggestionMode = 'personal',
-            value,
-            onChange,
-            onSelect,
-            ...props
-        },
-        ref
-    ) => {
+    ({ suggestionKey, suggestionMode = 'personal', value, onChange, onSelect, ...props }, ref) => {
         const [searchValue, setSearchValue] = useState('')
 
         const userId = window.contextData?.userId
 
         const finalSuggestionKey =
-            suggestionMode === 'personal' && userId
-                ? `${userId}_${suggestionKey}`
-                : suggestionKey
+            suggestionMode === 'personal' && userId ? `${userId}_${suggestionKey}` : suggestionKey
 
         const { data: suggestions = [], refetch } = useFindManySuggestion({
             where: {
@@ -166,10 +153,7 @@ const InputSuggestion = forwardRef<any, InputSuggestionProps>(
         const getFilteredOptions = (inputValue: string) => {
             if (!inputValue) return options
             return options.filter((option) =>
-                option.value
-                    ?.toString()
-                    .toLowerCase()
-                    .includes(inputValue.toLowerCase())
+                option.value?.toString().toLowerCase().includes(inputValue.toLowerCase())
             )
         }
 
@@ -208,10 +192,7 @@ const InputSuggestion = forwardRef<any, InputSuggestionProps>(
                 placeholder={props.placeholder || 'Nhập để tìm gợi ý'}
                 filterOption={(inputValue, option) => {
                     if (!option?.value) return false
-                    return option.value
-                        .toString()
-                        .toLowerCase()
-                        .includes(inputValue.toLowerCase())
+                    return option.value.toString().toLowerCase().includes(inputValue.toLowerCase())
                 }}
                 notFoundContent="Không có gợi ý nào"
             />

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 const { Title } = Typography
-function SurveyReport({selectedId}:{selectedId:string}) {
+function SurveyReport({ selectedId }: { selectedId: string }) {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -169,4 +169,3 @@ function SurveyReport({selectedId}:{selectedId:string}) {
 }
 
 export default SurveyReport
-

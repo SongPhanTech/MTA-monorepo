@@ -17,6 +17,7 @@ export default function TroLyAo() {
     const [input, setInput] = useState('')
     const [selectedTopic, setSelectedTopic] = useState<{ id: string; name: string } | null>(null)
     const [faqQuestions, setFaqQuestions] = useState<string[]>([])
+    const [selectedDocumentIds, setSelectedDocumentIds] = useState<string[]>([])
     const { mutateAsync: createConversation } = useCreateConversation()
     const isProcessingRef = useRef(false)
 
@@ -61,7 +62,13 @@ export default function TroLyAo() {
             const newId = res?.id
             if (newId) {
                 setInput('') // Reset input after successful creation
-                router.push({ pathname: `/hoi-thoai/${newId}`, query: { isInitMessage: 'true' } })
+                router.push({
+                    pathname: `/hoi-thoai/${newId}`,
+                    query: {
+                        isInitMessage: 'true',
+                        documentIds: selectedDocumentIds.join(','),
+                    },
+                })
             } else {
                 throw new Error('Không tạo được cuộc trò chuyện mới')
             }
@@ -185,7 +192,13 @@ export default function TroLyAo() {
             const newId = res?.id
             if (newId) {
                 setInput('')
-                router.push({ pathname: `/hoi-thoai/${newId}`, query: { isInitMessage: 'true' } })
+                router.push({
+                    pathname: `/hoi-thoai/${newId}`,
+                    query: {
+                        isInitMessage: 'true',
+                        documentIds: selectedDocumentIds.join(','),
+                    },
+                })
             } else {
                 throw new Error('Không tạo được cuộc trò chuyện mới')
             }
@@ -299,6 +312,8 @@ export default function TroLyAo() {
                         loading={loading || sessionLoading}
                         onInputChange={setInput}
                         onSend={handleSend}
+                        selectedDocumentIds={selectedDocumentIds}
+                        onDocumentIdsChange={setSelectedDocumentIds}
                     />
                 </div>
             </div>

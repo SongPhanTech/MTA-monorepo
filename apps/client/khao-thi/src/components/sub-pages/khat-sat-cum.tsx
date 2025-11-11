@@ -22,7 +22,13 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabDotKhaoSatCum({selectedId,setSelectedId}:{selectedId:string,setSelectedId:(value:string)=>void}) {
+function TabDotKhaoSatCum({
+    selectedId,
+    setSelectedId,
+}: {
+    selectedId: string
+    setSelectedId: (value: string) => void
+}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -227,14 +233,12 @@ function TabDotKhaoSatCum({selectedId,setSelectedId}:{selectedId:string,setSelec
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                                       onRow={(record) => {
+                        onRow={(record) => {
                             return {
                                 onClick: () => {
                                     setSelectedId(record.id)
                                 },
-                                className: cn(
-                                    selectedId === record.id ? 'bg-orange-200' : ''
-                                ),
+                                className: cn(selectedId === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
                         columns={[

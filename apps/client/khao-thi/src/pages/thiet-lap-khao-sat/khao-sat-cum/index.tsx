@@ -8,20 +8,34 @@ import { useState } from 'react'
 
 export default function ClussterSurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const [selectedId,setSelectedId]= useState('')
-    const [surveyId,setSurveyId]= useState('')
+    const [selectedId, setSelectedId] = useState('')
+    const [surveyId, setSurveyId] = useState('')
     const items = [
         {
             key: '1',
             label: 'Khảo sát cụm',
-            children: <TabDotKhaoSatCum selectedId={selectedId} setSelectedId={(value)=>{setSelectedId(value)
-                setSurveyId('')
-            }} />,
+            children: (
+                <TabDotKhaoSatCum
+                    selectedId={selectedId}
+                    setSelectedId={(value) => {
+                        setSelectedId(value)
+                        setSurveyId('')
+                    }}
+                />
+            ),
         },
-          {
+        {
             key: '2',
             label: 'Danh sách giảng viên',
-            children: <DetailSurveyPage selectedId={selectedId} surveyId={surveyId} setSurveyId={(value)=>{setSurveyId(value)}} />,
+            children: (
+                <DetailSurveyPage
+                    selectedId={selectedId}
+                    surveyId={surveyId}
+                    setSurveyId={(value) => {
+                        setSurveyId(value)
+                    }}
+                />
+            ),
             disabled: !selectedId,
         },
         {
@@ -35,7 +49,7 @@ export default function ClussterSurveyPage() {
             label: 'Báo cáo khảo sát',
             children: <SurveyReport selectedId={surveyId} />,
             disabled: !surveyId,
-        }
+        },
     ]
 
     return (

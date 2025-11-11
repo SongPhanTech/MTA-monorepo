@@ -25,7 +25,7 @@ import {
     useFindUniqueSurveyObjectType,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Row, Tabs ,TreeSelect as TreeSelectAnt} from 'antd'
+import { Col, Form, Input, message, Row, Tabs, TreeSelect as TreeSelectAnt } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
@@ -218,7 +218,7 @@ const PutSurveyObjectTypeModal = () => {
                   }
                 : {},
     })
-    const { data: schoolYears} = useFindManySchoolYear({
+    const { data: schoolYears } = useFindManySchoolYear({
         orderBy: { startDate: 'desc' },
         include: {
             semesters: {
@@ -226,33 +226,33 @@ const PutSurveyObjectTypeModal = () => {
             },
         },
     })
-       const treeDataSemester: TreeNodeType[] = useMemo(() => {
-           return (
-               schoolYears?.map((schoolYear) => ({
-                   value: `schoolYear-${schoolYear.id}`,
-                   title: schoolYear.name,
-                   selectable: false,
-                   children:
-                       schoolYear.semesters.map((semester) => ({
-                           value: semester.id,
-                           title: `${semester.name}`,
-                       })) || [],
-               })) || []
-           )
-       }, [schoolYears])
+    const treeDataSemester: TreeNodeType[] = useMemo(() => {
+        return (
+            schoolYears?.map((schoolYear) => ({
+                value: `schoolYear-${schoolYear.id}`,
+                title: schoolYear.name,
+                selectable: false,
+                children:
+                    schoolYear.semesters.map((semester) => ({
+                        value: semester.id,
+                        title: `${semester.name}`,
+                    })) || [],
+            })) || []
+        )
+    }, [schoolYears])
 
     const treeData = useMemo(() => {
         return buildOrgTree(manageOrgData)
     }, [manageOrgData])
 
     const TrainingFields = Form.useWatch('TrainingFields', form)
-        const TrainingMajors = Form.useWatch('TrainingMajors', form)
-        const TrainingCourses = Form.useWatch('TrainingCourses', form)
-        const FixedClasses = Form.useWatch('FixedClasses', form)
-        const semesterId = Form.useWatch('semesterId', form)
-        const SubjectClasses = Form.useWatch('SubjectClasses', form)
+    const TrainingMajors = Form.useWatch('TrainingMajors', form)
+    const TrainingCourses = Form.useWatch('TrainingCourses', form)
+    const FixedClasses = Form.useWatch('FixedClasses', form)
+    const semesterId = Form.useWatch('semesterId', form)
+    const SubjectClasses = Form.useWatch('SubjectClasses', form)
 
-         const { data: subjectClassData = [] } = useFindManySubjectClass({
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
         orderBy: { name: 'asc' },
         where: {
             ...(selectedFixedClasses.length > 0
@@ -264,25 +264,23 @@ const PutSurveyObjectTypeModal = () => {
                       },
                   }
                 : {}),
-                ...(
-                    semesterId?.length>0
-                        ? {
-                        semester:{
-                            id:{
-                                in: semesterId
-                            }
-                        }
-                    }:{}
-                ),
+            ...(semesterId?.length > 0
+                ? {
+                      semester: {
+                          id: {
+                              in: semesterId,
+                          },
+                      },
+                  }
+                : {}),
             cancelled: false,
             active: true,
             status: 'OFFICIAL',
         },
         include: {
             fixedClasses: true,
-            semester: true
-        }
-
+            semester: true,
+        },
     })
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
@@ -292,16 +290,15 @@ const PutSurveyObjectTypeModal = () => {
     const items = useMemo(() => {
         const result = []
         if (type.includes('MILITARY_STUDENT') || type.includes('CIVILIAN_STUDENT')) {
-           
             result.push({
                 key: 'STUDENT',
                 label: 'Sinh viên, học viên',
                 children: (
-                    <Row gutter={[16,0]}>
+                    <Row gutter={[16, 0]}>
                         <Col span={12}>
                             <FormItem form={form} name="TrainingFields" label="Ngành">
                                 <Select
-                                disabled={SubjectClasses?.length > 0}
+                                    disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
                                     maxTagCount={'responsive'}
                                     placeholder="Chọn ngành"
@@ -316,7 +313,7 @@ const PutSurveyObjectTypeModal = () => {
                         <Col span={12}>
                             <FormItem form={form} name="TrainingMajors" label="Chuyên ngành">
                                 <Select
-                                disabled={SubjectClasses?.length > 0}
+                                    disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
                                     maxTagCount={'responsive'}
                                     placeholder={'Chọn chuyên ngành'}
@@ -331,7 +328,7 @@ const PutSurveyObjectTypeModal = () => {
                         <Col span={12}>
                             <FormItem form={form} name="TrainingCourses" label="Khóa">
                                 <Select
-                                disabled={SubjectClasses?.length > 0}
+                                    disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
                                     maxTagCount={'responsive'}
                                     placeholder={'Chọn khóa'}
@@ -346,7 +343,7 @@ const PutSurveyObjectTypeModal = () => {
                         <Col span={12}>
                             <FormItem form={form} name="FixedClasses" label="Lớp niên chế">
                                 <Select
-                                disabled={SubjectClasses?.length > 0}
+                                    disabled={SubjectClasses?.length > 0}
                                     mode="multiple"
                                     maxTagCount={'responsive'}
                                     placeholder={'Chọn lớp niên chế'}
@@ -358,26 +355,36 @@ const PutSurveyObjectTypeModal = () => {
                                 />
                             </FormItem>
                         </Col>
-                                 <Col span={12}>
-                                    <FormItem form={form} name="semesterId" label="Kỳ học">
-                                        <TreeSelectAnt
-                                            multiple
-                                            disabled={TrainingFields?.length>0||TrainingMajors?.length>0||TrainingCourses?.length>0||FixedClasses?.length>0}
-                                            showSearch
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            placeholder={'Chọn kỳ học'}
-                                            allowClear
-                                            treeDefaultExpandAll
-                                            treeData={treeDataSemester}
-                                            filterTreeNode={filterTreeNode}
-                                            treeNodeFilterProp="title"
-                                        />
-                                    </FormItem>
-                                </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="semesterId" label="Kỳ học">
+                                <TreeSelectAnt
+                                    multiple
+                                    disabled={
+                                        TrainingFields?.length > 0 ||
+                                        TrainingMajors?.length > 0 ||
+                                        TrainingCourses?.length > 0 ||
+                                        FixedClasses?.length > 0
+                                    }
+                                    showSearch
+                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                    placeholder={'Chọn kỳ học'}
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    treeData={treeDataSemester}
+                                    filterTreeNode={filterTreeNode}
+                                    treeNodeFilterProp="title"
+                                />
+                            </FormItem>
+                        </Col>
                         <Col span={12}>
                             <FormItem form={form} name="SubjectClasses" label="Lớp môn học">
                                 <Select
-                                    disabled={TrainingFields?.length>0||TrainingMajors?.length>0||TrainingCourses?.length>0||FixedClasses?.length>0}
+                                    disabled={
+                                        TrainingFields?.length > 0 ||
+                                        TrainingMajors?.length > 0 ||
+                                        TrainingCourses?.length > 0 ||
+                                        FixedClasses?.length > 0
+                                    }
                                     mode="multiple"
                                     maxTagCount={'responsive'}
                                     placeholder="Chọn lớp môn học"
@@ -398,7 +405,7 @@ const PutSurveyObjectTypeModal = () => {
                 key: 'LECTURER',
                 label: 'Giảng viên, CBNV',
                 children: (
-                    <Row gutter={[16,0]}>
+                    <Row gutter={[16, 0]}>
                         <Col span={24}>
                             <FormItem form={form} name="Organizations" label="Đơn vị quản lý">
                                 <TreeSelect
@@ -468,7 +475,7 @@ const PutSurveyObjectTypeModal = () => {
             title={id ? 'Chỉnh sửa đối tượng làm khảo sát' : 'Thêm mới đối tượng làm khảo sát'}
             className="w-[1000px]"
         >
-           <Col span={12}>
+            <Col span={12}>
                 <FormItem form={form} name="code" label="Mã đối tượng làm khảo sát" required>
                     <Input placeholder="Nhập mã đối tượng làm khảo sát" />
                 </FormItem>
@@ -507,7 +514,6 @@ const PutSurveyObjectTypeModal = () => {
                     />
                 </Col>
             )}
-         
         </PutFormModal>
     )
 }
