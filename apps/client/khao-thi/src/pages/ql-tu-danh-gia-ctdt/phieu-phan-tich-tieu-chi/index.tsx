@@ -6,14 +6,17 @@ import { useStore } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
 import ReviewCriteriaAnalysis from './_components/review-criteria-analysis'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 
 export default function CriteriaAnalysisPage() {
     const [activeKey, setActiveKey] = useState('1')
+    const { can } = useAbility()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const tabItems = useMemo(() => {
-        return [
+        const tabs = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
@@ -25,14 +28,21 @@ export default function CriteriaAnalysisPage() {
                 children: <CriteriaAnalysisWrite />,
                 disabled: !selectedEvaluationPeriodId,
             },
-            {
+        ]
+
+        if (
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'DUYET')
+        ) {
+            tabs.push({
                 key: '3',
                 label: 'Xét duyệt phiếu',
                 children: <ReviewCriteriaAnalysis />,
                 disabled: !selectedEvaluationPeriodId,
-            },
-        ]
-    }, [selectedEvaluationPeriodId])
+            })
+        }
+
+        return tabs
+    }, [selectedEvaluationPeriodId, can])
 
     return (
         <Row gutter={[12, 0]}>

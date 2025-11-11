@@ -8,6 +8,8 @@ import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gi
 import { useStore } from '@tanstack/react-store'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo } from 'react'
@@ -20,6 +22,7 @@ type EvaluationAssignmentFormType = {
 export default function AssigmentOfAssessmentTab() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
+    const { can } = useAbility()
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
@@ -111,66 +114,61 @@ export default function AssigmentOfAssessmentTab() {
 
     const handleSave = async () => {
         try {
+            await form.validateFields()
+
             showSpinner()
 
             const formData = form.getFieldsValue()
-            const listData = Object.entries(formData.list)
-                .filter(([_, value]) => value.lecturerId || value.deadline)
+            const listData = Object.entries(formData.list || {})
+                .filter(([_, value]) => value?.lecturerId && value?.deadline)
                 .map(([key, value]) => {
                     return {
                         id: key,
-                        ...value,
+                        lecturerId: value.lecturerId,
+                        deadline: value.deadline ? dayjs(value.deadline).toISOString() : undefined,
                     }
                 })
 
-            const criterionPeriodIds = listData.map((i) => i.id)
-
-            const res = await sqlTransaction([
+            const operations: any[] = listData.flatMap((item) => [
                 {
                     model: 'AnalysisCriterion',
-                    operation: 'deleteMany',
+                    operation: 'upsert',
                     data: {
                         where: {
-                            criterionPeriodId: {
-                                in: criterionPeriodIds,
-                            },
+                            criterionPeriodId: item.id,
+                        },
+                        create: {
+                            criterionPeriodId: item.id,
+                            lecturerId: item.lecturerId,
+                            deadline: item.deadline,
+                        },
+                        update: {
+                            lecturerId: item.lecturerId,
+                            deadline: item.deadline,
                         },
                     },
                 },
                 {
                     model: 'EvaluationCriterion',
-                    operation: 'deleteMany',
+                    operation: 'upsert',
                     data: {
                         where: {
-                            criterionPeriodId: {
-                                in: criterionPeriodIds,
-                            },
+                            criterionPeriodId: item.id,
                         },
-                    },
-                },
-                {
-                    model: 'AnalysisCriterion',
-                    operation: 'createMany',
-                    data: {
-                        data: listData.map((i) => ({
-                            criterionPeriodId: i.id,
-                            lecturerId: i.lecturerId,
-                            deadline: i.deadline,
-                        })),
-                    },
-                },
-                {
-                    model: 'EvaluationCriterion',
-                    operation: 'createMany',
-                    data: {
-                        data: listData.map((i) => ({
-                            criterionPeriodId: i.id,
-                            lecturerId: i.lecturerId,
-                            deadline: i.deadline,
-                        })),
+                        create: {
+                            criterionPeriodId: item.id,
+                            lecturerId: item.lecturerId,
+                            deadline: item.deadline,
+                        },
+                        update: {
+                            lecturerId: item.lecturerId,
+                            deadline: item.deadline,
+                        },
                     },
                 },
             ])
+
+            const res = await sqlTransaction(operations)
 
             if (res.status !== 200) {
                 message.error('Đã có lỗi xảy ra, vui lòng thử lại')
@@ -178,9 +176,8 @@ export default function AssigmentOfAssessmentTab() {
             }
 
             message.success('Lưu phân công giảng viên đánh giá thành công')
-
-            console.log(listData)
         } catch (error: any) {
+            console.error('Error saving assignment:', error)
             message.error(error.message || 'Đã có lỗi xảy ra')
         } finally {
             hideSpinner()
@@ -284,25 +281,36 @@ export default function AssigmentOfAssessmentTab() {
                                 render: (_, record) => {
                                     return (
                                         <Flex justify="center" align="center" gap={8}>
-                                            <UserPlusIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    e.preventDefault()
-                                                    onOpen({
-                                                        criterionPeriodId: record.id,
-                                                    })
-                                                }}
-                                            />
-                                            <EditIcon
-                                                className="text-blue-700 cursor-pointer"
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    e.preventDefault()
-                                                    onOpen({
-                                                        criterionPeriodId: record.id,
-                                                    })
-                                                }}
-                                            />
+                                            {can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                'DUYET'
+                                            ) && (
+                                                <UserPlusIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        e.preventDefault()
+                                                        onOpen({
+                                                            criterionPeriodId: record.id,
+                                                        })
+                                                    }}
+                                                />
+                                            )}
+
+                                            {can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    className="text-blue-700 cursor-pointer"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        e.preventDefault()
+                                                        onOpen({
+                                                            criterionPeriodId: record.id,
+                                                        })
+                                                    }}
+                                                />
+                                            )}
                                         </Flex>
                                     )
                                 },

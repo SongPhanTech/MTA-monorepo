@@ -3,13 +3,13 @@ import clsx from 'clsx'
 import type { LucideProps } from 'lucide-react'
 import { BadgeCheck } from 'lucide-react'
 
-type DeleteIconProps = {
+type ApproveIconProps = {
     popConfirm?: Partial<PopconfirmProps>
     title?: string
     disabled?: boolean
 } & LucideProps
 
-const ApproveIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIconProps) => {
+const ApproveIcon = ({ title, popConfirm, disabled = false, ...props }: ApproveIconProps) => {
     const icon = (
         <BadgeCheck
             size={16}
