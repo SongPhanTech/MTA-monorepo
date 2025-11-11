@@ -8,7 +8,7 @@ import {
 import { useFindManyDocument } from '@workspace/db/hooks'
 import { Button, Dropdown, type MenuProps, Tag, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ChatInputProps {
@@ -72,11 +72,16 @@ export default function ChatInput({
         },
     ]
 
-    // Fetch selected documents to display their titles
-    const { data: fetchedDocuments = [] } = useFindManyDocument(
+    const documentsCache = useRef<Map<string, { id: string; title: string | null }>>(new Map())
+
+    const idsToFetch = useMemo(() => {
+        return selectedDocumentIds.filter((id) => !documentsCache.current.has(id))
+    }, [selectedDocumentIds])
+
+    const { data: newDocuments = [] } = useFindManyDocument(
         {
             where: {
-                id: { in: selectedDocumentIds },
+                id: { in: idsToFetch },
             },
             select: {
                 id: true,
@@ -84,13 +89,34 @@ export default function ChatInput({
             },
         },
         {
-            enabled: selectedDocumentIds.length > 0,
-            staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+            enabled: idsToFetch.length > 0,
+            staleTime: Number.POSITIVE_INFINITY,
+            gcTime: 30 * 60 * 1000,
         }
     )
 
-    // Filter to only show documents that are still in selectedDocumentIds to avoid flash
-    const selectedDocuments = fetchedDocuments.filter((doc) => selectedDocumentIds.includes(doc.id))
+    useEffect(() => {
+        if (newDocuments.length > 0) {
+            for (const doc of newDocuments) {
+                documentsCache.current.set(doc.id, doc)
+            }
+        }
+    }, [newDocuments])
+
+    // Get selected documents from cache OR from newDocuments if just fetched
+    const selectedDocuments = useMemo(() => {
+        return selectedDocumentIds
+            .map((id) => {
+                // First check cache
+                const cached = documentsCache.current.get(id)
+                if (cached) return cached
+
+                // If not in cache, check if it's in the newly fetched documents
+                const newDoc = newDocuments.find((doc) => doc.id === id)
+                return newDoc
+            })
+            .filter((doc): doc is { id: string; title: string | null } => doc !== undefined)
+    }, [selectedDocumentIds, newDocuments])
 
     const resizeTextarea = () => {
         if (textareaRef.current) {
@@ -129,9 +155,15 @@ export default function ChatInput({
 
             <div className="w-full flex justify-center pb-4">
                 <div className="w-full max-w-5xl px-4 md:px-6">
-                    {/* Selected Documents Tags - Horizontal scroll without scrollbar, fixed menu button */}
-                    {selectedDocumentIds.length > 0 && (
-                        <div className="mb-2 flex gap-2 items-center relative">
+                    <div
+                        className="transition-all duration-300 overflow-hidden"
+                        style={{
+                            height: selectedDocumentIds.length > 0 ? 'auto' : '0',
+                            marginBottom: selectedDocumentIds.length > 0 ? '8px' : '0',
+                            opacity: selectedDocumentIds.length > 0 ? 1 : 0,
+                        }}
+                    >
+                        <div className="flex gap-2 items-center relative">
                             {/* Scrollable tags container */}
                             <div
                                 className="flex gap-2 overflow-x-auto flex-1"
@@ -160,7 +192,6 @@ export default function ChatInput({
                                         style={{
                                             backgroundColor: '#D9EDE4',
                                             borderColor: '#00AA55',
-                                            // color: '#00AA55',
                                             padding: '4px 8px',
                                             fontSize: '13px',
                                         }}
@@ -172,17 +203,19 @@ export default function ChatInput({
                                 ))}
                             </div>
                             {/* Fixed menu button at the end */}
-                            <Dropdown menu={{ items: dropdownMenuItems }} trigger={['click']}>
-                                <Button
-                                    type="text"
-                                    size="small"
-                                    icon={<MoreOutlined style={{ fontSize: 16 }} />}
-                                    className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-all duration-200"
-                                    style={{ padding: 0, minWidth: 'auto', border: 'none' }}
-                                />
-                            </Dropdown>
+                            {selectedDocumentIds.length > 0 && (
+                                <Dropdown menu={{ items: dropdownMenuItems }} trigger={['click']}>
+                                    <Button
+                                        type="text"
+                                        size="small"
+                                        icon={<MoreOutlined style={{ fontSize: 16 }} />}
+                                        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-all duration-200"
+                                        style={{ padding: 0, minWidth: 'auto', border: 'none' }}
+                                    />
+                                </Dropdown>
+                            )}
                         </div>
-                    )}
+                    </div>
 
                     <div className="rounded-2xl border border-gray-300 px-3 py-2 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:border-primary/60 focus-within:border-primary hover:bg-white hover:shadow-md">
                         <textarea
