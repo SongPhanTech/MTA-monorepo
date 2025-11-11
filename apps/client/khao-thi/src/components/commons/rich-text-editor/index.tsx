@@ -52,6 +52,7 @@ export function RichTextEditor({
     id,
 }: TextEditorProps) {
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Underline,

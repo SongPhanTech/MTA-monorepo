@@ -6,14 +6,44 @@ import { useStore } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
 import ReviewCriteriaAnalysis from './_components/review-criteria-analysis'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { useSession } from '@workspace/auth/react'
+import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
 
 export default function CriteriaAnalysisPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const { can } = useAbility()
+    const { data: me } = useSession()
+    const idProfile = me?.sDM_NhanVienId || ''
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+
+    const { data: lecturer } = useFindUniqueLecturer(
+        {
+            where: {
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const { data: councilMember } = useFindFirstEvaluationCouncilMember(
+        {
+            where: {
+                lecturerId: lecturer?.id || '',
+                evaluationCouncil: {
+                    periodId: selectedEvaluationPeriodId || '',
+                },
+            },
+            include: {
+                evaluationCouncil: true,
+            },
+        },
+        {
+            enabled: !!lecturer?.id && !!selectedEvaluationPeriodId,
+        }
+    )
 
     const tabItems = useMemo(() => {
         const tabs = [
@@ -28,11 +58,29 @@ export default function CriteriaAnalysisPage() {
                 children: <CriteriaAnalysisWrite />,
                 disabled: !selectedEvaluationPeriodId,
             },
+            {
+                key: '3',
+                label: 'Xét duyệt phiếu',
+                children: <ReviewCriteriaAnalysis />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '4',
+                label: 'Xét duyệt phiếu',
+                children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
+                disabled: !selectedEvaluationPeriodId,
+            },
         ]
 
-        if (
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'DUYET')
-        ) {
+        const isAdvisoryBoard = councilMember?.role?.includes(
+            $Enums.EvaluationMemberRole.ADVISORY_BOARD
+        )
+
+        const isSecretary =
+            councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
+            councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
+
+        if (isAdvisoryBoard) {
             tabs.push({
                 key: '3',
                 label: 'Xét duyệt phiếu',
@@ -41,12 +89,7 @@ export default function CriteriaAnalysisPage() {
             })
         }
 
-        if (
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
+        if (isSecretary) {
             tabs.push({
                 key: '4',
                 label: 'Xét duyệt phiếu',
@@ -56,7 +99,7 @@ export default function CriteriaAnalysisPage() {
         }
 
         return tabs
-    }, [selectedEvaluationPeriodId, can])
+    }, [selectedEvaluationPeriodId, councilMember?.role])
 
     return (
         <Row gutter={[12, 0]}>
