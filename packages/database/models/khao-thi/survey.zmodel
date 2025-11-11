@@ -141,12 +141,10 @@ model SurveyChoice extends Base {
   answer             String
   requireExplanation Boolean
 
-  survey             Survey?          @relation(fields: [surveyId], references: [id])
-  surveyId           String?
-
   clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId    String?
 
+  survey             Survey[]
   surveyResponses    SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")

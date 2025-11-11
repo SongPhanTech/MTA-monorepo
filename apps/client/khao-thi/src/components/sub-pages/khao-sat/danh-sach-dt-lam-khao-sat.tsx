@@ -4,9 +4,9 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
-import {   Col,Row, Tag } from 'antd'
+import { Col, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
-import {  useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
     const { can, canSome } = useAbility()
@@ -23,22 +23,20 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
     })
     const router = useRouter()
 
-
-    const { data:res } = useGetSurveyObjects({
+    const { data: res } = useGetSurveyObjects({
         limit: numberOfPages || DEFAULT_PAGINATE_SIZE,
-        page: currentPage||1,
+        page: currentPage || 1,
         id: selectedId,
     })
 
-    const data=useMemo(()=>{
-        if(res?.status===200){
+    const data = useMemo(() => {
+        if (res?.status === 200) {
             return res?.data
         }
-        return 
-    },[res])
+        return
+    }, [res])
 
     const { showSpinner, hideSpinner } = useSpinner()
-
 
     return (
         <div>
@@ -59,41 +57,43 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                                {
+                            {
                                 title: 'Mã người làm KS',
                                 dataIndex: 'name',
-                                render: (_, record) => record?.code||'',
+                                render: (_, record) => record?.code || '',
+                            },
+                            {
+                                title: 'Người làm khảo sát',
+                                dataIndex: 'name',
+                                render: (_, record) => {
+                                    return `${record?.firstName || ''} ${record?.lastName || ''}`
                                 },
-                                {
-                                    title: 'Người làm khảo sát',
-                                    dataIndex: 'name',
-                                    render: (_, record) => {
-                                        return `${record?.firstName||''} ${record?.lastName||''}`
-                                    },
-                                },
-                                {
-                                    title: 'CCCD',
-                                    dataIndex: 'name',
-                                    render: (_, record) => record?.idCardNumber||'',
-                                },
-                                  {
-                                    title: 'SĐT',
-                                    dataIndex: 'phoneNumber',
-                                    render: (_, record) => record?.phoneNumber||'',
-                                },
+                            },
+                            {
+                                title: 'CCCD',
+                                dataIndex: 'name',
+                                render: (_, record) => record?.idCardNumber || '',
+                            },
+                            {
+                                title: 'SĐT',
+                                dataIndex: 'phoneNumber',
+                                render: (_, record) => record?.phoneNumber || '',
+                            },
 
-                                    {
-                                    title: 'Trạng thái KS',
-                                    dataIndex: '',
-                                    align: 'center',
-                                    render: (_, record) => {
-                                        return <Tag color={record?.surveySession ?'green':'red'}>
-                                            {record?.surveySession?'Đã làm':'Chưa làm'}
+                            {
+                                title: 'Trạng thái KS',
+                                dataIndex: '',
+                                align: 'center',
+                                render: (_, record) => {
+                                    return (
+                                        <Tag color={record?.surveySession ? 'green' : 'red'}>
+                                            {record?.surveySession ? 'Đã làm' : 'Chưa làm'}
                                         </Tag>
-                                    },
+                                    )
                                 },
+                            },
                         ]}
-                        data={data?.data ||[]}
+                        data={data?.data || []}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

@@ -56,8 +56,6 @@ const PutStudentModal = () => {
                         trainingCourse: true,
                     },
                 },
-                trainingType: true,
-                trainingLevel: true,
             },
         },
         {

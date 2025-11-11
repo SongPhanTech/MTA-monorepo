@@ -20,8 +20,8 @@ export type FilterProps = {
     name?: string | ''
     code?: string | ''
     sort?: string
-    idCardNumber?: string,
-    phoneNumber?: string,
+    idCardNumber?: string
+    phoneNumber?: string
     numberCreditsMajor?: 'asc' | 'desc'
     numberCreditsRequired?: 'asc' | 'desc'
     numberCreditsElective?: 'asc' | 'desc'
@@ -133,7 +133,7 @@ export type FilterProps = {
     surveyQuestionGroupId?: string[]
     isPublic?: boolean[]
     anonymous?: boolean[]
-    statusSurvey?:boolean[]
+    statusSurvey?: boolean[]
 }
 
 export type ColumnTypeProps = ColumnsType & {

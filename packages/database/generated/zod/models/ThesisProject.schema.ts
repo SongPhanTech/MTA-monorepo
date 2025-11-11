@@ -5,7 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod';
-import { ThesisProjectStatus } from '../../zenstack/models';
+import { ThesisType, ThesisProjectStatus } from '../../zenstack/models';
+import { ThesisTypeSchema } from '../enums/ThesisType.schema';
 import { ThesisProjectStatusSchema } from '../enums/ThesisProjectStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -25,6 +26,7 @@ const baseSchema = z.object({
     expectedResults: z.string().nullish(),
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
+    thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
@@ -52,6 +54,7 @@ const baseSchemaWithoutDefaults = z.object({
     expectedResults: z.string().nullish(),
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
+    thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
@@ -130,6 +133,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     expectedResults: z.string().nullish(),
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
+    thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
     maxStudents: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     defenseDate: z.coerce.date().nullish(),
@@ -144,7 +148,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
  * `ThesisProject` schema for create operations excluding foreign keys and relations.
  */
 export const ThesisProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, thesisType: true, status: true
 });
 
 

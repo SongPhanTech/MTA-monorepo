@@ -240,7 +240,6 @@ export default function UserProfilePageDs() {
                 },
             },
             curriculumVersionParallel: true,
-            trainingForm: true,
         },
         orderBy: {
             userProfile: {

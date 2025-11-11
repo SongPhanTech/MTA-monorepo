@@ -40,14 +40,8 @@ const CollapsibleField = ({
                     onClick={() => setExpanded(!expanded)}
                 >
                     {icon && <span style={{ color: '#000' }}>{icon}</span>}
-                    {title && (
-                        <span style={{ fontWeight: 500, fontSize: '14px' }}>
-                            {title}
-                        </span>
-                    )}
-                    <div style={{ fontSize: '13px', color: '#000' }}>
-                        {summary}
-                    </div>
+                    {title && <span style={{ fontWeight: 500, fontSize: '14px' }}>{title}</span>}
+                    <div style={{ fontSize: '13px', color: '#000' }}>{summary}</div>
                 </div>
 
                 {/* Content - always rendered, visibility controlled by CSS */}

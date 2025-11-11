@@ -355,20 +355,14 @@ export default function UpdateUserPage() {
                 : latest
         )
     }
-        function findLatestHocVi(list: any[]) {
+    function findLatestHocVi(list: any[]) {
         if (list.length === 0) return null
-        return list.reduce((latest, current) =>
-            current.year >= latest.year
-                ? current
-                : latest
-        )
+        return list.reduce((latest, current) => (current.year >= latest.year ? current : latest))
     }
-            function findLatestHocHam(list: any[]) {
+    function findLatestHocHam(list: any[]) {
         if (list.length === 0) return null
         return list.reduce((latest, current) =>
-            new Date(current.from) >= new Date(latest.from)
-                ? current
-                : latest
+            new Date(current.from) >= new Date(latest.from) ? current : latest
         )
     }
 
@@ -426,14 +420,14 @@ export default function UpdateUserPage() {
                 sEmail: values?.email || '',
                 Id: id,
                 sAvatarId: form.getFieldValue('avatar'),
-                bLaHocVien: values.bLaHocVien||false,
+                bLaHocVien: values.bLaHocVien || false,
                 bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
             }).catch((error) => {
                 console.log(error)
             })
             let rank = null
-            let hocvi=null
-            let hocham=null
+            let hocvi = null
+            let hocham = null
             if (values.capBac?.length > 0) {
                 if (values.capBac?.length === 1) {
                     rank = values.capBac[0]

@@ -324,9 +324,7 @@ export default function NhapDiem({
                             operation: 'update',
                             data: {
                                 where: { id },
-                                data: {
-                                    ...item,
-                                },
+                                data: item,
                             },
                         }
                     }),
@@ -682,13 +680,18 @@ export default function NhapDiem({
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
 
                             // Session: Subject onePoint
-                            const examScore = listForm[changedId].examScore ?? 0
+                            const examScore =
+                                changedValues.list[changedId]?.examScore ??
+                                listForm[changedId].examScore ??
+                                0
                             const attendanceScore = dataDetailSubjectClass?.subject.onePoint
                                 ? examScore
-                                : (listForm[changedId].attendanceScore ?? 0)
+                                : (changedValues.list[changedId]?.attendanceScore ??
+                                  listForm[changedId].attendanceScore)
                             const midtermScore = dataDetailSubjectClass?.subject.onePoint
                                 ? examScore
-                                : (listForm[changedId].midtermScore ?? 0)
+                                : (changedValues.list[changedId]?.midtermScore ??
+                                  listForm[changedId].midtermScore)
 
                             const finalScore = calcFinalScore(
                                 {
@@ -722,7 +725,8 @@ export default function NhapDiem({
                                             },
                                         })) || [],
                                 }
-                            )?.toFixed(1)
+                            )?.toNumber()
+
                             form.setFieldsValue({
                                 list: {
                                     ...listForm,
@@ -978,14 +982,19 @@ export default function NhapDiem({
                                 width: 80,
                                 align: 'center',
                                 render: (_, record: any) => {
-                                    const recordForm = listForm?.[record.id]?.examScore
+                                    const recordForm = listForm?.[record.id]
                                     const finalScore = calcFinalScore(
                                         record?.student?.fixedClass?.trainingCourse,
                                         {
                                             ...record,
-                                            examScore: recordForm ? recordForm : record?.examScore,
+                                            attendanceScore:
+                                                recordForm?.attendanceScore ??
+                                                record?.attendanceScore,
+                                            midtermScore:
+                                                recordForm?.midtermScore ?? record?.midtermScore,
+                                            examScore: recordForm?.examScore ?? record?.examScore,
                                         }
-                                    )?.toFixed(1)
+                                    )?.toNumber()
                                     return <div>{finalScore}</div>
                                 },
                             },

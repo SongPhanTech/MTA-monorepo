@@ -1109,6 +1109,12 @@ importers:
       easy-peasy:
         specifier: 'catalog:'
         version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      echarts:
+        specifier: ^6.0.0
+        version: 6.0.0
+      echarts-for-react:
+        specifier: ^3.0.5
+        version: 3.0.5(echarts@6.0.0)(react@18.3.1)
       exceljs:
         specifier: 'catalog:'
         version: 4.4.0

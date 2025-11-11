@@ -7,13 +7,20 @@ import { useState } from 'react'
 
 export default function SurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const [selectedId,setSelectedId]= useState('')
+    const [selectedId, setSelectedId] = useState('')
 
     const items = [
         {
             key: '1',
             label: 'Khảo sát chung',
-            children: <TabDotKhaoSat selectedId={selectedId} setSelectedId={(value)=>{setSelectedId(value)}} />,
+            children: (
+                <TabDotKhaoSat
+                    selectedId={selectedId}
+                    setSelectedId={(value) => {
+                        setSelectedId(value)
+                    }}
+                />
+            ),
         },
         {
             key: '2',
@@ -26,7 +33,7 @@ export default function SurveyPage() {
             label: 'Báo cáo khảo sát',
             children: <SurveyReport selectedId={selectedId} />,
             disabled: !selectedId,
-        }
+        },
     ]
 
     return (

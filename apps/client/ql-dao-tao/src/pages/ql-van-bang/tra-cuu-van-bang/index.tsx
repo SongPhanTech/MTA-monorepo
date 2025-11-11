@@ -211,7 +211,6 @@ export default function GraduationDecisionDiploma() {
                         },
                     },
                     trainingObjectType: true,
-                    trainingForm: true,
                     graduationDecision: {
                         select: {
                             id: true,

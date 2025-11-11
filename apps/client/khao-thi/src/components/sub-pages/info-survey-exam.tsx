@@ -77,7 +77,6 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
         )
     }, [schoolYears])
 
-
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
