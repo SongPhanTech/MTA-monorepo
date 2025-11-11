@@ -37,7 +37,8 @@ export default {
     "THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT": "/thiet-lap-khao-sat/danh-sach-khao-sat",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT": "/thiet-lap-khao-sat/dot-khao-sat",
     "THIET_LAP_KHAO_SAT_KHAO_SAT_CUM": "/thiet-lap-khao-sat/khao-sat-cum",
-    "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
+    "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
+    "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/id"
   },
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",

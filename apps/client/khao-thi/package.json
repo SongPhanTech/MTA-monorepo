@@ -52,6 +52,8 @@
 		"docx": "catalog:",
 		"docxtemplater": "catalog:",
 		"easy-peasy": "catalog:",
+		"echarts": "^6.0.0",
+		"echarts-for-react": "^3.0.5",
 		"exceljs": "catalog:",
 		"fast-xml-parser": "catalog:",
 		"file-saver": "catalog:",

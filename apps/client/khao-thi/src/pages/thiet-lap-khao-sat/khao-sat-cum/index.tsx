@@ -1,4 +1,4 @@
-import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
+import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vien'
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
@@ -41,15 +41,15 @@ export default function ClussterSurveyPage() {
         {
             key: '3',
             label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien surveyId={surveyId} />,
-            disabled: !surveyId,
+            children: <DanhSachHocVien selectedId={selectedId} surveyId={surveyId} />,
+            disabled: !selectedId,
         },
         {
             key: '4',
             label: 'Báo cáo khảo sát',
-            children: <SurveyReport selectedId={surveyId} />,
-            disabled: !surveyId,
-        },
+            children: <ClusterSurveyReport selectedId={selectedId} />,
+            disabled: !selectedId,
+        }
     ]
 
     return (
