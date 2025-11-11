@@ -366,7 +366,6 @@ export default function StudentScoreClassPage() {
                     },
                 },
                 trainingObjectType: true,
-                trainingForm: true,
             },
         },
         {
