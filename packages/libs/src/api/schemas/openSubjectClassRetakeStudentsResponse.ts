@@ -16,8 +16,10 @@ export interface OpenSubjectClassRetakeStudentsResponse {
     /** @nullable */
     diem_cuoi: number | null
     withdrew: boolean
-    exempted: boolean
-    examPostponed: boolean
+    mien_thi: boolean
+    hoan_thi: boolean
+    /** @nullable */
+    ly_do_hoan_thi: string | null
     cam_thi: boolean
     /** @nullable */
     ly_do_cam_thi: string | null

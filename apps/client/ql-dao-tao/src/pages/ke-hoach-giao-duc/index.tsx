@@ -1,17 +1,18 @@
 import DefaultLayout from '@layouts/default-layout'
-import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
+import {useFindManyFixedClass, useFindManyTrainingMajor} from '@workspace/db/hooks'
 import {
     SelectTrainingCourse,
     useFixedClassStore,
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Flex, Form, Select, Tabs } from 'antd'
+import {Flex, Form, Select, Tabs} from 'antd'
 import type React from 'react'
-import { useState } from 'react'
+import {useState} from 'react'
 import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
+import ThongKeNo from "@pages/ke-hoach-hoc-lai/thong-ke-no";
 
 interface TabItem {
     key: string
@@ -19,41 +20,52 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function KeHoachDaoTao() {
-    const [activeLeftTab, setActiveLeftTab] = useState('1')
+type KeHoachDaoTaoPageProps = {
+    hocLai: boolean
+}
+
+export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
+    const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? 'thong-ke-no' : 'lap-ke-hoach')
+
     const tabs: TabItem[] = [
+        ...(hocLai ?
+            [{
+                key: 'thong-ke-no',
+                label: 'Thống kê nợ',
+                content: <ThongKeNo />,
+            }] : []),
         {
-            key: '1',
+            key: 'lap-ke-hoach',
             label: 'Lập kế hoạch',
-            content: <LapKeHoach />,
+            content: <LapKeHoach hocLai={hocLai}/>,
         },
         {
-            key: '2',
+            key: 'ke-hoach-mo-lop-mon-hoc',
             label: 'Kế hoạch mở lớp môn học',
-            content: <KeHoachMoLopMonHoc />,
+            content: <KeHoachMoLopMonHoc hocLai={hocLai}/>,
         },
         {
-            key: '3',
+            key: 'phan-cong-giang-day',
             label: 'Phân công giảng dạy',
-            content: <PhanCongGiangDay />,
+            content: <PhanCongGiangDay hocLai={hocLai}/>,
         },
     ]
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
 
-    const { id: trainingMajorId, onSelect: onSelectTrainingMajor } = useTrainingMajorStore()
-    const { id: fixedClassId, onSelect: onSelectFixedClass } = useFixedClassStore()
+    const {id: trainingMajorId, onSelect: onSelectTrainingMajor} = useTrainingMajorStore()
+    const {id: fixedClassId, onSelect: onSelectFixedClass} = useFixedClassStore()
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
+    const {data: trainingMajorData = []} = useFindManyTrainingMajor({
+        orderBy: {name: 'asc'},
         where: {
             active: true,
             deletedAt: null,
         },
     })
 
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        orderBy: { name: 'asc' },
+    const {data: fixedClassData = []} = useFindManyFixedClass({
+        orderBy: {name: 'asc'},
         where: {
             deletedAt: null,
             active: true,
@@ -76,7 +88,7 @@ export default function KeHoachDaoTao() {
                     label="Khóa đào tạo"
                     labelAlign="left"
                 >
-                    <SelectTrainingCourse />
+                    <SelectTrainingCourse/>
                 </Form.Item>
                 <Form.Item
                     className="m-0"

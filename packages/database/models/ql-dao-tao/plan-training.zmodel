@@ -25,7 +25,6 @@ model PlanTrainingDelay extends BaseNoCode {
   trainingObjectTypeId      String
 
   planTrainingDelaySubjects PlanTrainingDelaySubject[] // Môn học bị trì hoãn
-
   @@schema("ql-dao-tao")
 }
 
