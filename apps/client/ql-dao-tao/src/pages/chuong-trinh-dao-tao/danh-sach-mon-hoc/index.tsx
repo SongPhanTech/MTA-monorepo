@@ -290,7 +290,7 @@ export default function SubjectList() {
                 action: HistorySubjectVersionType.DELETE,
                 updatedBy: {
                     connect: {
-                        id: window?.contextData?.userId 
+                        id: window?.contextData?.userId,
                     },
                 },
             }

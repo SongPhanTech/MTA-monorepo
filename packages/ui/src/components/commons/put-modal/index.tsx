@@ -49,12 +49,7 @@ const PutFormModal = <T extends PutModalFormType>({
             onOk={form.submit}
             {...rest}
         >
-            <Form
-                form={form}
-                layout={layout}
-                onFinish={onFinish}
-                {...formProps}
-            >
+            <Form form={form} layout={layout} onFinish={onFinish} {...formProps}>
                 <Row gutter={[12, 12]}>{children}</Row>
             </Form>
         </AntdModal>

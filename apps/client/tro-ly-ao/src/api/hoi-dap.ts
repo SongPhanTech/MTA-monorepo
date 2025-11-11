@@ -4,21 +4,30 @@ export async function fetchHoiDap({
     prompt,
     conversation_id,
     signal,
+    document_ids,
 }: {
     prompt: string
     conversation_id: string
     signal: AbortSignal
+    document_ids?: string[]
 }) {
-    const formData = new FormData()
-    formData.append('prompt', prompt)
-    formData.append('conversation_id', conversation_id)
+    const params = new URLSearchParams()
+    params.append('prompt', prompt)
+    params.append('conversation_id', conversation_id)
+
+    if (document_ids && document_ids.length > 0) {
+        params.append('document_ids', document_ids.join(','))
+    }
 
     const response = await fetch(
         // 'https://api.chat.chatbot.swantech.vn/hoi_dap_v2',
         `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`,
         {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params.toString(),
             signal: signal,
         }
     )

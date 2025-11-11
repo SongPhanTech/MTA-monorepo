@@ -1,4 +1,5 @@
 import AppSwitcherModal from './app-switcher-modal'
+import ChonTaiLieu from './chon-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import PheDuyetCauHoiThuongGap from './phe-duyet-cau-hoi-thuong-gap'
 import PheDuyetTaiLieu from './phe-duyet-tai-lieu'
@@ -10,6 +11,7 @@ import SuaTaiLieu from './sua-tai-lieu'
 import ThemTaiLieu from './them-tai-lieu'
 export {
     AppSwitcherModal,
+    ChonTaiLieu,
     ConfirmModal,
     ThemTaiLieu,
     SuaTaiLieu,

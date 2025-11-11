@@ -65,7 +65,7 @@ export default function ExpertProfile() {
                       ],
                   }
                 : {}),
-                      ...(filters.academicDegree
+            ...(filters.academicDegree
                 ? {
                       OR: [
                           {

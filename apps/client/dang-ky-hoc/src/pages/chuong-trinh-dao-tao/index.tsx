@@ -5,7 +5,12 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import { $Enums, type Prisma, type SubjectVersion, type TrainingBlockSubject } from '@workspace/db/client'
+import {
+    $Enums,
+    type Prisma,
+    type SubjectVersion,
+    type TrainingBlockSubject,
+} from '@workspace/db/client'
 import {
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,

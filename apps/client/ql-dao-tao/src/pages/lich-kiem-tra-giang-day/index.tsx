@@ -95,7 +95,10 @@ export default function LichKiemTraGiangDay() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY, 'THEM') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
+                                    'THEM'
+                                ) && (
                                     <Button
                                         onClick={() =>
                                             onOpenPutLichVaSuKienModal({
@@ -174,7 +177,10 @@ export default function LichKiemTraGiangDay() {
                                 ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY, 'SUA') && (
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
+                                            'SUA'
+                                        ) && (
                                             <EditIcon
                                                 onClick={() =>
                                                     onOpenPutLichVaSuKienModal({
@@ -185,7 +191,10 @@ export default function LichKiemTraGiangDay() {
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY, 'XOA') && (
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
+                                            'XOA'
+                                        ) && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(id),

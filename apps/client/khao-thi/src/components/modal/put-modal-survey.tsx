@@ -336,48 +336,48 @@ const PutSurveyModal = () => {
                                 />
                             </FormItem>
                         </Col>
-                        {
-                           input?.type!=='multiple'&& !(isPublic&&anonymous) &&(
-                                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="surveyObjectTypes"
-                                label="Đối tượng làm khảo sát"
-                                required={true}
-                            >
-                                <Select
-                                    mode="multiple"
-                                    maxTagCount={'responsive'}
-                                    placeholder="Chọn đối tượng làm khảo sát"
-                                    options={surveyObjectTypesData.map((i: SurveyObjectType) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                />
-                            </FormItem>
-                        </Col>
-                            )
-                        }
-                             {input?.type === 'multiple' && (
-                                <Col span={12}>
-                                    <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                                        <TreeSelectAnt
-                                            showSearch
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            placeholder={'Chọn kỳ học'}
-                                            allowClear
-                                            treeDefaultExpandAll
-                                            treeData={treeData}
-                                            filterTreeNode={filterTreeNode}
-                                            treeNodeFilterProp="title"
-                                            loading={schoolYearLoading}
-                                        />
-                                    </FormItem>
-                                </Col>
+                        {input?.type !== 'multiple' && !(isPublic && anonymous) && (
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="surveyObjectTypes"
+                                    label="Đối tượng làm khảo sát"
+                                    required={true}
+                                >
+                                    <Select
+                                        mode="multiple"
+                                        maxTagCount={'responsive'}
+                                        placeholder="Chọn đối tượng làm khảo sát"
+                                        options={surveyObjectTypesData.map(
+                                            (i: SurveyObjectType) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }
+                                            }
+                                        )}
+                                    />
+                                </FormItem>
+                            </Col>
                         )}
-                
+                        {input?.type === 'multiple' && (
+                            <Col span={12}>
+                                <FormItem form={form} name="semesterId" label="Kỳ học" required>
+                                    <TreeSelectAnt
+                                        showSearch
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        placeholder={'Chọn kỳ học'}
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
+                                        filterTreeNode={filterTreeNode}
+                                        treeNodeFilterProp="title"
+                                        loading={schoolYearLoading}
+                                    />
+                                </FormItem>
+                            </Col>
+                        )}
+
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -393,7 +393,7 @@ const PutSurveyModal = () => {
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
-                   
+
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -462,7 +462,16 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId, isPublic,anonymous])
+    }, [
+        input,
+        surveyObjectTypesData,
+        surveyTopics,
+        treeData,
+        surveyTopicId,
+        semesterId,
+        isPublic,
+        anonymous,
+    ])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {

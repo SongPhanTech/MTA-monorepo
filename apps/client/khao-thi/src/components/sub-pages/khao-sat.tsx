@@ -22,7 +22,13 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabDotKhaoSat({selectedId,setSelectedId}:{selectedId:string,setSelectedId:(value:string)=>void}) {
+function TabDotKhaoSat({
+    selectedId,
+    setSelectedId,
+}: {
+    selectedId: string
+    setSelectedId: (value: string) => void
+}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -178,14 +184,12 @@ function TabDotKhaoSat({selectedId,setSelectedId}:{selectedId:string,setSelected
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                                   onRow={(record) => {
+                        onRow={(record) => {
                             return {
                                 onClick: () => {
                                     setSelectedId(record.id)
                                 },
-                                className: cn(
-                                    selectedId === record.id ? 'bg-orange-200' : ''
-                                ),
+                                className: cn(selectedId === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
                         columns={[
@@ -222,7 +226,7 @@ function TabDotKhaoSat({selectedId,setSelectedId}:{selectedId:string,setSelected
                                 })),
                                 render: (_, record) => {
                                     return record?.surveyObjectType?.length ? (
-                                        <HtmlTruncate >
+                                        <HtmlTruncate>
                                             <ul>
                                                 {record?.surveyObjectType?.map((i: any) => (
                                                     <li key={i.id}>- {i.name}</li>

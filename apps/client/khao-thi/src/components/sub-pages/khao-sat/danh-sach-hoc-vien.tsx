@@ -6,7 +6,7 @@ import { useCountUserProfile, useFindManyUserProfile } from '@workspace/db/hooks
 import { useAbility } from '@workspace/permissions/hooks'
 import { Col, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
-import {  useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 function DanhSachHocVien({ surveyId }: { surveyId: string }) {
     const { can, canSome } = useAbility()
@@ -15,88 +15,83 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         code: '',
-        idCardNumber:'',
-        phoneNumber:'',
-        statusSurvey:undefined
+        idCardNumber: '',
+        phoneNumber: '',
+        statusSurvey: undefined,
     })
     const router = useRouter()
-    const where = useMemo(()=>{
-    return {
-                educationAndTraining: {
-                    some: {
-                        subjectClassStudent: {
-                            some: {
-                                subjectClass: {
-                                    survey: {
-                                        some: {
-                                            id: surveyId,
-                                
-                                        },
+    const where = useMemo(() => {
+        return {
+            educationAndTraining: {
+                some: {
+                    subjectClassStudent: {
+                        some: {
+                            subjectClass: {
+                                survey: {
+                                    some: {
+                                        id: surveyId,
                                     },
                                 },
                             },
                         },
                     },
                 },
-                ...(
-                    filters.statusSurvey && filters.statusSurvey?.length===1 &&filters.statusSurvey[0]===true&&{
-                        surveySession: {
-                            some: {
-                                surveyId: surveyId,
-                            },
-                        }
-                    }
-                ),
-                   ...(
-                    filters.statusSurvey && filters.statusSurvey?.length===1 &&filters.statusSurvey[0]===false&&{
-                        surveySession: {
-                            none: {
-                                surveyId: surveyId,
-                            },
-                        }
-                    }
-                ),
-                
-                ...(filters.name&&{
-                    OR:[
-                        {
-                            firstName: {
-                                contains: filters.name,
-                                mode: 'insensitive' as const,
-                            },
+            },
+            ...(filters.statusSurvey &&
+                filters.statusSurvey?.length === 1 &&
+                filters.statusSurvey[0] === true && {
+                    surveySession: {
+                        some: {
+                            surveyId: surveyId,
                         },
-                        {
-                            lastName: {
-                                contains: filters.name,
-                                mode: 'insensitive' as const,
-                            },
-                        }
-                    ]
+                    },
                 }),
-                  ...(filters.code&&{
-                         code: {
-                                contains: filters.code,
-                                mode: 'insensitive' as const,
-                            },
+            ...(filters.statusSurvey &&
+                filters.statusSurvey?.length === 1 &&
+                filters.statusSurvey[0] === false && {
+                    surveySession: {
+                        none: {
+                            surveyId: surveyId,
+                        },
+                    },
                 }),
-                   ...(filters.idCardNumber&&{
-                         idCardNumber: {
-                                contains: filters.idCardNumber,
-                                mode: 'insensitive' as const,
-                            },
-                            
-                }),
-                  ...(filters.phoneNumber&&{
-                         phoneNumber: {
-                                contains: filters.phoneNumber,
-                                mode: 'insensitive' as const,
-                            },
-                            
-                }),
-            }
-    },[surveyId,filters]
-    
-) 
+
+            ...(filters.name && {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                ],
+            }),
+            ...(filters.code && {
+                code: {
+                    contains: filters.code,
+                    mode: 'insensitive' as const,
+                },
+            }),
+            ...(filters.idCardNumber && {
+                idCardNumber: {
+                    contains: filters.idCardNumber,
+                    mode: 'insensitive' as const,
+                },
+            }),
+            ...(filters.phoneNumber && {
+                phoneNumber: {
+                    contains: filters.phoneNumber,
+                    mode: 'insensitive' as const,
+                },
+            }),
+        }
+    }, [surveyId, filters])
     const { data } = useFindManyUserProfile({
         where,
         include: {
@@ -109,7 +104,7 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                                     survey: {
                                         include: {
                                             surveySessions: true,
-                                        }
+                                        },
                                     },
                                 },
                             },
@@ -118,22 +113,22 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                 },
             },
             surveySession: {
-                where: { surveyId }
-            }
+                where: { surveyId },
+            },
         },
-        orderBy: { 
+        orderBy: {
             firstName: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-      const { data: count } = useCountUserProfile({
-        where:{...where,deletedAt: null},
+    const { data: count } = useCountUserProfile({
+        where: { ...where, deletedAt: null },
     })
 
-    const checkStatus=(record:any)=>{
-        if(record?.surveySession?.length===1){
-          return <Tag color="green">{'Đã làm'}</Tag>
+    const checkStatus = (record: any) => {
+        if (record?.surveySession?.length === 1) {
+            return <Tag color="green">{'Đã làm'}</Tag>
         }
         return <Tag color={'red'}>{'Chưa làm'}</Tag>
     }
@@ -162,13 +157,13 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                             {
                                 title: 'Mã người làm KS',
                                 dataIndex: 'code',
-                                type:'input',
+                                type: 'input',
                                 render: (_, record) => record?.code || '',
                             },
                             {
                                 title: 'Người làm khảo sát',
                                 dataIndex: 'name',
-                                type:'input',
+                                type: 'input',
                                 render: (_, record) => {
                                     return `${record?.lastName || ''} ${record?.firstName || ''}`
                                 },
@@ -176,21 +171,21 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                             {
                                 title: 'CCCD',
                                 dataIndex: 'idCardNumber',
-                                 type:'input',
+                                type: 'input',
                                 render: (_, record) => record?.idCardNumber || '',
                             },
                             {
                                 title: 'SĐT',
                                 dataIndex: 'phoneNumber',
-                                 type:'input',
+                                type: 'input',
                                 render: (_, record) => record?.phoneNumber || '',
                             },
                             {
                                 title: 'Trạng thái KS',
                                 dataIndex: 'statusSurvey',
                                 align: 'center',
-                                 type:'select',
-                                 options: [
+                                type: 'select',
+                                options: [
                                     {
                                         value: true,
                                         label: 'Đã làm',
@@ -200,9 +195,9 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                                         label: 'Chưa làm',
                                     },
                                 ],
-                                render:(__,record)=>{
+                                render: (__, record) => {
                                     return checkStatus(record)
-                                }
+                                },
                             },
                         ]}
                         data={data || []}

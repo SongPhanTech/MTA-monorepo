@@ -68,18 +68,17 @@ export default function EvaluationAssignmentPage() {
                                                 userProfile: true,
                                             },
                                         },
-                                    }
+                                    },
                                 },
-                                evaluationCriterion:{
-                                         include: {
+                                evaluationCriterion: {
+                                    include: {
                                         lecturer: {
                                             include: {
                                                 userProfile: true,
                                             },
                                         },
-                                    }
-                                }
-                                
+                                    },
+                                },
                             },
                             orderBy: {
                                 order: 'asc',

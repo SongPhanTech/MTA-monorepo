@@ -141,7 +141,7 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate >
+                                <HtmlTruncate>
                                     <ul>
                                         {record?.subjectClasses?.map((i: any) => (
                                             <li key={i.id}>
@@ -218,7 +218,7 @@ export default function DetailSurveyPage() {
                                         >
                                             <EyeOutlined
                                                 onClick={() => {
-                                                    if(surveySessions?.length > 0){
+                                                    if (surveySessions?.length > 0) {
                                                         router.push(`/xem-lai/private/${id}`)
                                                         return
                                                     }
