@@ -27,6 +27,8 @@ export type GraduationCheckResultRank = {
     /** @nullable */
     createdBy?: string | null
     classification: string
+    /** @nullable */
+    classificationEnglish?: string | null
     context: GraduationCheckResultRankContext
     rankOrder: number
     baseScore: GraduationCheckResultRankBaseScore

@@ -1,7 +1,6 @@
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
 import PieChart from '@components/dashboard/org-structure'
-import StaffByOrg from '@components/dashboard/staff-by-org'
 import DashboardLayout from '@layouts/dashboard-layout'
 import { Col, Row, Typography } from 'antd'
 
@@ -60,7 +59,6 @@ function Page() {
                                     </Title>
                                 </div>
                                 <div className="flex-1">
-                                    <StaffByOrg />
                                 </div>
                             </div>
                         </Col>

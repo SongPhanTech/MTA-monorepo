@@ -864,4 +864,56 @@ app.openapi(graduationSessionDecision, async (c) => {
     })
 })
 
+const statisticsGraduationDecision = createRoute({
+    operationId: 'statisticsGraduationDecision',
+    tags: ['Graduation'],
+    path: '/statistics',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Successfully',
+            content: {
+                'application/json': {
+                    schema: z.array(
+                        z.object({
+                            count: z.number(),
+                            year: z.number(),
+                            classification: z.string(),
+                        })
+                    ),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(statisticsGraduationDecision, async (c) => {
+    const { trainingObjectTypeId } = c.req.valid('query')
+    const res = await prisma.$queryRaw<{ count: number; year: number; classification: string }[]>`
+            select count("GraduationDecision"."studentId"),
+            date_part('year', "decisionDate") as year,
+            ARC."classification"              as classification
+        from "ql-dao-tao"."GraduationDecision"
+                inner join "ql-dao-tao"."AcademicRankingConvert" ARC on ARC.id = "GraduationDecision"."finalRankingId"
+                inner join "ql-dao-tao"."StudentGraduationApplication" SGA on SGA.id = "GraduationDecision"."applicationId"
+                inner join "ql-dao-tao"."GraduationSession" GS on GS.id = SGA."sessionId"
+        where GS."trainingObjectTypeId" = ${trainingObjectTypeId}
+        group by date_part('year', "decisionDate"), classification;
+    `
+    return c.json(res, 200)
+})
+
 export default app
