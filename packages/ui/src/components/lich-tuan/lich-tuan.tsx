@@ -167,13 +167,13 @@ const convertApiToCalendarEventReactBigCalendar = (
         const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
         const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
         const start = event?.startTime
-            ? dayjs(event.startTime)
-            : dayjs(event.classDate)
+            ? dayjs(event?.startTime)
+            : dayjs(event?.classDate)
                   .set('hour', dayjs(startPeriod?.startTime).hour())
                   .set('minute', dayjs(startPeriod?.startTime).minute())
         const end = event?.endTime
-            ? dayjs(event.endTime)
-            : dayjs(event.classDate)
+            ? dayjs(event?.endTime)
+            : dayjs(event?.classDate)
                   .set('hour', dayjs(endPeriod?.endTime).hour())
                   .set('minute', dayjs(endPeriod?.endTime).minute())
 
@@ -374,13 +374,13 @@ export function LichCongTac({
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
             const start = event?.startTime
-                ? dayjs(event.startTime)
-                : dayjs(event.classDate)
+                ? dayjs(event?.startTime)
+                : dayjs(event?.classDate)
                       .set('hour', dayjs(startPeriod?.startTime).hour())
                       .set('minute', dayjs(startPeriod?.startTime).minute())
             const end = event?.endTime
-                ? dayjs(event.endTime)
-                : dayjs(event.classDate)
+                ? dayjs(event?.endTime)
+                : dayjs(event?.classDate)
                       .set('hour', dayjs(endPeriod?.endTime).hour())
                       .set('minute', dayjs(endPeriod?.endTime).minute())
             let current = start
@@ -485,13 +485,13 @@ export function LichCongTac({
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
             const start = event?.startTime
-                ? dayjs(event.startTime)
-                : dayjs(event.classDate)
+                ? dayjs(event?.startTime)
+                : dayjs(event?.classDate)
                       .set('hour', dayjs(startPeriod?.startTime).hour())
                       .set('minute', dayjs(startPeriod?.startTime).minute())
             const end = event?.endTime
-                ? dayjs(event.endTime)
-                : dayjs(event.classDate)
+                ? dayjs(event?.endTime)
+                : dayjs(event?.classDate)
                       .set('hour', dayjs(endPeriod?.endTime).hour())
                       .set('minute', dayjs(endPeriod?.endTime).minute())
             return {
