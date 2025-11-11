@@ -137,16 +137,17 @@ export const calcFinalScore = (
         }
     }>
 ): Decimal | null => {
-    const rawFinalScore = !subjectScore.examScore
-        ? null
-        : subjectScore.examScore < coef?.scoreToPass
-          ? subjectScore.examScore
-          : Math.min(
-                (subjectScore.attendanceScore || 0) * coef?.coef_1 +
-                    (subjectScore.midtermScore || 0) * coef?.coef_2 +
-                    subjectScore.examScore * coef?.coef_3,
-                10
-            )
+    const rawFinalScore =
+        subjectScore.examScore === null
+            ? null
+            : subjectScore.examScore < coef?.scoreToPass
+              ? subjectScore.examScore
+              : Math.min(
+                    (subjectScore.attendanceScore || 0) * coef?.coef_1 +
+                        (subjectScore.midtermScore || 0) * coef?.coef_2 +
+                        subjectScore.examScore * coef?.coef_3,
+                    10
+                )
 
     const maxCertFinalScore = subjectScore.certificates?.length
         ? Math.max(
@@ -167,7 +168,10 @@ export const calcFinalScore = (
         0
     )
 
-    return Decimal.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
+    return Decimal.min(
+        Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore,
+        10
+    ).toDecimalPlaces(1)
 }
 
 function getScoreClassification(
