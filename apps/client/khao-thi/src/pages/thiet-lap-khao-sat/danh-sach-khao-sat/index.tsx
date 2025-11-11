@@ -221,7 +221,7 @@ export default function DetailSurveyPage() {
                                             
                                             onClick={() => {
                                                     if(surveySessions?.length > 0){
-                                                        router.push(`/xem-lai-khao-sat/private/${id}`)
+                                                        router.push(`/xem-lai-khao-sat/${id}`)
                                                         return
                                                     }
                                                     if (!isPublic) {

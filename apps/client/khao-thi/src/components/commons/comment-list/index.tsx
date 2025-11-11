@@ -96,7 +96,7 @@ const CommentList = ({ comments }: CommentListProps) => {
                                 <div className="relative z-10">
                                     <div
                                         className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none"
-                                        dangerouslySetInnerHTML={{ __html: comment.content }}
+                                        dangerouslySetInnerHTML={{ __html: comment.content|| '<i>Chưa có phản hồi</i>' }}
                                     />
                                 </div>
                             </div>

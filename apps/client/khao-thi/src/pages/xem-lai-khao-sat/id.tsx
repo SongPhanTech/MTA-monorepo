@@ -9,7 +9,7 @@ import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResul
 import { Button, Col, Input, Row } from 'antd'
 
 import { useRouter } from 'next/router'
-import {  useEffect, useMemo, useState } from 'react'
+import {   useMemo } from 'react'
 
 type PutSurveySession = SurveySession & {
     responses: {
@@ -43,13 +43,13 @@ function TakeTestPage() {
     const id = router.query.id as string
     // const surveyObjectTypeId = router.query.surveyObjectTypeId as string
 
-    const [survey, setSurvey] = useState<SurveyType>()
-    const [isLoading, setIsLoading] = useState(true)
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
+    console.log(profileId);
+    
 
     // const { data } =  useGetPublicSurvey(id)
-    const { data} = useFindFirstSurveySession(
+    const { data,isLoading} = useFindFirstSurveySession(
       {
           where:{
             profileId,
@@ -65,7 +65,14 @@ function TakeTestPage() {
                     },
                 },
             },
+            survey: {
+                include: {
+                    surveyChoice: true,
+                },
+            },
         },
+      },{
+        enabled: !!id&&!!profileId
       }
     )
     // const {  }=useValidateUserSurvey()
@@ -109,11 +116,7 @@ function TakeTestPage() {
 
 
 
-    const fetchData = async () => {
-        // const response = await getPublicSurvey(id)
-    
-        setIsLoading(false)
-    }
+
 
     const checkedQuestion=(qId:string,aId:string)=>{
         const result=data?.responses.find(i=>i.surveyQuestionId===qId&&i.surveyChoiceId===aId)
@@ -123,26 +126,21 @@ function TakeTestPage() {
         return false
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        if (id) {
-            fetchData()
-        }
-    }, [id])
+
 
     return isLoading ? (
         <Loading />
     ) : (
     !!data?.responses && data?.responses?.length>0 ? (
         <div>
-                <div className="text-xl font-bold">{survey?.name}</div>
-                    {survey?.surveyChoice?.length && (
+                <div className="text-xl font-bold">{data?.survey?.name}</div>
+                    {data?.survey?.surveyChoice?.length && (
                         <Row gutter={[16, 16]}>
                             <Col span={24}>
                                 <Table
                                     rowKey="id"
                                     dataSource={[{ id: 'abc' }]}
-                                    columns={survey.surveyChoice.map((i) => {
+                                    columns={data?.survey.surveyChoice.map((i) => {
                                         return {
                                             title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
                                             dataIndex: i?.id,
@@ -183,7 +181,7 @@ function TakeTestPage() {
                                                                                 {q.name}
                                                                             </div>
                                                                             <div className="flex items-center justify-end">
-                                                                                {survey?.surveyChoice.map(
+                                                                                {data?.survey?.surveyChoice.map(
                                                                                     (i) => {
                                                                                         return (
                                                                                             <Button
