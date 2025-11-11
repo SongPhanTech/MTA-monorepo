@@ -78,11 +78,11 @@ export function RichTextEditor({
             // }),
             // Highlight.configure({ multicolor: true }),
             Image.configure({
-                // inline: true,
+                inline: true,
                 allowBase64: false,
-                // HTMLAttributes: {
-                //     class: 'mx-auto my-2',
-                // },
+                HTMLAttributes: {
+                    class: 'mx-auto my-2',
+                },
                 resize: {
                     enabled: true,
                     minWidth: 10,

@@ -384,7 +384,8 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                             align: 'center',
                             width: 50,
                             render: (_, record) =>
-                                record.subject.studentSubjectScore[0]?.finalScore || '-',
+                                record.subject.studentSubjectScore[0]?.finalScore?.toNumber() ??
+                                '-',
                         },
                         {
                             title: 'Cải thiện',
@@ -398,10 +399,9 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                                             ? record.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
                                                   (sc: ScoreConvert) =>
                                                       sc?.base10Min <=
-                                                          record.subject.studentSubjectScore[0]
-                                                              ?.finalScore &&
-                                                      record.subject.studentSubjectScore[0]
-                                                          ?.finalScore <= sc?.base10Max &&
+                                                          record.subject.studentSubjectScore[0]?.finalScore?.toNumber() &&
+                                                      record.subject.studentSubjectScore[0]?.finalScore?.toNumber() <=
+                                                          sc?.base10Max &&
                                                       sc?.improvementRegister
                                               )
                                             : false
