@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const NotificationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "title", "content", "type", "priority", "publishedAt", "expiresAt", "targetAll", "createdById"])
+export const NotificationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "title", "content", "type", "priority", "publishedAt", "expiresAt", "targetAll"])

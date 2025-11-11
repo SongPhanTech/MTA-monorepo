@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     cuongVi: z.string().nullish(),
     donVi: z.string().nullish(),
     diaDiem: z.string().nullish(),
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     cuongVi: z.string().nullish(),
     donVi: z.string().nullish(),
     diaDiem: z.string().nullish(),
@@ -79,6 +81,7 @@ export const ChienDauPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     cuongVi: z.string().nullish(),
     donVi: z.string().nullish(),
     diaDiem: z.string().nullish(),
@@ -93,7 +96,7 @@ export const ChienDauPrismaUpdateSchema = z.object({
  * `ChienDau` schema for create operations excluding foreign keys and relations.
  */
 export const ChienDauCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

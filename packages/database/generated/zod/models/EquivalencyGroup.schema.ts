@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -23,6 +24,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -60,7 +62,8 @@ export const EquivalencyGroupPrismaUpdateSchema = z.object({
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date()
+    updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish()
 }).partial().passthrough();
 
 
@@ -68,7 +71,7 @@ export const EquivalencyGroupPrismaUpdateSchema = z.object({
  * `EquivalencyGroup` schema for create operations excluding foreign keys and relations.
  */
 export const EquivalencyGroupCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
@@ -76,7 +79,7 @@ export const EquivalencyGroupCreateScalarSchema = baseSchemaWithoutDefaults.part
  * `EquivalencyGroup` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const EquivalencyGroupCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

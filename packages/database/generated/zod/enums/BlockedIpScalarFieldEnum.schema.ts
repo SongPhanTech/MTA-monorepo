@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const BlockedIpScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "ipAddress", "reason", "expiresAt"])
+export const BlockedIpScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "ipAddress", "reason", "expiresAt"])

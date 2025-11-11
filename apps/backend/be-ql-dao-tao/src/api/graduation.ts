@@ -12,7 +12,9 @@ import {
     GraduationRankDowngradeConditionScalarSchema,
     TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
+import { getTemplateBuffer } from '@workspace/libs/server'
 import Decimal from 'decimal.js'
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { evaluateCondition } from '../services/student-result.service'
 import type { StudentDataContext } from '../types/student-context'
@@ -751,6 +753,115 @@ app.openapi(graduationCheck, async (c) => {
     }
 
     return c.json({ results }, 200)
+})
+
+const graduationSessionDecision = createRoute({
+    operationId: 'graduationSessionDecision',
+    tags: ['Graduation'],
+    path: '/session-decision',
+    method: 'get',
+    request: {
+        query: z.object({
+            sessionId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(graduationSessionDecision, async (c) => {
+    const { sessionId } = c.req.valid('query')
+
+    const graduationDecisions = await prisma.graduationDecision.findMany({
+        where: { application: { sessionId } },
+        include: {
+            trainingMajor: true,
+            finalRanking: true,
+            diplomaType: true,
+            student: {
+                include: {
+                    userProfile: { include: { gender: true } },
+                    curriculumVersion: {
+                        include: {
+                            trainingType: true,
+                        },
+                    },
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: {
+                                    trainingType: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const data = graduationDecisions.map((graduationDecision, idx) => {
+        const curriculumVersion =
+            graduationDecision.student.curriculumVersion ||
+            graduationDecision.student.fixedClass?.curriculumVersion
+
+        const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth
+
+        return {
+            no: idx + 1,
+            ...graduationDecision,
+            originalDiplomaNumber: graduationDecision.originalDiplomaNumber,
+            diplomaNumber: graduationDecision.diplomaNumber,
+            diplomaIssueDate: graduationDecision.diplomaIssueDate,
+            fullname: graduationDecision.student.userProfile.fullname,
+            FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
+            gender: graduationDecision.student.userProfile.gender?.sTen,
+            dayOfBirth: dateOfBirth ? dateOfBirth.getDate() : null,
+            monthOfBirth: dateOfBirth ? dateOfBirth.getMonth() + 1 : null,
+            mmmOfBirth: dateOfBirth
+                ? dateOfBirth.toLocaleString('en-US', { month: 'short' })
+                : null,
+            yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
+            trainingMajor: graduationDecision.trainingMajor?.name,
+            classification: graduationDecision.finalRanking.classification,
+            classificationEnglish: graduationDecision.finalRanking.classificationEnglish,
+            trainingType: curriculumVersion?.trainingType?.name,
+            diplomaType: graduationDecision.diplomaType?.name,
+            diplomaTypeEnglish: graduationDecision.diplomaType?.englishName,
+        }
+    })
+
+    const buffer = await getTemplateBuffer(prisma, 'DANH_SACH_TOT_NGHIEP')
+
+    const template = new XlsxTemplate(buffer)
+
+    template.substitute(1, { data })
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = 'danh_sach_GV.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app

@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
 }
@@ -70,6 +72,7 @@ export const CriterionCatalogPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     name: z.string()
 }).partial().passthrough();
@@ -79,7 +82,7 @@ export const CriterionCatalogPrismaUpdateSchema = z.object({
  * `CriterionCatalog` schema for create operations excluding foreign keys and relations.
  */
 export const CriterionCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

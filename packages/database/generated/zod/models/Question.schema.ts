@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     type: QuestionTypeSchema,
     point: z.number().default(1),
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     type: QuestionTypeSchema,
     point: z.number(),
@@ -85,6 +87,7 @@ export const QuestionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     type: QuestionTypeSchema,
     point: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -97,7 +100,7 @@ export const QuestionPrismaUpdateSchema = z.object({
  * `Question` schema for create operations excluding foreign keys and relations.
  */
 export const QuestionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true, point: true, isAutoGraded: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, point: true, isAutoGraded: true
 });
 
 

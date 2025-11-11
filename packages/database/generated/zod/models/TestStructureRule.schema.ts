@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     questionPoint: z.number(),
     questionType: QuestionTypeSchema,
     count: z.number(),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     questionPoint: z.number(),
     questionType: QuestionTypeSchema,
     count: z.number(),
@@ -76,6 +78,7 @@ export const TestStructureRulePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     questionPoint: z.union([z.number(), z.record(z.string(), z.unknown())]),
     questionType: QuestionTypeSchema,
     count: z.union([z.number(), z.record(z.string(), z.unknown())])
@@ -86,7 +89,7 @@ export const TestStructureRulePrismaUpdateSchema = z.object({
  * `TestStructureRule` schema for create operations excluding foreign keys and relations.
  */
 export const TestStructureRuleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

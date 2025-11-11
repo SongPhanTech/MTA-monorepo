@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -23,6 +24,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -66,7 +68,8 @@ export const DocumentTopicPrismaUpdateSchema = z.object({
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date()
+    updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish()
 }).partial().passthrough();
 
 
@@ -74,7 +77,7 @@ export const DocumentTopicPrismaUpdateSchema = z.object({
  * `DocumentTopic` schema for create operations excluding foreign keys and relations.
  */
 export const DocumentTopicCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

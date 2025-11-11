@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     registeredAt: z.coerce.date().default(() => new Date()),
     motivation: z.string().nullish(),
     experience: z.string().nullish(),
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     registeredAt: z.coerce.date(),
     motivation: z.string().nullish(),
     experience: z.string().nullish(),
@@ -88,6 +90,7 @@ export const StudentThesisRegistrationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     registeredAt: z.coerce.date(),
     motivation: z.string().nullish(),
     experience: z.string().nullish(),
@@ -102,7 +105,7 @@ export const StudentThesisRegistrationPrismaUpdateSchema = z.object({
  * `StudentThesisRegistration` schema for create operations excluding foreign keys and relations.
  */
 export const StudentThesisRegistrationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, registeredAt: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, registeredAt: true, status: true
 });
 
 

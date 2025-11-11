@@ -128,6 +128,20 @@ exports.Prisma.ConfigScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  key: 'key',
+  value: 'value'
+};
+
+exports.Prisma.SuggestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   key: 'key',
   value: 'value'
 };
@@ -153,6 +167,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   bLaNguoiDung: 'bLaNguoiDung',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
   bLaHocVien: 'bLaHocVien',
@@ -272,6 +287,7 @@ exports.Prisma.HocHamScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   academicRankTypeId: 'academicRankTypeId',
   noiCap: 'noiCap',
   soQuyetDinh: 'soQuyetDinh',
@@ -288,6 +304,7 @@ exports.Prisma.HocViScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
@@ -304,6 +321,7 @@ exports.Prisma.RelativeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type',
   birthYear: 'birthYear',
@@ -322,6 +340,7 @@ exports.Prisma.TrinhDoLyLuanChinhTriScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -338,6 +357,7 @@ exports.Prisma.TrinhDoQuanLyNhaNuocScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -354,6 +374,7 @@ exports.Prisma.NgoaiNguScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   ngonNguId: 'ngonNguId',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
@@ -371,6 +392,7 @@ exports.Prisma.TinHocScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   thoiGianBatDau: 'thoiGianBatDau',
@@ -387,6 +409,7 @@ exports.Prisma.BoiDuongQuocPhongAnNinhScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   thoiGianBatDau: 'thoiGianBatDau',
   thoiGianKetThuc: 'thoiGianKetThuc',
@@ -401,6 +424,7 @@ exports.Prisma.CapBacScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   noiRaQuyetDinh: 'noiRaQuyetDinh',
   capRaQuyetDinh: 'capRaQuyetDinh',
   ngayNhanQuyetDinh: 'ngayNhanQuyetDinh',
@@ -416,6 +440,7 @@ exports.Prisma.QuaTrinhCongTacScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tuThangNam: 'tuThangNam',
   denThangNam: 'denThangNam',
   donVi: 'donVi',
@@ -437,6 +462,7 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tuThangNam: 'tuThangNam',
   denThangNam: 'denThangNam',
   donVi: 'donVi',
@@ -452,6 +478,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   ten: 'ten',
   donViToChuc: 'donViToChuc',
   tuNgay: 'tuNgay',
@@ -469,6 +496,7 @@ exports.Prisma.KhenThuongScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   hinhThucKhenThuong: 'hinhThucKhenThuong',
   capKhenThuong: 'capKhenThuong',
   soQuyetDinh: 'soQuyetDinh',
@@ -486,6 +514,7 @@ exports.Prisma.KyLuatScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   hinhThucKyLuat: 'hinhThucKyLuat',
   capKyLuat: 'capKyLuat',
   soQuyetDinh: 'soQuyetDinh',
@@ -503,6 +532,7 @@ exports.Prisma.DoiTuongChinhSachScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tenDoiTuong: 'tenDoiTuong',
   ngayBatDau: 'ngayBatDau',
   ngayKetThuc: 'ngayKetThuc',
@@ -518,6 +548,7 @@ exports.Prisma.KeKhaiTaiSanScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   loai: 'loai',
   tenDot: 'tenDot',
   thoiGianKeKhai: 'thoiGianKeKhai',
@@ -532,6 +563,7 @@ exports.Prisma.TiengDanTocScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   danTocId: 'danTocId',
   nghe: 'nghe',
   noi: 'noi',
@@ -547,6 +579,7 @@ exports.Prisma.ChienDauScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   cuongVi: 'cuongVi',
   donVi: 'donVi',
   diaDiem: 'diaDiem',
@@ -565,6 +598,7 @@ exports.Prisma.NuocNgoaiScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tenNuocId: 'tenNuocId',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
@@ -580,6 +614,7 @@ exports.Prisma.ThuongTatScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   loaiId: 'loaiId',
   tiLe: 'tiLe',
   nguyenNhan: 'nguyenNhan',
@@ -597,6 +632,7 @@ exports.Prisma.DanhHieuScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   ten: 'ten',
   thoiGian: 'thoiGian',
   userProfileId: 'userProfileId'
@@ -610,6 +646,7 @@ exports.Prisma.QuaTrinhHocTapScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tenTruongId: 'tenTruongId',
   nganhHocId: 'nganhHocId',
   chuyenNganhId: 'chuyenNganhId',
@@ -628,6 +665,7 @@ exports.Prisma.ToChucXaHoiScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tenId: 'tenId',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
@@ -643,6 +681,7 @@ exports.Prisma.QuaTrinhLuongScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   tuNgay: 'tuNgay',
   denNgay: 'denNgay',
   ngachId: 'ngachId',
@@ -662,6 +701,7 @@ exports.Prisma.GroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -673,6 +713,7 @@ exports.Prisma.RoleScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -684,6 +725,7 @@ exports.Prisma.PermissionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   permissionType: 'permissionType',
   disabled: 'disabled'
@@ -697,6 +739,7 @@ exports.Prisma.ChatBotConfigScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   value: 'value'
 };
@@ -709,6 +752,7 @@ exports.Prisma.UserSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber'
@@ -722,6 +766,7 @@ exports.Prisma.DocumentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   title: 'title',
   body: 'body',
   status: 'status',
@@ -742,6 +787,7 @@ exports.Prisma.DocumentTopicScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   documentId: 'documentId',
   topicId: 'topicId'
 };
@@ -754,6 +800,7 @@ exports.Prisma.FAQScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   question: 'question',
   answer: 'answer',
   status: 'status',
@@ -771,6 +818,7 @@ exports.Prisma.PromptScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   prompt: 'prompt',
   status: 'status',
   topicId: 'topicId',
@@ -785,6 +833,7 @@ exports.Prisma.ConversationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   userId: 'userId',
   sessionId: 'sessionId',
@@ -799,6 +848,7 @@ exports.Prisma.MessageScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   conversationId: 'conversationId',
   content: 'content',
   sender: 'sender'
@@ -812,6 +862,7 @@ exports.Prisma.CitationMessageScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   content: 'content',
   index: 'index',
   documentId: 'documentId',
@@ -827,6 +878,7 @@ exports.Prisma.TopicScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type',
   isPinned: 'isPinned'
@@ -840,6 +892,7 @@ exports.Prisma.DocumentClassificationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -1437,6 +1490,7 @@ exports.Prisma.StudentScoreConvertScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId'
 };
 
@@ -1448,6 +1502,7 @@ exports.Prisma.SubjectScoreConvertScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentScoreConvertId: 'studentScoreConvertId',
   subjectVersionId: 'subjectVersionId',
   status: 'status',
@@ -1462,6 +1517,7 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
@@ -1491,6 +1547,7 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   attendanceScore: 'attendanceScore',
   midtermScore: 'midtermScore',
@@ -1514,6 +1571,7 @@ exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedCertificateId: 'archivedCertificateId'
 };
@@ -1526,6 +1584,7 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   certificateId: 'certificateId',
   studentId: 'studentId',
   finalScore: 'finalScore',
@@ -1544,6 +1603,7 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedAwardId: 'archivedAwardId'
 };
@@ -1556,6 +1616,7 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   awardId: 'awardId',
   studentId: 'studentId',
   bonusScore: 'bonusScore',
@@ -1571,6 +1632,7 @@ exports.Prisma.SchoolYearScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate'
@@ -1584,6 +1646,7 @@ exports.Prisma.SemesterScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   shortName: 'shortName',
   semesterType: 'semesterType',
@@ -1600,6 +1663,7 @@ exports.Prisma.MilestoneScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startPeriod: 'startPeriod',
   period: 'period',
@@ -1616,6 +1680,7 @@ exports.Prisma.TrainingLanguageScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -1627,6 +1692,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   semesterStartId: 'semesterStartId',
   startYear: 'startYear',
@@ -1677,6 +1743,7 @@ exports.Prisma.FixedClassScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   summary: 'summary',
   startYear: 'startYear',
@@ -1699,6 +1766,7 @@ exports.Prisma.CurriculumScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -1716,6 +1784,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -1727,6 +1796,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   requiredCredits: 'requiredCredits',
@@ -1752,6 +1822,7 @@ exports.Prisma.SubjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -1766,6 +1837,7 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -1777,6 +1849,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -1815,6 +1888,7 @@ exports.Prisma.SubjectVersionHistoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectVersionId: 'subjectVersionId',
   content: 'content',
   action: 'action',
@@ -1828,7 +1902,8 @@ exports.Prisma.EquivalencyGroupScalarFieldEnum = {
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy'
 };
 
 exports.Prisma.SubjectInGroupScalarFieldEnum = {
@@ -1839,6 +1914,7 @@ exports.Prisma.SubjectInGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectId: 'subjectId',
   equivalencyGroupId: 'equivalencyGroupId',
   side: 'side'
@@ -1852,6 +1928,7 @@ exports.Prisma.TrainingBlockSubjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectId: 'subjectId',
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId',
   semester: 'semester',
@@ -1868,6 +1945,7 @@ exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   classRegisterSessionId: 'classRegisterSessionId',
   minCredit: 'minCredit',
   maxCredit: 'maxCredit',
@@ -1886,6 +1964,7 @@ exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -1901,6 +1980,7 @@ exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   classRegisterSessionId: 'classRegisterSessionId',
   subjectClassId: 'subjectClassId',
   studentId: 'studentId',
@@ -1959,6 +2039,7 @@ exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   scoreDeadLineStart: 'scoreDeadLineStart',
   scoreDeadline: 'scoreDeadline',
@@ -1978,6 +2059,7 @@ exports.Prisma.SubjectClassTimeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   dayOfWeek: 'dayOfWeek',
   startPeriod: 'startPeriod',
@@ -1992,14 +2074,18 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   periodType: 'periodType',
   startPeriod: 'startPeriod',
   endPeriod: 'endPeriod',
+  startTime: 'startTime',
+  endTime: 'endTime',
   classDate: 'classDate',
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   isReplacement: 'isReplacement',
   originalScheduleId: 'originalScheduleId',
@@ -2014,6 +2100,7 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type',
   trainingFormId: 'trainingFormId',
@@ -2028,6 +2115,7 @@ exports.Prisma.PriorityObjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2039,6 +2127,7 @@ exports.Prisma.TrainingTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2050,6 +2139,7 @@ exports.Prisma.TrainingLevelScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2061,6 +2151,7 @@ exports.Prisma.TrainingFormScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2072,6 +2163,7 @@ exports.Prisma.TrainingLocationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   dM_TinhId: 'dM_TinhId',
   dM_Tinh_NewId: 'dM_Tinh_NewId'
@@ -2085,6 +2177,7 @@ exports.Prisma.BuildingScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   floor: 'floor',
   trainingLocationId: 'trainingLocationId'
@@ -2098,6 +2191,7 @@ exports.Prisma.RoomScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   trainingRoom: 'trainingRoom',
   computerRoom: 'computerRoom',
@@ -2116,6 +2210,7 @@ exports.Prisma.TrainingFieldScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   publishDate: 'publishDate',
@@ -2131,6 +2226,7 @@ exports.Prisma.TrainingFieldOnTrainingObjectTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingFieldId: 'trainingFieldId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -2143,6 +2239,7 @@ exports.Prisma.TrainingMajorScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   summary: 'summary',
@@ -2163,6 +2260,7 @@ exports.Prisma.TrainingMajorOnTrainingObjectTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingMajorId: 'trainingMajorId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -2175,6 +2273,7 @@ exports.Prisma.TrainingBlockScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   priority: 'priority',
   parentId: 'parentId'
@@ -2188,6 +2287,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumId: 'curriculumId',
@@ -2203,6 +2303,7 @@ exports.Prisma.TrainingTimeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2214,6 +2315,7 @@ exports.Prisma.CertificateScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName'
 };
@@ -2226,6 +2328,7 @@ exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   finalScore: 'finalScore',
   certificateId: 'certificateId',
   subjectId: 'subjectId'
@@ -2239,6 +2342,7 @@ exports.Prisma.AwardScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   bonusScore: 'bonusScore'
@@ -2252,6 +2356,7 @@ exports.Prisma.DiplomaTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   type: 'type'
@@ -2265,6 +2370,7 @@ exports.Prisma.ScoreConvertScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   classification: 'classification',
   base10Min: 'base10Min',
   base10Max: 'base10Max',
@@ -2283,6 +2389,7 @@ exports.Prisma.TrainingKPIScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2294,6 +2401,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   note: 'note',
   from: 'from',
   to: 'to',
@@ -2319,10 +2427,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -2415,14 +2520,14 @@ exports.Prisma.NotificationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   title: 'title',
   content: 'content',
   type: 'type',
   priority: 'priority',
   publishedAt: 'publishedAt',
   expiresAt: 'expiresAt',
-  targetAll: 'targetAll',
-  createdById: 'createdById'
+  targetAll: 'targetAll'
 };
 
 exports.Prisma.DocumentFileScalarFieldEnum = {
@@ -2433,6 +2538,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   size: 'size',
@@ -2447,6 +2553,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   notificationId: 'notificationId',
   decisionId: 'decisionId',
   defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
   diplomaFrontId: 'diplomaFrontId',
   diplomaBackId: 'diplomaBackId',
   diplomaVerificationId: 'diplomaVerificationId',
@@ -2465,6 +2572,7 @@ exports.Prisma.AcademicActionConfigScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   actionType: 'actionType',
   trainingCourseId: 'trainingCourseId'
@@ -2478,6 +2586,7 @@ exports.Prisma.AcademicActionRuleSetScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   configId: 'configId'
 };
 
@@ -2489,6 +2598,7 @@ exports.Prisma.AcademicActionConditionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   ruleSetId: 'ruleSetId',
   field: 'field',
   operator: 'operator',
@@ -2507,6 +2617,7 @@ exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   schoolYearId: 'schoolYearId',
@@ -2527,6 +2638,7 @@ exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   time: 'time',
   semesterId: 'semesterId',
@@ -2541,6 +2653,7 @@ exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingScoreSessionId: 'trainingScoreSessionId',
   studentId: 'studentId',
   score: 'score',
@@ -2556,6 +2669,7 @@ exports.Prisma.LecturerTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2567,6 +2681,7 @@ exports.Prisma.StaffTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2578,6 +2693,7 @@ exports.Prisma.StaffPositionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2589,6 +2705,7 @@ exports.Prisma.LecturerScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   from: 'from',
   lectureID: 'lectureID',
   serviceDate: 'serviceDate',
@@ -2605,6 +2722,7 @@ exports.Prisma.LecturerHistoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   from: 'from',
   to: 'to',
   lectureID: 'lectureID',
@@ -2623,6 +2741,7 @@ exports.Prisma.ResearchProjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   title: 'title',
   summary: 'summary',
   objectives: 'objectives',
@@ -2648,6 +2767,7 @@ exports.Prisma.StudentResearchRegistrationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   researchProjectId: 'researchProjectId',
   registeredAt: 'registeredAt',
@@ -2667,6 +2787,7 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -2689,6 +2810,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   title: 'title',
   titleEN: 'titleEN',
   summary: 'summary',
@@ -2723,6 +2845,7 @@ exports.Prisma.DefenseSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   startTime: 'startTime'
 };
 
@@ -2734,6 +2857,7 @@ exports.Prisma.StudentThesisRegistrationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   thesisProjectId: 'thesisProjectId',
@@ -2755,6 +2879,7 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   lecturerId: 'lecturerId',
   name: 'name',
   academicRank: 'academicRank',
@@ -2779,6 +2904,7 @@ exports.Prisma.DecisionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   issueDate: 'issueDate',
   type: 'type',
   thesisProjectId: 'thesisProjectId'
@@ -2792,6 +2918,7 @@ exports.Prisma.InvitationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   sentDate: 'sentDate',
   isConfirmed: 'isConfirmed',
   councilMemberId: 'councilMemberId'
@@ -2805,6 +2932,7 @@ exports.Prisma.CouncilScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   proposedDate: 'proposedDate',
   status: 'status',
   studentThesisRegistrationId: 'studentThesisRegistrationId'
@@ -2818,6 +2946,7 @@ exports.Prisma.CouncilMemberScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   role: 'role',
   councilId: 'councilId',
   expertId: 'expertId'
@@ -2831,6 +2960,7 @@ exports.Prisma.DefenseRecordScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   finalScore: 'finalScore',
   comments: 'comments',
   isProfileComplete: 'isProfileComplete',
@@ -2845,6 +2975,7 @@ exports.Prisma.LibrarySubmissionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   submissionDate: 'submissionDate',
   isHardcopy: 'isHardcopy',
   isSoftcopy: 'isSoftcopy',
@@ -2861,6 +2992,7 @@ exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   role: 'role',
   amount: 'amount'
 };
@@ -2873,6 +3005,7 @@ exports.Prisma.PaymentRecordScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   amount: 'amount',
   status: 'status',
   paymentDate: 'paymentDate',
@@ -2889,6 +3022,7 @@ exports.Prisma.SupervisorPaymentRecordScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   thesisProjectId: 'thesisProjectId',
   expertId: 'expertId',
   amount: 'amount',
@@ -2905,6 +3039,7 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate'
@@ -2918,6 +3053,7 @@ exports.Prisma.StandardCatalogScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   order: 'order',
   name: 'name'
 };
@@ -2930,6 +3066,7 @@ exports.Prisma.CriterionCatalogScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   standardId: 'standardId',
   order: 'order',
   name: 'name'
@@ -2943,6 +3080,7 @@ exports.Prisma.EvidenceCategoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -2954,6 +3092,7 @@ exports.Prisma.EvidenceScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
@@ -2968,6 +3107,7 @@ exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   reviewerId: 'reviewerId',
   requirementCriterionId: 'requirementCriterionId',
   content: 'content',
@@ -2983,6 +3123,7 @@ exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   criterionCatalogId: 'criterionCatalogId',
   order: 'order',
   name: 'name',
@@ -2997,6 +3138,7 @@ exports.Prisma.StandardPeriodScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   periodId: 'periodId',
   name: 'name',
   order: 'order',
@@ -3012,6 +3154,7 @@ exports.Prisma.CriterionPeriodScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   order: 'order',
   evaluationStandardId: 'evaluationStandardId'
@@ -3025,6 +3168,7 @@ exports.Prisma.AnalysisCriterionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   deadline: 'deadline',
@@ -3039,6 +3183,7 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   deadline: 'deadline',
@@ -3058,6 +3203,7 @@ exports.Prisma.RequirementCriterionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   analysisCriterionId: 'analysisCriterionId',
   order: 'order',
   name: 'name',
@@ -3074,6 +3220,7 @@ exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   requirementCriterionId: 'requirementCriterionId',
   evidenceId: 'evidenceId',
   order: 'order'
@@ -3087,6 +3234,7 @@ exports.Prisma.EvaluationCouncilScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   periodId: 'periodId',
   name: 'name'
 };
@@ -3099,6 +3247,7 @@ exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId',
   role: 'role'
@@ -3112,6 +3261,7 @@ exports.Prisma.EvidenceFileScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
@@ -3128,6 +3278,7 @@ exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type'
 };
@@ -3140,6 +3291,7 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3151,6 +3303,7 @@ exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3162,6 +3315,7 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
@@ -3179,6 +3333,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -3198,6 +3353,7 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
@@ -3211,6 +3367,7 @@ exports.Prisma.SurveyChoiceScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   answer: 'answer',
   requireExplanation: 'requireExplanation',
   surveyId: 'surveyId',
@@ -3225,6 +3382,7 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
@@ -3243,6 +3401,7 @@ exports.Prisma.SurveyResponseScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   surveySessionId: 'surveySessionId',
   surveyQuestionId: 'surveyQuestionId',
   answerText: 'answerText',
@@ -3259,6 +3418,7 @@ exports.Prisma.QuestionBankScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   subjectVersionId: 'subjectVersionId'
 };
@@ -3271,6 +3431,7 @@ exports.Prisma.DifficultyScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   level: 'level'
 };
@@ -3283,6 +3444,7 @@ exports.Prisma.KnowledgeBlockScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   subjectVersionId: 'subjectVersionId',
   name: 'name'
 };
@@ -3295,6 +3457,7 @@ exports.Prisma.QuestionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   content: 'content',
   type: 'type',
   point: 'point',
@@ -3313,6 +3476,7 @@ exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   content: 'content',
   isCorrect: 'isCorrect',
@@ -3327,6 +3491,7 @@ exports.Prisma.FillInBlankSlotScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   order: 'order',
   correctAnswer: 'correctAnswer'
@@ -3340,6 +3505,7 @@ exports.Prisma.OrderingItemScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   content: 'content',
   correctOrder: 'correctOrder'
@@ -3353,6 +3519,7 @@ exports.Prisma.ExamScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   status: 'status',
   questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
@@ -3369,6 +3536,7 @@ exports.Prisma.ExamRoomScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examId: 'examId',
   roomId: 'roomId',
   capacity: 'capacity'
@@ -3382,6 +3550,7 @@ exports.Prisma.ExamListScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId',
@@ -3399,6 +3568,7 @@ exports.Prisma.TestStructureRuleScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examId: 'examId',
   questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId',
@@ -3415,6 +3585,7 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examId: 'examId',
   examCode: 'examCode'
 };
@@ -3427,6 +3598,7 @@ exports.Prisma.ExamBankQuestionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examBankId: 'examBankId',
   questionId: 'questionId',
   order: 'order'
@@ -3440,6 +3612,7 @@ exports.Prisma.ExamPaperScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
@@ -3453,6 +3626,7 @@ exports.Prisma.StaffScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   from: 'from',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
@@ -3468,6 +3642,7 @@ exports.Prisma.StaffHistoryScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   from: 'from',
   to: 'to',
   userProfileId: 'userProfileId',
@@ -3484,6 +3659,7 @@ exports.Prisma.ScholarshipScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   rankOrder: 'rankOrder',
   baseAmount: 'baseAmount',
@@ -3501,6 +3677,7 @@ exports.Prisma.ScholarshipCriteriaScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   scholarshipId: 'scholarshipId',
   field: 'field',
   invert: 'invert',
@@ -3518,6 +3695,7 @@ exports.Prisma.ScholarshipAwardScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   scholarshipId: 'scholarshipId',
@@ -3534,6 +3712,7 @@ exports.Prisma.GraduationSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   sessionDate: 'sessionDate',
   applicationStart: 'applicationStart',
@@ -3550,6 +3729,7 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   sessionId: 'sessionId',
   applicationDate: 'applicationDate',
@@ -3570,6 +3750,7 @@ exports.Prisma.ApplicationDowngradedScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentGraduationApplicationId: 'studentGraduationApplicationId',
   fromId: 'fromId'
 };
@@ -3582,6 +3763,7 @@ exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentGraduationApplicationId: 'studentGraduationApplicationId',
   rankingConditionId: 'rankingConditionId',
   passed: 'passed',
@@ -3596,6 +3778,7 @@ exports.Prisma.GraduationDecisionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   applicationId: 'applicationId',
   studentId: 'studentId',
   decisionDate: 'decisionDate',
@@ -3618,7 +3801,9 @@ exports.Prisma.AcademicRankingConvertScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   context: 'context',
   rankOrder: 'rankOrder',
   baseScore: 'baseScore',
@@ -3638,6 +3823,7 @@ exports.Prisma.GraduationRankDowngradeRuleScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   initialRankId: 'initialRankId'
 };
 
@@ -3649,6 +3835,7 @@ exports.Prisma.GraduationRankDowngradeConditionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   downgradeRuleId: 'downgradeRuleId',
   field: 'field',
   operator: 'operator',
@@ -3665,6 +3852,7 @@ exports.Prisma.RankingConditionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   rankingId: 'rankingId',
   field: 'field',
   operator: 'operator',
@@ -3681,6 +3869,7 @@ exports.Prisma.DiplomaVerificationApplicationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   fullname: 'fullname',
   idCardNumber: 'idCardNumber',
   dateOfBirth: 'dateOfBirth',
@@ -3708,6 +3897,7 @@ exports.Prisma.NoteScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   content: 'content',
   isPinned: 'isPinned',
   studentId: 'studentId',
@@ -3722,6 +3912,7 @@ exports.Prisma.NoteFolderScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   icon: 'icon',
   sortOrder: 'sortOrder',
@@ -3737,6 +3928,7 @@ exports.Prisma.NoteTagScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   color: 'color'
 };
@@ -3749,6 +3941,7 @@ exports.Prisma.NoteReminderScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   title: 'title',
   reminderTime: 'reminderTime',
   isCompleted: 'isCompleted',
@@ -3766,6 +3959,7 @@ exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   field: 'field',
   operator: 'operator',
   invert: 'invert',
@@ -3785,6 +3979,7 @@ exports.Prisma.AcademicWarningScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   level: 'level',
@@ -3800,6 +3995,7 @@ exports.Prisma.DisciplinaryWarningScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   level: 'level',
@@ -3814,6 +4010,7 @@ exports.Prisma.DisciplinaryWarningReasonScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   severityLevel: 'severityLevel'
 };
@@ -3826,6 +4023,7 @@ exports.Prisma.FeedbackScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   content: 'content',
   status: 'status',
   satisfaction: 'satisfaction',
@@ -3840,6 +4038,7 @@ exports.Prisma.DM_TrinhDoHocVanScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3851,6 +4050,7 @@ exports.Prisma.DM_TrinhDoLyLuanChinhTriScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3862,6 +4062,7 @@ exports.Prisma.DM_TrinhDoQuanLyNhaNuocScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3873,6 +4074,7 @@ exports.Prisma.DM_TinhTrangHonNhanScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3884,6 +4086,7 @@ exports.Prisma.DM_TrangThaiLamViecScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3895,6 +4098,7 @@ exports.Prisma.DM_HinhThucKhenThuongChinhQuyenScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3906,6 +4110,7 @@ exports.Prisma.DM_HinhThucKhenThuongDangScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3917,6 +4122,7 @@ exports.Prisma.DM_XepLoaiDanhGiaCanBoScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3928,6 +4134,7 @@ exports.Prisma.DM_XepLoaiDanhGiaChatLuongDangVienScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3939,6 +4146,7 @@ exports.Prisma.DM_LoaiHinhCongTacScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3950,6 +4158,7 @@ exports.Prisma.DM_TinhTrangCongTacScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3961,6 +4170,7 @@ exports.Prisma.DM_LoaiHinhDiHocTapScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3972,6 +4182,7 @@ exports.Prisma.DM_TinhTrangDiHocTapScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3983,6 +4194,7 @@ exports.Prisma.DM_NuocCuDiHocTapScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -3994,6 +4206,7 @@ exports.Prisma.DM_ChucDanhCMNVGiangVienScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4005,6 +4218,7 @@ exports.Prisma.DM_ChucDanhCMNVNghienCuuVienScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4016,6 +4230,7 @@ exports.Prisma.DM_ChucDanhCMNVKySuScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4027,6 +4242,7 @@ exports.Prisma.DM_TruongDaoTaoBacDHScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4038,6 +4254,7 @@ exports.Prisma.DM_ChuyenNganhDaoTaoBacDHScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4049,6 +4266,7 @@ exports.Prisma.DM_ChiHuyQuanLyScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4060,6 +4278,7 @@ exports.Prisma.DM_ChuyenMonKyThuatScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4071,6 +4290,7 @@ exports.Prisma.DM_SucKhoeScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4082,6 +4302,7 @@ exports.Prisma.DM_NhomMauScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4093,6 +4314,7 @@ exports.Prisma.DM_LoaiThuongTatScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4104,6 +4326,7 @@ exports.Prisma.DM_NganhHocScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4115,6 +4338,7 @@ exports.Prisma.DM_ToChucXaHoiScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4126,6 +4350,7 @@ exports.Prisma.DM_NgachScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4137,6 +4362,7 @@ exports.Prisma.DM_BacLuongScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4148,6 +4374,7 @@ exports.Prisma.TemplateFileScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   fileType: 'fileType',
@@ -4163,6 +4390,7 @@ exports.Prisma.BlockedIpScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   ipAddress: 'ipAddress',
   reason: 'reason',
   expiresAt: 'expiresAt'
@@ -4192,6 +4420,16 @@ exports.Prisma.ConfigOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
+  value: 'value'
+};
+
+exports.Prisma.SuggestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  key: 'key',
   value: 'value'
 };
 
@@ -4215,6 +4453,7 @@ exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   groupId: 'groupId',
   sDM_DonViId: 'sDM_DonViId',
   sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
@@ -4307,6 +4546,7 @@ exports.Prisma.HocHamOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   academicRankTypeId: 'academicRankTypeId',
   noiCap: 'noiCap',
   soQuyetDinh: 'soQuyetDinh',
@@ -4317,6 +4557,7 @@ exports.Prisma.HocViOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
@@ -4328,6 +4569,7 @@ exports.Prisma.RelativeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   queQuan: 'queQuan',
   noiOHienTai: 'noiOHienTai',
@@ -4340,6 +4582,7 @@ exports.Prisma.TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   userProfileId: 'userProfileId',
@@ -4350,6 +4593,7 @@ exports.Prisma.TrinhDoQuanLyNhaNuocOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   userProfileId: 'userProfileId',
@@ -4360,6 +4604,7 @@ exports.Prisma.NgoaiNguOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ngonNguId: 'ngonNguId',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
@@ -4371,6 +4616,7 @@ exports.Prisma.TinHocOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   hinhThucDaoTao: 'hinhThucDaoTao',
   noiDaoTao: 'noiDaoTao',
   dM_TrinhDoTinHocId: 'dM_TrinhDoTinHocId',
@@ -4381,6 +4627,7 @@ exports.Prisma.BoiDuongQuocPhongAnNinhOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   userProfileId: 'userProfileId'
 };
@@ -4389,6 +4636,7 @@ exports.Prisma.CapBacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   noiRaQuyetDinh: 'noiRaQuyetDinh',
   capRaQuyetDinh: 'capRaQuyetDinh',
   capBacId: 'capBacId',
@@ -4399,6 +4647,7 @@ exports.Prisma.QuaTrinhCongTacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   donVi: 'donVi',
   diaChi: 'diaChi',
   chucDanh: 'chucDanh',
@@ -4413,6 +4662,7 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
   userProfileId: 'userProfileId'
@@ -4422,6 +4672,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ten: 'ten',
   donViToChuc: 'donViToChuc',
   vanBang: 'vanBang',
@@ -4433,6 +4684,7 @@ exports.Prisma.KhenThuongOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   hinhThucKhenThuong: 'hinhThucKhenThuong',
   capKhenThuong: 'capKhenThuong',
   soQuyetDinh: 'soQuyetDinh',
@@ -4445,6 +4697,7 @@ exports.Prisma.KyLuatOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   hinhThucKyLuat: 'hinhThucKyLuat',
   capKyLuat: 'capKyLuat',
   soQuyetDinh: 'soQuyetDinh',
@@ -4457,6 +4710,7 @@ exports.Prisma.DoiTuongChinhSachOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   tenDoiTuong: 'tenDoiTuong',
   ghiChu: 'ghiChu',
   userProfileId: 'userProfileId'
@@ -4466,6 +4720,7 @@ exports.Prisma.KeKhaiTaiSanOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   loai: 'loai',
   tenDot: 'tenDot',
   userProfileId: 'userProfileId'
@@ -4475,6 +4730,7 @@ exports.Prisma.TiengDanTocOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   danTocId: 'danTocId',
   nghe: 'nghe',
   noi: 'noi',
@@ -4486,6 +4742,7 @@ exports.Prisma.ChienDauOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   cuongVi: 'cuongVi',
   donVi: 'donVi',
   diaDiem: 'diaDiem',
@@ -4498,6 +4755,7 @@ exports.Prisma.NuocNgoaiOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   tenNuocId: 'tenNuocId',
   lyDo: 'lyDo',
   userProfileId: 'userProfileId'
@@ -4507,6 +4765,7 @@ exports.Prisma.ThuongTatOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   loaiId: 'loaiId',
   nguyenNhan: 'nguyenNhan',
   noiBiThuong: 'noiBiThuong',
@@ -4517,6 +4776,7 @@ exports.Prisma.DanhHieuOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ten: 'ten',
   userProfileId: 'userProfileId'
 };
@@ -4525,6 +4785,7 @@ exports.Prisma.QuaTrinhHocTapOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   tenTruongId: 'tenTruongId',
   nganhHocId: 'nganhHocId',
   chuyenNganhId: 'chuyenNganhId',
@@ -4537,6 +4798,7 @@ exports.Prisma.ToChucXaHoiOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   tenId: 'tenId',
   congViec: 'congViec',
   userProfileId: 'userProfileId'
@@ -4546,6 +4808,7 @@ exports.Prisma.QuaTrinhLuongOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ngachId: 'ngachId',
   bacLuongId: 'bacLuongId',
   heSo: 'heSo',
@@ -4559,6 +4822,7 @@ exports.Prisma.GroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4566,6 +4830,7 @@ exports.Prisma.RoleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4573,6 +4838,7 @@ exports.Prisma.PermissionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -4580,6 +4846,7 @@ exports.Prisma.ChatBotConfigOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   value: 'value'
 };
@@ -4588,6 +4855,7 @@ exports.Prisma.UserSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber'
@@ -4597,6 +4865,7 @@ exports.Prisma.DocumentOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   title: 'title',
   body: 'body',
   classificationId: 'classificationId',
@@ -4611,6 +4880,7 @@ exports.Prisma.DocumentTopicOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   documentId: 'documentId',
   topicId: 'topicId'
 };
@@ -4619,6 +4889,7 @@ exports.Prisma.FAQOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   question: 'question',
   answer: 'answer',
   topicId: 'topicId',
@@ -4631,6 +4902,7 @@ exports.Prisma.PromptOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   prompt: 'prompt',
   topicId: 'topicId',
   reason: 'reason'
@@ -4640,6 +4912,7 @@ exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   userId: 'userId',
   sessionId: 'sessionId',
@@ -4650,6 +4923,7 @@ exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   conversationId: 'conversationId',
   content: 'content'
 };
@@ -4658,6 +4932,7 @@ exports.Prisma.CitationMessageOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   content: 'content',
   documentId: 'documentId',
   documentType: 'documentType',
@@ -4668,6 +4943,7 @@ exports.Prisma.TopicOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   type: 'type'
 };
@@ -4676,6 +4952,7 @@ exports.Prisma.DocumentClassificationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5049,6 +5326,7 @@ exports.Prisma.StudentScoreConvertOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId'
 };
 
@@ -5056,6 +5334,7 @@ exports.Prisma.SubjectScoreConvertOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentScoreConvertId: 'studentScoreConvertId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -5064,6 +5343,7 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
   studentId: 'studentId',
@@ -5077,6 +5357,7 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
@@ -5088,6 +5369,7 @@ exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedCertificateId: 'archivedCertificateId'
 };
@@ -5096,6 +5378,7 @@ exports.Prisma.ArchivedCertificateOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   certificateId: 'certificateId',
   studentId: 'studentId',
   issuedBy: 'issuedBy'
@@ -5105,6 +5388,7 @@ exports.Prisma.ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentSubjectScoreId: 'studentSubjectScoreId',
   archivedAwardId: 'archivedAwardId'
 };
@@ -5113,6 +5397,7 @@ exports.Prisma.ArchivedAwardOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   awardId: 'awardId',
   studentId: 'studentId'
 };
@@ -5121,6 +5406,7 @@ exports.Prisma.SchoolYearOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5128,6 +5414,7 @@ exports.Prisma.SemesterOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   shortName: 'shortName',
   schoolYearId: 'schoolYearId'
@@ -5137,6 +5424,7 @@ exports.Prisma.MilestoneOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   period: 'period',
   schoolYearId: 'schoolYearId'
@@ -5146,6 +5434,7 @@ exports.Prisma.TrainingLanguageOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5153,6 +5442,7 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   semesterStartId: 'semesterStartId',
   academicYear: 'academicYear',
@@ -5175,6 +5465,7 @@ exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   summary: 'summary',
   classMonitorId: 'classMonitorId',
@@ -5190,6 +5481,7 @@ exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -5203,6 +5495,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
@@ -5210,6 +5503,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   jobPosition: 'jobPosition',
@@ -5229,6 +5523,7 @@ exports.Prisma.SubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
@@ -5239,6 +5534,7 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5246,6 +5542,7 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   codeTkb: 'codeTkb',
   objectives: 'objectives',
@@ -5265,6 +5562,7 @@ exports.Prisma.SubjectVersionHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectVersionId: 'subjectVersionId',
   content: 'content',
   action: 'action',
@@ -5274,13 +5572,15 @@ exports.Prisma.SubjectVersionHistoryOrderByRelevanceFieldEnum = {
 exports.Prisma.EquivalencyGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
-  description: 'description'
+  description: 'description',
+  createdBy: 'createdBy'
 };
 
 exports.Prisma.SubjectInGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectId: 'subjectId',
   equivalencyGroupId: 'equivalencyGroupId'
 };
@@ -5289,6 +5589,7 @@ exports.Prisma.TrainingBlockSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectId: 'subjectId',
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
 };
@@ -5297,6 +5598,7 @@ exports.Prisma.ClassRegisterSessionCreditOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   classRegisterSessionId: 'classRegisterSessionId'
 };
 
@@ -5304,6 +5606,7 @@ exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   semesterId: 'semesterId'
 };
@@ -5312,6 +5615,7 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   classRegisterSessionId: 'classRegisterSessionId',
   subjectClassId: 'subjectClassId',
   studentId: 'studentId',
@@ -5338,6 +5642,7 @@ exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   updatedById: 'updatedById'
 };
@@ -5346,6 +5651,7 @@ exports.Prisma.SubjectClassTimeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId'
 };
 
@@ -5353,10 +5659,12 @@ exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   originalScheduleId: 'originalScheduleId',
   cancelReason: 'cancelReason'
@@ -5366,6 +5674,7 @@ exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingFormId: 'trainingFormId',
   trainingLevelId: 'trainingLevelId'
@@ -5375,6 +5684,7 @@ exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5382,6 +5692,7 @@ exports.Prisma.TrainingTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5389,6 +5700,7 @@ exports.Prisma.TrainingLevelOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5396,6 +5708,7 @@ exports.Prisma.TrainingFormOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5403,6 +5716,7 @@ exports.Prisma.TrainingLocationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   dM_TinhId: 'dM_TinhId',
   dM_Tinh_NewId: 'dM_Tinh_NewId'
@@ -5412,6 +5726,7 @@ exports.Prisma.BuildingOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingLocationId: 'trainingLocationId'
 };
@@ -5420,6 +5735,7 @@ exports.Prisma.RoomOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   buildingId: 'buildingId'
 };
@@ -5428,6 +5744,7 @@ exports.Prisma.TrainingFieldOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   decisionNo: 'decisionNo',
@@ -5438,6 +5755,7 @@ exports.Prisma.TrainingFieldOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   trainingFieldId: 'trainingFieldId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -5446,6 +5764,7 @@ exports.Prisma.TrainingMajorOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName',
   summary: 'summary',
@@ -5459,6 +5778,7 @@ exports.Prisma.TrainingMajorOnTrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   trainingMajorId: 'trainingMajorId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -5467,6 +5787,7 @@ exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   parentId: 'parentId'
 };
@@ -5475,6 +5796,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumId: 'curriculumId'
@@ -5484,6 +5806,7 @@ exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5491,6 +5814,7 @@ exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName'
 };
@@ -5499,6 +5823,7 @@ exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   certificateId: 'certificateId',
   subjectId: 'subjectId'
 };
@@ -5507,6 +5832,7 @@ exports.Prisma.AwardOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName'
 };
@@ -5515,6 +5841,7 @@ exports.Prisma.DiplomaTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   englishName: 'englishName'
 };
@@ -5523,6 +5850,7 @@ exports.Prisma.ScoreConvertOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   classification: 'classification',
   letter: 'letter',
   trainingCourseId: 'trainingCourseId'
@@ -5532,6 +5860,7 @@ exports.Prisma.TrainingKPIOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5539,6 +5868,7 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   note: 'note',
   registerNumber: 'registerNumber',
   doctoralCode: 'doctoralCode',
@@ -5555,10 +5885,7 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId'
@@ -5584,15 +5911,16 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   title: 'title',
-  content: 'content',
-  createdById: 'createdById'
+  content: 'content'
 };
 
 exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
@@ -5606,6 +5934,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   notificationId: 'notificationId',
   decisionId: 'decisionId',
   defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
   diplomaFrontId: 'diplomaFrontId',
   diplomaBackId: 'diplomaBackId',
   diplomaVerificationId: 'diplomaVerificationId',
@@ -5620,6 +5949,7 @@ exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingCourseId: 'trainingCourseId'
 };
@@ -5628,6 +5958,7 @@ exports.Prisma.AcademicActionRuleSetOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   configId: 'configId'
 };
 
@@ -5635,6 +5966,7 @@ exports.Prisma.AcademicActionConditionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ruleSetId: 'ruleSetId',
   tuple: 'tuple'
 };
@@ -5643,6 +5975,7 @@ exports.Prisma.StudentAcademicDecisionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   schoolYearId: 'schoolYearId',
@@ -5654,6 +5987,7 @@ exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   semesterId: 'semesterId',
   trainingObjectTypeId: 'trainingObjectTypeId'
@@ -5663,6 +5997,7 @@ exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   trainingScoreSessionId: 'trainingScoreSessionId',
   studentId: 'studentId'
 };
@@ -5671,6 +6006,7 @@ exports.Prisma.LecturerTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5678,6 +6014,7 @@ exports.Prisma.StaffTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5685,6 +6022,7 @@ exports.Prisma.StaffPositionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5692,6 +6030,7 @@ exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   lectureID: 'lectureID',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
@@ -5702,6 +6041,7 @@ exports.Prisma.LecturerHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   lectureID: 'lectureID',
   lectureCode: 'lectureCode',
   userProfileId: 'userProfileId',
@@ -5713,6 +6053,7 @@ exports.Prisma.ResearchProjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   title: 'title',
   summary: 'summary',
   objectives: 'objectives',
@@ -5727,6 +6068,7 @@ exports.Prisma.StudentResearchRegistrationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   researchProjectId: 'researchProjectId',
   motivation: 'motivation',
@@ -5739,6 +6081,7 @@ exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingCourseId: 'trainingCourseId',
@@ -5753,6 +6096,7 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   title: 'title',
   titleEN: 'titleEN',
   summary: 'summary',
@@ -5775,13 +6119,15 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
 exports.Prisma.DefenseSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
-  description: 'description'
+  description: 'description',
+  createdBy: 'createdBy'
 };
 
 exports.Prisma.StudentThesisRegistrationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   thesisProjectId: 'thesisProjectId',
@@ -5796,6 +6142,7 @@ exports.Prisma.ExpertProfileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   lecturerId: 'lecturerId',
   name: 'name',
   academicRank: 'academicRank',
@@ -5814,6 +6161,7 @@ exports.Prisma.DecisionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   thesisProjectId: 'thesisProjectId'
 };
 
@@ -5821,6 +6169,7 @@ exports.Prisma.InvitationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   councilMemberId: 'councilMemberId'
 };
 
@@ -5828,6 +6177,7 @@ exports.Prisma.CouncilOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentThesisRegistrationId: 'studentThesisRegistrationId'
 };
 
@@ -5835,6 +6185,7 @@ exports.Prisma.CouncilMemberOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   councilId: 'councilId',
   expertId: 'expertId'
 };
@@ -5843,6 +6194,7 @@ exports.Prisma.DefenseRecordOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   comments: 'comments',
   thesisId: 'thesisId'
 };
@@ -5851,6 +6203,7 @@ exports.Prisma.LibrarySubmissionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   librarianNote: 'librarianNote',
   thesisId: 'thesisId',
   confirmedById: 'confirmedById'
@@ -5859,13 +6212,15 @@ exports.Prisma.LibrarySubmissionOrderByRelevanceFieldEnum = {
 exports.Prisma.DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
-  description: 'description'
+  description: 'description',
+  createdBy: 'createdBy'
 };
 
 exports.Prisma.PaymentRecordOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   transactionCode: 'transactionCode',
   expertId: 'expertId',
   councilMemberId: 'councilMemberId'
@@ -5875,6 +6230,7 @@ exports.Prisma.SupervisorPaymentRecordOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   thesisProjectId: 'thesisProjectId',
   expertId: 'expertId',
   transactionCode: 'transactionCode'
@@ -5884,6 +6240,7 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5891,6 +6248,7 @@ exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5898,6 +6256,7 @@ exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   standardId: 'standardId',
   name: 'name'
 };
@@ -5906,6 +6265,7 @@ exports.Prisma.EvidenceCategoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -5913,6 +6273,7 @@ exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
@@ -5923,6 +6284,7 @@ exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   reviewerId: 'reviewerId',
   requirementCriterionId: 'requirementCriterionId',
   content: 'content',
@@ -5934,6 +6296,7 @@ exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   criterionCatalogId: 'criterionCatalogId',
   name: 'name',
   questions: 'questions'
@@ -5943,6 +6306,7 @@ exports.Prisma.StandardPeriodOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   periodId: 'periodId',
   name: 'name',
   opening: 'opening',
@@ -5953,6 +6317,7 @@ exports.Prisma.CriterionPeriodOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   evaluationStandardId: 'evaluationStandardId'
 };
@@ -5961,6 +6326,7 @@ exports.Prisma.AnalysisCriterionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId'
 };
@@ -5969,6 +6335,7 @@ exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
   currentSituation: 'currentSituation',
@@ -5981,6 +6348,7 @@ exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   analysisCriterionId: 'analysisCriterionId',
   name: 'name',
   questions: 'questions',
@@ -5992,6 +6360,7 @@ exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   requirementCriterionId: 'requirementCriterionId',
   evidenceId: 'evidenceId'
 };
@@ -6000,6 +6369,7 @@ exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   periodId: 'periodId',
   name: 'name'
 };
@@ -6008,6 +6378,7 @@ exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   evaluationCouncilId: 'evaluationCouncilId',
   lecturerId: 'lecturerId'
 };
@@ -6016,6 +6387,7 @@ exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
@@ -6027,6 +6399,7 @@ exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6034,6 +6407,7 @@ exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6041,6 +6415,7 @@ exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6048,6 +6423,7 @@ exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   surveyTopicId: 'surveyTopicId'
 };
@@ -6056,6 +6432,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   lectureId: 'lectureId',
   surveyTopicId: 'surveyTopicId',
@@ -6066,6 +6443,7 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
@@ -6074,6 +6452,7 @@ exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   answer: 'answer',
   surveyId: 'surveyId',
   clusterSurveyId: 'clusterSurveyId'
@@ -6083,6 +6462,7 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
   profileId: 'profileId',
@@ -6094,6 +6474,7 @@ exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   surveySessionId: 'surveySessionId',
   surveyQuestionId: 'surveyQuestionId',
   answerText: 'answerText',
@@ -6105,6 +6486,7 @@ exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   subjectVersionId: 'subjectVersionId'
 };
@@ -6113,6 +6495,7 @@ exports.Prisma.DifficultyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6120,6 +6503,7 @@ exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   subjectVersionId: 'subjectVersionId',
   name: 'name'
 };
@@ -6128,6 +6512,7 @@ exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   content: 'content',
   explanation: 'explanation',
   questionBankId: 'questionBankId',
@@ -6139,6 +6524,7 @@ exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   content: 'content'
 };
@@ -6147,6 +6533,7 @@ exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   correctAnswer: 'correctAnswer'
 };
@@ -6155,6 +6542,7 @@ exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   questionId: 'questionId',
   content: 'content'
 };
@@ -6163,6 +6551,7 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   questionBankId: 'questionBankId',
   subjectVersionId: 'subjectVersionId'
 };
@@ -6171,6 +6560,7 @@ exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examId: 'examId',
   roomId: 'roomId'
 };
@@ -6179,6 +6569,7 @@ exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId'
@@ -6188,6 +6579,7 @@ exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examId: 'examId',
   questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId'
@@ -6197,6 +6589,7 @@ exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examId: 'examId',
   examCode: 'examCode'
 };
@@ -6205,6 +6598,7 @@ exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examBankId: 'examBankId',
   questionId: 'questionId'
 };
@@ -6213,6 +6607,7 @@ exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
@@ -6222,6 +6617,7 @@ exports.Prisma.StaffOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
   staffTypeId: 'staffTypeId',
@@ -6232,6 +6628,7 @@ exports.Prisma.StaffHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
   staffTypeId: 'staffTypeId',
@@ -6242,6 +6639,7 @@ exports.Prisma.ScholarshipOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingCourseId: 'trainingCourseId'
 };
@@ -6250,6 +6648,7 @@ exports.Prisma.ScholarshipCriteriaOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   scholarshipId: 'scholarshipId',
   tuple: 'tuple'
 };
@@ -6258,6 +6657,7 @@ exports.Prisma.ScholarshipAwardOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId',
   scholarshipId: 'scholarshipId'
@@ -6267,6 +6667,7 @@ exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
@@ -6275,6 +6676,7 @@ exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   sessionId: 'sessionId',
   reason: 'reason',
@@ -6287,6 +6689,7 @@ exports.Prisma.ApplicationDowngradedOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentGraduationApplicationId: 'studentGraduationApplicationId',
   fromId: 'fromId'
 };
@@ -6295,6 +6698,7 @@ exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentGraduationApplicationId: 'studentGraduationApplicationId',
   rankingConditionId: 'rankingConditionId'
 };
@@ -6303,6 +6707,7 @@ exports.Prisma.GraduationDecisionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   applicationId: 'applicationId',
   studentId: 'studentId',
   notes: 'notes',
@@ -6317,7 +6722,9 @@ exports.Prisma.AcademicRankingConvertOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   trainingCourseId: 'trainingCourseId'
 };
 
@@ -6325,6 +6732,7 @@ exports.Prisma.GraduationRankDowngradeRuleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   initialRankId: 'initialRankId'
 };
 
@@ -6332,6 +6740,7 @@ exports.Prisma.GraduationRankDowngradeConditionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   downgradeRuleId: 'downgradeRuleId',
   tuple: 'tuple'
 };
@@ -6340,6 +6749,7 @@ exports.Prisma.RankingConditionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   rankingId: 'rankingId',
   tuple: 'tuple'
 };
@@ -6348,6 +6758,7 @@ exports.Prisma.DiplomaVerificationApplicationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   fullname: 'fullname',
   idCardNumber: 'idCardNumber',
   phoneNumber: 'phoneNumber',
@@ -6366,6 +6777,7 @@ exports.Prisma.NoteOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   content: 'content',
   studentId: 'studentId',
   folderId: 'folderId'
@@ -6375,6 +6787,7 @@ exports.Prisma.NoteFolderOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   icon: 'icon',
   studentId: 'studentId',
@@ -6385,6 +6798,7 @@ exports.Prisma.NoteTagOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   color: 'color'
 };
@@ -6393,6 +6807,7 @@ exports.Prisma.NoteReminderOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   title: 'title',
   noteId: 'noteId'
 };
@@ -6401,6 +6816,7 @@ exports.Prisma.AcademicWarningRuleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   tuple: 'tuple',
   trainingCourseId: 'trainingCourseId'
 };
@@ -6409,6 +6825,7 @@ exports.Prisma.AcademicWarningOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId'
 };
@@ -6417,6 +6834,7 @@ exports.Prisma.DisciplinaryWarningOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   studentId: 'studentId',
   semesterId: 'semesterId'
 };
@@ -6425,6 +6843,7 @@ exports.Prisma.DisciplinaryWarningReasonOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6432,6 +6851,7 @@ exports.Prisma.FeedbackOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   content: 'content',
   userId: 'userId'
 };
@@ -6440,6 +6860,7 @@ exports.Prisma.DM_TrinhDoHocVanOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6447,6 +6868,7 @@ exports.Prisma.DM_TrinhDoLyLuanChinhTriOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6454,6 +6876,7 @@ exports.Prisma.DM_TrinhDoQuanLyNhaNuocOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6461,6 +6884,7 @@ exports.Prisma.DM_TinhTrangHonNhanOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6468,6 +6892,7 @@ exports.Prisma.DM_TrangThaiLamViecOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6475,6 +6900,7 @@ exports.Prisma.DM_HinhThucKhenThuongChinhQuyenOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6482,6 +6908,7 @@ exports.Prisma.DM_HinhThucKhenThuongDangOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6489,6 +6916,7 @@ exports.Prisma.DM_XepLoaiDanhGiaCanBoOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6496,6 +6924,7 @@ exports.Prisma.DM_XepLoaiDanhGiaChatLuongDangVienOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6503,6 +6932,7 @@ exports.Prisma.DM_LoaiHinhCongTacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6510,6 +6940,7 @@ exports.Prisma.DM_TinhTrangCongTacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6517,6 +6948,7 @@ exports.Prisma.DM_LoaiHinhDiHocTapOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6524,6 +6956,7 @@ exports.Prisma.DM_TinhTrangDiHocTapOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6531,6 +6964,7 @@ exports.Prisma.DM_NuocCuDiHocTapOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6538,6 +6972,7 @@ exports.Prisma.DM_ChucDanhCMNVGiangVienOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6545,6 +6980,7 @@ exports.Prisma.DM_ChucDanhCMNVNghienCuuVienOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6552,6 +6988,7 @@ exports.Prisma.DM_ChucDanhCMNVKySuOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6559,6 +6996,7 @@ exports.Prisma.DM_TruongDaoTaoBacDHOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6566,6 +7004,7 @@ exports.Prisma.DM_ChuyenNganhDaoTaoBacDHOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6573,6 +7012,7 @@ exports.Prisma.DM_ChiHuyQuanLyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6580,6 +7020,7 @@ exports.Prisma.DM_ChuyenMonKyThuatOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6587,6 +7028,7 @@ exports.Prisma.DM_SucKhoeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6594,6 +7036,7 @@ exports.Prisma.DM_NhomMauOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6601,6 +7044,7 @@ exports.Prisma.DM_LoaiThuongTatOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6608,6 +7052,7 @@ exports.Prisma.DM_NganhHocOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6615,6 +7060,7 @@ exports.Prisma.DM_ToChucXaHoiOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6622,6 +7068,7 @@ exports.Prisma.DM_NgachOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6629,6 +7076,7 @@ exports.Prisma.DM_BacLuongOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name'
 };
 
@@ -6636,6 +7084,7 @@ exports.Prisma.TemplateFileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   name: 'name',
   path: 'path',
   extensions: 'extensions'
@@ -6645,6 +7094,7 @@ exports.Prisma.BlockedIpOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
+  createdBy: 'createdBy',
   ipAddress: 'ipAddress',
   reason: 'reason'
 };
@@ -6743,7 +7193,8 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Internship: 'Internship',
   Research: 'Research',
   Project: 'Project',
-  Practice: 'Practice'
+  Practice: 'Practice',
+  Graduation: 'Graduation'
 };
 
 exports.EquivalencySide = exports.$Enums.EquivalencySide = {
@@ -6782,7 +7233,9 @@ exports.PeriodType = exports.$Enums.PeriodType = {
   SEMINAR: 'SEMINAR',
   EXAM: 'EXAM',
   MAKEUP: 'MAKEUP',
-  REVIEW: 'REVIEW'
+  REVIEW: 'REVIEW',
+  CHECK: 'CHECK',
+  WEEK: 'WEEK'
 };
 
 exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
@@ -7066,6 +7519,7 @@ exports.TemplateFileType = exports.$Enums.TemplateFileType = {
 
 exports.Prisma.ModelName = {
   Config: 'Config',
+  Suggestion: 'Suggestion',
   ChangeLog: 'ChangeLog',
   UserProfile: 'UserProfile',
   HocHam: 'HocHam',

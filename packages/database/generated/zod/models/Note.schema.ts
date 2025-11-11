@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     isPinned: z.boolean().default(false),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     isPinned: z.boolean(),
 }
@@ -74,6 +76,7 @@ export const NotePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string(),
     isPinned: z.boolean()
 }).partial().passthrough();
@@ -83,7 +86,7 @@ export const NotePrismaUpdateSchema = z.object({
  * `Note` schema for create operations excluding foreign keys and relations.
  */
 export const NoteCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, isPinned: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isPinned: true
 });
 
 

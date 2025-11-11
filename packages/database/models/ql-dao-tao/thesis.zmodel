@@ -55,9 +55,15 @@ model ThesisSession extends Base {
   @@schema("ql-dao-tao")
 }
 
+enum ThesisType {
+  THESIS // Luận văn
+  PROJECT // Đồ án
+  @@schema("ql-dao-tao")
+}
+
 // Bảng đồ án
 model ThesisProject extends Base {
-  title              String?                        // Tên đồ án
+  title              String?                       // Tên đồ án
   titleEN            String?                       // Tên đồ án (Tiếng Anh)
   summary            String?                     @db.Text() // Tóm tắt đồ án
   objectives         String?                     @db.Text() // Mục tiêu
@@ -66,7 +72,7 @@ model ThesisProject extends Base {
   expectedResults    String?                     @db.Text() // Kết quả mong đợi
   requirements       String?                     @db.Text() // Yêu cầu với học viên
   technologies       String?                     @db.Text() // Công nghệ sử dụng
-
+  thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
 
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
@@ -104,13 +110,14 @@ model ThesisProject extends Base {
   defenseSessionId   String?
   
   // Thời gian
-  registrationStart  DateTime?                      // Thời gian mở đăng ký
+  registrationStart  DateTime?                     // Thời gian mở đăng ký
   registrationEnd    DateTime?                     // Thời gian đóng đăng ký
   projectStart       DateTime?                     // Thời gian bắt đầu thực hiện
   projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
 
   defenseRecord      DefenseRecord?
-  librarySubmission  LibrarySubmission?
+  librarySubmission  LibrarySubmission?  @relation(fields: [librarySubmissionId], references: [id])
+  librarySubmissionId String?
 
   decisions          Decision[]
   registrations      StudentThesisRegistration[]
@@ -294,14 +301,16 @@ model DefenseRecord extends Base {
 
 /// Quản lý việc nộp Luận văn cho Thư viện
 model LibrarySubmission extends Base {
-  submissionDate DateTime      @default(now())
-  isHardcopy     Boolean       @default(false) // Đã nộp bản cứng
-  isSoftcopy     Boolean       @default(false) // Đã nộp bản mềm
+  submissionDate DateTime       @default(now())
+  isHardcopy     Boolean        @default(false) // Đã nộp bản cứng
+  isSoftcopy     Boolean        @default(false) // Đã nộp bản mềm
   librarianNote  String?
 
-  thesis         ThesisProject @relation(fields: [thesisId], references: [id])
-  thesisId       String        @unique
+  thesis         ThesisProject  @relation(fields: [thesisId], references: [id])
+  thesisId       String         @unique
   confirmedById  String? // ID của thủ thư đã xác nhận
+
+  documentFile   DocumentFile[]
 
   @@schema("ql-dao-tao")
 }

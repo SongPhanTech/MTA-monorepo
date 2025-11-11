@@ -233,14 +233,14 @@ app.openapi(saveExamScore, async (c) => {
         },
     })
 
-    const updates = examPapers.map((p) => {
-        const defaultCoef = {
-            coef_1: 0.1,
-            coef_2: 0.3,
-            coef_3: 0.6,
-            scoreToPass: 4,
-        }
+    const defaultCoef = {
+        coef_1: 0.1,
+        coef_2: 0.3,
+        coef_3: 0.6,
+        scoreToPass: 4,
+    }
 
+    const updates = examPapers.map((p) => {
         const examScore = map.get(p.id) || null
 
         const finalScore = calcFinalScore(
@@ -266,10 +266,10 @@ app.openapi(saveExamScore, async (c) => {
             ${updates
                 .map(
                     (u) => `(
-          '${u.examPaperId}',
-          ${u.examScore === null ? 'NULL::double precision' : u.examScore},
-          ${u.finalScore === null ? 'NULL::double precision' : u.finalScore}
-        )`
+                        '${u.examPaperId}',
+                        ${u.examScore === null ? 'NULL::double precision' : u.examScore},
+                        ${u.finalScore === null ? 'NULL::double precision' : u.finalScore}
+                    )`
                 )
                 .join(',\n')}
         ) AS data("examPaperId", "examScore", "finalScore")

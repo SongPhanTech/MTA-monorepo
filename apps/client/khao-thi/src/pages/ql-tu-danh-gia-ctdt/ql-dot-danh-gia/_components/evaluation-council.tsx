@@ -15,15 +15,12 @@ import {
     useUpdateEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
-    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -72,7 +69,6 @@ export default function EvaluationCouncilTab() {
             },
             include: {
                 members: true,
-                evaluationCriterion: true,
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
@@ -240,22 +236,17 @@ export default function EvaluationCouncilTab() {
         <Row gutter={[8, 8]} align="top">
             <Col span={10}>
                 <Flex justify="end">
-                    {can(
-                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                        'THEM'
-                    ) && (
-                        <Button
-                            type="primary"
-                            onClick={() => {
-                                onOpenPutEvaluationCouncil({
-                                    evaluationPeriodId: selectedEvaluationPeriodId,
-                                })
-                            }}
-                        >
-                            <BookPlus />
-                            Thêm mới
-                        </Button>
-                    )}
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            onOpenPutEvaluationCouncil({
+                                evaluationPeriodId: selectedEvaluationPeriodId,
+                            })
+                        }}
+                    >
+                        <BookPlus />
+                        Thêm mới
+                    </Button>
                 </Flex>
                 <Table
                     rowKey="id"
@@ -310,46 +301,30 @@ export default function EvaluationCouncilTab() {
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            hidden: !canSome(
-                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                                'XEM_CHI_TIET',
-                                'SUA',
-                                'XOA'
-                            ),
+
                             render: (_, record) => {
                                 if (record?.id) {
                                     return (
                                         <Row className="justify-center gap-2">
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                                                'SUA'
-                                            ) && (
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutEvaluationCouncil({
-                                                            evaluationCouncilId: record.id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                            )}
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                                                'XOA'
-                                            ) && (
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvaluationCouncil(
-                                                                record?.id
-                                                            )
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            )}
+                                            <EditIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenPutEvaluationCouncil({
+                                                        evaluationCouncilId: record.id,
+                                                    })
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDeleteEvaluationCouncil(record?.id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
                                         </Row>
                                     )
                                 }

@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     status: ClassRegisterStatusSchema,
     reason: z.string().nullish(),
 }
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     status: ClassRegisterStatusSchema,
     reason: z.string().nullish(),
 }
@@ -75,6 +77,7 @@ export const ClassRegisterLogsPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     status: ClassRegisterStatusSchema,
     reason: z.string().nullish()
 }).partial().passthrough();
@@ -84,7 +87,7 @@ export const ClassRegisterLogsPrismaUpdateSchema = z.object({
  * `ClassRegisterLogs` schema for create operations excluding foreign keys and relations.
  */
 export const ClassRegisterLogsCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
 });
 
 

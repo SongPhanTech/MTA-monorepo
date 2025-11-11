@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion'
 
 /**
  * @nullable
@@ -21,6 +22,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     summary?: string | null
@@ -29,4 +32,6 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass = {
     /** @nullable */
     graduated?: boolean | null
     initSize?: number
+    /** @nullable */
+    curriculumVersion: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion
 } | null

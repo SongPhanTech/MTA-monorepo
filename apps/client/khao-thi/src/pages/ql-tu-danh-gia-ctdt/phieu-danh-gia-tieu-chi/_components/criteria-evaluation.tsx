@@ -1,16 +1,26 @@
 import CriteriaEvaluationSubPage from '@components/sub-pages/tu-danh-gia-ctdt/criteria-evaluation'
-import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
+import type {
+    CriterionPeriod,
+    EvaluationCriterion,
+    EvaluationCriterionComment,
+    StandardPeriod,
+} from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
-export type PutRequirementCriterion = {
-    opening: string
-    conclusion: string
-    criteria: Record<string, any>
+export type DataTabEvaluationCriterionType = StandardPeriod & {
+    criteria: (CriterionPeriod & {
+        evaluationCriterion?:
+            | (EvaluationCriterion & {
+                  evaluationCriterionComments?: EvaluationCriterionComment[]
+              })
+            | null
+    })[]
 }
 
 export default function CriteriaEvaluationWrite() {
@@ -27,12 +37,10 @@ export default function CriteriaEvaluationWrite() {
                     some: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                evaluationCriterion: {
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -46,12 +54,11 @@ export default function CriteriaEvaluationWrite() {
                     where: {
                         criteria: {
                             some: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                evaluationCriterion: {
+                                    status: $Enums.EvaluationStatus.PENDING,
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
@@ -61,33 +68,14 @@ export default function CriteriaEvaluationWrite() {
                     include: {
                         criteria: {
                             where: {
-                                criterionAssignments: {
-                                    some: {
-                                        lecturer: {
-                                            userProfile: {
-                                                id: idProfile,
-                                            },
+                                evaluationCriterion: {
+                                    status: $Enums.EvaluationStatus.PENDING,
+                                    lecturer: {
+                                        userProfile: {
+                                            id: idProfile,
                                         },
                                     },
                                 },
-                            },
-                            include: {
-                                requirementCriterions: {
-                                    include: {
-                                        evidences: {
-                                            include: {
-                                                evidence: true,
-                                            },
-                                            orderBy: {
-                                                order: 'asc',
-                                            },
-                                        },
-                                    },
-                                    orderBy: {
-                                        order: 'asc',
-                                    },
-                                },
-                                scoreScale: true,
                             },
                             orderBy: {
                                 order: 'asc',
@@ -106,8 +94,8 @@ export default function CriteriaEvaluationWrite() {
     )
 
     const dataTab = useMemo(() => {
-        if (data) {
-            return data.standards.map((standard: DataTabType) => {
+        if (data && data.standards.length > 0) {
+            return data.standards.map((standard: DataTabEvaluationCriterionType) => {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
@@ -128,16 +116,25 @@ export default function CriteriaEvaluationWrite() {
         <div className="h-full">
             <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Tabs
-                        className="h-[calc(100vh-200px)] overflow-y-auto"
-                        tabPosition="left"
-                        items={dataTab}
-                        tabBarStyle={{
-                            height: '100%',
-                            overflow: 'auto',
-                            width: '175px',
-                        }}
-                    />
+                    {data && data.standards.length > 0 ? (
+                        <Tabs
+                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            tabPosition="left"
+                            items={dataTab}
+                            tabBarStyle={{
+                                height: '100%',
+                                overflow: 'auto',
+                                width: '175px',
+                            }}
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                            <Empty
+                                description="Chưa có phiếu đánh giá tiêu chí nào"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                        </div>
+                    )}
                 </Col>
             </Row>
         </div>

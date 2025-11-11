@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const PermissionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const PermissionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

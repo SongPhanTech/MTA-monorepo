@@ -6,6 +6,7 @@ export const academicRankingGraduationMilitary: Omit<
 >[] = [
     {
         classification: 'Xuất sắc',
+        classificationEnglish: 'Excellent',
         context: 'GRADUATION',
         rankOrder: 1,
         baseScore: 'Base10',
@@ -15,6 +16,7 @@ export const academicRankingGraduationMilitary: Omit<
     },
     {
         classification: 'Giỏi',
+        classificationEnglish: 'Distinction',
         context: 'GRADUATION',
         rankOrder: 2,
         baseScore: 'Base10',
@@ -24,6 +26,7 @@ export const academicRankingGraduationMilitary: Omit<
     },
     {
         classification: 'Khá',
+        classificationEnglish: 'Good',
         context: 'GRADUATION',
         rankOrder: 3,
         baseScore: 'Base10',
@@ -33,6 +36,7 @@ export const academicRankingGraduationMilitary: Omit<
     },
     {
         classification: 'Trung Bình Khá',
+        classificationEnglish: 'Average Good',
         context: 'GRADUATION',
         rankOrder: 4,
         baseScore: 'Base10',
@@ -42,6 +46,7 @@ export const academicRankingGraduationMilitary: Omit<
     },
     {
         classification: 'Trung Bình',
+        classificationEnglish: 'Average',
         context: 'GRADUATION',
         rankOrder: 5,
         baseScore: 'Base10',
@@ -51,6 +56,7 @@ export const academicRankingGraduationMilitary: Omit<
     },
     {
         classification: 'Không đạt',
+        classificationEnglish: 'Below Average',
         context: 'GRADUATION',
         rankOrder: 6,
         baseScore: 'Base10',

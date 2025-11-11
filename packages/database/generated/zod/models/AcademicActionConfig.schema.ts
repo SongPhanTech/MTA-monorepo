@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     actionType: AcademicActionTypeSchema,
 }
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     actionType: AcademicActionTypeSchema,
 }
@@ -72,6 +74,7 @@ export const AcademicActionConfigPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     actionType: AcademicActionTypeSchema
 }).partial().passthrough();
@@ -81,7 +84,7 @@ export const AcademicActionConfigPrismaUpdateSchema = z.object({
  * `AcademicActionConfig` schema for create operations excluding foreign keys and relations.
  */
 export const AcademicActionConfigCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

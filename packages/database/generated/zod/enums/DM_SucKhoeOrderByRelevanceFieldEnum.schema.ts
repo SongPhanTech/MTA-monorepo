@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DM_SucKhoeOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const DM_SucKhoeOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

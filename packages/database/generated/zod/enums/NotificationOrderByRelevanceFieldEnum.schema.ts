@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const NotificationOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "title", "content", "createdById"])
+export const NotificationOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "title", "content"])

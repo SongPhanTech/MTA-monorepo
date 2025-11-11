@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     ipAddress: z.string().regex(new RegExp("^(?:[0-9]{1,3}.){3}[0-9]{1,3}$"), { message: "Invalid IP address" }),
     reason: z.string().nullish(),
     expiresAt: z.coerce.date().nullish(),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     ipAddress: z.string().regex(new RegExp("^(?:[0-9]{1,3}.){3}[0-9]{1,3}$"), { message: "Invalid IP address" }),
     reason: z.string().nullish(),
     expiresAt: z.coerce.date().nullish(),
@@ -63,6 +65,7 @@ export const BlockedIpPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     ipAddress: z.string().regex(new RegExp("^(?:[0-9]{1,3}.){3}[0-9]{1,3}$"), { message: "Invalid IP address" }),
     reason: z.string().nullish(),
     expiresAt: z.coerce.date().nullish()
@@ -73,7 +76,7 @@ export const BlockedIpPrismaUpdateSchema = z.object({
  * `BlockedIp` schema for create operations excluding foreign keys and relations.
  */
 export const BlockedIpCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
@@ -81,7 +84,7 @@ export const BlockedIpCreateScalarSchema = baseSchemaWithoutDefaults.partial({
  * `BlockedIp` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const BlockedIpCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

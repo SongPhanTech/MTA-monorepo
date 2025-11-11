@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     priority: z.number().default(0),
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     priority: z.number(),
 }
@@ -71,6 +73,7 @@ export const TrainingBlockPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     priority: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
@@ -80,7 +83,7 @@ export const TrainingBlockPrismaUpdateSchema = z.object({
  * `TrainingBlock` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingBlockCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, priority: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, priority: true
 });
 
 

@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
     questions: z.array(z.string()),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
     questions: z.array(z.string()),
@@ -71,6 +73,7 @@ export const RequirementCriterionCatalogPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     name: z.string(),
     questions: z.array(z.string())
@@ -81,7 +84,7 @@ export const RequirementCriterionCatalogPrismaUpdateSchema = z.object({
  * `RequirementCriterionCatalog` schema for create operations excluding foreign keys and relations.
  */
 export const RequirementCriterionCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, questions: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, questions: true
 });
 
 

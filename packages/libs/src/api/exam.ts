@@ -58,6 +58,9 @@ import type {
     GetSurveyStatistics404,
     GetSurveyStatisticsBySemester404,
     GetSurveyStatisticsBySemesterParams,
+    GetSurveysOfProfile200,
+    GetSurveysOfProfile404,
+    GetSurveysOfProfileParams,
     HourlyAggregateResponse,
     ListOfundefined,
     ParticipationByTypeResponse,
@@ -2397,6 +2400,177 @@ export function useGetSurveyObjects<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetSurveyObjectsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Danh sách khảo sát cần làm
+ */
+export type getSurveysOfProfileResponse200 = {
+    data: GetSurveysOfProfile200
+    status: 200
+}
+
+export type getSurveysOfProfileResponse404 = {
+    data: GetSurveysOfProfile404
+    status: 404
+}
+
+export type getSurveysOfProfileResponseComposite =
+    | getSurveysOfProfileResponse200
+    | getSurveysOfProfileResponse404
+
+export type getSurveysOfProfileResponse = getSurveysOfProfileResponseComposite & {
+    headers: Headers
+}
+
+export const getGetSurveysOfProfileUrl = (id: string, params?: GetSurveysOfProfileParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/survey/of-profile/${id}?${stringifiedParams}`
+        : `/api/survey/of-profile/${id}`
+}
+
+export const getSurveysOfProfile = async (
+    id: string,
+    params?: GetSurveysOfProfileParams,
+    options?: RequestInit
+): Promise<getSurveysOfProfileResponse> => {
+    return customExamFetch<getSurveysOfProfileResponse>(getGetSurveysOfProfileUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetSurveysOfProfileQueryKey = (id: string, params?: GetSurveysOfProfileParams) => {
+    return [`/api/survey/of-profile/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetSurveysOfProfileQueryOptions = <
+    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError = GetSurveysOfProfile404,
+>(
+    id: string,
+    params?: GetSurveysOfProfileParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetSurveysOfProfileQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveysOfProfile>>> = ({ signal }) =>
+        getSurveysOfProfile(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getSurveysOfProfile>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSurveysOfProfileQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getSurveysOfProfile>>
+>
+export type GetSurveysOfProfileQueryError = GetSurveysOfProfile404
+
+export function useGetSurveysOfProfile<
+    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError = GetSurveysOfProfile404,
+>(
+    id: string,
+    params: undefined | GetSurveysOfProfileParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveysOfProfile>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveysOfProfile>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveysOfProfile<
+    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError = GetSurveysOfProfile404,
+>(
+    id: string,
+    params?: GetSurveysOfProfileParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getSurveysOfProfile>>,
+                    TError,
+                    Awaited<ReturnType<typeof getSurveysOfProfile>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveysOfProfile<
+    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError = GetSurveysOfProfile404,
+>(
+    id: string,
+    params?: GetSurveysOfProfileParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách khảo sát cần làm
+ */
+
+export function useGetSurveysOfProfile<
+    TData = Awaited<ReturnType<typeof getSurveysOfProfile>>,
+    TError = GetSurveysOfProfile404,
+>(
+    id: string,
+    params?: GetSurveysOfProfileParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getSurveysOfProfile>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetSurveysOfProfileQueryOptions(id, params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

@@ -21,6 +21,9 @@ declare global {
             userName: string
             organizationId: string
         }
+        MTAMenuComponents: any
+        tenantCode: string
+        docEditor: any
     }
 }
 

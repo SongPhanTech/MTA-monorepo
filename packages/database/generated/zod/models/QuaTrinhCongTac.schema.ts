@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string().nullish(),
@@ -31,6 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string().nullish(),
@@ -85,6 +87,7 @@ export const QuaTrinhCongTacPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string().nullish(),
@@ -100,7 +103,7 @@ export const QuaTrinhCongTacPrismaUpdateSchema = z.object({
  * `QuaTrinhCongTac` schema for create operations excluding foreign keys and relations.
  */
 export const QuaTrinhCongTacCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

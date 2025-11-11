@@ -1,8 +1,7 @@
 import News from '@components/dashboard/news'
-import Notifications from '@components/dashboard/notifications'
 import StaffByOrg from '@components/dashboard/staff-by-org'
 import DefaultLayout from '@layouts/default-layout'
-import { LichCongTac } from '@workspace/ui'
+import { LichCongTac, DanhSachThongBao } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
 const { Title } = Typography
@@ -27,7 +26,7 @@ function Page() {
                             <Title level={4}>Thông báo</Title>
                         </div>
                         <div className="flex-1 overflow-y-auto mb-2 p-2">
-                            <Notifications />
+                            <DanhSachThongBao />
                         </div>
                     </div>
                 </Col>

@@ -317,6 +317,7 @@ export default function PhanCongGiangDay({
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
+    const orgId = window.contextData?.organizationId
 
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
@@ -420,6 +421,7 @@ export default function PhanCongGiangDay({
                         },
                     },
                 },
+                sParentId: !khoaBoMon ? undefined : orgId,
             },
         },
         {
@@ -514,7 +516,6 @@ export default function PhanCongGiangDay({
         }
     }
 
-    const orgId = window.contextData?.organizationId
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData, !khoaBoMon ? '0' : orgId)
 
@@ -1624,7 +1625,10 @@ export default function PhanCongGiangDay({
                                             countSubjectClassOfficial > 0 &&
                                             countSubjectClassOfficial < countSubjectClass
                                         }
-                                        checked={countSubjectClassOfficial === countSubjectClass}
+                                        checked={
+                                            countSubjectClassOfficial > 0 &&
+                                            countSubjectClassOfficial === countSubjectClass
+                                        }
                                         onChange={async (e) => {
                                             try {
                                                 await sqlTransaction([

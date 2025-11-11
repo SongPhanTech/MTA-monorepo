@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const CriterionPeriodScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "order", "evaluationStandardId"])
+export const CriterionPeriodScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "order", "evaluationStandardId"])

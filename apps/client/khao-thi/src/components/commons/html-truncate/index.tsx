@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TypeProps = {
-    key: string
     children: React.ReactNode
 }
-export default function HtmlTruncate({ key, children }: TypeProps) {
+export default function HtmlTruncate({  children }: TypeProps) {
     const [show, setShow] = useState(false)
     const [showButton, setShowButton] = useState(false)
     const textRef = useRef<HTMLDivElement>(null)

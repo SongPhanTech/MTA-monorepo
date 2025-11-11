@@ -1,9 +1,9 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useScoreConverter } from '@hooks/scoreConverter'
-import { SubjectRequirementType } from '@workspace/db'
+import { SubjectRequirementType } from '@workspace/db/client'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
-import { Button, Modal } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -19,6 +19,7 @@ type ModalPrintToKQHTInput = {
 const ModalPrintToKQHT = () => {
     const formattedDate = `..., ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
+    const [signerName, setSignerName] = useState('Đại tá, TS Nguyễn Trọng Lưu')
     const [gpaScore, setGpaScore] = useState(0)
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
@@ -111,9 +112,7 @@ const ModalPrintToKQHT = () => {
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: (
-                <span>{input?.dataStudent?.curriculumVersion?.trainingLanguage?.name || ''}</span>
-            ),
+            value: <span>{input?.dataStudent?.curriculumVersion?.trainingLanguage?.name}</span>,
         },
         {
             title: 'Ngành đào tạo:',
@@ -214,6 +213,12 @@ const ModalPrintToKQHT = () => {
                 <div className="flex items-center justify-between w-[95%]">
                     <span>Kết quả học tập</span>
                     {/* TODO: Làm select chọn trưởng phòng đào tạo */}
+                    <Input
+                        placeholder="Nhập tên người ký"
+                        value={signerName}
+                        onChange={(e) => setSignerName(e.target.value)}
+                        className="w-64"
+                    />
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={handlePrint}
@@ -242,7 +247,11 @@ const ModalPrintToKQHT = () => {
                             <hr className="text-black border-[1px] mx-14" />
                         </div>
                     </div>
-                    <div className="mt-4 uppercase text-[20px]">Kết quả học tập</div>
+
+                    <div className="mt-4 uppercase text-[20px]">Phụ lục văn bằng</div>
+                    <div className="text-sm normal-case font-normal italic">
+                        (Kèm theo bằng tốt nghiệp số hiệu ...)
+                    </div>
                 </div>
                 <div className="flex justify-between gap-5 mt-6">
                     <div className="flex flex-col gap-2.5 w-[50%]">
@@ -315,10 +324,8 @@ const ModalPrintToKQHT = () => {
 
                                 subjectScoreData?.trainingBlocks.forEach((block) => {
                                     block.subjects
-                                        ?.filter(
-                                            (subjectItem) => subjectItem.useForFinalScore === true
-                                        )
-                                        ?.forEach((subjectItem: any, index: number) => {
+                                        // ?.filter((subjectItem) => subjectItem.print === true)
+                                        ?.forEach((subjectItem, index: number) => {
                                             if (subjectItem.graduation) {
                                                 graduationSubjects.push({
                                                     subjectItem,
@@ -390,6 +397,14 @@ const ModalPrintToKQHT = () => {
                                         const letterGrade = convertScore(score10).letter
 
                                         return [
+                                            <tr key={`graduation-header-${subject.id}`}>
+                                                <td
+                                                    colSpan={6}
+                                                    className="border border-black px-1 py-1 font-semibold"
+                                                >
+                                                    Học phần tốt nghiệp
+                                                </td>
+                                            </tr>,
                                             <tr key={subject.id}>
                                                 <td className="border border-black px-1 py-1 text-center">
                                                     {originalIndex + 1}
@@ -418,18 +433,7 @@ const ModalPrintToKQHT = () => {
                                 )
 
                                 // Kết hợp cả 2 và giữ nguyên STT
-                                return [
-                                    ...regularRows,
-                                    <tr key={'graduation-header'}>
-                                        <td
-                                            colSpan={6}
-                                            className="border border-black px-1 py-1 font-semibold"
-                                        >
-                                            Học phần tốt nghiệp
-                                        </td>
-                                    </tr>,
-                                    ...graduationRows,
-                                ]
+                                return [...regularRows, ...graduationRows]
                             })()}
                         </tbody>
                     </table>
@@ -475,6 +479,9 @@ const ModalPrintToKQHT = () => {
                         <div className="uppercase font-bold flex flex-col">
                             <span>TL. GIÁM ĐỐC</span>
                             <span>Trưởng phòng đào tạo</span>
+                        </div>
+                        <div className="min-h-40 flex items-end justify-center">
+                            <span>{signerName}</span>
                         </div>
                     </div>
                 </div>
@@ -545,6 +552,7 @@ const ModalPrintToKQHT = () => {
 
                             return sortedRankings.map((item: any, index: number) => {
                                 const displayName = item.classification
+
                                 // TODO: optimize this function
                                 const formatNumber = (num: number) => {
                                     if (Number.isInteger(num)) {

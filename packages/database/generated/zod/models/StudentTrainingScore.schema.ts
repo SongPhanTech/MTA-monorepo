@@ -16,6 +16,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     score: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     status: TrainingScoreStatusSchema,
@@ -29,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     score: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     status: TrainingScoreStatusSchema,
@@ -76,6 +78,7 @@ export const StudentTrainingScorePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     status: TrainingScoreStatusSchema
@@ -86,7 +89,7 @@ export const StudentTrainingScorePrismaUpdateSchema = z.object({
  * `StudentTrainingScore` schema for create operations excluding foreign keys and relations.
  */
 export const StudentTrainingScoreCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, studentTrainingType: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, studentTrainingType: true, status: true
 });
 
 

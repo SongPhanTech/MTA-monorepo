@@ -5,6 +5,7 @@ import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gi
 import { useStore } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
+import ReviewCriteriaAnalysis from './_components/review-criteria-analysis'
 
 export default function CriteriaAnalysisPage() {
     const [activeKey, setActiveKey] = useState('1')
@@ -22,6 +23,12 @@ export default function CriteriaAnalysisPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '3',
+                label: 'Xét duyệt phiếu',
+                children: <ReviewCriteriaAnalysis />,
                 disabled: !selectedEvaluationPeriodId,
             },
         ]

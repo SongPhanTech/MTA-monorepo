@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string().nullish(),
 }
 ).strict();
@@ -24,6 +25,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string().nullish(),
 }
 ).strict();
@@ -72,6 +74,7 @@ export const ConversationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string().nullish()
 }).partial().passthrough();
 
@@ -80,7 +83,7 @@ export const ConversationPrismaUpdateSchema = z.object({
  * `Conversation` schema for create operations excluding foreign keys and relations.
  */
 export const ConversationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

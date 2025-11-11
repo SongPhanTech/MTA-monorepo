@@ -15,10 +15,14 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.number(),
     endPeriod: z.number(),
+    startTime: z.coerce.date().nullish(),
+    endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean().default(false),
     cancelReason: z.string().nullish(),
@@ -32,26 +36,31 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.number(),
     endPeriod: z.number(),
+    startTime: z.coerce.date().nullish(),
+    endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean(),
     cancelReason: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
-    subjectClass: z.record(z.string(), z.unknown()),
+    subjectClass: z.record(z.string(), z.unknown()).optional(),
     room: z.record(z.string(), z.unknown()).optional(),
     lecturer: z.record(z.string(), z.unknown()).optional(),
     extraLecturer: z.record(z.string(), z.unknown()).optional(),
+    userProfiles: z.array(z.unknown()).optional(),
     originalSchedule: z.record(z.string(), z.unknown()).optional(),
     replacementSchedule: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    subjectClassId: z.string(),
+    subjectClassId: z.string().nullish(),
     roomId: z.string().nullish(),
     lecturerId: z.string().nullish(),
     extraLecturerId: z.string().nullish(),
@@ -90,10 +99,14 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     periodType: PeriodTypeSchema,
     startPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
     endPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    startTime: z.coerce.date().nullish(),
+    endTime: z.coerce.date().nullish(),
     classDate: z.coerce.date(),
+    location: z.string().nullish(),
     notes: z.string().nullish(),
     isReplacement: z.boolean(),
     cancelReason: z.string().nullish()
@@ -104,7 +117,7 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
  * `ClassSchedule` schema for create operations excluding foreign keys and relations.
  */
 export const ClassScheduleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, periodType: true, isReplacement: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, periodType: true, isReplacement: true
 });
 
 

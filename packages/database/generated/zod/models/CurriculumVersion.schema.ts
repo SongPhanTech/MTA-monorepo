@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
@@ -43,6 +44,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
@@ -70,6 +72,7 @@ const relationSchema = z.object({
     curriculum: z.record(z.string(), z.unknown()),
     trainingObjectType: z.record(z.string(), z.unknown()),
     trainingLevel: z.record(z.string(), z.unknown()),
+    trainingType: z.record(z.string(), z.unknown()),
     trainingTime: z.record(z.string(), z.unknown()),
     diplomaType: z.record(z.string(), z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
@@ -84,6 +87,7 @@ const fkSchema = z.object({
     curriculumId: z.string(),
     trainingObjectTypeId: z.string(),
     trainingLevelId: z.string(),
+    trainingTypeId: z.string(),
     trainingTimeId: z.string(),
     diplomaTypeId: z.string().nullish(),
 }
@@ -120,6 +124,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
@@ -147,7 +152,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
  * `CurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
 export const CurriculumVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, isLock: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true
 });
 
 

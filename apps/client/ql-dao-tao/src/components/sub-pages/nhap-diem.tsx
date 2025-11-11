@@ -33,6 +33,7 @@ import {
     Modal,
     message,
     Row,
+    Tag,
 } from 'antd'
 import dayjs from 'dayjs'
 import type Decimal from 'decimal.js'
@@ -92,139 +93,6 @@ export default function NhapDiem({
         midtermScore: undefined,
         examScore: undefined,
     })
-
-    const handleSave = () => {
-        Modal.confirm({
-            title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn lưu điểm không?',
-            okText: 'Xác nhận',
-            cancelText: 'Hủy',
-            onOk: async () => {
-                handleSaveScores()
-            },
-        })
-    }
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-            queryClient.invalidateQueries({
-                queryKey: ['zenstack', 'SubjectClass'],
-            })
-        }, 500),
-        []
-    )
-
-    const handleSaveScores = async () => {
-        try {
-            showSpinner()
-            const listChange = Object.entries(listForm)
-                .map(([key, value]) => {
-                    return {
-                        id: key,
-                        ...value,
-                    }
-                })
-                .filter((e) => e.isChanged)
-
-            let listSqlTransaction: SqlTransactionBodyItem[] = []
-            const emptyScore = dataTable.find(
-                (i) =>
-                    (!i.attendanceScore || !listForm?.[i.id].attendanceScore) &&
-                    (!i.midtermScore || !listForm?.[i.id].midtermScore)
-            )
-            if (!emptyScore && selectedSubjectClassId) {
-                listSqlTransaction = [
-                    ...listSqlTransaction,
-                    {
-                        model: 'SubjectClass',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: selectedSubjectClassId,
-                            },
-                            data: { enteredScore: true },
-                        },
-                    },
-                ]
-            }
-            if (listChange.length > 0) {
-                const dataWithFinalScore = listChange.map((item) => {
-                    return {
-                        attendanceScore: item.attendanceScore,
-                        midtermScore: item.midtermScore,
-                        examScore: item.examScore,
-                        finalScore: item.finalScore,
-                        description: item?.description,
-                        examPostponed: item?.examPostponed,
-                        examPostponedReason: item?.examPostponedReason,
-                        examBanned: !!item?.examBanned,
-                        examBannedReason: item?.examBannedReason,
-                        suspended: !!item?.suspended,
-                        suspendedReason: item?.suspendedReason,
-                        id: item.id,
-                    }
-                })
-
-                listSqlTransaction = [
-                    ...listSqlTransaction,
-                    ...dataWithFinalScore.map(({ id, ...item }) => {
-                        return {
-                            model: 'StudentSubjectScore' as const,
-                            operation: 'update',
-                            data: {
-                                where: { id },
-                                data: {
-                                    ...item,
-                                },
-                            },
-                        }
-                    }),
-                    {
-                        model: 'StudentSubjectScoreHistory' as const,
-                        operation: 'createMany',
-                        data: {
-                            data: dataWithFinalScore.map(({ id, ...item }) => {
-                                return {
-                                    ...item,
-                                    studentSubjectScoreId: id,
-                                    updatedById: profileId,
-                                }
-                            }),
-                        },
-                    },
-                ]
-            }
-
-            if (listSqlTransaction?.length > 0) {
-                const res = await sqlTransaction(listSqlTransaction)
-                if (res?.status === 200) {
-                    form.resetFields()
-                    message.success('Đã cập nhật điểm thi thành công!')
-                    debouncedRefetch()
-                }
-            }
-        } catch (error: any) {
-            console.log(error)
-            message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const handleImportConfirm = (importedData: ImportScoreData[]) => {
-        showSpinner()
-        try {
-            message.success('Nhập điểm từ file thành công!')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Có lỗi xảy ra khi nhập điểm từ file')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
         {
@@ -369,6 +237,145 @@ export default function NhapDiem({
             enabled: loadData && !!selectedSubjectClassId,
         }
     )
+
+    const enteredScore = useMemo(
+        () =>
+            dataTable.every(({ id }) => {
+                const f = listForm?.[id]
+                return f?.examBanned || (f?.attendanceScore && f?.midtermScore)
+            }),
+        [dataTable, listForm]
+    )
+    const enteredExamScore = useMemo(
+        () =>
+            dataTable.every(({ id }) => {
+                const f = listForm?.[id]
+                return f?.examBanned || f?.examScore
+            }),
+        [dataTable, listForm]
+    )
+
+    const handleSave = () => {
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: 'Bạn có chắc chắn muốn lưu điểm không?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                handleSaveScores()
+            },
+        })
+    }
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
+        }, 500),
+        []
+    )
+
+    const handleSaveScores = async () => {
+        try {
+            showSpinner()
+            const listChange = Object.entries(listForm)
+                .map(([key, value]) => {
+                    return {
+                        id: key,
+                        ...value,
+                    }
+                })
+                .filter((e) => e.isChanged)
+
+            const listSqlTransaction: SqlTransactionBodyItem[] = []
+            if (selectedSubjectClassId) {
+                listSqlTransaction.push({
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: { id: selectedSubjectClassId },
+                        data: { enteredScore, enteredExamScore },
+                    },
+                })
+            }
+            if (listChange.length > 0) {
+                const dataWithFinalScore = listChange.map((item) => {
+                    return {
+                        attendanceScore: item.attendanceScore,
+                        midtermScore: item.midtermScore,
+                        examScore: item.examScore,
+                        finalScore: item.finalScore,
+                        description: item?.description,
+                        examPostponed: item?.examPostponed,
+                        examPostponedReason: item?.examPostponedReason,
+                        examBanned: !!item?.examBanned,
+                        examBannedReason: item?.examBannedReason,
+                        suspended: !!item?.suspended,
+                        suspendedReason: item?.suspendedReason,
+                        id: item.id,
+                    }
+                })
+
+                listSqlTransaction.push(
+                    ...dataWithFinalScore.map(({ id, ...item }) => {
+                        return {
+                            model: 'StudentSubjectScore' as const,
+                            operation: 'update',
+                            data: {
+                                where: { id },
+                                data: {
+                                    ...item,
+                                },
+                            },
+                        }
+                    }),
+                    {
+                        model: 'StudentSubjectScoreHistory' as const,
+                        operation: 'createMany',
+                        data: {
+                            data: dataWithFinalScore.map(({ id, ...item }) => {
+                                return {
+                                    ...item,
+                                    studentSubjectScoreId: id,
+                                    updatedById: profileId,
+                                }
+                            }),
+                        },
+                    }
+                )
+            }
+
+            if (listSqlTransaction?.length > 0) {
+                const res = await sqlTransaction(listSqlTransaction)
+                if (res?.status === 200) {
+                    form.resetFields()
+                    message.success('Đã cập nhật điểm thi thành công!')
+                    debouncedRefetch()
+                }
+            }
+        } catch (error: any) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleImportConfirm = (importedData: ImportScoreData[]) => {
+        showSpinner()
+        try {
+            message.success('Nhập điểm từ file thành công!')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     const { data: dataDetailSubjectClass } = useFindUniqueSubjectClass(
         {
@@ -551,7 +558,19 @@ export default function NhapDiem({
 
     return (
         <Row gutter={[8, 8]}>
-            <Col span={24} className="flex justify-end">
+            <Col span={8}>
+                {score === 'CC/TX' && (
+                    <Tag color={enteredScore ? 'green' : 'yellow'}>
+                        {enteredScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
+                    </Tag>
+                )}
+                {score === 'THI' && (
+                    <Tag color={enteredExamScore ? 'green' : 'yellow'}>
+                        {enteredExamScore ? 'Đã hoàn thiện' : 'Chưa hoàn thiện'}
+                    </Tag>
+                )}
+            </Col>
+            <Col span={16} className="flex justify-end">
                 <Flex gap={4}>
                     {can(
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
@@ -644,17 +663,25 @@ export default function NhapDiem({
                     onValuesChange={(changedValues) => {
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
-                            const score =
-                                changedValues.list[changedId]?.midtermScore ||
-                                changedValues.list[changedId]?.attendanceScore ||
-                                changedValues.list[changedId]?.examScore
-                            const numberScore = score ? Number(score) : null
+                            const basicScore =
+                                changedValues.list[changedId]?.attendanceScore ??
+                                changedValues.list[changedId]?.midtermScore ??
+                                listForm[changedId]?.attendanceScore ??
+                                listForm[changedId]?.midtermScore
+                            const numberScore = basicScore ?? Number(basicScore)
                             const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
+                            // TODO: fix not work if directly uncheck exam banned
                             const isExamBanned =
-                                changedValues.list[changedId]?.examBanned ||
-                                listForm[changedId]?.examBanned ||
-                                (numberScore && scoreToTakeExam && numberScore <= scoreToTakeExam)
+                                !!changedValues.list[changedId]?.examBannedReason ||
+                                !!listForm[changedId]?.examBannedReason ||
+                                (numberScore !== null &&
+                                    scoreToTakeExam !== null &&
+                                    scoreToTakeExam !== undefined &&
+                                    numberScore < scoreToTakeExam)
+
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
+
+                            // Session: Subject onePoint
                             const examScore = listForm[changedId].examScore ?? 0
                             const attendanceScore = dataDetailSubjectClass?.subject.onePoint
                                 ? examScore
@@ -708,7 +735,7 @@ export default function NhapDiem({
                                             ...listForm[changedId],
                                             ...changedValues.list[changedId],
                                         }),
-                                        finalScore: finalScore,
+                                        finalScore,
                                     },
                                 },
                             })
@@ -788,15 +815,15 @@ export default function NhapDiem({
                                                     validator: (_, value) => {
                                                         if (value == null || value === '')
                                                             return Promise.resolve()
-                                                        if (value > 10) {
+                                                        if (value > 10 || value < 0) {
                                                             message.error(
-                                                                'Điểm phải là nhỏ hơn 10!'
+                                                                'Điểm phải trong khoảng 0-10'
                                                             )
                                                             return Promise.reject()
                                                         }
                                                         if (value % 0.5 !== 0) {
                                                             message.error(
-                                                                'Điểm phải là bội số của 0.5!'
+                                                                'Điểm phải là bội số của 0.5'
                                                             )
                                                             return Promise.reject()
                                                         }
@@ -808,7 +835,6 @@ export default function NhapDiem({
                                         >
                                             <InputNumber
                                                 disabled={disabledForm}
-                                                min={0}
                                                 id={`score-cc-${record.id}`}
                                                 style={{
                                                     width: '100%',
@@ -849,15 +875,15 @@ export default function NhapDiem({
                                                     validator: (_, value) => {
                                                         if (value == null || value === '')
                                                             return Promise.resolve()
-                                                        if (value > 10) {
+                                                        if (value > 10 || value < 0) {
                                                             message.error(
-                                                                'Điểm phải là nhỏ hơn 10!'
+                                                                'Điểm phải trong khoảng 0-10'
                                                             )
                                                             return Promise.reject()
                                                         }
                                                         if (value % 0.5 !== 0) {
                                                             message.error(
-                                                                'Điểm phải là bội số của 0.5!'
+                                                                'Điểm phải là bội số của 0.5'
                                                             )
                                                             return Promise.reject()
                                                         }
@@ -869,7 +895,6 @@ export default function NhapDiem({
                                         >
                                             <InputNumber
                                                 disabled={disabledForm}
-                                                min={0}
                                                 id={`score-tx-${record.id}`}
                                                 style={{
                                                     width: '100%',
@@ -910,19 +935,18 @@ export default function NhapDiem({
                                                     validator: (_, value) => {
                                                         if (value == null || value === '')
                                                             return Promise.resolve()
-                                                        if (value > 10) {
+                                                        if (value > 10 || value < 0) {
                                                             message.error(
-                                                                'Điểm phải là nhỏ hơn 10!'
+                                                                'Điểm phải trong khoảng 0-10'
                                                             )
                                                             return Promise.reject()
                                                         }
                                                         if (Math.round(value * 10) !== value * 10) {
                                                             message.error(
-                                                                'Điểm phải là bội số của 0.1!'
+                                                                'Điểm phải là bội số của 0.1'
                                                             )
                                                             return Promise.reject()
                                                         }
-
                                                         return Promise.resolve()
                                                     },
                                                 },
@@ -930,7 +954,6 @@ export default function NhapDiem({
                                         >
                                             <InputNumber
                                                 disabled={disabledForm}
-                                                min={0}
                                                 id={`score-thi-${record.id}`}
                                                 style={{
                                                     width: '100%',

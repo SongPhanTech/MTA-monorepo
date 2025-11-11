@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     bonusScore: z.number(),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     bonusScore: z.number(),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
@@ -77,6 +79,7 @@ export const ArchivedAwardPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     bonusScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema
@@ -87,7 +90,7 @@ export const ArchivedAwardPrismaUpdateSchema = z.object({
  * `ArchivedAward` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedAwardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
 });
 
 

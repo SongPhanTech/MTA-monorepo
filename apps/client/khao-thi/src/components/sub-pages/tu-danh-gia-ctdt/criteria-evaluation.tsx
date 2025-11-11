@@ -1,11 +1,10 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/[id]'
-import { Button, Collapse, Form, InputNumber, message } from 'antd'
-import '../tu-danh-gia/index.css'
+import { Button, Collapse, Form, message } from 'antd'
 import { useEffect } from 'react'
 import type { EvaluationCriterion } from '@workspace/db'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 
 export type PutRequirementCriterion = {
     opening: string
@@ -13,7 +12,13 @@ export type PutRequirementCriterion = {
     criteria: Record<string, any>
 }
 
-const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: number }) => {
+const CriteriaEvaluationSubPage = ({
+    data,
+    idx,
+}: {
+    data: DataTabEvaluationCriterionType
+    idx: number
+}) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
 
     const { hideSpinner, showSpinner } = useSpinner()
@@ -23,7 +28,7 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
 
         let listSqlTransaction: any = [
             {
-                model: 'EvaluationStandard',
+                model: 'StandardPeriod',
                 operation: 'update',
                 data: {
                     where: {
@@ -36,7 +41,8 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
                 },
             },
         ]
-        if (dataSubmit?.criteria.length) {
+
+        if (dataSubmit?.criteria && dataSubmit?.criteria.length > 0) {
             listSqlTransaction = [
                 ...listSqlTransaction,
                 ...dataSubmit.criteria.map((i: EvaluationCriterion) => {
@@ -48,10 +54,10 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
                                 id: i?.id,
                             },
                             data: {
-                                currentSituation: i?.currentSituation,
-                                strengths: i?.strengths,
-                                weakness: i?.weakness,
-                                actionPlan: i?.actionPlan,
+                                currentSituation: i?.currentSituation || '',
+                                strengths: i?.strengths || '',
+                                weakness: i?.weakness || '',
+                                actionPlan: i?.actionPlan || '',
                                 score: i?.score,
                             },
                         },
@@ -59,7 +65,6 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
                 }),
             ]
         }
-
         try {
             showSpinner()
             const res = await sqlTransaction(listSqlTransaction)
@@ -153,7 +158,7 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
                                                             <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
                                                             </div>
-                                                            <div className="mb-1">
+                                                            {/* <div className="mb-1">
                                                                 Điểm tối thiểu:{' '}
                                                                 <span className="font-bold">
                                                                     {item?.scoreScale?.minValue},{' '}
@@ -186,7 +191,7 @@ const CriteriaEvaluationSubPage = ({ data, idx }: { data: DataTabType; idx: numb
                                                                     step={1}
                                                                     className="w-full"
                                                                 />
-                                                            </Form.Item>
+                                                            </Form.Item> */}
                                                         </>
                                                     ),
                                                 },

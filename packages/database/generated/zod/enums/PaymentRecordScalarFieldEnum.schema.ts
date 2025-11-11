@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const PaymentRecordScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "amount", "status", "paymentDate", "transactionCode", "expertId", "councilMemberId"])
+export const PaymentRecordScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "amount", "status", "paymentDate", "transactionCode", "expertId", "councilMemberId"])

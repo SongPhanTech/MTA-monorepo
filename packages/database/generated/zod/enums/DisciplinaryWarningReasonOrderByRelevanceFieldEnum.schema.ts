@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DisciplinaryWarningReasonOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const DisciplinaryWarningReasonOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

@@ -4,13 +4,6 @@ import type React from 'react'
 import { useEffect } from 'react'
 import { env } from '@/env'
 
-declare global {
-    interface Window {
-        MTAMenuComponents: any
-        tenantCode: string
-    }
-}
-
 const HeaderApp: React.FC = () => {
     useEffect(() => {
         try {

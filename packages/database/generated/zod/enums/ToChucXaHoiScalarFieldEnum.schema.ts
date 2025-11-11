@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ToChucXaHoiScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "tenId", "tuNgay", "denNgay", "congViec", "userProfileId"])
+export const ToChucXaHoiScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "tenId", "tuNgay", "denNgay", "congViec", "userProfileId"])

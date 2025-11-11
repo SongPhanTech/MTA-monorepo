@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const CapBacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "noiRaQuyetDinh", "capRaQuyetDinh", "capBacId", "userProfileId"])
+export const CapBacOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "noiRaQuyetDinh", "capRaQuyetDinh", "capBacId", "userProfileId"])

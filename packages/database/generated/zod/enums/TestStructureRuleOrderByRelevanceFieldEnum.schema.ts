@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const TestStructureRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "examId", "questionBankId", "knowledgeBlockId"])
+export const TestStructureRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "examId", "questionBankId", "knowledgeBlockId"])

@@ -96,12 +96,14 @@ import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
 import PutArchivedAwardModal from './put-archived-award'
 import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
 import PutCertificateArchivedModal from './put-archived-certificate'
-import { XemTaiLieu } from './xem-tai-lieu'
+import { XemTaiLieu, ViewNotificationModal, PutLichVaSuKienModal } from '@workspace/ui'
 import PutDeadlineScoreModal from './set-deadline-score'
 import PutThesisSession from './put-dot-xet-luan-van'
 import ModalCauHinhLuanVan from './modal-cau-hinh-luan-van'
 export {
     XemTaiLieu,
+    PutLichVaSuKienModal,
+    ViewNotificationModal,
     ModalViewHistoryChange,
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -205,3 +207,4 @@ export {
     ModalCauHinhLuanVan,
 }
 export * from './ke-hoach-dao-tao'
+export * from './thong-bao'

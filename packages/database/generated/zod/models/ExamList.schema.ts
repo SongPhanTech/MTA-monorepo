@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     createdExamCode: z.boolean().default(false),
     lockExamCode: z.boolean().default(false),
     start: z.number().nullish(),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     createdExamCode: z.boolean(),
     lockExamCode: z.boolean(),
     start: z.number().nullish(),
@@ -78,6 +80,7 @@ export const ExamListPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     createdExamCode: z.boolean(),
     lockExamCode: z.boolean(),
     start: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
@@ -89,7 +92,7 @@ export const ExamListPrismaUpdateSchema = z.object({
  * `ExamList` schema for create operations excluding foreign keys and relations.
  */
 export const ExamListCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdExamCode: true, lockExamCode: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, createdExamCode: true, lockExamCode: true
 });
 
 

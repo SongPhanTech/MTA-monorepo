@@ -7,7 +7,6 @@ import useSpinner from '@hooks/spinner'
 import { type Exam, ExamStatus, type StudentSubjectScore } from '@workspace/db'
 import {
     useCreateExam,
-    useCreateManyExamSession,
     useFindManyQuestionBank,
     useFindUniqueExam,
     useUpdateExam,
@@ -90,7 +89,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
 
     const { mutateAsync: createExam } = useCreateExam()
     const { mutateAsync: updateExam } = useUpdateExam()
-    const { mutateAsync: createManyExamSession } = useCreateManyExamSession()
     async function onOk(output?: PutExamType) {
         if (!output) return
         try {
@@ -138,9 +136,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         subjectClass: {
                             set: output.subjectClass?.map((item) => ({ id: item })) || [],
                         },
-                        studentSubjectScore: {
-                            set: studentScores.map((item) => ({ id: item.id })) || [],
-                        },
+                        // studentSubjectScore: {
+                        //     set: studentScores.map((item) => ({ id: item.id })) || [],
+                        // },
                         examRooms: {
                             set: output.room?.map((item) => ({ id: item })) || [],
                         },
@@ -161,9 +159,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         subjectClass: {
                             connect: output.subjectClass?.map((item) => ({ id: item })) || [],
                         },
-                        studentSubjectScore: {
-                            connect: studentScores.map((item) => ({ id: item.id })) || [],
-                        },
+                        // studentSubjectScore: {
+                        //     connect: studentScores.map((item) => ({ id: item.id })) || [],
+                        // },
                         examRooms: {
                             connect: output.room?.map((item) => ({ id: item })) || [],
                         },

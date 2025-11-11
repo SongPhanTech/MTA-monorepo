@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish(),
     index: z.number().nullish(),
     documentId: z.string().nullish(),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish(),
     index: z.number().nullish(),
     documentId: z.string().nullish(),
@@ -73,6 +75,7 @@ export const CitationMessagePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     content: z.string().nullish(),
     index: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     documentId: z.string().nullish(),
@@ -84,7 +87,7 @@ export const CitationMessagePrismaUpdateSchema = z.object({
  * `CitationMessage` schema for create operations excluding foreign keys and relations.
  */
 export const CitationMessageCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

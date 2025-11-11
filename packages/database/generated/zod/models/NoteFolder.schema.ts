@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     icon: z.string().nullish(),
     sortOrder: z.number().default(0),
@@ -26,6 +27,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     icon: z.string().nullish(),
     sortOrder: z.number(),
@@ -75,6 +77,7 @@ export const NoteFolderPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     icon: z.string().nullish(),
     sortOrder: z.union([z.number(), z.record(z.string(), z.unknown())])
@@ -85,7 +88,7 @@ export const NoteFolderPrismaUpdateSchema = z.object({
  * `NoteFolder` schema for create operations excluding foreign keys and relations.
  */
 export const NoteFolderCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, sortOrder: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, sortOrder: true
 });
 
 

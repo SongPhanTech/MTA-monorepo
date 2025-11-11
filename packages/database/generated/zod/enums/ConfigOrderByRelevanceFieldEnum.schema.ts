@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "value"])
+export const ConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "value"])

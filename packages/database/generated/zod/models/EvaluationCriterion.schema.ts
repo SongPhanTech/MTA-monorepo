@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
     currentSituation: z.string().default(""),
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
     currentSituation: z.string(),
@@ -84,6 +86,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
     currentSituation: z.string(),
@@ -98,7 +101,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
  * `EvaluationCriterion` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
 });
 
 

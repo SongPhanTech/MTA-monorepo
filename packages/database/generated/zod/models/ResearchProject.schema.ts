@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     summary: z.string(),
     objectives: z.string().nullish(),
@@ -38,6 +39,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     summary: z.string(),
     objectives: z.string().nullish(),
@@ -96,6 +98,7 @@ export const ResearchProjectPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     title: z.string(),
     summary: z.string(),
     objectives: z.string().nullish(),
@@ -116,7 +119,7 @@ export const ResearchProjectPrismaUpdateSchema = z.object({
  * `ResearchProject` schema for create operations excluding foreign keys and relations.
  */
 export const ResearchProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, currentStudents: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, currentStudents: true, status: true
 });
 
 

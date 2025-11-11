@@ -1,10 +1,9 @@
-import Notifications from '@components/dashboard/notifications'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DashboardLayout from '@layouts/dashboard-layout'
 import { useSession } from '@workspace/auth/react'
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
-import { LichCongTac } from '@workspace/ui'
+import { LichCongTac, DanhSachThongBao } from '@workspace/ui'
 import { Col, Progress, Row, Typography } from 'antd'
 import { useMemo } from 'react'
 
@@ -168,7 +167,7 @@ function Page() {
                             <Title level={4}>Thông báo</Title>
                         </div>
                         <div className="flex-1 overflow-y-auto mb-2 p-2">
-                            <Notifications />
+                            <DanhSachThongBao />
                         </div>
                     </div>
                 </Col>

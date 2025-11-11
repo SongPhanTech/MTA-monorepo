@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -55,6 +56,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -95,10 +97,7 @@ const relationSchema = z.object({
     fixedClass: z.record(z.string(), z.unknown()).optional(),
     subjectClassStudent: z.array(z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),
-    trainingLevel: z.record(z.string(), z.unknown()).optional(),
     trainingObjectType: z.record(z.string(), z.unknown()).optional(),
-    trainingType: z.record(z.string(), z.unknown()).optional(),
-    trainingForm: z.record(z.string(), z.unknown()).optional(),
     registrationArea: z.record(z.string(), z.unknown()).optional(),
     curriculumVersion: z.record(z.string(), z.unknown()).optional(),
     curriculumVersionParallel: z.record(z.string(), z.unknown()).optional(),
@@ -128,10 +127,7 @@ const fkSchema = z.object({
     trainingLocationId: z.string().nullish(),
     fixedClassId: z.string().nullish(),
     userProfileId: z.string(),
-    trainingLevelId: z.string().nullish(),
     trainingObjectTypeId: z.string().nullish(),
-    trainingTypeId: z.string().nullish(),
-    trainingFormId: z.string().nullish(),
     registrationAreaId: z.string().uuid().nullish(),
     curriculumVersionId: z.string().nullish(),
     curriculumVersionParallelId: z.string().nullish(),
@@ -169,6 +165,7 @@ export const StudentPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
@@ -206,7 +203,7 @@ export const StudentPrismaUpdateSchema = z.object({
  * `Student` schema for create operations excluding foreign keys and relations.
  */
 export const StudentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, foreignLangPass: true, ITCertificationPass: true, strengthTrainingPass: true, militaryTrainingPass: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, foreignLangPass: true, ITCertificationPass: true, strengthTrainingPass: true, militaryTrainingPass: true
 });
 
 

@@ -16,7 +16,9 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     classification: z.string(),
+    classificationEnglish: z.string().nullish(),
     context: RankingContextSchema,
     rankOrder: z.number(),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -35,7 +37,9 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     classification: z.string(),
+    classificationEnglish: z.string().nullish(),
     context: RankingContextSchema,
     rankOrder: z.number(),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -106,7 +110,9 @@ export const AcademicRankingConvertPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     classification: z.string(),
+    classificationEnglish: z.string().nullish(),
     context: RankingContextSchema,
     rankOrder: z.union([z.number(), z.record(z.string(), z.unknown())]),
     baseScore: AcademicRankingBaseTypeSchema,
@@ -122,7 +128,7 @@ export const AcademicRankingConvertPrismaUpdateSchema = z.object({
  * `AcademicRankingConvert` schema for create operations excluding foreign keys and relations.
  */
 export const AcademicRankingConvertCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

@@ -15,6 +15,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     decisionDate: z.coerce.date().default(() => new Date()),
     notes: z.string().nullish(),
     finalGpa: DecimalSchema,
@@ -32,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     decisionDate: z.coerce.date(),
     notes: z.string().nullish(),
     finalGpa: DecimalSchema,
@@ -91,6 +93,7 @@ export const GraduationDecisionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     decisionDate: z.coerce.date(),
     notes: z.string().nullish(),
     finalGpa: DecimalSchema,
@@ -105,7 +108,7 @@ export const GraduationDecisionPrismaUpdateSchema = z.object({
  * `GraduationDecision` schema for create operations excluding foreign keys and relations.
  */
 export const GraduationDecisionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, decisionDate: true, totalCopy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, decisionDate: true, totalCopy: true
 });
 
 

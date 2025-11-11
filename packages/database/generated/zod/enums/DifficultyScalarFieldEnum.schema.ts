@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const DifficultyScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "level"])
+export const DifficultyScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "level"])

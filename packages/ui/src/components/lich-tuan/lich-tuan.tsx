@@ -14,6 +14,8 @@ import { CalendarFilter } from './calendar-filter'
 
 export const TYPE_WORK_SCHEDULE_COLOR_OPTIONS = [
     { label: 'Lịch học lý thuyết', value: '#7bb3e6', type: PeriodType.THEORY },
+    { label: 'Lịch kiểm tra giảng dạy', value: '#b8e67b', type: PeriodType.CHECK },
+    { label: 'Lịch tuần học viện', value: '#c67be6', type: PeriodType.WEEK },
     { label: 'Lịch thi', value: '#e699a8', type: PeriodType.EXAM },
     { label: 'Lịch học thực hành', value: '#f5e080', type: PeriodType.PRACTICE },
     { label: 'Lịch học thí nghiệm', value: '#f5b366', type: PeriodType.LAB },
@@ -164,16 +166,20 @@ const convertApiToCalendarEventReactBigCalendar = (
     return apiData.map((event) => {
         const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
         const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-        const start = dayjs(event.classDate)
-            .set('hour', dayjs(startPeriod.startTime).hour())
-            .set('minute', dayjs(startPeriod.startTime).minute())
-        const end = dayjs(event.classDate)
-            .set('hour', dayjs(endPeriod.endTime).hour())
-            .set('minute', dayjs(endPeriod.endTime).minute())
+        const start = event?.startTime
+            ? dayjs(event?.startTime)
+            : dayjs(event?.classDate)
+                  .set('hour', dayjs(startPeriod?.startTime).hour())
+                  .set('minute', dayjs(startPeriod?.startTime).minute())
+        const end = event?.endTime
+            ? dayjs(event?.endTime)
+            : dayjs(event?.classDate)
+                  .set('hour', dayjs(endPeriod?.endTime).hour())
+                  .set('minute', dayjs(endPeriod?.endTime).minute())
 
         return {
             id: event.id,
-            title: event.subjectClass.name || '',
+            title: event?.subjectClass?.name ?? event?.notes ?? '',
             start: start.toDate(),
             end: end.toDate(),
             location: event.subjectClass?.room?.name || '',
@@ -250,94 +256,98 @@ export function LichCongTac({
 
     // Shared query config
 
-    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule(
-        {
-            where: {
-                OR: [
-                    {
-                        subjectClass: {
-                            subjectClassStudent: {
-                                some: {
-                                    student: {
-                                        userProfileId: profileIdLogin,
-                                    },
+    const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
+        where: {
+            OR: [
+                {
+                    subjectClass: {
+                        subjectClassStudent: {
+                            some: {
+                                student: {
+                                    userProfileId: profileIdLogin,
                                 },
                             },
                         },
                     },
-                    {
-                        lecturer: {
+                },
+                {
+                    lecturer: {
+                        userProfileId: profileIdLogin,
+                    },
+                },
+                {
+                    subjectClass: {
+                        mainLecturer: {
                             userProfileId: profileIdLogin,
                         },
                     },
-                    {
-                        subjectClass: {
-                            mainLecturer: {
-                                userProfileId: profileIdLogin,
-                            },
-                        },
-                    },
-                    {
-                        subjectClass: {
-                            extraLecturer: {
-                                userProfileId: profileIdLogin,
-                            },
-                        },
-                    },
-                ],
-                periodType: {
-                    in: selectedColors
-                        .map((color) => {
-                            const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
-                                (opt) => opt.value === color
-                            )?.type
-                            return type
-                        })
-                        .filter(Boolean) as PeriodType[],
                 },
-            },
-            include: {
-                subjectClass: {
-                    select: {
-                        name: true,
-                        code: true,
-                        room: true,
-                        mainLecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        id: true,
-                                        fullname: true,
-                                        firstName: true,
-                                        lastName: true,
-                                    },
-                                },
-                            },
-                        },
+                {
+                    subjectClass: {
                         extraLecturer: {
-                            select: {
-                                userProfile: {
-                                    select: {
-                                        id: true,
-                                        fullname: true,
-                                        firstName: true,
-                                        lastName: true,
-                                    },
+                            userProfileId: profileIdLogin,
+                        },
+                    },
+                },
+                {
+                    periodType: 'WEEK',
+                },
+                {
+                    periodType: 'CHECK',
+                },
+            ],
+            periodType: {
+                in: selectedColors
+                    .map((color) => {
+                        const type = TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find(
+                            (opt) => opt.value === color
+                        )?.type
+                        return type
+                    })
+                    .filter(Boolean) as PeriodType[],
+            },
+        },
+        include: {
+            subjectClass: {
+                select: {
+                    name: true,
+                    code: true,
+                    room: true,
+                    mainLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true,
+                                    fullname: true,
+                                    firstName: true,
+                                    lastName: true,
                                 },
                             },
                         },
-                        subjectClassStudent: {
-                            select: {
-                                student: {
-                                    select: {
-                                        id: true,
-                                        userProfile: {
-                                            select: {
-                                                id: true,
-                                                fullname: true,
-                                                firstName: true,
-                                                lastName: true,
-                                            },
+                    },
+                    extraLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true,
+                                    fullname: true,
+                                    firstName: true,
+                                    lastName: true,
+                                },
+                            },
+                        },
+                    },
+                    subjectClassStudent: {
+                        select: {
+                            student: {
+                                select: {
+                                    id: true,
+                                    userProfile: {
+                                        select: {
+                                            id: true,
+                                            fullname: true,
+                                            firstName: true,
+                                            lastName: true,
                                         },
                                     },
                                 },
@@ -347,10 +357,7 @@ export function LichCongTac({
                 },
             },
         },
-        {
-            enabled: !!profileIdLogin,
-        }
-    )
+    })
 
     // Convert events data to calendar filter format
     const calendarEvents = useMemo(() => {
@@ -362,16 +369,20 @@ export function LichCongTac({
             const color =
                 TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
                     ?.value || '#1890ff'
-            const title = event.subjectClass?.name || ''
+            const title = event?.subjectClass?.name ?? event?.notes ?? ''
             // Handle multi-day events
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-            const start = dayjs(event.classDate)
-                .set('hour', dayjs(startPeriod.startTime).hour())
-                .set('minute', dayjs(startPeriod.startTime).minute())
-            const end = dayjs(event.classDate)
-                .set('hour', dayjs(endPeriod.endTime).hour())
-                .set('minute', dayjs(endPeriod.endTime).minute())
+            const start = event?.startTime
+                ? dayjs(event?.startTime)
+                : dayjs(event?.classDate)
+                      .set('hour', dayjs(startPeriod?.startTime).hour())
+                      .set('minute', dayjs(startPeriod?.startTime).minute())
+            const end = event?.endTime
+                ? dayjs(event?.endTime)
+                : dayjs(event?.classDate)
+                      .set('hour', dayjs(endPeriod?.endTime).hour())
+                      .set('minute', dayjs(endPeriod?.endTime).minute())
             let current = start
 
             while (current.isSameOrBefore(end, 'day')) {
@@ -473,12 +484,16 @@ export function LichCongTac({
         return eventsDataTableCalendar.map((event) => {
             const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
             const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-            const start = dayjs(event.classDate)
-                .set('hour', dayjs(startPeriod.startTime).hour())
-                .set('minute', dayjs(startPeriod.startTime).minute())
-            const end = dayjs(event.classDate)
-                .set('hour', dayjs(endPeriod.endTime).hour())
-                .set('minute', dayjs(endPeriod.endTime).minute())
+            const start = event?.startTime
+                ? dayjs(event?.startTime)
+                : dayjs(event?.classDate)
+                      .set('hour', dayjs(startPeriod?.startTime).hour())
+                      .set('minute', dayjs(startPeriod?.startTime).minute())
+            const end = event?.endTime
+                ? dayjs(event?.endTime)
+                : dayjs(event?.classDate)
+                      .set('hour', dayjs(endPeriod?.endTime).hour())
+                      .set('minute', dayjs(endPeriod?.endTime).minute())
             return {
                 id: event.id,
                 startTime: start.toISOString(),
@@ -490,7 +505,7 @@ export function LichCongTac({
                     TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
                         ?.value || '#1890ff',
                 host: [event.lecturerId, event.extraLecturerId].filter(Boolean) as string[],
-                attendees: event.subjectClass.subjectClassStudent.map((scs) => scs.student.id),
+                attendees: event?.subjectClass?.subjectClassStudent.map((scs) => scs.student.id),
                 hostProfile: transformProfileDataTableCalendar(
                     [
                         event.subjectClass?.mainLecturer?.userProfile,

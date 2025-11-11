@@ -13,6 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     size: z.bigint(),
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     size: z.bigint(),
@@ -44,6 +46,7 @@ const relationSchema = z.object({
     notification: z.record(z.string(), z.unknown()).optional(),
     decision: z.record(z.string(), z.unknown()).optional(),
     defenseRecord: z.record(z.string(), z.unknown()).optional(),
+    librarySubmission: z.record(z.string(), z.unknown()).optional(),
     diplomaFront: z.record(z.string(), z.unknown()).optional(),
     diplomaBack: z.record(z.string(), z.unknown()).optional(),
     diplomaVerification: z.record(z.string(), z.unknown()).optional(),
@@ -65,6 +68,7 @@ const fkSchema = z.object({
     notificationId: z.string().nullish(),
     decisionId: z.string().nullish(),
     defenseRecordId: z.string().nullish(),
+    librarySubmissionId: z.string().nullish(),
     diplomaFrontId: z.string().nullish(),
     diplomaBackId: z.string().nullish(),
     diplomaVerificationId: z.string().nullish(),
@@ -107,6 +111,7 @@ export const DocumentFilePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     name: z.string(),
     path: z.string(),
     size: z.bigint(),
@@ -118,7 +123,7 @@ export const DocumentFilePrismaUpdateSchema = z.object({
  * `DocumentFile` schema for create operations excluding foreign keys and relations.
  */
 export const DocumentFileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 

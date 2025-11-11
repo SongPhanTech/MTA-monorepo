@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const TinHocScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "hinhThucDaoTao", "noiDaoTao", "thoiGianBatDau", "thoiGianKetThuc", "dM_TrinhDoTinHocId", "userProfileId"])
+export const TinHocScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "hinhThucDaoTao", "noiDaoTao", "thoiGianBatDau", "thoiGianKetThuc", "dM_TrinhDoTinHocId", "userProfileId"])

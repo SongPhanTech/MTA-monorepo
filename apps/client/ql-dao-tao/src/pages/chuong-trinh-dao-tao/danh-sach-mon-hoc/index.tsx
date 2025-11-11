@@ -290,7 +290,7 @@ export default function SubjectList() {
                 action: HistorySubjectVersionType.DELETE,
                 updatedBy: {
                     connect: {
-                        id: window?.contextData?.userId ?? 'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                        id: window?.contextData?.userId 
                     },
                 },
             }
