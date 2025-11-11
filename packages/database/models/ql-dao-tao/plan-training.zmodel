@@ -915,10 +915,11 @@ model SubjectClass extends BaseNoCode {
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]  // Thứ trong tuần và tiết học
+	survey                      Survey[] // Đợt khảo sát cho giảng viên
 
   subjectClassHistory         SubjectClassHistory[]
-  survey                      Survey []// Đợt khảo sát cho giảng viên
   @@schema("ql-dao-tao")
+
 }
 
 model SubjectClassHistory extends Base {

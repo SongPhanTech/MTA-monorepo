@@ -11317,19 +11317,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 }, subjectClassHistory: {
                     name: "subjectClassHistory",
                     type: "SubjectClassHistory",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'subjectClasses',
-                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19523,19 +19522,6 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'survey',
                     isRelationOwner: true,
-                }, subjectClasses: {
-                    name: "subjectClasses",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                }, lectureId: {
-                    name: "lectureId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'lecture',
                 }, lecture: {
                     name: "lecture",
                     type: "Lecturer",
@@ -19545,6 +19531,27 @@ const metadata: ModelMeta = {
                     backLink: 'survey',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lectureId" },
+                }, lectureId: {
+                    name: "lectureId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecture',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, surveyTopic: {
                     name: "surveyTopic",
                     type: "SurveyTopic",

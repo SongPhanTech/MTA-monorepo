@@ -3157,8 +3157,8 @@ model SubjectClass {
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
-  subjectClassHistory         SubjectClassHistory[]
   survey                      Survey[]
+  subjectClassHistory         SubjectClassHistory[]
 
   @@schema("ql-dao-tao")
 }
@@ -5033,9 +5033,10 @@ model Survey {
   isPublic             Boolean            @default(false)
   anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
-  subjectClasses       SubjectClass[]
-  lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lectureId            String?
+  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClassId       String?
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
   additionalSuggestion Boolean

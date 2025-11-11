@@ -126,36 +126,50 @@ app.openapi(createClusterSurvey, async (c) => {
             },
         })
 
-        const lecturers = await tx.lecturer.findMany({
+        // const lecturers = await tx.lecturer.findMany({
+        //     where: {
+        //         id: {
+        //             in: lecturerIds,
+        //         },
+        //         mainSubjectClasses: {
+        //             some: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        //     include: {
+        //         mainSubjectClasses: {
+        //             where: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // })
+        const subjectClasses=await prisma.subjectClass.findMany({
             where: {
-                id: {
-                    in: lecturerIds,
-                },
-                mainSubjectClasses: {
-                    some: {
-                        semester: {
-                            id: semesterId,
-                        },
+                semesterId,
+                mainLecturer: {
+                    id: {
+                        in: lecturerIds,
                     },
                 },
             },
             include: {
-                mainSubjectClasses: {
-                    where: {
-                        semester: {
-                            id: semesterId,
-                        },
-                    },
-                },
+                mainLecturer: true,
             },
         })
 
         const surveys = await tx.survey.createManyAndReturn({
-            data: lecturerIds.map((lectureId) => ({
+            data: subjectClasses.map((cls) => ({
                 ...payload,
                 clusterSurveyId: cluster.id,
-                lectureId,
+                subjectClassId: cls.id,
                 surveyTopicId,
+                lectureId: cls.lecturerId,
             })),
         })
 
@@ -173,13 +187,6 @@ app.openapi(createClusterSurvey, async (c) => {
                     },
                     surveyObjectType: {
                         connect: surveyObjectTypeIds.map((id) => ({ id })),
-                    },
-                    subjectClasses: {
-                        connect: lecturers
-                            .find((lecturer) => lecturer.id === survey.lectureId)
-                            ?.mainSubjectClasses.map((subjectClass) => ({
-                                id: subjectClass.id,
-                            })),
                     },
                 },
             })
@@ -1198,6 +1205,7 @@ const getSurveysByProfile = createRoute({
             name: z.string().optional(),
             taken: z.boolean().optional(),
             lecturerName: z.string().optional(),
+            subjectClassName: z.string().optional(),
         }),
     },
     responses: {
@@ -1210,6 +1218,7 @@ const getSurveysByProfile = createRoute({
                             lecture: models.LecturerScalarSchema.extend({
                                 organization: models.DM_DonViScalarSchema,
                             }).nullable(),
+                            subjectClass: models.SubjectClassScalarSchema.nullable(),
                             surveyTopic: models.SurveyTopicScalarSchema,
                         })
                     ),
@@ -1355,8 +1364,11 @@ app.openapi(getSurveysByProfile, async (c) => {
     const where: Prisma.SurveyWhereInput = {
         ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
         ...(q.lecturerName
-            ? { lecturer: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } }
+            ? { lecturer: { userProfile: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } } }
             : {}),
+        ...(q.subjectClassName
+        ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
+        : {}),
         deletedAt: null,
         startDate: { lte: new Date() },
     }
@@ -1372,6 +1384,7 @@ app.openapi(getSurveysByProfile, async (c) => {
         include: {
             lecture: { include: { organization: true } },
             surveyTopic: true,
+            subjectClass: true,
         },
         take: limit,
         skip: (page - 1) * limit,

@@ -327,7 +327,7 @@ export function useSuspenseCountSurvey<TArgs extends Prisma.SurveyCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Survey', `${endpoint}/survey/count`, args, options, fetch);
 }
 
-export function useCheckSurvey<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; isPublic?: boolean; anonymous?: boolean; lectureId?: string; surveyTopicId?: string; additionalSuggestion?: boolean; clusterSurveyId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSurvey<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; isPublic?: boolean; anonymous?: boolean; lectureId?: string; subjectClassId?: string; surveyTopicId?: string; additionalSuggestion?: boolean; clusterSurveyId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Survey', `${endpoint}/survey/check`, args, options, fetch);
 }
