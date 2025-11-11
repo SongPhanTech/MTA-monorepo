@@ -8,8 +8,9 @@ import type {
     EvaluationCriterionComment,
     StandardPeriod,
 } from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
 export type DataTabEvaluationCriterionType = StandardPeriod & {
@@ -54,6 +55,7 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             some: {
                                 evaluationCriterion: {
+                                    status: $Enums.EvaluationStatus.PENDING,
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
@@ -67,6 +69,7 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
+                                    status: $Enums.EvaluationStatus.PENDING,
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
@@ -74,23 +77,6 @@ export default function CriteriaEvaluationWrite() {
                                     },
                                 },
                             },
-                            // include: {
-                            //     requirementCriterions: {
-                            //         include: {
-                            //             evidences: {
-                            //                 include: {
-                            //                     evidence: true,
-                            //                 },
-                            //                 orderBy: {
-                            //                     order: 'asc',
-                            //                 },
-                            //             },
-                            //         },
-                            //         orderBy: {
-                            //             order: 'asc',
-                            //         },
-                            //     },
-                            // },
                             orderBy: {
                                 order: 'asc',
                             },
@@ -108,7 +94,7 @@ export default function CriteriaEvaluationWrite() {
     )
 
     const dataTab = useMemo(() => {
-        if (data) {
+        if (data && data.standards.length > 0) {
             return data.standards.map((standard: DataTabEvaluationCriterionType) => {
                 return {
                     key: standard.id,
@@ -130,16 +116,25 @@ export default function CriteriaEvaluationWrite() {
         <div className="h-full">
             <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Tabs
-                        className="h-[calc(100vh-200px)] overflow-y-auto"
-                        tabPosition="left"
-                        items={dataTab}
-                        tabBarStyle={{
-                            height: '100%',
-                            overflow: 'auto',
-                            width: '175px',
-                        }}
-                    />
+                    {data && data.standards.length > 0 ? (
+                        <Tabs
+                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            tabPosition="left"
+                            items={dataTab}
+                            tabBarStyle={{
+                                height: '100%',
+                                overflow: 'auto',
+                                width: '175px',
+                            }}
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                            <Empty
+                                description="Chưa có phiếu đánh giá tiêu chí nào"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                        </div>
+                    )}
                 </Col>
             </Row>
         </div>

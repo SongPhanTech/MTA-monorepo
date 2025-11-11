@@ -34,8 +34,8 @@ const RejectIcon = ({ title, popConfirm, disabled = false, ...props }: RejectIco
         <Tooltip title={title ?? 'Từ chối'} placement="top">
             <Popconfirm
                 placement="topLeft"
-                title="Xác nhận từ chối đơn?"
-                description="Đơn này bị từ chối"
+                title="Xác nhận yêu cầu chỉnh sửa tiêu chí?"
+                description="Tiêu chí này bị từ chối"
                 okText="Đồng ý"
                 cancelText="Hủy"
                 {...popConfirm}

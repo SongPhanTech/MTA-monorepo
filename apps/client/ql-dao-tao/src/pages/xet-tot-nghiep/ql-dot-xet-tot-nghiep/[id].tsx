@@ -657,7 +657,7 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'Ngày sinh',
-                                                    width: 120,
+                                                    width: 100,
                                                     align: 'center',
                                                     render: (record) =>
                                                         record?.student?.userProfile?.dateOfBirth
@@ -669,7 +669,7 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'SĐT',
-                                                    width: 80,
+                                                    width: 100,
                                                     align: 'center',
                                                     render: (record) =>
                                                         record?.student?.userProfile?.phoneNumber,
