@@ -21,10 +21,14 @@ const CriteriaEvaluationSubPage = ({
 }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
 
+    console.log(data.criteria)
+
     const { hideSpinner, showSpinner } = useSpinner()
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
+
+        console.log(dataSubmit)
 
         let listSqlTransaction: any = [
             {
@@ -32,33 +36,43 @@ const CriteriaEvaluationSubPage = ({
                 operation: 'update',
                 data: {
                     where: {
-                        id: data?.id,
+                        id: data.id,
                     },
                     data: {
-                        opening: dataSubmit?.opening,
-                        conclusion: dataSubmit?.conclusion,
+                        opening: dataSubmit?.opening || '',
+                        conclusion: dataSubmit?.conclusion || '',
                     },
                 },
             },
         ]
 
-        if (dataSubmit?.criteria && dataSubmit?.criteria.length > 0) {
+        if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
             listSqlTransaction = [
                 ...listSqlTransaction,
                 ...dataSubmit.criteria.map((i: EvaluationCriterion) => {
                     return {
                         model: 'EvaluationCriterion',
-                        operation: 'update',
+                        operation: 'upsert',
                         data: {
                             where: {
-                                id: i?.id,
+                                id: i.id,
                             },
-                            data: {
+                            update: {
                                 currentSituation: i?.currentSituation || '',
                                 strengths: i?.strengths || '',
                                 weakness: i?.weakness || '',
                                 actionPlan: i?.actionPlan || '',
-                                score: i?.score,
+                            },
+                            create: {
+                                criterionPeriod: {
+                                    connect: {
+                                        id: i.criterionPeriodId,
+                                    },
+                                },
+                                currentSituation: i?.currentSituation || '',
+                                strengths: i?.strengths || '',
+                                weakness: i?.weakness || '',
+                                actionPlan: i?.actionPlan || '',
                             },
                         },
                     }

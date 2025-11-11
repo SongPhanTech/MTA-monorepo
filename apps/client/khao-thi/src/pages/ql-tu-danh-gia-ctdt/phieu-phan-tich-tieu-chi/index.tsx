@@ -41,6 +41,20 @@ export default function CriteriaAnalysisPage() {
             })
         }
 
+        if (
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
+        ) {
+            tabs.push({
+                key: '4',
+                label: 'Xét duyệt phiếu',
+                children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
         return tabs
     }, [selectedEvaluationPeriodId, can])
 

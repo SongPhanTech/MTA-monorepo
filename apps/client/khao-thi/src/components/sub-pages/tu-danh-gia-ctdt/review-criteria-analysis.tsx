@@ -23,7 +23,7 @@ type CommentType = EvaluationCriterionComment
 type Props = {
     data: ReviewDataTabType
     idx: number
-    role?: 'BAN_TU_VAN' | 'THU_KY'
+    role: 'BAN_TU_VAN' | 'THU_KY'
 }
 
 const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props) => {
