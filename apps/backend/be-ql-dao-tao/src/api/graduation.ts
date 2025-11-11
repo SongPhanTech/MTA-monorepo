@@ -338,7 +338,7 @@ app.openapi(graduationCheck, async (c) => {
                 scoreBase10 >= scoreToPass
             ) {
                 const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
-                // skip if can't improve or score is already higher
+                // skip if pre-score can't improve or score is already higher
                 if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
                     continue
                 }
@@ -363,7 +363,6 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        // TODO: Implement logic for check equivalence subject
         const equivalencyGroups = await prisma.equivalencyGroup.findMany({
             where: {
                 deletedAt: null,
@@ -404,7 +403,9 @@ app.openapi(graduationCheck, async (c) => {
             }
 
             const subjectScore = subjectScoresMap.get(subject.subjectId)
-            if (subjectScore && !subjectScore.canImprove) {
+
+            // if (subjectScore && !subjectScore.canImprove) {
+            if (subjectScore) {
                 finalScores.set(subject.subjectId, subjectScore)
                 continue
             }
