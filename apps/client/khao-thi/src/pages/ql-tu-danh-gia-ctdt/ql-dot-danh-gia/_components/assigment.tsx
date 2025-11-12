@@ -6,28 +6,55 @@ import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
+import type { Prisma } from '@workspace/db/client'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type EvaluationAssignmentFormType = {
     list: Record<string, { lecturerId: string; deadline: Date }>
 }
 
+type StandardData = Prisma.StandardPeriodGetPayload<{
+    include: {
+        criteria: {
+            include: {
+                analysisCriterions: true
+            }
+        }
+    }
+}> & {
+    key: string
+    displayName: string
+}
+
+export type PutPhanCongHangLoatModalProps = {
+    selectedCriteriaIds?: string[]
+    tableData?: StandardData[]
+    refetch?: () => void
+}
+
 export default function AssigmentOfAssessmentTab() {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
     const { can } = useAbility()
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
+        refetch?: () => void
     }>({
         tag: 'CriteriaAssignmentModal',
+    })
+
+    const { onOpen: openPhanCongHangLoat } = useDisclosure<PutPhanCongHangLoatModalProps>({
+        tag: 'PutPhanCongHangLoatModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -54,7 +81,7 @@ export default function AssigmentOfAssessmentTab() {
         },
     })
 
-    const { data, isLoading } = useFindUniqueEvaluationPeriod(
+    const { data, isLoading, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: { id: selectedEvaluationPeriodId },
             include: {
@@ -90,6 +117,70 @@ export default function AssigmentOfAssessmentTab() {
         }))
     }, [data])
 
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        const allKeys = new Set<string>(newSelectedRowKeys as string[])
+        const previousKeys = new Set<string>(selectedRowKeys)
+
+        const criteriaByStandard = new Map<string, string[]>()
+        const standardIds = new Set<string>()
+
+        tableData.forEach((standard) => {
+            standardIds.add(standard.id)
+            const criteriaIds = standard.criteria?.map((c) => c.id) || []
+            criteriaByStandard.set(standard.id, criteriaIds)
+        })
+
+        const addedKeys = Array.from(allKeys).filter((k) => !previousKeys.has(k))
+        const removedKeys = Array.from(previousKeys).filter((k) => !allKeys.has(k))
+
+        addedKeys.forEach((key) => {
+            const keyStr = String(key)
+
+            if (standardIds.has(keyStr)) {
+                const childrenIds = criteriaByStandard.get(keyStr) || []
+                childrenIds.forEach((childId) => {
+                    allKeys.add(childId)
+                })
+            }
+        })
+
+        removedKeys.forEach((key) => {
+            const keyStr = String(key)
+
+            if (standardIds.has(keyStr)) {
+                const childrenIds = criteriaByStandard.get(keyStr) || []
+                childrenIds.forEach((childId) => {
+                    allKeys.delete(childId)
+                })
+            } else {
+                for (const [standardId, criteriaIds] of criteriaByStandard.entries()) {
+                    if (criteriaIds.includes(keyStr)) {
+                        allKeys.delete(standardId)
+                        break
+                    }
+                }
+            }
+        })
+
+        criteriaByStandard.forEach((criteriaIds, standardId) => {
+            const allChildrenSelected =
+                criteriaIds.length > 0 && criteriaIds.every((childId) => allKeys.has(childId))
+
+            if (allChildrenSelected) {
+                allKeys.add(standardId)
+            } else {
+                allKeys.delete(standardId)
+            }
+        })
+
+        setSelectedRowKeys(Array.from(allKeys))
+    }
+
+    const getSelectedCriteria = () => {
+        const standardIds = new Set(tableData.map((s) => s.id))
+        return selectedRowKeys.filter((key) => !standardIds.has(key))
+    }
+
     useEffect(() => {
         if (!data?.standards) return
 
@@ -110,7 +201,7 @@ export default function AssigmentOfAssessmentTab() {
         })
 
         form.setFieldsValue({ list: formData })
-    }, [data?.standards, form])
+    }, [data, form])
 
     const handleSave = async () => {
         try {
@@ -191,7 +282,21 @@ export default function AssigmentOfAssessmentTab() {
                     Phân công giảng viên đánh giá
                 </h1>
                 <p className="text-gray-600 text-base">Đợt đánh giá: {data?.name}</p>
-                <Flex justify="flex-end" className="pb-2">
+                <Flex justify="flex-end" gap={8} className="pb-2">
+                    <Button
+                        type="primary"
+                        className="bg-blue-500"
+                        disabled={getSelectedCriteria().length === 0}
+                        onClick={() => {
+                            openPhanCongHangLoat({
+                                selectedCriteriaIds: getSelectedCriteria(),
+                                tableData: tableData,
+                                refetch: refetch,
+                            })
+                        }}
+                    >
+                        Phân công hàng loạt
+                    </Button>
                     <Button type="primary" onClick={handleSave}>
                         Lưu
                     </Button>
@@ -206,6 +311,11 @@ export default function AssigmentOfAssessmentTab() {
                         defaultExpandAll
                         headerTitleKey="displayName"
                         childrenFieldName="criteria"
+                        rowSelection={{
+                            type: 'checkbox',
+                            selectedRowKeys,
+                            onChange: onSelectChange,
+                        }}
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
@@ -291,6 +401,7 @@ export default function AssigmentOfAssessmentTab() {
                                                         e.preventDefault()
                                                         onOpen({
                                                             criterionPeriodId: record.id,
+                                                            refetch: refetch,
                                                         })
                                                     }}
                                                 />
@@ -307,6 +418,7 @@ export default function AssigmentOfAssessmentTab() {
                                                         e.preventDefault()
                                                         onOpen({
                                                             criterionPeriodId: record.id,
+                                                            refetch: refetch,
                                                         })
                                                     }}
                                                 />

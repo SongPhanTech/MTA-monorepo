@@ -84,7 +84,16 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         }
     }
 
-    console.log(data)
+    const handleEvaluationForm = async () => {
+        try {
+            const dataSubmit = form.getFieldsValue()
+
+            console.log('dataSubmit ', dataSubmit)
+        } catch (error) {
+        } finally {
+            hideSpinner()
+        }
+    }
 
     useEffect(() => {
         if (data) {
@@ -108,8 +117,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
 
     return (
         <div>
-            <div className="flex justify-end">
-                <Button type="primary" onClick={() => handleSubmit()} className="mb-2">
+            <div className="flex justify-end gap-2" onClick={handleEvaluationForm}>
+                <Button type="primary" className="bg-blue-500">
+                    Nộp phiếu đánh giá
+                </Button>
+                <Button type="primary" onClick={handleSubmit} className="mb-2">
                     Lưu đánh giá
                 </Button>
             </div>

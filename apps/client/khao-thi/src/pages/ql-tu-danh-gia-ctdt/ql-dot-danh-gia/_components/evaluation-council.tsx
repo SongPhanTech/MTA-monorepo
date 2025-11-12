@@ -282,26 +282,28 @@ export default function EvaluationCouncilTab() {
                         {
                             title: 'Tên hội đồng',
                             dataIndex: 'name',
-                            width: 200,
+                            width: 150,
                             align: 'center',
                             type: 'input',
-                            fixed: 'left',
                         },
                         {
                             title: 'Số thành viên trong HĐ',
                             dataIndex: 'members',
-                            width: 200,
+                            width: 100,
                             align: 'center',
                             render: (__, record) => {
                                 return record?.members?.length || ''
                             },
                         },
                         {
+                            title: 'Mô tả',
+                            dataIndex: 'description',
+                            width: 200,
+                        },
+                        {
                             title: 'Thao tác',
-                            width: 100,
+                            width: 70,
                             align: 'center',
-                            fixed: 'right',
-
                             render: (_, record) => {
                                 if (record?.id) {
                                     return (

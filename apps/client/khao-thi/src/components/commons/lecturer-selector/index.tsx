@@ -68,7 +68,9 @@ const LecturerSelector = ({ value, onChange }: LecturerSelectorProps) => {
         }
     }, [value, lecturerById])
 
-    const { data: donViData = [] } = useFindManyDM_DonVi()
+    const { data: donViData = [] } = useFindManyDM_DonVi({
+        orderBy: { sTen: 'asc' },
+    })
     const organizationTreeData = useMemo(() => buildOrgTree(donViData), [donViData])
 
     const { data = [], isLoading } = useFindManyLecturer(
@@ -94,7 +96,7 @@ const LecturerSelector = ({ value, onChange }: LecturerSelectorProps) => {
                     : {}),
             },
             include: {
-                organization: { select: { sTen: true } },
+                organization: { select: { sTen: true, sParentId: true } },
                 userProfile: {
                     include: {
                         academicRankType: { select: { sTen: true } },
@@ -136,7 +138,7 @@ const LecturerSelector = ({ value, onChange }: LecturerSelectorProps) => {
     )
 
     const content = (
-        <div className="w-[800px]">
+        <div className="w-[900px]">
             <Table
                 rowKey="id"
                 loading={isLoading}
@@ -160,7 +162,7 @@ const LecturerSelector = ({ value, onChange }: LecturerSelectorProps) => {
                     },
                     {
                         title: 'Đơn vị',
-                        width: 200,
+                        width: 250,
                         type: 'tree_select',
                         dataIndex: 'organizationId',
                         options: organizationTreeData,
