@@ -4,10 +4,7 @@ import { Typography } from 'antd'
 const { Title } = Typography
 
 function Page() {
-    return (
-        <div>
-        </div>
-    )
+    return <div></div>
 }
 
 export default Page

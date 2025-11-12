@@ -1,11 +1,11 @@
 import Table from '@components/commons/table'
-import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
-import {useOpenSubjectClassRetakeStudents} from '@workspace/libs/api/training'
-import {useTrainingCourseStore, useTrainingObjectTypeStore} from '@workspace/ui'
-import {Button, Checkbox, Col, Form, Input, Row} from 'antd'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
+import { useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
-import {Search} from 'lucide-react'
-import {type Key, useCallback, useMemo, useState} from 'react'
+import { Search } from 'lucide-react'
+import { type Key, useCallback, useMemo, useState } from 'react'
 
 interface FilterProps {
     searchText?: string | null
@@ -18,7 +18,7 @@ interface RegisterClassProps {
     viewOnly?: boolean
 }
 
-export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassProps) {
+export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(50)
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
@@ -26,10 +26,10 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
     const [filters, setFilters] = useState<FilterProps>({
         searchText: undefined,
     })
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
-    const {id: trainingCourseId} = useTrainingCourseStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
 
-    const {data: res, refetch} = useOpenSubjectClassRetakeStudents(
+    const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
             search: filters.searchText || undefined,
             trainingObjectTypeId: trainingObjectTypeId || '',
@@ -38,7 +38,7 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
             page: currentPage,
             pageSize: numberOfPages,
         },
-        {query: {enabled: !!trainingObjectTypeId && !!subjectVersionId}}
+        { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
@@ -54,7 +54,7 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
-            const newFilters = {...prev, [key]: value}
+            const newFilters = { ...prev, [key]: value }
             debouncedRefetch()
             return newFilters
         })
@@ -72,7 +72,7 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
                         id="search"
                         placeholder="Tìm kiếm HV/SV..."
                         onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                        style={{height: 32}}
+                        style={{ height: 32 }}
                         prefix={
                             <Search
                                 size={15}
@@ -106,19 +106,19 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
                                 setSelectedRowKeys([...selectedRowKeys, record.id])
                             }
                         },
-                        style: {cursor: 'pointer'},
+                        style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
                     rowSelection={
                         !viewOnly
                             ? {
-                                selectedRowKeys: selectedRowKeys,
-                                onChange: (selectedRowKeys) => {
-                                    handleRowSelection(selectedRowKeys)
-                                },
-                                type: 'checkbox',
-                                columnWidth: 35,
-                            }
+                                  selectedRowKeys: selectedRowKeys,
+                                  onChange: (selectedRowKeys) => {
+                                      handleRowSelection(selectedRowKeys)
+                                  },
+                                  type: 'checkbox',
+                                  columnWidth: 35,
+                              }
                             : undefined
                     }
                     columns={[
@@ -165,33 +165,30 @@ export default function HSSVChuaDat({subjectVersionId, viewOnly}: RegisterClassP
                             align: 'center',
                             dataIndex: 'cam_thi',
                             width: 80,
-                            render: (value) => <Checkbox
-                                checked={value}
-                            />,
+                            render: (value) => <Checkbox checked={value} />,
                         },
                         {
                             title: 'Hoãn thi',
                             align: 'center',
                             dataIndex: 'hoan_thi',
                             width: 80,
-                            render: (value) => <Checkbox
-                                checked={value}
-                            />,
+                            render: (value) => <Checkbox checked={value} />,
                         },
                         {
                             title: 'Đình chỉ thi',
                             align: 'center',
                             dataIndex: 'dinh_chi',
                             width: 80,
-                            render: (value) => <Checkbox
-                                checked={value}
-                            />,
+                            render: (value) => <Checkbox checked={value} />,
                         },
                         {
                             title: 'Lý do',
                             align: 'center',
                             width: 80,
-                            render: (_, record) => record?.ly_do_cam_thi ?? record?.ly_do_dinh_chi ?? record?.ly_do_hoan_thi,
+                            render: (_, record) =>
+                                record?.ly_do_cam_thi ??
+                                record?.ly_do_dinh_chi ??
+                                record?.ly_do_hoan_thi,
                         },
                     ]}
                     pagination={{

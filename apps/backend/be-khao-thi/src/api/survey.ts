@@ -149,7 +149,7 @@ app.openapi(createClusterSurvey, async (c) => {
         //         },
         //     },
         // })
-        const subjectClasses=await prisma.subjectClass.findMany({
+        const subjectClasses = await prisma.subjectClass.findMany({
             where: {
                 semesterId,
                 mainLecturer: {
@@ -1364,11 +1364,15 @@ app.openapi(getSurveysByProfile, async (c) => {
     const where: Prisma.SurveyWhereInput = {
         ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
         ...(q.lecturerName
-            ? { lecturer: { userProfile: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } } }
+            ? {
+                  lecturer: {
+                      userProfile: { fullname: { contains: q.lecturerName, mode: 'insensitive' } },
+                  },
+              }
             : {}),
         ...(q.subjectClassName
-        ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
-        : {}),
+            ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
+            : {}),
         deletedAt: null,
         startDate: { lte: new Date() },
     }

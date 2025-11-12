@@ -1,9 +1,9 @@
 import DefaultLayout from '@layouts/default-layout'
-import {useFindFirstPlanTrainingDelay} from '@workspace/db/hooks'
-import {useTrainingObjectTypeStore} from '@workspace/ui'
-import {Col, Row, Tabs} from 'antd'
+import { useFindFirstPlanTrainingDelay } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
-import {useState} from 'react'
+import { useState } from 'react'
 import MonCham from './_components/mon-cham'
 import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
@@ -16,11 +16,11 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function LapKeHoach({hocLai = false}: { hocLai?: boolean }) {
+export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
-    const {data: countDelay} = useFindFirstPlanTrainingDelay({
-        where: {trainingObjectTypeId, deletedAt: null},
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: countDelay } = useFindFirstPlanTrainingDelay({
+        where: { trainingObjectTypeId, deletedAt: null },
         select: {
             _count: {
                 select: {
@@ -32,35 +32,35 @@ export default function LapKeHoach({hocLai = false}: { hocLai?: boolean }) {
 
     const leftTabs: TabItem[] = hocLai
         ? [
-            {
-                key: '1',
-                label: 'Môn có SV/HV chưa đạt',
-                content: <MonCoHVSVChuaDat />,
-            },
-        ]
+              {
+                  key: '1',
+                  label: 'Môn có SV/HV chưa đạt',
+                  content: <MonCoHVSVChuaDat />,
+              },
+          ]
         : [
-            {
-                key: '1',
-                label: 'Môn theo kế hoạch giảng dạy',
-                content: <MonTheoKeHoachDuKien/>,
-            },
-            {
-                key: '2',
-                label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
-                content: <MonCham/>,
-            },
-            {
-                key: '3',
-                label: 'Môn học kỳ sau',
-                content: <MonKySau/>,
-            },
-        ]
+              {
+                  key: '1',
+                  label: 'Môn theo kế hoạch giảng dạy',
+                  content: <MonTheoKeHoachDuKien />,
+              },
+              {
+                  key: '2',
+                  label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
+                  content: <MonCham />,
+              },
+              {
+                  key: '3',
+                  label: 'Môn học kỳ sau',
+                  content: <MonKySau />,
+              },
+          ]
 
     const rightTabsMap: TabItem[] = [
         {
             key: '1',
             label: 'Môn học đã lập kế hoạch',
-            content: <MonDaLapKeHoach hocLai={hocLai}/>,
+            content: <MonDaLapKeHoach hocLai={hocLai} />,
         },
     ]
 

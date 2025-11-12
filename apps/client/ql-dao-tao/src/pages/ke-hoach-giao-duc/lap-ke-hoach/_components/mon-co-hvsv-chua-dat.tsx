@@ -1,19 +1,19 @@
 import Table from '@components/commons/table'
-import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
-import {$Enums, PlanTraining} from '@workspace/db/client'
-import {useOpenSubjectClassRetake} from '@workspace/libs/api/training'
-import {useAbility} from '@workspace/permissions/hooks'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import { queryClient } from '@lib/api'
+import { $Enums, type PlanTraining } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
 import {
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingMajorStore,
-    useTrainingObjectTypeStore
+    useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import {Button, Col, Flex, Form, Input, message, Row} from 'antd'
-import {type Key, useMemo, useState} from 'react'
-import {sqlTransaction} from "@workspace/libs/api/model";
-import useSpinner from "@hooks/spinner";
-import {queryClient} from "@lib/api";
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { type Key, useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -21,30 +21,30 @@ interface SubjectBySemesterForm {
 }
 
 export default function MonCoHVSVChuaDat() {
-    const {canSome} = useAbility()
+    const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
-    const {id: semesterId} = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const {showSpinner, hideSpinner} = useSpinner()
+    const { showSpinner, hideSpinner } = useSpinner()
 
-    const {id: trainingCourseId} = useTrainingCourseStore()
-    const {id: trainingMajorId} = useTrainingMajorStore()
-    const {data: res} = useOpenSubjectClassRetake(
+    const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: trainingMajorId } = useTrainingMajorStore()
+    const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText,
             trainingCourseId,
             trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId || '',
-            semesterId,
+            trainingObjectTypeId: trainingObjectTypeId as string,
+            semesterId: semesterId as string,
             limit: numberOfPages,
             page: currentPage,
         },
-        {query: {enabled: !!trainingObjectTypeId && !!semesterId}}
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
@@ -54,8 +54,7 @@ export default function MonCoHVSVChuaDat() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
-            const subject = data
-                .filter((subject) => subjectSelected.includes(subject.id))
+            const subject = data.filter((subject) => subjectSelected.includes(subject.id))
             const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -100,7 +99,7 @@ export default function MonCoHVSVChuaDat() {
                     model: 'PlanTraining',
                     operation: 'update',
                     data: {
-                        where: {id: planTrainingId},
+                        where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
                                 create: subject.map((subject) => ({
@@ -137,10 +136,10 @@ export default function MonCoHVSVChuaDat() {
         <Form form={form}>
             <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Flex justify={"space-between"}>
+                    <Flex justify={'space-between'}>
                         <Col span={12}>
                             <Form.Item className="mb-0" name="searchText">
-                                <Input id="search" placeholder="Tìm kiếm" allowClear/>
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
                         <Flex gap={8} justify={'end'}>
@@ -155,7 +154,7 @@ export default function MonCoHVSVChuaDat() {
                     </Flex>
                 </Col>
                 <Col span={24}>
-                    <Form.Item hidden name="subjectSelected"/>
+                    <Form.Item hidden name="subjectSelected" />
                     <Table
                         rowKey="id"
                         data={data as any}
@@ -171,9 +170,10 @@ export default function MonCoHVSVChuaDat() {
                             return {
                                 onClick: () => {
                                     if (subjectSelected.includes(record.id)) {
-                                        const newSelected = subjectSelected.filter((id) => id !== record.id)
+                                        const newSelected = subjectSelected.filter(
+                                            (id) => id !== record.id
+                                        )
                                         form.setFieldValue('subjectSelected', newSelected)
-
                                     } else {
                                         const newSelected = [...subjectSelected, record.id as Key]
                                         form.setFieldValue('subjectSelected', newSelected)

@@ -1,12 +1,12 @@
-import {createRoute, OpenAPIHono, z} from '@hono/zod-openapi'
-import {$Enums} from '@workspace/db'
-import {read, utils} from 'xlsx'
-import {prisma} from '..'
-import {EnrollFixedClassOnSubjectClass, OpenSubjectClass} from '../dto/subject-class.dto'
-import {UploadExcelModel} from '../dto/upload-excel.dto'
-import {ListOf, PaginationQuerySchema} from '../zod/base'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { $Enums } from '@workspace/db'
+import { read, utils } from 'xlsx'
+import { prisma } from '..'
+import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
+import { ListOf, PaginationQuerySchema } from '../zod/base'
 
-const app = new OpenAPIHono({strict: false})
+const app = new OpenAPIHono({ strict: false })
 
 const openSubjectClass = createRoute({
     operationId: 'openSubjectClass',
@@ -71,11 +71,9 @@ const openSubjectClassRetake = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            semesterId: z
-                .string()
-                .openapi('semesterId', {
-                    description: 'ID học kỳ',
-                })
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID học kỳ',
+            }),
         }),
     },
     responses: {
@@ -118,8 +116,8 @@ const openSubjectClassRetakeStudents = createRoute({
             trainingCourseId: z.string().optional(),
             search: z.string().optional(),
             trainingObjectTypeId: z.string(),
-            page: z.number({coerce: true}).default(1),
-            pageSize: z.number({coerce: true}).default(10),
+            page: z.number({ coerce: true }).default(1),
+            pageSize: z.number({ coerce: true }).default(10),
         }),
     },
     responses: {
@@ -340,7 +338,7 @@ app.openapi(openSubjectClass, async (c) => {
     const nextSemesterBool = nextSemester === 'true'
 
     const semester = await prisma.semester.findUnique({
-        where: {id: semesterId},
+        where: { id: semesterId },
         include: {
             schoolYear: true,
         },
@@ -359,8 +357,8 @@ app.openapi(openSubjectClass, async (c) => {
         semester?.semesterType === $Enums.SemesterType.FIRST
             ? 1
             : semester?.semesterType === $Enums.SemesterType.SECOND
-                ? 2
-                : 0
+              ? 2
+              : 0
     let semesterYear = semester?.schoolYear.startDate.getFullYear()
     if (nextSemesterBool) {
         if (semesterType === 1) {
@@ -446,7 +444,7 @@ app.openapi(openSubjectClass, async (c) => {
                        AND fc."active" = TRUE
                        AND sv."deletedAt" IS NULL
                        AND sv."active" = TRUE
-                       AND sv.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
+                       AND sv.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
                      GROUP BY sv.code,
                               tbs.semester,
                               fc."startYear",
@@ -640,7 +638,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -703,7 +701,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -718,11 +716,11 @@ app.openapi(openSubjectClassRetake, async (c) => {
             OR name ILIKE ${`%${search}%`}
             )
     `
-    return c.json({data: res, count: countRaw[0]?.count}, 200)
+    return c.json({ data: res, count: countRaw[0]?.count }, 200)
 })
 
 app.openapi(openSubjectClassRetakeStudents, async (c) => {
-    const {page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId} =
+    const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
         c.req.valid('query')
 
     type Result = {
@@ -857,7 +855,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
 })
 
 app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
-    const {subjectClassId, fixedClassIds} = c.req.valid('json')
+    const { subjectClassId, fixedClassIds } = c.req.valid('json')
     const fixedClasses = await prisma.fixedClass.findMany({
         where: {
             id: {
@@ -877,7 +875,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
     })
 
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: {id: subjectClassId, deletedAt: null, active: true},
+        where: { id: subjectClassId, deletedAt: null, active: true },
     })
 
     if (!subjectClass) {
@@ -899,7 +897,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
             },
             data: {
                 fixedClasses: {
-                    set: fixedClassIds.map((id) => ({id})),
+                    set: fixedClassIds.map((id) => ({ id })),
                 },
             },
         })
@@ -921,7 +919,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         })
     })
 
-    return c.json({data: res, success: true}, 200)
+    return c.json({ data: res, success: true }, 200)
 })
 
 app.openapi(setScoreDeadLine, async (c) => {
@@ -985,7 +983,7 @@ app.openapi(setScoreDeadLine, async (c) => {
         `)
     })
 
-    return c.json({message: 'Success'})
+    return c.json({ message: 'Success' })
 })
 
 app.openapi(setExamScoreDeadLine, async (c) => {
@@ -1025,34 +1023,34 @@ app.openapi(setExamScoreDeadLine, async (c) => {
             ${whereSQL};
     `)
 
-    return c.json({message: 'Success'})
+    return c.json({ message: 'Success' })
 })
 
 app.openapi(uploadExcelImportScore, async (c) => {
-    const {file, subjectClassId} = c.req.valid('form')
+    const { file, subjectClassId } = c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
-        return c.json({message: 'File vượt quá 50MB'}, 400)
+        return c.json({ message: 'File vượt quá 50MB' }, 400)
     }
 
     // Đọc file Excel
     const arrayBuffer = await file.arrayBuffer()
-    const workbook = read(arrayBuffer, {type: 'array'})
+    const workbook = read(arrayBuffer, { type: 'array' })
 
     // Lấy sheet đầu tiên
     const sheetName = workbook.SheetNames[0]
     if (!sheetName) {
-        return c.json({message: 'Không tìm thấy sheet'}, 400)
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
     }
 
     const sheet = workbook.Sheets[sheetName]
     if (!sheet) {
-        return c.json({message: 'Không tìm thấy sheet'}, 400)
+        return c.json({ message: 'Không tìm thấy sheet' }, 400)
     }
 
     // Chuyển đổi dữ liệu từ sheet thành JSON
-    const rowData = utils.sheet_to_json<string[]>(sheet, {header: 1})
+    const rowData = utils.sheet_to_json<string[]>(sheet, { header: 1 })
 
     // Kiểm tra mã lớp có trùng với đầu vào không để tránh nhập nhầm
     const cellAddress = 'C4'
@@ -1061,14 +1059,14 @@ app.openapi(uploadExcelImportScore, async (c) => {
     console.log(`Giá trị ô ${cellAddress}:`, cellValue)
 
     const subjectClass = await prisma.subjectClass.findFirst({
-        where: {id: subjectClassId},
+        where: { id: subjectClassId },
     })
 
     if (!subjectClass?.code) {
-        return c.json({message: 'Không tìm thấy khoá học'}, 400)
+        return c.json({ message: 'Không tìm thấy khoá học' }, 400)
     }
     if (subjectClass?.code !== cellValue) {
-        return c.json({message: 'Mã lớp không trùng khớp'}, 400)
+        return c.json({ message: 'Mã lớp không trùng khớp' }, 400)
     }
 
     const scoreUpdates = rowData
@@ -1087,7 +1085,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
     const students = await prisma.student.findMany({
         where: {
             active: true,
-            code: {in: studentCodes},
+            code: { in: studentCodes },
         },
         select: {
             id: true,
@@ -1097,7 +1095,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
 
     // Update the student scores (assuming the score field exists in studentSubjectScore)
     const updateResults = []
-    for (const {studentCode, scoreCC, scoreTX, scoreThi} of scoreUpdates) {
+    for (const { studentCode, scoreCC, scoreTX, scoreThi } of scoreUpdates) {
         const student = students.find((s) => s.code === studentCode)
         if (student) {
             const res = await prisma.studentSubjectScore.updateMany({
@@ -1118,7 +1116,7 @@ app.openapi(uploadExcelImportScore, async (c) => {
     const totalUpdated = updateResults.reduce((sum, count) => sum + count, 0)
     console.log(`Total records updated: ${totalUpdated}`)
 
-    return c.json({data: updateResults, count: totalUpdated}, 200)
+    return c.json({ data: updateResults, count: totalUpdated }, 200)
 })
 
 export default app

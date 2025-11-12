@@ -8,7 +8,7 @@ import { Col, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-function DanhSachHocVien({ selectedId,surveyId }: {selectedId:string, surveyId: string }) {
+function DanhSachHocVien({ selectedId, surveyId }: { selectedId: string; surveyId: string }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -22,40 +22,41 @@ function DanhSachHocVien({ selectedId,surveyId }: {selectedId:string, surveyId: 
     const router = useRouter()
     const where = useMemo(() => {
         return {
-            ...(surveyId?{
-                     educationAndTraining: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            subjectClass: {
-                                survey: {
-                                    some: {
-                                        id: surveyId,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            }
-            }:{
-                     educationAndTraining: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            subjectClass: {
-                                survey: {
-                                    some: {
-                                        clusterSurveyId: selectedId,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            }
-            })
-       ,
+            ...(surveyId
+                ? {
+                      educationAndTraining: {
+                          some: {
+                              subjectClassStudent: {
+                                  some: {
+                                      subjectClass: {
+                                          survey: {
+                                              some: {
+                                                  id: surveyId,
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {
+                      educationAndTraining: {
+                          some: {
+                              subjectClassStudent: {
+                                  some: {
+                                      subjectClass: {
+                                          survey: {
+                                              some: {
+                                                  clusterSurveyId: selectedId,
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }),
             ...(filters.statusSurvey &&
                 filters.statusSurvey?.length === 1 &&
                 filters.statusSurvey[0] === true && {

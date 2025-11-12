@@ -8,9 +8,9 @@ import { Button, Col, Empty, message, Row, Typography } from 'antd'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import ReactECharts from "echarts-for-react";
+import ReactECharts from 'echarts-for-react'
 const { Title } = Typography
-function ClusterSurveyReport({selectedId}:{selectedId:string}) {
+function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -19,55 +19,53 @@ function ClusterSurveyReport({selectedId}:{selectedId:string}) {
     // })
 
     const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
-    console.log(dataLevel);
-    
     const dataBarchart = useMemo(() => {
-        let choices:any=[]
-   
-        if(dataLevel?.status!==200 ){
+        let choices: any = []
+
+        if (dataLevel?.status !== 200) {
             return
         }
-        choices=dataLevel?.data?.choices.map(i=>{
-            return {name:i?.description, 
+        choices = dataLevel?.data?.choices.map((i) => {
+            return {
+                name: i?.description,
                 type: 'bar',
                 stack: 'total',
                 label: {
-                    show: true
+                    show: true,
                 },
-                   emphasis: {
-                    focus: 'series'
+                emphasis: {
+                    focus: 'series',
                 },
-                data: []
+                data: [],
             }
         })
-        dataLevel?.data?.data.forEach((i:any)=>{
-            choices.forEach((j:any,index:number)=>{
-                j?.data.push(i?.average[index]||0)
+        dataLevel?.data?.data.forEach((i: any) => {
+            choices.forEach((j: any, index: number) => {
+                j?.data.push(i?.average[index] || 0)
             })
         })
- 
 
-    
         return {
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      // Use axis to trigger tooltip
-      type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-    }
-  },
-  legend: {},
-  xAxis: {
-    type: 'value'
-  },
-  yAxis: {
-    type: 'category',
-    data: dataLevel?.data?.data?.map(i=>{
-        return `${i?.lecture}`
-    })||[]
-  },
-  series: choices
-}
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    // Use axis to trigger tooltip
+                    type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+                },
+            },
+            legend: {},
+            xAxis: {
+                type: 'value',
+            },
+            yAxis: {
+                type: 'category',
+                data:
+                    dataLevel?.data?.data?.map((i) => {
+                        return `${i?.lecture}`
+                    }) || [],
+            },
+            series: choices,
+        }
     }, [dataLevel])
 
     const renderQuestionReport = (item: {
@@ -137,17 +135,17 @@ function ClusterSurveyReport({selectedId}:{selectedId:string}) {
         }
     }
 
-      const onChartClick = (params: any) => {
-        if(dataLevel?.status!==200){
+    const onChartClick = (params: any) => {
+        if (dataLevel?.status !== 200) {
             return
         }
-        const result= dataLevel?.data?.data[params?.dataIndex]
+        const result = dataLevel?.data?.data[params?.dataIndex]
         router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
-  };
+    }
 
-  const onEvents = {
-    click: onChartClick,
-  };
+    const onEvents = {
+        click: onChartClick,
+    }
 
     return (
         <div>
@@ -194,8 +192,15 @@ function ClusterSurveyReport({selectedId}:{selectedId:string}) {
                         </div>
                         <div className="flex-1">
                             {dataLevel?.status === 200 && dataLevel?.data ? (
-                              <div style={{ width: "100%", height: "100%"}} className="min-h-[400px]">
-                                <ReactECharts onEvents={onEvents} option={dataBarchart} style={{ height: "100%" }} />
+                                <div
+                                    style={{ width: '100%', height: '100%' }}
+                                    className="min-h-[400px]"
+                                >
+                                    <ReactECharts
+                                        onEvents={onEvents}
+                                        option={dataBarchart}
+                                        style={{ height: '100%' }}
+                                    />
                                 </div>
                                 // <BarChart className="h-full" dataMap={dataBarchart} />
                             ) : (
@@ -210,4 +215,3 @@ function ClusterSurveyReport({selectedId}:{selectedId:string}) {
 }
 
 export default ClusterSurveyReport
-
