@@ -85,6 +85,7 @@ const ThongKeDonVi: React.FC<LectureByOrgProps> = ({ className, showTable = true
             </Col>
             <Col span={8}>
                 <Table
+                    rowKey={'letter'}
                     dataSource={data}
                     columns={[
                         {

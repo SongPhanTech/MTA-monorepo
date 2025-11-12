@@ -74,14 +74,14 @@ export default function ThongKeNo() {
             search: searchText || undefined,
             trainingCourseId,
             trainingMajorId,
-            semesterId: semesterId || undefined,
+            // semesterId: semesterId || undefined,
             trainingObjectTypeId: trainingObjectTypeId as string,
+
         },
         {query: {enabled: !!trainingObjectTypeId}}
     )
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
-
     return (
         <Row gutter={[8, 8]}>
             <Col span={8}>

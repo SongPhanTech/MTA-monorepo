@@ -7335,6 +7335,9 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, trainingObjectTypeId_semesterId: {
+                    name: "trainingObjectTypeId_semesterId",
+                    fields: ["trainingObjectTypeId", "semesterId"]
                 },
             },
         },

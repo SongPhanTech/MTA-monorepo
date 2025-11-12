@@ -76,13 +76,6 @@ const openSubjectClassRetake = createRoute({
                 .openapi('semesterId', {
                     description: 'ID học kỳ',
                 })
-                .optional(),
-            fixedClassId: z
-                .string()
-                .openapi('fixedClassId', {
-                    description: 'ID lớp quản lý',
-                })
-                .optional(),
         }),
     },
     responses: {
@@ -377,6 +370,30 @@ app.openapi(openSubjectClass, async (c) => {
             semesterYear = semesterYear + 1
         }
     }
+    const planTraining = await prisma.planTraining.upsert({
+        where: {
+            trainingObjectTypeId_semesterId: {
+                trainingObjectTypeId,
+                semesterId,
+            },
+        },
+        update: {},
+        create: {
+            trainingObjectTypeId,
+            semesterId,
+        },
+        select: {
+            id: true,
+            planTrainingSubjects: {
+                select: {
+                    subjectVersionId: true,
+                },
+                where: {
+                    subjectClassType: $Enums.SubjectClassType.NORMAL,
+                },
+            },
+        },
+    })
     const res = await prisma.$queryRaw<
         {
             data: OpenSubjectClass
@@ -429,6 +446,7 @@ app.openapi(openSubjectClass, async (c) => {
                        AND fc."active" = TRUE
                        AND sv."deletedAt" IS NULL
                        AND sv."active" = TRUE
+                       AND sv.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
                      GROUP BY sv.code,
                               tbs.semester,
                               fc."startYear",
@@ -513,35 +531,8 @@ app.openapi(openSubjectClass, async (c) => {
                  management_organization_name
 
     `
-
-    const planTraining = await prisma.planTraining.findFirst({
-        where: {
-            trainingObjectTypeId,
-            semesterId,
-        },
-        select: {
-            planTrainingSubjects: {
-                select: {
-                    subjectVersionId: true,
-                },
-                where: {
-                    subjectClassType: $Enums.SubjectClassType.NORMAL,
-                },
-            },
-        },
-    })
-
-    const listSubjectAlreadyInPlanTraining = planTraining
-        ? planTraining.planTrainingSubjects.map((pts) => pts.subjectVersionId)
-        : []
-
     const data = res
         .map((e) => e.data)
-        .filter((item) =>
-            listSubjectAlreadyInPlanTraining.length > 0
-                ? !listSubjectAlreadyInPlanTraining.includes(item.subjectVersionId)
-                : true
-        )
         .filter((item) =>
             item.fixedClass.some((fc) => (fixedClassId ? fc.fixedClassId === fixedClassId : true))
         )
@@ -581,6 +572,30 @@ app.openapi(openSubjectClassRetake, async (c) => {
         page,
     } = c.req.valid('query')
 
+    const planTraining = await prisma.planTraining.upsert({
+        where: {
+            trainingObjectTypeId_semesterId: {
+                trainingObjectTypeId,
+                semesterId,
+            },
+        },
+        update: {},
+        create: {
+            trainingObjectTypeId,
+            semesterId,
+        },
+        select: {
+            id: true,
+            planTrainingSubjects: {
+                select: {
+                    subjectVersionId: true,
+                },
+                where: {
+                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                },
+            },
+        },
+    })
     const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                                sv.code,
@@ -615,10 +630,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id
-                          and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId}))
+                        where TBS."subjectId" = sv.id)
         select id, code, name, count("studentId") ::INTEGER as count
-        -- select *
         from mon_no
         where rn = 1
           and (truot_mon = true
@@ -627,6 +640,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -748,6 +762,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                                    as truot_mon,
+                               SC."code"                                                                                         as ma_lop_mon_hoc,
+                               Sem."name"                                                                                        as ky_hoc,
+                               Sch."name"                                                                                        as nam_hoc,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -755,6 +772,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                                  inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
+                                 inner join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
                                  inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
                                  inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
                                  inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
@@ -774,7 +793,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                ly_do_cam_thi,
                dinh_chi,
                ly_do_dinh_chi,
-               truot_mon
+               truot_mon,
+               ky_hoc,
+               nam_hoc
         from mon_no
         where rn = 1
           and (truot_mon = true or cam_thi = true or dinh_chi = true)

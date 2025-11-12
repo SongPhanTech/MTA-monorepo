@@ -2,7 +2,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {useFindManyFixedClass, useFindManyTrainingMajor} from '@workspace/db/hooks'
 import {
     SelectTrainingCourse,
-    useFixedClassStore,
+    useFixedClassStore, useTrainingCourseStore,
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
@@ -32,7 +32,7 @@ export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
             [{
                 key: 'thong-ke-no',
                 label: 'Thống kê nợ',
-                content: <ThongKeNo />,
+                content: <ThongKeNo/>,
             }] : []),
         {
             key: 'lap-ke-hoach',
@@ -55,6 +55,7 @@ export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
 
     const {id: trainingMajorId, onSelect: onSelectTrainingMajor} = useTrainingMajorStore()
     const {id: fixedClassId, onSelect: onSelectFixedClass} = useFixedClassStore()
+    const {id: trainingCourseId} = useTrainingCourseStore()
 
     const {data: trainingMajorData = []} = useFindManyTrainingMajor({
         orderBy: {name: 'asc'},
@@ -71,6 +72,7 @@ export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
             active: true,
             trainingCourse: {
                 trainingObjectTypeId,
+                id: trainingCourseId
             },
             curriculumVersion: {
                 curriculum: {

@@ -362734,6 +362734,7 @@ export namespace Prisma {
 
   export type PlanTrainingWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    trainingObjectTypeId_semesterId?: PlanTrainingTrainingObjectTypeIdSemesterIdCompoundUniqueInput
     AND?: PlanTrainingWhereInput | PlanTrainingWhereInput[]
     OR?: PlanTrainingWhereInput[]
     NOT?: PlanTrainingWhereInput | PlanTrainingWhereInput[]
@@ -362747,7 +362748,7 @@ export namespace Prisma {
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
     semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     planTrainingSubjects?: PlanTrainingSubjectListRelationFilter
-  }, "id">
+  }, "id" | "trainingObjectTypeId_semesterId">
 
   export type PlanTrainingOrderByWithAggregationInput = {
     id?: SortOrder
@@ -419155,6 +419156,11 @@ export namespace Prisma {
     fields: PlanTrainingOrderByRelevanceFieldEnum | PlanTrainingOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type PlanTrainingTrainingObjectTypeIdSemesterIdCompoundUniqueInput = {
+    trainingObjectTypeId: string
+    semesterId: string
   }
 
   export type PlanTrainingCountOrderByAggregateInput = {

@@ -2526,6 +2526,7 @@ model PlanTraining {
   semesterId           String
   planTrainingSubjects PlanTrainingSubject[]
 
+  @@unique([trainingObjectTypeId, semesterId])
   @@schema("ql-dao-tao")
 }
 

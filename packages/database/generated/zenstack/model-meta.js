@@ -7685,9 +7685,12 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, trainingObjectTypeId_semesterId: {
+                    name: "trainingObjectTypeId_semesterId",
+                    fields: ["trainingObjectTypeId", "semesterId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         planTrainingSubject: {
             name: 'PlanTrainingSubject', fields: {

@@ -47,7 +47,7 @@ model PlanTraining extends BaseNoCode {
   semesterId           String
 
   planTrainingSubjects PlanTrainingSubject[]
-
+  @@unique([trainingObjectTypeId, semesterId])
   @@schema("ql-dao-tao")
 }
 
