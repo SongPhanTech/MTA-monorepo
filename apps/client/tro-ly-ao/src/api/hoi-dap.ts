@@ -4,24 +4,29 @@ export async function fetchHoiDap({
     prompt,
     conversation_id,
     signal,
+    document_ids,
 }: {
     prompt: string
     conversation_id: string
     signal: AbortSignal
+    document_ids?: string[]
 }) {
     const formData = new FormData()
     formData.append('prompt', prompt)
     formData.append('conversation_id', conversation_id)
 
-    const response = await fetch(
-        // 'https://api.chat.chatbot.swantech.vn/hoi_dap_v2',
-        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`,
-        {
-            method: 'POST',
-            body: formData,
-            signal: signal,
+    if (document_ids && document_ids.length > 0) {
+        for (const id of document_ids) {
+            formData.append('document_ids', id)
         }
-    )
+    }
+
+    const response = await fetch(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`, {
+        method: 'POST',
+        // do NOT set Content-Type header for FormData; the browser will set the boundary automatically
+        body: formData,
+        signal: signal,
+    })
 
     if (!response.ok) {
         throw new Error('Lỗi khi gọi API Hỏi Đáp')

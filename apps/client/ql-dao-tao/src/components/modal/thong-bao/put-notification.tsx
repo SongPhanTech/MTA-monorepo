@@ -6,10 +6,7 @@ import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
 import type { Notification } from '@workspace/db/client'
-import {
-    useCreateNotification,
-    useFindUniqueNotification
-} from '@workspace/db/hooks'
+import { useCreateNotification, useFindUniqueNotification } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
@@ -153,7 +150,7 @@ const PutNotificationModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa thời gian đào tạo' : 'Thêm mới thời gian đào tạo'}
+            title={id ? 'Chỉnh sửa thông báo' : 'Thêm mới thông báo'}
             className="w-[85vw]"
         >
             <Col span={24}>

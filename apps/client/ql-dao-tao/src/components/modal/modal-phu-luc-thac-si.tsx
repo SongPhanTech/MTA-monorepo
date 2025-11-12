@@ -56,7 +56,11 @@ export const ModalPhuLucThacSi = () => {
                 },
                 graduationDecision: true,
                 fixedClass: { include: { trainingCourse: true } },
-                trainingForm: true,
+                trainingObjectType: {
+                    include: {
+                        trainingForm: true,
+                    },
+                },
                 curriculumVersion: {
                     include: {
                         curriculum: {
@@ -163,7 +167,7 @@ export const ModalPhuLucThacSi = () => {
         },
         {
             title: 'Hình thức đào tạo:',
-            value: <span>{data?.trainingForm?.name}</span>,
+            value: <span>{data?.trainingObjectType?.trainingForm?.name}</span>,
         },
     ]
 
@@ -901,7 +905,10 @@ export const ModalPhuLucThacSi = () => {
                                                         ?.trainingMajor?.name
                                                 }
                                             </li>
-                                            <li>+ Hình thức đào tạo: {data?.trainingForm?.name}</li>
+                                            <li>
+                                                + Hình thức đào tạo:{' '}
+                                                {data?.trainingObjectType?.trainingForm?.name}
+                                            </li>
                                         </ul>
                                     </td>
 

@@ -4,7 +4,6 @@ import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
-import HSSVChuaDat from './_components/hssv-chua-dat'
 import MonCham from './_components/mon-cham'
 import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
@@ -20,7 +19,6 @@ interface TabItem {
 export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const [subjectVersionId, setSubjectVersionId] = useState<string>('')
     const { data: countDelay } = useFindFirstPlanTrainingDelay({
         where: { trainingObjectTypeId, deletedAt: null },
         select: {
@@ -37,12 +35,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'Môn có SV/HV chưa đạt',
-                  content: <MonCoHVSVChuaDat setSubjectVersionId={setSubjectVersionId} />,
-              },
-              {
-                  key: '2',
-                  label: 'Môn học lại đã lập kế hoạch',
-                  content: <MonDaLapKeHoach hocLai />,
+                  content: <MonCoHVSVChuaDat />,
               },
           ]
         : [
@@ -63,21 +56,13 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               },
           ]
 
-    const rightTabsMap: TabItem[] = hocLai
-        ? [
-              {
-                  key: '1',
-                  label: 'SV/HV chưa đạt',
-                  content: <HSSVChuaDat subjectVersionId={subjectVersionId} />,
-              },
-          ]
-        : [
-              {
-                  key: '1',
-                  label: 'Môn học đã lập kế hoạch',
-                  content: <MonDaLapKeHoach />,
-              },
-          ]
+    const rightTabsMap: TabItem[] = [
+        {
+            key: '1',
+            label: 'Môn học đã lập kế hoạch',
+            content: <MonDaLapKeHoach hocLai={hocLai} />,
+        },
+    ]
 
     return (
         <Row gutter={[8, 0]}>

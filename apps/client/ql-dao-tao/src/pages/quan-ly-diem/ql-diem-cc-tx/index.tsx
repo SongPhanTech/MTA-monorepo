@@ -2,7 +2,7 @@ import DefaultLayout from '@layouts/default-layout'
 import QuanLyDiemLopMonHoc from '../ql-diem-lop-mon-hoc'
 
 export default function QuanLyDiemCCTX() {
-    // biome-ignore lint/a11y/useValidAriaRole: <explanation>
+    // biome-ignore lint/a11y/useValidAriaRole: <custom attr>
     return <QuanLyDiemLopMonHoc role="GV" score="CC/TX" />
 }
 

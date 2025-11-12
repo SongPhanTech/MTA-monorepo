@@ -1,11 +1,10 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
 import { Button, Collapse, Form, message } from 'antd'
-// import '../tu-danh-gia/index.css'
 import { useEffect } from 'react'
-import type { EvaluationCriterion } from '@workspace/db'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
+import type { CriterionPeriod, EvaluationCriterion } from '@workspace/db/client'
 
 export type PutRequirementCriterion = {
     opening: string
@@ -13,13 +12,7 @@ export type PutRequirementCriterion = {
     criteria: Record<string, any>
 }
 
-const CriteriaEvaluationSubPage = ({
-    data,
-    idx,
-}: {
-    data: DataTabEvaluationCriterionType
-    idx: number
-}) => {
+const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
 
     const { hideSpinner, showSpinner } = useSpinner()
@@ -33,38 +26,43 @@ const CriteriaEvaluationSubPage = ({
                 operation: 'update',
                 data: {
                     where: {
-                        id: data?.id,
+                        id: data.id,
                     },
                     data: {
-                        opening: dataSubmit?.opening,
-                        conclusion: dataSubmit?.conclusion,
+                        opening: dataSubmit?.opening || '',
+                        conclusion: dataSubmit?.conclusion || '',
                     },
                 },
             },
         ]
 
-        // Cập nhật các EvaluationCriterion
-        if (dataSubmit?.criteria && dataSubmit?.criteria.length > 0) {
+        if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
             listSqlTransaction = [
                 ...listSqlTransaction,
-                ...dataSubmit.criteria.map((i: EvaluationCriterion) => {
-                    return {
-                        model: 'EvaluationCriterion',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: i?.id,
-                            },
+                ...dataSubmit.criteria.map(
+                    (
+                        i: CriterionPeriod & {
+                            evaluationCriterion: EvaluationCriterion
+                        }
+                    ) => {
+                        return {
+                            model: 'EvaluationCriterion',
+                            operation: 'update',
                             data: {
-                                currentSituation: i?.currentSituation || '',
-                                strengths: i?.strengths || '',
-                                weakness: i?.weakness || '',
-                                actionPlan: i?.actionPlan || '',
-                                score: i?.score,
+                                where: {
+                                    id: i.evaluationCriterion.id,
+                                    criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
+                                },
+                                data: {
+                                    currentSituation: i.evaluationCriterion.currentSituation || '',
+                                    strengths: i.evaluationCriterion.strengths || '',
+                                    weakness: i.evaluationCriterion.weakness || '',
+                                    actionPlan: i.evaluationCriterion.actionPlan || '',
+                                },
                             },
-                        },
+                        }
                     }
-                }),
+                ),
             ]
         }
         try {
@@ -86,10 +84,31 @@ const CriteriaEvaluationSubPage = ({
         }
     }
 
+    const handleEvaluationForm = async () => {
+        try {
+            const dataSubmit = form.getFieldsValue()
+
+            console.log('dataSubmit ', dataSubmit)
+        } catch (error) {
+        } finally {
+            hideSpinner()
+        }
+    }
+
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
-                criteria: data.criteria,
+                criteria: data?.criteria?.map((item) => ({
+                    ...item,
+                    evaluationCriterion: {
+                        id: item.evaluationCriterion?.id,
+                        criterionPeriodId: item.evaluationCriterion?.criterionPeriodId,
+                        currentSituation: item.evaluationCriterion?.currentSituation || '',
+                        strengths: item.evaluationCriterion?.strengths || '',
+                        weakness: item.evaluationCriterion?.weakness || '',
+                        actionPlan: item.evaluationCriterion?.actionPlan || '',
+                    },
+                })),
                 opening: data?.opening,
                 conclusion: data?.conclusion,
             })
@@ -98,8 +117,11 @@ const CriteriaEvaluationSubPage = ({
 
     return (
         <div>
-            <div className="flex justify-end">
-                <Button type="primary" onClick={() => handleSubmit()}>
+            <div className="flex justify-end gap-2" onClick={handleEvaluationForm}>
+                <Button type="primary" className="bg-blue-500">
+                    Nộp phiếu đánh giá
+                </Button>
+                <Button type="primary" onClick={handleSubmit} className="mb-2">
                     Lưu đánh giá
                 </Button>
             </div>
@@ -132,28 +154,44 @@ const CriteriaEvaluationSubPage = ({
                                                         <>
                                                             <Form.Item
                                                                 label="1. Mô tả hiện trạng"
-                                                                name={[name, 'currentSituation']}
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'currentSituation',
+                                                                ]}
                                                             >
                                                                 <RichTextEditor id={item.id} />
                                                             </Form.Item>
 
                                                             <Form.Item
                                                                 label="2. Điểm mạnh"
-                                                                name={[name, 'strengths']}
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'strengths',
+                                                                ]}
                                                             >
                                                                 <RichTextEditor id={item.id} />
                                                             </Form.Item>
 
                                                             <Form.Item
                                                                 label="3. Điểm tồn tại"
-                                                                name={[name, 'weakness']}
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'weakness',
+                                                                ]}
                                                             >
                                                                 <RichTextEditor id={item.id} />
                                                             </Form.Item>
 
                                                             <Form.Item
                                                                 label="4. Kế hoạch hành động"
-                                                                name={[name, 'actionPlan']}
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'actionPlan',
+                                                                ]}
                                                             >
                                                                 <RichTextEditor id={item.id} />
                                                             </Form.Item>

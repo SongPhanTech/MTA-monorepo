@@ -69,8 +69,6 @@ app.openapi(getClusterSurveyStatistics, async (c) => {
         return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
     }
 
-    const questionIds = cluster.surveyQuestion.map((q) => q.id)
-
     const statsRaw = await Promise.all(
         cluster.surveys.map(async (survey) => {
             return getSurveyStats(prisma, survey, cluster.surveyQuestion, cluster.surveyChoice)

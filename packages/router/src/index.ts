@@ -35,6 +35,7 @@ import { QL_HO_SO_PERMISSION } from '../generated/ql-ho-so'
 import ROUTER_PATH from '../generated/router'
 import { TRO_LY_AO_PERMISSION } from '../generated/tro-ly-ao'
 import './index.css'
+
 interface MenuItem {
     id: string
     label: React.ReactNode
@@ -144,41 +145,42 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
             },
             {
-                id: 'ke-hoach-hoc-lai',
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI,
                 label: 'Kế hoạch học lại',
+                path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI,
                 icon: CalendarRange,
-                children: [
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
-                        label: 'Thống kê nợ',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
-                        description: 'Thống kê nợ',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                        label: 'Lập kế hoạch',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                        description: 'Lập kế hoạch',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Mở lớp môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        description: 'Kế hoạch mở lớp học lại',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                        label: 'Đăng ký học lại',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                        description: 'Đăng ký học lại',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                        label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                        description: 'Phân công giảng dạy',
-                    },
-                ],
+                // children: [
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
+                //         label: 'Thống kê nợ',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
+                //         description: 'Thống kê nợ',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
+                //         label: 'Lập kế hoạch',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
+                //         description: 'Lập kế hoạch',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
+                //         label: 'Mở lớp môn học',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
+                //         description: 'Kế hoạch mở lớp học lại',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_DANG_KY_HOC,
+                //         label: 'Đăng ký học lại',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_DANG_KY_HOC,
+                //         description: 'Đăng ký học lại',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
+                //         label: 'Phân công giảng dạy',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
+                //         description: 'Phân công giảng dạy',
+                //     },
+                // ],
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
@@ -592,6 +594,18 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.THONG_BAO,
                 description: 'Quản lý thông báo đào tạo',
             },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
+                label: 'Lịch tuần tháng',
+                path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
+                description: 'Quản lý lịch tuần tháng',
+            },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_KIEM_TRA_GIANG_DAY,
+                label: 'Lịch kiểm tra giảng dạy',
+                path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
+                description: 'Quản lý lịch kiểm tra giảng dạy',
+            },
         ],
         label: 'Quản lý đào tạo',
     },
@@ -625,10 +639,20 @@ const NAVIGATION: NavigationType = {
                         label: 'Tham số',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_THAM_SO,
                     },
+                    // {
+                    //     id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
+                    //     label: 'Prompt',
+                    //     path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
+                    // },
                     {
-                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
-                        label: 'Prompt',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP,
+                        label: 'Prompt Hỏi đáp',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP,
+                    },
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG,
+                        label: 'Prompt Chức năng',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG,
                     },
                 ],
             },
@@ -722,13 +746,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_KHAO_SAT_CUM,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                         label: 'Khảo sát giảng viên',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_KHAO_SAT_CUM,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
-                        label: 'Danh sách khảo sát',
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
+                        label: 'Khảo sát của tôi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                     },
                 ],
@@ -753,11 +777,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Quản lý minh chứng',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                     },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                        label: 'Hội đồng đánh giá',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
-                    },
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    //     label: 'Hội đồng đánh giá',
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    // },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                         label: 'Quản lý đợt tự đánh giá',

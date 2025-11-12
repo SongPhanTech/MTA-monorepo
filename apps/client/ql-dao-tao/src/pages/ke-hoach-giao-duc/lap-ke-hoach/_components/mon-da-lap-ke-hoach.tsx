@@ -31,7 +31,6 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
     const [form] = Form.useForm<MonDaLapKeHoachForm>()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
-
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: semesterData } = useFindUniqueSemester(
         {
@@ -134,6 +133,12 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'PlanTrainingSubject'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['/api/subject-class/open-subject-class-retake'],
+            })
         }, 500),
         []
     )
@@ -268,6 +273,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     await deleteManyPlanTrainingSubject({
                                         where: {
                                             subjectVersionId: { in: subjectSelected },
+                                            subjectClassType: hocLai
+                                                ? $Enums.SubjectClassType.RETAKE
+                                                : $Enums.SubjectClassType.NORMAL,
                                         },
                                     })
                                     debouncedRefetch()

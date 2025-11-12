@@ -25,7 +25,6 @@ model PlanTrainingDelay extends BaseNoCode {
   trainingObjectTypeId      String
 
   planTrainingDelaySubjects PlanTrainingDelaySubject[] // Môn học bị trì hoãn
-
   @@schema("ql-dao-tao")
 }
 
@@ -49,6 +48,7 @@ model PlanTraining extends BaseNoCode {
 
   planTrainingSubjects PlanTrainingSubject[]
 
+  @@unique([trainingObjectTypeId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -518,11 +518,12 @@ model CurriculumVersion extends Base {
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo
   trainingLevelId                  String
+  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id]) // Thời gian đào tạo
   trainingTimeId                   String
-
-  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
-  diplomaTypeId                    String?
+  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id]) // Loại văn bằng
+  diplomaTypeId                    String
 
   // TODO: Thêm các quy chế cho chương trình đào tạo
   requiredCredits                  Int? // Số tín chỉ bắt buộc
@@ -914,9 +915,9 @@ model SubjectClass extends BaseNoCode {
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]  // Thứ trong tuần và tiết học
+  survey                      Survey[] // Đợt khảo sát cho giảng viên
 
   subjectClassHistory         SubjectClassHistory[]
-  survey                      Survey []// Đợt khảo sát cho giảng viên
   @@schema("ql-dao-tao")
 }
 
@@ -975,6 +976,8 @@ model ClassSchedule extends Base {
   extraLecturerId     String?
 
   userProfiles        UserProfile[]  // Người tham gia thêm
+
+  location            String?        // Địa điểm cụ thể nếu có
 
   notes               String?         
 

@@ -1,9 +1,7 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -15,17 +13,15 @@ import {
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
-import { useRouter } from 'next/router'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationPeriod() {
     const { can, canSome } = useAbility()
-    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -173,7 +169,7 @@ export default function EvaluationPeriod() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 30,
+                                width: 50,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -252,7 +248,7 @@ export default function EvaluationPeriod() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {can(
+                                                {/* {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'XEM_CHI_TIET'
                                                 ) && (
@@ -268,22 +264,6 @@ export default function EvaluationPeriod() {
                                                         />
                                                     </Tooltip>
                                                 )}
-                                                {/* {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                    'XEM_CHI_TIET'
-                                                ) && (
-                                                    <Tooltip title={'Chi tiết'} placement="top">
-                                                        <EyeOutlined
-                                                            style={{ fontSize: '16px' }}
-                                                            onClick={(e) => {
-                                                                router.push(
-                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}/phancong`
-                                                                )
-                                                                e?.stopPropagation()
-                                                            }}
-                                                        />
-                                                    </Tooltip>
-                                                )} */}
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'DUYET'
@@ -296,7 +276,7 @@ export default function EvaluationPeriod() {
                                                             e?.stopPropagation()
                                                         }}
                                                     />
-                                                )}
+                                                )} */}
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'SUA'

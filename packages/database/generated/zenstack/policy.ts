@@ -37,6 +37,7 @@ import { StudentTrainingType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
 import { ThesisProjectStatus } from "../prisma-client";
+import { ThesisType } from "../prisma-client";
 import { StudentThesisRegistrationStatus } from "../prisma-client";
 import { DecisionType } from "../prisma-client";
 import { CouncilProposalStatus } from "../prisma-client";
@@ -69,6 +70,26 @@ const policy: PolicyDef = {
                 update: { guard: Config_update, },
                 postUpdate: { guard: Config_postUpdate, },
                 delete: { guard: Config_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        suggestion: {
+            modelLevel: {
+                read: { guard: Suggestion_read, },
+                create: { guard: Suggestion_create, inputChecker: Suggestion_create_input, },
+                update: { guard: Suggestion_update, },
+                postUpdate: { guard: Suggestion_postUpdate, },
+                delete: { guard: Suggestion_delete, }
             },
             fieldLevel: {
                 read:
@@ -5045,6 +5066,7 @@ const policy: PolicyDef = {
     },
     validation: {
         config: { hasValidation: false },
+        suggestion: { hasValidation: false },
         changeLog: { hasValidation: false },
         userProfile: { hasValidation: false },
         hocHam: { hasValidation: false },
@@ -5356,6 +5378,71 @@ function Config_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Config_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Suggestion_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Suggestion_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Suggestion_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Suggestion_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Suggestion_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Suggestion_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Suggestion_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Suggestion_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Suggestion_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Suggestion_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Suggestion_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

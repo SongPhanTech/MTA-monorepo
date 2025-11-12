@@ -221,7 +221,7 @@ function TabDoiTuongKhaoSat() {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
@@ -236,7 +236,7 @@ function TabDoiTuongKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
-                    rowKey="id"
+                        rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
@@ -259,7 +259,7 @@ function TabDoiTuongKhaoSat() {
                                 fixed: 'left',
                             },
                             {
-                                title: 'Tên Đối tượng làm khảo sát',
+                                title: 'Tên đối tượng làm KS',
                                 dataIndex: 'name',
                                 type: 'input',
                                 width: 200,

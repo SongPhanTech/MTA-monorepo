@@ -3,6 +3,7 @@ import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/h
 import {
     SelectTrainingCourse,
     useFixedClassStore,
+    useTrainingCourseStore,
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
@@ -12,6 +13,7 @@ import { useState } from 'react'
 import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
+import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
 
 interface TabItem {
     key: string
@@ -19,23 +21,37 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function KeHoachDaoTao() {
-    const [activeLeftTab, setActiveLeftTab] = useState('1')
+type KeHoachDaoTaoPageProps = {
+    hocLai: boolean
+}
+
+export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
+    const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? 'thong-ke-no' : 'lap-ke-hoach')
+
     const tabs: TabItem[] = [
+        ...(hocLai
+            ? [
+                  {
+                      key: 'thong-ke-no',
+                      label: 'Thống kê nợ',
+                      content: <ThongKeNo />,
+                  },
+              ]
+            : []),
         {
-            key: '1',
+            key: 'lap-ke-hoach',
             label: 'Lập kế hoạch',
-            content: <LapKeHoach />,
+            content: <LapKeHoach hocLai={hocLai} />,
         },
         {
-            key: '2',
+            key: 'ke-hoach-mo-lop-mon-hoc',
             label: 'Kế hoạch mở lớp môn học',
-            content: <KeHoachMoLopMonHoc />,
+            content: <KeHoachMoLopMonHoc hocLai={hocLai} />,
         },
         {
-            key: '3',
+            key: 'phan-cong-giang-day',
             label: 'Phân công giảng dạy',
-            content: <PhanCongGiangDay />,
+            content: <PhanCongGiangDay hocLai={hocLai} />,
         },
     ]
 
@@ -43,6 +59,7 @@ export default function KeHoachDaoTao() {
 
     const { id: trainingMajorId, onSelect: onSelectTrainingMajor } = useTrainingMajorStore()
     const { id: fixedClassId, onSelect: onSelectFixedClass } = useFixedClassStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -59,6 +76,7 @@ export default function KeHoachDaoTao() {
             active: true,
             trainingCourse: {
                 trainingObjectTypeId,
+                id: trainingCourseId,
             },
             curriculumVersion: {
                 curriculum: {

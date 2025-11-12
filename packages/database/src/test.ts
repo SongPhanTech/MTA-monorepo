@@ -1,23 +1,33 @@
-import { PrismaClient } from '../generated/prisma-client'
+import { $Enums, PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-const curriculums = await prisma.curriculum.findMany({
-    where: { trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000', deletedAt: null },
-    include: {
-        curriculumVersion: {
-            where: { trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000' },
-            include: {
-                trainingTime: true,
-                trainingBlocks: { include: { subjects: { include: { subject: true } } } },
-                trainingObjectType: true,
-                documentFiles: true,
-                fixedClasses: { include: { trainingCourse: true } },
-            },
-            orderBy: [{ name: 'asc' }],
+await prisma.diplomaType.createMany({
+    skipDuplicates: true,
+    data: [
+        {
+            name: 'BẰNG KỸ SƯ',
+            englishName: 'THE DEGREE OF ENGINEER',
+            code: 'BS',
+            type: $Enums.DiplomaTypeEnum.ENGINEER,
         },
-        managementOrganization: true,
-        trainingMajor: true,
-    },
-    orderBy: { createdAt: 'desc' },
+        {
+            name: 'BẰNG CỬ NHÂN',
+            englishName: 'THE DEGREE OF BACHELOR',
+            code: 'BC',
+            type: $Enums.DiplomaTypeEnum.BACHELOR,
+        },
+        {
+            name: 'BẰNG THẠC SĨ',
+            englishName: 'THE DEGREE OF MASTER',
+            code: 'BThS',
+            type: $Enums.DiplomaTypeEnum.MASTER,
+        },
+        {
+            name: 'BẰNG TIẾN SĨ',
+            englishName: 'THE DEGREE OF DOCTORATE',
+            code: 'BTS',
+            type: $Enums.DiplomaTypeEnum.DOCTORATE,
+        },
+    ],
 })

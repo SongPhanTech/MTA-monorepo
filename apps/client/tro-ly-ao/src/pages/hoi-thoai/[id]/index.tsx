@@ -57,8 +57,8 @@ function parseResponseWithCitations(text: string): {
         // Phần sau: JSON chứa citations
         const citationsText = text.substring(separatorIndex + '---CITATIONS---'.length).trim()
 
-        let citations: Citation[] = []
-        let faqCitations: FAQCitation[] = []
+        const citations: Citation[] = []
+        const faqCitations: FAQCitation[] = []
 
         if (citationsText) {
             try {
@@ -91,7 +91,7 @@ function parseResponseWithCitations(text: string): {
 
 export default function Page() {
     const router = useRouter()
-    const { id, isInitMessage } = router.query
+    const { id, isInitMessage, documentIds } = router.query
     const scrollRef = useRef<HTMLDivElement>(null)
     const [isFaqMode, setIsFaqMode] = useState(false)
     const [input, setInput] = useState('')
@@ -113,6 +113,17 @@ export default function Page() {
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
     const [selectedCitationContent, setSelectedCitationContent] = useState<string | null>(null)
     const [selectedFaqData, setSelectedFaqData] = useState<FAQCitation | null>(null)
+    const [selectedDocumentIds, setSelectedDocumentIds] = useState<string[]>([])
+
+    // Initialize selectedDocumentIds from query params
+    useEffect(() => {
+        if (documentIds && typeof documentIds === 'string') {
+            const ids = documentIds.split(',').filter(Boolean)
+            if (ids.length > 0) {
+                setSelectedDocumentIds(ids)
+            }
+        }
+    }, [documentIds])
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -177,11 +188,18 @@ export default function Page() {
                     })
                 }
 
-                const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
-                    prompt: text,
-                    conversation_id: id as string,
-                    signal: controller.signal,
-                })
+                const response = await (isFaqMode
+                    ? fetchHoiDapFaq({
+                          prompt: text,
+                          conversation_id: id as string,
+                          signal: controller.signal,
+                      })
+                    : fetchHoiDap({
+                          prompt: text,
+                          conversation_id: id as string,
+                          signal: controller.signal,
+                          document_ids: selectedDocumentIds,
+                      }))
 
                 if (!response.ok) {
                     message.error('Lỗi từ server')
@@ -714,6 +732,8 @@ export default function Page() {
                         onSend={handleSend}
                         onStop={handleStop}
                         isFaqMode={isFaqMode}
+                        selectedDocumentIds={selectedDocumentIds}
+                        onDocumentIdsChange={setSelectedDocumentIds}
                     />
                 </div>
             </div>

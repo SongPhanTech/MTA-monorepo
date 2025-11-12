@@ -1,15 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
-import { getDefaultPromptTemplate } from '@lib/prompt-template'
-import { $Enums } from '@workspace/db'
-import {
-    useCreateManyPrompt,
-    useCreateTopic,
-    useFindFirstPrompt,
-    useFindFirstTopic,
-    useUpdateManyPrompt,
-    useUpdateTopic,
-} from '@workspace/db/hooks'
+import { useCreateTopic, useFindFirstTopic, useUpdateTopic } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, message, Checkbox, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -35,8 +26,6 @@ const PutTopic = () => {
     })
     const { mutateAsync: create } = useCreateTopic()
     const { mutateAsync: update } = useUpdateTopic()
-    const { mutateAsync: createPrompt } = useCreateManyPrompt()
-    const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
 
     const { data: detail } = useFindFirstTopic({
         where: {
@@ -109,12 +98,6 @@ const PutTopic = () => {
         }
     }, [isOpen, id, detail, form])
 
-    const { data: existingPrompt } = useFindFirstPrompt({
-        where: {
-            topicId: id,
-        },
-    })
-
     const onFinish = async (values: TopicFormType) => {
         const finalValues = {
             ...values,
@@ -134,22 +117,9 @@ const PutTopic = () => {
                     },
                 })
 
-                const updatedPrompt = getDefaultPromptTemplate(finalValues.name)
-
-                if (existingPrompt) {
-                    await updatePrompt({
-                        where: {
-                            topicId: id,
-                        },
-                        data: {
-                            prompt: updatedPrompt,
-                        },
-                    })
-                }
-
                 message.success('Cập nhật chủ đề thành công')
             } else {
-                const newTopic = await create({
+                await create({
                     data: {
                         name: finalValues.name,
                         type: finalValues.type,
@@ -157,17 +127,6 @@ const PutTopic = () => {
                         isPinned: finalValues.isPinned,
                     },
                 })
-
-                if (newTopic) {
-                    const defaultPrompt = getDefaultPromptTemplate(finalValues.name)
-                    await createPrompt({
-                        data: {
-                            prompt: defaultPrompt,
-                            topicId: newTopic.id,
-                            status: $Enums.DocumentStatus.APPROVE,
-                        },
-                    })
-                }
 
                 message.success('Thêm chủ đề thành công')
             }

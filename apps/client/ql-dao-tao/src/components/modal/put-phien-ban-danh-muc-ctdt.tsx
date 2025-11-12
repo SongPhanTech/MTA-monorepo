@@ -23,6 +23,7 @@ import {
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
     useFindManyTrainingTime,
+    useFindManyTrainingType,
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
@@ -81,13 +82,10 @@ const PutCurriculumVersion = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingLevelData = [] } = useFindManyTrainingLevel()
-
     const { data: trainingTimeData = [] } = useFindManyTrainingTime()
-
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
-
+    const { data: trainingTypeData = [] } = useFindManyTrainingType()
     const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
         where: { active: true },
         orderBy: { name: 'asc' },
@@ -135,6 +133,7 @@ const PutCurriculumVersion = () => {
                 yearApplication: output.yearApplication,
                 trainingObjectTypeId: output.trainingObjectTypeId,
                 trainingLevelId: output.trainingLevelId,
+                trainingTypeId: output.trainingTypeId,
                 trainingTimeId: output.trainingTimeId,
                 numberOfSemesters: output.numberOfSemesters,
                 // coef_1: output.coef_1,
@@ -433,6 +432,25 @@ const PutCurriculumVersion = () => {
                                                 placeholder="Chọn bậc đào tạo"
                                                 options={trainingLevelData.map(
                                                     (i: TrainingForm) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            label="Loại hình đào tạo"
+                                            name="trainingTypeId"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn loại hình đào tạo"
+                                                options={trainingTypeData.map(
+                                                    (i: TrainingTime) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })

@@ -413,6 +413,14 @@ async function main() {
                 extensions: 'xlsx',
                 numberField: 0,
             },
+            {
+                name: 'Danh sách giảng viên',
+                code: 'DANH_SACH_TOT_NGHIEP',
+                path: 'https://minio.swantech.vn/mta/template/DANH_SACH_TOT_NGHIEP.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 
@@ -476,22 +484,26 @@ async function main() {
         skipDuplicates: true,
         data: [
             {
-                name: 'Bằng kỹ sư',
+                name: 'BẰNG KỸ SƯ',
+                englishName: 'THE DEGREE OF ENGINEER',
                 code: 'BS',
                 type: $Enums.DiplomaTypeEnum.ENGINEER,
             },
             {
-                name: 'Bằng cử nhân',
+                name: 'BẰNG CỬ NHÂN',
+                englishName: 'THE DEGREE OF BACHELOR',
                 code: 'BC',
                 type: $Enums.DiplomaTypeEnum.BACHELOR,
             },
             {
-                name: 'Bằng thạc sĩ',
-                code: 'BTS',
+                name: 'BẰNG THẠC SĨ',
+                englishName: 'THE DEGREE OF MASTER',
+                code: 'BThS',
                 type: $Enums.DiplomaTypeEnum.MASTER,
             },
             {
-                name: 'Bằng tiến sĩ',
+                name: 'BẰNG TIẾN SĨ',
+                englishName: 'THE DEGREE OF DOCTORATE',
                 code: 'BTS',
                 type: $Enums.DiplomaTypeEnum.DOCTORATE,
             },
@@ -545,6 +557,7 @@ async function main() {
                     trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
                     trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
                     trainingTimeId: '4years',
+                    trainingTypeId: '550e8403-e29b-41d4-a716-446655440000',
                 }))
             )
         ),
@@ -588,7 +601,11 @@ async function main() {
                     name: 'Công nghệ thông tin 2023 seed',
                     code: 'CNTT-DS-2023',
                     numberOfSemesters: 10,
-
+                    trainingType: {
+                        connect: {
+                            id: '550e8403-e29b-41d4-a716-446655440000',
+                        },
+                    },
                     trainingObjectType: {
                         connectOrCreate: {
                             where: { name: 'Đại học quân sự' },

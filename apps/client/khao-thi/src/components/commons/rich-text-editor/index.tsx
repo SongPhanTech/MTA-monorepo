@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { cn } from '@lib/utils'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
@@ -22,7 +24,7 @@ import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
 import Color from '@tiptap/extension-color'
-import Table from '@tiptap/extension-table'
+import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
@@ -52,6 +54,7 @@ export function RichTextEditor({
     id,
 }: TextEditorProps) {
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Underline,

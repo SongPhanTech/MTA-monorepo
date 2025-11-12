@@ -13,7 +13,7 @@ import type {
     StandardPeriod,
 } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
 export type DataTabType = StandardPeriod & {
@@ -159,16 +159,25 @@ export default function CriteriaAnalysisWrite() {
         <div className="h-full">
             <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Tabs
-                        className="h-[calc(100vh-200px)] overflow-y-auto"
-                        tabPosition="left"
-                        items={dataTab}
-                        tabBarStyle={{
-                            height: '100%',
-                            overflow: 'auto',
-                            width: '175px',
-                        }}
-                    />
+                    {data && data.standards.length > 0 ? (
+                        <Tabs
+                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            tabPosition="left"
+                            items={dataTab}
+                            tabBarStyle={{
+                                height: '100%',
+                                overflow: 'auto',
+                                width: '175px',
+                            }}
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                            <Empty
+                                description="Chưa có phiếu phân tích tiêu chí nào"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                        </div>
+                    )}
                 </Col>
             </Row>
         </div>

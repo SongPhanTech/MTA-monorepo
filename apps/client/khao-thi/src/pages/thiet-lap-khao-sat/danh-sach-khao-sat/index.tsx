@@ -1,5 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
-import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -9,6 +7,7 @@ import { useSession } from '@workspace/auth/react'
 import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
 import { Col, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
@@ -27,14 +26,12 @@ export default function DetailSurveyPage() {
     })
     const where = useMemo(
         () => ({
-            subjectClasses: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            student: {
-                                userProfile: {
-                                    id: profileId,
-                                },
+            subjectClass: {
+                subjectClassStudent: {
+                    some: {
+                        student: {
+                            userProfile: {
+                                id: profileId,
                             },
                         },
                     },
@@ -80,7 +77,7 @@ export default function DetailSurveyPage() {
                         userProfile: true,
                     },
                 },
-                subjectClasses: {
+                subjectClass: {
                     include: {
                         subjectClassStudent: {
                             include: {
@@ -141,15 +138,9 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate >
-                                    <ul>
-                                        {record?.subjectClasses?.map((i: any) => (
-                                            <li key={i.id}>
-                                                {i?.code} - {i?.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </HtmlTruncate>
+                                <div>
+                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                </div>
                             ),
                         },
                         {
@@ -213,20 +204,29 @@ export default function DetailSurveyPage() {
                                     {surveyQuestion?.length > 0 && (
                                         <Tooltip
                                             className="mr-2"
-                                            title={'Làm khảo sát'}
+                                            title={
+                                                surveySessions?.length > 0
+                                                    ? 'Xem khảo sát'
+                                                    : 'Làm khảo sát'
+                                            }
                                             placement="top"
                                         >
-                                            <EyeOutlined
-                                                disabled={surveySessions?.length > 0}
+                                            <div
+                                                className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
                                                 onClick={() => {
+                                                    if (surveySessions?.length > 0) {
+                                                        router.push(`/xem-lai-khao-sat/${id}`)
+                                                        return
+                                                    }
                                                     if (!isPublic) {
                                                         router.push(`/lam-khao-sat/private/${id}`)
                                                     } else {
                                                         router.push(`/lam-khao-sat/${id}`)
                                                     }
                                                 }}
-                                                style={{ fontSize: '16px' }}
-                                            />
+                                            >
+                                                <ArrowRight style={{ fontSize: '16px' }} />
+                                            </div>
                                         </Tooltip>
                                     )}
                                 </Row>

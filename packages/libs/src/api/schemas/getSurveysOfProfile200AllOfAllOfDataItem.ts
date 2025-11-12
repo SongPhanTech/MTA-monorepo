@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetSurveysOfProfile200AllOfAllOfDataItemLecture } from './getSurveysOfProfile200AllOfAllOfDataItemLecture'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClass'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfAllOfDataItemSurveyTopic'
 
 export type GetSurveysOfProfile200AllOfAllOfDataItem = {
@@ -32,5 +33,7 @@ export type GetSurveysOfProfile200AllOfAllOfDataItem = {
     additionalSuggestion: boolean
     /** @nullable */
     lecture: GetSurveysOfProfile200AllOfAllOfDataItemLecture
+    /** @nullable */
+    subjectClass: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass
     surveyTopic: GetSurveysOfProfile200AllOfAllOfDataItemSurveyTopic
 }

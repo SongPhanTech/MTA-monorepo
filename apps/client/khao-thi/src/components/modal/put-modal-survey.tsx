@@ -8,6 +8,7 @@ import useSpinner from '@hooks/spinner'
 import type { Survey, SurveyObjectType, SurveyResponse, SurveyTopic } from '@workspace/db'
 import {
     useCreateSurvey,
+    useCreateSurveyChoice,
     useFindManySchoolYear,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
@@ -20,8 +21,8 @@ import {
     Col,
     Form,
     Input,
-    message,
     Modal,
+    message,
     Radio,
     Row,
     Steps,
@@ -114,6 +115,7 @@ const PutSurveyModal = () => {
 
     const { mutateAsync: create } = useCreateSurvey()
     const { mutateAsync: update } = useUpdateSurvey()
+    const { mutateAsync: createSurveyChoice } = useCreateSurveyChoice()
     const { mutateAsync: createMultiple } = useCreateClusterSurvey()
     const { data: surveyTopics = [] } = useFindManySurveyTopic()
     const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
@@ -162,14 +164,6 @@ const PutSurveyModal = () => {
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
                             surveyChoice: {
-                                createMany: {
-                                    data: output.surveyChoice.map((item) => ({
-                                        answer: item.answer,
-                                        description: item.description,
-                                        requireExplanation: item.requireExplanation,
-                                    })),
-                                    skipDuplicates: true,
-                                },
                                 deleteMany: {
                                     id: {
                                         notIn: output.surveyChoice.map((item) => item.id),
@@ -186,12 +180,25 @@ const PutSurveyModal = () => {
                             id: input?.id,
                         },
                     })
+
+                    // TODO: fix create survey choice
+                    for (const choice of output.surveyChoice) {
+                        await createSurveyChoice({
+                            data: {
+                                survey: { connect: { id: input?.id } },
+                                answer: choice.answer,
+                                description: choice.description,
+                                requireExplanation: choice.requireExplanation,
+                            },
+                        })
+                    }
+
                     message.success('Cập nhật thành công')
                     queryClient.invalidateQueries({
                         queryKey: ['Level'],
                     })
                 } else {
-                    await create({
+                    const res = await create({
                         data: {
                             code: output.code,
                             name: output.name.trim(),
@@ -215,15 +222,15 @@ const PutSurveyModal = () => {
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
                             additionalSuggestion: output.additionalSuggestion,
-                            surveyChoice: {
-                                createMany: {
-                                    data: output.surveyChoice.map((item) => ({
-                                        answer: item.answer,
-                                        description: item.description,
-                                        requireExplanation: item.requireExplanation,
-                                    })),
-                                },
-                            },
+                            // surveyChoice: {
+                            //     create: {
+                            //         data: output.surveyChoice.map((item) => ({
+                            //             answer: item.answer,
+                            //             description: item.description,
+                            //             requireExplanation: item.requireExplanation,
+                            //         })),
+                            //     },
+                            // },
                             surveyQuestion: {
                                 connect: output.surveyQuestionIds.length
                                     ? output.surveyQuestionIds.map((item) => ({ id: item }))
@@ -231,6 +238,18 @@ const PutSurveyModal = () => {
                             },
                         },
                     })
+
+                    // TODO: fix create survey choice
+                    for (const choice of output.surveyChoice) {
+                        await createSurveyChoice({
+                            data: {
+                                survey: { connect: { id: res?.id } },
+                                answer: choice.answer,
+                                description: choice.description,
+                                requireExplanation: choice.requireExplanation,
+                            },
+                        })
+                    }
                     message.success('Thêm mới thành công')
                 }
                 queryClient.invalidateQueries({
@@ -336,48 +355,48 @@ const PutSurveyModal = () => {
                                 />
                             </FormItem>
                         </Col>
-                        {
-                           input?.type!=='multiple'&& !(isPublic&&anonymous) &&(
-                                        <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name="surveyObjectTypes"
-                                label="Đối tượng làm khảo sát"
-                                required={true}
-                            >
-                                <Select
-                                    mode="multiple"
-                                    maxTagCount={'responsive'}
-                                    placeholder="Chọn đối tượng làm khảo sát"
-                                    options={surveyObjectTypesData.map((i: SurveyObjectType) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                />
-                            </FormItem>
-                        </Col>
-                            )
-                        }
-                             {input?.type === 'multiple' && (
-                                <Col span={12}>
-                                    <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                                        <TreeSelectAnt
-                                            showSearch
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            placeholder={'Chọn kỳ học'}
-                                            allowClear
-                                            treeDefaultExpandAll
-                                            treeData={treeData}
-                                            filterTreeNode={filterTreeNode}
-                                            treeNodeFilterProp="title"
-                                            loading={schoolYearLoading}
-                                        />
-                                    </FormItem>
-                                </Col>
+                        {input?.type !== 'multiple' && !(isPublic && anonymous) && (
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="surveyObjectTypes"
+                                    label="Đối tượng làm khảo sát"
+                                    required={true}
+                                >
+                                    <Select
+                                        mode="multiple"
+                                        maxTagCount={'responsive'}
+                                        placeholder="Chọn đối tượng làm khảo sát"
+                                        options={surveyObjectTypesData.map(
+                                            (i: SurveyObjectType) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }
+                                            }
+                                        )}
+                                    />
+                                </FormItem>
+                            </Col>
                         )}
-                
+                        {input?.type === 'multiple' && (
+                            <Col span={12}>
+                                <FormItem form={form} name="semesterId" label="Kỳ học" required>
+                                    <TreeSelectAnt
+                                        showSearch
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        placeholder={'Chọn kỳ học'}
+                                        allowClear
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
+                                        filterTreeNode={filterTreeNode}
+                                        treeNodeFilterProp="title"
+                                        loading={schoolYearLoading}
+                                    />
+                                </FormItem>
+                            </Col>
+                        )}
+
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -393,7 +412,7 @@ const PutSurveyModal = () => {
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
-                   
+
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -462,7 +481,16 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId, isPublic,anonymous])
+    }, [
+        input,
+        surveyObjectTypesData,
+        surveyTopics,
+        treeData,
+        surveyTopicId,
+        semesterId,
+        isPublic,
+        anonymous,
+    ])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {

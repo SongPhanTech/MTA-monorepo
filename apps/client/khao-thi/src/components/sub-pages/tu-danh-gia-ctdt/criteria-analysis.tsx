@@ -1,15 +1,24 @@
 import CommentList from '@components/commons/comment-list'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import { getStatusEvaluation } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import { formatDate } from '@lib/utils'
 import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
-import { Badge, Button } from 'antd'
+import { $Enums } from '@workspace/db/client'
+import { useUpdateAnalysisCriterion } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { Badge, Button, message, Popconfirm, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number }) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
+    const { can } = useAbility()
 
     const { onOpen } = useDisclosure<{
         id?: string
@@ -18,10 +27,55 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
         tag: 'PutTieuChiMinhChungModal',
     })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
             prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
         )
+    }
+
+    const getDeadlineStatus = (deadline: Date | string) => {
+        const now = dayjs()
+        const deadlineDate = dayjs(deadline)
+        const daysUntilDeadline = deadlineDate.diff(now, 'day')
+
+        if (daysUntilDeadline < 0) {
+            return {
+                color: 'red',
+                text: 'Quá hạn',
+            }
+        }
+        if (daysUntilDeadline <= 3) {
+            return {
+                color: 'orange',
+                text: 'Sắp quá hạn',
+            }
+        }
+
+        return { color: 'blue', text: '' }
+    }
+
+    const { mutateAsync: updateCriterion } = useUpdateAnalysisCriterion()
+
+    const handleSubmitCriterion = async (analysisCriterionId: string) => {
+        try {
+            showSpinner()
+            await updateCriterion({
+                where: {
+                    id: analysisCriterionId,
+                },
+                data: {
+                    status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                },
+            })
+
+            message.success('Nộp tiêu chí thành công.')
+        } catch (error) {
+            message.error('Nộp tiêu chí thất bại. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
     }
 
     return (
@@ -31,23 +85,71 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                 <span>{data?.name}</span>
             </div>
             {data?.criteria?.map((item, idx: number) => {
+                if (!item.analysisCriterions) return null
+                const status = item.analysisCriterions?.status
+                const statusConfig = getStatusEvaluation(status)
+                const deadline = item.analysisCriterions?.deadline
+                const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
+
                 return (
                     <div key={item.id} className="ml-4 mb-6">
                         <div className="mb-3 flex items-center justify-between">
-                            <div className="text-base">
+                            <div className="text-base flex items-center gap-2">
                                 <span className="font-bold">Tiêu chí {idx + 1}: </span>
                                 <span>{item?.name}</span>
+                                {deadline && deadlineStatus && (
+                                    <Tag color={deadlineStatus.color}>
+                                        Hạn: {formatDate(deadline)}
+                                        {deadlineStatus.text && ` (${deadlineStatus.text})`}
+                                    </Tag>
+                                )}
+                                <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
                             </div>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    onOpen({
-                                        analysisCriterionId: item.analysisCriterions?.id,
-                                    })
-                                }
-                            >
-                                Thêm mới
-                            </Button>
+                            <div className="flex gap-2">
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                    'THEM'
+                                ) &&
+                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                        <Popconfirm
+                                            title="Xác nhận nộp tiêu chí"
+                                            description="Bạn chắc chắn muốn nộp tiêu chí này?"
+                                            onConfirm={() => {
+                                                const id = item.analysisCriterions?.id
+                                                if (id) {
+                                                    handleSubmitCriterion(id)
+                                                }
+                                            }}
+                                            okText="Đồng ý"
+                                            cancelText="Hủy"
+                                            placement="topRight"
+                                        >
+                                            <Button type="primary" className="bg-blue-500">
+                                                Nộp tiêu chí
+                                            </Button>
+                                        </Popconfirm>
+                                    )}
+
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                    'THEM'
+                                ) &&
+                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                        <Button
+                                            type="primary"
+                                            onClick={() =>
+                                                onOpen({
+                                                    analysisCriterionId:
+                                                        item.analysisCriterions?.id,
+                                                })
+                                            }
+                                        >
+                                            Thêm mới
+                                        </Button>
+                                    )}
+                            </div>
                         </div>
                         <div>
                             <Table
@@ -90,7 +192,7 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                         ],
                                     },
                                     {
-                                        title: 'Thông tin, minh chứng',
+                                        title: 'Thông tin minh chứng',
                                         children: [
                                             {
                                                 title: 'Tên minh chứng',
@@ -150,21 +252,31 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                             const commentCount =
                                                 record.evaluationCriterionComment?.length || 0
 
-                                            const isExpanded = expandedRowKeys.includes(record.id)
-
                                             return (
                                                 <div className="flex gap-2 items-center justify-center">
-                                                    <EditIcon
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            onOpen({
-                                                                id: record.id,
-                                                                analysisCriterionId:
-                                                                    record.analysisCriterionId,
-                                                            })
-                                                        }}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                        'SUA'
+                                                    ) &&
+                                                        status !==
+                                                            $Enums.EvaluationCriterionStatus
+                                                                .APPROVED &&
+                                                        status !==
+                                                            $Enums.EvaluationCriterionStatus
+                                                                .COMPLETED && (
+                                                            <EditIcon
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    onOpen({
+                                                                        id: record.id,
+                                                                        analysisCriterionId:
+                                                                            record.analysisCriterionId,
+                                                                    })
+                                                                }}
+                                                                className="text-sm text-blue-700 cursor-pointer"
+                                                            />
+                                                        )}
+
                                                     {commentCount > 0 && (
                                                         <Badge count={commentCount} size="small">
                                                             <MessageCircle

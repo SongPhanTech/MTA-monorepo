@@ -1,5 +1,4 @@
 import { BarChartOutlined, EyeOutlined } from '@ant-design/icons'
-import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
@@ -16,7 +15,15 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{selectedId:string,surveyId:string,setSurveyId:(value:string)=>void}) {
+export default function DetailSurveyPage({
+    selectedId,
+    surveyId,
+    setSurveyId,
+}: {
+    selectedId: string
+    surveyId: string
+    setSurveyId: (value: string) => void
+}) {
     const { can, canSome } = useAbility()
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -59,9 +66,9 @@ export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{sele
                   }
                 : {}),
         }),
-        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, selectedId]
+        [filters, selectedId]
     )
-    const { data = []} = useFindManySurvey(
+    const { data = [] } = useFindManySurvey(
         {
             where,
             include: {
@@ -72,7 +79,7 @@ export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{sele
                         userProfile: true,
                     },
                 },
-                subjectClasses: {
+                subjectClass: {
                     include: {
                         subjectClassStudent: {
                             include: {
@@ -144,16 +151,14 @@ export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{sele
                         setFilters(value)
                         setCurrentPage(1)
                     }}
-                                        onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    setSurveyId(record.id)
-                                },
-                                className: cn(
-                                    surveyId === record.id ? 'bg-orange-200' : ''
-                                ),
-                            }
-                        }}
+                    onRow={(record) => {
+                        return {
+                            onClick: () => {
+                                setSurveyId(record.id)
+                            },
+                            className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
+                        }
+                    }}
                     columns={[
                         {
                             title: 'STT',
@@ -175,15 +180,9 @@ export default function DetailSurveyPage({selectedId,surveyId,setSurveyId}:{sele
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate >
-                                    <ul>
-                                        {record?.subjectClasses?.map((i: any) => (
-                                            <li key={i.id}>
-                                                {i?.code} - {i?.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </HtmlTruncate>
+                                <>
+                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                </>
                             ),
                         },
                         {

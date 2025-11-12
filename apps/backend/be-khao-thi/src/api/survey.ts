@@ -121,37 +121,55 @@ app.openapi(createClusterSurvey, async (c) => {
                     connect: lecturerIds.map((id) => ({ id })),
                 },
             },
+            include: {
+                surveyChoice: true,
+            },
         })
-        const lecturers = await tx.lecturer.findMany({
+
+        // const lecturers = await tx.lecturer.findMany({
+        //     where: {
+        //         id: {
+        //             in: lecturerIds,
+        //         },
+        //         mainSubjectClasses: {
+        //             some: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        //     include: {
+        //         mainSubjectClasses: {
+        //             where: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // })
+        const subjectClasses = await prisma.subjectClass.findMany({
             where: {
-                id: {
-                    in: lecturerIds,
-                },
-                mainSubjectClasses: {
-                    some: {
-                        semester: {
-                            id: semesterId,
-                        },
+                semesterId,
+                mainLecturer: {
+                    id: {
+                        in: lecturerIds,
                     },
                 },
             },
             include: {
-                mainSubjectClasses: {
-                    where: {
-                        semester: {
-                            id: semesterId,
-                        },
-                    },
-                },
+                mainLecturer: true,
             },
         })
 
         const surveys = await tx.survey.createManyAndReturn({
-            data: lecturerIds.map((lectureId) => ({
+            data: subjectClasses.map((cls) => ({
                 ...payload,
                 clusterSurveyId: cluster.id,
-                lectureId,
+                subjectClassId: cls.id,
                 surveyTopicId,
+                lectureId: cls.lecturerId,
             })),
         })
 
@@ -162,28 +180,17 @@ app.openapi(createClusterSurvey, async (c) => {
                     surveyQuestion: {
                         connect: surveyQuestionIds.map((id) => ({ id })),
                     },
+                    surveyChoice: {
+                        connect: cluster.surveyChoice.map((choice) => ({
+                            id: choice.id,
+                        })),
+                    },
                     surveyObjectType: {
                         connect: surveyObjectTypeIds.map((id) => ({ id })),
-                    },
-                    subjectClasses: {
-                        connect: lecturers
-                            .find((lecturer) => lecturer.id === survey.lectureId)
-                            ?.mainSubjectClasses.map((subjectClass) => ({
-                                id: subjectClass.id,
-                            })),
                     },
                 },
             })
         }
-
-        await tx.surveyChoice.createMany({
-            data: surveys.flatMap((survey) =>
-                surveyChoices.map((choice) => ({
-                    ...choice,
-                    surveyId: survey.id,
-                }))
-            ),
-        })
     })
 
     return c.json({ message: 'Success' })
@@ -933,13 +940,14 @@ const getSurveyObjects = createRoute({
         query: PaginationQuerySchema.extend({
             id: z.string(),
             fullname: z.string().optional(),
-            organizationId: z.string().optional(),
+            organizationId: z.string().array().optional(),
             lecturerCode: z.string().optional(),
             staffCode: z.string().optional(),
             studentCode: z.string().optional(),
             fixedClassIds: z.string().array().optional(),
             trainingCourseIds: z.string().array().optional(),
             taken: z.boolean().optional(),
+            isStudent: z.string().optional(),
         }),
     },
     responses: {
@@ -965,6 +973,7 @@ const getSurveyObjects = createRoute({
                                         }),
                                     }).nullable(),
                                 }).nullable(),
+                                trainingCourse: models.TrainingCourseScalarSchema.optional(),
                             }).array(),
                             surveySession: models.SurveySessionScalarSchema.optional(),
                         })
@@ -1024,9 +1033,9 @@ app.openapi(getSurveyObjects, async (c) => {
                                   ...(q.lecturerCode
                                       ? { code: { contains: q.lecturerCode, mode: 'insensitive' } }
                                       : {}),
-                                  organizationId: {
-                                      in: q.organizationId
-                                          ? [q.organizationId]
+                                          organizationId:q?.isStudent==='student'?{}:{
+                                              in:q?.organizationId&& q?.organizationId?.length>0 
+                                          ? q.organizationId
                                           : objectType.organizations.map((org) => org.Id),
                                   },
                               },
@@ -1036,15 +1045,15 @@ app.openapi(getSurveyObjects, async (c) => {
                                   ...(q.staffCode
                                       ? { code: { contains: q.staffCode, mode: 'insensitive' } }
                                       : {}),
-                                  organizationId: {
-                                      in: q.organizationId
-                                          ? [q.organizationId]
+                                          organizationId: q?.isStudent==='student'?{}:{
+                                              in: q?.organizationId&& q?.organizationId?.length>0
+                                          ? q.organizationId
                                           : objectType.organizations.map((org) => org.Id),
                                   },
                               },
                           },
                           {
-                              educationAndTraining: {
+                              educationAndTraining: q?.isStudent !=='lecturer' ?{
                                   some: {
                                       ...(q.studentCode
                                           ? {
@@ -1129,7 +1138,7 @@ app.openapi(getSurveyObjects, async (c) => {
                                             }
                                           : {}),
                                   },
-                              },
+                              }:{},
                           },
                       ],
                   },
@@ -1160,6 +1169,7 @@ app.openapi(getSurveyObjects, async (c) => {
                             curriculumVersion: {
                                 include: { curriculum: { include: { trainingMajor: true } } },
                             },
+                            trainingCourse: true,
                         },
                     },
                 },
@@ -1196,8 +1206,10 @@ const getSurveysByProfile = createRoute({
         params: z.object({ id: z.string() }),
         query: PaginationQuerySchema.extend({
             name: z.string().optional(),
+            code: z.string().optional(),
             taken: z.boolean().optional(),
             lecturerName: z.string().optional(),
+            subjectClassName: z.string().optional(),
         }),
     },
     responses: {
@@ -1210,6 +1222,7 @@ const getSurveysByProfile = createRoute({
                             lecture: models.LecturerScalarSchema.extend({
                                 organization: models.DM_DonViScalarSchema,
                             }).nullable(),
+                            subjectClass: models.SubjectClassScalarSchema.nullable(),
                             surveyTopic: models.SurveyTopicScalarSchema,
                         })
                     ),
@@ -1353,25 +1366,53 @@ app.openapi(getSurveysByProfile, async (c) => {
     }
 
     const where: Prisma.SurveyWhereInput = {
+        OR: [
+            audienceMatch,
+            {
+                    subjectClass: {
+                        subjectClassStudent: {
+                            some: {
+                                student: {
+                                    userProfile: {
+                                        id,
+                                    },
+                                },
+                            },
+                        },
+                },
+            }
+        ],
         ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
         ...(q.lecturerName
-            ? { lecturer: { fullname: { contains: q.lecturerName, mode: 'insensitive' } } }
+            ? {
+                  lecturer: {
+                      userProfile: { fullname: { contains: q.lecturerName, mode: 'insensitive' } },
+                  },
+              }
             : {}),
+        ...(q.subjectClassName
+            ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
+            : {}),
+<<<<<<< Updated upstream
+=======
+          
+>>>>>>> Stashed changes
         deletedAt: null,
         startDate: { lte: new Date() },
     }
 
-    if (audienceMatch.OR?.length) {
-        where.AND = [{ OR: [{ isPublic: true }, audienceMatch] }]
-    } else {
-        where.isPublic = true
-    }
+    // if (audienceMatch.OR?.length) {
+    //     where.AND = [{ OR: [{ isPublic: true }, audienceMatch] }]
+    // } else {
+    //     where.isPublic = true
+    // }
 
     const surveys = await prisma.survey.findMany({
         where,
         include: {
             lecture: { include: { organization: true } },
             surveyTopic: true,
+            subjectClass: true,
         },
         take: limit,
         skip: (page - 1) * limit,

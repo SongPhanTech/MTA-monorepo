@@ -1,88 +1,157 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { TrainingMajor } from '@workspace/db/client'
-import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
+import useSpinner from '@hooks/spinner'
+import { queryClient } from '@lib/api'
+import { $Enums, type PlanTraining } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, Row } from 'antd'
+import {
+    useSemesterStore,
+    useTrainingCourseStore,
+    useTrainingMajorStore,
+    useTrainingObjectTypeStore,
+} from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { type Key, useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    trainingCourseId?: string
-    trainingMajorId?: string
+    subjectSelected?: Array<string>
 }
 
-export default function MonCoHVSVChuaDat({
-    setSubjectVersionId,
-}: {
-    setSubjectVersionId: (id: string) => void
-}) {
+export default function MonCoHVSVChuaDat() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
-    const trainingCourseId = Form.useWatch('trainingCourseId', form)
-    const trainingMajorId = Form.useWatch('trainingMajorId', form)
-    const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
+    const subjectSelected = Form.useWatch('subjectSelected', form) || []
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: trainingMajorId } = useTrainingMajorStore()
     const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText,
             trainingCourseId,
             trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId || '',
+            trainingObjectTypeId: trainingObjectTypeId as string,
+            semesterId: semesterId as string,
+            limit: numberOfPages,
+            page: currentPage,
         },
-        { query: { enabled: !!trainingObjectTypeId } }
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
     const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
+    const onSubmit = async () => {
+        try {
+            if (!semesterId || !trainingObjectTypeId) return
+            showSpinner()
+            const subject = data.filter((subject) => subjectSelected.includes(subject.id))
+            const planTraining = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'upsert',
+                    data: {
+                        where: {
+                            trainingObjectTypeId_semesterId: {
+                                trainingObjectTypeId,
+                                semesterId,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            trainingObjectTypeId,
+                            semesterId,
+                        },
+                        select: {
+                            id: true,
+                            planTrainingSubjects: {
+                                select: {
+                                    subjectVersionId: true,
+                                },
+                                where: {
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
+            if (planTraining.status !== 200) {
+                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
+            }
+
+            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
+            if (!planTrainingId) {
+                throw new Error('Kế hoạch đào tạo không tồn tại')
+            }
+            const res = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            planTrainingSubjects: {
+                                create: subject.map((subject) => ({
+                                    subjectVersionId: subject.id,
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                })),
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi lưu kế hoạch đào tạo')
+            }
+            message.success('Thêm môn học vào kế hoạch thành công')
+            form.resetFields()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'PlanTraining'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'PlanTrainingSubject'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['/api/subject-class/open-subject-class-retake'],
+            })
+        } catch (error) {
+            message.error('Lưu kế hoạch môn thất bại')
+            console.error(error)
+        }
+        hideSpinner()
+    }
 
     return (
         <Form form={form}>
             <Row gutter={[8, 0]}>
-                <Col span={8}>
-                    <Form.Item className="mb-0" name="searchText">
-                        <Input id="search" placeholder="Tìm kiếm" allowClear />
-                    </Form.Item>
-                </Col>
-                <Col span={8}>
-                    <Form.Item className="mb-0" name="trainingMajorId" labelAlign="left">
-                        <Select
-                            placeholder="Chọn chuyên ngành đào tạo"
-                            options={trainingMajorData.map((i: TrainingMajor) => ({
-                                value: i.id,
-                                label: i.name,
-                            }))}
-                            allowClear
-                        />
-                    </Form.Item>
-                </Col>
-                <Col span={8}>
-                    <Form.Item className="mb-0" name="trainingCourseId" labelAlign="left">
-                        <Select
-                            placeholder="Khoá đào tạo"
-                            options={trainingCourseData.map((i) => ({
-                                value: i.id,
-                                label: i.name,
-                            }))}
-                            allowClear
-                        />
-                    </Form.Item>
+                <Col span={24}>
+                    <Flex justify={'space-between'}>
+                        <Col span={12}>
+                            <Form.Item className="mb-0" name="searchText">
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
+                            </Form.Item>
+                        </Col>
+                        <Flex gap={8} justify={'end'}>
+                            <Button
+                                onClick={onSubmit}
+                                type="primary"
+                                disabled={subjectSelected.length === 0}
+                            >
+                                Đưa {subjectSelected.length || ''} môn vào KHDG
+                            </Button>
+                        </Flex>
+                    </Flex>
                 </Col>
                 <Col span={24}>
                     <Form.Item hidden name="subjectSelected" />
@@ -90,19 +159,25 @@ export default function MonCoHVSVChuaDat({
                         rowKey="id"
                         data={data as any}
                         rowSelection={{
-                            selectedRowKeys: [selectedRowKey],
+                            selectedRowKeys: [...subjectSelected],
                             onChange: (selectedRowKeys) => {
-                                setSelectedRowKey(selectedRowKeys?.[0] as string)
-                                setSubjectVersionId(selectedRowKeys?.[0] as string)
+                                form.setFieldValue('subjectSelected', selectedRowKeys)
                             },
-                            type: 'radio',
+                            type: 'checkbox',
                             columnWidth: 35,
                         }}
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    setSelectedRowKey(record.id)
-                                    setSubjectVersionId(record.id)
+                                    if (subjectSelected.includes(record.id)) {
+                                        const newSelected = subjectSelected.filter(
+                                            (id) => id !== record.id
+                                        )
+                                        form.setFieldValue('subjectSelected', newSelected)
+                                    } else {
+                                        const newSelected = [...subjectSelected, record.id as Key]
+                                        form.setFieldValue('subjectSelected', newSelected)
+                                    }
                                 },
                             }
                         }}
@@ -135,19 +210,19 @@ export default function MonCoHVSVChuaDat({
                                 align: 'center',
                             },
                         ]}
-                        // pagination={{
-                        //     current: currentPage,
-                        //     pageSize: numberOfPages,
-                        //     total: res?.data?.count ?? 0,
-                        //     onChange: (page, pageSize) => {
-                        //         if (numberOfPages === pageSize) {
-                        //             setCurrentPage(page)
-                        //         } else {
-                        //             setCurrentPage(1)
-                        //             setNumberOfPages(pageSize)
-                        //         }
-                        //     },
-                        // }}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: res?.data?.count ?? 0,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                        }}
                     />
                 </Col>
             </Row>

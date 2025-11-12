@@ -1,9 +1,8 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Form, Input, Row, Select } from 'antd'
+import { useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
@@ -26,26 +25,15 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: undefined,
-        trainingCourseId: undefined,
-        fixedClassId: undefined,
     })
-    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
-        where: {
-            active: true,
-            trainingObjectTypeId,
-        },
-    })
+    const { id: trainingCourseId } = useTrainingCourseStore()
 
     const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
             search: filters.searchText || undefined,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            trainingCourseId: filters.trainingCourseId,
+            trainingCourseId: trainingCourseId,
             subjectVersionId: subjectVersionId || '',
             page: currentPage,
             pageSize: numberOfPages,
@@ -56,16 +44,6 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
 
     const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
     const countData = useMemo(() => (res?.status === 200 ? res?.data.count : 0), [res])
-
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        orderBy: {
-            code: 'asc',
-        },
-        where: {
-            active: true,
-            trainingCourseId: filters.trainingCourseId,
-        },
-    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -107,41 +85,6 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
                     />
                 </Form.Item>
             </Col>
-            <Col span={7}>
-                <Select
-                    placeholder="Chọn khoá"
-                    className="w-full"
-                    options={trainingCourseData.map((i) => ({
-                        value: i.id,
-                        label: i.name,
-                    }))}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    onChange={(value) => handleFilterChange('trainingCourseId', value)}
-                />
-            </Col>
-            <Col span={7}>
-                <Select
-                    placeholder="Chọn lớp"
-                    className="w-full"
-                    dropdownStyle={{
-                        width: '400px',
-                    }}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={fixedClassData.map((i) => ({
-                        value: i.id,
-                        label: `${i.code} - ${i.name}`,
-                    }))}
-                    onChange={(value) => handleFilterChange('fixedClassId', value)}
-                />
-            </Col>
             {!viewOnly && (
                 <Col span={2}>
                     <Button type="primary">Lưu</Button>
@@ -151,7 +94,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
                 <Table
                     rowKey="id"
                     className="mt-0"
-                    data={data as any}
+                    data={data}
                     onRow={(record) => ({
                         onClick: () => {
                             const isSelected = selectedRowKeys.includes(record.id)
@@ -197,7 +140,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
                             dataIndex: ['userProfile', 'fullname'],
                             align: 'center',
                             width: 200,
-                            render: (text: string) => <p className="text-left">{text}</p>,
+                            render: (text) => <p className="text-left">{text}</p>,
                         },
                         {
                             title: 'Lớp',
@@ -216,6 +159,36 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
                             align: 'center',
                             dataIndex: 'diem_cuoi',
                             width: 80,
+                        },
+                        {
+                            title: 'Cấm thi',
+                            align: 'center',
+                            dataIndex: 'cam_thi',
+                            width: 80,
+                            render: (value) => <Checkbox checked={value} />,
+                        },
+                        {
+                            title: 'Hoãn thi',
+                            align: 'center',
+                            dataIndex: 'hoan_thi',
+                            width: 80,
+                            render: (value) => <Checkbox checked={value} />,
+                        },
+                        {
+                            title: 'Đình chỉ thi',
+                            align: 'center',
+                            dataIndex: 'dinh_chi',
+                            width: 80,
+                            render: (value) => <Checkbox checked={value} />,
+                        },
+                        {
+                            title: 'Lý do',
+                            align: 'center',
+                            width: 80,
+                            render: (_, record) =>
+                                record?.ly_do_cam_thi ??
+                                record?.ly_do_dinh_chi ??
+                                record?.ly_do_hoan_thi,
                         },
                     ]}
                     pagination={{

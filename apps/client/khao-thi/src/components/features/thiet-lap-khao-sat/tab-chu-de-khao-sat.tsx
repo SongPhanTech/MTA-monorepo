@@ -93,7 +93,7 @@ function TabChuDeKhaoSat() {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
@@ -108,7 +108,7 @@ function TabChuDeKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
-                    rowKey="id"
+                        rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)

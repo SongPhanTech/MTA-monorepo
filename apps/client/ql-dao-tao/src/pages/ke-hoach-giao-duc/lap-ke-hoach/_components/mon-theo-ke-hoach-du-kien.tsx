@@ -20,7 +20,6 @@ import { useCallback, useMemo } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    trainingMajorId?: string
     subjectSelected?: Array<string>
 }
 
@@ -103,26 +102,36 @@ export default function MonTheoKeHoachDuKien() {
                     ...subjectVersion,
                 }))
                 .filter((subject) => subjectSelected.includes(subject.subjectVersionId))
-            let planTraining = await sqlTransaction([
+            const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
-                    operation: 'findFirst',
+                    operation: 'upsert',
                     data: {
-                        where: { semesterId, trainingObjectTypeId },
+                        where: {
+                            trainingObjectTypeId_semesterId: {
+                                trainingObjectTypeId,
+                                semesterId,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            trainingObjectTypeId,
+                            semesterId,
+                        },
+                        select: {
+                            id: true,
+                            planTrainingSubjects: {
+                                select: {
+                                    subjectVersionId: true,
+                                },
+                                where: {
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                },
+                            },
+                        },
                     },
                 },
             ])
-            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
-                planTraining = await sqlTransaction([
-                    {
-                        model: 'PlanTraining',
-                        operation: 'create',
-                        data: {
-                            data: { semesterId, trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
 
             if (planTraining.status !== 200) {
                 throw new Error('Lỗi khi tạo kế hoạch đào tạo')

@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { $Enums } from '@workspace/db'
 import type { PlanTraining } from '@workspace/db/client'
 import {
     useFindFirstPlanTrainingDelay,
@@ -128,27 +129,36 @@ export default function MonCham() {
                 subjectDelaySelected.includes(subject.subjectVersionId)
             )
 
-            let planTraining = await sqlTransaction([
+            const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
-                    operation: 'findFirst',
+                    operation: 'upsert',
                     data: {
-                        where: { semesterId, trainingObjectTypeId },
+                        where: {
+                            trainingObjectTypeId_semesterId: {
+                                trainingObjectTypeId,
+                                semesterId,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            trainingObjectTypeId,
+                            semesterId,
+                        },
+                        select: {
+                            id: true,
+                            planTrainingSubjects: {
+                                select: {
+                                    subjectVersionId: true,
+                                },
+                                where: {
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                },
+                            },
+                        },
                     },
                 },
             ])
-
-            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
-                planTraining = await sqlTransaction([
-                    {
-                        model: 'PlanTraining',
-                        operation: 'create',
-                        data: {
-                            data: { semesterId, trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
 
             if (planTraining.status !== 200 || !subject) {
                 throw new Error('Lỗi khi tạo kế hoạch đào tạo')

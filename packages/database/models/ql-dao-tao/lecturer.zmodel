@@ -43,10 +43,9 @@ model Lecturer extends Base {
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
   evaluationCriterions        EvaluationCriterion[]
+	analysisCriterion AnalysisCriterion[]
 
   @@schema("ql-dao-tao")
-
-	analysisCriterion AnalysisCriterion[]
 }
 
 model LecturerHistory extends Base {

@@ -6,7 +6,7 @@ import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
+// import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -61,26 +61,22 @@ export default function EvaluationAssignmentPage() {
                     include: {
                         criteria: {
                             include: {
-                                requirementCriterions: {
+                                analysisCriterions: {
                                     include: {
-                                        evidences: {
+                                        lecturer: {
                                             include: {
-                                                evidence: true,
-                                            },
-                                            orderBy: {
-                                                order: 'asc',
+                                                userProfile: true,
                                             },
                                         },
                                     },
-                                    orderBy: {
-                                        order: 'asc',
-                                    },
                                 },
-                                scoreScale: true,
-                                criterionAssignments: {
-                                    select: {
-                                        lecturerId: true,
-                                        deadline: true,
+                                evaluationCriterion: {
+                                    include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
                                     },
                                 },
                             },
@@ -115,17 +111,17 @@ export default function EvaluationAssignmentPage() {
 
         const formData: Record<string, { lecturerId: string; deadline: any }> = {}
 
-        data.standards.forEach((standard) => {
-            standard.criteria.forEach((criterion) => {
-                if (criterion.criterionAssignments && criterion.criterionAssignments.length > 0) {
-                    const assignment = criterion.criterionAssignments[0]
-                    formData[criterion.id] = {
-                        lecturerId: assignment.lecturerId,
-                        deadline: assignment.deadline ? dayjs(assignment.deadline) : undefined,
-                    }
-                }
-            })
-        })
+        // data.standards.forEach((standard) => {
+        //     standard.criteria.forEach((criterion) => {
+        //         if (criterion.criterionAssignments && criterion.criterionAssignments.length > 0) {
+        //             const assignment = criterion.criterionAssignments[0]
+        //             formData[criterion.id] = {
+        //                 lecturerId: assignment.lecturerId,
+        //                 deadline: assignment.deadline ? dayjs(assignment.deadline) : undefined,
+        //             }
+        //         }
+        //     })
+        // })
 
         form.setFieldsValue({ list: formData })
     }, [data?.standards, form])
@@ -154,35 +150,35 @@ export default function EvaluationAssignmentPage() {
                     standard.criteria.map((criterion) => criterion.id)
                 ) || []
 
-            const res = await sqlTransaction([
-                {
-                    model: 'CriterionAssignment',
-                    operation: 'deleteMany',
-                    data: {
-                        where: {
-                            evaluationCriterionId: {
-                                in: criterionIds,
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'CriterionAssignment',
-                    operation: 'createMany',
-                    data: {
-                        data: listData.map((i) => ({
-                            evaluationCriterionId: i.id,
-                            lecturerId: i.lecturerId,
-                            deadline: i.deadline,
-                        })),
-                    },
-                },
-            ])
+            // const res = await sqlTransaction([
+            //     {
+            //         model: 'CriterionAssignment',
+            //         operation: 'deleteMany',
+            //         data: {
+            //             where: {
+            //                 evaluationCriterionId: {
+            //                     in: criterionIds,
+            //                 },
+            //             },
+            //         },
+            //     },
+            //     {
+            //         model: 'CriterionAssignment',
+            //         operation: 'createMany',
+            //         data: {
+            //             data: listData.map((i) => ({
+            //                 evaluationCriterionId: i.id,
+            //                 lecturerId: i.lecturerId,
+            //                 deadline: i.deadline,
+            //             })),
+            //         },
+            //     },
+            // ])
 
-            if (res.status !== 200) {
-                message.error('Đã có lỗi xảy ra, vui lòng thử lại')
-                return
-            }
+            // if (res.status !== 200) {
+            //     message.error('Đã có lỗi xảy ra, vui lòng thử lại')
+            //     return
+            // }
 
             message.success('Lưu phân công giảng viên đánh giá thành công')
 

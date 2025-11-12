@@ -91,11 +91,12 @@ model Survey extends Base {
   anonymous            Boolean            @default(true)
 
   surveyObjectType     SurveyObjectType[]
-  subjectClasses       SubjectClass[]
 
-  lectureId            String?            // khảo sát cho GV nào
-  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lecture             Lecturer? @relation(fields: [lectureId], references: [id])
+	lectureId           String?
 
+  subjectClass         SubjectClass?  @relation(fields: [subjectClassId], references: [id])
+  subjectClassId       String?
   // TODO: SurveyTopic[]
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
@@ -117,6 +118,8 @@ model Survey extends Base {
   clusterSurveyId      String?
 
   @@schema("khao-thi")
+
+
 }
 
 // câu hỏi khảo sát
@@ -141,12 +144,10 @@ model SurveyChoice extends Base {
   answer             String
   requireExplanation Boolean
 
-  survey             Survey?          @relation(fields: [surveyId], references: [id])
-  surveyId           String?
-
   clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId    String?
 
+  survey             Survey[]
   surveyResponses    SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")

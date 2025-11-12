@@ -71,18 +71,9 @@ const openSubjectClassRetake = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            semesterId: z
-                .string()
-                .openapi('semesterId', {
-                    description: 'ID học kỳ',
-                })
-                .optional(),
-            fixedClassId: z
-                .string()
-                .openapi('fixedClassId', {
-                    description: 'ID lớp quản lý',
-                })
-                .optional(),
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID học kỳ',
+            }),
         }),
     },
     responses: {
@@ -149,8 +140,9 @@ const openSubjectClassRetakeStudents = createRoute({
                                 }),
                                 diem_cuoi: z.number().nullable(),
                                 withdrew: z.boolean(),
-                                exempted: z.boolean(),
-                                examPostponed: z.boolean(),
+                                mien_thi: z.boolean(),
+                                hoan_thi: z.boolean(),
+                                ly_do_hoan_thi: z.string().nullable(),
                                 cam_thi: z.boolean(),
                                 ly_do_cam_thi: z.string().nullable(),
                                 dinh_chi: z.boolean(),
@@ -376,148 +368,20 @@ app.openapi(openSubjectClass, async (c) => {
             semesterYear = semesterYear + 1
         }
     }
-    const res = await prisma.$queryRaw<
-        {
-            data: OpenSubjectClass
-        }[]
-    >`
-    WITH FCS AS (SELECT sv.id                             as subject_version_id,
-                        sv.code                           as subject_version_code,
-                        sv.credit                         as subject_version_credit,
-                        cv.id                             as curriculum_version_id,
-                        cv.name                           as curriculum_version_name,
-                        cv.code                           as curriculum_version_code,
-                        sv.name                           as subject_version_name,
-                        tbs.semester                      as training_block_subject_semester,
-                        ((${semesterYear} - DATE_PART('year', schy."startDate")) * 2 + ${semesterType}) as fixed_class_semester,
-                        fc."startYear"                    as fixed_class_start_year,
-                        fc.id                             as fixed_class_id,
-                        fc.name                           as fixed_class_name,
-                        fc.code                           as fixed_class_code,
-                        fc.active                         as active,
-                        fc.graduated                      as graduated,
-                        fc."trainingCourseId"             as training_course_id,
-                        c."trainingMajorId"               as training_major_id,
-                        sub."managementOrganizationId"    as management_organization_id,
-                        dv."sTen"                         as management_organization_name,
-                        dv."sMa"                          as management_organization_code,
-                        tc."trainingObjectTypeId"         as training_object_type_id,
-                        COUNT(fc.id)                      as fixed_class_count
-                FROM "ql-dao-tao"."SubjectVersion" sv
-                        JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
-                        JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
-                            ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
-                        JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
-                        JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
-                        JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
-                        JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
-                        JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
-                        JOIN "ql-dao-tao"."Semester" sem on tc."semesterStartId" = sem.id
-                        JOIN "ql-dao-tao"."SchoolYear" schy on sem."schoolYearId" = schy.id
-                        JOIN "ql-dao-tao"."Subject" sub on sv."subjectId" = sub.id
-                        LEFT JOIN "mta"."DM_DonVi" dv ON sub."managementOrganizationId" = dv."Id"
-                WHERE fc.active = TRUE
-                AND tbs."deletedAt" IS NULL
-                AND tbs."active" = TRUE
-                AND tbocv."deletedAt" IS NULL
-                AND tbocv."active" = TRUE
-                AND cv."deletedAt" IS NULL
-                AND cv."active" = TRUE
-                AND fc."deletedAt" IS NULL
-                AND fc."active" = TRUE
-                AND sv."deletedAt" IS NULL
-                AND sv."active" = TRUE
-                GROUP BY sv.code,
-                        tbs.semester,
-                        fc."startYear",
-                        fc.id,
-                        cv.id,
-                        cv.code,
-                        cv.name,
-                        sv.id,
-                        c."trainingMajorId",
-                        sub."managementOrganizationId",
-                        tc."trainingObjectTypeId",
-                        dv."sTen",
-                        dv."sMa",
-                        schy."startDate")
-    SELECT json_build_object(
-                'subjectVersionCode',
-                subject_version_code,
-                'managementOrganizationId',
-                management_organization_id,
-                'managementOrganizationName',
-                management_organization_name,
-                'managementOrganizationCode',
-                management_organization_code,
-                'subjectVersionId',
-                subject_version_id,
-                'subjectVersionName',
-                subject_version_name,
-                'subjectVersionCredit',
-                subject_version_credit,
-                'fixedClass',
-                json_agg(
-                        json_build_object(
-                                'fixedClassId',
-                                fixed_class_id,
-                                'fixedClassCode',
-                                fixed_class_code,
-                                'fixedClassName',
-                                fixed_class_name,
-                                'fixedClassCount',
-                                fixed_class_count,
-                                'fixedClassSemester',
-                                fixed_class_semester,
-                                'curriculumVersionId',
-                                curriculum_version_id,
-                                'curriculumVersionName',
-                                curriculum_version_name,
-                                'curriculumVersionCode',
-                                curriculum_version_code,
-                                'trainingCourseId',
-                                training_course_id
-                        )
-                )
-        ) as data
-    FROM FCS
-    WHERE training_block_subject_semester = fixed_class_semester
-    AND active = TRUE
-    AND graduated = FALSE
-    AND training_object_type_id = ${trainingObjectTypeId}
-            AND (
-                    (
-                            ${trainingCourseId ?? null}::TEXT IS NULL
-                            OR training_course_id = ${trainingCourseId}
-                    )
-                    AND (
-                            ${trainingMajorId ?? null}::TEXT IS NULL
-                            OR training_major_id = ${trainingMajorId}
-                    )
-                    AND (
-                            ${search ?? null}::TEXT IS NULL
-                            OR subject_version_name ILIKE ${search}
-                            OR subject_version_code ILIKE ${search}
-                            OR fixed_class_name ILIKE ${search}
-                            OR fixed_class_code ILIKE ${search}
-                    )
-            )
-    GROUP BY subject_version_id,
-            subject_version_code,
-            subject_version_credit,
-            subject_version_name,
-            management_organization_id,
-            management_organization_code,
-            management_organization_name
-
-    `
-
-    const planTraining = await prisma.planTraining.findFirst({
+    const planTraining = await prisma.planTraining.upsert({
         where: {
+            trainingObjectTypeId_semesterId: {
+                trainingObjectTypeId,
+                semesterId,
+            },
+        },
+        update: {},
+        create: {
             trainingObjectTypeId,
             semesterId,
         },
         select: {
+            id: true,
             planTrainingSubjects: {
                 select: {
                     subjectVersionId: true,
@@ -528,18 +392,145 @@ app.openapi(openSubjectClass, async (c) => {
             },
         },
     })
+    const res = await prisma.$queryRaw<
+        {
+            data: OpenSubjectClass
+        }[]
+    >`
+        WITH FCS AS (SELECT sv.id                          as subject_version_id,
+                            sv.code                        as subject_version_code,
+                            sv.credit                      as subject_version_credit,
+                            cv.id                          as curriculum_version_id,
+                            cv.name                        as curriculum_version_name,
+                            cv.code                        as curriculum_version_code,
+                            sv.name                        as subject_version_name,
+                            tbs.semester                   as training_block_subject_semester,
+                            ((${semesterYear} - DATE_PART('year', schy."startDate")) * 2 +
+                             ${semesterType})              as fixed_class_semester,
+                            fc."startYear"                 as fixed_class_start_year,
+                            fc.id                          as fixed_class_id,
+                            fc.name                        as fixed_class_name,
+                            fc.code                        as fixed_class_code,
+                            fc.active                      as active,
+                            fc.graduated                   as graduated,
+                            fc."trainingCourseId"          as training_course_id,
+                            c."trainingMajorId"            as training_major_id,
+                            sub."managementOrganizationId" as management_organization_id,
+                            dv."sTen"                      as management_organization_name,
+                            dv."sMa"                       as management_organization_code,
+                            tc."trainingObjectTypeId"      as training_object_type_id,
+                            COUNT(fc.id)                   as fixed_class_count
+                     FROM "ql-dao-tao"."SubjectVersion" sv
+                              JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
+                              JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
+                                   ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
+                              JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
+                              JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
+                              JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
+                              JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
+                              JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
+                              JOIN "ql-dao-tao"."Semester" sem on tc."semesterStartId" = sem.id
+                              JOIN "ql-dao-tao"."SchoolYear" schy on sem."schoolYearId" = schy.id
+                              JOIN "ql-dao-tao"."Subject" sub on sv."subjectId" = sub.id
+                              LEFT JOIN "mta"."DM_DonVi" dv ON sub."managementOrganizationId" = dv."Id"
+                     WHERE fc.active = TRUE
+                       AND tbs."deletedAt" IS NULL
+                       AND tbs."active" = TRUE
+                       AND tbocv."deletedAt" IS NULL
+                       AND tbocv."active" = TRUE
+                       AND cv."deletedAt" IS NULL
+                       AND cv."active" = TRUE
+                       AND fc."deletedAt" IS NULL
+                       AND fc."active" = TRUE
+                       AND sv."deletedAt" IS NULL
+                       AND sv."active" = TRUE
+                       AND sv.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+                     GROUP BY sv.code,
+                              tbs.semester,
+                              fc."startYear",
+                              fc.id,
+                              cv.id,
+                              cv.code,
+                              cv.name,
+                              sv.id,
+                              c."trainingMajorId",
+                              sub."managementOrganizationId",
+                              tc."trainingObjectTypeId",
+                              dv."sTen",
+                              dv."sMa",
+                              schy."startDate")
+        SELECT json_build_object(
+                       'subjectVersionCode',
+                       subject_version_code,
+                       'managementOrganizationId',
+                       management_organization_id,
+                       'managementOrganizationName',
+                       management_organization_name,
+                       'managementOrganizationCode',
+                       management_organization_code,
+                       'subjectVersionId',
+                       subject_version_id,
+                       'subjectVersionName',
+                       subject_version_name,
+                       'subjectVersionCredit',
+                       subject_version_credit,
+                       'fixedClass',
+                       json_agg(
+                               json_build_object(
+                                       'fixedClassId',
+                                       fixed_class_id,
+                                       'fixedClassCode',
+                                       fixed_class_code,
+                                       'fixedClassName',
+                                       fixed_class_name,
+                                       'fixedClassCount',
+                                       fixed_class_count,
+                                       'fixedClassSemester',
+                                       fixed_class_semester,
+                                       'curriculumVersionId',
+                                       curriculum_version_id,
+                                       'curriculumVersionName',
+                                       curriculum_version_name,
+                                       'curriculumVersionCode',
+                                       curriculum_version_code,
+                                       'trainingCourseId',
+                                       training_course_id
+                               )
+                       )
+               ) as data
+        FROM FCS
+        WHERE training_block_subject_semester = fixed_class_semester
+          AND active = TRUE
+          AND graduated = FALSE
+          AND training_object_type_id = ${trainingObjectTypeId}
+          AND (
+            (
+                ${trainingCourseId ?? null}::TEXT IS NULL
+                    OR training_course_id = ${trainingCourseId}
+                )
+                AND (
+                ${trainingMajorId ?? null}::TEXT IS NULL
+                    OR training_major_id = ${trainingMajorId}
+                )
+                AND (
+                ${search ?? null}::TEXT IS NULL
+                    OR subject_version_name ILIKE ${search}
+                    OR subject_version_code ILIKE ${search}
+                    OR fixed_class_name ILIKE ${search}
+                    OR fixed_class_code ILIKE ${search}
+                )
+            )
+        GROUP BY subject_version_id,
+                 subject_version_code,
+                 subject_version_credit,
+                 subject_version_name,
+                 management_organization_id,
+                 management_organization_code,
+                 management_organization_name
 
-    const listSubjectAlreadyInPlanTraining = planTraining
-        ? planTraining.planTrainingSubjects.map((pts) => pts.subjectVersionId)
-        : []
-
+    `
     const data = res
         .map((e) => e.data)
-        .filter((item) =>
-            listSubjectAlreadyInPlanTraining.length > 0
-                ? !listSubjectAlreadyInPlanTraining.includes(item.subjectVersionId)
-                : true
-        )
         .filter((item) =>
             item.fixedClass.some((fc) => (fixedClassId ? fc.fixedClassId === fixedClassId : true))
         )
@@ -579,141 +570,152 @@ app.openapi(openSubjectClassRetake, async (c) => {
         page,
     } = c.req.valid('query')
 
+    const planTraining = await prisma.planTraining.upsert({
+        where: {
+            trainingObjectTypeId_semesterId: {
+                trainingObjectTypeId,
+                semesterId,
+            },
+        },
+        update: {},
+        create: {
+            trainingObjectTypeId,
+            semesterId,
+        },
+        select: {
+            id: true,
+            planTrainingSubjects: {
+                select: {
+                    subjectVersionId: true,
+                },
+                where: {
+                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                },
+            },
+        },
+    })
     const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
-                sv.code,
-                sv.name,
-                sv."trainingObjectTypeId",
-                C."trainingMajorId",
-                TC.id                                                                                    as trainingCourseId,
-                SSS."studentId",
-                SSS."finalScore"                                                                         as diem_cuoi,
-                SSS.withdrew,
-                SSS.exempted,
-                SSS."examPostponed",
-                SSS."examBanned"                                                                         as cam_thi,
-                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
-                SSS.suspended                                                                            as dinh_chi,
-                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                    TC."scoreToPassConditional"                           as truot_mon,
-                row_number()
-                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
-        from "ql-dao-tao"."SubjectVersion" as sv
-                    inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                    inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                    inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                    inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                    inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
-                    inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                            on CV.id = TBOCV."curriculumVersionId"
-                    inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                    inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                    inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-        where TBS."subjectId" = sv.id and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId})
-        )
-        select id, code, name, count("studentId")::INTEGER as count
-        -- select *
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id)
+        select id, code, name, count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
-        and (truot_mon = true or cam_thi = true or dinh_chi = true)
-        and withdrew = false        -- rút khỏi lớp
-        and exempted = false        -- miễn học
-        and "examPostponed" = false -- hoãn thi
-        and 
-        (
-            ${trainingObjectTypeId}::TEXT IS NULL
+          and (truot_mon = true
+            or cam_thi = true
+            or dinh_chi = true)
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          and "examPostponed" = false -- hoãn thi
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+          and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-        )
-        and 
-        (
-            ${trainingMajorId}::TEXT IS NULL
+            )
+          and (${trainingMajorId}::TEXT IS NULL
             OR "trainingMajorId" = ${trainingMajorId}
-        )
-        and 
-        (
-            ${trainingCourseId}::TEXT IS NULL
+            )
+          and (${trainingCourseId}::TEXT IS NULL
             OR trainingCourseId = ${trainingCourseId}
-        )
-        and (
-            ${search}::TEXT IS NULL
-                OR code ILIKE ${`%${search}%`}
-                OR name ILIKE ${`%${search}%`}
+            )
+          and (${search}::TEXT IS NULL
+            OR code ILIKE ${`%${search}%`}
+            OR name ILIKE ${`%${search}%`}
             )
         group by id, code, name
         order by code
-        limit ${limit}
-        offset ${limit} * (${page} - 1)
-        `
+        limit ${limit} offset ${limit} * (${page} - 1)
+    `
 
     const countRaw: { count: number }[] = await prisma.$queryRaw`
         with mon_no as (select sv.id,
-                sv.code,
-                sv.name,
-                sv."trainingObjectTypeId",
-                C."trainingMajorId",
-                TC.id                                                                                    as trainingCourseId,
-                SSS."studentId",
-                SSS."finalScore"                                                                         as diem_cuoi,
-                SSS.withdrew,
-                SSS.exempted,
-                SSS."examPostponed",
-                SSS."examBanned"                                                                         as cam_thi,
-                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
-                SSS.suspended                                                                            as dinh_chi,
-                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                    TC."scoreToPassConditional"                           as truot_mon,
-                row_number()
-                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
-            from "ql-dao-tao"."SubjectVersion" as sv
-                inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
-                inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                        on CV.id = TBOCV."curriculumVersionId"
-                inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                        on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-            where TBS."subjectId" = sv.id and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId})
-        )
-        select count(DISTINCT id)::INTEGER as count
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id)
+        select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
-        and (truot_mon = true or cam_thi = true or dinh_chi = true)
-        and withdrew = false        -- rút khỏi lớp
-        and exempted = false        -- miễn học
-        and "examPostponed" = false -- hoãn thi
-        and 
-        (
-            ${trainingObjectTypeId}::TEXT IS NULL
+          and (truot_mon = true
+            or cam_thi = true
+            or dinh_chi = true)
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          and "examPostponed" = false -- hoãn thi
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+          and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-        )
-        and 
-        (
-            ${trainingMajorId}::TEXT IS NULL
-            OR "trainingMajorId" = ${trainingMajorId}
-        )
-        and 
-        (
-            ${trainingCourseId}::TEXT IS NULL
-            OR trainingCourseId = ${trainingCourseId}
-        )
-        and (
-            ${search}::TEXT IS NULL
-                OR code ILIKE ${`%${search}%`}
-                OR name ILIKE ${`%${search}%`}
             )
-        `
-
+          and (${trainingMajorId}::TEXT IS NULL
+            OR "trainingMajorId" = ${trainingMajorId}
+            )
+          and (${trainingCourseId}::TEXT IS NULL
+            OR trainingCourseId = ${trainingCourseId}
+            )
+          and (${search}::TEXT IS NULL
+            OR code ILIKE ${`%${search}%`}
+            OR name ILIKE ${`%${search}%`}
+            )
+    `
     return c.json({ data: res, count: countRaw[0]?.count }, 200)
 })
 
@@ -726,7 +728,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
         diem_cuoi: number | null
         withdrew: boolean
         exempted: boolean
-        examPostponed: boolean
+        hoan_thi: boolean
+        ly_do_hoan_thi: string | null
         cam_thi: boolean
         ly_do_cam_thi: string | null
         dinh_chi: boolean
@@ -735,68 +738,83 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     }[]
 
     const res = await prisma.$queryRaw<Result>`
-                    with mon_no as (select sv.id,
-                       sv.code,
-                       sv.name,
-                       "UP"."fullname",
-                       sv."trainingObjectTypeId",
-                       C."trainingMajorId",
-                       TC.id                                                                                    as trainingCourseId,
-                       SSS."studentId",
-                       SSS."finalScore"                                                                         as diem_cuoi,
-                       SSS.withdrew,
-                       SSS.exempted,
-                       SSS."examPostponed",
-                       SSS."examBanned"                                                                         as cam_thi,
-                       SSS."examBannedReason"                                                                   as ly_do_cam_thi,
-                       SSS.suspended                                                                            as dinh_chi,
-                       SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                       TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                       TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                       TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                          TC."scoreToPassConditional"                           as truot_mon,
-                       row_number()
-                       over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
-                    from "ql-dao-tao"."SubjectVersion" as sv
-                         inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                         inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                         inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
-                         inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                         inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                         inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
-                         inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                                    on CV.id = TBOCV."curriculumVersionId"
-                         inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                                    on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                         inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                         inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                    where TBS."subjectId" = sv.id)
-                    select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
-                    from mon_no
-                    where rn = 1
-                    and (truot_mon = true or cam_thi = true or dinh_chi = true)
-                    and withdrew = false        -- rút khỏi lớp
-                    and exempted = false        -- miễn học
-                    and "examPostponed" = false -- hoãn thi
-                    and 
-                    (
-                        ${trainingObjectTypeId}::TEXT IS NULL
-                        OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-                    )
-                    and 
-                    (
-                        ${trainingCourseId}::TEXT IS NULL
-                        OR trainingCourseId = ${trainingCourseId}
-                    )
-                    and (
-                        ${search}::TEXT IS NULL
-                            OR code ILIKE ${`%${search}%`}
-                            OR "fullname" ILIKE ${`%${search}%`}
-                        )
-                        and id = ${subjectVersionId}
-                        limit ${pageSize}
-                        offset ${pageSize} * (${page} - 1)
-                    `
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               "UP"."fullname",
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                             as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                                  as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted                                                                                      as mien_thi,
+                               SSS."examPostponed"                                                                               as hoan_thi,
+                               SSS."examPostponedReason"                                                                         as ly_do_hoan_thi,
+                               SSS."examBanned"                                                                                  as cam_thi,
+                               SSS."examBannedReason"                                                                            as ly_do_cam_thi,
+                               SSS.suspended                                                                                     as dinh_chi,
+                               SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                                    as truot_mon,
+                               SC."code"                                                                                         as ma_lop_mon_hoc,
+                               Sem."name"                                                                                        as ky_hoc,
+                               Sch."name"                                                                                        as nam_hoc,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
+                                 inner join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id)
+        select "studentId",
+               diem_cuoi,
+               withdrew,
+               mien_thi,
+               hoan_thi,
+               ly_do_hoan_thi,
+               cam_thi,
+               ly_do_cam_thi,
+               dinh_chi,
+               ly_do_dinh_chi,
+               truot_mon,
+               ky_hoc,
+               nam_hoc
+        from mon_no
+        where rn = 1
+          and (truot_mon = true or cam_thi = true or dinh_chi = true)
+          and withdrew = false -- rút khỏi lớp
+          and mien_thi = false -- miễn học
+          and hoan_thi = false -- hoãn thi
+          and (
+            ${trainingObjectTypeId}::TEXT IS NULL
+                OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+            )
+          and (
+            ${trainingCourseId}::TEXT IS NULL
+                OR trainingCourseId = ${trainingCourseId}
+            )
+          and (
+            ${search}::TEXT IS NULL
+                OR code ILIKE ${`%${search}%`}
+                OR "fullname" ILIKE ${`%${search}%`}
+            )
+          and id = ${subjectVersionId}
+        limit ${pageSize} offset ${pageSize} * (${page} - 1)
+    `
 
     const students = await prisma.student.findMany({
         where: {
@@ -948,19 +966,20 @@ app.openapi(setScoreDeadLine, async (c) => {
         }
 
         await tx.$executeRawUnsafe(`
-        UPDATE "ql-dao-tao"."SubjectClass"
-        SET 
-            "scoreDeadLineStart" = CASE
-            WHEN "examDate" IS NOT NULL AND ${startPadding ? 'TRUE' : 'FALSE'} THEN "examDate" - (${startPadding} * INTERVAL '1 day')
-            WHEN ${startDate ? 'TRUE' : 'FALSE'} THEN DATE '${startDate || placeholder}'
-            ELSE NULL
-            END,
-            "scoreDeadline" = CASE
-            WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'} THEN "examDate" + (${endPadding} * INTERVAL '1 day')
-            WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
-            ELSE NULL
-            END
-        ${whereSQL};
+            UPDATE "ql-dao-tao"."SubjectClass"
+            SET "scoreDeadLineStart" = CASE
+                                           WHEN "examDate" IS NOT NULL AND ${startPadding ? 'TRUE' : 'FALSE'}
+                                               THEN "examDate" - (${startPadding} * INTERVAL '1 day')
+                                           WHEN ${startDate ? 'TRUE' : 'FALSE'} THEN DATE '${startDate || placeholder}'
+                                           ELSE NULL
+                END,
+                "scoreDeadline"      = CASE
+                                           WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'}
+                                               THEN "examDate" + (${endPadding} * INTERVAL '1 day')
+                                           WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
+                                           ELSE NULL
+                    END
+                ${whereSQL};
         `)
     })
 
@@ -995,14 +1014,14 @@ app.openapi(setExamScoreDeadLine, async (c) => {
 
     await prisma.$executeRawUnsafe(`
         UPDATE "ql-dao-tao"."SubjectClass"
-        SET 
-            "examScoreDeadline" = CASE
-            WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'} THEN "examDate" + (${endPadding} * INTERVAL '1 day')
-            WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
-            ELSE NULL
+        SET "examScoreDeadline" = CASE
+                                      WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'}
+                                          THEN "examDate" + (${endPadding} * INTERVAL '1 day')
+                                      WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
+                                      ELSE NULL
             END
-        ${whereSQL};
-        `)
+            ${whereSQL};
+    `)
 
     return c.json({ message: 'Success' })
 })

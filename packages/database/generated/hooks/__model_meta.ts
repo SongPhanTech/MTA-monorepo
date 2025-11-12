@@ -65,6 +65,60 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        suggestion: {
+            name: 'Suggestion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Suggestion$createdBy,
+                }, key: {
+                    name: "key",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         changeLog: {
             name: 'ChangeLog', fields: {
                 id: {
@@ -7281,6 +7335,9 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, trainingObjectTypeId_semesterId: {
+                    name: "trainingObjectTypeId_semesterId",
+                    fields: ["trainingObjectTypeId", "semesterId"]
                 },
             },
         },
@@ -9285,6 +9342,18 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingLevel',
+                }, trainingType: {
+                    name: "trainingType",
+                    type: "TrainingType",
+                    isDataModel: true,
+                    backLink: 'curriculumVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingTypeId" },
+                }, trainingTypeId: {
+                    name: "trainingTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingType',
                 }, trainingTime: {
                     name: "trainingTime",
                     type: "TrainingTime",
@@ -9301,14 +9370,12 @@ const metadata: ModelMeta = {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
-                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {
@@ -10719,19 +10786,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 }, subjectClassHistory: {
                     name: "subjectClassHistory",
                     type: "SubjectClassHistory",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'subjectClasses',
-                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -11032,6 +11098,10 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'classSchedules',
                     isRelationOwner: true,
+                }, location: {
+                    name: "location",
+                    type: "String",
+                    isOptional: true,
                 }, notes: {
                     name: "notes",
                     type: "String",
@@ -11342,9 +11412,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, students: {
-                    name: "students",
-                    type: "Student",
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingType',
@@ -11408,12 +11478,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingLevel',
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingLevel',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -11474,12 +11538,6 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingForm',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13068,20 +13126,6 @@ const metadata: ModelMeta = {
                     backLink: 'educationAndTraining',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
-                }, trainingLevel: {
-                    name: "trainingLevel",
-                    type: "TrainingLevel",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingLevelId" },
-                }, trainingLevelId: {
-                    name: "trainingLevelId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingLevel',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13096,34 +13140,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
-                }, trainingType: {
-                    name: "trainingType",
-                    type: "TrainingType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingTypeId" },
-                }, trainingTypeId: {
-                    name: "trainingTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingType',
-                }, trainingForm: {
-                    name: "trainingForm",
-                    type: "TrainingForm",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFormId" },
-                }, trainingFormId: {
-                    name: "trainingFormId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingForm',
                 }, registrationArea: {
                     name: "registrationArea",
                     type: "DM_KhuVuc_DiaLy",
@@ -15538,6 +15554,10 @@ const metadata: ModelMeta = {
                     name: "technologies",
                     type: "String",
                     isOptional: true,
+                }, thesisType: {
+                    name: "thesisType",
+                    type: "ThesisType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, status: {
                     name: "status",
                     type: "ThesisProjectStatus",
@@ -18519,19 +18539,6 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'survey',
                     isRelationOwner: true,
-                }, subjectClasses: {
-                    name: "subjectClasses",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                }, lectureId: {
-                    name: "lectureId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'lecture',
                 }, lecture: {
                     name: "lecture",
                     type: "Lecturer",
@@ -18540,6 +18547,26 @@ const metadata: ModelMeta = {
                     backLink: 'survey',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lectureId" },
+                }, lectureId: {
+                    name: "lectureId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecture',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, surveyTopic: {
                     name: "surveyTopic",
                     type: "SurveyTopic",
@@ -18561,6 +18588,7 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',
+                    isRelationOwner: true,
                 }, surveyQuestion: {
                     name: "surveyQuestion",
                     type: "SurveyQuestion",
@@ -18728,20 +18756,6 @@ const metadata: ModelMeta = {
                 }, requireExplanation: {
                     name: "requireExplanation",
                     type: "Boolean",
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveyChoice',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyId" },
-                }, surveyId: {
-                    name: "surveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'survey',
                 }, clusterSurvey: {
                     name: "clusterSurvey",
                     type: "ClusterSurvey",
@@ -18756,6 +18770,13 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'clusterSurvey',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyChoice',
+                    isRelationOwner: true,
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",
@@ -21337,6 +21358,10 @@ const metadata: ModelMeta = {
                 }, classification: {
                     name: "classification",
                     type: "String",
+                }, classificationEnglish: {
+                    name: "classificationEnglish",
+                    type: "String",
+                    isOptional: true,
                 }, context: {
                     name: "context",
                     type: "RankingContext",
@@ -24310,6 +24335,10 @@ const metadata: ModelMeta = {
 };
 
 function $default$Config$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Suggestion$createdBy(user: any): unknown {
     return user?.id;
 }
 

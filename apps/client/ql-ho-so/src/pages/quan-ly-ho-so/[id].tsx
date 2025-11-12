@@ -355,20 +355,14 @@ export default function UpdateUserPage() {
                 : latest
         )
     }
-        function findLatestHocVi(list: any[]) {
+    function findLatestHocVi(list: any[]) {
         if (list.length === 0) return null
-        return list.reduce((latest, current) =>
-            current.year >= latest.year
-                ? current
-                : latest
-        )
+        return list.reduce((latest, current) => (current.year >= latest.year ? current : latest))
     }
-            function findLatestHocHam(list: any[]) {
+    function findLatestHocHam(list: any[]) {
         if (list.length === 0) return null
         return list.reduce((latest, current) =>
-            new Date(current.from) >= new Date(latest.from)
-                ? current
-                : latest
+            new Date(current.from) >= new Date(latest.from) ? current : latest
         )
     }
 
@@ -387,7 +381,7 @@ export default function UpdateUserPage() {
         ...values
     }: SubmitForm) => {
         if (!values) return
-        if (fileList.length > 0) {
+        if (fileList?.length > 0) {
             const file: any = fileList[0]
             const formData = new FormData()
             formData.append('file', file?.originFileObj)
@@ -426,12 +420,14 @@ export default function UpdateUserPage() {
                 sEmail: values?.email || '',
                 Id: id,
                 sAvatarId: form.getFieldValue('avatar'),
+                bLaHocVien: values.bLaHocVien || false,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
             }).catch((error) => {
                 console.log(error)
             })
             let rank = null
-            let hocvi=null
-            let hocham=null
+            let hocvi = null
+            let hocham = null
             if (values.capBac?.length > 0) {
                 if (values.capBac?.length === 1) {
                     rank = values.capBac[0]
@@ -543,8 +539,8 @@ export default function UpdateUserPage() {
                                 : null,
                             avatar: form.getFieldValue('avatar'),
                             rankId: rank?.capBacId ?? undefined,
-                            academicRankTypeId: hocham?.hocHamId ?? undefined,
-                            academicDegreeTypeId: hocvi?.hocViId ?? undefined,
+                            academicRankTypeId: hocham?.academicRankTypeId ?? undefined,
+                            academicDegreeTypeId: hocvi?.academicDegreeTypeId ?? undefined,
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {
@@ -1075,6 +1071,7 @@ export default function UpdateUserPage() {
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
                 ...userData,
+                bLaHocVien: !!userData.bLaHocVien,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
                 idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
                 idCardExpirationDate: userData.idCardExpirationDate
@@ -1099,7 +1096,7 @@ export default function UpdateUserPage() {
                     status: 'done',
                     url: imageUrl, // Sử dụng getMinioUrl để tạo URL hiển thị
                 }
-                setFileList([avatarFile])
+                // setFileList([avatarFile])
             }
         },
         [form]

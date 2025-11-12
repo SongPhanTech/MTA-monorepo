@@ -22,7 +22,7 @@ import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
 import Color from '@tiptap/extension-color'
-import Table from '@tiptap/extension-table'
+import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
@@ -83,6 +83,12 @@ export function RichTextEditor({
                 HTMLAttributes: {
                     class: 'mx-auto my-2',
                 },
+                resize: {
+                    enabled: true,
+                    minWidth: 10,
+                    minHeight: 10,
+                    alwaysPreserveAspectRatio: true,
+                },
             }),
             Mention.configure({
                 renderHTML({ node, options }) {
@@ -101,10 +107,10 @@ export function RichTextEditor({
                 suggestion: suggestion(mentions),
             }),
             Mathematics.configure({
-                shouldRender: (state, pos, node) => {
-                    const $pos = state.doc.resolve(pos)
-                    return node.type.name === 'text' && $pos.parent.type.name !== 'codeBlock'
-                },
+                // shouldRender: (state, pos, node) => {
+                //     const $pos = state.doc.resolve(pos)
+                //     return node.type.name === 'text' && $pos.parent.type.name !== 'codeBlock'
+                // },
                 katexOptions: {
                     output: 'html',
                 },
@@ -273,6 +279,7 @@ export function RichTextEditor({
                 return false
             },
         },
+        immediatelyRender: false,
     })
 
     async function uploadImageFile(file: File, editor: Editor | null) {
@@ -318,7 +325,7 @@ export function RichTextEditor({
     }
     useEffect(() => {
         if (editor && value !== editor.getHTML()) {
-            editor.commands.setContent(value || '', false)
+            editor.commands.setContent(value || '')
         }
     }, [value, editor])
 

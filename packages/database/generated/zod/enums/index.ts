@@ -6,6 +6,7 @@
 
 export * from './TransactionIsolationLevel.schema';
 export * from './ConfigScalarFieldEnum.schema';
+export * from './SuggestionScalarFieldEnum.schema';
 export * from './ChangeLogScalarFieldEnum.schema';
 export * from './UserProfileScalarFieldEnum.schema';
 export * from './HocHamScalarFieldEnum.schema';
@@ -259,6 +260,7 @@ export * from './NullableJsonNullValueInput.schema';
 export * from './QueryMode.schema';
 export * from './NullsOrder.schema';
 export * from './ConfigOrderByRelevanceFieldEnum.schema';
+export * from './SuggestionOrderByRelevanceFieldEnum.schema';
 export * from './JsonNullValueFilter.schema';
 export * from './ChangeLogOrderByRelevanceFieldEnum.schema';
 export * from './UserProfileOrderByRelevanceFieldEnum.schema';
@@ -539,6 +541,7 @@ export * from './DecisionStatus.schema';
 export * from './TrainingScoreStatus.schema';
 export * from './ResearchProjectStatus.schema';
 export * from './RegistrationStatus.schema';
+export * from './ThesisType.schema';
 export * from './ThesisProjectStatus.schema';
 export * from './StudentThesisRegistrationStatus.schema';
 export * from './DecisionType.schema';

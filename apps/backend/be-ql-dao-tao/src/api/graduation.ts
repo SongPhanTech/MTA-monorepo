@@ -12,7 +12,9 @@ import {
     GraduationRankDowngradeConditionScalarSchema,
     TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
+import { getTemplateBuffer } from '@workspace/libs/server'
 import Decimal from 'decimal.js'
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { evaluateCondition } from '../services/student-result.service'
 import type { StudentDataContext } from '../types/student-context'
@@ -336,7 +338,7 @@ app.openapi(graduationCheck, async (c) => {
                 scoreBase10 >= scoreToPass
             ) {
                 const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
-                // skip if can't improve or score is already higher
+                // skip if pre-score can't improve or score is already higher
                 if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
                     continue
                 }
@@ -361,7 +363,6 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        // TODO: Implement logic for check equivalence subject
         const equivalencyGroups = await prisma.equivalencyGroup.findMany({
             where: {
                 deletedAt: null,
@@ -402,7 +403,9 @@ app.openapi(graduationCheck, async (c) => {
             }
 
             const subjectScore = subjectScoresMap.get(subject.subjectId)
-            if (subjectScore && !subjectScore.canImprove) {
+
+            // if (subjectScore && !subjectScore.canImprove) {
+            if (subjectScore) {
                 finalScores.set(subject.subjectId, subjectScore)
                 continue
             }
@@ -751,6 +754,167 @@ app.openapi(graduationCheck, async (c) => {
     }
 
     return c.json({ results }, 200)
+})
+
+const graduationSessionDecision = createRoute({
+    operationId: 'graduationSessionDecision',
+    tags: ['Graduation'],
+    path: '/session-decision',
+    method: 'get',
+    request: {
+        query: z.object({
+            sessionId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(graduationSessionDecision, async (c) => {
+    const { sessionId } = c.req.valid('query')
+
+    const graduationDecisions = await prisma.graduationDecision.findMany({
+        where: { application: { sessionId } },
+        include: {
+            trainingMajor: true,
+            finalRanking: true,
+            diplomaType: true,
+            student: {
+                include: {
+                    userProfile: { include: { gender: true } },
+                    curriculumVersion: {
+                        include: {
+                            trainingType: true,
+                        },
+                    },
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: {
+                                    trainingType: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const data = graduationDecisions.map((graduationDecision, idx) => {
+        const curriculumVersion =
+            graduationDecision.student.curriculumVersion ||
+            graduationDecision.student.fixedClass?.curriculumVersion
+
+        const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth
+
+        return {
+            no: idx + 1,
+            ...graduationDecision,
+            originalDiplomaNumber: graduationDecision.originalDiplomaNumber,
+            diplomaNumber: graduationDecision.diplomaNumber,
+            diplomaIssueDate: graduationDecision.diplomaIssueDate,
+            fullname: graduationDecision.student.userProfile.fullname,
+            FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
+            gender: graduationDecision.student.userProfile.gender?.sTen,
+            dayOfBirth: dateOfBirth ? dateOfBirth.getDate() : null,
+            monthOfBirth: dateOfBirth ? dateOfBirth.getMonth() + 1 : null,
+            mmmOfBirth: dateOfBirth
+                ? dateOfBirth.toLocaleString('en-US', { month: 'short' })
+                : null,
+            yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
+            trainingMajor: graduationDecision.trainingMajor?.name,
+            classification: graduationDecision.finalRanking.classification,
+            classificationEnglish: graduationDecision.finalRanking.classificationEnglish,
+            trainingType: curriculumVersion?.trainingType?.name,
+            diplomaType: graduationDecision.diplomaType?.name,
+            diplomaTypeEnglish: graduationDecision.diplomaType?.englishName,
+        }
+    })
+
+    const buffer = await getTemplateBuffer(prisma, 'DANH_SACH_TOT_NGHIEP')
+
+    const template = new XlsxTemplate(buffer)
+
+    template.substitute(1, { data })
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = 'DANH_SACH_TOT_NGHIEP.xlsx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
+})
+
+const statisticsGraduationDecision = createRoute({
+    operationId: 'statisticsGraduationDecision',
+    tags: ['Graduation'],
+    path: '/statistics',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Successfully',
+            content: {
+                'application/json': {
+                    schema: z.array(
+                        z.object({
+                            count: z.number(),
+                            year: z.number(),
+                            classification: z.string(),
+                        })
+                    ),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(statisticsGraduationDecision, async (c) => {
+    const { trainingObjectTypeId } = c.req.valid('query')
+    const res = await prisma.$queryRaw<{ count: number; year: number; classification: string }[]>`
+            select count("GraduationDecision"."studentId"),
+            date_part('year', "decisionDate") as year,
+            ARC."classification"              as classification
+        from "ql-dao-tao"."GraduationDecision"
+                inner join "ql-dao-tao"."AcademicRankingConvert" ARC on ARC.id = "GraduationDecision"."finalRankingId"
+                inner join "ql-dao-tao"."StudentGraduationApplication" SGA on SGA.id = "GraduationDecision"."applicationId"
+                inner join "ql-dao-tao"."GraduationSession" GS on GS.id = SGA."sessionId"
+        where GS."trainingObjectTypeId" = ${trainingObjectTypeId}
+        group by date_part('year', "decisionDate"), classification;
+    `
+    return c.json(res, 200)
 })
 
 export default app

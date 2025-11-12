@@ -30,7 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    students: z.array(z.unknown()).optional(),
+    curriculumVersion: z.array(z.unknown()).optional(),
 }
 );
 

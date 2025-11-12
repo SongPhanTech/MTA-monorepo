@@ -338,6 +338,13 @@ enum ThesisProjectStatus {
   @@schema("ql-dao-tao")
 }
 
+enum ThesisType {
+  THESIS
+  PROJECT
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentThesisRegistrationStatus {
   PENDING
   ACCEPTED
@@ -584,6 +591,24 @@ model Config {
   updatedAt   DateTime  @default(now()) @updatedAt()
   createdBy   String?   @default("") @db.Uuid()
   key         ConfigKey @unique()
+  value       String
+
+  @@schema("he-thong")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model Suggestion {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  createdBy   String?   @default("") @db.Uuid()
+  key         String
   value       String
 
   @@schema("he-thong")
@@ -2501,6 +2526,7 @@ model PlanTraining {
   semesterId           String
   planTrainingSubjects PlanTrainingSubject[]
 
+  @@unique([trainingObjectTypeId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -3076,10 +3102,12 @@ model CurriculumVersion {
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId                  String
+  trainingType                     TrainingType                       @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId                   String
-  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId                    String?
+  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String
   requiredCredits                  Int?
   electiveCredits                  Int?
   jobPosition                      String?
@@ -3451,8 +3479,8 @@ model SubjectClass {
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
-  subjectClassHistory         SubjectClassHistory[]
   survey                      Survey[]
+  subjectClassHistory         SubjectClassHistory[]
 
   @@schema("ql-dao-tao")
 }
@@ -3532,6 +3560,7 @@ model ClassSchedule {
   extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
   extraLecturerId     String?
   userProfiles        UserProfile[]
+  location            String?
   notes               String?
   isReplacement       Boolean        @default(false)
   originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
@@ -3602,16 +3631,16 @@ model PriorityObject {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingType {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @default("") @db.Uuid()
-  name        String    @unique()
-  students    Student[]
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  createdBy         String?             @default("") @db.Uuid()
+  name              String              @unique()
+  curriculumVersion CurriculumVersion[]
 
   @@schema("ql-dao-tao")
 }
@@ -3631,7 +3660,6 @@ model TrainingLevel {
   createdBy          String?              @default("") @db.Uuid()
   name               String               @unique()
   curriculumVersion  CurriculumVersion[]
-  students           Student[]
   trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
@@ -3651,7 +3679,6 @@ model TrainingForm {
   updatedAt          DateTime             @default(now()) @updatedAt()
   createdBy          String?              @default("") @db.Uuid()
   name               String               @unique()
-  students           Student[]
   trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
@@ -4114,14 +4141,8 @@ model Student {
   subjectClassStudent            StudentSubjectScore[]
   userProfileId                  String
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
-  trainingLevel                  TrainingLevel?                   @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId                String?
   trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId           String?
-  trainingType                   TrainingType?                    @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId                 String?
-  trainingForm                   TrainingForm?                    @relation(fields: [trainingFormId], references: [id])
-  trainingFormId                 String?
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
   curriculumVersion              CurriculumVersion?               @relation("CurriculumVersion", fields: [curriculumVersionId], references: [id])
@@ -4735,6 +4756,7 @@ model ThesisProject {
   expectedResults    String?                     @db.Text()
   requirements       String?                     @db.Text()
   technologies       String?                     @db.Text()
+  thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId     String?
@@ -5567,9 +5589,10 @@ model Survey {
   isPublic             Boolean            @default(false)
   anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
-  subjectClasses       SubjectClass[]
-  lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
+  lectureId            String?
+  subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClassId       String?
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
   additionalSuggestion Boolean
@@ -5620,10 +5643,9 @@ model SurveyChoice {
   createdBy          String?          @default("") @db.Uuid()
   answer             String
   requireExplanation Boolean
-  survey             Survey?          @relation(fields: [surveyId], references: [id])
-  surveyId           String?
   clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId    String?
+  survey             Survey[]
   surveyResponses    SurveyResponse[]
 
   @@schema("khao-thi")
@@ -6323,6 +6345,7 @@ model AcademicRankingConvert {
   updatedAt                    DateTime                       @default(now()) @updatedAt()
   createdBy                    String?                        @default("") @db.Uuid()
   classification               String
+  classificationEnglish        String?
   context                      RankingContext
   rankOrder                    Int
   baseScore                    AcademicRankingBaseType

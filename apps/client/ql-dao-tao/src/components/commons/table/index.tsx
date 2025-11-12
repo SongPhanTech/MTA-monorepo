@@ -46,12 +46,12 @@ export type ColumnsType<RecordType = AnyObject> = ((
         | (string & {})
 })[]
 
-type TableProps<T = Record<string, unknown>> = {
+type TableProps<T = AnyObject> = {
     columns?: ColumnsType<T> & {
         distinctFilters?: string[]
         options?: ColumnOption[]
     }
-    data?: T[]
+    data?: readonly T[]
     pagination?:
         | (TablePaginationConfig & {
               onShowSizeChange?: ((size: number) => void) | undefined
@@ -70,7 +70,7 @@ type TableProps<T = Record<string, unknown>> = {
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
-const Table = <T extends Record<string, unknown>>({
+const Table = <T extends AnyObject>({
     columns = [],
     data,
     pagination,
@@ -173,6 +173,7 @@ const Table = <T extends Record<string, unknown>>({
             )
         })
     }
+
     function searchVietnameseTree(data: TreeNode[], keyword: string): TreeNode[] {
         const normalizedKeyword = normalizeVietnamese(keyword.trim())
         if (!normalizedKeyword) return data
@@ -204,6 +205,7 @@ const Table = <T extends Record<string, unknown>>({
 
         return searchRecursive(data)
     }
+
     type TreeNode = {
         value: string
         label: string

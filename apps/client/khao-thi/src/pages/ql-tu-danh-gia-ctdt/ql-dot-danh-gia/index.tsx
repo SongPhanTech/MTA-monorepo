@@ -6,6 +6,9 @@ import { Store, useStore } from '@tanstack/react-store'
 import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council'
 import EvaluationStandardTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-standard'
 import AssigmentOfAssessmentTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
+import { useSession } from '@workspace/auth/react'
+import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -17,11 +20,40 @@ export const evaluationPeriodStore = new Store<EvaluationPeriodStoreState>({
 
 export default function EvaluationPeriodTabPage() {
     const [activeKey, setActiveKey] = useState('1')
-
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { data: me } = useSession()
+    const idProfile = me?.sDM_NhanVienId || ''
+
+    const { data: lecturer } = useFindUniqueLecturer(
+        {
+            where: {
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const { data: councilMember } = useFindFirstEvaluationCouncilMember(
+        {
+            where: {
+                lecturerId: lecturer?.id || '',
+                evaluationCouncil: {
+                    periodId: selectedEvaluationPeriodId || '',
+                },
+            },
+            include: {
+                evaluationCouncil: true,
+            },
+        },
+        {
+            enabled: !!lecturer?.id && !!selectedEvaluationPeriodId,
+        }
+    )
 
     const tabItems = useMemo(() => {
-        return [
+        const tabs = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
@@ -46,7 +78,22 @@ export default function EvaluationPeriodTabPage() {
                 disabled: !selectedEvaluationPeriodId,
             },
         ]
-    }, [selectedEvaluationPeriodId])
+
+        const isVicePersident = councilMember?.role?.includes(
+            $Enums.EvaluationMemberRole.VICE_PRESIDENT
+        )
+
+        if (isVicePersident) {
+            tabs.push({
+                key: '4',
+                label: 'Phân công giảng viên',
+                children: <AssigmentOfAssessmentTab />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        return tabs
+    }, [selectedEvaluationPeriodId, councilMember?.role])
 
     return (
         <Row gutter={[12, 0]}>

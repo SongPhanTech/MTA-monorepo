@@ -1,3 +1,4 @@
+import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -24,13 +25,29 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduationCheckResult'
-import { graduationApplicationInit, useGraduationCheck } from '@workspace/libs/api/training'
+import {
+    graduationApplicationInit,
+    graduationSessionDecision,
+    useGraduationCheck,
+} from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Row,
+    Tag,
+    Tooltip,
+} from 'antd'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import Decimal from 'decimal.js'
-import { BookPlus, SearchCheck, X } from 'lucide-react'
+import { saveAs } from 'file-saver'
+import { BookPlus, SearchCheck, Sheet, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -58,6 +75,8 @@ export default function StudentGraduationApplication() {
     const [showDecision, setShowDecision] = useState(false)
     const [trainingCourseSelected, setTrainingCourseSelected] = useState<string>()
     const [fixedClassSelected, setFixedClassSelected] = useState<string>()
+
+    const [form] = Form.useForm<{ prefix: string; suffix: string; start: number }>()
 
     const where = useMemo(
         () => ({
@@ -151,6 +170,8 @@ export default function StudentGraduationApplication() {
                             },
                         },
                     },
+                    trainingMajor: true,
+                    diplomaType: true,
                 },
                 orderBy: { createdAt: 'asc' },
                 take: numberOfPages,
@@ -229,25 +250,38 @@ export default function StudentGraduationApplication() {
         }
     }
 
+    const [isExporting, setIsExporting] = useState(false)
+    const handleExportResult = async () => {
+        if (!graduationSessionId) return
+        setIsExporting(true)
+        try {
+            const res = await graduationSessionDecision({ sessionId: graduationSessionId })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'DANH_SACH_TOT_NGHIEP.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExporting(false)
+        }
+    }
+
     const data = useMemo(() => {
         if (!studentGraduationApplicationData) return []
 
         return studentGraduationApplicationData.map((item) => {
-            const result = graduationCheckResults.find((r) => r.applicationId === item.id)
             return {
                 ...item,
-                graduation: item.graduation || undefined,
-                ...(result && {
-                    gpa: result.gpa ? new Decimal(result.gpa) : null,
-                    graduation: result.graduation || undefined,
-                    rank: result.rank,
-                    reason: result.reason,
-                    trainingMajor: result.trainingMajor,
-                    diplomaType: result.diplomaType,
-                }),
+                gpa: item.gpa?.toNumber(),
+                trainingMajor: item.trainingMajor?.name,
+                diplomaType: item.diplomaType?.name,
             }
         })
-    }, [studentGraduationApplicationData, graduationCheckResults])
+    }, [studentGraduationApplicationData])
 
     const { onOpen } = useDisclosure<{
         id: string | null
@@ -372,39 +406,29 @@ export default function StudentGraduationApplication() {
         })
     }
 
-    const isApproveButtonDisabled = useMemo(() => {
-        const selectedRecords = data?.filter((record) => selectedRowKeys.includes(record.id)) || []
-
-        return !selectedRecords.every(
-            (record) => record.status === ApplicationStatus.IN_REVIEW && record.graduation === true
-        )
-    }, [selectedRowKeys, data])
-
     const handleApproved = async () => {
         if (selectedRowKeys.length === 0) {
             message.warning('Vui lòng chọn ít nhất một sinh viên để duyệt')
             return
         }
 
-        const selectedRecords = data?.filter((record) => selectedRowKeys.includes(record.id)) || []
+        const graduationRecords =
+            data?.filter(
+                (record) =>
+                    selectedRowKeys.includes(record.id) &&
+                    record.status === ApplicationStatus.IN_REVIEW &&
+                    record.graduation === true
+            ) || []
 
-        const allApproved = selectedRecords.every(
-            (record) => record.status === ApplicationStatus.IN_REVIEW && record.graduation === true
-        )
-
-        if (!allApproved) {
-            message.error('Không thể duyệt vì có sinh viên chưa được xét hoặc không đạt yêu cầu')
-            return
-        }
         Modal.confirm({
             title: 'Xác nhận duyệt',
-            content: `Bạn có chắc chắn muốn chấp nhận ${selectedRowKeys.length} sinh viên đã chọn?`,
+            content: `Bạn có chắc chắn muốn chấp nhận ${graduationRecords.length} sinh viên tốt nghiệp?`,
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
                 try {
                     showSpinner()
-                    const createDecision = selectedRecords
+                    const createDecision = graduationRecords
                         .filter(
                             (record) =>
                                 record.id &&
@@ -419,9 +443,9 @@ export default function StudentGraduationApplication() {
                                 finalGpa: record.gpa ?? 0,
                                 decisionDate: new Date(),
                                 finalRanking: { connect: { id: record.rank?.id } },
-                                trainingMajor: { connect: { id: record.trainingMajor?.id } },
-                                ...(record.diplomaType?.id
-                                    ? { diplomaType: { connect: { id: record.diplomaType?.id } } }
+                                trainingMajor: { connect: { id: record.trainingMajorId } },
+                                ...(record.diplomaTypeId
+                                    ? { diplomaType: { connect: { id: record.diplomaTypeId } } }
                                     : {}),
                             }
 
@@ -440,11 +464,10 @@ export default function StudentGraduationApplication() {
                         })
                     await sqlTransaction(createDecision)
                     await updateManyStudentGraduationApplication({
-                        where: { id: { in: selectedRowKeys } },
+                        where: { id: { in: graduationRecords.map((record) => record.id) } },
                         data: { status: ApplicationStatus.APPROVED },
                     })
                     await refetch()
-                    setSelectedRowKeys([])
                     message.success('Duyệt thành công')
                 } catch (error) {
                     message.error('Đã xảy ra lỗi khi duyệt')
@@ -537,11 +560,56 @@ export default function StudentGraduationApplication() {
                                 </Button>
                             </div>
                         </Flex>
-                        {showDecision && <GraduationDecision sessionId={graduationSessionId} />}
+                        {showDecision && (
+                            <>
+                                <Flex align="center" justify="space-between" className="px-4 mt-4">
+                                    <div className="flex align-middle items-center gap-2">
+                                        <Form layout="inline" className="gap-2">
+                                            <FormItem form={form} name="prefix" label="Tiền tố">
+                                                <Input
+                                                    className="w-20"
+                                                    placeholder={`CQ/${new Date().getFullYear()}/`}
+                                                />
+                                            </FormItem>
+                                            <FormItem
+                                                form={form}
+                                                name="start"
+                                                label="Số từ"
+                                                required
+                                            >
+                                                <InputNumber
+                                                    className="w-20"
+                                                    type="number"
+                                                    min={0}
+                                                />
+                                            </FormItem>
+                                            <FormItem form={form} name="suffix" label="Hậu tố">
+                                                <Input
+                                                    className="w-20"
+                                                    placeholder={`/${new Date().getFullYear()}`}
+                                                />
+                                            </FormItem>
+                                            <Button type="primary">Tạo SVS</Button>
+                                        </Form>
+                                    </div>
+                                    <div className="flex align-middle items-center gap-2">
+                                        <Button
+                                            type="primary"
+                                            onClick={() => handleExportResult()}
+                                            loading={isExporting}
+                                        >
+                                            <Sheet />
+                                            Xuất kết quả
+                                        </Button>
+                                    </div>
+                                </Flex>
+                                <GraduationDecision sessionId={graduationSessionId} />
+                            </>
+                        )}
                     </Col>
                     <Flex>
                         <Col span={24}>
-                            <div className="bg-white rounded-lg shadow-sm p-4">
+                            <div className="bg-white rounded-lg shadow-sm px-4">
                                 <Row gutter={[16, 0]}>
                                     <Col span={24}>
                                         <Row
@@ -591,19 +659,13 @@ export default function StudentGraduationApplication() {
                                                     </Button>
                                                     <Tooltip
                                                         placement="topLeft"
-                                                        title={
-                                                            selectedRowKeys.length === 0
-                                                                ? 'Duyệt tất cả sinh viên đã được xét và đạt'
-                                                                : isApproveButtonDisabled
-                                                                  ? 'Chỉ có thể duyệt sinh viên đã được xét và đạt'
-                                                                  : 'Duyệt những đơn xét tốt nghiệp đã chọn'
-                                                        }
+                                                        title="Duyệt những đơn đã được xét và đạt"
                                                     >
                                                         <Button
                                                             type="primary"
                                                             className="h-[32px] px-4"
                                                             onClick={handleApproved}
-                                                            disabled={isApproveButtonDisabled}
+                                                            disabled={selectedRowKeys.length === 0}
                                                         >
                                                             <BookPlus />
                                                             Duyệt
@@ -657,9 +719,9 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'Ngày sinh',
-                                                    width: 120,
+                                                    width: 100,
                                                     align: 'center',
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.student?.userProfile?.dateOfBirth
                                                             ? dayjs(
                                                                   record?.student?.userProfile
@@ -669,9 +731,9 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'SĐT',
-                                                    width: 80,
+                                                    width: 100,
                                                     align: 'center',
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.student?.userProfile?.phoneNumber,
                                                 },
                                                 {
@@ -679,7 +741,7 @@ export default function StudentGraduationApplication() {
                                                     dataIndex: ['student', 'userProfile', 'gender'],
                                                     align: 'center',
                                                     width: 60,
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.userProfile?.gender?.sTen,
                                                 },
                                                 {
@@ -715,36 +777,6 @@ export default function StudentGraduationApplication() {
                                                             : '',
                                                 },
                                                 {
-                                                    title: 'GPA',
-                                                    width: 60,
-                                                    align: 'center',
-                                                    dataIndex: 'gpaCmp',
-                                                    type: 'cmp',
-                                                    render: (record) => {
-                                                        if (record?.gpa) {
-                                                            return <span>{record.gpa}</span>
-                                                        }
-                                                        return null
-                                                    },
-                                                },
-                                                {
-                                                    title: 'Hệ số xét',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (record) => {
-                                                        if (record?.rank?.baseScore) {
-                                                            return (
-                                                                <span>
-                                                                    {getAcademicRankingBaseTypeLabel(
-                                                                        record.rank.baseScore
-                                                                    )}
-                                                                </span>
-                                                            )
-                                                        }
-                                                        return null
-                                                    },
-                                                },
-                                                {
                                                     title: 'Kết quả xét',
                                                     width: 90,
                                                     align: 'center',
@@ -754,7 +786,7 @@ export default function StudentGraduationApplication() {
                                                         { value: true, label: 'Đạt' },
                                                         { value: false, label: 'Không đạt' },
                                                     ],
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.graduation ? (
                                                             <Tag color="green">Đạt</Tag>
                                                         ) : (
@@ -796,11 +828,41 @@ export default function StudentGraduationApplication() {
                                                     },
                                                 },
                                                 {
+                                                    title: 'GPA',
+                                                    width: 60,
+                                                    align: 'center',
+                                                    dataIndex: 'gpaCmp',
+                                                    type: 'cmp',
+                                                    render: (_, record) => {
+                                                        if (record?.gpa) {
+                                                            return record.gpa
+                                                        }
+                                                        return null
+                                                    },
+                                                },
+                                                {
+                                                    title: 'Hệ số xét',
+                                                    width: 60,
+                                                    align: 'center',
+                                                    render: (_, record) => {
+                                                        if (record?.rank?.baseScore) {
+                                                            return (
+                                                                <span>
+                                                                    {getAcademicRankingBaseTypeLabel(
+                                                                        record.rank.baseScore
+                                                                    )}
+                                                                </span>
+                                                            )
+                                                        }
+                                                        return null
+                                                    },
+                                                },
+                                                {
                                                     title: 'Xếp loại',
                                                     width: 100,
                                                     align: 'center',
                                                     fixed: 'right',
-                                                    render: (record) => {
+                                                    render: (_, record) => {
                                                         if (record?.rank?.classification) {
                                                             return (
                                                                 <span>

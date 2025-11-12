@@ -133,6 +133,19 @@ exports.Prisma.ConfigScalarFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.SuggestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  key: 'key',
+  value: 'value'
+};
+
 exports.Prisma.ChangeLogScalarFieldEnum = {
   id: 'id',
   tableName: 'tableName',
@@ -1783,6 +1796,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   requiredCredits: 'requiredCredits',
@@ -2071,6 +2085,7 @@ exports.Prisma.ClassScheduleScalarFieldEnum = {
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   isReplacement: 'isReplacement',
   originalScheduleId: 'originalScheduleId',
@@ -2412,10 +2427,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -2808,6 +2820,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   expectedResults: 'expectedResults',
   requirements: 'requirements',
   technologies: 'technologies',
+  thesisType: 'thesisType',
   status: 'status',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
@@ -3328,6 +3341,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   isPublic: 'isPublic',
   anonymous: 'anonymous',
   lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
   surveyTopicId: 'surveyTopicId',
   additionalSuggestion: 'additionalSuggestion',
   clusterSurveyId: 'clusterSurveyId'
@@ -3358,7 +3372,6 @@ exports.Prisma.SurveyChoiceScalarFieldEnum = {
   createdBy: 'createdBy',
   answer: 'answer',
   requireExplanation: 'requireExplanation',
-  surveyId: 'surveyId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -3791,6 +3804,7 @@ exports.Prisma.AcademicRankingConvertScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   context: 'context',
   rankOrder: 'rankOrder',
   baseScore: 'baseScore',
@@ -4408,6 +4422,15 @@ exports.Prisma.ConfigOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  value: 'value'
+};
+
+exports.Prisma.SuggestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  key: 'key',
   value: 'value'
 };
 
@@ -5481,6 +5504,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
+  trainingTypeId: 'trainingTypeId',
   trainingTimeId: 'trainingTimeId',
   diplomaTypeId: 'diplomaTypeId',
   jobPosition: 'jobPosition',
@@ -5641,6 +5665,7 @@ exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   roomId: 'roomId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
+  location: 'location',
   notes: 'notes',
   originalScheduleId: 'originalScheduleId',
   cancelReason: 'cancelReason'
@@ -5861,10 +5886,7 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingLevelId: 'trainingLevelId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  trainingTypeId: 'trainingTypeId',
-  trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId'
@@ -6414,6 +6436,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
   surveyTopicId: 'surveyTopicId',
   clusterSurveyId: 'clusterSurveyId'
 };
@@ -6433,7 +6456,6 @@ exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   answer: 'answer',
-  surveyId: 'surveyId',
   clusterSurveyId: 'clusterSurveyId'
 };
 
@@ -6703,6 +6725,7 @@ exports.Prisma.AcademicRankingConvertOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   classification: 'classification',
+  classificationEnglish: 'classificationEnglish',
   trainingCourseId: 'trainingCourseId'
 };
 
@@ -7339,6 +7362,11 @@ exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.ThesisType = exports.$Enums.ThesisType = {
+  THESIS: 'THESIS',
+  PROJECT: 'PROJECT'
+};
+
 exports.ThesisProjectStatus = exports.$Enums.ThesisProjectStatus = {
   PROPOSED: 'PROPOSED',
   APPROVED_BY_DEPT: 'APPROVED_BY_DEPT',
@@ -7497,6 +7525,7 @@ exports.TemplateFileType = exports.$Enums.TemplateFileType = {
 
 exports.Prisma.ModelName = {
   Config: 'Config',
+  Suggestion: 'Suggestion',
   ChangeLog: 'ChangeLog',
   UserProfile: 'UserProfile',
   HocHam: 'HocHam',

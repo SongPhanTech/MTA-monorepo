@@ -72,8 +72,9 @@ const relationSchema = z.object({
     curriculum: z.record(z.string(), z.unknown()),
     trainingObjectType: z.record(z.string(), z.unknown()),
     trainingLevel: z.record(z.string(), z.unknown()),
+    trainingType: z.record(z.string(), z.unknown()),
     trainingTime: z.record(z.string(), z.unknown()),
-    diplomaType: z.record(z.string(), z.unknown()).optional(),
+    diplomaType: z.record(z.string(), z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     fixedClasses: z.array(z.unknown()).optional(),
@@ -86,8 +87,9 @@ const fkSchema = z.object({
     curriculumId: z.string(),
     trainingObjectTypeId: z.string(),
     trainingLevelId: z.string(),
+    trainingTypeId: z.string(),
     trainingTimeId: z.string(),
-    diplomaTypeId: z.string().nullish(),
+    diplomaTypeId: z.string(),
 }
 );
 
