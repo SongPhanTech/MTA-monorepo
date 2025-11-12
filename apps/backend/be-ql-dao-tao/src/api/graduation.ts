@@ -856,7 +856,7 @@ app.openapi(graduationSessionDecision, async (c) => {
 
     const result = await template.generate({ type: 'arraybuffer' })
 
-    const fileName = 'danh_sach_GV.xlsx'
+    const fileName = 'DANH_SACH_TOT_NGHIEP.xlsx'
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {

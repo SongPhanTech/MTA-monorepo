@@ -34,6 +34,7 @@
     "docxtemplater": "catalog:",
     "esm-env": "catalog:",
     "exceljs": "catalog:",
+    "hono": "catalog:",
     "file-saver": "catalog:",
     "pizzip": "catalog:",
     "react": "catalog:",

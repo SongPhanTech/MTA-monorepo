@@ -29,7 +29,6 @@ import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import Decimal from 'decimal.js'
 import { BookPlus, SearchCheck, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -151,6 +150,8 @@ export default function StudentGraduationApplication() {
                             },
                         },
                     },
+                    trainingMajor: true,
+                    diplomaType: true,
                 },
                 orderBy: { createdAt: 'asc' },
                 take: numberOfPages,
@@ -233,21 +234,14 @@ export default function StudentGraduationApplication() {
         if (!studentGraduationApplicationData) return []
 
         return studentGraduationApplicationData.map((item) => {
-            const result = graduationCheckResults.find((r) => r.applicationId === item.id)
             return {
                 ...item,
-                graduation: item.graduation || undefined,
-                ...(result && {
-                    gpa: result.gpa ? new Decimal(result.gpa) : null,
-                    graduation: result.graduation || undefined,
-                    rank: result.rank,
-                    reason: result.reason,
-                    trainingMajor: result.trainingMajor,
-                    diplomaType: result.diplomaType,
-                }),
+                gpa: item.gpa?.toNumber(),
+                trainingMajor: item.trainingMajor?.name,
+                diplomaType: item.diplomaType?.name,
             }
         })
-    }, [studentGraduationApplicationData, graduationCheckResults])
+    }, [studentGraduationApplicationData])
 
     const { onOpen } = useDisclosure<{
         id: string | null
@@ -372,39 +366,29 @@ export default function StudentGraduationApplication() {
         })
     }
 
-    const isApproveButtonDisabled = useMemo(() => {
-        const selectedRecords = data?.filter((record) => selectedRowKeys.includes(record.id)) || []
-
-        return !selectedRecords.every(
-            (record) => record.status === ApplicationStatus.IN_REVIEW && record.graduation === true
-        )
-    }, [selectedRowKeys, data])
-
     const handleApproved = async () => {
         if (selectedRowKeys.length === 0) {
             message.warning('Vui lòng chọn ít nhất một sinh viên để duyệt')
             return
         }
 
-        const selectedRecords = data?.filter((record) => selectedRowKeys.includes(record.id)) || []
+        const graduationRecords =
+            data?.filter(
+                (record) =>
+                    selectedRowKeys.includes(record.id) &&
+                    record.status === ApplicationStatus.IN_REVIEW &&
+                    record.graduation === true
+            ) || []
 
-        const allApproved = selectedRecords.every(
-            (record) => record.status === ApplicationStatus.IN_REVIEW && record.graduation === true
-        )
-
-        if (!allApproved) {
-            message.error('Không thể duyệt vì có sinh viên chưa được xét hoặc không đạt yêu cầu')
-            return
-        }
         Modal.confirm({
             title: 'Xác nhận duyệt',
-            content: `Bạn có chắc chắn muốn chấp nhận ${selectedRowKeys.length} sinh viên đã chọn?`,
+            content: `Bạn có chắc chắn muốn chấp nhận ${graduationRecords.length} sinh viên tốt nghiệp?`,
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
                 try {
                     showSpinner()
-                    const createDecision = selectedRecords
+                    const createDecision = graduationRecords
                         .filter(
                             (record) =>
                                 record.id &&
@@ -419,9 +403,9 @@ export default function StudentGraduationApplication() {
                                 finalGpa: record.gpa ?? 0,
                                 decisionDate: new Date(),
                                 finalRanking: { connect: { id: record.rank?.id } },
-                                trainingMajor: { connect: { id: record.trainingMajor?.id } },
-                                ...(record.diplomaType?.id
-                                    ? { diplomaType: { connect: { id: record.diplomaType?.id } } }
+                                trainingMajor: { connect: { id: record.trainingMajorId } },
+                                ...(record.diplomaTypeId
+                                    ? { diplomaType: { connect: { id: record.diplomaTypeId } } }
                                     : {}),
                             }
 
@@ -440,11 +424,10 @@ export default function StudentGraduationApplication() {
                         })
                     await sqlTransaction(createDecision)
                     await updateManyStudentGraduationApplication({
-                        where: { id: { in: selectedRowKeys } },
+                        where: { id: { in: graduationRecords.map((record) => record.id) } },
                         data: { status: ApplicationStatus.APPROVED },
                     })
                     await refetch()
-                    setSelectedRowKeys([])
                     message.success('Duyệt thành công')
                 } catch (error) {
                     message.error('Đã xảy ra lỗi khi duyệt')
@@ -591,19 +574,13 @@ export default function StudentGraduationApplication() {
                                                     </Button>
                                                     <Tooltip
                                                         placement="topLeft"
-                                                        title={
-                                                            selectedRowKeys.length === 0
-                                                                ? 'Duyệt tất cả sinh viên đã được xét và đạt'
-                                                                : isApproveButtonDisabled
-                                                                  ? 'Chỉ có thể duyệt sinh viên đã được xét và đạt'
-                                                                  : 'Duyệt những đơn xét tốt nghiệp đã chọn'
-                                                        }
+                                                        title="Duyệt những đơn đã được xét và đạt"
                                                     >
                                                         <Button
                                                             type="primary"
                                                             className="h-[32px] px-4"
                                                             onClick={handleApproved}
-                                                            disabled={isApproveButtonDisabled}
+                                                            disabled={selectedRowKeys.length === 0}
                                                         >
                                                             <BookPlus />
                                                             Duyệt
@@ -659,7 +636,7 @@ export default function StudentGraduationApplication() {
                                                     title: 'Ngày sinh',
                                                     width: 100,
                                                     align: 'center',
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.student?.userProfile?.dateOfBirth
                                                             ? dayjs(
                                                                   record?.student?.userProfile
@@ -671,7 +648,7 @@ export default function StudentGraduationApplication() {
                                                     title: 'SĐT',
                                                     width: 100,
                                                     align: 'center',
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.student?.userProfile?.phoneNumber,
                                                 },
                                                 {
@@ -679,7 +656,7 @@ export default function StudentGraduationApplication() {
                                                     dataIndex: ['student', 'userProfile', 'gender'],
                                                     align: 'center',
                                                     width: 60,
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.userProfile?.gender?.sTen,
                                                 },
                                                 {
@@ -715,36 +692,6 @@ export default function StudentGraduationApplication() {
                                                             : '',
                                                 },
                                                 {
-                                                    title: 'GPA',
-                                                    width: 60,
-                                                    align: 'center',
-                                                    dataIndex: 'gpaCmp',
-                                                    type: 'cmp',
-                                                    render: (record) => {
-                                                        if (record?.gpa) {
-                                                            return <span>{record.gpa}</span>
-                                                        }
-                                                        return null
-                                                    },
-                                                },
-                                                {
-                                                    title: 'Hệ số xét',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (record) => {
-                                                        if (record?.rank?.baseScore) {
-                                                            return (
-                                                                <span>
-                                                                    {getAcademicRankingBaseTypeLabel(
-                                                                        record.rank.baseScore
-                                                                    )}
-                                                                </span>
-                                                            )
-                                                        }
-                                                        return null
-                                                    },
-                                                },
-                                                {
                                                     title: 'Kết quả xét',
                                                     width: 90,
                                                     align: 'center',
@@ -754,7 +701,7 @@ export default function StudentGraduationApplication() {
                                                         { value: true, label: 'Đạt' },
                                                         { value: false, label: 'Không đạt' },
                                                     ],
-                                                    render: (record) =>
+                                                    render: (_, record) =>
                                                         record?.graduation ? (
                                                             <Tag color="green">Đạt</Tag>
                                                         ) : (
@@ -796,11 +743,41 @@ export default function StudentGraduationApplication() {
                                                     },
                                                 },
                                                 {
+                                                    title: 'GPA',
+                                                    width: 60,
+                                                    align: 'center',
+                                                    dataIndex: 'gpaCmp',
+                                                    type: 'cmp',
+                                                    render: (_, record) => {
+                                                        if (record?.gpa) {
+                                                            return record.gpa
+                                                        }
+                                                        return null
+                                                    },
+                                                },
+                                                {
+                                                    title: 'Hệ số xét',
+                                                    width: 60,
+                                                    align: 'center',
+                                                    render: (_, record) => {
+                                                        if (record?.rank?.baseScore) {
+                                                            return (
+                                                                <span>
+                                                                    {getAcademicRankingBaseTypeLabel(
+                                                                        record.rank.baseScore
+                                                                    )}
+                                                                </span>
+                                                            )
+                                                        }
+                                                        return null
+                                                    },
+                                                },
+                                                {
                                                     title: 'Xếp loại',
                                                     width: 100,
                                                     align: 'center',
                                                     fixed: 'right',
-                                                    render: (record) => {
+                                                    render: (_, record) => {
                                                         if (record?.rank?.classification) {
                                                             return (
                                                                 <span>
