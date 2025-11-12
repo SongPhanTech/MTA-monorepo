@@ -1,7 +1,7 @@
-import { FilterFilled } from '@ant-design/icons'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { ColumnTypeProps, FilterProps } from '@constants/type'
-import { cn } from '@workspace/ui/lib/utils'
+import {FilterFilled} from '@ant-design/icons'
+import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
+import type {ColumnTypeProps, FilterProps} from '@constants/type'
+import {cn} from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
     Button,
@@ -15,11 +15,11 @@ import {
     type TableProps as TableAntdProps,
     Tree,
 } from 'antd'
-import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
-import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
+import type {ColumnGroupType, ColumnType, TablePaginationConfig} from 'antd/es/table'
+import type {FilterDropdownProps, TableRowSelection} from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import { Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import {Search} from 'lucide-react'
+import {useCallback, useState} from 'react'
 
 dayjs.locale('vi')
 
@@ -34,7 +34,7 @@ export type AnyObject = Record<PropertyKey, any>
 export type ColumnsType<RecordType = AnyObject> = ((
     | ColumnGroupType<RecordType>
     | ColumnType<RecordType>
-) & {
+    ) & {
     type?:
         | 'input'
         | 'input_search'
@@ -46,16 +46,16 @@ export type ColumnsType<RecordType = AnyObject> = ((
         | (string & {})
 })[]
 
-type TableProps<T = Record<string, unknown>> = {
+type TableProps<T = AnyObject> = {
     columns?: ColumnsType<T> & {
         distinctFilters?: string[]
         options?: ColumnOption[]
     }
-    data?: T[]
+    data?: readonly T[]
     pagination?:
         | (TablePaginationConfig & {
-              onShowSizeChange?: ((size: number) => void) | undefined
-          })
+        onShowSizeChange?: ((size: number) => void) | undefined
+    })
         | false
     onRowClick?: (record: T) => void
     onRowDoubleClick?: (record: T) => void
@@ -70,23 +70,23 @@ type TableProps<T = Record<string, unknown>> = {
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
-const Table = <T extends Record<string, unknown>>({
-    columns = [],
-    data,
-    pagination,
-    onRowClick,
-    onRowDoubleClick,
-    filters,
-    setFilters,
-    expandable,
-    rowKey,
-    id,
-    selectedRow,
-    scrollable,
-    maxHeight,
-    rowSelection,
-    ...rest
-}: TableProps<T>) => {
+const Table = <T extends AnyObject>({
+                                        columns = [],
+                                        data,
+                                        pagination,
+                                        onRowClick,
+                                        onRowDoubleClick,
+                                        filters,
+                                        setFilters,
+                                        expandable,
+                                        rowKey,
+                                        id,
+                                        selectedRow,
+                                        scrollable,
+                                        maxHeight,
+                                        rowSelection,
+                                        ...rest
+                                    }: TableProps<T>) => {
     const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
 
     const onCheckAllChange = (item: ColumnTypeProps, e: CheckboxChangeEvent) => {
@@ -173,6 +173,7 @@ const Table = <T extends Record<string, unknown>>({
             )
         })
     }
+
     function searchVietnameseTree(data: TreeNode[], keyword: string): TreeNode[] {
         const normalizedKeyword = normalizeVietnamese(keyword.trim())
         if (!normalizedKeyword) return data
@@ -204,12 +205,13 @@ const Table = <T extends Record<string, unknown>>({
 
         return searchRecursive(data)
     }
+
     type TreeNode = {
         value: string
         label: string
         children?: TreeNode[]
     }
-    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+    const ListButton = useCallback(({clear, click}: { clear: () => void; click: () => void }) => {
         return (
             <div className="flex justify-end gap-2">
                 <Button size="small" onClick={clear}>
@@ -321,7 +323,7 @@ const Table = <T extends Record<string, unknown>>({
                                 option: { value: string; label: string } | undefined
                             ) =>
                                 option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-                                    -1 ||
+                                -1 ||
                                 option?.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                             }
                             onSelect={(value) => {
@@ -422,7 +424,7 @@ const Table = <T extends Record<string, unknown>>({
                                             setInput(e.target.value)
                                             handleSearch(e.target.value)
                                         }}
-                                        style={{ height: 36, width: '100%', marginBottom: 16 }}
+                                        style={{height: 36, width: '100%', marginBottom: 16}}
                                     />
                                     {!input && optionsSearch.length > 0 && (
                                         <Checkbox
@@ -447,7 +449,7 @@ const Table = <T extends Record<string, unknown>>({
                                         value={
                                             filtersTable[
                                                 item.dataIndex as keyof FilterProps
-                                            ] as string[]
+                                                ] as string[]
                                         }
                                         onChange={(e: string[]) => onCheckChange(item, e)}
                                         options={optionsSearch}
@@ -470,7 +472,7 @@ const Table = <T extends Record<string, unknown>>({
                                     if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
-                                        ] as string[]
+                                            ] as string[]
                                         const result = {
                                             ...updateObjectExcept(
                                                 filtersTable,
@@ -549,7 +551,7 @@ const Table = <T extends Record<string, unknown>>({
                                     setInput(e.target.value)
                                     handleSearchTree(e.target.value)
                                 }}
-                                style={{ height: 36, width: '100%', marginBottom: 16 }}
+                                style={{height: 36, width: '100%', marginBottom: 16}}
                             />
                             <Tree
                                 autoExpandParent={true}
@@ -567,7 +569,7 @@ const Table = <T extends Record<string, unknown>>({
                                     })
                                 }}
                                 checkStrictly={!!input}
-                                fieldNames={{ title: 'label', key: 'value', children: 'children' }}
+                                fieldNames={{title: 'label', key: 'value', children: 'children'}}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton
@@ -586,7 +588,7 @@ const Table = <T extends Record<string, unknown>>({
                                     if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
-                                        ] as string[]
+                                            ] as string[]
                                         const result = {
                                             ...updateObjectExcept(
                                                 filtersTable,
@@ -669,7 +671,7 @@ const Table = <T extends Record<string, unknown>>({
                                                 <Radio
                                                     key={option.value}
                                                     value={option}
-                                                    style={{ display: 'block', marginBottom: 8 }}
+                                                    style={{display: 'block', marginBottom: 8}}
                                                 >
                                                     {option.label}
                                                 </Radio>
@@ -695,7 +697,7 @@ const Table = <T extends Record<string, unknown>>({
                                         value={
                                             filtersTable[
                                                 item.dataIndex as keyof FilterProps
-                                            ] as string[]
+                                                ] as string[]
                                         }
                                         onChange={(e: string[]) => onCheckChange(item, e)}
                                         options={item.options}
@@ -771,7 +773,7 @@ const Table = <T extends Record<string, unknown>>({
                                             : null,
                                     })
                                 }}
-                                format={{ format: 'DD/MM/YYYY', type: 'mask' }}
+                                format={{format: 'DD/MM/YYYY', type: 'mask'}}
                             />
 
                             <ListButton
@@ -940,25 +942,25 @@ const Table = <T extends Record<string, unknown>>({
                 })) as ColumnsType<T>
             }
             // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
-            scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
+            scroll={{x: '100%', y: scrollable ? maxHeight : undefined}}
             bordered
             dataSource={data}
             locale={{
-                emptyText: <Empty description="Không có dữ liệu" />,
+                emptyText: <Empty description="Không có dữ liệu"/>,
             }}
             pagination={
                 pagination !== false
                     ? {
-                          position: ['bottomRight'],
-                          defaultPageSize: DEFAULT_PAGINATE_SIZE,
-                          showSizeChanger: {
-                              labelRender: ({ value }) => `${value} / trang`,
-                              optionRender: (oriOption) => `${oriOption.value} / trang`,
-                          },
-                          showTotal: (total, range) =>
-                              `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                          ...pagination,
-                      }
+                        position: ['bottomRight'],
+                        defaultPageSize: DEFAULT_PAGINATE_SIZE,
+                        showSizeChanger: {
+                            labelRender: ({value}) => `${value} / trang`,
+                            optionRender: (oriOption) => `${oriOption.value} / trang`,
+                        },
+                        showTotal: (total, range) =>
+                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        ...pagination,
+                    }
                     : false
             }
             expandable={expandable}
@@ -974,7 +976,7 @@ const Table = <T extends Record<string, unknown>>({
                         onRowDoubleClick(record)
                     }
                 },
-                style: { cursor: 'pointer' },
+                style: {cursor: 'pointer'},
                 className: cn(
                     record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : ''
                 ),

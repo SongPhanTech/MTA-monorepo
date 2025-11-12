@@ -185,6 +185,14 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="improvementRegister" label="Cho phép cải thiện" required>
+                    <Radio.Group>
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={4}>
                 <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
                     <Switch defaultValue={true} />
                 </FormItem>

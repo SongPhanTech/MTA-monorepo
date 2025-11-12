@@ -59,6 +59,8 @@ import type {
     GraduationCheck200,
     GraduationCheck400,
     GraduationCheckBody,
+    GraduationSessionDecision404,
+    GraduationSessionDecisionParams,
     ImportHeQuanSu200,
     ImportHeQuanSu400,
     ImportHeQuanSuRequest,
@@ -162,6 +164,9 @@ import type {
     SetExamScoreDeadLineBody,
     SetScoreDeadLine200,
     SetScoreDeadLineBody,
+    StatisticsGraduationDecision200Item,
+    StatisticsGraduationDecision404,
+    StatisticsGraduationDecisionParams,
     TrainingField200Item,
     TrainingField400,
     UnmergeExamBadResponse,
@@ -3295,6 +3300,334 @@ export const useGraduationCheck = <TError = GraduationCheck400, TContext = unkno
     const mutationOptions = getGraduationCheckMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+export type graduationSessionDecisionResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type graduationSessionDecisionResponse404 = {
+    data: GraduationSessionDecision404
+    status: 404
+}
+
+export type graduationSessionDecisionResponseComposite =
+    | graduationSessionDecisionResponse200
+    | graduationSessionDecisionResponse404
+
+export type graduationSessionDecisionResponse = graduationSessionDecisionResponseComposite & {
+    headers: Headers
+}
+
+export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisionParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/graduation/session-decision?${stringifiedParams}`
+        : '/api/graduation/session-decision'
+}
+
+export const graduationSessionDecision = async (
+    params: GraduationSessionDecisionParams,
+    options?: RequestInit
+): Promise<graduationSessionDecisionResponse> => {
+    return customTrainingFetch<graduationSessionDecisionResponse>(
+        getGraduationSessionDecisionUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGraduationSessionDecisionQueryKey = (params: GraduationSessionDecisionParams) => {
+    return ['/api/graduation/session-decision', ...(params ? [params] : [])] as const
+}
+
+export const getGraduationSessionDecisionQueryOptions = <
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({
+        signal,
+    }) => graduationSessionDecision(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof graduationSessionDecision>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GraduationSessionDecisionQueryResult = NonNullable<
+    Awaited<ReturnType<typeof graduationSessionDecision>>
+>
+export type GraduationSessionDecisionQueryError = GraduationSessionDecision404
+
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof graduationSessionDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof graduationSessionDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof graduationSessionDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof graduationSessionDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGraduationSessionDecision<
+    TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
+    TError = GraduationSessionDecision404,
+>(
+    params: GraduationSessionDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGraduationSessionDecisionQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type statisticsGraduationDecisionResponse200 = {
+    data: StatisticsGraduationDecision200Item[]
+    status: 200
+}
+
+export type statisticsGraduationDecisionResponse404 = {
+    data: StatisticsGraduationDecision404
+    status: 404
+}
+
+export type statisticsGraduationDecisionResponseComposite =
+    | statisticsGraduationDecisionResponse200
+    | statisticsGraduationDecisionResponse404
+
+export type statisticsGraduationDecisionResponse = statisticsGraduationDecisionResponseComposite & {
+    headers: Headers
+}
+
+export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationDecisionParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/graduation/statistics?${stringifiedParams}`
+        : '/api/graduation/statistics'
+}
+
+export const statisticsGraduationDecision = async (
+    params: StatisticsGraduationDecisionParams,
+    options?: RequestInit
+): Promise<statisticsGraduationDecisionResponse> => {
+    return customTrainingFetch<statisticsGraduationDecisionResponse>(
+        getStatisticsGraduationDecisionUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getStatisticsGraduationDecisionQueryKey = (
+    params: StatisticsGraduationDecisionParams
+) => {
+    return ['/api/graduation/statistics', ...(params ? [params] : [])] as const
+}
+
+export const getStatisticsGraduationDecisionQueryOptions = <
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({
+        signal,
+    }) => statisticsGraduationDecision(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type StatisticsGraduationDecisionQueryResult = NonNullable<
+    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+>
+export type StatisticsGraduationDecisionQueryError = StatisticsGraduationDecision404
+
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+                    TError,
+                    Awaited<ReturnType<typeof statisticsGraduationDecision>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useStatisticsGraduationDecision<
+    TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
+    TError = StatisticsGraduationDecision404,
+>(
+    params: StatisticsGraduationDecisionParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getStatisticsGraduationDecisionQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 /**

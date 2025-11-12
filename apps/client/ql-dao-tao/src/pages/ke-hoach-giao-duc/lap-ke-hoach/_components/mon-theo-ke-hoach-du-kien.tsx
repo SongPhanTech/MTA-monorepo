@@ -1,12 +1,12 @@
-import { queryClient } from '@api/index'
+import {queryClient} from '@api/index'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { PlanTraining } from '@workspace/db/client'
-import { $Enums } from '@workspace/db/client'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
-import { useOpenSubjectClass } from '@workspace/libs/api/training'
-import { useAbility } from '@workspace/permissions/hooks'
+import type {PlanTraining} from '@workspace/db/client'
+import {$Enums} from '@workspace/db/client'
+import {sqlTransaction} from '@workspace/libs/api/model'
+import type {OpenSubjectClass} from '@workspace/libs/api/schemas/openSubjectClass'
+import {useOpenSubjectClass} from '@workspace/libs/api/training'
+import {useAbility} from '@workspace/permissions/hooks'
 import {
     useFixedClassStore,
     useSemesterStore,
@@ -14,28 +14,27 @@ import {
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import {Button, Col, Flex, Form, Input, message, Row} from 'antd'
 import _ from 'lodash'
-import { useCallback, useMemo } from 'react'
+import {useCallback, useMemo} from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    trainingMajorId?: string
     subjectSelected?: Array<string>
 }
 
 export default function MonTheoKeHoachDuKien() {
-    const { canSome } = useAbility()
+    const {canSome} = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
-    const { id: semesterId } = useSemesterStore()
+    const {id: semesterId} = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { id: trainingCourseId } = useTrainingCourseStore()
-    const { id: trainingMajorId } = useTrainingMajorStore()
-    const { id: fixedClassId } = useFixedClassStore()
-    const { data: subjects, refetch } = useOpenSubjectClass(
+    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
+    const {id: trainingCourseId} = useTrainingCourseStore()
+    const {id: trainingMajorId} = useTrainingMajorStore()
+    const {id: fixedClassId} = useFixedClassStore()
+    const {data: subjects, refetch} = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
             search: searchText,
@@ -45,17 +44,17 @@ export default function MonTheoKeHoachDuKien() {
             nextSemester: 'false',
             fixedClassId: fixedClassId,
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        {query: {enabled: !!semesterId && !!trainingObjectTypeId}}
     )
 
     const data = useMemo(() => {
         if (subjects?.status !== 200) return []
         const result: Array<
             Omit<OpenSubjectClass, 'fixedClass'> &
-                OpenSubjectClass['fixedClass'][number] & {
-                    rowSpan: number
-                    groupKey: string
-                }
+            OpenSubjectClass['fixedClass'][number] & {
+            rowSpan: number
+            groupKey: string
+        }
         > = []
         subjects?.data?.data
             .map((subjectVersion, idx) => ({
@@ -64,7 +63,7 @@ export default function MonTheoKeHoachDuKien() {
                 index: idx + 1,
             }))
             .forEach((subject) => {
-                const { fixedClass, ...subjectInfo } = subject
+                const {fixedClass, ...subjectInfo} = subject
                 const length = fixedClass?.length || 0
                 fixedClass.forEach((cls, index) => {
                     result.push({
@@ -84,14 +83,14 @@ export default function MonTheoKeHoachDuKien() {
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
-            queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
+            queryClient.invalidateQueries({queryKey: ['/api/subject-class/open-subject-class']})
+            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTraining']})
+            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTrainingDelay']})
         }, 500),
         []
     )
 
-    const { showSpinner, hideSpinner } = useSpinner()
+    const {showSpinner, hideSpinner} = useSpinner()
 
     const onSubmit = async () => {
         try {
@@ -103,26 +102,36 @@ export default function MonTheoKeHoachDuKien() {
                     ...subjectVersion,
                 }))
                 .filter((subject) => subjectSelected.includes(subject.subjectVersionId))
-            let planTraining = await sqlTransaction([
+            const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
-                    operation: 'findFirst',
+                    operation: 'upsert',
                     data: {
-                        where: { semesterId, trainingObjectTypeId },
+                        where: {
+                            trainingObjectTypeId_semesterId: {
+                                trainingObjectTypeId,
+                                semesterId,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            trainingObjectTypeId,
+                            semesterId,
+                        },
+                        select: {
+                            id:true,
+                            planTrainingSubjects: {
+                                select: {
+                                    subjectVersionId: true,
+                                },
+                                where: {
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                },
+                            },
+                        },
                     },
                 },
             ])
-            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
-                planTraining = await sqlTransaction([
-                    {
-                        model: 'PlanTraining',
-                        operation: 'create',
-                        data: {
-                            data: { semesterId, trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
 
             if (planTraining.status !== 200) {
                 throw new Error('Lỗi khi tạo kế hoạch đào tạo')
@@ -137,7 +146,7 @@ export default function MonTheoKeHoachDuKien() {
                     model: 'PlanTraining',
                     operation: 'update',
                     data: {
-                        where: { id: planTrainingId },
+                        where: {id: planTrainingId},
                         data: {
                             planTrainingSubjects: {
                                 create: subject.map((subject) => ({
@@ -181,7 +190,7 @@ export default function MonTheoKeHoachDuKien() {
                     <Flex justify="space-between" gap={4}>
                         <Col span={8}>
                             <Form.Item className="m-0" name="searchText">
-                                <Input id="search" placeholder="Tìm kiếm" allowClear />
+                                <Input id="search" placeholder="Tìm kiếm" allowClear/>
                             </Form.Item>
                         </Col>
                         <Flex gap={8}>
@@ -196,7 +205,7 @@ export default function MonTheoKeHoachDuKien() {
                     </Flex>
                 </Col>
                 <Col span={24}>
-                    <Form.Item hidden name="subjectSelected" />
+                    <Form.Item hidden name="subjectSelected"/>
                     <Table
                         className="mt-0"
                         rowKey="groupKey"
@@ -211,7 +220,7 @@ export default function MonTheoKeHoachDuKien() {
                             getCheckboxProps: (record) => ({
                                 disabled: record.rowSpan === 0,
                             }),
-                            onCell: (record) => ({ rowSpan: record.rowSpan }),
+                            onCell: (record) => ({rowSpan: record.rowSpan}),
                             columnWidth: 15,
                         }}
                         onRow={(record) => {
@@ -242,20 +251,20 @@ export default function MonTheoKeHoachDuKien() {
                                 width: 35,
                                 dataIndex: 'index',
                                 align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                onCell: (record) => ({rowSpan: record.rowSpan}),
                             },
                             {
                                 title: 'Mã MH',
                                 dataIndex: 'subjectVersionCode',
                                 align: 'center',
                                 width: 100,
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                onCell: (record) => ({rowSpan: record.rowSpan}),
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'subjectVersionName',
                                 align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                onCell: (record) => ({rowSpan: record.rowSpan}),
                                 render: (__, record) => {
                                     return (
                                         <div className="text-left">
@@ -294,14 +303,14 @@ export default function MonTheoKeHoachDuKien() {
                                 dataIndex: 'countStudent',
                                 width: 80,
                                 align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                onCell: (record) => ({rowSpan: record.rowSpan}),
                             },
                             {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganizationCode',
                                 width: 150,
                                 align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                onCell: (record) => ({rowSpan: record.rowSpan}),
                             },
                         ]}
                         pagination={false}

@@ -81,6 +81,7 @@ export default {
     "KE_HOACH_GIAO_DUC_LAP_KE_HOACH": "/ke-hoach-giao-duc/lap-ke-hoach",
     "KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
     "KE_HOACH_HOC_LAI_DANG_KY_HOC": "/ke-hoach-hoc-lai/dang-ky-hoc",
+    "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
     "KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-hoc-lai/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_HOC_LAI_LAP_KE_HOACH": "/ke-hoach-hoc-lai/lap-ke-hoach",
     "KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY": "/ke-hoach-hoc-lai/phan-cong-giang-day",

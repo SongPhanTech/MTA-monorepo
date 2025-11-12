@@ -17,7 +17,8 @@ export function parseDate(date?: string): dayjs.Dayjs {
         'DD/MM/YY',
     ]
 
-    return dayjs(date, dateFormats, true)
+    const trimmed = date?.replace(/^[']+|[']+$/g, '')
+    return dayjs(trimmed, dateFormats, true)
 }
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {

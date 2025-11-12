@@ -8,6 +8,7 @@ import useSpinner from '@hooks/spinner'
 import type { Survey, SurveyObjectType, SurveyResponse, SurveyTopic } from '@workspace/db'
 import {
     useCreateSurvey,
+    useCreateSurveyChoice,
     useFindManySchoolYear,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
@@ -20,8 +21,8 @@ import {
     Col,
     Form,
     Input,
-    message,
     Modal,
+    message,
     Radio,
     Row,
     Steps,
@@ -114,6 +115,7 @@ const PutSurveyModal = () => {
 
     const { mutateAsync: create } = useCreateSurvey()
     const { mutateAsync: update } = useUpdateSurvey()
+    const { mutateAsync: createSurveyChoice } = useCreateSurveyChoice()
     const { mutateAsync: createMultiple } = useCreateClusterSurvey()
     const { data: surveyTopics = [] } = useFindManySurveyTopic()
     const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
@@ -162,14 +164,6 @@ const PutSurveyModal = () => {
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
                             surveyChoice: {
-                                createMany: {
-                                    data: output.surveyChoice.map((item) => ({
-                                        answer: item.answer,
-                                        description: item.description,
-                                        requireExplanation: item.requireExplanation,
-                                    })),
-                                    skipDuplicates: true,
-                                },
                                 deleteMany: {
                                     id: {
                                         notIn: output.surveyChoice.map((item) => item.id),
@@ -186,12 +180,25 @@ const PutSurveyModal = () => {
                             id: input?.id,
                         },
                     })
+
+                    // TODO: fix create survey choice
+                    for (const choice of output.surveyChoice) {
+                        await createSurveyChoice({
+                            data: {
+                                survey: { connect: { id: input?.id } },
+                                answer: choice.answer,
+                                description: choice.description,
+                                requireExplanation: choice.requireExplanation,
+                            },
+                        })
+                    }
+
                     message.success('Cập nhật thành công')
                     queryClient.invalidateQueries({
                         queryKey: ['Level'],
                     })
                 } else {
-                    await create({
+                    const res = await create({
                         data: {
                             code: output.code,
                             name: output.name.trim(),
@@ -215,15 +222,15 @@ const PutSurveyModal = () => {
                             isPublic: output.isPublic,
                             anonymous: !output.isPublic ? false : output.anonymous,
                             additionalSuggestion: output.additionalSuggestion,
-                            surveyChoice: {
-                                createMany: {
-                                    data: output.surveyChoice.map((item) => ({
-                                        answer: item.answer,
-                                        description: item.description,
-                                        requireExplanation: item.requireExplanation,
-                                    })),
-                                },
-                            },
+                            // surveyChoice: {
+                            //     create: {
+                            //         data: output.surveyChoice.map((item) => ({
+                            //             answer: item.answer,
+                            //             description: item.description,
+                            //             requireExplanation: item.requireExplanation,
+                            //         })),
+                            //     },
+                            // },
                             surveyQuestion: {
                                 connect: output.surveyQuestionIds.length
                                     ? output.surveyQuestionIds.map((item) => ({ id: item }))
@@ -231,6 +238,18 @@ const PutSurveyModal = () => {
                             },
                         },
                     })
+
+                    // TODO: fix create survey choice
+                    for (const choice of output.surveyChoice) {
+                        await createSurveyChoice({
+                            data: {
+                                survey: { connect: { id: res?.id } },
+                                answer: choice.answer,
+                                description: choice.description,
+                                requireExplanation: choice.requireExplanation,
+                            },
+                        })
+                    }
                     message.success('Thêm mới thành công')
                 }
                 queryClient.invalidateQueries({

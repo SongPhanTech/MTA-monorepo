@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
 import type { GetClusterSurveyStatistics200ChoicesItemClusterSurvey } from './getClusterSurveyStatistics200ChoicesItemClusterSurvey'
-import type { GetClusterSurveyStatistics200ChoicesItemSurvey } from './getClusterSurveyStatistics200ChoicesItemSurvey'
+import type { GetClusterSurveyStatistics200ChoicesItemSurveyItem } from './getClusterSurveyStatistics200ChoicesItemSurveyItem'
 import type { GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem } from './getClusterSurveyStatistics200ChoicesItemSurveyResponsesItem'
 
 export type GetClusterSurveyStatistics200ChoicesItem = {
@@ -27,10 +26,8 @@ export type GetClusterSurveyStatistics200ChoicesItem = {
     answer: string
     requireExplanation: boolean
     /** @nullable */
-    surveyId?: string | null
-    /** @nullable */
     clusterSurveyId?: string | null
-    survey?: GetClusterSurveyStatistics200ChoicesItemSurvey
     clusterSurvey?: GetClusterSurveyStatistics200ChoicesItemClusterSurvey
+    survey?: GetClusterSurveyStatistics200ChoicesItemSurveyItem[]
     surveyResponses?: GetClusterSurveyStatistics200ChoicesItemSurveyResponsesItem[]
 }

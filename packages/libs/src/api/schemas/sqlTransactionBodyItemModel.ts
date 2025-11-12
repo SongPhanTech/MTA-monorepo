@@ -11,6 +11,7 @@ export type SqlTransactionBodyItemModel =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SqlTransactionBodyItemModel = {
     Config: 'Config',
+    Suggestion: 'Suggestion',
     ChangeLog: 'ChangeLog',
     UserProfile: 'UserProfile',
     HocHam: 'HocHam',

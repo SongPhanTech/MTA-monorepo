@@ -175,7 +175,7 @@ const DefaultLayout = ({
                                     background: colorBgContainer,
                                 }}
                             >
-                                <div className="mt-3 mb-6">
+                                <div className="my-0">
                                     <Breadcrumb items={listBreadcrumb} />
                                 </div>
                                 {children}

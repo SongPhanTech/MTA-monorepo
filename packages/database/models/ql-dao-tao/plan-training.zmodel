@@ -25,7 +25,6 @@ model PlanTrainingDelay extends BaseNoCode {
   trainingObjectTypeId      String
 
   planTrainingDelaySubjects PlanTrainingDelaySubject[] // Môn học bị trì hoãn
-
   @@schema("ql-dao-tao")
 }
 
@@ -48,7 +47,7 @@ model PlanTraining extends BaseNoCode {
   semesterId           String
 
   planTrainingSubjects PlanTrainingSubject[]
-
+  @@unique([trainingObjectTypeId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -916,10 +915,11 @@ model SubjectClass extends BaseNoCode {
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]  // Thứ trong tuần và tiết học
+	survey                      Survey[] // Đợt khảo sát cho giảng viên
 
   subjectClassHistory         SubjectClassHistory[]
-  survey                      Survey []// Đợt khảo sát cho giảng viên
   @@schema("ql-dao-tao")
+
 }
 
 model SubjectClassHistory extends Base {

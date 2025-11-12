@@ -3341,6 +3341,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   isPublic: 'isPublic',
   anonymous: 'anonymous',
   lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
   surveyTopicId: 'surveyTopicId',
   additionalSuggestion: 'additionalSuggestion',
   clusterSurveyId: 'clusterSurveyId'
@@ -6435,6 +6436,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
   surveyTopicId: 'surveyTopicId',
   clusterSurveyId: 'clusterSurveyId'
 };

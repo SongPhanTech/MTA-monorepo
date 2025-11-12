@@ -24,6 +24,8 @@ export type GraduationCheckResultDowngradedFrom = {
     /** @nullable */
     createdBy?: string | null
     classification: string
+    /** @nullable */
+    classificationEnglish?: string | null
     context: GraduationCheckResultDowngradedFromContext
     rankOrder: number
     baseScore: GraduationCheckResultDowngradedFromBaseScore

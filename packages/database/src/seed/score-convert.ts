@@ -10,7 +10,7 @@ export const scoreConversions = [
     {
         classification: 'Giỏi',
         base10Min: 8.5,
-        base10Max: 8.9,
+        base10Max: 9,
         letter: 'A',
         base4: 3.7,
         pass: true,
@@ -18,7 +18,7 @@ export const scoreConversions = [
     {
         classification: 'Giỏi',
         base10Min: 8.0,
-        base10Max: 8.4,
+        base10Max: 8.5,
         letter: 'B+',
         base4: 3.5,
         pass: true,
@@ -26,7 +26,7 @@ export const scoreConversions = [
     {
         classification: 'Khá',
         base10Min: 7.0,
-        base10Max: 7.9,
+        base10Max: 8,
         letter: 'B',
         base4: 3.0,
         pass: true,
@@ -34,7 +34,7 @@ export const scoreConversions = [
     {
         classification: 'TBK',
         base10Min: 6.5,
-        base10Max: 6.9,
+        base10Max: 7,
         letter: 'C+',
         base4: 2.5,
         pass: true,
@@ -42,7 +42,7 @@ export const scoreConversions = [
     {
         classification: 'TB',
         base10Min: 5.5,
-        base10Max: 6.4,
+        base10Max: 6.5,
         letter: 'C',
         base4: 2.0,
         pass: true,
@@ -50,7 +50,7 @@ export const scoreConversions = [
     {
         classification: 'TB',
         base10Min: 5.0,
-        base10Max: 5.4,
+        base10Max: 5.5,
         letter: 'D+',
         base4: 1.5,
         pass: true,
@@ -59,7 +59,7 @@ export const scoreConversions = [
     {
         classification: 'Yếu',
         base10Min: 4.0,
-        base10Max: 4.9,
+        base10Max: 5,
         letter: 'D',
         base4: 1.0,
         pass: true,
@@ -72,6 +72,5 @@ export const scoreConversions = [
         letter: 'F',
         base4: 0.0,
         pass: false,
-        improvementRegister: true,
     },
 ]

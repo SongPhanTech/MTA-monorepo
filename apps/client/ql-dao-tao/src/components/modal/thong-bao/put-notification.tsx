@@ -150,7 +150,7 @@ const PutNotificationModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa thời gian đào tạo' : 'Thêm mới thời gian đào tạo'}
+            title={id ? 'Chỉnh sửa thông báo' : 'Thêm mới thông báo'}
             className="w-[85vw]"
         >
             <Col span={24}>

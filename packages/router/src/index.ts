@@ -7,7 +7,7 @@ import {
     SettingOutlined,
     TeamOutlined,
 } from '@ant-design/icons'
-import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
+import type {AntdIconProps} from '@ant-design/icons/lib/components/AntdIcon'
 import {
     BarChart3,
     BookOpenCheck,
@@ -28,23 +28,24 @@ import {
     ScrollText,
     Settings,
 } from 'lucide-react'
-import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
-import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
-import { QL_DAO_TAO_PERMISSION } from '../generated/ql-dao-tao'
-import { QL_HO_SO_PERMISSION } from '../generated/ql-ho-so'
+import {DANG_KY_HOC_PERMISSION} from '../generated/dang-ky-hoc'
+import {KHAO_THI_PERMISSION} from '../generated/khao-thi'
+import {QL_DAO_TAO_PERMISSION} from '../generated/ql-dao-tao'
+import {QL_HO_SO_PERMISSION} from '../generated/ql-ho-so'
 import ROUTER_PATH from '../generated/router'
-import { TRO_LY_AO_PERMISSION } from '../generated/tro-ly-ao'
+import {TRO_LY_AO_PERMISSION} from '../generated/tro-ly-ao'
 import './index.css'
+
 interface MenuItem {
     id: string
     label: React.ReactNode
     icon?:
         | React.ForwardRefExoticComponent<
-              Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-          >
+        Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+    >
         | React.ForwardRefExoticComponent<
-              Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-          >
+        Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+    >
     path?: string
     children?: MenuItem[]
     description?: string
@@ -144,41 +145,42 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
             },
             {
-                id: 'ke-hoach-hoc-lai',
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI,
                 label: 'Kế hoạch học lại',
+                path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI,
                 icon: CalendarRange,
-                children: [
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
-                        label: 'Thống kê nợ',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
-                        description: 'Thống kê nợ',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                        label: 'Lập kế hoạch',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                        description: 'Lập kế hoạch',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Mở lớp môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        description: 'Kế hoạch mở lớp học lại',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                        label: 'Đăng ký học lại',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                        description: 'Đăng ký học lại',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                        label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                        description: 'Phân công giảng dạy',
-                    },
-                ],
+                // children: [
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
+                //         label: 'Thống kê nợ',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
+                //         description: 'Thống kê nợ',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
+                //         label: 'Lập kế hoạch',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
+                //         description: 'Lập kế hoạch',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
+                //         label: 'Mở lớp môn học',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
+                //         description: 'Kế hoạch mở lớp học lại',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_DANG_KY_HOC,
+                //         label: 'Đăng ký học lại',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_DANG_KY_HOC,
+                //         description: 'Đăng ký học lại',
+                //     },
+                //     {
+                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
+                //         label: 'Phân công giảng dạy',
+                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
+                //         description: 'Phân công giảng dạy',
+                //     },
+                // ],
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
@@ -849,6 +851,6 @@ export {
     TRO_LY_AO_PERMISSION,
     QL_HO_SO_PERMISSION,
 }
-export { ROUTER_PATH, PUBLIC_ROUTER }
-export type { MenuItem, NavigationType }
+export {ROUTER_PATH, PUBLIC_ROUTER}
+export type {MenuItem, NavigationType}
 export default NAVIGATION

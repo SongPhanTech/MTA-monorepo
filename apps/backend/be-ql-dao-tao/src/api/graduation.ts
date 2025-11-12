@@ -338,7 +338,7 @@ app.openapi(graduationCheck, async (c) => {
                 scoreBase10 >= scoreToPass
             ) {
                 const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
-                // skip if can't improve or score is already higher
+                // skip if pre-score can't improve or score is already higher
                 if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
                     continue
                 }
@@ -363,7 +363,6 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        // TODO: Implement logic for check equivalence subject
         const equivalencyGroups = await prisma.equivalencyGroup.findMany({
             where: {
                 deletedAt: null,
@@ -404,7 +403,9 @@ app.openapi(graduationCheck, async (c) => {
             }
 
             const subjectScore = subjectScoresMap.get(subject.subjectId)
-            if (subjectScore && !subjectScore.canImprove) {
+
+            // if (subjectScore && !subjectScore.canImprove) {
+            if (subjectScore) {
                 finalScores.set(subject.subjectId, subjectScore)
                 continue
             }
@@ -862,6 +863,58 @@ app.openapi(graduationSessionDecision, async (c) => {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': disposition,
     })
+})
+
+const statisticsGraduationDecision = createRoute({
+    operationId: 'statisticsGraduationDecision',
+    tags: ['Graduation'],
+    path: '/statistics',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Successfully',
+            content: {
+                'application/json': {
+                    schema: z.array(
+                        z.object({
+                            count: z.number(),
+                            year: z.number(),
+                            classification: z.string(),
+                        })
+                    ),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(statisticsGraduationDecision, async (c) => {
+    const { trainingObjectTypeId } = c.req.valid('query')
+    const res = await prisma.$queryRaw<{ count: number; year: number; classification: string }[]>`
+            select count("GraduationDecision"."studentId"),
+            date_part('year', "decisionDate") as year,
+            ARC."classification"              as classification
+        from "ql-dao-tao"."GraduationDecision"
+                inner join "ql-dao-tao"."AcademicRankingConvert" ARC on ARC.id = "GraduationDecision"."finalRankingId"
+                inner join "ql-dao-tao"."StudentGraduationApplication" SGA on SGA.id = "GraduationDecision"."applicationId"
+                inner join "ql-dao-tao"."GraduationSession" GS on GS.id = SGA."sessionId"
+        where GS."trainingObjectTypeId" = ${trainingObjectTypeId}
+        group by date_part('year', "decisionDate"), classification;
+    `
+    return c.json(res, 200)
 })
 
 export default app

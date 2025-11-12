@@ -1,4 +1,3 @@
-import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -27,19 +26,17 @@ export default function DetailSurveyPage() {
     })
     const where = useMemo(
         () => ({
-            subjectClasses: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            student: {
-                                userProfile: {
-                                    id: profileId,
+               subjectClass: {
+                        subjectClassStudent: {
+                            some: {
+                                student: {
+                                    userProfile: {
+                                        id: profileId,
+                                    },
                                 },
                             },
                         },
-                    },
                 },
-            },
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -80,7 +77,7 @@ export default function DetailSurveyPage() {
                         userProfile: true,
                     },
                 },
-                subjectClasses: {
+                subjectClass: {
                     include: {
                         subjectClassStudent: {
                             include: {
@@ -141,15 +138,10 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                <HtmlTruncate>
-                                    <ul>
-                                        {record?.subjectClasses?.map((i: any) => (
-                                            <li key={i.id}>
-                                                {i?.code} - {i?.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </HtmlTruncate>
+                                 <div>
+                                         {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                    </div>
+                                    
                             ),
                         },
                         {
