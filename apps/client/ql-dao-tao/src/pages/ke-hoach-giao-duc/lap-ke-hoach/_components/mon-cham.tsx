@@ -1,20 +1,20 @@
-import {queryClient} from '@api/index'
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
-import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type {PlanTraining} from '@workspace/db/client'
+import type { PlanTraining } from '@workspace/db/client'
 import {
     useFindFirstPlanTrainingDelay,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
-import {sqlTransaction} from '@workspace/libs/api/model'
-import {useAbility} from '@workspace/permissions/hooks'
-import {useSemesterStore, useTrainingObjectTypeStore} from '@workspace/ui'
-import {Button, Col, Flex, Form, Input, message, Row} from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions/hooks'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import {useCallback, useState} from 'react'
+import { useCallback, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -24,19 +24,19 @@ interface SubjectBySemesterForm {
 }
 
 export default function MonCham() {
-    const {canSome} = useAbility()
+    const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
-    const {id: semesterId} = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectDelaySelected = Form.useWatch('subjectDelaySelected', form) || []
 
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const {data: planTrainingDelayData} = useFindFirstPlanTrainingDelay(
+    const { data: planTrainingDelayData } = useFindFirstPlanTrainingDelay(
         {
             where: {
                 trainingObjectTypeId,
@@ -47,7 +47,7 @@ export default function MonCham() {
                         subjectVersion: {
                             include: {
                                 managementOrganization: {
-                                    select: {sMa: true},
+                                    select: { sMa: true },
                                 },
                             },
                         },
@@ -70,21 +70,21 @@ export default function MonCham() {
                         subjectVersion: {
                             ...(searchText && searchText !== ''
                                 ? {
-                                    name: {
-                                        contains: searchText,
-                                        mode: 'insensitive',
-                                    },
-                                }
+                                      name: {
+                                          contains: searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  }
                                 : {}),
                             ...(trainingCourseId
                                 ? {
-                                    trainingCourseId,
-                                }
+                                      trainingCourseId,
+                                  }
                                 : {}),
                             ...(trainingMajorId
                                 ? {
-                                    trainingMajorId,
-                                }
+                                      trainingMajorId,
+                                  }
                                 : {}),
                         },
                     },
@@ -92,7 +92,7 @@ export default function MonCham() {
                     skip: (currentPage - 1) * numberOfPages,
                 },
                 _count: {
-                    select: {planTrainingDelaySubjects: true},
+                    select: { planTrainingDelaySubjects: true },
                 },
             },
         },
@@ -103,22 +103,22 @@ export default function MonCham() {
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
-            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTraining']})
-            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTrainingDelay']})
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
         }, 500),
         []
     )
 
-    const {data: trainingMajorData = []} = useFindManyTrainingMajor({
-        orderBy: {name: 'asc'},
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
     })
 
-    const {data: trainingCourseData = []} = useFindManyTrainingCourse({
-        orderBy: {name: 'asc'},
-        where: {trainingObjectTypeId, deletedAt: null, active: true},
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
-    const {showSpinner, hideSpinner} = useSpinner()
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const onSubmit = async () => {
         try {
@@ -145,7 +145,7 @@ export default function MonCham() {
                             semesterId,
                         },
                         select: {
-                            id:true,
+                            id: true,
                             planTrainingSubjects: {
                                 select: {
                                     subjectVersionId: true,
@@ -177,7 +177,7 @@ export default function MonCham() {
                     model: 'PlanTraining',
                     operation: 'update',
                     data: {
-                        where: {id: planTrainingId},
+                        where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
                                 create: subject.map((subject) => ({
@@ -196,7 +196,7 @@ export default function MonCham() {
                     model: 'PlanTrainingDelay',
                     operation: 'update',
                     data: {
-                        where: {id: planTrainingDelayId},
+                        where: { id: planTrainingDelayId },
                         data: {
                             planTrainingDelaySubjects: {
                                 deleteMany: subjectDelaySelected.map((id) => ({
@@ -235,7 +235,7 @@ export default function MonCham() {
                     <Col span={24}>
                         <Flex justify="space-between" gap={4}>
                             <Form.Item className="mb-0" name="searchText">
-                                <Input id="search" placeholder="Tìm kiếm" allowClear/>
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                             <Button onClick={onSubmit} type="primary">
                                 Thêm vào kế hoạch
@@ -243,7 +243,7 @@ export default function MonCham() {
                         </Flex>
                     </Col>
                     <Col span={24}>
-                        <Form.Item hidden name="subjectDelaySelected"/>
+                        <Form.Item hidden name="subjectDelaySelected" />
                         <Table
                             rowKey="subjectVersionId"
                             data={planTrainingDelayData?.planTrainingDelaySubjects ?? []}

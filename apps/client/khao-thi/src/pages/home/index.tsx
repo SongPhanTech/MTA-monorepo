@@ -58,8 +58,7 @@ function Page() {
                                         Thống kê số lượng giảng viên theo đầu mối
                                     </Title>
                                 </div>
-                                <div className="flex-1">
-                                </div>
+                                <div className="flex-1"></div>
                             </div>
                         </Col>
                     </Row>

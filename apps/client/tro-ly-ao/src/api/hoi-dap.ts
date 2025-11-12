@@ -21,15 +21,12 @@ export async function fetchHoiDap({
         }
     }
 
-    const response = await fetch(
-        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`,
-        {
-            method: 'POST',
-            // do NOT set Content-Type header for FormData; the browser will set the boundary automatically
-            body: formData,
-            signal: signal,
-        }
-    )
+    const response = await fetch(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`, {
+        method: 'POST',
+        // do NOT set Content-Type header for FormData; the browser will set the boundary automatically
+        body: formData,
+        signal: signal,
+    })
 
     if (!response.ok) {
         throw new Error('Lỗi khi gọi API Hỏi Đáp')
