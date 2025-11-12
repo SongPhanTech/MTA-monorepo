@@ -34,6 +34,9 @@ import { buildOrgTree } from '@lib/utils'
 interface ExpertStat {
     expertId: string
     name: string
+    sDonvi:string
+    stk:string
+    tennganhang:string
     GVHD1Student: number
     GVHD2Student: number
     totalPayment: number
@@ -489,6 +492,9 @@ export default function PostgraduateProject() {
                         newStats = {
                             expertId: expertId,
                             name: payment.expert.name ?? '',
+                            sDonvi: payment.expert.organization ?? '',
+                            stk: payment.expert.bankAccountNumber ?? '',
+                            tennganhang: payment.expert.bankName ?? '',
                             GVHD1Student: 0,
                             GVHD2Student: 0,
                             totalPayment: 0,
