@@ -7,7 +7,6 @@ import Table from '@components/commons/table'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import {
-    useFindFirstPlanTraining,
     useFindManySubject,
     useFindManySubjectVersion,
     useFindManyTrainingCourse,
@@ -20,6 +19,8 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { Trash2Icon } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { $Enums, PlanTraining } from '@workspace/db/client'
+
 export type KhoiTaoMonFormType = {
     managementOrganizationIds: string[]
     subjectVersionIds: Record<string, Array<string>>
@@ -27,7 +28,9 @@ export type KhoiTaoMonFormType = {
 dayjs.locale('vi')
 const KhoiTaoMon = () => {
     const [form] = Form.useForm<KhoiTaoMonFormType>()
-    const { isOpen, onClose } = useDisclosure({
+    const { isOpen, onClose, input } = useDisclosure<{
+        hocLai: boolean
+    }>({
         tag: 'KhoiTaoMon',
         onClose: form.resetFields,
     })
@@ -37,22 +40,47 @@ const KhoiTaoMon = () => {
     const subjectVersionIds = Form.useWatch('subjectVersionIds', form) || {}
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: planTraining } = useFindFirstPlanTraining({
-        where: {
-            trainingObjectTypeId,
-            semesterId,
-            deletedAt: null,
-            active: true,
-        },
-        select: {
-            id: true,
-        },
-    })
 
     async function onOk(output?: KhoiTaoMonFormType) {
-        if (!output || !planTraining?.id) return
+        if (!output) return
         try {
             showSpinner()
+            const planTraining = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'upsert',
+                    data: {
+                        where: {
+                            trainingObjectTypeId_semesterId: {
+                                trainingObjectTypeId,
+                                semesterId,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            trainingObjectTypeId,
+                            semesterId,
+                        },
+                        select: {
+                            id: true,
+                            planTrainingSubjects: {
+                                select: {
+                                    subjectVersionId: true,
+                                },
+                                where: {
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
+
+            if (planTraining.status !== 200) {
+                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
+            }
+            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
+
             const res = await sqlTransaction(
                 Object.entries(output.subjectVersionIds).map(
                     ([subjectVersionId, fixedClassIds]) => {
@@ -62,7 +90,7 @@ const KhoiTaoMon = () => {
                             data: {
                                 data: {
                                     subjectVersionId,
-                                    planTrainingId: planTraining.id,
+                                    planTrainingId,
                                     fixedClasses: {
                                         connect: fixedClassIds.map((id) => ({ id })),
                                     },
@@ -78,6 +106,9 @@ const KhoiTaoMon = () => {
             }
 
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
+            queryClient.invalidateQueries({
+                queryKey: ['/api/subject-class/open-subject-class-retake'],
+            })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingSubject'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
@@ -94,6 +125,7 @@ const KhoiTaoMon = () => {
             hideSpinner()
         }
     }
+
     const { getExamTypeLabel } = useExamTypeOptions()
 
     const { data: subjectVersionData = [] } = useFindManySubject({
@@ -106,6 +138,9 @@ const KhoiTaoMon = () => {
                                 trainingObjectTypeId,
                                 semesterId,
                             },
+                            subjectClassType: input?.hocLai
+                                ? $Enums.SubjectClassType.RETAKE
+                                : $Enums.SubjectClassType.NORMAL,
                         },
                     },
                 },

@@ -1,40 +1,42 @@
 import Table from '@components/commons/table'
-import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
-import {$Enums, PlanTraining} from '@workspace/db/client'
-import {useOpenSubjectClassRetake} from '@workspace/libs/api/training'
-import {useAbility} from '@workspace/permissions/hooks'
+import { $Enums, PlanTraining } from '@workspace/db/client'
+import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
 import {
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingMajorStore,
-    useTrainingObjectTypeStore
+    useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import {Button, Col, Flex, Form, Input, message, Row} from 'antd'
-import {type Key, useMemo, useState} from 'react'
-import {sqlTransaction} from "@workspace/libs/api/model";
-import useSpinner from "@hooks/spinner";
-import {queryClient} from "@lib/api";
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { useMemo, useState } from 'react'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import useSpinner from '@hooks/spinner'
+import { queryClient } from '@lib/api'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    subjectSelected?: Array<string>
+    subjectSelected?: Array<{
+        id: string
+        count: number
+    }>
 }
 
 export default function MonCoHVSVChuaDat() {
-    const {canSome} = useAbility()
+    const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
-    const {id: semesterId} = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const {showSpinner, hideSpinner} = useSpinner()
+    const { showSpinner, hideSpinner } = useSpinner()
 
-    const {id: trainingCourseId} = useTrainingCourseStore()
-    const {id: trainingMajorId} = useTrainingMajorStore()
-    const {data: res} = useOpenSubjectClassRetake(
+    const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: trainingMajorId } = useTrainingMajorStore()
+    const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText,
             trainingCourseId,
@@ -44,7 +46,7 @@ export default function MonCoHVSVChuaDat() {
             limit: numberOfPages,
             page: currentPage,
         },
-        {query: {enabled: !!trainingObjectTypeId && !!semesterId}}
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
@@ -54,8 +56,6 @@ export default function MonCoHVSVChuaDat() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
-            const subject = data
-                .filter((subject) => subjectSelected.includes(subject.id))
             const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -100,12 +100,13 @@ export default function MonCoHVSVChuaDat() {
                     model: 'PlanTraining',
                     operation: 'update',
                     data: {
-                        where: {id: planTrainingId},
+                        where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
-                                create: subject.map((subject) => ({
+                                create: subjectSelected.map((subject) => ({
                                     subjectVersionId: subject.id,
                                     subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    studentCount: subject.count,
                                 })),
                             },
                         },
@@ -137,10 +138,10 @@ export default function MonCoHVSVChuaDat() {
         <Form form={form}>
             <Row gutter={[8, 0]}>
                 <Col span={24}>
-                    <Flex justify={"space-between"}>
+                    <Flex justify={'space-between'}>
                         <Col span={12}>
                             <Form.Item className="mb-0" name="searchText">
-                                <Input id="search" placeholder="Tìm kiếm" allowClear/>
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
                         <Flex gap={8} justify={'end'}>
@@ -155,14 +156,20 @@ export default function MonCoHVSVChuaDat() {
                     </Flex>
                 </Col>
                 <Col span={24}>
-                    <Form.Item hidden name="subjectSelected"/>
+                    <Form.Item hidden name="subjectSelected" />
                     <Table
                         rowKey="id"
-                        data={data as any}
+                        data={data}
                         rowSelection={{
-                            selectedRowKeys: [...subjectSelected],
-                            onChange: (selectedRowKeys) => {
-                                form.setFieldValue('subjectSelected', selectedRowKeys)
+                            selectedRowKeys: [...subjectSelected.map((e) => e.id)],
+                            onChange: (_, selectedRows) => {
+                                form.setFieldValue(
+                                    'subjectSelected',
+                                    selectedRows.map((e) => ({
+                                        id: e.id,
+                                        count: e.count,
+                                    }))
+                                )
                             },
                             type: 'checkbox',
                             columnWidth: 35,
@@ -170,12 +177,19 @@ export default function MonCoHVSVChuaDat() {
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    if (subjectSelected.includes(record.id)) {
-                                        const newSelected = subjectSelected.filter((id) => id !== record.id)
+                                    if (subjectSelected.some((e) => e.id === record.id)) {
+                                        const newSelected = subjectSelected.filter(
+                                            (e) => e.id !== record.id
+                                        )
                                         form.setFieldValue('subjectSelected', newSelected)
-
                                     } else {
-                                        const newSelected = [...subjectSelected, record.id as Key]
+                                        const newSelected = [
+                                            ...subjectSelected,
+                                            {
+                                                id: record.id,
+                                                count: record.count,
+                                            },
+                                        ]
                                         form.setFieldValue('subjectSelected', newSelected)
                                     }
                                 },
@@ -187,7 +201,7 @@ export default function MonCoHVSVChuaDat() {
                                 width: 35,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * numberOfPages,
                             },
                             {
                                 title: 'Mã MH',

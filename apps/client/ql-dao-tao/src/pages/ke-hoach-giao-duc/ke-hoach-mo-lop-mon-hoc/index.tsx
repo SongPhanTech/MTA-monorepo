@@ -1,47 +1,20 @@
 import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { createId } from '@workspace/db'
-import type { FixedClass } from '@workspace/db/client'
-import { $Enums } from '@workspace/db/client'
-import { useFindFirstPlanTraining, useFindManyTrainingLocation } from '@workspace/db/hooks'
+import { $Enums, Prisma } from '@workspace/db/client'
+import { useFindFirstPlanTraining } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Popconfirm,
-    Row,
-    Tooltip,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, InputNumber, message, Popover, Row, Switch } from 'antd'
 import _ from 'lodash'
-import { PlusCircle, XCircleIcon } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DndProvider, type DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-
-type SubjectClassForm = {
-    id: string
-    code: string | null
-    count: number
-    createdAt?: Date
-    fixedClasses?: {
-        id: string
-        code: string | null
-        count: number
-    }[]
-}
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type OpenSubjectClassForm = {
     searchText?: string
@@ -54,182 +27,24 @@ type OpenSubjectClassForm = {
             name: string | null
             code: string | null
             maxStudent: number
-            examType?: $Enums.ExamType | null
-            subjectClasses?: Record<string, SubjectClassForm>
             isEdit?: boolean
         }
     >
-    // SubjectVersionId -> SubjectClassId -> FixedClassId
+    // SubjectVersionId -> SubjectClassId
 }
 
-const SubjectClassDropItem: React.FC<{
-    item: SubjectClassForm
-    subjectVersionId: string
-}> = ({ item, subjectVersionId }) => {
-    const form = Form.useFormInstance<OpenSubjectClassForm>()
-    const subjectVersionsForm = Form.useWatch('subjectVersions', form) || {}
-    const fixedClass =
-        subjectVersionsForm?.[subjectVersionId]?.subjectClasses?.[item.id]?.fixedClasses || []
-    const ref = useRef<HTMLDivElement>(null)
-    const [{ canDrop, isOver }, drop] = useDrop(
-        () => ({
-            accept: 'fixedClass',
-            drop: () => ({
-                item,
-            }),
-            collect: (monitor) => ({
-                isOver: monitor.isOver(),
-                canDrop: monitor.canDrop(),
-            }),
-        }),
-        []
-    )
-
-    const onRemoveFixedClass = (fixedClassId: string) => {
-        const subjectClasses = subjectVersionsForm[subjectVersionId] || {}
-        form.setFieldValue('subjectVersions', {
-            ...subjectVersionsForm,
-            [subjectVersionId]: {
-                ...subjectClasses,
-                isEdit: true,
-                subjectClasses: {
-                    ...subjectClasses?.subjectClasses,
-                    [item?.id]: {
-                        ...(subjectClasses?.subjectClasses?.[item?.id] || {}),
-                        fixedClasses:
-                            subjectClasses?.subjectClasses?.[item?.id]?.fixedClasses?.filter(
-                                (fc) => fc.id !== fixedClassId
-                            ) || [],
-                    },
-                },
-            },
-        })
-    }
-
-    const onRemoveSubjectClass = () => {
-        const { [item.id]: _, ...subjectClass } =
-            subjectVersionsForm[subjectVersionId].subjectClasses || {}
-        form.setFieldValue('subjectVersions', {
-            ...subjectVersionsForm,
-            [subjectVersionId]: {
-                ...subjectVersionsForm[subjectVersionId],
-                subjectClasses: subjectClass,
-                isEdit: true,
-            },
-        })
-    }
-
-    drop(ref)
-    return (
-        <div
-            ref={ref}
-            className="border border-dashed border-gray-400 rounded p-2 bg-white select-none h-fit relative"
-            style={{
-                opacity: canDrop && isOver ? 0.4 : 1,
-            }}
-        >
-            <Tooltip title="Xóa LMH">
-                <XCircleIcon
-                    onClick={onRemoveSubjectClass}
-                    className="absolute -top-4 -right-2 z-10 text-red-500 bg-white rounded p-0"
-                    size={14}
-                />
-            </Tooltip>
-            {item.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId.count || 0), 0)})
-            <div className="grid grid-cols-3 gap-1">
-                {!!fixedClass?.length &&
-                    fixedClass.map((fcId) => (
-                        <div
-                            onClick={() => onRemoveFixedClass(fcId.id)}
-                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none"
-                            key={fcId.id}
-                            style={{
-                                height: (fcId.count || 0) * 1 + 30,
-                            }}
-                        >
-                            {fcId.code} ({fcId.count})
-                        </div>
-                    ))}
-            </div>
-        </div>
-    )
-}
-
-const FixedClassDragItem: React.FC<{
-    item: FixedClass & { _count?: { students: number } }
-    subjectVersionId: string
-    hiddenAlreadyAdded?: boolean
-}> = ({ item, subjectVersionId, hiddenAlreadyAdded = true }) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const form = Form.useFormInstance<OpenSubjectClassForm>()
-    const subjectVersionsForm = Form.useWatch('subjectVersions', form) || {}
-    const subjectClasses = subjectVersionsForm[subjectVersionId] || {}
-    const [{ opacity }, drag] = useDrag(
-        () => ({
-            type: 'fixedClass',
-            end(_, monitor) {
-                const dropResult = monitor.getDropResult() as any
-                if (!dropResult) return
-                form.setFieldValue('subjectVersions', {
-                    ...subjectVersionsForm,
-                    [subjectVersionId]: {
-                        ...subjectClasses,
-                        isEdit: true,
-                        subjectClasses: {
-                            ...subjectClasses?.subjectClasses,
-                            [dropResult?.item?.id]: {
-                                ...(subjectClasses?.subjectClasses?.[dropResult?.item?.id] || {}),
-                                fixedClasses: [
-                                    ...(subjectClasses?.subjectClasses?.[dropResult?.item?.id]
-                                        ?.fixedClasses || []),
-                                    {
-                                        id: item.id,
-                                        code: item.code,
-                                        count: item._count?.students || 0,
-                                    },
-                                ],
-                            },
-                        },
-                    },
-                })
-            },
-            collect: (monitor: DragSourceMonitor) => ({
-                opacity: monitor.isDragging() ? 0.4 : 1,
-            }),
-        }),
-        [subjectVersionsForm]
-    )
-
-    drag(ref)
-
-    const isAlreadyAdded = !!Object.values(subjectClasses.subjectClasses || {}).find((e) =>
-        e.fixedClasses?.some((fc) => fc.id === item.id)
-    )
-
-    return (
-        <div
-            ref={ref}
-            hidden={isAlreadyAdded && hiddenAlreadyAdded}
-            onClick={(e) => {
-                e.stopPropagation()
-                e.preventDefault()
-            }}
-            className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
-            style={{ opacity, height: (item?._count?.students ?? 0) * 1 + 30 }}
-        >
-            {item.code} ({item._count?.students})
-        </div>
-    )
+type MoLMHNhanhForm = {
+    count: number
+    isOverride: boolean
 }
 
 export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolean }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
+    const [formMoLMHNhanh] = Form.useForm<MoLMHNhanhForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: semesterId } = useSemesterStore()
-
-    const [isLayering, setIsLayering] = useState(false)
 
     const searchText = Form.useWatch('searchText', form)
     const { id: trainingCourseId } = useTrainingCourseStore()
@@ -280,16 +95,20 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                         subjectClassType: hocLai
                             ? $Enums.SubjectClassType.RETAKE
                             : $Enums.SubjectClassType.NORMAL,
-                        fixedClasses: {
-                            some: {
-                                trainingCourseId,
-                                curriculumVersion: {
-                                    curriculum: {
-                                        trainingMajorId,
-                                    },
-                                },
-                            },
-                        },
+                        ...(hocLai
+                            ? {}
+                            : {
+                                  fixedClasses: {
+                                      some: {
+                                          trainingCourseId,
+                                          curriculumVersion: {
+                                              curriculum: {
+                                                  trainingMajorId,
+                                              },
+                                          },
+                                      },
+                                  },
+                              }),
                         subjectVersion: {
                             OR: [
                                 {
@@ -364,16 +183,20 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 subjectClassType: hocLai
                                     ? $Enums.SubjectClassType.RETAKE
                                     : $Enums.SubjectClassType.NORMAL,
-                                fixedClasses: {
-                                    some: {
-                                        trainingCourseId,
-                                        curriculumVersion: {
-                                            curriculum: {
-                                                trainingMajorId,
-                                            },
-                                        },
-                                    },
-                                },
+                                ...(hocLai
+                                    ? {}
+                                    : {
+                                          fixedClasses: {
+                                              some: {
+                                                  trainingCourseId,
+                                                  curriculumVersion: {
+                                                      curriculum: {
+                                                          trainingMajorId,
+                                                      },
+                                                  },
+                                              },
+                                          },
+                                      }),
                                 subjectVersion: {
                                     OR: [
                                         {
@@ -397,11 +220,11 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
 
     useEffect(() => {
         if (data) {
-            resetSubjectClassToFixedClass()
+            resetData()
         }
     }, [data])
 
-    const resetSubjectClassToFixedClass = () => {
+    const resetData = () => {
         if (!data) return
         form.setFieldValue(
             'subjectVersions',
@@ -415,35 +238,12 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                         name: cur.subjectVersion?.name,
                         code: cur.subjectVersion?.code,
                         maxStudent:
+                            cur.studentCount ??
                             cur.subjectVersion.subjectClass?.[0]?.maxStudent ??
                             cur.fixedClasses.reduce(
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
                             ),
-                        examType: cur.subjectVersion?.examType,
-                        subjectClasses: cur.subjectVersion.subjectClass.reduce(
-                            (subAcc, subCur) => {
-                                if (!subAcc) {
-                                    return {}
-                                }
-                                subAcc[subCur.id] = {
-                                    id: subCur.id,
-                                    code: subCur.code,
-                                    count: subCur.fixedClasses.reduce(
-                                        (sum, fc) => sum + (fc._count?.students ?? 0),
-                                        0
-                                    ),
-                                    createdAt: subCur.createdAt,
-                                    fixedClasses: subCur.fixedClasses.map((fc) => ({
-                                        id: fc.id,
-                                        code: fc.code,
-                                        count: fc._count?.students || 0,
-                                    })),
-                                }
-                                return subAcc
-                            },
-                            {} as Record<string, SubjectClassForm>
-                        ),
                         isEdit: false,
                     }
                     return acc
@@ -463,167 +263,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
         []
     )
 
-    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
-        orderBy: { name: 'asc' },
-        where: { deletedAt: null, active: true },
-    })
-
     const { hideSpinner, showSpinner } = useSpinner()
-
-    const onAddSubjectClass = (subjectVersionId: string) => {
-        const subjectClasses = subjectVersions[subjectVersionId] || {}
-        const newId = createId()
-        form.setFieldValue('subjectVersions', {
-            ...subjectVersions,
-            [subjectVersionId]: {
-                ...subjectClasses,
-                isEdit: true,
-                subjectClasses: {
-                    ...subjectClasses?.subjectClasses,
-                    [newId]: {
-                        id: newId,
-                        code: `${subjectVersions[subjectVersionId]?.code ?? ''} ${
-                            Number(
-                                Object.values(subjectClasses.subjectClasses || {})
-                                    .sort((a, b) => (a.code || '').localeCompare(b.code || ''))
-                                    .pop()
-                                    ?.code?.split(' ')
-                                    .pop() ?? '0'
-                            ) + 1
-                        }`,
-                        count: 0,
-                        createdAt: new Date(),
-                        fixedClasses: [],
-                    },
-                },
-            },
-        })
-    }
-
-    const onSaveLayering = async () => {
-        try {
-            showSpinner()
-            const payload = Object.entries(subjectVersions)
-                .filter(([, subjectVersion]) => subjectVersion.isEdit)
-                .flatMap(([subjectVersionId, subjectVersion]) =>
-                    Object.entries(subjectVersion.subjectClasses || {}).flatMap(
-                        ([subjectClassId, subjectClass], index) => ({
-                            subjectClassId,
-                            ...subjectClass,
-                            subjectVersion,
-                            index,
-                            subjectVersionId,
-                        })
-                    )
-                )
-
-            const allSubjectVersionIds = Object.entries(subjectVersions)
-                .filter(([, subjectVersion]) => subjectVersion.isEdit)
-                .map(([key]) => key)
-
-            const res = await sqlTransaction([
-                ...allSubjectVersionIds.flatMap((subjectVersionId) => [
-                    {
-                        model: 'ClassRegisterLogs' as const,
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                subjectClass: {
-                                    semesterId,
-                                    trainingObjectTypeId,
-                                    subjectId: subjectVersionId,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'SubjectClassTime' as const,
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                subjectClass: {
-                                    semesterId,
-                                    trainingObjectTypeId,
-                                    subjectId: subjectVersionId,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'ClassSchedule' as const,
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                subjectClass: {
-                                    semesterId,
-                                    trainingObjectTypeId,
-                                    subjectId: subjectVersionId,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'SubjectClass' as const,
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                subjectId: subjectVersionId,
-                                semesterId: semesterId,
-                                trainingObjectTypeId: trainingObjectTypeId,
-                            },
-                        },
-                    },
-                ]),
-                ...payload.map((e) => ({
-                    model: 'SubjectClass' as const,
-                    operation: 'upsert',
-                    data: {
-                        where: {
-                            id: e.subjectClassId,
-                        },
-                        update: {
-                            subjectId: e.subjectVersionId,
-                            semesterId: semesterId,
-                            trainingObjectTypeId: trainingObjectTypeId,
-                            code: `${e.subjectVersion.code} ${String(e.index + 1)}`,
-                            name: e.subjectVersion.name,
-                            maxStudent: e.subjectVersion.maxStudent,
-                            examType: e.subjectVersion.examType,
-                            schedule: $Enums.SubjectClassSchedule.MORNING,
-                            fixedClasses: {
-                                set: e.fixedClasses?.map((fc) => ({
-                                    id: fc.id,
-                                })),
-                            },
-                        },
-                        create: {
-                            subjectId: e.subjectVersionId,
-                            semesterId: semesterId,
-                            trainingObjectTypeId: trainingObjectTypeId,
-                            code: `${e.subjectVersion.code} ${String(e.index + 1)}`,
-                            name: e.subjectVersion.name,
-                            maxStudent: e.subjectVersion.maxStudent,
-                            examType: e.subjectVersion.examType,
-                            schedule: $Enums.SubjectClassSchedule.MORNING,
-                            fixedClasses: {
-                                connect: e.fixedClasses?.map((fc) => ({
-                                    id: fc.id,
-                                })),
-                            },
-                        },
-                    },
-                })),
-            ])
-            if (res.status !== 200) throw new Error('Lưu ghép lớp thất bại')
-            message.success('Lưu ghép lớp thành công')
-            form.resetFields()
-            debouncedRefetch()
-        } catch (error) {
-            message.error('Lưu ghép lớp thất bại')
-            console.error(error)
-        }
-        hideSpinner()
-    }
 
     return (
         <div>
@@ -660,25 +300,298 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
+                                <Popover
+                                    content={
+                                        <Form
+                                            form={formMoLMHNhanh}
+                                            initialValues={{ isOverride: false }}
+                                            onFinish={async (values: MoLMHNhanhForm) => {
+                                                try {
+                                                    if (!semesterId || !trainingObjectTypeId) return
+                                                    showSpinner()
+                                                    const resList = await sqlTransaction([
+                                                        ...(values.isOverride
+                                                            ? [
+                                                                  {
+                                                                      model: 'SubjectClass' as const,
+                                                                      operation: 'deleteMany',
+                                                                      data: {
+                                                                          where: {
+                                                                              semesterId,
+                                                                              trainingObjectTypeId,
+                                                                              status: 'DRAFT',
+                                                                              cancelled: false,
+                                                                              type: hocLai
+                                                                                  ? $Enums
+                                                                                        .SubjectClassType
+                                                                                        .RETAKE
+                                                                                  : $Enums
+                                                                                        .SubjectClassType
+                                                                                        .NORMAL,
+                                                                          },
+                                                                      },
+                                                                  },
+                                                              ]
+                                                            : []),
+                                                        {
+                                                            model: 'PlanTraining',
+                                                            operation: 'findFirst',
+                                                            data: {
+                                                                where: {
+                                                                    semesterId,
+                                                                    trainingObjectTypeId,
+                                                                    planTrainingSubjects: {
+                                                                        some: {
+                                                                            subjectClassType: hocLai
+                                                                                ? $Enums
+                                                                                      .SubjectClassType
+                                                                                      .RETAKE
+                                                                                : $Enums
+                                                                                      .SubjectClassType
+                                                                                      .NORMAL,
+                                                                        },
+                                                                    },
+                                                                },
+                                                                select: {
+                                                                    planTrainingSubjects: {
+                                                                        select: {
+                                                                            subjectVersion: {
+                                                                                select: {
+                                                                                    id: true,
+                                                                                    code: true,
+                                                                                    name: true,
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                        where: {
+                                                                            subjectClassType: hocLai
+                                                                                ? $Enums
+                                                                                      .SubjectClassType
+                                                                                      .RETAKE
+                                                                                : $Enums
+                                                                                      .SubjectClassType
+                                                                                      .NORMAL,
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        {
+                                                            model: 'SubjectClass',
+                                                            operation: 'findMany',
+                                                            data: {
+                                                                where: {
+                                                                    semesterId,
+                                                                    trainingObjectTypeId,
+                                                                    status: 'DRAFT',
+                                                                    cancelled: false,
+                                                                    type: hocLai
+                                                                        ? $Enums.SubjectClassType
+                                                                              .RETAKE
+                                                                        : $Enums.SubjectClassType
+                                                                              .NORMAL,
+                                                                },
+                                                            },
+                                                        },
+                                                    ])
+                                                    if (resList.status !== 200) {
+                                                        throw new Error('Lỗi khi lấy dữ liệu')
+                                                    }
+                                                    const [
+                                                        _,
+                                                        listSubjectVersionIds,
+                                                        alreadySubjectIds,
+                                                    ] = resList.data as [
+                                                        null,
+                                                        Prisma.PlanTrainingGetPayload<{
+                                                            select: {
+                                                                planTrainingSubjects: {
+                                                                    select: {
+                                                                        subjectVersion: {
+                                                                            select: {
+                                                                                id: true
+                                                                                code: true
+                                                                                name: true
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }>,
+                                                        Prisma.SubjectClassGetPayload<{}>[],
+                                                    ]
+                                                    const res = await sqlTransaction([
+                                                        ...listSubjectVersionIds.planTrainingSubjects
+                                                            .filter(
+                                                                (pts) =>
+                                                                    !alreadySubjectIds.some(
+                                                                        (asc) =>
+                                                                            asc.subjectId ===
+                                                                            pts.subjectVersion.id
+                                                                    )
+                                                            )
+                                                            .flatMap((e) =>
+                                                                new Array(values.count)
+                                                                    .fill(1)
+                                                                    .map((_, idx) => ({
+                                                                        model: 'SubjectClass' as const,
+                                                                        operation: 'create',
+                                                                        data: {
+                                                                            data: {
+                                                                                semesterId,
+                                                                                trainingObjectTypeId,
+                                                                                type: hocLai
+                                                                                    ? $Enums
+                                                                                          .SubjectClassType
+                                                                                          .RETAKE
+                                                                                    : $Enums
+                                                                                          .SubjectClassType
+                                                                                          .NORMAL,
+                                                                                subjectId:
+                                                                                    e.subjectVersion
+                                                                                        .id,
+                                                                                code: `${e.subjectVersion.code} ${String(idx + 1)}`,
+                                                                                name: e
+                                                                                    .subjectVersion
+                                                                                    .name,
+                                                                                maxStudent:
+                                                                                    subjectVersions[
+                                                                                        e
+                                                                                            .subjectVersion
+                                                                                            .id
+                                                                                    ]?.maxStudent ||
+                                                                                    0,
+                                                                            },
+                                                                        },
+                                                                    }))
+                                                            ),
+                                                    ])
+                                                    if (res.status !== 200) {
+                                                        throw new Error('Lỗi khi mở LMH')
+                                                    }
+                                                    debouncedRefetch()
+                                                    message.success('Mở LMH thành công')
+                                                } catch (error: any) {
+                                                    message.error(
+                                                        'Đã xảy ra lỗi, vui lòng kiểm tra lại'
+                                                    )
+                                                } finally {
+                                                    hideSpinner()
+                                                }
+                                            }}
+                                        >
+                                            <FormItem
+                                                form={formMoLMHNhanh}
+                                                name={'count'}
+                                                required
+                                                label="Số LMH"
+                                            >
+                                                <InputNumber min={0} />
+                                            </FormItem>
+                                            <FormItem
+                                                form={formMoLMHNhanh}
+                                                name={'isOverride'}
+                                                label="Ghi đè LMH đã mở"
+                                                className="mt-2"
+                                            >
+                                                <Switch />
+                                            </FormItem>
+                                            <Col span={24} className="text-right mt-4">
+                                                <Button type="primary" htmlType="submit">
+                                                    Mở LMH
+                                                </Button>
+                                            </Col>
+                                        </Form>
+                                    }
+                                    title="Mở LMH nhanh"
+                                    trigger="click"
+                                    placement="bottomRight"
+                                >
+                                    <Button type={'dashed'}>Mở LMH (nhanh)</Button>
+                                </Popover>
+                                <Button
+                                    onClick={async () => {
+                                        try {
+                                            if (!semesterId || !trainingObjectTypeId) return
+                                            showSpinner()
+                                            const values = await form.validateFields()
+                                            const subjectIds = Object.entries(
+                                                values.subjectVersions || {}
+                                            )
+                                                .filter(([_, v]) => v.isEdit)
+                                                .map(([k, _]) => k)
+                                            const res = await sqlTransaction([
+                                                {
+                                                    model: 'SubjectClass' as const,
+                                                    operation: 'deleteMany',
+                                                    data: {
+                                                        where: {
+                                                            semesterId,
+                                                            trainingObjectTypeId,
+                                                            status: 'DRAFT',
+                                                            cancelled: false,
+                                                            type: hocLai
+                                                                ? $Enums.SubjectClassType.RETAKE
+                                                                : $Enums.SubjectClassType.NORMAL,
+                                                            subjectId: {
+                                                                in: subjectIds,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                                ...Object.entries(values.subjectVersions || {})
+                                                    .filter(([_, v]) => v.isEdit)
+                                                    .flatMap(([subjectId, v]) =>
+                                                        new Array(v.count)
+                                                            .fill(1)
+                                                            .map((_, idx) => ({
+                                                                model: 'SubjectClass' as const,
+                                                                operation: 'create',
+                                                                data: {
+                                                                    data: {
+                                                                        semesterId,
+                                                                        trainingObjectTypeId,
+                                                                        type: hocLai
+                                                                            ? $Enums
+                                                                                  .SubjectClassType
+                                                                                  .RETAKE
+                                                                            : $Enums
+                                                                                  .SubjectClassType
+                                                                                  .NORMAL,
+                                                                        subjectId,
+                                                                        code: `${v.code} ${String(idx + 1)}`,
+                                                                        name: v.name,
+                                                                        maxStudent:
+                                                                            v.maxStudent || 0,
+                                                                    },
+                                                                },
+                                                            }))
+                                                    ),
+                                            ])
+                                            if (res.status !== 200) {
+                                                throw new Error('Lỗi khi mở LMH')
+                                            }
+                                            debouncedRefetch()
+                                            message.success('Mở LMH thành công')
+                                        } catch (error: any) {
+                                            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+                                        } finally {
+                                            hideSpinner()
+                                        }
+                                    }}
+                                    type={'primary'}
+                                >
+                                    Lưu
+                                </Button>
                                 <Button
                                     onClick={() => {
-                                        setIsLayering(!isLayering)
-                                        resetSubjectClassToFixedClass()
+                                        resetData()
                                     }}
-                                    type={isLayering ? 'default' : 'primary'}
+                                    type={'primary'}
+                                    danger
                                 >
-                                    {isLayering ? 'Tắt' : 'Xem'} ghép lớp
+                                    Huỷ
                                 </Button>
-                                {isLayering && (
-                                    <Popconfirm
-                                        onConfirm={onSaveLayering}
-                                        title="Xác nhận lưu kế hoạch ghép lớp?"
-                                        okText="Xác nhận"
-                                        cancelText="Hủy"
-                                    >
-                                        <Button type="primary">Lưu ghép lớp</Button>
-                                    </Popconfirm>
-                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -690,10 +603,8 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                             onRow={(record) => {
                                 return {
                                     className: cn(
-                                        Object.keys(
-                                            subjectVersions?.[record.subjectVersionId]
-                                                ?.subjectClasses || {}
-                                        ).length === 0 && 'bg-red-100',
+                                        subjectVersions?.[record.subjectVersionId]?.count === 0 &&
+                                            'bg-red-100',
                                         subjectVersions?.[record.subjectVersionId]?.isEdit &&
                                             'bg-yellow-100'
                                     ),
@@ -727,71 +638,10 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     },
                                 },
                                 {
-                                    title: 'Ghép lớp',
-                                    align: 'center',
-                                    hidden: !isLayering,
-                                    render: (_, record) => {
-                                        return (
-                                            <DndProvider backend={HTML5Backend}>
-                                                <div className="flex flex-col items-center justify-center m-2">
-                                                    <div className="flex h-fit gap-4 items-center">
-                                                        {subjectVersions?.[record.subjectVersionId]
-                                                            ?.subjectClasses &&
-                                                            Object.entries(
-                                                                subjectVersions?.[
-                                                                    record.subjectVersionId
-                                                                ]?.subjectClasses || {}
-                                                            ).map(
-                                                                ([
-                                                                    subjectClassId,
-                                                                    subjectClass,
-                                                                ]) => (
-                                                                    <SubjectClassDropItem
-                                                                        subjectVersionId={
-                                                                            record.subjectVersionId
-                                                                        }
-                                                                        item={subjectClass}
-                                                                        key={subjectClassId}
-                                                                    />
-                                                                )
-                                                            )}
-                                                        <Tooltip
-                                                            title="Thêm lớp MH"
-                                                            className="select-none cursor-pointer"
-                                                        >
-                                                            <PlusCircle
-                                                                onClick={() =>
-                                                                    onAddSubjectClass(
-                                                                        record.subjectVersionId
-                                                                    )
-                                                                }
-                                                                size={16}
-                                                            />
-                                                        </Tooltip>
-                                                    </div>
-                                                    <div className="flex h-fit">
-                                                        {record?.fixedClasses.map(
-                                                            (e: FixedClass) => (
-                                                                <FixedClassDragItem
-                                                                    subjectVersionId={
-                                                                        record.subjectVersionId
-                                                                    }
-                                                                    item={e}
-                                                                    key={e.id}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </DndProvider>
-                                        )
-                                    },
-                                },
-                                {
                                     title: 'Danh sách lớp MH',
                                     dataIndex: 'subjectClass',
                                     align: 'center',
-                                    hidden: isLayering,
+                                    hidden: hocLai,
                                     render: (__, record) => {
                                         return record?.subjectVersion?.subjectClass?.length ? (
                                             <TextTruncate
@@ -814,7 +664,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     title: 'Danh sách lớp quản lý',
                                     dataIndex: 'fixedClass',
                                     align: 'center',
-                                    hidden: isLayering,
+                                    hidden: hocLai,
                                     render: (__, record) => {
                                         return record?.fixedClasses?.length ? (
                                             <TextTruncate
@@ -835,18 +685,84 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     title: 'Tổng SV',
                                     width: 80,
                                     align: 'center',
-                                    render: (__, record) =>
+                                    render: (_, record) =>
+                                        record?.studentCount ||
                                         record?.fixedClasses?.reduce(
                                             (sum: number, fc: any) =>
                                                 sum + (fc._count?.students ?? 0),
                                             0
-                                        ) || 0,
+                                        ) ||
+                                        0,
                                 },
                                 {
                                     title: 'Đơn vị phụ trách',
                                     dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
                                     width: 150,
                                     align: 'center',
+                                },
+                                {
+                                    title: 'Số LMH',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (_, record, idx) => (
+                                        <>
+                                            <Form.Item
+                                                name={[
+                                                    'subjectVersions',
+                                                    record?.subjectVersionId,
+                                                    'count',
+                                                ]}
+                                                className={'m-0'}
+                                                required
+                                            >
+                                                <InputNumber
+                                                    step={0}
+                                                    id={`subjectClassCount-${record?.subjectVersionId}`}
+                                                    controls={false}
+                                                    onKeyDown={(e) => {
+                                                        if (
+                                                            e.key === 'ArrowUp' ||
+                                                            e.key === 'ArrowDown'
+                                                        ) {
+                                                            e.preventDefault()
+                                                            e.stopPropagation()
+                                                            if (!data) return
+                                                            const nextId =
+                                                                data[
+                                                                    idx +
+                                                                        (e.key === 'ArrowUp'
+                                                                            ? -1
+                                                                            : 1)
+                                                                ]?.subjectVersionId
+                                                            document
+                                                                .getElementById(
+                                                                    `subjectClassCount-${nextId}`
+                                                                )
+                                                                ?.focus()
+                                                            return
+                                                            // Handle the logic for ArrowUp key press
+                                                        }
+
+                                                        const allowedKeys = [
+                                                            'Backspace',
+                                                            'Delete',
+                                                            'ArrowLeft',
+                                                            'ArrowRight',
+                                                            'Tab',
+                                                            'Meta',
+                                                            'Control',
+                                                        ]
+                                                        if (
+                                                            !/[0-9]/.test(e.key) &&
+                                                            !allowedKeys.includes(e.key)
+                                                        ) {
+                                                            e.preventDefault()
+                                                        }
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                        </>
+                                    ),
                                 },
                                 {
                                     title: 'Số SV tối đa / LMH',
@@ -861,6 +777,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                     'maxStudent',
                                                 ]}
                                                 required
+                                                className={'m-0'}
                                             >
                                                 <InputNumber
                                                     step={0}
@@ -909,33 +826,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                         </>
                                     ),
                                 },
-                                // {
-                                //     title: 'Thao tác',
-                                //     width: 100,
-                                //     align: 'center',
-                                //     fixed: 'right',
-                                //     hidden: !canSome(
-                                //         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                                //         'THEM'
-                                //     ),
-                                //     render: (record) => {
-                                //         if (record?.id) {
-                                //             return (
-                                //                 <Row
-                                //                     className="flex justify-center items-center gap-2 text-[#028850]"
-                                //                     onClick={onOpen.bind(null, {
-                                //                         ...record,
-                                //                         semester: semesterId,
-                                //                     })}
-                                //                 >
-                                //                     <CalendarPlus size={16} strokeWidth={2} />
-                                //                     Mở Lớp
-                                //                 </Row>
-                                //             )
-                                //         }
-                                //         return ''
-                                //     },
-                                // },
                             ]}
                             pagination={{
                                 current: currentPage,

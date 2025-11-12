@@ -1,16 +1,18 @@
 import DefaultLayout from '@layouts/default-layout'
+import MonHocLai from '@pages/dang-ky-hoc/dang-ky-hoc-offline/_components/dang-ky-hoc-cho-ca-nhan/mon-hoc-lai'
+import MonThiLai from '@pages/dang-ky-hoc/dang-ky-hoc-offline/_components/dang-ky-hoc-cho-ca-nhan/mon-thi-lai'
 import { Store } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
-import CaNhanTrongLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/ca-nhan-trong-lop-quan-ly'
-import DangKyHocChoCaNhan from './_components/dang-ky-hoc-cho-lop-ca-nhan'
-import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/dang-ky-hoc-cho-lop-quan-ly'
-import LopQuanLyDaGhep from './_components/dang-ky-hoc-cho-lop-quan-ly/lop-quan-ly-da-ghep'
 import KetQuaDangKyHoc from './_components/dang-ky-hoc-cho-ca-nhan/ket-qua-dang-ky-hoc'
 import MonToanTruong from './_components/dang-ky-hoc-cho-ca-nhan/mon-toan-truong'
 import MonTrongCTDT from './_components/dang-ky-hoc-cho-ca-nhan/mon-trong-ctdt'
 import MonTuongDuong from './_components/dang-ky-hoc-cho-ca-nhan/mon-tuong-duong'
+import DangKyHocChoCaNhan from './_components/dang-ky-hoc-cho-lop-ca-nhan'
+import CaNhanTrongLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/ca-nhan-trong-lop-quan-ly'
+import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/dang-ky-hoc-cho-lop-quan-ly'
+import LopQuanLyDaGhep from './_components/dang-ky-hoc-cho-lop-quan-ly/lop-quan-ly-da-ghep'
+import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
 
 interface TabItem {
     key: string
@@ -103,6 +105,20 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
                                       key={'mon-tuong-duong'}
                                   >
                                       <MonTuongDuong />
+                                  </Tabs.TabPane>
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Môn học lại'}
+                                      key={'mon-hoc-lai'}
+                                  >
+                                      <MonHocLai />
+                                  </Tabs.TabPane>
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Môn thi lại'}
+                                      key={'mon-thi-lai'}
+                                  >
+                                      <MonThiLai />
                                   </Tabs.TabPane>
                               </Tabs>
                           </Col>

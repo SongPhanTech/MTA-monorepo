@@ -1,45 +1,45 @@
-import {queryClient} from '@api/index'
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import {DEFAULT_PAGINATE_SIZE} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import {getMinioUrl} from '@workspace/constant'
-import {$Enums} from '@workspace/db/client'
+import { getMinioUrl } from '@workspace/constant'
+import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
     useFindFirstPlanTraining,
     useFindUniqueSemester,
 } from '@workspace/db/hooks'
-import {exportFromTemplate} from '@workspace/libs/template-excel'
-import {useAbility} from '@workspace/permissions/hooks'
-import {useSemesterStore, useTrainingObjectTypeStore} from '@workspace/ui'
-import {Button, Col, Flex, Form, Input, message, Popconfirm, Row} from 'antd'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { useAbility } from '@workspace/permissions/hooks'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
-import {Search} from 'lucide-react'
-import {useCallback, useState} from 'react'
-import {useDisclosure} from 'react-hook-disclosure-modal'
+import { Search } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type MonDaLapKeHoachForm = {
     searchText: string | null
     subjectSelected?: Array<string>
 }
 
-export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) {
-    const {can} = useAbility()
+export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
-    const {id: semesterId} = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
     const [form] = Form.useForm<MonDaLapKeHoachForm>()
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
-    const {data: semesterData} = useFindUniqueSemester(
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: semesterData } = useFindUniqueSemester(
         {
-            where: {id: semesterId},
+            where: { id: semesterId },
             select: {
                 id: true,
                 name: true,
                 schoolYear: {
-                    select: {id: true, name: true},
+                    select: { id: true, name: true },
                 },
             },
         },
@@ -48,7 +48,7 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
         }
     )
 
-    const {data: planTraining} = useFindFirstPlanTraining(
+    const { data: planTraining } = useFindFirstPlanTraining(
         {
             where: {
                 semesterId: semesterId as string,
@@ -90,11 +90,11 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                         subjectVersion: {
                             ...(searchText
                                 ? {
-                                    name: {
-                                        contains: searchText,
-                                        mode: 'insensitive',
-                                    },
-                                }
+                                      name: {
+                                          contains: searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  }
                                 : {}),
                         },
                         subjectClassType: hocLai
@@ -117,22 +117,24 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                 },
             },
         },
-        {enabled: !!semesterId && !!trainingObjectTypeId}
+        { enabled: !!semesterId && !!trainingObjectTypeId }
     )
 
-    const {onOpen: openKhoiTaoMon} = useDisclosure({
+    const { onOpen: openKhoiTaoMon } = useDisclosure<{
+        hocLai: boolean
+    }>({
         tag: 'KhoiTaoMon',
     })
 
-    const {showSpinner, hideSpinner} = useSpinner()
+    const { showSpinner, hideSpinner } = useSpinner()
 
-    const {mutateAsync: deleteManyPlanTrainingSubject} = useDeleteManyPlanTrainingSubject()
+    const { mutateAsync: deleteManyPlanTrainingSubject } = useDeleteManyPlanTrainingSubject()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
-            queryClient.invalidateQueries({queryKey: ['/api/subject-class/open-subject-class']})
-            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTraining']})
-            queryClient.invalidateQueries({queryKey: ['zenstack', 'PlanTrainingDelay']})
+            queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'PlanTrainingSubject'],
             })
@@ -159,7 +161,7 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                         <Input
                             id="search"
                             placeholder="Nhập tên môn..."
-                            style={{height: 32}}
+                            style={{ height: 32 }}
                             prefix={
                                 <Search
                                     size={15}
@@ -174,7 +176,14 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                 </Col>
                 <Col span={12}>
                     <Flex justify="end" gap={4}>
-                        <Button onClick={openKhoiTaoMon} type="default">
+                        <Button
+                            onClick={() =>
+                                openKhoiTaoMon({
+                                    hocLai,
+                                })
+                            }
+                            type="default"
+                        >
                             Khởi tạo môn
                         </Button>
                         <Button
@@ -191,7 +200,7 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                                                 hoc_ky: semesterData?.name ?? '',
                                                 nam_hoc: semesterData?.schoolYear?.name ?? '',
                                             },
-                                            tableStartCell: {row: 7, col: 1},
+                                            tableStartCell: { row: 7, col: 1 },
                                             rows: planTraining?.planTrainingSubjects.flatMap(
                                                 (item, index) =>
                                                     item.fixedClasses.map((fc, idx) => {
@@ -272,8 +281,10 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                                     showSpinner()
                                     await deleteManyPlanTrainingSubject({
                                         where: {
-                                            subjectVersionId: {in: subjectSelected},
-                                            subjectClassType: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                                            subjectVersionId: { in: subjectSelected },
+                                            subjectClassType: hocLai
+                                                ? $Enums.SubjectClassType.RETAKE
+                                                : $Enums.SubjectClassType.NORMAL,
                                         },
                                     })
                                     debouncedRefetch()
@@ -292,7 +303,7 @@ export default function MonDaLapKeHoach({hocLai = false}: { hocLai?: boolean }) 
                         </Popconfirm>
                     </Flex>
                 </Col>
-                <Form.Item hidden name="subjectSelected"/>
+                <Form.Item hidden name="subjectSelected" />
                 <Table
                     rowKey="subjectVersionId"
                     id="fixed-class"

@@ -631,6 +631,7 @@ export default function PhanCongGiangDay({
             hideSpinner()
         }
     }
+
     async function handleTuChoiPCGD() {
         try {
             showSpinner()
@@ -686,6 +687,7 @@ export default function PhanCongGiangDay({
     }
 
     const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
+
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -798,15 +800,6 @@ export default function PhanCongGiangDay({
                                 />
                             </Col>
                             <Flex gap={4}>
-                                {!khoaBoMon &&
-                                    can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                        'THEM'
-                                    ) && (
-                                        <Button onClick={() => handleModal()} type="default">
-                                            Thêm mới lớp MH
-                                        </Button>
-                                    )}
                                 {khoaBoMon &&
                                     can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
@@ -1786,7 +1779,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Hạn PCGD',
                                     dataIndex: 'lecturerAssignmentDeadline',
-                                    width: 100,
+                                    width: 120,
                                     align: 'center',
                                     render: (_, record) =>
                                         canXemTatCa && !khoaBoMon ? (

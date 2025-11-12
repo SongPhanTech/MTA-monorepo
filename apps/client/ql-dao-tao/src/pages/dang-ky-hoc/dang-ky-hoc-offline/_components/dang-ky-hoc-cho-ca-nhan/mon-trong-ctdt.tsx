@@ -1,6 +1,7 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useStore } from '@tanstack/react-store'
 import { $Enums, type ScoreConvert } from '@workspace/db/client'
 import {
     useCountSubjectClass,
@@ -18,17 +19,12 @@ import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { dangKyHocChoCaNhanStore } from '../..'
-import { useStore } from '@tanstack/react-store'
 
 interface FilterProps {
     searchText: string | null
 }
 
-interface StudentCourseByPlanProps {
-    hocLai?: boolean
-}
-
-export default function MonTrongCTDT({ hocLai }: StudentCourseByPlanProps) {
+export default function MonTrongCTDT() {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(20)
@@ -80,7 +76,7 @@ export default function MonTrongCTDT({ hocLai }: StudentCourseByPlanProps) {
                 trainingObjectTypeId,
                 cancelled: false,
                 active: true,
-                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                type: $Enums.SubjectClassType.NORMAL,
                 subjectId: {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
