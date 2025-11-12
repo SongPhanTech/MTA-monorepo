@@ -26,7 +26,6 @@ const CommentList = ({ comments }: CommentListProps) => {
 
     return (
         <div className="relative">
-            {/* Header */}
             <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-lg border-b border-gray-200 px-6 py-4 rounded-t-2xl">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -50,7 +49,6 @@ const CommentList = ({ comments }: CommentListProps) => {
                 </div>
             </div>
 
-            {/* Comments List */}
             <div className="p-6 space-y-5 max-h-[600px] overflow-y-auto custom-scrollbar">
                 {comments.map((comment, index) => (
                     <div
@@ -96,7 +94,9 @@ const CommentList = ({ comments }: CommentListProps) => {
                                 <div className="relative z-10">
                                     <div
                                         className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none"
-                                        dangerouslySetInnerHTML={{ __html: comment.content|| '<i>Chưa có phản hồi</i>' }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: comment.content || '<i>Chưa có phản hồi</i>',
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -105,7 +105,6 @@ const CommentList = ({ comments }: CommentListProps) => {
                 ))}
             </div>
 
-            {/* Custom Scrollbar Styles */}
             <style jsx>{`
                 @keyframes slideInUp {
                     from {

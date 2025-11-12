@@ -109,41 +109,46 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                                     'THEM'
-                                ) && (
-                                    <Popconfirm
-                                        title="Xác nhận nộp tiêu chí"
-                                        description="Bạn chắc chắn muốn nộp tiêu chí này?"
-                                        onConfirm={() => {
-                                            const id = item.analysisCriterions?.id
-                                            if (id) {
-                                                handleSubmitCriterion(id)
-                                            }
-                                        }}
-                                        okText="Đồng ý"
-                                        cancelText="Hủy"
-                                        placement="topRight"
-                                    >
-                                        <Button type="primary" className="bg-blue-500">
-                                            Nộp tiêu chí
-                                        </Button>
-                                    </Popconfirm>
-                                )}
+                                ) &&
+                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                        <Popconfirm
+                                            title="Xác nhận nộp tiêu chí"
+                                            description="Bạn chắc chắn muốn nộp tiêu chí này?"
+                                            onConfirm={() => {
+                                                const id = item.analysisCriterions?.id
+                                                if (id) {
+                                                    handleSubmitCriterion(id)
+                                                }
+                                            }}
+                                            okText="Đồng ý"
+                                            cancelText="Hủy"
+                                            placement="topRight"
+                                        >
+                                            <Button type="primary" className="bg-blue-500">
+                                                Nộp tiêu chí
+                                            </Button>
+                                        </Popconfirm>
+                                    )}
 
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                                     'THEM'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() =>
-                                            onOpen({
-                                                analysisCriterionId: item.analysisCriterions?.id,
-                                            })
-                                        }
-                                    >
-                                        Thêm mới
-                                    </Button>
-                                )}
+                                ) &&
+                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                        <Button
+                                            type="primary"
+                                            onClick={() =>
+                                                onOpen({
+                                                    analysisCriterionId:
+                                                        item.analysisCriterions?.id,
+                                                })
+                                            }
+                                        >
+                                            Thêm mới
+                                        </Button>
+                                    )}
                             </div>
                         </div>
                         <div>
@@ -252,19 +257,25 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                                     {can(
                                                         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                                                         'SUA'
-                                                    ) && (
-                                                        <EditIcon
-                                                            onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                onOpen({
-                                                                    id: record.id,
-                                                                    analysisCriterionId:
-                                                                        record.analysisCriterionId,
-                                                                })
-                                                            }}
-                                                            className="text-sm text-blue-700 cursor-pointer"
-                                                        />
-                                                    )}
+                                                    ) &&
+                                                        status !==
+                                                            $Enums.EvaluationCriterionStatus
+                                                                .APPROVED &&
+                                                            status !==
+                                                                $Enums.EvaluationCriterionStatus
+                                                                    .COMPLETED && (
+                                                            <EditIcon
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    onOpen({
+                                                                        id: record.id,
+                                                                        analysisCriterionId:
+                                                                            record.analysisCriterionId,
+                                                                    })
+                                                                }}
+                                                                className="text-sm text-blue-700 cursor-pointer"
+                                                            />
+                                                        )}
 
                                                     {commentCount > 0 && (
                                                         <Badge count={commentCount} size="small">
