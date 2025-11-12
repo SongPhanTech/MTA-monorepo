@@ -106,14 +106,13 @@ const PutEvaluationCouncil = () => {
             className="w-[600px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã chương">
-                    <Input placeholder="Nhập mã chương" />
-                </FormItem>
-            </Col>
-
-            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên hội đồng đánh giá" required>
                     <Input placeholder="Nhập mã hội đồng đánh giá" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="code" label="Mã chương">
+                    <Input placeholder="Nhập mã chương" />
                 </FormItem>
             </Col>
             <Col span={24}>

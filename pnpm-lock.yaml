@@ -2073,6 +2073,9 @@ importers:
       file-saver:
         specifier: 'catalog:'
         version: 2.0.5
+      hono:
+        specifier: 'catalog:'
+        version: 4.10.3
       pizzip:
         specifier: 'catalog:'
         version: 3.2.0

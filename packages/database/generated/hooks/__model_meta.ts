@@ -9370,14 +9370,12 @@ const metadata: ModelMeta = {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
-                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {

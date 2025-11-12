@@ -1,6 +1,9 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { $Enums, PlanTraining } from '@workspace/db/client'
+import useSpinner from '@hooks/spinner'
+import { queryClient } from '@lib/api'
+import { $Enums, type PlanTraining } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import {
@@ -11,9 +14,6 @@ import {
 } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { type Key, useMemo, useState } from 'react'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import useSpinner from '@hooks/spinner'
-import { queryClient } from '@lib/api'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -39,8 +39,8 @@ export default function MonCoHVSVChuaDat() {
             search: searchText,
             trainingCourseId,
             trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId || '',
-            semesterId,
+            trainingObjectTypeId: trainingObjectTypeId as string,
+            semesterId: semesterId as string,
             limit: numberOfPages,
             page: currentPage,
         },

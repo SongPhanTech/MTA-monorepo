@@ -319,7 +319,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     )
 
     return (
-        <div className="bg-white rounded-lg shadow-sm p-4">
+        <div className="bg-white rounded-lg shadow-sm px-4">
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <TableCollapse
@@ -362,12 +362,20 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                         : '',
                             },
                             {
-                                title: 'GPA cuối cùng',
+                                title: 'GPA',
                                 align: 'center',
-                                width: 100,
+                                width: 60,
                                 dataIndex: 'finalGpa',
                                 type: 'order',
                                 render: (_, record) => record?.finalGpa?.toNumber(),
+                            },
+                            {
+                                title: 'Xếp loại',
+                                align: 'center',
+                                type: 'select',
+                                dataIndex: 'classification',
+                                width: 100,
+                                render: (_, record) => record?.finalRanking?.classification,
                             },
                             {
                                 title: 'Loại bằng',
@@ -408,14 +416,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     record.diplomaIssueDate
                                         ? dayjs(record.diplomaIssueDate).format('DD/MM/YYYY')
                                         : '',
-                            },
-                            {
-                                title: 'Xếp loại',
-                                align: 'center',
-                                type: 'select',
-                                dataIndex: 'classification',
-                                width: 100,
-                                render: (_, record) => record?.finalRanking?.classification,
                             },
                             {
                                 title: 'Ghi chú của hội đồng',

@@ -29,6 +29,7 @@ import ThongTinKhaoSatModal from './show-exam'
 import CriteriaAssignmentModal from './modal-phan-cong-giang-vien'
 import PutTieuChiMinhChungModal from './put-modal-tieu-chi-minh-chung'
 import PutTieuChuanTieuChi from './ql-dot-tu-danh-gia/put-tieu-chuan-tieu-chi'
+import PutPhanCongHangLoatModal from './put-phan-cong-hang-loat'
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -61,4 +62,5 @@ export {
     CriteriaAssignmentModal,
     PutTieuChiMinhChungModal,
     PutTieuChuanTieuChi,
+    PutPhanCongHangLoatModal,
 }
