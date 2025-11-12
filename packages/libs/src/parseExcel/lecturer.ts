@@ -118,6 +118,14 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 })
             }
 
+            if (!row[cols.lecturerType]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
+                    message: 'Kiểu giáo viên không được để trống',
+                })
+            }
+
             return {
                 stt: row[cols.stt],
                 code: row[cols.code]?.trim() as string,
