@@ -180,11 +180,10 @@ model EvaluationCriterion extends Base {
 
   status                      EvaluationStatus             @default(LOCK)
 
-  reviewer               EvaluationCouncilMember?      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewerId             String?
+  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId                  String?
 
   evaluationCriterionComments EvaluationCriterionComment[]
-
 
   // Phiếu đánh giá
   /// 1. Mô tả hiện trạng

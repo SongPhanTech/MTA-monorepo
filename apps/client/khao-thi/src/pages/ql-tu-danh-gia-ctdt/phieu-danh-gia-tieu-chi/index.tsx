@@ -1,5 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
+import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -22,6 +23,12 @@ export default function CriteriaEvaluationPage() {
                 key: '2',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '3',
+                label: 'Phân công phản biện chéo',
+                children: <CrossReview />,
                 disabled: !selectedEvaluationPeriodId,
             },
         ]
