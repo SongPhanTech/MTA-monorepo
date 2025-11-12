@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import LecturerSelector from '@components/commons/lecturer-selector'
@@ -21,6 +20,7 @@ export default function CriteriaAssignmentModal() {
 
     const { isOpen, onClose, input } = useDisclosure<{
         criterionPeriodId?: string
+        refetch?: () => void
     }>({
         tag: 'CriteriaAssignmentModal',
         onClose() {
@@ -109,14 +109,9 @@ export default function CriteriaAssignmentModal() {
             }
 
             message.success(`${input?.criterionPeriodId ? 'Chỉnh sửa' : 'Thêm'} thành công`)
-
-            queryClient.invalidateQueries({
-                queryKey: ['CriterionAssignment'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['EvaluationCriterion'],
-            })
-
+            if (input?.refetch) {
+                input.refetch()
+            }
             onClose()
         } catch (error: any) {
             message.error(error.message || 'Đã xảy ra lỗi, vui lòng kiểm tra lại')

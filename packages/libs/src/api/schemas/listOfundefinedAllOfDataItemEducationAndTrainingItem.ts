@@ -7,6 +7,7 @@
 
 import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass'
 import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus } from './listOfundefinedAllOfDataItemEducationAndTrainingItemStatus'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse } from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse'
 
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItem = {
     id: string
@@ -76,4 +77,5 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItem = {
     militaryTrainingPass?: boolean
     /** @nullable */
     fixedClass: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass
+    trainingCourse?: ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse
 }

@@ -2819,8 +2819,8 @@ model CurriculumVersion {
   trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId                   String
-  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId                    String?
+  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String
   requiredCredits                  Int?
   electiveCredits                  Int?
   jobPosition                      String?

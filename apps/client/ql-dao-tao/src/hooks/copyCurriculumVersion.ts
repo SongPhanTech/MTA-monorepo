@@ -62,6 +62,7 @@ export const useCloneCurriculumVersion = () => {
                 summary: originalVersion.summary,
                 learningDiagram: originalVersion.learningDiagram,
                 guide: originalVersion.guide,
+                diplomaType: { connect: { id: originalVersion.diplomaTypeId } },
                 documentFiles: {
                     createMany: {
                         data: (originalVersion.documentFiles || []).map(

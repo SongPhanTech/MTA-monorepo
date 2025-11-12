@@ -49,7 +49,7 @@ export default function ClussterSurveyPage() {
             label: 'Báo cáo khảo sát',
             children: <ClusterSurveyReport selectedId={selectedId} />,
             disabled: !selectedId,
-        }
+        },
     ]
 
     return (

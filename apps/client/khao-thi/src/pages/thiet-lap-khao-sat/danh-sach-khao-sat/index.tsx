@@ -26,17 +26,17 @@ export default function DetailSurveyPage() {
     })
     const where = useMemo(
         () => ({
-               subjectClass: {
-                        subjectClassStudent: {
-                            some: {
-                                student: {
-                                    userProfile: {
-                                        id: profileId,
-                                    },
-                                },
+            subjectClass: {
+                subjectClassStudent: {
+                    some: {
+                        student: {
+                            userProfile: {
+                                id: profileId,
                             },
                         },
+                    },
                 },
+            },
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -138,10 +138,9 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                 <div>
-                                         {record?.subjectClass?.code} - {record?.subjectClass?.name}
-                                    </div>
-                                    
+                                <div>
+                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                </div>
                             ),
                         },
                         {
@@ -205,14 +204,17 @@ export default function DetailSurveyPage() {
                                     {surveyQuestion?.length > 0 && (
                                         <Tooltip
                                             className="mr-2"
-                                            title={surveySessions?.length > 0 ? 'Xem khảo sát' : 'Làm khảo sát'}
+                                            title={
+                                                surveySessions?.length > 0
+                                                    ? 'Xem khảo sát'
+                                                    : 'Làm khảo sát'
+                                            }
                                             placement="top"
                                         >
-                                            <div   
-                                            className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
-                                            
-                                            onClick={() => {
-                                                    if(surveySessions?.length > 0){
+                                            <div
+                                                className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
+                                                onClick={() => {
+                                                    if (surveySessions?.length > 0) {
                                                         router.push(`/xem-lai-khao-sat/${id}`)
                                                         return
                                                     }
@@ -221,12 +223,10 @@ export default function DetailSurveyPage() {
                                                     } else {
                                                         router.push(`/lam-khao-sat/${id}`)
                                                     }
-                                                }}>
-                                                <ArrowRight
-                                                style={{ fontSize: '16px' }}
-                                            />
+                                                }}
+                                            >
+                                                <ArrowRight style={{ fontSize: '16px' }} />
                                             </div>
-                                          
                                         </Tooltip>
                                     )}
                                 </Row>

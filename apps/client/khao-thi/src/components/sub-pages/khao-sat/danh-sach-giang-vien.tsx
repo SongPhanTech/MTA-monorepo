@@ -180,7 +180,9 @@ export default function DetailSurveyPage({
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                               <>{record?.subjectClass?.code} - {record?.subjectClass?.name}</>
+                                <>
+                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                </>
                             ),
                         },
                         {
@@ -267,7 +269,6 @@ export default function DetailSurveyPage({
                                             onClick={() => onOpen({ id, type: 'one' })}
                                             className="text-sm text-blue-700 cursor-pointer mr-2"
                                         />
-                                       
                                     )}
 
                                     {can(

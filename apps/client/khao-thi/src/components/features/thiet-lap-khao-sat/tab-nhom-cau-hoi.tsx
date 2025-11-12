@@ -18,14 +18,10 @@ import { Button, Col, Flex, message, Row } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import CauHoiKhaoSat from './cau-hoi-khao-sat'
 
-function TabNhomCauHoi({
-    selectedID,
-    setSelectedID,
-}: {
-    selectedID: string
-    setSelectedID: React.Dispatch<React.SetStateAction<string>>
-}) {
+function TabNhomCauHoi() {
+    const [selectedID, setSelectedID] = useState('')
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -112,20 +108,21 @@ function TabNhomCauHoi({
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    <Flex justify="end">
-                        {can(
-                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                            'THEM'
-                        ) && (
-                            <Button onClick={handleModal} type="primary">
-                                Thêm mới
-                            </Button>
-                        )}
-                    </Flex>
-                </Col>
-                <Col span={24}>
+            <Row gutter={[16, 4]}>
+               
+                <Col span={selectedID?12:24}>
+                    <Col span={24}>
+                        <Flex justify="end">
+                            {can(
+                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                'THEM'
+                            ) && (
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            )}
+                        </Flex>
+                    </Col>
                     <Table
                         rowKey={'id'}
                         filters={filters}
@@ -270,6 +267,15 @@ function TabNhomCauHoi({
                         }}
                     />
                 </Col>
+                {
+                    selectedID && (
+                        <Col span={12}>
+                            <CauHoiKhaoSat id={selectedID}/>
+                        </Col>
+                    )
+                }
+              
+
             </Row>
         </div>
     )

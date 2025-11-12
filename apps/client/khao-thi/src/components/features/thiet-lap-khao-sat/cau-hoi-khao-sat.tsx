@@ -122,7 +122,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
@@ -152,15 +152,16 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên câu hỏi khảo sát',
+                                title: 'Tên câu hỏi',
                                 dataIndex: 'name',
                                 type: 'input',
                             },
 
                             {
-                                title: 'Loại câu hỏi khảo sát',
+                                title: 'Loại câu hỏi',
                                 dataIndex: 'surveyQuestionType',
                                 type: 'select',
+                                 width: 150,
                                 options: surveyQuestionTypeOptions,
                                 render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },

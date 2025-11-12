@@ -48,7 +48,7 @@ export const cancelOCRTask = async (taskId: string): Promise<void> => {
     }
 }
 
-let pollTimeouts: Map<string, NodeJS.Timeout> = new Map()
+const pollTimeouts: Map<string, NodeJS.Timeout> = new Map()
 
 export const stopOCRPolling = (taskId: string): void => {
     const timeoutId = pollTimeouts.get(taskId)
