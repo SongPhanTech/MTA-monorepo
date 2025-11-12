@@ -40,7 +40,6 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/id"
   },
-  "PORTAL": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -78,6 +77,7 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "KE_HOACH_GIAO_DUC": "/ke-hoach-giao-duc",
+    "KE_HOACH_GIAO_DUC_KE_HOACH_GHEP_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_LAP_KE_HOACH": "/ke-hoach-giao-duc/lap-ke-hoach",
     "KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
@@ -166,7 +166,6 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
-  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
