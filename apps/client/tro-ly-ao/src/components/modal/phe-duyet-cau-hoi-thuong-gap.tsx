@@ -5,7 +5,7 @@ import { useUpdateFAQ } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, message, Radio } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { fetchFAQDocument } from '@/api/chunking_and_vectorize'
+import { fetchFAQVectorize } from '@/api/chunking_and_vectorize'
 
 type PheDuyetCauHoiThuongGapFormType = {
     status: $Enums.DocumentStatus
@@ -15,7 +15,7 @@ const PheDuyetCauHoiThuongGap = () => {
     const {
         isOpen,
         onClose,
-        input: documentId,
+        input: faq_id,
     } = useDisclosure<string>({
         tag: 'PheDuyetCauHoiThuongGap',
     })
@@ -29,14 +29,14 @@ const PheDuyetCauHoiThuongGap = () => {
     const onFinish = async (values: PheDuyetCauHoiThuongGapFormType) => {
         setIsSubmitting(true)
         try {
-            if (!documentId) {
+            if (!faq_id) {
                 message.error('Không tìm thấy câu hỏi phê duyệt')
                 setIsSubmitting(false)
                 return
             }
 
             if (values.status === $Enums.DocumentStatus.APPROVE) {
-                const result = await fetchFAQDocument(documentId)
+                const result = await fetchFAQVectorize(faq_id)
 
                 if ((result as any)?.error === 'True') {
                     message.error('Đã xảy ra lỗi khi phê duyệt câu hỏi thường gặp')
@@ -46,7 +46,7 @@ const PheDuyetCauHoiThuongGap = () => {
 
             await update({
                 where: {
-                    id: documentId,
+                    id: faq_id,
                 },
                 data: {
                     status: values.status,

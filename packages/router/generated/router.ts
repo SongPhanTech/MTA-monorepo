@@ -40,6 +40,7 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/id"
   },
+  "PORTAL": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -80,11 +81,7 @@ export default {
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_LAP_KE_HOACH": "/ke-hoach-giao-duc/lap-ke-hoach",
     "KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
-    "KE_HOACH_HOC_LAI_DANG_KY_HOC": "/ke-hoach-hoc-lai/dang-ky-hoc",
     "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
-    "KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-hoc-lai/ke-hoach-mo-lop-mon-hoc",
-    "KE_HOACH_HOC_LAI_LAP_KE_HOACH": "/ke-hoach-hoc-lai/lap-ke-hoach",
-    "KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY": "/ke-hoach-hoc-lai/phan-cong-giang-day",
     "KE_HOACH_HOC_LAI_THONG_KE_NO": "/ke-hoach-hoc-lai/thong-ke-no",
     "KHOA_BO_MON_PHAN_CONG_GIANG_DAY": "/khoa-bo-mon-phan-cong-giang-day",
     "LICH_KIEM_TRA_GIANG_DAY": "/lich-kiem-tra-giang-day",
@@ -169,10 +166,13 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
     "INDEX": "/",
+    "QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG": "/quan-tri/cau-hinh/prompt-chuc-nang",
+    "QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP": "/quan-tri/cau-hinh/prompt-hoi-dap",
     "QUAN_TRI_CAU_HINH_PROMT": "/quan-tri/cau-hinh/promt",
     "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
     "QUAN_TRI_DANH_MUC_CHU_DE": "/quan-tri/danh-muc/chu-de",

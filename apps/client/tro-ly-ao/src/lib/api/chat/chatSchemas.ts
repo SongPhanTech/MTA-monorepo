@@ -16,7 +16,7 @@ export type BodyCreateOrUpdatePromptPromptsPost = {
 };
 
 export type BodyFaqVectorizeFaqVectorizePost = {
-  topic_id?: string;
+  faq_id: string;
 };
 
 export type BodyGetFaqAnswerGetFaqAnswerPost = {

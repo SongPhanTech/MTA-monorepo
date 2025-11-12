@@ -19,6 +19,8 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
     // })
 
     const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
+    console.log(dataLevel)
+
     const dataBarchart = useMemo(() => {
         let choices: any = []
 

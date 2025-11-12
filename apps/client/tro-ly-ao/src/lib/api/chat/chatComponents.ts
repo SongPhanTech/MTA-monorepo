@@ -395,7 +395,7 @@ export type FaqVectorizeFaqVectorizePostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
+ * Vectorize a single active FAQ record into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
  */
 export const fetchFaqVectorizeFaqVectorizePost = (
   variables: FaqVectorizeFaqVectorizePostVariables,
@@ -409,7 +409,7 @@ export const fetchFaqVectorizeFaqVectorizePost = (
   });
 
 /**
- * Vectorize all active FAQ records of a topic into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
+ * Vectorize a single active FAQ record into the FAQ collection for fast lookup. Includes FAQ_ID in metadata for sync.
  */
 export const useFaqVectorizeFaqVectorizePost = (
   options?: Omit<
