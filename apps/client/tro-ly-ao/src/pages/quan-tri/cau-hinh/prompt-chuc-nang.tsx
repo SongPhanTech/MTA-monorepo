@@ -150,7 +150,7 @@ function Page() {
     const [searchKeyword, setSearchKeyword] = useState('')
 
     const filteredList = topicOptions.filter((item) =>
-        item.name.toLowerCase().includes(searchKeyword.toLowerCase()),
+        item.name.toLowerCase().includes(searchKeyword.toLowerCase())
     )
 
     const sortedList = filteredList.sort((a, b) => a.name.localeCompare(b.name))
@@ -172,7 +172,11 @@ function Page() {
                     {systemTopics.map((item) => {
                         return (
                             <Col span={24} key={item.id}>
-                                <PromptQuestionAnswer topicId={item.id} topicType={item.type} label={item.name} />
+                                <PromptQuestionAnswer
+                                    topicId={item.id}
+                                    topicType={item.type}
+                                    label={item.name}
+                                />
                             </Col>
                         )
                     })}

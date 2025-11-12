@@ -1,138 +1,182 @@
-import { EditOutlined } from '@ant-design/icons'
-import FormItem from '@components/commons/form-item'
+import { EditOutlined, SearchOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Form, Input, message, Row } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import {
-    useGetPromptByCodePromptsCodeGet,
-    useUpdatePromptByCodePromptsCodePut,
-} from '@/lib/api/chat/chatComponents'
-import { getDefaultPromptTemplate } from '@lib/prompt-template'
+import { Tag, Tooltip, Input } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useFindManyPrompt } from '@/../../../../packages/database/generated/hooks/prompt'
+import { useState } from 'react'
+
+type PromptType = {
+    id: string
+    code: string
+    prompt: string
+    active: boolean
+    description: string
+    status: string
+    reason: string | null
+    createdAt: string
+    updatedAt: string
+    deletedAt: string | null
+}
 
 type PromptFormType = { prompt: string }
 
-const PromptEditor = ({ code, label }: { code: string; label: string }) => {
-    const [form] = Form.useForm<PromptFormType>()
-    const [isEditing, setIsEditing] = useState(false)
-    const [initialPrompt, setInitialPrompt] = useState('')
-    const [currentPrompt, setCurrentPrompt] = useState('')
-    const previewRef = useRef<HTMLDivElement>(null)
-    const [previewHeight, setPreviewHeight] = useState<number>(80)
-
-    const {
-        data: promptData,
-        isLoading,
-        refetch,
-    } = useGetPromptByCodePromptsCodeGet<any>({ pathParams: { code } }) as any
-
-    useEffect(() => {
-        const promptText = promptData?.prompt ?? getDefaultPromptTemplate('Hỏi đáp')
-        form.setFieldsValue({ prompt: promptText })
-        setInitialPrompt(promptText)
-        setCurrentPrompt(promptText)
-    }, [promptData, form])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <reason>we only need to run when currentPrompt changes for preview height</reason>
-    useEffect(() => {
-        if (previewRef.current) {
-            const height = previewRef.current.getBoundingClientRect().height
-            if (height > 0) setPreviewHeight(height)
-        }
-    }, [currentPrompt])
-
-    const updateMutation = useUpdatePromptByCodePromptsCodePut()
-
-    const onFinish = async (values: PromptFormType) => {
-        try {
-            await updateMutation.mutateAsync({
-                pathParams: { code },
-                body: { prompt: values.prompt },
-            } as any)
-            message.success('Cập nhật thành công')
-            setInitialPrompt(values.prompt)
-            setCurrentPrompt(values.prompt)
-            setIsEditing(false)
-            refetch && (await refetch())
-        } catch (error) {
-            console.error('Error updating prompt by code:', error)
-            message.error('Cập nhật thất bại, vui lòng thử lại sau')
-        }
-    }
-
-    const handleCancel = () => {
-        form.setFieldsValue({ prompt: initialPrompt })
-        setCurrentPrompt(initialPrompt)
-        setIsEditing(false)
-    }
-
-    return (
-        <Form layout="vertical" onFinish={onFinish} form={form}>
-            <div className="flex items-center justify-between mb-0">
-                <p className="text-lg font-semibold text-primary mb-0">{label}</p>
-                {isEditing ? (
-                    <div className="flex gap-1">
-                        <Button size="small" onClick={handleCancel}>
-                            Huỷ
-                        </Button>
-                        <Button size="small" type="primary" htmlType="submit">
-                            Lưu
-                        </Button>
-                    </div>
-                ) : (
-                    <Button
-                        type="primary"
-                        size="small"
-                        icon={<EditOutlined />}
-                        onClick={() => {
-                            if (previewRef.current) {
-                                const height = previewRef.current.getBoundingClientRect().height
-                                if (height > 0) setPreviewHeight(height)
-                            }
-                            setIsEditing(true)
-                        }}
-                    >
-                        Sửa
-                    </Button>
-                )}
-            </div>
-
-            {isEditing ? (
-                <FormItem name="prompt" form={form}>
-                    <Input.TextArea
-                        autoSize={{ minRows: 4, maxRows: 12 }}
-                        onChange={(e) => setCurrentPrompt(e.target.value)}
-                        value={currentPrompt}
-                        style={{ minHeight: previewHeight }}
-                    />
-                </FormItem>
-            ) : (
-                <div
-                    ref={previewRef}
-                    className="border border-primary rounded-md p-2 bg-gray-50 whitespace-pre-line"
-                >
-                    {isLoading ? (
-                        <span className="text-gray-500">Đang tải...</span>
-                    ) : (
-                        (currentPrompt && <>{currentPrompt}</>) || (
-                            <span className="text-gray-400">Chưa có nội dung</span>
-                        )
-                    )}
-                </div>
-            )}
-        </Form>
-    )
-}
-
 function Page() {
+    const [searchText, setSearchText] = useState('')
+
+    const { onOpen: openPutPromptHoiDap } = useDisclosure<any>({
+        tag: 'PutPromptHoiDap',
+    })
+
+    const { data: prompts, isLoading } = useFindManyPrompt({
+        where: {
+            code: { in: ['rag', 'no-rag'] },
+        },
+        orderBy: { createdAt: 'desc' },
+    })
+
+    const filteredPrompts =
+        prompts?.filter(
+            (prompt) =>
+                prompt.description?.toLowerCase().includes(searchText.toLowerCase()) ||
+                prompt.prompt?.toLowerCase().includes(searchText.toLowerCase())
+        ) || []
+
+    const handleEdit = (record: PromptType) => {
+        openPutPromptHoiDap(record)
+    }
+
     return (
-        <div>
-            <span className="text-xl font-semibold text-gray-700">Prompt Hỏi đáp (No-RAG)</span>
-            <div className="my-3" />
-            <Row gutter={[16, 16]} className="bg-white rounded-md shadow-sm">
-                <Col span={24}>
-                    <PromptEditor code="prompt-hoi-dap" label="Prompt Hỏi đáp" />
-                </Col>
-            </Row>
+        <div className="h-full">
+            <div className="flex gap-4 h-full overflow-hidden">
+                <div className="flex-1 overflow-auto pr-2">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                            <span className="text-xl font-semibold text-gray-700">
+                                Prompt Hỏi đáp
+                            </span>
+                        </div>
+                    </div>
+                    <div className="mb-4">
+                        <Input
+                            placeholder="Tìm kiếm theo mô tả hoặc nội dung..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            style={{ width: 400 }}
+                            allowClear
+                        />
+                    </div>
+                    <Table
+                        rowKey="id"
+                        scroll={{ x: 800 }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                dataIndex: 'index',
+                                width: 60,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Loại Prompt',
+                                dataIndex: 'code',
+                                width: 200,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (code: string) => {
+                                    const tagMap = {
+                                        'no-rag': {
+                                            label: 'Hỏi đáp thông thường',
+                                            color: '#1890ff',
+                                        },
+                                        rag: { label: 'Hỏi đáp dựa trên RAG', color: '#52c41a' },
+                                    }
+                                    const tag = tagMap[code as keyof typeof tagMap] || {
+                                        label: code,
+                                        color: '#666',
+                                    }
+                                    return (
+                                        <Tag
+                                            style={{
+                                                backgroundColor: `${tag.color}15`,
+                                                color: tag.color,
+                                                border: `1px solid ${tag.color}30`,
+                                            }}
+                                            className="px-3 py-1 text-sm rounded-md"
+                                        >
+                                            {tag.label}
+                                        </Tag>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                                width: 300,
+                                render: (value: string) =>
+                                    value?.length > 80
+                                        ? `${value.slice(0, 80)}...`
+                                        : value || 'Chưa có mô tả',
+                            },
+                            {
+                                title: 'Nội dung Prompt',
+                                dataIndex: 'prompt',
+                                width: 400,
+                                render: (value: string) =>
+                                    value?.length > 100
+                                        ? `${value.slice(0, 100)}...`
+                                        : value || 'Chưa có nội dung',
+                            },
+                            {
+                                title: 'Trạng thái',
+                                dataIndex: 'active',
+                                width: 160,
+                                align: 'center',
+                                render: (active: boolean) => (
+                                    <Tag
+                                        style={{
+                                            backgroundColor: active ? '#f6ffed' : '#fff2f0',
+                                            color: active ? '#52c41a' : '#ff4d4f',
+                                            border: active
+                                                ? '1px solid #b7eb8f'
+                                                : '1px solid #ffb3b3',
+                                        }}
+                                        className="px-3 py-1 text-sm rounded-md"
+                                    >
+                                        {active ? 'Đang hoạt động' : 'Không hoạt động'}
+                                    </Tag>
+                                ),
+                            },
+                            {
+                                title: 'Ngày tạo',
+                                dataIndex: 'createdAt',
+                                width: 100,
+                                align: 'center',
+                                render: (date: string) =>
+                                    date ? new Date(date).toLocaleDateString('vi-VN') : '-',
+                            },
+                            {
+                                title: 'Thao tác',
+                                key: 'action',
+                                align: 'center',
+                                width: 80,
+                                fixed: 'right',
+                                render: (_, record: any) => (
+                                    <Tooltip title="Chỉnh sửa" placement="top">
+                                        <EditOutlined
+                                            onClick={() => handleEdit(record)}
+                                            className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
+                                        />
+                                    </Tooltip>
+                                ),
+                            },
+                        ]}
+                        data={filteredPrompts}
+                        loading={isLoading}
+                        pagination={false}
+                    />
+                </div>
+            </div>
         </div>
     )
 }
