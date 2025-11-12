@@ -5345,6 +5345,8 @@ model EvaluationCriterion {
   lecturerId                  String?
   deadline                    DateTime?
   status                      EvaluationStatus             @default(LOCK)
+  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId                  String?
   evaluationCriterionComments EvaluationCriterionComment[]
   /// 1. Mô tả hiện trạng
   currentSituation            String                       @default("")
@@ -5434,19 +5436,20 @@ model EvaluationCouncil {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationCouncilMember {
-  id                  String                 @id() @default(cuid())
-  code                String?                @unique()
-  active              Boolean                @default(true)
-  description         String?                @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @default(now()) @updatedAt()
-  createdBy           String?                @default("") @db.Uuid()
-  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
-  evaluationCouncilId String
-  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
-  lecturerId          String
-  role                EvaluationMemberRole[]
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt()
+  createdBy            String?                @default("") @db.Uuid()
+  evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncilId  String
+  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturerId           String
+  role                 EvaluationMemberRole[]
+  evaluationCriterions EvaluationCriterion[]
 
   @@schema("khao-thi")
 }

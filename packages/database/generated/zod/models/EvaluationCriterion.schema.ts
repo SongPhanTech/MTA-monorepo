@@ -46,12 +46,14 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     criterionPeriod: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()).optional(),
+    reviewer: z.record(z.string(), z.unknown()).optional(),
     evaluationCriterionComments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     criterionPeriodId: z.string(),
     lecturerId: z.string().nullish(),
+    reviewerId: z.string().nullish(),
 }
 );
 

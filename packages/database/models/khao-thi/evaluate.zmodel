@@ -180,8 +180,8 @@ model EvaluationCriterion extends Base {
 
   status                      EvaluationStatus             @default(LOCK)
 
-  councilMember               EvaluationCouncilMember      @relation(fields: [councilMemberId], references: [id], onDelete: Cascade)
-  councilMemberId             String
+  reviewer               EvaluationCouncilMember?      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId             String?
 
   evaluationCriterionComments EvaluationCriterionComment[]
 
