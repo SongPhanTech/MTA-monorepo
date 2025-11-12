@@ -693,8 +693,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id
-                          and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId}))
+                        where TBS."subjectId" = sv.id)
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
@@ -704,6 +703,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => e.subjectVersionId).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -718,7 +718,6 @@ app.openapi(openSubjectClassRetake, async (c) => {
             OR name ILIKE ${`%${search}%`}
             )
     `
-
     return c.json({data: res, count: countRaw[0]?.count}, 200)
 })
 

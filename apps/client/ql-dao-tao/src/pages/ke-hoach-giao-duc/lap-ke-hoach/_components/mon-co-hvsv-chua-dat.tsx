@@ -44,7 +44,7 @@ export default function MonCoHVSVChuaDat() {
             limit: numberOfPages,
             page: currentPage,
         },
-        {query: {enabled: !!trainingObjectTypeId}}
+        {query: {enabled: !!trainingObjectTypeId && !!semesterId}}
     )
     // queryKey /api/subject-class/open-subject-class-retake
 

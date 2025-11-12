@@ -74,11 +74,11 @@ export default function ThongKeNo() {
             search: searchText || undefined,
             trainingCourseId,
             trainingMajorId,
-            // semesterId: semesterId || undefined,
+            semesterId: semesterId as string,
             trainingObjectTypeId: trainingObjectTypeId as string,
 
         },
-        {query: {enabled: !!trainingObjectTypeId}}
+        {query: {enabled: !!trainingObjectTypeId && !!semesterId}}
     )
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
