@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { env } from '@/env'
 
-const postFormUrlEncoded = async (url: string, id_document: string) => {
+const postFormUrlEncoded = async (url: string, id_document: string, fieldName: string) => {
     const params = new URLSearchParams()
-    params.append('id_document', id_document)
+    params.append(fieldName, id_document)
 
     const response = await axios.post(url, params, {
         headers: {
@@ -17,9 +17,9 @@ const postFormUrlEncoded = async (url: string, id_document: string) => {
 export const fetchChungkingAndVectorizeDocument = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            // `${env.NEXT_PUBLIC_CHAT_BOT_URL}/chungking_and_vectorize_document`,
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_document_v4`, // update api chungkingandvector
-            id_document
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_document_v4`,
+            id_document,
+            'id_document'
         )
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API' }
@@ -44,11 +44,12 @@ export const getStatusChungkingAndVectorizeDocument = async () => {
     }
 }
 
-export const fetchFAQDocument = async (id_document: string) => {
+export const fetchFAQVectorize = async (faq_id: string) => {
     try {
         return await postFormUrlEncoded(
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/faq_vectorize`,
-            id_document
+            faq_id,
+            'faq_id'
         )
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API FAQ' }
@@ -59,7 +60,8 @@ export const deleteVectorRecordHoiDap = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap`,
-            id_document
+            id_document,
+            'id_document'
         )
     } catch (_error: any) {
         return {
@@ -74,7 +76,8 @@ export const deleteVectorRecordFAQ = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
             `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_db_faq`,
-            id_document
+            id_document,
+            'id_document'
         )
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi xóa bản ghi FAQ' }
@@ -83,7 +86,11 @@ export const deleteVectorRecordFAQ = async (id_document: string) => {
 
 export const reloadBM25 = async (id_document: string) => {
     try {
-        return await postFormUrlEncoded(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/reload_bm25`, id_document)
+        return await postFormUrlEncoded(
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/reload_bm25`,
+            id_document,
+            'id_document'
+        )
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi reload BM25' }
     }
