@@ -73,7 +73,7 @@ app.openapi(exportLecturerProfile, async (c) => {
             ? `'${dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')}`
             : '',
         gender: lecturer.userProfile?.gender?.sTen,
-        lecturerType: lecturer.lecturerType.name,
+        type: lecturer.lecturerType.name,
         academicRank: lecturer.userProfile?.academicRankType?.sTen,
         academicDegree: lecturer.userProfile?.academicDegreeType?.sTen,
         facultyOrganization: lecturer.organization.sTen,

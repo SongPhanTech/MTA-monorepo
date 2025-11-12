@@ -549,6 +549,7 @@ async function main() {
                     trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
                     trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
                     trainingTimeId: '4years',
+                    trainingTypeId: '550e8403-e29b-41d4-a716-446655440000',
                 }))
             )
         ),
@@ -592,7 +593,11 @@ async function main() {
                     name: 'Công nghệ thông tin 2023 seed',
                     code: 'CNTT-DS-2023',
                     numberOfSemesters: 10,
-
+                    trainingType: {
+                        connect: {
+                            id: '550e8403-e29b-41d4-a716-446655440000',
+                        },
+                    },
                     trainingObjectType: {
                         connectOrCreate: {
                             where: { name: 'Đại học quân sự' },

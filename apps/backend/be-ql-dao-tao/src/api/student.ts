@@ -13,6 +13,7 @@ import {
     listStudentResultInfo,
     resultCourseStudentResult,
 } from '../services/student-result.service'
+import type { ErrorExtra } from '../types/error-extra'
 import {
     buildCurriculumMapOrThrow,
     buildDMChuyenNganhMap,
@@ -158,188 +159,194 @@ app.openapi(importStudent, async (c) => {
     )
 
     const start = Date.now()
-    await prisma.$transaction(
-        async (tx) => {
-            await tx.fixedClass.createMany({
-                skipDuplicates: true,
-                data: data.students.map(({ fixedClass, curriculum }) => ({
-                    name: fixedClass,
-                    trainingCourseId: trainingCourse.id,
-                    curriculumVersionId: curriculumVersionMap.get(curriculum),
-                    startYear: new Date().getFullYear(),
-                })),
-            })
+    // await prisma.$transaction(
+    //     async (tx) => {
+    await prisma.fixedClass.createMany({
+        skipDuplicates: true,
+        data: data.students.map(({ fixedClass, curriculum }) => ({
+            name: fixedClass,
+            trainingCourseId: trainingCourse.id,
+            curriculumVersionId: curriculumVersionMap.get(curriculum),
+            startYear: new Date().getFullYear(),
+        })),
+    })
 
-            const fixedClass = await tx.fixedClass.findMany({
-                where: {
-                    OR: data.students.map(({ fixedClass, curriculum }) => ({
-                        name: fixedClass,
-                        trainingCourseId: trainingCourse.id,
-                        curriculumVersionId: curriculumVersionMap.get(curriculum),
-                    })),
-                },
-                select: { id: true, name: true },
-            })
-
-            const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
-
-            for (const student of data.students) {
-                const studentData: Prisma.StudentCreateInput = {
-                    code: student.code,
-                    entryScore: Number.parseFloat(student.entryScore ?? '') || null,
-                    trainingObjectType: {
-                        connect: { id: trainingObjectType.id },
-                    },
-                    fixedClass: {
-                        connect: { id: fixedClassMap.get(student.fixedClass) },
-                    },
-                    curriculumVersion: {
-                        connect: { id: curriculumVersionMap.get(student.curriculum) },
-                    },
-                    userProfile: {},
-                    department: student.department,
-                    departmentAddress: student.departmentAddress,
-                    careerYear: Number.parseInt(student.careerYear ?? '0', 10),
-                    universitySchool: student.universitySchool,
-                    universityTrainingType: student.universityTrainingType,
-                    universityGraduationYear: Number.parseInt(
-                        student.universityGraduationYear ?? '0',
-                        10
-                    ),
-                    universityMajor: student.universityMajor,
-                    universityRank: student.universityRank,
-                    basic: student.basic ? Number.parseFloat(student.basic) : null,
-                    facility: student.facility ? Number.parseFloat(student.facility) : null,
-                    foreignLanguage: student.foreignLanguage,
-                    priorityReason: student.priorityReason,
-                    description: student.description,
-                }
-                const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
-                    {
-                        ...splitFullName(student.fullname),
-                        dateOfBirth: student.dateOfBirth,
-                        idCardNumber: student.idCardNumber,
-                        genderId: student.gender ? genderMap.get(student.gender) : null,
-                        ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
-                        nationalityId: nationalityMap.get(student.nationality ?? '') || null,
-                        provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
-                        phoneNumber: student.phoneNumber,
-                        officerNumber: student.officerNumber,
-                        rankId: rankMap.get(student.rank ?? '') || null,
-                        positionCPVId: positionMap.get(student.position ?? '') || null,
-                    }
-
-                const existing = existingStudentMap.get(student.code)
-                if (existing) {
-                    await tx.student.update({
-                        where: { id: existing.id },
-                        data: {
-                            ...studentData,
-                            userProfile: { update: profileData },
-                        },
-                    })
-
-                    putDMNhanViens(
-                        {
-                            Id: existing.userProfileId,
-                            sMa: student.idCardNumber,
-                            bLaHocVien: true,
-                            bLaTaiKhoan: true,
-                            dNgaySinh: student.dateOfBirth
-                                ? new Date(student.dateOfBirth)?.toISOString()
-                                : null,
-                            sCCCD: student.idCardNumber,
-                            sHoVaDem: profileData.lastName,
-                            sTen: profileData.firstName,
-                            sTenDayDu: student.fullname,
-                            sSDTDiDong: student.phoneNumber ?? '',
-                            // TODO: fix this
-                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
-                            sEmail: `${student.idCardNumber}@gmail.com`,
-                            sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                        },
-                        {
-                            headers: {
-                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                            },
-                        }
-                    )
-                        .then((res) => {
-                            console.log('[LSB update User]:', res.status, res.data)
-                        })
-                        .catch(console.error)
-                } else {
-                    const profileId = crypto.randomUUID()
-                    const st = await tx.student.create({
-                        data: {
-                            ...studentData,
-                            userProfile: {
-                                connectOrCreate: {
-                                    where: { idCardNumber: student.idCardNumber },
-                                    create: profileData,
-                                },
-                            },
-                        },
-                    })
-
-                    postDMNhanViens(
-                        {
-                            Id: profileId,
-                            sMa: student.idCardNumber,
-                            bLaHocVien: true,
-                            bLaTaiKhoan: true,
-                            dNgaySinh: student.dateOfBirth
-                                ? new Date(student.dateOfBirth)?.toISOString()
-                                : null,
-                            sCCCD: student.idCardNumber,
-                            sHoVaDem: profileData.lastName,
-                            sTen: profileData.firstName,
-                            sTenDayDu: student.fullname,
-                            sSDTDiDong: student.phoneNumber ?? '',
-                            // TODO: fix this
-                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
-                            sEmail: `${student.idCardNumber}@gmail.com`,
-                            sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                        },
-                        {
-                            headers: {
-                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                            },
-                        }
-                    )
-                        .then((res) => {
-                            console.log('[LSB create User]:', res.status, res.data)
-                        })
-                        .catch(console.error)
-
-                    if (student.department) {
-                        await tx.quaTrinhCongTac.create({
-                            data: {
-                                userProfileId: st.userProfileId,
-                                donVi: student.department,
-                                diaChi: student.departmentAddress,
-                                chucVuId: positionMap.get(student.position ?? ''),
-                            },
-                        })
-                    }
-
-                    if (student.universitySchool && student.universityMajor) {
-                        await tx.quaTrinhHocTap.create({
-                            data: {
-                                userProfileId: st.userProfileId,
-                                tenTruongId: dmTruong.get(student.universitySchool) as string,
-                                nganhHocId: dmNganh.get(student.universityMajor) as string,
-                                chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
-                            },
-                        })
-                    }
-                }
-            }
+    const fixedClass = await prisma.fixedClass.findMany({
+        where: {
+            OR: data.students.map(({ fixedClass, curriculum }) => ({
+                name: fixedClass,
+                trainingCourseId: trainingCourse.id,
+                curriculumVersionId: curriculumVersionMap.get(curriculum),
+            })),
         },
-        { timeout: timeout * 1000 }
-    )
+        select: { id: true, name: true },
+    })
+
+    const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
+
+    for (const student of data.students) {
+        const studentData: Prisma.StudentCreateInput = {
+            code: student.code,
+            entryScore: Number.parseFloat(student.entryScore ?? '') || null,
+            trainingObjectType: {
+                connect: { id: trainingObjectType.id },
+            },
+            fixedClass: {
+                connect: { id: fixedClassMap.get(student.fixedClass) },
+            },
+            curriculumVersion: {
+                connect: { id: curriculumVersionMap.get(student.curriculum) },
+            },
+            userProfile: {},
+            department: student.department,
+            departmentAddress: student.departmentAddress,
+            careerYear: Number.parseInt(student.careerYear ?? '0', 10),
+            universitySchool: student.universitySchool,
+            universityTrainingType: student.universityTrainingType,
+            universityGraduationYear: Number.parseInt(student.universityGraduationYear ?? '0', 10),
+            universityMajor: student.universityMajor,
+            universityRank: student.universityRank,
+            basic: student.basic ? Number.parseFloat(student.basic) : null,
+            facility: student.facility ? Number.parseFloat(student.facility) : null,
+            foreignLanguage: student.foreignLanguage,
+            priorityReason: student.priorityReason,
+            description: student.description,
+        }
+        const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
+            ...splitFullName(student.fullname),
+            dateOfBirth: student.dateOfBirth,
+            idCardNumber: student.idCardNumber,
+            genderId: student.gender ? genderMap.get(student.gender) : null,
+            ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
+            nationalityId: nationalityMap.get(student.nationality ?? '') || null,
+            provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
+            phoneNumber: student.phoneNumber,
+            officerNumber: student.officerNumber,
+            rankId: rankMap.get(student.rank ?? '') || null,
+            positionCPVId: positionMap.get(student.position ?? '') || null,
+        }
+
+        const existing = existingStudentMap.get(student.code)
+        if (existing) {
+            const res = await putDMNhanViens(
+                {
+                    Id: existing.userProfileId,
+                    sMa: student.idCardNumber,
+                    bLaHocVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: student.dateOfBirth
+                        ? new Date(student.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: student.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: student.fullname,
+                    sSDTDiDong: student.phoneNumber ?? '',
+                    //! TODO: fix this
+                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                    sEmail: `${student.idCardNumber}@gmail.com`,
+                    sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                },
+                {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                }
+            )
+            console.log('[LSB update User]:', res.status, res.data)
+            if (res.status === 200) {
+                await prisma.student.update({
+                    where: { id: existing.id },
+                    data: {
+                        ...studentData,
+                        userProfile: { update: profileData },
+                    },
+                })
+            } else {
+                const extra = res.data?.extra as ErrorExtra | undefined
+                return c.json(
+                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                    400
+                )
+            }
+        } else {
+            // const profileId = crypto.randomUUID()
+
+            const res = await postDMNhanViens(
+                {
+                    // Id: profileId,
+                    sMa: student.idCardNumber,
+                    bLaHocVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: student.dateOfBirth
+                        ? new Date(student.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: student.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: student.fullname,
+                    sSDTDiDong: student.phoneNumber ?? '',
+                    //! TODO: fix this
+                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                    sEmail: `${student.idCardNumber}@gmail.com`,
+                    sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                },
+                {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                }
+            )
+            console.log('[LSB create User]:', res.status, res.data)
+
+            if (res.status === 200) {
+                const st = await prisma.student.create({
+                    data: {
+                        ...studentData,
+                        userProfile: {
+                            connectOrCreate: {
+                                where: { idCardNumber: student.idCardNumber },
+                                create: profileData,
+                            },
+                        },
+                    },
+                })
+
+                if (student.department) {
+                    await prisma.quaTrinhCongTac.create({
+                        data: {
+                            userProfileId: st.userProfileId,
+                            donVi: student.department,
+                            diaChi: student.departmentAddress,
+                            chucVuId: positionMap.get(student.position ?? ''),
+                        },
+                    })
+                }
+
+                if (student.universitySchool && student.universityMajor) {
+                    await prisma.quaTrinhHocTap.create({
+                        data: {
+                            userProfileId: st.userProfileId,
+                            tenTruongId: dmTruong.get(student.universitySchool) as string,
+                            nganhHocId: dmNganh.get(student.universityMajor) as string,
+                            chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
+                        },
+                    })
+                }
+            } else {
+                const extra = res.data?.extra as ErrorExtra | undefined
+                return c.json(
+                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                    400
+                )
+            }
+        }
+    }
+    //     },
+    //     { timeout: timeout * 1000 }
+    // )
 
     return c.json(
         {

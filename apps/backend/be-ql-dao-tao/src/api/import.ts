@@ -5,6 +5,7 @@ import { parseSheetLecturer, zParseSheetError } from '@workspace/libs/parseExcel
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
+import type { ErrorExtra } from '../types/error-extra'
 import {
     buildDegreeRankTypeMapOrThrow,
     buildDegreeTypeMapOrThrow,
@@ -99,124 +100,133 @@ app.openapi(importLecturer, async (c) => {
     )
 
     const start = Date.now()
-    await prisma.$transaction(
-        async (tx) => {
-            for (const lecturer of data.lecturers) {
-                const lecturerData: Prisma.LecturerCreateInput = {
-                    from: new Date(),
-                    code: lecturer.code,
-                    lecturerType: {
-                        connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
+    // await prisma.$transaction(
+    //     async (tx) => {
+    for (const lecturer of data.lecturers) {
+        const lecturerData: Prisma.LecturerCreateInput = {
+            from: new Date(),
+            code: lecturer.code,
+            lecturerType: {
+                connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
+            },
+            organization: {
+                connect: {
+                    Id: organizationMap.get(lecturer.departmentOrganization),
+                },
+            },
+            userProfile: {},
+            description: lecturer.description,
+        }
+
+        const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
+            ...splitFullName(lecturer.fullname),
+            dateOfBirth: lecturer.dateOfBirth,
+            genderId: genderMap.get(lecturer.gender),
+            academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ''),
+            academicRankTypeId: degreeRankTypeMap.get(lecturer.degreeRankType ?? ''),
+            currentAddress: lecturer.currentAddress,
+            phoneNumber: lecturer.phoneNumber,
+            email: lecturer.email,
+            idCardNumber: lecturer.idCardNumber,
+        }
+
+        const existing = existingLecturerMap.get(lecturer.code)
+        if (existing) {
+            const res = await putDMNhanViens(
+                {
+                    Id: existing.userProfileId,
+                    sMa: lecturer.code,
+                    bLaCanBoNhanVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: lecturer.dateOfBirth
+                        ? new Date(lecturer.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: lecturer.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: lecturer.fullname,
+                    sSDTDiDong: lecturer.phoneNumber ?? '',
+                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                    sEmail: lecturer.email,
+                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                },
+                {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                     },
-                    organization: {
-                        connect: {
-                            Id: organizationMap.get(lecturer.departmentOrganization),
-                        },
+                }
+            )
+
+            console.log('[LSB update User]:', res.status, res.data)
+            if (res.status === 200) {
+                await prisma.lecturer.update({
+                    where: { id: existing.id },
+                    data: {
+                        ...lecturerData,
+                        userProfile: { update: profileData },
                     },
-                    userProfile: {},
-                    description: lecturer.description,
-                }
-
-                const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
-                    {
-                        ...splitFullName(lecturer.fullname),
-                        dateOfBirth: lecturer.dateOfBirth,
-                        genderId: genderMap.get(lecturer.gender),
-                        academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ''),
-                        academicRankTypeId: degreeRankTypeMap.get(lecturer.degreeRankType ?? ''),
-                        currentAddress: lecturer.currentAddress,
-                        phoneNumber: lecturer.phoneNumber,
-                        email: lecturer.email,
-                        idCardNumber: lecturer.idCardNumber,
-                    }
-
-                const existing = existingLecturerMap.get(lecturer.code)
-                if (existing) {
-                    await tx.lecturer.update({
-                        where: { id: existing.id },
-                        data: {
-                            ...lecturerData,
-                            userProfile: { update: profileData },
-                        },
-                    })
-
-                    putDMNhanViens(
-                        {
-                            Id: existing.userProfileId,
-                            sMa: lecturer.idCardNumber,
-                            bLaHocVien: true,
-                            bLaTaiKhoan: true,
-                            dNgaySinh: lecturer.dateOfBirth
-                                ? new Date(lecturer.dateOfBirth)?.toISOString()
-                                : null,
-                            sCCCD: lecturer.idCardNumber,
-                            sHoVaDem: profileData.lastName,
-                            sTen: profileData.firstName,
-                            sTenDayDu: lecturer.fullname,
-                            sSDTDiDong: lecturer.phoneNumber ?? '',
-                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                            sEmail: lecturer.email,
-                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-                        },
-                        {
-                            headers: {
-                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                            },
-                        }
-                    )
-                        .then((res) => {
-                            console.log('[LSB create User]:', res.status, res.data)
-                        })
-                        .catch(console.error)
-                } else {
-                    const profileId = crypto.randomUUID()
-                    await tx.lecturer.create({
-                        data: {
-                            ...lecturerData,
-                            userProfile: {
-                                connectOrCreate: {
-                                    where: { idCardNumber: lecturer.idCardNumber },
-                                    create: { id: profileId, ...profileData },
-                                },
-                            },
-                        },
-                    })
-
-                    postDMNhanViens(
-                        {
-                            Id: profileId,
-                            sMa: lecturer.idCardNumber,
-                            bLaHocVien: true,
-                            bLaTaiKhoan: true,
-                            dNgaySinh: lecturer.dateOfBirth
-                                ? new Date(lecturer.dateOfBirth)?.toISOString()
-                                : null,
-                            sCCCD: lecturer.idCardNumber,
-                            sHoVaDem: profileData.lastName,
-                            sTen: profileData.firstName,
-                            sTenDayDu: lecturer.fullname,
-                            sSDTDiDong: lecturer.phoneNumber ?? '',
-                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                            sEmail: lecturer.email,
-                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-                        },
-                        {
-                            headers: {
-                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                            },
-                        }
-                    )
-                        .then((res) => {
-                            console.log('[LSB create User]:', res.status, res.data)
-                        })
-                        .catch(console.error)
-                }
+                })
+            } else {
+                const extra = res.data?.extra as ErrorExtra | undefined
+                return c.json(
+                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                    400
+                )
             }
-        },
-        { timeout: timeout * 1000 }
-    )
+        } else {
+            // const profileId = crypto.randomUUID()
+            const res = await postDMNhanViens(
+                {
+                    // Id: profileId,
+                    sMa: lecturer.idCardNumber,
+                    bLaCanBoNhanVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: lecturer.dateOfBirth
+                        ? new Date(lecturer.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: lecturer.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: lecturer.fullname,
+                    sSDTDiDong: lecturer.phoneNumber ?? '',
+                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                    sEmail: lecturer.email,
+                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                },
+                {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                }
+            )
+
+            console.log('[LSB create User]:', res.status, res.data)
+            if (res.status === 200) {
+                await prisma.lecturer.create({
+                    data: {
+                        ...lecturerData,
+                        userProfile: {
+                            connectOrCreate: {
+                                where: { idCardNumber: lecturer.idCardNumber },
+                                create: { id: res.data as string, ...profileData },
+                            },
+                        },
+                    },
+                })
+            } else {
+                const extra = res.data?.extra as ErrorExtra | undefined
+                return c.json(
+                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                    400
+                )
+            }
+        }
+    }
+    //     },
+    //     { timeout: timeout * 1000 }
+    // )
 
     return c.json(
         {
