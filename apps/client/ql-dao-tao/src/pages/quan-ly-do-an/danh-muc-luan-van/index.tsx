@@ -6,6 +6,7 @@ import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import TreeSelect from '@/components/commons/tree-select'
 import {
     useCountStudent,
     useCreateStudentThesisRegistration,
@@ -19,7 +20,6 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 
-import { useAbility } from '@workspace/permissions/hooks'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
 
@@ -29,10 +29,16 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { CouncilRole } from '@workspace/db/client'
+import { buildOrgTree } from '@lib/utils'
 // import { getMinioUrl } from '@workspace/constant'
-
+interface ExpertStat {
+    expertId: string
+    name: string
+    GVHD1Student: number
+    GVHD2Student: number
+    totalPayment: number
+}
 export default function PostgraduateProject() {
-    const { can } = useAbility()
     const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
         useThesisProjectStatusOptions()
     const [editingRowKey, setEditingRowKey] = useState<string | null>(null)
@@ -99,7 +105,8 @@ export default function PostgraduateProject() {
     }>({
         tag: 'ModalCauHinhLuanVan',
     })
-    const { data: sDm_Donvi } = useFindManyDM_DonVi()
+    const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(sDm_Donvi ?? [], '0')
     const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null)
 
     const { data: trainingCourses } = useFindManyTrainingCourse(
@@ -337,9 +344,9 @@ export default function PostgraduateProject() {
     const danhsachbaove = async () => {
         showSpinner()
         try {
-            const allSheetOptions = allStudents?.map((student, index) => {
-                const row: TableRow[] = [
-                    {
+            const row: TableRow[] =
+                allStudents?.map((student, index) => {
+                    return {
                         cells: [
                             { value: index + 1, border: true, align: 'center' },
                             {
@@ -355,12 +362,12 @@ export default function PostgraduateProject() {
                                 align: 'center',
                             },
                             {
-                                value: student.userProfile?.firstName || '',
+                                value: student.userProfile?.lastName || '',
                                 border: true,
                                 align: 'center',
                             },
                             {
-                                value: student.userProfile?.lastName || '',
+                                value: student.userProfile?.firstName || '',
                                 border: true,
                                 align: 'center',
                             },
@@ -397,45 +404,117 @@ export default function PostgraduateProject() {
                             { value: '', border: true },
                             { value: '', border: true },
                         ],
+                    }
+                }) ?? []
+            const gapRow: TableRow = {
+                cells: [{ value: null, border: false }],
+            }
+            const totalRow: TableRow = {
+                cells: [
+                    {
+                        value: `(Tổng số: ${allStudents?.length} học viên)`,
+                        align: 'center',
+                        colSpan: 13,
+                        border: false,
+                        bold: true,
                     },
-                ]
-                const gapRow: TableRow = {
-                    cells: [{ value: null, border: false }],
-                }
-                const totalRow: TableRow = {
-                    cells: [
-                        {
-                            value: `(Tổng số: ${allStudents?.length} học viên)`,
-                            align: 'center',
-                            colSpan: 13,
-                            border: false,
-                            bold: true,
-                        },
-                    ],
-                }
-                return {
-                    sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-                    data: {
-                        dotxet:
-                            student.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name ||
-                            '',
-                    },
-                    tableStartCell: { row: 7, col: 1 },
-                    rows: [...row, gapRow, totalRow],
-                }
-            })
+                ],
+            }
             await exportFromTemplate({
                 templateUrl: '/lms/templates/chuong-trinh-dao-tao/DanhSachBaoVe.xlsx',
-                sheets: allSheetOptions ?? [],
+                sheets: [
+                    {
+                        sheet: 'DanhSachBaoVe',
+                        rows: [...row, gapRow, totalRow],
+                        tableStartCell: { row: 7, col: 1 },
+                        data: {
+                            dotxet: thesisSessionSelected?.name || '',
+                        },
+                    },
+                ],
                 fileName: 'DanhSachBaoVe',
-                mergeSheetsToOne: true,
-                sheetName: 'DanhSachBaoVe',
             })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
         }
+    }
+    const thongkecbhdlv = async () => {
+        // showSpinner()
+        // try {
+        //     const allSheetOptions = allStudents?.map((student) => {
+        //         const data = {
+        //             tenhocvien: student.userProfile?.fullname || '',
+        //         }
+        //         const gapRow: TableRow = {
+        //             cells: [{ value: null, border: false }],
+        //         }
+        //         return {
+        //             sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+        //             data: data,
+        //             tableStartCell: { row: 7, col: 1 },
+        //             rows: [gapRow],
+        //         }
+        //     })
+        // } catch (error) {
+        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        // } finally {
+        //     hideSpinner()
+        // }
+    }
+    const getExpertSupervisionStats = (): ExpertStat[] => {
+        if (!allStudents || allStudents.length === 0) {
+            return []
+        }
+
+        const expertStatsMap = new Map<string, ExpertStat>()
+
+        for (const student of allStudents) {
+            for (const registration of student.thesisRegistrations) {
+                const project = registration.thesisProject
+
+                if (!project) continue
+
+                const countedExperts: { [expertId: string]: boolean } = {}
+
+                for (const payment of project.supervisorPayments) {
+                    if (!payment.expert) continue
+
+                    const expertId = payment.expert.id
+                    const paymentAmount = Number.parseFloat(payment.amount.toString()) || 0
+
+                    let newStats = expertStatsMap.get(expertId)
+                    if (!newStats) {
+                        newStats = {
+                            expertId: expertId,
+                            name: payment.expert.name ?? '',
+                            GVHD1Student: 0,
+                            GVHD2Student: 0,
+                            totalPayment: 0,
+                        }
+                        expertStatsMap.set(expertId, newStats)
+                    }
+
+                    newStats.totalPayment += paymentAmount
+
+                    if (!countedExperts[expertId]) {
+                        if (payment.description === '1' && expertId === project.supervisorId) {
+                            newStats.GVHD1Student += 1
+                        } else if (
+                            payment.description === '2' &&
+                            expertId === project.coSupervisorId
+                        ) {
+                            newStats.GVHD2Student += 1
+                        }
+
+                        countedExperts[expertId] = true
+                    }
+                }
+            }
+        }
+
+        return Array.from(expertStatsMap.values())
     }
     const buttonList = [
         {
@@ -508,7 +587,7 @@ export default function PostgraduateProject() {
         {
             id: 14,
             label: 'Thông kê CBHD LV',
-            onClick: () => defaultButtonClick(),
+            onClick: async () => await thongkecbhdlv(),
         },
         {
             id: 15,
@@ -551,7 +630,11 @@ export default function PostgraduateProject() {
         {
             where: {
                 thesisRegistrations: {
-                    some: {},
+                    some: {
+                        thesisProject: {
+                            thesisSessionId: thesisSessionSelected?.id ?? '',
+                        },
+                    },
                 },
                 fixedClassId: {
                     in: queryFixedClasses,
@@ -566,9 +649,15 @@ export default function PostgraduateProject() {
                 },
                 trainingObjectType: true,
                 thesisRegistrations: {
+                    where: {
+                        thesisProject: {
+                            thesisSessionId: thesisSessionSelected?.id ?? '',
+                        },
+                    },
                     include: {
                         thesisProject: {
                             include: {
+                                thesisSession: true,
                                 organization: true,
                                 supervisor: true,
                                 coSupervisor: true,
@@ -621,6 +710,14 @@ export default function PostgraduateProject() {
                                 supervisor: true,
                                 coSupervisor: true,
                                 room: true,
+                                supervisorPayments: {
+                                    include: {
+                                        expert: true,
+                                    },
+                                    orderBy: {
+                                        description: 'asc',
+                                    },
+                                },
                                 council: {
                                     include: { members: { include: { expert: true } } },
                                 },
@@ -709,7 +806,7 @@ export default function PostgraduateProject() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
+                        <Col span={36}>
                             <Flex gap={12}>
                                 <Form.Item name="searchDotXet" label="Đợt xét" required>
                                     <Select
@@ -763,16 +860,13 @@ export default function PostgraduateProject() {
                                     />
                                 </Form.Item>
                                 <Form.Item name="searchKhoaQuanLy" label="Khoa quản lí">
-                                    <Select
-                                        mode="multiple"
-                                        className="w-40"
-                                        options={sDm_Donvi?.map((x) => {
-                                            return {
-                                                label: x.sTen,
-                                                value: x.Id,
-                                            }
-                                        })}
-                                        placeholder="Chọn khoa quản lí"
+                                    <TreeSelect
+                                        className="w-80"
+                                        placeholder="Chọn đơn vị quản lý"
+                                        allowClear
+                                        showSearch
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
                                     />
                                 </Form.Item>
                                 <Form.Item className="flex justify-end gap-3">
@@ -785,8 +879,7 @@ export default function PostgraduateProject() {
                                             if (!hasClickedFetch) {
                                                 setHasClickedFetch(true)
                                             }
-                                            console.log(students)
-                                            if (!students || students?.length == 0) {
+                                            if (!students || students?.length === 0) {
                                                 message.info(
                                                     'Không tìm thấy dữ liệu để xem kết quả'
                                                 )
@@ -848,8 +941,11 @@ export default function PostgraduateProject() {
                             {
                                 title: 'Đợt xét',
                                 width: 100,
-                                render: (_) => {
-                                    return thesisSessionSelected?.name
+                                render: (_, record) => {
+                                    return (
+                                        record?.thesisRegistrations?.[0]?.thesisProject
+                                            ?.thesisSession?.name || ''
+                                    )
                                 },
                             },
                             {

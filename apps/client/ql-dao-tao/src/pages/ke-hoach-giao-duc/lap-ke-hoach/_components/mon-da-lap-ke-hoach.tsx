@@ -120,7 +120,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
         { enabled: !!semesterId && !!trainingObjectTypeId }
     )
 
-    const { onOpen: openKhoiTaoMon } = useDisclosure({
+    const { onOpen: openKhoiTaoMon } = useDisclosure<{
+        hocLai: boolean
+    }>({
         tag: 'KhoiTaoMon',
     })
 
@@ -174,7 +176,14 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                 </Col>
                 <Col span={12}>
                     <Flex justify="end" gap={4}>
-                        <Button onClick={openKhoiTaoMon} type="default">
+                        <Button
+                            onClick={() =>
+                                openKhoiTaoMon({
+                                    hocLai,
+                                })
+                            }
+                            type="default"
+                        >
                             Khởi tạo môn
                         </Button>
                         <Button

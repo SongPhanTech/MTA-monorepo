@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { cn } from '@lib/utils'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'

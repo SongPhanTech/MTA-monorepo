@@ -755,6 +755,8 @@ export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassC
 export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajor'
 export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculumTrainingMajorTrainingField'
 export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemStatus'
+export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse'
+export * from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourseBaseScore'
 export * from './listOfundefinedAllOfDataItemLecturer'
 export * from './listOfundefinedAllOfDataItemLecturerOrganization'
 export * from './listOfundefinedAllOfDataItemStaffs'

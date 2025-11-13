@@ -1,9 +1,5 @@
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
-import { queryClient } from '@lib/api'
-import { $Enums, type PlanTraining } from '@workspace/db/client'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { $Enums, PlanTraining } from '@workspace/db/client'
 import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import {
@@ -13,11 +9,17 @@ import {
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
-import { type Key, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import useSpinner from '@hooks/spinner'
+import { queryClient } from '@lib/api'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    subjectSelected?: Array<string>
+    subjectSelected?: Array<{
+        id: string
+        count: number
+    }>
 }
 
 export default function MonCoHVSVChuaDat() {
@@ -54,7 +56,6 @@ export default function MonCoHVSVChuaDat() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
-            const subject = data.filter((subject) => subjectSelected.includes(subject.id))
             const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -102,9 +103,10 @@ export default function MonCoHVSVChuaDat() {
                         where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
-                                create: subject.map((subject) => ({
+                                create: subjectSelected.map((subject) => ({
                                     subjectVersionId: subject.id,
                                     subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    studentCount: subject.count,
                                 })),
                             },
                         },
@@ -157,11 +159,17 @@ export default function MonCoHVSVChuaDat() {
                     <Form.Item hidden name="subjectSelected" />
                     <Table
                         rowKey="id"
-                        data={data as any}
+                        data={data}
                         rowSelection={{
-                            selectedRowKeys: [...subjectSelected],
-                            onChange: (selectedRowKeys) => {
-                                form.setFieldValue('subjectSelected', selectedRowKeys)
+                            selectedRowKeys: [...subjectSelected.map((e) => e.id)],
+                            onChange: (_, selectedRows) => {
+                                form.setFieldValue(
+                                    'subjectSelected',
+                                    selectedRows.map((e) => ({
+                                        id: e.id,
+                                        count: e.count,
+                                    }))
+                                )
                             },
                             type: 'checkbox',
                             columnWidth: 35,
@@ -169,13 +177,19 @@ export default function MonCoHVSVChuaDat() {
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    if (subjectSelected.includes(record.id)) {
+                                    if (subjectSelected.some((e) => e.id === record.id)) {
                                         const newSelected = subjectSelected.filter(
-                                            (id) => id !== record.id
+                                            (e) => e.id !== record.id
                                         )
                                         form.setFieldValue('subjectSelected', newSelected)
                                     } else {
-                                        const newSelected = [...subjectSelected, record.id as Key]
+                                        const newSelected = [
+                                            ...subjectSelected,
+                                            {
+                                                id: record.id,
+                                                count: record.count,
+                                            },
+                                        ]
                                         form.setFieldValue('subjectSelected', newSelected)
                                     }
                                 },
@@ -187,7 +201,7 @@ export default function MonCoHVSVChuaDat() {
                                 width: 35,
                                 align: 'center',
                                 render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * numberOfPages,
                             },
                             {
                                 title: 'Mã MH',

@@ -34,12 +34,7 @@ import dayjs from 'dayjs'
 import { CouncilProposalStatus, CouncilRole, DocumentFile } from '@workspace/db'
 import { useEffect, useState } from 'react'
 import DocumentPaths from '@components/commons/documentPaths'
-import {
-    CloudUploadOutlined,
-    DollarOutlined,
-    FileOutlined,
-    SettingOutlined,
-} from '@ant-design/icons'
+import { CloudUploadOutlined, DollarOutlined, SettingOutlined } from '@ant-design/icons'
 import Decimal from 'decimal.js'
 
 const { Title } = Typography
@@ -315,9 +310,11 @@ const ModalCauHinhLuanVan = () => {
         }
     }
     const handlePaymentThesis = async (data: ModalCauHinhLuanVanType) => {
+        console.log('data', data.supervisorId)
+        console.log('count', thesisProjectData?.supervisorPayments?.length)
         try {
             showSpinner()
-            if (thesisProjectData?.supervisorPayments?.length == 0) {
+            if (thesisProjectData?.supervisorPayments?.length === 0) {
                 const gvhd1Payment = {
                     expert: { connect: { id: thesisProjectData?.supervisor?.id ?? '' } },
                     amount: new Decimal(data.supervisorPaymentAmount ?? 0),
@@ -334,7 +331,7 @@ const ModalCauHinhLuanVan = () => {
                     }
                     await createSupervisorPaymentRecord({ data: gvhd2Payment })
                 }
-            } else if (thesisProjectData?.supervisorPayments?.length == 1) {
+            } else if (thesisProjectData?.supervisorPayments?.length === 1) {
                 const gvhd1Payment = {
                     expert: { connect: { id: thesisProjectData?.supervisor?.id ?? '' } },
                     amount: new Decimal(data.supervisorPaymentAmount ?? 0),
@@ -354,7 +351,7 @@ const ModalCauHinhLuanVan = () => {
                     }
                     await createSupervisorPaymentRecord({ data: gvhd2Payment })
                 }
-            } else if (thesisProjectData?.supervisorPayments?.length == 2) {
+            } else if (thesisProjectData?.supervisorPayments?.length === 2) {
                 const gvhd1Payment = {
                     expert: { connect: { id: thesisProjectData?.supervisor?.id ?? '' } },
                     amount: new Decimal(data.supervisorPaymentAmount ?? 0),
@@ -429,11 +426,20 @@ const ModalCauHinhLuanVan = () => {
             },
             supervisor: true,
             coSupervisor: true,
-            supervisorPayments: true,
+            supervisorPayments: {
+                include: {
+                    expert: true,
+                },
+
+                orderBy: {
+                    description: 'asc',
+                },
+            },
         },
     })
 
     useEffect(() => {
+        console.log('thesisProjectData', thesisProjectData)
         if (thesisProjectData) {
             form.setFieldsValue({
                 chairman: thesisProjectData?.council?.members.find(
@@ -462,7 +468,9 @@ const ModalCauHinhLuanVan = () => {
                 isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
                 isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
                 librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? '',
+                supervisorId: thesisProjectData?.supervisorId ?? '',
                 supervisorName: thesisProjectData?.supervisor?.name ?? '',
+                coSupervisorId: thesisProjectData?.coSupervisorId ?? '',
                 coSupervisorName: thesisProjectData?.coSupervisor?.name ?? '',
                 supervisorPaymentAmount:
                     thesisProjectData?.supervisorPayments[0]?.amount?.toNumber() ?? 0,
@@ -867,6 +875,16 @@ const ModalCauHinhLuanVan = () => {
                                 >
                                     <Input className="w-full" disabled />
                                 </FormItem>
+                                <FormItem
+                                    form={form}
+                                    name="supervisorId"
+                                    label="GVHD 1"
+                                    className="mb-5 hidden"
+                                    labelAlign="left"
+                                    {...formItemLayout}
+                                >
+                                    <Input className="w-full" disabled />
+                                </FormItem>
                             </Col>
 
                             <Col span={12}>
@@ -912,6 +930,16 @@ const ModalCauHinhLuanVan = () => {
                                     <Input className="w-full" disabled />
                                 </FormItem>
                             </Col>
+                            <FormItem
+                                form={form}
+                                name="coSupervisorId"
+                                label="GVHD 2"
+                                className="mb-5 hidden"
+                                labelAlign="left"
+                                {...formItemLayout}
+                            >
+                                <Input className="w-full" disabled />
+                            </FormItem>
 
                             <Col span={12}>
                                 <FormItem

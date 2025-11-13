@@ -2545,6 +2545,7 @@ model PlanTrainingSubject {
   subjectVersion   SubjectVersion   @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   fixedClasses     FixedClass[]
+  studentCount     Int              @default(0)
   subjectClassType SubjectClassType @default(NORMAL)
 
   @@schema("ql-dao-tao")
