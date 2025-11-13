@@ -45,10 +45,10 @@ export default function PostgraduateProject() {
     const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
         useThesisProjectStatusOptions()
     const [editingRowKey, setEditingRowKey] = useState<string | null>(null)
-
     const [editingValues, setEditingValues] = useState<Record<string, any>>({})
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const handleSave = async (rowId: string) => {
         try {
             showSpinner()
@@ -444,27 +444,51 @@ export default function PostgraduateProject() {
         }
     }
     const thongkecbhdlv = async () => {
-        // showSpinner()
-        // try {
-        //     const allSheetOptions = allStudents?.map((student) => {
-        //         const data = {
-        //             tenhocvien: student.userProfile?.fullname || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 7, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        showSpinner()
+        const dataMapping = getExpertSupervisionStats();
+        const ngayhientai = dayjs().format('DD/MM/YYYY')
+        const ngay = ngayhientai.split('/')[0]
+        const thang = ngayhientai.split('/')[1]
+        const nam = ngayhientai.split('/')[2]
+        const tendot = thesisSessionSelected?.name || ''
+        const tenkhoa = ''
+        const rows: TableRow[] = dataMapping?.map((item, index) => {
+            return {
+                cells: [
+                    { value: index + 1, border: true, align: 'center' },
+                    { value: item.name, border: true, align: 'center' },
+                    { value: item.sDonvi, border: true, align: 'center' },
+                    { value: (item.GVHD1Student + item.GVHD2Student) || 0, border: true, align: 'center' },
+                    { value:  0, border: true, align: 'center' },
+                    { value: item.GVHD1Student, border: true, align: 'center' },
+                    { value: item.GVHD2Student, border: true, align: 'center' },
+                    { value: item.totalPayment, border: true, align: 'center' },
+                    { value: item.stk, border: true, align: 'center' },
+                    { value: item.tennganhang, border: true, align: 'center' }                                      
+                ],
+            }
+        })
+        try {
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/ThongKeCanBoHuongDan.xlsx',
+                sheets: [
+                    { sheet: 'ThongKeCanBoHuongDan', 
+                        data: {
+                            dotxet: tendot,
+                            tenkhoa: tenkhoa,
+                            ngay: ngay,
+                            thang: thang,
+                            nam: nam,
+                        },
+                        rows: rows, tableStartCell: { row: 10, col: 1 } },
+                ],
+                fileName: 'ThongKeCanBoHuongDan',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     const getExpertSupervisionStats = (): ExpertStat[] => {
         if (!allStudents || allStudents.length === 0) {
@@ -806,6 +830,14 @@ export default function PostgraduateProject() {
             hideSpinner()
         }
     }
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        setSelectedRowKeys(newSelectedRowKeys as string[])
+    }
+    
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    }
 
     return (
         <div>
@@ -936,6 +968,7 @@ export default function PostgraduateProject() {
                     <Table
                         className="w-full custom-scrollbar mt-2 "
                         rowKey="id"
+                        rowSelection={rowSelection}
                         columns={[
                             {
                                 title: 'Đối tượng đào tạo',
