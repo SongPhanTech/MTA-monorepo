@@ -1,5 +1,6 @@
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
+import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -52,9 +53,19 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
             <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end" gap={8} align="center">
-                        <Button  onClick={()=>{
-
-                        }} type='primary'>Xuất dữ liệu</Button>
+                      <ExportObjectInSurvey query={{
+                         limit: data?.count||10,
+                                page: 1,
+                                id: selectedId,
+                                fullname: filters.fullname,
+                                lecturerCode: filters.lecturerCode,
+                                studentCode: filters.studentCode,
+                                fixedClassIds: filters.fixedClassIds,
+                                trainingCourseIds: filters.trainingCourseIds,
+                                organizationId: filters.organization,
+                                taken: filters?.taken && filters?.taken?.length ===1 ? filters.taken[0] : undefined,
+                                isStudent: filters?.isStudent
+                      } } surveyName={'123123'}/>
                         <Button color="blue" onClick={()=>{
                             setFilters({...filters, isStudent: 'all'})
                         }} variant="solid">Tất cả</Button>
