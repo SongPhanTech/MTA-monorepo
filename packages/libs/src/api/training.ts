@@ -53,6 +53,10 @@ import type {
     GenExamListCode404,
     GenExamListCodeResult,
     GenExamRoomCode,
+    GenerateOriginalDiplomaNumber200,
+    GenerateOriginalDiplomaNumber400,
+    GenerateOriginalDiplomaNumber404,
+    GenerateOriginalDiplomaNumberBody,
     GraduationApplicationInit200,
     GraduationApplicationInit400,
     GraduationApplicationInitBody,
@@ -70,12 +74,12 @@ import type {
     ImportPhanCongGiangDay,
     ImportPhanCongGiangDay200,
     ImportPhanCongGiangDay400,
+    ImportPhienBanCTDT,
     ImportPhienBanCTDT200,
     ImportPhienBanCTDT400,
     ImportPhienBanCTDTSubject,
     ImportPhienBanCTDTSubject200,
     ImportPhienBanCTDTSubject400,
-    ImportPhienBanCTĐT,
     ImportStudent200,
     ImportStudent400,
     ImportStudentRequest,
@@ -2899,13 +2903,13 @@ export const getImportPhienBanCTDTUrl = (curriculumVersionId: string) => {
 
 export const importPhienBanCTDT = async (
     curriculumVersionId: string,
-    importPhienBanCTĐT: ImportPhienBanCTĐT,
+    importPhienBanCTDT: ImportPhienBanCTDT,
     options?: RequestInit
 ): Promise<importPhienBanCTDTResponse> => {
     const formData = new FormData()
-    formData.append('file', importPhienBanCTĐT.file)
-    if (importPhienBanCTĐT.timeout !== undefined && importPhienBanCTĐT.timeout !== null) {
-        formData.append('timeout', importPhienBanCTĐT.timeout.toString())
+    formData.append('file', importPhienBanCTDT.file)
+    if (importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
+        formData.append('timeout', importPhienBanCTDT.timeout.toString())
     }
 
     return customTrainingFetch<importPhienBanCTDTResponse>(
@@ -2925,14 +2929,14 @@ export const getImportPhienBanCTDTMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importPhienBanCTDT>>,
         TError,
-        { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+        { curriculumVersionId: string; data: ImportPhienBanCTDT },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhienBanCTDT>>,
     TError,
-    { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+    { curriculumVersionId: string; data: ImportPhienBanCTDT },
     TContext
 > => {
     const mutationKey = ['importPhienBanCTDT']
@@ -2944,7 +2948,7 @@ export const getImportPhienBanCTDTMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhienBanCTDT>>,
-        { curriculumVersionId: string; data: ImportPhienBanCTĐT }
+        { curriculumVersionId: string; data: ImportPhienBanCTDT }
     > = (props) => {
         const { curriculumVersionId, data } = props ?? {}
 
@@ -2957,7 +2961,7 @@ export const getImportPhienBanCTDTMutationOptions = <
 export type ImportPhienBanCTDTMutationResult = NonNullable<
     Awaited<ReturnType<typeof importPhienBanCTDT>>
 >
-export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTĐT
+export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTDT
 export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
 
 export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext = unknown>(
@@ -2965,7 +2969,7 @@ export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext =
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof importPhienBanCTDT>>,
             TError,
-            { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+            { curriculumVersionId: string; data: ImportPhienBanCTDT },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -2974,7 +2978,7 @@ export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext =
 ): UseMutationResult<
     Awaited<ReturnType<typeof importPhienBanCTDT>>,
     TError,
-    { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+    { curriculumVersionId: string; data: ImportPhienBanCTDT },
     TContext
 > => {
     const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
@@ -3298,6 +3302,119 @@ export const useGraduationCheck = <TError = GraduationCheck400, TContext = unkno
     TContext
 > => {
     const mutationOptions = getGraduationCheckMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type generateOriginalDiplomaNumberResponse200 = {
+    data: GenerateOriginalDiplomaNumber200
+    status: 200
+}
+
+export type generateOriginalDiplomaNumberResponse400 = {
+    data: GenerateOriginalDiplomaNumber400
+    status: 400
+}
+
+export type generateOriginalDiplomaNumberResponse404 = {
+    data: GenerateOriginalDiplomaNumber404
+    status: 404
+}
+
+export type generateOriginalDiplomaNumberResponseComposite =
+    | generateOriginalDiplomaNumberResponse200
+    | generateOriginalDiplomaNumberResponse400
+    | generateOriginalDiplomaNumberResponse404
+
+export type generateOriginalDiplomaNumberResponse =
+    generateOriginalDiplomaNumberResponseComposite & {
+        headers: Headers
+    }
+
+export const getGenerateOriginalDiplomaNumberUrl = () => {
+    return '/api/graduation/generate-original-diploma-number'
+}
+
+export const generateOriginalDiplomaNumber = async (
+    generateOriginalDiplomaNumberBody: GenerateOriginalDiplomaNumberBody,
+    options?: RequestInit
+): Promise<generateOriginalDiplomaNumberResponse> => {
+    return customTrainingFetch<generateOriginalDiplomaNumberResponse>(
+        getGenerateOriginalDiplomaNumberUrl(),
+        {
+            ...options,
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(generateOriginalDiplomaNumberBody),
+        }
+    )
+}
+
+export const getGenerateOriginalDiplomaNumberMutationOptions = <
+    TError = GenerateOriginalDiplomaNumber400 | GenerateOriginalDiplomaNumber404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+        TError,
+        { data: GenerateOriginalDiplomaNumberBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+    TError,
+    { data: GenerateOriginalDiplomaNumberBody },
+    TContext
+> => {
+    const mutationKey = ['generateOriginalDiplomaNumber']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+        { data: GenerateOriginalDiplomaNumberBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return generateOriginalDiplomaNumber(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GenerateOriginalDiplomaNumberMutationResult = NonNullable<
+    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>
+>
+export type GenerateOriginalDiplomaNumberMutationBody = GenerateOriginalDiplomaNumberBody
+export type GenerateOriginalDiplomaNumberMutationError =
+    | GenerateOriginalDiplomaNumber400
+    | GenerateOriginalDiplomaNumber404
+
+export const useGenerateOriginalDiplomaNumber = <
+    TError = GenerateOriginalDiplomaNumber400 | GenerateOriginalDiplomaNumber404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+            TError,
+            { data: GenerateOriginalDiplomaNumberBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+    TError,
+    { data: GenerateOriginalDiplomaNumberBody },
+    TContext
+> => {
+    const mutationOptions = getGenerateOriginalDiplomaNumberMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

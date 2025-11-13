@@ -80,4 +80,16 @@ export type DashboardParam = BaseEntity & {
     iSTT?: number | null
     /** @nullable */
     sThamSoGhepId?: string | null
+    /** @nullable */
+    iX?: number | null
+    /** @nullable */
+    iY?: number | null
+    /** @nullable */
+    iCols?: number | null
+    /** @nullable */
+    iRows?: number | null
+    /** @nullable */
+    sIdTypeLayout?: string | null
+    /** @nullable */
+    bAutoCheck?: boolean | null
 }

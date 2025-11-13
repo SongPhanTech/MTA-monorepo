@@ -87,4 +87,14 @@ export type Dashboard = BaseEntity & {
     sLabelConfig?: string | null
     /** @nullable */
     bDeleted?: boolean | null
+    /** @nullable */
+    xAxis?: string | null
+    /** @nullable */
+    yAxis?: string | null
+    /** @nullable */
+    sChartId?: string | null
+    /** @nullable */
+    sChartName?: string | null
+    /** @nullable */
+    sParamFormName?: string | null
 }

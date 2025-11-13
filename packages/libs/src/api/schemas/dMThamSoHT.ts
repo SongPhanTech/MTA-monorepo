@@ -60,8 +60,7 @@ export type DMThamSoHT = BaseEntity & {
     sTen?: string | null
     /** @nullable */
     sGhiChu?: string | null
-    /** @nullable */
-    sDataType?: string | null
+    iDataType?: number
     /** @nullable */
     sValue?: string | null
     /** @nullable */

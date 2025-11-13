@@ -1224,6 +1224,8 @@ const getSurveysByProfile = createRoute({
                             }).nullable(),
                             subjectClass: models.SubjectClassScalarSchema.nullable(),
                             surveyTopic: models.SurveyTopicScalarSchema,
+                            surveyQuestion: models.SurveyQuestionScalarSchema.array().nullable(),
+                            surveySessions: models.SurveySessionScalarSchema.array().nullable(),
                         })
                     ),
                 },
