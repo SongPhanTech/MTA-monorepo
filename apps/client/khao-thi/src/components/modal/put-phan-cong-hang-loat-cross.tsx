@@ -2,11 +2,15 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import useSpinner from '@hooks/spinner'
 import type { PutPhanCongHangLoatCrossModalInput } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { useFindManyUserProfile } from '@workspace/db/hooks'
-import { Col, Form, Tree } from 'antd'
+import {
+    useFindManyEvaluationCouncilMember,
+    useUpsertEvaluationCriterion,
+} from '@workspace/db/hooks'
+import { Col, Form, message, Tree } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -24,40 +28,42 @@ export default function PutPhanCongHangLoatCrossModal() {
     })
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { hideSpinner, showSpinner } = useSpinner()
 
-    const { data: lecturers = [] } = useFindManyUserProfile(
+    const { data: lecturers = [] } = useFindManyEvaluationCouncilMember(
         {
             where: {
+                deletedAt: null,
+                evaluationCouncil: {
+                    periodId: selectedEvaluationPeriodId || '',
+                },
+            },
+            include: {
                 lecturer: {
-                    evaluationCouncilMember: {
-                        some: {
-                            deletedAt: null,
-                            evaluationCouncil: {
-                                periodId: selectedEvaluationPeriodId || '',
+                    include: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                                firstName: true,
+                                lastName: true,
+                                academicDegreeType: {
+                                    select: {
+                                        sTen: true,
+                                    },
+                                },
+                                academicRankType: {
+                                    select: {
+                                        sTen: true,
+                                    },
+                                },
                             },
                         },
                     },
                 },
             },
-            select: {
-                id: true,
-                fullname: true,
-                firstName: true,
-                lastName: true,
-                academicDegreeType: {
-                    select: {
-                        sTen: true,
-                    },
-                },
-                academicRankType: {
-                    select: {
-                        sTen: true,
-                    },
-                },
-            },
         },
         {
-            enabled: isOpen && !!selectedEvaluationPeriodId,
+            enabled: !!selectedEvaluationPeriodId,
         }
     )
 
@@ -83,7 +89,46 @@ export default function PutPhanCongHangLoatCrossModal() {
             }))
     }, [input?.tableData, input?.selectedCriteriaIds])
 
-    const handleFinish = async () => {}
+    const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
+
+    const handleFinish = async (values: CrossReviewAssignmentModalFormType) => {
+        try {
+            if (!values) return
+            showSpinner()
+            if (input?.selectedCriteriaIds) {
+                await Promise.all(
+                    input.selectedCriteriaIds.map((criterionId) =>
+                        upsertEvaluationCriterion({
+                            where: {
+                                criterionPeriodId: criterionId,
+                            },
+                            create: {
+                                criterionPeriodId: criterionId,
+                                reviewerId: values.reviewerId,
+                                deadlineReview: values.deadlineReview,
+                            },
+                            update: {
+                                reviewerId: values.reviewerId,
+                                deadlineReview: values.deadlineReview,
+                            },
+                        })
+                    )
+                )
+
+                message.success('Phân công đánh giá thành công')
+
+                if (input.refetch) {
+                    input.refetch()
+                }
+
+                onClose()
+            }
+        } catch (error) {
+            message.error('Đã có lỗi xảy ra, vui lòng thử lại')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     return (
         <PutFormModal
@@ -100,12 +145,14 @@ export default function PutPhanCongHangLoatCrossModal() {
                         placeholder="Chọn người phản biện"
                         className="w-full"
                         options={lecturers.map((i) => {
-                            const academicRank = i.academicRankType?.sTen || ''
-                            const degreeRank = i.academicDegreeType?.sTen || ''
+                            const academicRank =
+                                i.lecturer.userProfile?.academicRankType?.sTen || ''
+                            const degreeRank =
+                                i.lecturer.userProfile?.academicDegreeType?.sTen || ''
 
-                            const fullName = i.fullname
-                                ? i.fullname
-                                : `${i.firstName} ${i.lastName}`
+                            const fullName = i?.lecturer.userProfile?.fullname
+                                ? i?.lecturer.userProfile?.fullname
+                                : `${i?.lecturer.userProfile?.firstName} ${i?.lecturer.userProfile?.lastName}`
 
                             const academicTitle = [academicRank, degreeRank]
                                 .filter(Boolean)

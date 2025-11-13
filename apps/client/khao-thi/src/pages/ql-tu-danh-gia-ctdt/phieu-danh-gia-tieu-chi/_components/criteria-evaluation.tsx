@@ -17,7 +17,10 @@ export type DataTabEvaluationCriterionType = StandardPeriod & {
     criteria: (CriterionPeriod & {
         evaluationCriterion?:
             | (EvaluationCriterion & {
-                  evaluationCriterionComments?: EvaluationCriterionComment[]
+                  evaluationCriterionComments?: (EvaluationCriterionComment & {
+                      reviewer?: { fullname?: string | null }
+                  })[]
+                  lecturer?: { userProfile?: { fullname?: string | null } } | null
               })
             | null
     })[]
@@ -82,7 +85,31 @@ export default function CriteriaEvaluationWrite() {
                                 },
                             },
                             include: {
-                                evaluationCriterion: true,
+                                evaluationCriterion: {
+                                    include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        evaluationCriterionComments: {
+                                            include: {
+                                                reviewer: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                            orderBy: {
+                                                createdAt: 'desc',
+                                            },
+                                        },
+                                    },
+                                },
                             },
                             orderBy: {
                                 order: 'asc',

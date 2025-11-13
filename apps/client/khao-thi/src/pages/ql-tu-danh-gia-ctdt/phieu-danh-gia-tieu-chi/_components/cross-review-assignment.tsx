@@ -142,7 +142,7 @@ export default function CrossReviewAssignment() {
             .map((standard) => {
                 const filteredCriteria = standard.criteria.filter(
                     (criterion) =>
-                        criterion.evaluationCriterion?.status === $Enums.EvaluationStatus.SUBMITTED
+                        criterion.evaluationCriterion?.status !== $Enums.EvaluationStatus.LOCK
                 )
 
                 if (filteredCriteria.length === 0) return null
@@ -221,76 +221,76 @@ export default function CrossReviewAssignment() {
         return selectedRowKeys.filter((key) => !standardIds.has(key))
     }
 
-    // useEffect(() => {
-    //     if (!data?.standards) return
+    useEffect(() => {
+        if (!data?.standards) return
 
-    //     const formData: Record<string, { reviewerId: string; deadlineReview: any }> = {}
+        const formData: Record<string, { reviewerId: string; deadlineReview: any }> = {}
 
-    //     data.standards.forEach((standard) => {
-    //         standard.criteria.forEach((criterion) => {
-    //             if (
-    //                 criterion.evaluationCriterion &&
-    //                 criterion.evaluationCriterion.status === $Enums.EvaluationStatus.SUBMITTED
-    //             ) {
-    //                 const { reviewerId, deadlineReview } = criterion.evaluationCriterion
-    //                 if (reviewerId || deadlineReview) {
-    //                     formData[criterion.id] = {
-    //                         reviewerId: reviewerId || '',
-    //                         deadlineReview: deadlineReview ? dayjs(deadlineReview) : undefined,
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //     })
+        data.standards.forEach((standard) => {
+            standard.criteria.forEach((criterion) => {
+                if (
+                    criterion.evaluationCriterion &&
+                    criterion.evaluationCriterion.status !== $Enums.EvaluationStatus.LOCK
+                ) {
+                    const { reviewerId, deadlineReview } = criterion.evaluationCriterion
+                    if (reviewerId || deadlineReview) {
+                        formData[criterion.id] = {
+                            reviewerId: reviewerId || '',
+                            deadlineReview: deadlineReview ? dayjs(deadlineReview) : undefined,
+                        }
+                    }
+                }
+            })
+        })
 
-    //     form.setFieldsValue({ list: formData })
-    // }, [data, form])
+        form.setFieldsValue({ list: formData })
+    }, [data, form])
 
     const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
 
-    // const handleSave = async () => {
-    //     try {
-    //         await form.validateFields()
+    const handleSave = async () => {
+        try {
+            await form.validateFields()
 
-    //         showSpinner()
+            showSpinner()
 
-    //         const submitData = Object.entries(listForm)
-    //             .map(([criterionId, value]) => ({
-    //                 criterionPeriodId: criterionId,
-    //                 reviewerId: value.reviewerId,
-    //                 deadlineReview: value.deadlineReview
-    //                     ? dayjs(value.deadlineReview).toISOString()
-    //                     : undefined,
-    //             }))
-    //             .filter((item) => item.reviewerId || item.deadlineReview)
+            const submitData = Object.entries(listForm)
+                .map(([criterionId, value]) => ({
+                    criterionPeriodId: criterionId,
+                    reviewerId: value.reviewerId,
+                    deadlineReview: value.deadlineReview
+                        ? dayjs(value.deadlineReview).toISOString()
+                        : undefined,
+                }))
+                .filter((item) => item.reviewerId || item.deadlineReview)
 
-    //         await Promise.all(
-    //             submitData.map((item) =>
-    //                 upsertEvaluationCriterion({
-    //                     where: {
-    //                         criterionPeriodId: item.criterionPeriodId,
-    //                     },
-    //                     create: {
-    //                         criterionPeriodId: item.criterionPeriodId,
-    //                         reviewerId: item.reviewerId,
-    //                         deadlineReview: item.deadlineReview,
-    //                     },
-    //                     update: {
-    //                         reviewerId: item.reviewerId,
-    //                         deadlineReview: item.deadlineReview,
-    //                     },
-    //                 })
-    //             )
-    //         )
+            await Promise.all(
+                submitData.map((item) =>
+                    upsertEvaluationCriterion({
+                        where: {
+                            criterionPeriodId: item.criterionPeriodId,
+                        },
+                        create: {
+                            criterionPeriodId: item.criterionPeriodId,
+                            reviewerId: item.reviewerId,
+                            deadlineReview: item.deadlineReview,
+                        },
+                        update: {
+                            reviewerId: item.reviewerId,
+                            deadlineReview: item.deadlineReview,
+                        },
+                    })
+                )
+            )
 
-    //         message.success('Lưu phân công phản biện chéo thành công')
-    //         refetch()
-    //     } catch (error: any) {
-    //         message.error(error.message || 'Đã có lỗi xảy ra')
-    //     } finally {
-    //         hideSpinner()
-    //     }
-    // }
+            message.success('Lưu phân công phản biện chéo thành công')
+            refetch()
+        } catch (error: any) {
+            message.error(error.message || 'Đã có lỗi xảy ra')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     return (
         <Row gutter={0}>
@@ -312,9 +312,9 @@ export default function CrossReviewAssignment() {
                     >
                         Phân công hàng loạt
                     </Button>
-                    {/* <Button type="primary" onClick={handleSave}>
+                    <Button type="primary" onClick={handleSave}>
                         Lưu
-                    </Button> */}
+                    </Button>
                 </Flex>
             </Col>
 

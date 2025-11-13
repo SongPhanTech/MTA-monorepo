@@ -1,16 +1,33 @@
-import CriteriaEvaluationSubPage from '@components/sub-pages/tu-danh-gia-ctdt/criteria-evaluation'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
+import CrossReviewSubPage from '@components/sub-pages/tu-danh-gia-ctdt/cross-review'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
+import type {
+    CriterionPeriod,
+    EvaluationCriterion,
+    EvaluationCriterionComment,
+    StandardPeriod,
+} from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
+export type DataTabCrossReviewType = StandardPeriod & {
+    criteria: (CriterionPeriod & {
+        evaluationCriterion?:
+            | (EvaluationCriterion & {
+                  evaluationCriterionComments?: (EvaluationCriterionComment & {
+                      reviewer?: { fullname?: string | null }
+                  })[]
+              })
+            | null
+    })[]
+}
+
 export default function CrossReview() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || ''
+    const idProfile = me?.sDM_NhanVienId || 'f596dc32-d3e2-48ff-a09c-734379bf3c46'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data } = useFindUniqueEvaluationPeriod(
@@ -66,7 +83,22 @@ export default function CrossReview() {
                                 },
                             },
                             include: {
-                                evaluationCriterion: true,
+                                evaluationCriterion: {
+                                    include: {
+                                        evaluationCriterionComments: {
+                                            include: {
+                                                reviewer: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                            orderBy: {
+                                                createdAt: 'desc',
+                                            },
+                                        },
+                                    },
+                                },
                             },
                             orderBy: {
                                 order: 'asc',
@@ -86,11 +118,11 @@ export default function CrossReview() {
 
     const dataTab = useMemo(() => {
         if (data && data.standards.length > 0) {
-            return data.standards.map((standard: DataTabEvaluationCriterionType) => {
+            return data.standards.map((standard: DataTabCrossReviewType) => {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-                    children: <CriteriaEvaluationSubPage key={standard.id} data={standard} />,
+                    children: <CrossReviewSubPage key={standard.id} data={standard} />,
                 }
             })
         }
