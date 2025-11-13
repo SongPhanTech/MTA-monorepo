@@ -182,6 +182,7 @@ model EvaluationCriterion extends Base {
 
   reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewerId                  String?
+  deadlineReview              DateTime?
 
   evaluationCriterionComments EvaluationCriterionComment[]
 

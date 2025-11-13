@@ -106,7 +106,6 @@ export default function CriteriaEvaluationWrite() {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-
                     children: <CriteriaEvaluationSubPage key={standard.id} data={standard} />,
                 }
             })

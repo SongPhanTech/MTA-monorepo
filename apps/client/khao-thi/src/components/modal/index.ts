@@ -30,6 +30,7 @@ import CriteriaAssignmentModal from './modal-phan-cong-giang-vien'
 import PutTieuChiMinhChungModal from './put-modal-tieu-chi-minh-chung'
 import PutTieuChuanTieuChi from './ql-dot-tu-danh-gia/put-tieu-chuan-tieu-chi'
 import PutPhanCongHangLoatModal from './put-phan-cong-hang-loat'
+import PutPhanCongHangLoatCrossModal from "./put-phan-cong-hang-loat-cross"
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -63,4 +64,5 @@ export {
     PutTieuChiMinhChungModal,
     PutTieuChuanTieuChi,
     PutPhanCongHangLoatModal,
+    PutPhanCongHangLoatCrossModal
 }
