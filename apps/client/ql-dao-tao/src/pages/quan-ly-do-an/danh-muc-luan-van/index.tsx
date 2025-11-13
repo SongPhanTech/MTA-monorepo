@@ -1,7 +1,6 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -22,18 +21,21 @@ import {
 
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
-
+import { CircleX, Save } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { CouncilRole } from '@workspace/db/client'
+import { CouncilRole, ThesisType } from '@workspace/db/client'
 import { buildOrgTree } from '@lib/utils'
 // import { getMinioUrl } from '@workspace/constant'
 interface ExpertStat {
     expertId: string
     name: string
+    sDonvi: string
+    stk: string
+    tennganhang: string
     GVHD1Student: number
     GVHD2Student: number
     totalPayment: number
@@ -41,56 +43,111 @@ interface ExpertStat {
 export default function PostgraduateProject() {
     const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
         useThesisProjectStatusOptions()
-    const [editingRowKey, setEditingRowKey] = useState<string | null>(null)
-
-    const [editingValues, setEditingValues] = useState<Record<string, any>>({})
+    const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
+    const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const handleSave = async (rowId: string) => {
-        try {
-            showSpinner()
-            const basePayload = {
-                title: editingValues.title,
-                description: `Ngôn ngữ: ${editingValues.language} - Luận án/Đề án: ${editingValues.type}`,
-                status: editingValues.status,
-                supervisor: {
-                    connect: {
-                        id: editingValues.supervisor === '' ? null : editingValues.supervisor,
-                    },
-                },
-            }
-            const coSupervisorPayload =
-                editingValues.coSupervisor === '' || editingValues.coSupervisor === null
-                    ? { coSupervisor: { disconnect: true } }
-                    : {
-                          coSupervisor: {
-                              connect: {
-                                  id: editingValues.coSupervisor,
-                              },
-                          },
-                      }
+    const handleBatchSave = async () => {
+        if (editingRowKeys.length === 0) {
+            message.info('Không có hàng nào đang ở chế độ chỉnh sửa để lưu.')
+            return
+        }
 
-            const payload = {
-                ...basePayload,
-                ...coSupervisorPayload,
-            }
-            await updateThesisProject({
-                data: payload,
-                where: {
-                    id: rowId,
-                },
+        showSpinner()
+        try {
+            const updatePromises = editingRowKeys.map(async (studentId) => {
+                const rowData = editingValues[studentId]
+
+                const studentRecord = students?.find((s) => s.id === studentId)
+                const thesisProjectId = studentRecord?.thesisRegistrations?.[0]?.thesisProject?.id
+
+                if (!thesisProjectId || !rowData) return
+
+                const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
+
+                const basePayload = {
+                    title: rowData.title,
+                    description: description,
+                    status: rowData.status,
+                    supervisor: {
+                        connect: {
+                            id: rowData.supervisor === '' ? null : rowData.supervisor,
+                        },
+                    },
+                }
+                const coSupervisorPayload =
+                    rowData.coSupervisor === '' || rowData.coSupervisor === null
+                        ? { coSupervisor: { disconnect: true } }
+                        : {
+                              coSupervisor: {
+                                  connect: {
+                                      id: rowData.coSupervisor,
+                                  },
+                              },
+                          }
+
+                const payload = {
+                    ...basePayload,
+                    ...coSupervisorPayload,
+                }
+
+                await updateThesisProject({
+                    data: payload,
+                    where: {
+                        id: thesisProjectId,
+                    },
+                })
             })
 
-            message.success('Lưu thành công')
+            await Promise.all(updatePromises.filter((p) => p !== undefined)) // Chờ tất cả promise hoàn thành
+
+            message.success(`Lưu thành công ${editingRowKeys.length} hàng đã chỉnh sửa.`)
         } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            message.error('Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
             await refetch()
             if (refetchCount) await refetchCount()
         }
-        setEditingRowKey(null)
+        // Reset trạng thái chỉnh sửa
+        setEditingRowKeys([])
         setEditingValues({})
+    }
+    const handleActivateEdit = () => {
+        if (!students || students.length === 0) {
+            message.info('Không có dữ liệu sinh viên để chỉnh sửa.')
+            return
+        }
+
+        const newEditingRowKeys = students.map((s) => s.id)
+        const initialEditingValues: Record<string, Record<string, any>> = {}
+
+        students.forEach((record) => {
+            const thesisProject = record?.thesisRegistrations?.[0]?.thesisProject
+            if (thesisProject) {
+                // Logic để phân tích language và type từ chuỗi description
+                const description = thesisProject.description || ''
+                const parts = description.split('-')
+                const languagePart = parts[0]
+                const typePart = parts.length > 1 ? parts[1] : ''
+
+                // Trích xuất giá trị sau ':' và loại bỏ khoảng trắng
+                const language = languagePart.split(':')[1]?.trim() || ''
+                const type = typePart.split(':')[1]?.trim() || ''
+
+                initialEditingValues[record.id] = {
+                    title: thesisProject.title || '',
+                    supervisor: thesisProject.supervisor?.id || '',
+                    coSupervisor: thesisProject.coSupervisor?.id || '',
+                    language: language,
+                    type: type,
+                    status: thesisProject.status || '',
+                }
+            }
+        })
+
+        setEditingRowKeys(newEditingRowKeys)
+        setEditingValues(initialEditingValues)
     }
     const { TextArea } = Input
     const { id: trainingObjectId } = useTrainingObjectTypeStore()
@@ -136,10 +193,13 @@ export default function PostgraduateProject() {
             },
         },
     })
-    const handleEditChange = (field: string, value: any) => {
+    const handleEditChange = (rowId: string, field: string, value: any) => {
         setEditingValues((prev) => ({
             ...prev,
-            [field]: value,
+            [rowId]: {
+                ...prev[rowId],
+                [field]: value,
+            },
         }))
     }
     const defaultButtonClick = () => {
@@ -441,27 +501,95 @@ export default function PostgraduateProject() {
         }
     }
     const thongkecbhdlv = async () => {
-        // showSpinner()
-        // try {
-        //     const allSheetOptions = allStudents?.map((student) => {
-        //         const data = {
-        //             tenhocvien: student.userProfile?.fullname || '',
-        //         }
-        //         const gapRow: TableRow = {
-        //             cells: [{ value: null, border: false }],
-        //         }
-        //         return {
-        //             sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
-        //             data: data,
-        //             tableStartCell: { row: 7, col: 1 },
-        //             rows: [gapRow],
-        //         }
-        //     })
-        // } catch (error) {
-        //     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        // } finally {
-        //     hideSpinner()
-        // }
+        showSpinner()
+        const dataMapping = getExpertSupervisionStats()
+        const ngayhientai = dayjs().format('DD/MM/YYYY')
+        const ngay = ngayhientai.split('/')[0]
+        const thang = ngayhientai.split('/')[1]
+        const nam = ngayhientai.split('/')[2]
+        const tendot = thesisSessionSelected?.name || ''
+
+        const tenkhoa = ''
+        const rows: TableRow[] = dataMapping?.map((item, index) => {
+            return {
+                cells: [
+                    { value: index + 1, border: true, align: 'center' },
+                    { value: item.name, border: true, align: 'center' },
+                    { value: item.sDonvi, border: true, align: 'center' },
+                    {
+                        value: item.GVHD1Student + item.GVHD2Student || 0,
+                        border: true,
+                        align: 'center',
+                    },
+                    { value: 0, border: true, align: 'center' },
+                    { value: item.GVHD1Student, border: true, align: 'center' },
+                    { value: item.GVHD2Student, border: true, align: 'center' },
+                    { value: item.totalPayment, border: true, align: 'center' },
+                    { value: item.stk, border: true, align: 'center' },
+                    { value: item.tennganhang, border: true, align: 'center' },
+                ],
+            }
+        })
+        const totalRow: TableRow = {
+            cells: [
+                { value: '', border: true, align: 'center' },
+                { value: 'Tổng cộng', border: true, align: 'right', colSpan: 2, bold: true },
+                {
+                    value: dataMapping?.reduce(
+                        (acc, item) => acc + item.GVHD1Student + item.GVHD2Student,
+                        0
+                    ),
+                    border: true,
+                    align: 'center',
+                    bold: true,
+                },
+                { value: 0, border: true, align: 'center', bold: true },
+                {
+                    value: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
+                    border: true,
+                    align: 'center',
+                    bold: true,
+                },
+                {
+                    value: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
+                    border: true,
+                    align: 'center',
+                    bold: true,
+                },
+                {
+                    value: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
+                    border: true,
+                    align: 'center',
+                    bold: true,
+                },
+                { value: '', border: true, align: 'center', bold: true },
+                { value: '', border: true, align: 'center', bold: true },
+            ],
+        }
+        try {
+            await exportFromTemplate({
+                templateUrl: '/lms/templates/chuong-trinh-dao-tao/ThongKeCanBoHuongDan.xlsx',
+                sheets: [
+                    {
+                        sheet: 'ThongKeCanBoHuongDan',
+                        data: {
+                            tendot: tendot,
+                            tenkhoa: tenkhoa,
+                            ngay: ngay,
+                            thang: thang,
+                            nam: nam,
+                        },
+                        rows: [...rows, totalRow],
+                        tableStartCell: { row: 10, col: 1 },
+                    },
+                ],
+                fileName: 'ThongKeCanBoHuongDan',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
     const getExpertSupervisionStats = (): ExpertStat[] => {
         if (!allStudents || allStudents.length === 0) {
@@ -474,7 +602,13 @@ export default function PostgraduateProject() {
             for (const registration of student.thesisRegistrations) {
                 const project = registration.thesisProject
 
-                if (!project) continue
+                if (
+                    !project
+                    // !project ||
+                    // !project.supervisorPayments ||
+                    // project.thesisType !== ThesisType.THESIS
+                )
+                    continue
 
                 const countedExperts: { [expertId: string]: boolean } = {}
 
@@ -489,6 +623,9 @@ export default function PostgraduateProject() {
                         newStats = {
                             expertId: expertId,
                             name: payment.expert.name ?? '',
+                            sDonvi: payment.expert.organization ?? '',
+                            stk: payment.expert.bankAccountNumber ?? '',
+                            tennganhang: payment.expert.bankName ?? '',
                             GVHD1Student: 0,
                             GVHD2Student: 0,
                             totalPayment: 0,
@@ -586,7 +723,7 @@ export default function PostgraduateProject() {
         },
         {
             id: 14,
-            label: 'Thông kê CBHD LV',
+            label: 'Thống kê CBHD LV',
             onClick: async () => await thongkecbhdlv(),
         },
         {
@@ -633,6 +770,7 @@ export default function PostgraduateProject() {
                     some: {
                         thesisProject: {
                             thesisSessionId: thesisSessionSelected?.id ?? '',
+                            // thesisType: ThesisType.THESIS,
                         },
                     },
                 },
@@ -652,6 +790,7 @@ export default function PostgraduateProject() {
                     where: {
                         thesisProject: {
                             thesisSessionId: thesisSessionSelected?.id ?? '',
+                            // thesisType: ThesisType.THESIS,
                         },
                     },
                     include: {
@@ -676,6 +815,13 @@ export default function PostgraduateProject() {
     const { data: allStudents } = useFindManyStudent(
         {
             where: {
+                thesisRegistrations: {
+                    some: {
+                        thesisProject: {
+                            thesisSessionId: thesisSessionSelected?.id ?? '',
+                        },
+                    },
+                },
                 fixedClassId: {
                     in: queryFixedClasses,
                 },
@@ -699,6 +845,7 @@ export default function PostgraduateProject() {
                         },
                     },
                 },
+
                 trainingObjectType: true,
                 thesisRegistrations: {
                     include: {
@@ -767,8 +914,7 @@ export default function PostgraduateProject() {
                         id: thesisSessionSelected?.id ?? '',
                     },
                 },
-                //TODO: remove comment this when thesis type is implemented
-                // thesisType: "THESIS",
+                thesisType: ThesisType.THESIS,
                 librarySubmission: {
                     create: {
                         isHardcopy: false,
@@ -873,17 +1019,12 @@ export default function PostgraduateProject() {
                                     <Button
                                         type="primary"
                                         onClick={() => {
+                                            setEditingRowKeys([])
                                             setNeedAllStudents(true)
                                             setQueryFixedClasses(fixedClassesSelected)
 
                                             if (!hasClickedFetch) {
                                                 setHasClickedFetch(true)
-                                            }
-                                            if (!students || students?.length === 0) {
-                                                message.info(
-                                                    'Không tìm thấy dữ liệu để xem kết quả'
-                                                )
-                                                return
                                             }
                                         }}
                                     >
@@ -894,6 +1035,7 @@ export default function PostgraduateProject() {
                                         title="Xác nhận tạo dữ liệu mẫu"
                                         description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
                                         onConfirm={async () => {
+                                            setEditingRowKeys([])
                                             setQueryFixedClasses(fixedClassesSelected)
                                             if (!hasClickedFetch) {
                                                 setHasClickedFetch(true)
@@ -905,6 +1047,39 @@ export default function PostgraduateProject() {
                                             Tạo dữ liệu mẫu
                                         </Button>
                                     </Popconfirm>
+                                    {editingRowKeys.length > 0 ? (
+                                        <>
+                                            <Button
+                                                type="default"
+                                                className="ml-2"
+                                                onClick={() => {
+                                                    setEditingRowKeys([])
+                                                    setEditingValues({})
+                                                    message.info(
+                                                        'Đã hủy tất cả các thay đổi chưa lưu.'
+                                                    )
+                                                }}
+                                            >
+                                                Hủy thay đổi
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                className="ml-2"
+                                                onClick={handleBatchSave} // Gọi hàm lưu hàng loạt
+                                            >
+                                                Lưu thay đổi
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button
+                                            type="default"
+                                            className="ml-2"
+                                            onClick={handleActivateEdit}
+                                            disabled={!students?.length}
+                                        >
+                                            Chỉnh sửa
+                                        </Button>
+                                    )}
                                 </Form.Item>
                             </Flex>
                         </Col>
@@ -933,7 +1108,7 @@ export default function PostgraduateProject() {
                         columns={[
                             {
                                 title: 'Đối tượng đào tạo',
-                                width: 100,
+                                width: 120,
                                 render: (_, record) => {
                                     return record?.trainingObjectType?.name
                                 },
@@ -980,18 +1155,23 @@ export default function PostgraduateProject() {
                                 width: 200,
                                 dataIndex: 'title',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.title !== undefined
+                                                ? editingValues[record?.id]?.title
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.title || ''
+
                                         return (
                                             <TextArea
                                                 rows={2}
-                                                value={
-                                                    editingValues.title ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.title ||
-                                                    ''
-                                                }
+                                                value={currentValue}
                                                 onChange={(e) => {
-                                                    handleEditChange('title', e.target.value)
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'title',
+                                                        e.target.value
+                                                    )
                                                 }}
                                             />
                                         )
@@ -1006,7 +1186,13 @@ export default function PostgraduateProject() {
                                 width: 150,
                                 dataIndex: 'supervisor',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.supervisor !== undefined
+                                                ? editingValues[record?.id]?.supervisor
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.supervisor?.name || ''
+
                                         return (
                                             <Select
                                                 className="w-full"
@@ -1014,14 +1200,13 @@ export default function PostgraduateProject() {
                                                     label: item.name,
                                                     value: item.id,
                                                 }))}
-                                                value={
-                                                    editingValues.supervisor ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.supervisor?.id ||
-                                                    ''
-                                                }
+                                                value={currentValue || ''}
                                                 onChange={(value) =>
-                                                    handleEditChange('supervisor', value)
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'supervisor',
+                                                        value
+                                                    )
                                                 }
                                             />
                                         )
@@ -1037,7 +1222,13 @@ export default function PostgraduateProject() {
                                 width: 150,
                                 dataIndex: 'coSupervisor',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.coSupervisor !== undefined
+                                                ? editingValues[record?.id]?.coSupervisor
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.coSupervisor?.name || ''
+
                                         return (
                                             <Select
                                                 className="w-full"
@@ -1045,14 +1236,13 @@ export default function PostgraduateProject() {
                                                     label: item.name,
                                                     value: item.id,
                                                 }))}
-                                                value={
-                                                    editingValues.coSupervisor ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.coSupervisor?.id ||
-                                                    ''
-                                                }
+                                                value={currentValue || ''}
                                                 onChange={(value) =>
-                                                    handleEditChange('coSupervisor', value)
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'coSupervisor',
+                                                        value
+                                                    )
                                                 }
                                             />
                                         )
@@ -1068,19 +1258,23 @@ export default function PostgraduateProject() {
                                 width: 100,
                                 dataIndex: 'language',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.language !== undefined
+                                                ? editingValues[record?.id]?.language
+                                                : record?.thesisRegistrations?.[0]?.thesisProject?.description
+                                                      ?.split('-')[0]
+                                                      .trim()
+                                                      .split(':')[1] || ''
                                         return (
                                             <Input
-                                                value={
-                                                    editingValues.language ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject?.description
-                                                        ?.split('-')[0]
-                                                        .trim()
-                                                        .split(':')[1] ||
-                                                    ''
-                                                }
+                                                value={currentValue || ''}
                                                 onChange={(e) =>
-                                                    handleEditChange('language', e.target.value)
+                                                    handleEditChange(
+                                                        record?.id,
+                                                        'language',
+                                                        e.target.value
+                                                    )
                                                 }
                                             />
                                         )
@@ -1095,7 +1289,14 @@ export default function PostgraduateProject() {
                                 width: 130,
                                 dataIndex: 'type',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.type !== undefined
+                                                ? editingValues[record?.id]?.type
+                                                : record?.thesisRegistrations?.[0]?.thesisProject?.description
+                                                      ?.split('-')[1]
+                                                      .trim()
+                                                      .split(':')[1] || ''
                                         return (
                                             <Select
                                                 className="w-full"
@@ -1103,16 +1304,9 @@ export default function PostgraduateProject() {
                                                     label: item,
                                                     value: item,
                                                 }))}
-                                                value={
-                                                    editingValues.type ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject?.description
-                                                        ?.split('-')[1]
-                                                        .trim()
-                                                        .split(':')[1] ||
-                                                    ''
-                                                }
+                                                value={currentValue || ''}
                                                 onChange={(value) =>
-                                                    handleEditChange('type', value)
+                                                    handleEditChange(record?.id, 'type', value)
                                                 }
                                             />
                                         )
@@ -1127,7 +1321,12 @@ export default function PostgraduateProject() {
                                 width: 100,
                                 dataIndex: 'status',
                                 render: (text: string, record: any) => {
-                                    if (record?.id === editingRowKey) {
+                                    if (editingRowKeys.includes(record?.id)) {
+                                        const currentValue =
+                                            editingValues[record?.id]?.status !== undefined
+                                                ? editingValues[record?.id]?.status
+                                                : record?.thesisRegistrations?.[0]?.thesisProject
+                                                      ?.status || ''
                                         return (
                                             <Select
                                                 className="w-full"
@@ -1137,14 +1336,9 @@ export default function PostgraduateProject() {
                                                         value: item.value,
                                                     })
                                                 )}
-                                                value={
-                                                    editingValues.status ||
-                                                    record?.thesisRegistrations?.[0]?.thesisProject
-                                                        ?.status ||
-                                                    ''
-                                                }
+                                                value={currentValue || ''}
                                                 onChange={(value) =>
-                                                    handleEditChange('status', value)
+                                                    handleEditChange(record?.id, 'status', value)
                                                 }
                                             />
                                         )
@@ -1160,70 +1354,12 @@ export default function PostgraduateProject() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 60,
                                 align: 'center',
                                 render: (_, record: any) => {
-                                    if (record?.id === editingRowKey) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <Button
-                                                    size="small"
-                                                    type="primary"
-                                                    onClick={async () =>
-                                                        await handleSave(
-                                                            record?.thesisRegistrations?.[0]
-                                                                ?.thesisProject?.id
-                                                        )
-                                                    }
-                                                >
-                                                    Lưu
-                                                </Button>
-                                                <Button
-                                                    size="small"
-                                                    onClick={() => {
-                                                        setEditingRowKey(null)
-                                                        setEditingValues({}) // Xóa giá trị tạm
-                                                    }}
-                                                >
-                                                    Hủy
-                                                </Button>
-                                            </Row>
-                                        )
-                                    }
-
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                    onClick={() => {
-                                                        setEditingRowKey(record?.id)
-
-                                                        setEditingValues({
-                                                            title:
-                                                                record?.thesisRegistrations?.[0]
-                                                                    ?.thesisProject?.title || '',
-                                                            supervisor:
-                                                                record?.thesisRegistrations?.[0]
-                                                                    ?.thesisProject?.supervisor
-                                                                    ?.id || '',
-                                                            coSupervisor:
-                                                                record?.thesisRegistrations?.[0]
-                                                                    ?.thesisProject?.coSupervisor
-                                                                    ?.id || '',
-                                                            language:
-                                                                record?.thesisRegistrations?.[0]?.thesisProject?.description
-                                                                    ?.split('-')[0]
-                                                                    .trim()
-                                                                    .split(':')[1] || '',
-                                                            type:
-                                                                record?.thesisRegistrations?.[0]?.thesisProject?.description
-                                                                    ?.split('-')[1]
-                                                                    .trim()
-                                                                    .split(':')[1] || '',
-                                                        })
-                                                    }}
-                                                />
                                                 <DeleteIcon
                                                     className="text-sm text-red-700 cursor-pointer"
                                                     onClick={async () => {
@@ -1269,9 +1405,14 @@ export default function PostgraduateProject() {
                                 },
                             },
                         ]}
-                        //TODO: remove comment this when thesis type is implemented
-                        // and change the data to: data={students?.filter((item) => item?.thesisRegistrations?.[0]?.thesisProject?.thesisType === "THESIS") || []}
-                        data={students?.filter((item) => item?.thesisRegistrations?.[0]) || []}
+                        // data={
+                        //     students?.filter(
+                        //         (item) =>
+                        //             item?.thesisRegistrations?.[0]?.thesisProject?.thesisType ===
+                        //             ThesisType.THESIS
+                        //     ) || []
+                        // }
+                        data={students || []}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

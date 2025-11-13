@@ -310,8 +310,6 @@ const ModalCauHinhLuanVan = () => {
         }
     }
     const handlePaymentThesis = async (data: ModalCauHinhLuanVanType) => {
-        console.log('data', data.supervisorId)
-        console.log('count', thesisProjectData?.supervisorPayments?.length)
         try {
             showSpinner()
             if (thesisProjectData?.supervisorPayments?.length === 0) {
@@ -439,7 +437,6 @@ const ModalCauHinhLuanVan = () => {
     })
 
     useEffect(() => {
-        console.log('thesisProjectData', thesisProjectData)
         if (thesisProjectData) {
             form.setFieldsValue({
                 chairman: thesisProjectData?.council?.members.find(
