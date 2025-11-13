@@ -47,6 +47,8 @@ export type FilterProps = {
     numberOfExam?: 'asc' | 'desc'
     examType?: ExamType[]
     fixedClass?: string[]
+    fixedClassName?: string
+    fixedClassCode?: string
     trainingCourse?: string[]
     actionTaken?: AcademicActionType[]
     status?: DecisionStatus[]

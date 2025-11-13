@@ -231,9 +231,8 @@ export default function GraduationDecisionDiploma() {
                 ],
                 !!filters.finalGpa
             ),
-            {
-                createdAt: 'desc',
-            },
+            { originalDiplomaNumber: 'asc' },
+            { student: { userProfile: { firstName: 'asc' } } },
         ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
