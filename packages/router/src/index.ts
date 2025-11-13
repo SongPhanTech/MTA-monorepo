@@ -7,7 +7,7 @@ import {
     SettingOutlined,
     TeamOutlined,
 } from '@ant-design/icons'
-import type {AntdIconProps} from '@ant-design/icons/lib/components/AntdIcon'
+import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import {
     BarChart3,
     BookOpenCheck,
@@ -28,12 +28,12 @@ import {
     ScrollText,
     Settings,
 } from 'lucide-react'
-import {DANG_KY_HOC_PERMISSION} from '../generated/dang-ky-hoc'
-import {KHAO_THI_PERMISSION} from '../generated/khao-thi'
-import {QL_DAO_TAO_PERMISSION} from '../generated/ql-dao-tao'
-import {QL_HO_SO_PERMISSION} from '../generated/ql-ho-so'
+import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
+import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
+import { QL_DAO_TAO_PERMISSION } from '../generated/ql-dao-tao'
+import { QL_HO_SO_PERMISSION } from '../generated/ql-ho-so'
 import ROUTER_PATH from '../generated/router'
-import {TRO_LY_AO_PERMISSION} from '../generated/tro-ly-ao'
+import { TRO_LY_AO_PERMISSION } from '../generated/tro-ly-ao'
 import './index.css'
 
 interface MenuItem {
@@ -41,11 +41,11 @@ interface MenuItem {
     label: React.ReactNode
     icon?:
         | React.ForwardRefExoticComponent<
-        Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-    >
+              Omit<AntdIconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+          >
         | React.ForwardRefExoticComponent<
-        Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-    >
+              Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+          >
     path?: string
     children?: MenuItem[]
     description?: string
@@ -639,10 +639,20 @@ const NAVIGATION: NavigationType = {
                         label: 'Tham số',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_THAM_SO,
                     },
+                    // {
+                    //     id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
+                    //     label: 'Prompt',
+                    //     path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
+                    // },
                     {
-                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
-                        label: 'Prompt',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP,
+                        label: 'Prompt Hỏi đáp',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMPT_HOI_DAP,
+                    },
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG,
+                        label: 'Prompt Chức năng',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG,
                     },
                 ],
             },
@@ -851,6 +861,6 @@ export {
     TRO_LY_AO_PERMISSION,
     QL_HO_SO_PERMISSION,
 }
-export {ROUTER_PATH, PUBLIC_ROUTER}
-export type {MenuItem, NavigationType}
+export { ROUTER_PATH, PUBLIC_ROUTER }
+export type { MenuItem, NavigationType }
 export default NAVIGATION

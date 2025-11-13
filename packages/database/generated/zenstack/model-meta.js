@@ -7753,6 +7753,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'planTrainingSubject',
                     isRelationOwner: true,
+                }, studentCount: {
+                    name: "studentCount",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, subjectClassType: {
                     name: "subjectClassType",
                     type: "SubjectClassType",

@@ -4,12 +4,12 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
+import { useGetSurveysOfProfile } from '@workspace/libs/api/exam'
 import { Col, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 export default function DetailSurveyPage() {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -21,95 +21,94 @@ export default function DetailSurveyPage() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        surveyQuestionType: undefined,
-        surveyId: undefined,
+        // subjectClassName: '',
+        // lecturerName: '',
     })
-    const where = useMemo(
-        () => ({
-               subjectClass: {
-                        subjectClassStudent: {
-                            some: {
-                                student: {
-                                    userProfile: {
-                                        id: profileId,
-                                    },
-                                },
-                            },
-                        },
-                },
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.surveyId
-                ? Array.isArray(filters.surveyId)
-                    ? { surveyId: { in: filters.surveyId } }
-                    : { surveyId: filters.surveyId }
-                : {}),
-            ...(filters.surveyQuestionType && filters.surveyQuestionType.length > 0
-                ? {
-                      type: { in: filters.surveyQuestionType },
-                  }
-                : {}),
-        }),
-        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, profileId]
-    )
-    const { data = [], refetch } = useFindManySurvey(
-        {
-            where,
-            include: {
-                clusterSurvey: true,
-                surveyObjectType: true,
-                lecture: {
-                    include: {
-                        userProfile: true,
-                    },
-                },
-                subjectClass: {
-                    include: {
-                        subjectClassStudent: {
-                            include: {
-                                student: true,
-                            },
-                        },
-                        subject: true,
-                    },
-                },
-                surveyQuestion: true,
-                surveySessions: true,
-            },
-            orderBy: { createdAt: 'desc' },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        },
-        {
-            enabled: !!profileId,
-        }
-    )
+    // const where = useMemo(
+    //     () => ({
+    //         ...(filters.code && filters.code !== ''
+    //             ? {
+    //                   code: {
+    //                       contains: filters.code,
+    //                       mode: 'insensitive' as const,
+    //                   },
+    //               }
+    //             : {}),
+    //         ...(filters.name && filters.name !== ''
+    //             ? {
+    //                   name: {
+    //                       contains: filters.name,
+    //                       mode: 'insensitive' as const,
+    //                   },
+    //               }
+    //             : {}),
+    //         ...(filters.surveyId
+    //             ? Array.isArray(filters.surveyId)
+    //                 ? { surveyId: { in: filters.surveyId } }
+    //                 : { surveyId: filters.surveyId }
+    //             : {}),
+    //         ...(filters.surveyQuestionType && filters.surveyQuestionType.length > 0
+    //             ? {
+    //                   type: { in: filters.surveyQuestionType },
+    //               }
+    //             : {}),
+    //     }),
+    //     [filters]
+    // )
+    // const { data = [], refetch } = useFindManySurvey(
+    //     {
+    //         where,
+    //         include: {
+    //             clusterSurvey: true,
+    //             surveyObjectType: true,
+    //             lecture: {
+    //                 include: {
+    //                     userProfile: true,
+    //                 },
+    //             },
+    //             subjectClass: {
+    //                 include: {
+    //                     subjectClassStudent: {
+    //                         include: {
+    //                             student: true,
+    //                         },
+    //                     },
+    //                     subject: true,
+    //                 },
+    //             },
+    //             surveyQuestion: true,
+    //             surveySessions: true,
+    //         },
+    //         orderBy: { createdAt: 'desc' },
+    //         take: numberOfPages,
+    //         skip: (currentPage - 1) * numberOfPages,
+    //     },
+    //     {
+    //         enabled: !!profileId,
+    //     }
+    // )
 
-    const { data: count } = useCountSurvey({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const {data} = useGetSurveysOfProfile(
+        profileId as string,
+        {
+                page: currentPage,
+                limit: numberOfPages,
+                name: filters.name,
+                code: filters.code
+            },
+        )  
+
+    // const { data: count } = useCountSurvey({
+    //     where: {
+    //         ...where,
+    //         deletedAt: null,
+    //     },
+    // })
     return (
         <Row gutter={[16, 16]}>
-            <Col span={24}>
+            {/* <Col span={24}>
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
-            </Col>
+            </Col> */}
             <Col span={24}>
                 <Table
                     filters={filters}
@@ -138,10 +137,9 @@ export default function DetailSurveyPage() {
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => (
-                                 <div>
-                                         {record?.subjectClass?.code} - {record?.subjectClass?.name}
-                                    </div>
-                                    
+                                <div>
+                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                </div>
                             ),
                         },
                         {
@@ -205,14 +203,17 @@ export default function DetailSurveyPage() {
                                     {surveyQuestion?.length > 0 && (
                                         <Tooltip
                                             className="mr-2"
-                                            title={surveySessions?.length > 0 ? 'Xem khảo sát' : 'Làm khảo sát'}
+                                            title={
+                                                surveySessions?.length > 0
+                                                    ? 'Xem khảo sát'
+                                                    : 'Làm khảo sát'
+                                            }
                                             placement="top"
                                         >
-                                            <div   
-                                            className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
-                                            
-                                            onClick={() => {
-                                                    if(surveySessions?.length > 0){
+                                            <div
+                                                className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
+                                                onClick={() => {
+                                                    if (surveySessions?.length > 0) {
                                                         router.push(`/xem-lai-khao-sat/${id}`)
                                                         return
                                                     }
@@ -221,23 +222,21 @@ export default function DetailSurveyPage() {
                                                     } else {
                                                         router.push(`/lam-khao-sat/${id}`)
                                                     }
-                                                }}>
-                                                <ArrowRight
-                                                style={{ fontSize: '16px' }}
-                                            />
+                                                }}
+                                            >
+                                                <ArrowRight style={{ fontSize: '16px' }} />
                                             </div>
-                                          
                                         </Tooltip>
                                     )}
                                 </Row>
                             ),
                         },
                     ]}
-                    data={data}
+                    data={data?.status === 200 && data?.data?.data||[]}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
-                        total: count,
+                        total:data?.status === 200 && data?.data?.count ||0,
                         onChange: (page, pageSize) => {
                             if (numberOfPages === pageSize) {
                                 setCurrentPage(page)

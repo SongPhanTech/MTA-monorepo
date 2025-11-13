@@ -10,11 +10,12 @@ export type GetSurveyObjectsParams = {
     limit?: number | null
     id: string
     fullname?: string
-    organizationId?: string
+    organizationId?: string[]
     lecturerCode?: string
     staffCode?: string
     studentCode?: string
     fixedClassIds?: string[]
     trainingCourseIds?: string[]
     taken?: boolean
+    isStudent?: string
 }

@@ -346,6 +346,7 @@ export type SqlTransactionResponse = (void | null)[];
 export type SqlTransactionRequestBody = {
   model:
     | "Config"
+    | "Suggestion"
     | "ChangeLog"
     | "UserProfile"
     | "HocHam"

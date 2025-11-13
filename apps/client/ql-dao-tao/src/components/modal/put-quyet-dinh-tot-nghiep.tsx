@@ -267,7 +267,7 @@ const PutGraduationDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="finalGpa" label="GPA cuối cùng" required>
+                <FormItem form={form} name="finalGpa" label="GPA" required>
                     <InputNumber
                         min={0}
                         type="number"

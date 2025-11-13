@@ -1,18 +1,26 @@
 import DefaultLayout from '@layouts/default-layout'
-import {debtStatistics, useOpenSubjectClassRetake} from '@workspace/libs/api/training'
-import {getFilenameFromContentDisposition} from '@workspace/libs/utils'
+import { debtStatistics, useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import {
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingMajorStore,
-    useTrainingObjectTypeStore
+    useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import {Button, Col, Form, Input, message, Row} from 'antd'
-import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip,} from 'chart.js'
+import { Button, Col, Form, Input, message, Row } from 'antd'
+import {
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip,
+} from 'chart.js'
 import type React from 'react'
-import {useMemo, useState} from 'react'
+import { useMemo, useState } from 'react'
 import HSSVChuaDat from '../../ke-hoach-giao-duc/lap-ke-hoach/_components/hssv-chua-dat'
-import Table from "@components/commons/table";
+import Table from '@components/commons/table'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -24,10 +32,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default function ThongKeNo() {
     const [form] = Form.useForm<SubjectBySemesterForm>()
-    const {id: semesterId} = useSemesterStore()
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
-    const {id: trainingCourseId} = useTrainingCourseStore()
-    const {id: trainingMajorId} = useTrainingMajorStore()
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: trainingMajorId } = useTrainingMajorStore()
 
     const searchText = Form.useWatch('searchText', form)
     const [subjectVersionId, setSubjectVersionId] = useState<string>()
@@ -45,7 +53,7 @@ export default function ThongKeNo() {
         try {
             setLoading(true)
             // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
-            const {status, headers, data} = await debtStatistics({
+            const { status, headers, data } = await debtStatistics({
                 trainingObjectTypeId: trainingObjectTypeId,
                 trainingCourseId,
             })
@@ -53,7 +61,7 @@ export default function ThongKeNo() {
                 const filename = getFilenameFromContentDisposition(
                     headers.get('content-disposition') as string
                 )
-                const blob = new Blob([data], {type: headers.get('content-type') as string})
+                const blob = new Blob([data], { type: headers.get('content-type') as string })
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
@@ -69,16 +77,15 @@ export default function ThongKeNo() {
         }
     }
 
-    const {data: res} = useOpenSubjectClassRetake(
+    const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText || undefined,
             trainingCourseId,
             trainingMajorId,
             semesterId: semesterId as string,
             trainingObjectTypeId: trainingObjectTypeId as string,
-
         },
-        {query: {enabled: !!trainingObjectTypeId && !!semesterId}}
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
     )
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
@@ -89,7 +96,7 @@ export default function ThongKeNo() {
                     <Row gutter={[8, 0]}>
                         <Col span={7}>
                             <Form.Item className="mb-0" name="searchText">
-                                <Input id="search" placeholder="Tìm kiếm" allowClear/>
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
                         <Col span={3}>
@@ -98,7 +105,7 @@ export default function ThongKeNo() {
                             </Button>
                         </Col>
                         <Col span={24}>
-                            <Form.Item hidden name="subjectSelected"/>
+                            <Form.Item hidden name="subjectSelected" />
                         </Col>
                     </Row>
                 </Form>
@@ -111,13 +118,13 @@ export default function ThongKeNo() {
                         onChange: (selectedRowKeys) => {
                             setSubjectVersionId(selectedRowKeys[0] as string)
                         },
-                        columnWidth: 35
+                        columnWidth: 35,
                     }}
                     onRow={(record) => {
                         return {
                             onClick: () => {
                                 setSubjectVersionId(record.id)
-                            }
+                            },
                         }
                     }}
                     columns={[
@@ -131,7 +138,7 @@ export default function ThongKeNo() {
                         {
                             title: 'Mã MH',
                             dataIndex: 'code',
-                            align: 'center'
+                            align: 'center',
                         },
                         {
                             title: 'Môn học',
@@ -140,13 +147,13 @@ export default function ThongKeNo() {
                         {
                             title: 'Số SV nợ',
                             dataIndex: 'count',
-                            align: 'center'
-                        }
+                            align: 'center',
+                        },
                     ]}
                 />
             </Col>
             <Col span={16}>
-                <HSSVChuaDat subjectVersionId={subjectVersionId} viewOnly/>
+                <HSSVChuaDat subjectVersionId={subjectVersionId} viewOnly />
             </Col>
         </Row>
     )

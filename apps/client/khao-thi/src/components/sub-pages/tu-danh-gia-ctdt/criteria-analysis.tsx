@@ -261,9 +261,9 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                                         status !==
                                                             $Enums.EvaluationCriterionStatus
                                                                 .APPROVED &&
-                                                            status !==
-                                                                $Enums.EvaluationCriterionStatus
-                                                                    .COMPLETED && (
+                                                        status !==
+                                                            $Enums.EvaluationCriterionStatus
+                                                                .COMPLETED && (
                                                             <EditIcon
                                                                 onClick={(e) => {
                                                                     e.stopPropagation()

@@ -1479,6 +1479,7 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   updatedAt: 'updatedAt',
   planTrainingId: 'planTrainingId',
   subjectVersionId: 'subjectVersionId',
+  studentCount: 'studentCount',
   subjectClassType: 'subjectClassType'
 };
 

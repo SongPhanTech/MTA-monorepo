@@ -3,8 +3,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { $Enums } from '@workspace/db'
-import type { PlanTraining } from '@workspace/db/client'
+import { $Enums, type PlanTraining } from '@workspace/db/client'
 import {
     useFindFirstPlanTrainingDelay,
     useFindManyTrainingCourse,

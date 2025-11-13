@@ -221,7 +221,7 @@ function TabDoiTuongKhaoSat() {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(

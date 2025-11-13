@@ -1,3 +1,4 @@
+import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -24,12 +25,29 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduationCheckResult'
-import { graduationApplicationInit, useGraduationCheck } from '@workspace/libs/api/training'
+import {
+    graduationApplicationInit,
+    graduationSessionDecision,
+    useGraduationCheck,
+} from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Row,
+    Tag,
+    Tooltip,
+} from 'antd'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
-import { BookPlus, SearchCheck, X } from 'lucide-react'
+import { saveAs } from 'file-saver'
+import { BookPlus, SearchCheck, Sheet, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -57,6 +75,8 @@ export default function StudentGraduationApplication() {
     const [showDecision, setShowDecision] = useState(false)
     const [trainingCourseSelected, setTrainingCourseSelected] = useState<string>()
     const [fixedClassSelected, setFixedClassSelected] = useState<string>()
+
+    const [form] = Form.useForm<{ prefix: string; suffix: string; start: number }>()
 
     const where = useMemo(
         () => ({
@@ -227,6 +247,26 @@ export default function StudentGraduationApplication() {
             console.error(error)
         } finally {
             hideSpinner()
+        }
+    }
+
+    const [isExporting, setIsExporting] = useState(false)
+    const handleExportResult = async () => {
+        if (!graduationSessionId) return
+        setIsExporting(true)
+        try {
+            const res = await graduationSessionDecision({ sessionId: graduationSessionId })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'DANH_SACH_TOT_NGHIEP.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExporting(false)
         }
     }
 
@@ -520,11 +560,56 @@ export default function StudentGraduationApplication() {
                                 </Button>
                             </div>
                         </Flex>
-                        {showDecision && <GraduationDecision sessionId={graduationSessionId} />}
+                        {showDecision && (
+                            <>
+                                <Flex align="center" justify="space-between" className="px-4 mt-4">
+                                    <div className="flex align-middle items-center gap-2">
+                                        <Form layout="inline" className="gap-2">
+                                            <FormItem form={form} name="prefix" label="Tiền tố">
+                                                <Input
+                                                    className="w-20"
+                                                    placeholder={`CQ/${new Date().getFullYear()}/`}
+                                                />
+                                            </FormItem>
+                                            <FormItem
+                                                form={form}
+                                                name="start"
+                                                label="Số từ"
+                                                required
+                                            >
+                                                <InputNumber
+                                                    className="w-20"
+                                                    type="number"
+                                                    min={0}
+                                                />
+                                            </FormItem>
+                                            <FormItem form={form} name="suffix" label="Hậu tố">
+                                                <Input
+                                                    className="w-20"
+                                                    placeholder={`/${new Date().getFullYear()}`}
+                                                />
+                                            </FormItem>
+                                            <Button type="primary">Tạo SVS</Button>
+                                        </Form>
+                                    </div>
+                                    <div className="flex align-middle items-center gap-2">
+                                        <Button
+                                            type="primary"
+                                            onClick={() => handleExportResult()}
+                                            loading={isExporting}
+                                        >
+                                            <Sheet />
+                                            Xuất kết quả
+                                        </Button>
+                                    </div>
+                                </Flex>
+                                <GraduationDecision sessionId={graduationSessionId} />
+                            </>
+                        )}
                     </Col>
                     <Flex>
                         <Col span={24}>
-                            <div className="bg-white rounded-lg shadow-sm p-4">
+                            <div className="bg-white rounded-lg shadow-sm px-4">
                                 <Row gutter={[16, 0]}>
                                     <Col span={24}>
                                         <Row

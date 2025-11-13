@@ -1,18 +1,20 @@
 import DefaultLayout from '@layouts/default-layout'
-import {useFindManyFixedClass, useFindManyTrainingMajor} from '@workspace/db/hooks'
+import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import {
     SelectTrainingCourse,
-    useFixedClassStore, useTrainingCourseStore,
+    useFixedClassStore,
+    useTrainingCourseStore,
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import {Flex, Form, Select, Tabs} from 'antd'
+import { Flex, Form, Select, Tabs } from 'antd'
 import type React from 'react'
-import {useState} from 'react'
+import { useState } from 'react'
 import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
-import ThongKeNo from "@pages/ke-hoach-hoc-lai/thong-ke-no";
+import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
+import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc'
 
 interface TabItem {
     key: string
@@ -24,55 +26,67 @@ type KeHoachDaoTaoPageProps = {
     hocLai: boolean
 }
 
-export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
+export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
     const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? 'thong-ke-no' : 'lap-ke-hoach')
 
     const tabs: TabItem[] = [
-        ...(hocLai ?
-            [{
-                key: 'thong-ke-no',
-                label: 'Thống kê nợ',
-                content: <ThongKeNo/>,
-            }] : []),
+        ...(hocLai
+            ? [
+                  {
+                      key: 'thong-ke-no',
+                      label: 'Thống kê nợ',
+                      content: <ThongKeNo />,
+                  },
+              ]
+            : []),
         {
             key: 'lap-ke-hoach',
             label: 'Lập kế hoạch',
-            content: <LapKeHoach hocLai={hocLai}/>,
+            content: <LapKeHoach hocLai={hocLai} />,
         },
         {
-            key: 'ke-hoach-mo-lop-mon-hoc',
-            label: 'Kế hoạch mở lớp môn học',
-            content: <KeHoachMoLopMonHoc hocLai={hocLai}/>,
+            key: 'mo-lop-mon-hoc',
+            label: 'Mở LMH',
+            content: <KeHoachMoLopMonHoc hocLai={hocLai} />,
         },
+        ...(hocLai
+            ? []
+            : [
+                  {
+                      key: 'ghep-lop-mon-hoc',
+                      label: 'Ghép LMH',
+                      content: <KeHoachGhepLopMonHoc />,
+                  },
+              ]),
         {
             key: 'phan-cong-giang-day',
             label: 'Phân công giảng dạy',
-            content: <PhanCongGiangDay hocLai={hocLai}/>,
+            content: <PhanCongGiangDay hocLai={hocLai} />,
         },
     ]
 
-    const {id: trainingObjectTypeId} = useTrainingObjectTypeStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const {id: trainingMajorId, onSelect: onSelectTrainingMajor} = useTrainingMajorStore()
-    const {id: fixedClassId, onSelect: onSelectFixedClass} = useFixedClassStore()
-    const {id: trainingCourseId} = useTrainingCourseStore()
+    const { id: trainingMajorId, onSelect: onSelectTrainingMajor } = useTrainingMajorStore()
+    const { id: fixedClassId, onSelect: onSelectFixedClass } = useFixedClassStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
 
-    const {data: trainingMajorData = []} = useFindManyTrainingMajor({
-        orderBy: {name: 'asc'},
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
         where: {
             active: true,
             deletedAt: null,
         },
     })
 
-    const {data: fixedClassData = []} = useFindManyFixedClass({
-        orderBy: {name: 'asc'},
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
         where: {
             deletedAt: null,
             active: true,
             trainingCourse: {
                 trainingObjectTypeId,
-                id: trainingCourseId
+                id: trainingCourseId,
             },
             curriculumVersion: {
                 curriculum: {
@@ -90,7 +104,7 @@ export default function KeHoachDaoTao({hocLai}: KeHoachDaoTaoPageProps) {
                     label="Khóa đào tạo"
                     labelAlign="left"
                 >
-                    <SelectTrainingCourse/>
+                    <SelectTrainingCourse />
                 </Form.Item>
                 <Form.Item
                     className="m-0"

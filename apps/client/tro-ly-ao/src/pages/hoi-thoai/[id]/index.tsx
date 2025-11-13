@@ -57,8 +57,8 @@ function parseResponseWithCitations(text: string): {
         // Phần sau: JSON chứa citations
         const citationsText = text.substring(separatorIndex + '---CITATIONS---'.length).trim()
 
-        let citations: Citation[] = []
-        let faqCitations: FAQCitation[] = []
+        const citations: Citation[] = []
+        const faqCitations: FAQCitation[] = []
 
         if (citationsText) {
             try {

@@ -521,9 +521,9 @@ export default function GraduationDecisionDiploma() {
                                         : '',
                             },
                             {
-                                title: 'GPA cuối cùng',
+                                title: 'GPA',
                                 align: 'center',
-                                width: 100,
+                                width: 60,
                                 dataIndex: 'finalGpa',
                                 type: 'order',
                                 render: (_, record) => record?.finalGpa?.toNumber(),

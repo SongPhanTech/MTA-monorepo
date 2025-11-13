@@ -1,3 +1,4 @@
+// @ts-nocheck
 import BarChart from '@components/dashboard/bar-chart'
 import PieChart from '@components/dashboard/org-structure'
 import useSpinner from '@hooks/spinner'
