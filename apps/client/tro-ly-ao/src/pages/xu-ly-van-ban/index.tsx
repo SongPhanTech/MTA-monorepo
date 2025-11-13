@@ -33,6 +33,10 @@ function Page() {
             message.warning('Vui lòng nhập nội dung cần xử lý')
             return
         }
+        if (mode === 'translate' && inputText.length >= 1000) {
+            message.warning('Văn bản cần dịch không được vượt quá 1000 ký tự')
+            return
+        }
 
         const controller = new AbortController()
         setAbortController(controller)
@@ -169,6 +173,10 @@ function Page() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-base font-medium text-gray-700">Văn bản gốc</h3>
                                 <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-500 mr-3">
+                                        Số ký tự: {inputText.length}
+                                        {mode === 'translate' && ' / 1000'}
+                                    </span>
                                     <Button
                                         size="small"
                                         icon={<CloseOutlined />}
