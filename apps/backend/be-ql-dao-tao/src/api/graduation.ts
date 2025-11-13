@@ -786,6 +786,169 @@ const graduationSessionDecision = createRoute({
     },
 })
 
+const generateOriginalDiplomaNumber = createRoute({
+    operationId: 'generateOriginalDiplomaNumber',
+    tags: ['Graduation'],
+    path: '/generate-original-diploma-number',
+    method: 'put',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        sessionId: z.string(),
+                        prefix: z.string().nullish(),
+                        suffix: z.string().nullish(),
+                        start: z.number(),
+                        maxLength: z.number().nullish(),
+                        rewrite: z.boolean().default(false),
+                        skip: z
+                            .string()
+                            .nullish()
+                            .transform((val) => {
+                                if (val == null) return []
+
+                                return val
+                                    .split(/[\s,;]+/)
+                                    .map((v) => v.trim())
+                                    .filter(Boolean)
+                                    .map(Number)
+                            })
+                            .refine((arr) => arr.every((n) => !Number.isNaN(n)), {
+                                message: 'Danh sách bỏ qua phải là số',
+                            }),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Successfully',
+            content: {
+                'application/json': {
+                    schema: z.object({ count: z.number() }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad Request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                        existing: z.array(z.string()).optional(),
+                        shouldSkip: z.array(z.number()).optional(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(generateOriginalDiplomaNumber, async (c) => {
+    const { sessionId, prefix, suffix, start, maxLength, rewrite, skip } = c.req.valid('json')
+
+    const decisions = await prisma.graduationDecision.findMany({
+        where: {
+            application: { sessionId },
+            ...(rewrite ? {} : { originalDiplomaNumber: null }),
+        },
+        select: { id: true },
+        orderBy: [
+            { originalDiplomaNumber: 'asc' },
+            { student: { userProfile: { firstName: 'asc' } } },
+        ],
+    })
+
+    if (decisions.length === 0) {
+        return c.json({ count: 0 }, 200)
+    }
+
+    const generatedNumbers: string[] = []
+    let currentNumber = start
+    let i = 0
+    while (i < decisions.length) {
+        if (skip?.includes(currentNumber)) {
+            currentNumber++
+            continue
+        }
+
+        const serial = maxLength ? currentNumber.toString().padStart(maxLength, '0') : currentNumber
+        generatedNumbers.push(`${prefix || ''}${serial}${suffix || ''}`)
+        currentNumber++
+        i++
+    }
+
+    const existing = await prisma.graduationDecision.findMany({
+        where: {
+            originalDiplomaNumber: { in: generatedNumbers },
+            ...(rewrite ? { application: { sessionId: { not: sessionId } } } : {}),
+        },
+        select: { originalDiplomaNumber: true },
+    })
+
+    if (existing.length > 0) {
+        return c.json(
+            {
+                message: 'Số hiệu đã tồn tại.',
+                existing: existing.flatMap((e) => e.originalDiplomaNumber || []),
+                shouldSkip: existing
+                    .map((e) => e.originalDiplomaNumber)
+                    .filter((num): num is string => !!num)
+                    .map((num) => {
+                        let serialStr = num
+                        if (prefix) {
+                            serialStr = serialStr.startsWith(prefix)
+                                ? serialStr.substring(prefix.length)
+                                : serialStr
+                        }
+                        if (suffix) {
+                            serialStr = serialStr.endsWith(suffix)
+                                ? serialStr.slice(0, -suffix.length)
+                                : serialStr
+                        }
+                        return Number.parseInt(serialStr, 10)
+                    })
+                    .filter((num) => !Number.isNaN(num)),
+            },
+            400
+        )
+    }
+
+    const updates = decisions.map((decision, index) =>
+        prisma.graduationDecision.update({
+            where: { id: decision.id },
+            data: { originalDiplomaNumber: generatedNumbers[index] },
+        })
+    )
+
+    if (rewrite) {
+        const result = await prisma.$transaction([
+            prisma.graduationDecision.updateMany({
+                where: {
+                    application: { sessionId },
+                    id: { in: decisions.map((d) => d.id) },
+                },
+                data: { originalDiplomaNumber: null },
+            }),
+            ...updates,
+        ])
+        return c.json({ count: result.length - 1 }, 200)
+    }
+
+    const result = await prisma.$transaction(updates)
+    return c.json({ count: result.length }, 200)
+})
+
 app.openapi(graduationSessionDecision, async (c) => {
     const { sessionId } = c.req.valid('query')
 
@@ -833,8 +996,10 @@ app.openapi(graduationSessionDecision, async (c) => {
             fullname: graduationDecision.student.userProfile.fullname,
             FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
             gender: graduationDecision.student.userProfile.gender?.sTen,
-            dayOfBirth: dateOfBirth ? dateOfBirth.getDate() : null,
-            monthOfBirth: dateOfBirth ? dateOfBirth.getMonth() + 1 : null,
+            dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, '0') : null,
+            monthOfBirth: dateOfBirth
+                ? (dateOfBirth.getMonth() + 1).toString().padStart(2, '0')
+                : null,
             mmmOfBirth: dateOfBirth
                 ? dateOfBirth.toLocaleString('en-US', { month: 'short' })
                 : null,

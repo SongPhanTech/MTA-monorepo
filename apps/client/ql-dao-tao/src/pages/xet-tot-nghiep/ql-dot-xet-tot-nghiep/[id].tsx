@@ -100,6 +100,24 @@ export default function StudentGraduationApplication() {
                           }
                         : {}),
                 },
+                fixedClass: {
+                    ...(filters.fixedClassName
+                        ? {
+                              name: {
+                                  contains: filters.fixedClassName,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.fixedClassCode
+                        ? {
+                              name: {
+                                  contains: filters.fixedClassCode,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                },
             },
             ...(filters.applicationDate?.length === 2
                 ? {
@@ -137,16 +155,7 @@ export default function StudentGraduationApplication() {
                 ? { reason: { contains: filters.reason, mode: 'insensitive' as const } }
                 : {}),
         }),
-        [
-            filters.code,
-            filters.name,
-            filters.applicationDate,
-            filters.statusApplication,
-            graduationSessionId,
-            filters.graduation,
-            filters.gpaCmp,
-            filters.reason,
-        ]
+        [graduationSessionId, filters]
     )
 
     const { data: studentGraduationApplicationData, refetch } =
@@ -168,6 +177,7 @@ export default function StudentGraduationApplication() {
                                     ethnicity: true,
                                 },
                             },
+                            fixedClass: true,
                         },
                     },
                     trainingMajor: true,
@@ -691,7 +701,7 @@ export default function StudentGraduationApplication() {
                                             columns={[
                                                 {
                                                     title: 'STT',
-                                                    width: 60,
+                                                    width: 40,
                                                     align: 'center',
                                                     fixed: 'left',
                                                     render: (_, __, index) =>
@@ -700,10 +710,10 @@ export default function StudentGraduationApplication() {
                                                         (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                                 },
                                                 {
-                                                    title: 'Mã sinh viên',
+                                                    title: 'Mã SV',
                                                     align: 'center',
                                                     dataIndex: 'code',
-                                                    width: 130,
+                                                    width: 100,
                                                     fixed: 'left',
                                                     type: 'input',
                                                     render: (_, record) =>
@@ -711,7 +721,7 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'Họ và tên',
-                                                    width: 180,
+                                                    width: 150,
                                                     dataIndex: 'name',
                                                     type: 'input',
                                                     render: (_, record) =>
@@ -719,7 +729,7 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'Ngày sinh',
-                                                    width: 100,
+                                                    width: 80,
                                                     align: 'center',
                                                     render: (_, record) =>
                                                         record?.student?.userProfile?.dateOfBirth
@@ -728,6 +738,24 @@ export default function StudentGraduationApplication() {
                                                                       ?.dateOfBirth
                                                               ).format('DD/MM/YYYY')
                                                             : '',
+                                                },
+                                                {
+                                                    title: 'Lớp',
+                                                    width: 150,
+                                                    align: 'center',
+                                                    dataIndex: 'fixedClassName',
+                                                    type: 'input',
+                                                    render: (_, record) =>
+                                                        record?.student?.fixedClass?.name,
+                                                },
+                                                {
+                                                    title: 'Mã lớp',
+                                                    width: 80,
+                                                    align: 'center',
+                                                    dataIndex: 'fixedClassCode',
+                                                    type: 'input',
+                                                    render: (_, record) =>
+                                                        record?.student?.fixedClass?.code,
                                                 },
                                                 {
                                                     title: 'SĐT',
