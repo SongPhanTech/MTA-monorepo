@@ -9,13 +9,11 @@ import { Survey } from '@workspace/db'
 import {
     useCountClusterSurvey,
     useFindManyClusterSurvey,
-    useFindManySurveyObjectType,
     useFindManySurveyTopic,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { useSemesterStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -39,7 +37,6 @@ function TabDotKhaoSatCum({
         startDate: undefined,
         endDate: undefined,
     })
-    const { id: semesterId } = useSemesterStore()
     const router = useRouter()
     const where = useMemo(
         () => ({
@@ -203,9 +200,7 @@ function TabDotKhaoSatCum({
     }, [data])
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
-    const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
-        orderBy: { name: 'asc' },
-    })
+
     return (
         <div>
             <Row gutter={[16, 4]}>

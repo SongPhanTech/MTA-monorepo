@@ -13,7 +13,7 @@ export default function ClussterSurveyPage() {
     const items = [
         {
             key: '1',
-            label: 'Khảo sát cụm',
+            label: 'Đợt khảo sát',
             children: (
                 <TabDotKhaoSatCum
                     selectedId={selectedId}
@@ -41,8 +41,8 @@ export default function ClussterSurveyPage() {
         {
             key: '3',
             label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien selectedId={selectedId} surveyId={surveyId} />,
-            disabled: !selectedId,
+            children: <DanhSachHocVien surveyId={surveyId} />,
+            disabled: !surveyId,
         },
         {
             key: '4',

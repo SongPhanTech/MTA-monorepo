@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
 import { Button, Col, Flex, Row, Tag } from 'antd'
@@ -25,6 +26,15 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
         isStudent: 'all'
     })
     const router = useRouter()
+
+    const { data: fixedClasses = []} = useFindManyFixedClass({
+            orderBy: { name: 'asc' },
+        })
+    const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
+        useFindManyTrainingCourse({
+            orderBy: { name: 'asc' },
+        })
+
 
     const { data: res } = useGetSurveyObjects({
         limit: numberOfPages || DEFAULT_PAGINATE_SIZE,
@@ -133,22 +143,21 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
                                {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'organizationId',
-                                type:'select',
-                                options:[],
-                                render: (_, record) => record?.lecturer?.organization?.sTen || '',
+                                type:'input',
+                                render: (_, record) => record?.lecturer?.organization?.sMa || '',
                             },
                               {
                                 title: 'Lớp quản lý',
                                 dataIndex: 'fixedClassIds',
                                 type:'select',
-                                options:[],
+                                options:fixedClasses?.map((fc) => ({ value: fc.id, label: fc.name })) || [],
                                 render: (_, record) => record?.educationAndTraining?.length>0  ?`${record?.educationAndTraining[0]?.fixedClass?.code}-${record?.educationAndTraining[0]?.fixedClass?.name}` :"",
                             },
                             {
                                 title: 'Khoá',
                                 dataIndex: 'trainingCourseIds',
                                 type:'select',
-                                options:[],
+                                options:trainingCourses?.map((tc) => ({ value: tc.id, label: tc.name })) || [],
                                 render: (_, record) => record?.educationAndTraining?.length>0  ?`${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name ||''}` :"",
                             },
                             {

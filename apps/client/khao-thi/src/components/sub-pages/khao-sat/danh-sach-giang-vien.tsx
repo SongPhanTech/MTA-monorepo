@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import ExportLecturerInSurvey from '@components/modal/export-list-lecturer-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
 import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Col, message, Row, Tooltip } from 'antd'
+import { Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -33,36 +34,113 @@ export default function DetailSurveyPage({
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        surveyQuestionType: undefined,
-        surveyId: undefined,
+        subjectClassName: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        idCardNumber: undefined,
+        phoneNumber: undefined,
+        organizationId: undefined,
     })
     const where = useMemo(
         () => ({
             clusterSurveyId: selectedId,
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
             ...(filters.name && filters.name !== ''
                 ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
+                      lecture: {
+                          OR: [
+                              {
+                                  code: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                              {
+                                  userProfile: {
+                                    OR: [
+                                        {
+                                            firstName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                        {
+                                            lastName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                    ]
+                                  },
+                              },
+                          ],
                       },
                   }
                 : {}),
-            ...(filters.surveyId
-                ? Array.isArray(filters.surveyId)
-                    ? { surveyId: { in: filters.surveyId } }
-                    : { surveyId: filters.surveyId }
-                : {}),
-            ...(filters.surveyQuestionType && filters.surveyQuestionType.length > 0
+
+            ...(filters.subjectClassName && filters.subjectClassName !== ''
                 ? {
-                      type: { in: filters.surveyQuestionType },
+                     subjectClass:{
+                        OR: [
+                            {
+                                    code: {
+                                      contains: filters.subjectClassName,
+                                      mode: 'insensitive' as const,
+                                  },
+                            },
+                               {
+                                    name: {
+                                      contains: filters.subjectClassName,
+                                      mode: 'insensitive' as const,
+                                  },
+                            }
+                        ]
+                     }
+                  }
+                : {}),
+                    ...(filters.idCardNumber && filters.idCardNumber !== ''
+                ? {
+                 lecture: {
+                     userProfile: {
+                         idCardNumber: {
+                             contains: filters.idCardNumber,
+                             mode: 'insensitive' as const,
+                         },
+                     }
+                 }
+                  }
+                : {}),
+            ...(filters.phoneNumber && filters.phoneNumber !== ''
+                ? {
+                 lecture: {
+                     userProfile: {
+                         phoneNumber: {
+                             contains: filters.phoneNumber,
+                             mode: 'insensitive' as const,
+                         },
+                     }
+                 }
+                  }
+                : {}),
+                      ...(filters.organizationId && filters.organizationId !== ''
+                ? {
+                 lecture: {
+                     organization:{
+                        OR:[
+                            {
+                                    sMa: {
+                                      contains: filters.organizationId,
+                                      mode: 'insensitive' as const,
+                                  },
+                            },
+                               {
+                                    sTen: {
+                                      contains: filters.organizationId,
+                                      mode: 'insensitive' as const,
+                                  },
+                            }
+                        ]
+                     }
+                 }
                   }
                 : {}),
         }),
@@ -77,6 +155,7 @@ export default function DetailSurveyPage({
                 lecture: {
                     include: {
                         userProfile: true,
+                        organization: true,
                     },
                 },
                 subjectClass: {
@@ -142,7 +221,11 @@ export default function DetailSurveyPage({
     return (
         <Row gutter={[16, 4]}>
             <Col span={24}>
+            <Flex align="center" justify="space-between">
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
+                <ExportLecturerInSurvey query={where} surveyName={data?.[0]?.clusterSurvey?.name ||''}/>
+            </Flex>
+
             </Col>
             <Col span={24}>
                 <Table
@@ -167,14 +250,7 @@ export default function DetailSurveyPage({
                             render: (_, __, index) =>
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
-                        {
-                            title: 'Giảng viên',
-                            dataIndex: 'name',
-                            type: 'input',
-                            render: (__, record) => {
-                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
-                            },
-                        },
+
                         {
                             title: 'Lớp môn học',
                             dataIndex: 'name',
@@ -184,6 +260,42 @@ export default function DetailSurveyPage({
                                     {record?.subjectClass?.code} - {record?.subjectClass?.name}
                                 </>
                             ),
+                        },
+                        {
+                            title: 'Giảng viên',
+                            dataIndex: 'name',
+                            type: 'input',
+                            render: (__, record) => {
+                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                            },
+                        },
+                        {
+                            title: 'CCCD',
+                            dataIndex: 'idCardNumber',
+                            type: 'input',
+                            align: 'center',
+                            render: (__, record) => {
+                                return record?.lecture?.userProfile?.idCardNumber || ''
+                            },
+                        },
+                        {
+                            title: 'SĐT',
+                            dataIndex: 'phoneNumber',
+                            type: 'input',
+                            align: 'center',
+                            render: (__, record) => {
+                                return record?.lecture?.userProfile?.phoneNumber || ''
+                            },
+                        },
+                        {
+                            title: 'ĐVQL',
+                            dataIndex: 'organizationId',
+                            type: 'input',
+                            width: 100,
+                            align: 'center',
+                            render: (__, record) => {
+                                return record?.lecture?.organization?.sMa || ''
+                            },
                         },
                         {
                             title: 'Ngày bắt đầu',
@@ -204,7 +316,7 @@ export default function DetailSurveyPage({
 
                         {
                             title: 'Thao tác',
-                            width: 130,
+                            width: 80,
                             align: 'center',
                             hidden: !canSome(
                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,

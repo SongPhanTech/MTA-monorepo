@@ -141,6 +141,7 @@ export type FilterProps = {
     trainingCourseIds?: string[]
     fixedClassIds?: string[]
     isStudent?: string
+    subjectClassName?:string
 }
 
 export type ColumnTypeProps = ColumnsType & {
