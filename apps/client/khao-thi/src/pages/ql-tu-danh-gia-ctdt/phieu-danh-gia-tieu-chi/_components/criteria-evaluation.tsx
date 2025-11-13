@@ -55,7 +55,9 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             some: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.PENDING,
+                                    status: {
+                                        not: $Enums.EvaluationStatus.LOCK,
+                                    },
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
@@ -69,7 +71,9 @@ export default function CriteriaEvaluationWrite() {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.PENDING,
+                                    status: {
+                                        not: $Enums.EvaluationStatus.LOCK,
+                                    },
                                     lecturer: {
                                         userProfile: {
                                             id: idProfile,
@@ -102,7 +106,6 @@ export default function CriteriaEvaluationWrite() {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-
                     children: <CriteriaEvaluationSubPage key={standard.id} data={standard} />,
                 }
             })

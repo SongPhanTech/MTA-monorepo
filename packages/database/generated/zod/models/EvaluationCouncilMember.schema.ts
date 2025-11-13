@@ -33,6 +33,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     evaluationCouncil: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()),
+    evaluationCriterions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

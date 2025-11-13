@@ -3162,6 +3162,7 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   lecturerId: 'lecturerId',
   deadline: 'deadline',
   status: 'status',
+  reviewerId: 'reviewerId',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',
@@ -6312,6 +6313,7 @@ exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
+  reviewerId: 'reviewerId',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',
@@ -7826,6 +7828,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
