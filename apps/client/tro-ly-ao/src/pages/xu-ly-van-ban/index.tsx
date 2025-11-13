@@ -33,7 +33,7 @@ function Page() {
             message.warning('Vui lòng nhập nội dung cần xử lý')
             return
         }
-        if (mode === 'translate' && inputText.length >= 1000) {
+        if (mode === 'translate' && inputText.length >= 2000) {
             message.warning('Văn bản cần dịch không được vượt quá 1000 ký tự')
             return
         }
@@ -175,7 +175,7 @@ function Page() {
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-500 mr-3">
                                         Số ký tự: {inputText.length}
-                                        {mode === 'translate' && ' / 1000'}
+                                        {mode === 'translate' && ' / 2000'}
                                     </span>
                                     <Button
                                         size="small"
