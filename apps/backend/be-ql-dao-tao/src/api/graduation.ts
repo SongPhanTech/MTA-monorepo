@@ -787,16 +787,17 @@ const graduationSessionDecision = createRoute({
     },
 })
 
-const generateOriginalDiplomaNumber = createRoute({
-    operationId: 'generateOriginalDiplomaNumber',
+const generateDiplomaNumber = createRoute({
+    operationId: 'generateDiplomaNumber',
     tags: ['Graduation'],
-    path: '/generate-original-diploma-number',
+    path: '/generate-diploma-number',
     method: 'put',
     request: {
         body: {
             content: {
                 'application/json': {
                     schema: z.object({
+                        field: z.enum(['originalDiplomaNumber', 'diplomaNumber']),
                         sessionId: z.string(),
                         prefix: z.string().nullish(),
                         start: z.number(),
@@ -855,19 +856,17 @@ const generateOriginalDiplomaNumber = createRoute({
     },
 })
 
-app.openapi(generateOriginalDiplomaNumber, async (c) => {
-    const { sessionId, prefix, suffix, start, maxLength, rewrite, skip } = c.req.valid('json')
+app.openapi(generateDiplomaNumber, async (c) => {
+    const { field, sessionId, prefix, suffix, start, maxLength, rewrite, skip } =
+        c.req.valid('json')
 
     const decisions = await prisma.graduationDecision.findMany({
         where: {
             application: { sessionId },
-            ...(rewrite ? {} : { originalDiplomaNumber: null }),
+            ...(rewrite ? {} : { [field]: null }),
         },
         select: { id: true },
-        orderBy: [
-            { originalDiplomaNumber: 'asc' },
-            { student: { userProfile: { firstName: 'asc' } } },
-        ],
+        orderBy: [{ [field]: 'asc' }, { student: { userProfile: { firstName: 'asc' } } }],
     })
 
     if (decisions.length === 0) {
@@ -898,22 +897,22 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
 
     const existing = await prisma.graduationDecision.findMany({
         where: {
-            originalDiplomaNumber: { in: generatedNumbers },
+            [field]: { in: generatedNumbers },
             ...(rewrite ? { application: { sessionId: { not: sessionId } } } : {}),
         },
-        select: { originalDiplomaNumber: true },
+        select: { [field]: true },
     })
 
     if (existing.length > 0) {
         return c.json(
             {
                 message: 'Số hiệu đã tồn tại',
-                existing: existing.flatMap((e) => e.originalDiplomaNumber || []),
+                existing: existing.flatMap((e) => e[field] || []),
                 shouldSkip: existing
-                    .map((e) => e.originalDiplomaNumber)
-                    .filter((num): num is string => !!num)
+                    .map((e) => e[field])
+                    .filter((num) => !!num)
                     .map((num) => {
-                        let serialStr = num
+                        let serialStr = num as unknown as string
                         if (prefix) {
                             serialStr = serialStr.startsWith(prefix)
                                 ? serialStr.substring(prefix.length)
@@ -935,7 +934,7 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
     const updates = decisions.map((decision, index) =>
         prisma.graduationDecision.update({
             where: { id: decision.id },
-            data: { originalDiplomaNumber: generatedNumbers[index] },
+            data: { [field]: generatedNumbers[index] },
         })
     )
 
@@ -946,7 +945,7 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
                     application: { sessionId },
                     id: { in: decisions.map((d) => d.id) },
                 },
-                data: { originalDiplomaNumber: null },
+                data: { [field]: null },
             }),
             ...updates,
         ])
