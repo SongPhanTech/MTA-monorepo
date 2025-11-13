@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
-import { $Enums, type ScoreConvert } from '@workspace/db/client'
+import { type ScoreConvert } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -16,11 +16,7 @@ interface FilterProps {
     trainingCourseId: string | null
 }
 
-interface StudentCourseByPlanProps {
-    hocLai?: boolean
-}
-
-export default function KetQuaDangKyHoc({ hocLai }: StudentCourseByPlanProps) {
+export default function KetQuaDangKyHoc() {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -53,7 +49,6 @@ export default function KetQuaDangKyHoc({ hocLai }: StudentCourseByPlanProps) {
                 },
                 cancelled: false,
                 active: true,
-                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 status: 'OFFICIAL',
             },
             include: {

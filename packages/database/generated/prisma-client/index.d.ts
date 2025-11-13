@@ -29572,6 +29572,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type EvaluationCouncilMemberCountOutputType
+   */
+
+  export type EvaluationCouncilMemberCountOutputType = {
+    evaluationCriterions: number
+  }
+
+  export type EvaluationCouncilMemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evaluationCriterions?: boolean | EvaluationCouncilMemberCountOutputTypeCountEvaluationCriterionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvaluationCouncilMemberCountOutputType without action
+   */
+  export type EvaluationCouncilMemberCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCouncilMemberCountOutputType
+     */
+    select?: EvaluationCouncilMemberCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvaluationCouncilMemberCountOutputType without action
+   */
+  export type EvaluationCouncilMemberCountOutputTypeCountEvaluationCriterionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationCriterionWhereInput
+  }
+
+
+  /**
    * Count Type SurveyObjectTypeCountOutputType
    */
 
@@ -122912,8 +122943,18 @@ export namespace Prisma {
 
   export type AggregatePlanTrainingSubject = {
     _count: PlanTrainingSubjectCountAggregateOutputType | null
+    _avg: PlanTrainingSubjectAvgAggregateOutputType | null
+    _sum: PlanTrainingSubjectSumAggregateOutputType | null
     _min: PlanTrainingSubjectMinAggregateOutputType | null
     _max: PlanTrainingSubjectMaxAggregateOutputType | null
+  }
+
+  export type PlanTrainingSubjectAvgAggregateOutputType = {
+    studentCount: number | null
+  }
+
+  export type PlanTrainingSubjectSumAggregateOutputType = {
+    studentCount: number | null
   }
 
   export type PlanTrainingSubjectMinAggregateOutputType = {
@@ -122925,6 +122966,7 @@ export namespace Prisma {
     updatedAt: Date | null
     planTrainingId: string | null
     subjectVersionId: string | null
+    studentCount: number | null
     subjectClassType: $Enums.SubjectClassType | null
   }
 
@@ -122937,6 +122979,7 @@ export namespace Prisma {
     updatedAt: Date | null
     planTrainingId: string | null
     subjectVersionId: string | null
+    studentCount: number | null
     subjectClassType: $Enums.SubjectClassType | null
   }
 
@@ -122949,10 +122992,19 @@ export namespace Prisma {
     updatedAt: number
     planTrainingId: number
     subjectVersionId: number
+    studentCount: number
     subjectClassType: number
     _all: number
   }
 
+
+  export type PlanTrainingSubjectAvgAggregateInputType = {
+    studentCount?: true
+  }
+
+  export type PlanTrainingSubjectSumAggregateInputType = {
+    studentCount?: true
+  }
 
   export type PlanTrainingSubjectMinAggregateInputType = {
     id?: true
@@ -122963,6 +123015,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    studentCount?: true
     subjectClassType?: true
   }
 
@@ -122975,6 +123028,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    studentCount?: true
     subjectClassType?: true
   }
 
@@ -122987,6 +123041,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    studentCount?: true
     subjectClassType?: true
     _all?: true
   }
@@ -123029,6 +123084,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PlanTrainingSubjectAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanTrainingSubjectSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PlanTrainingSubjectMinAggregateInputType
@@ -123059,6 +123126,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PlanTrainingSubjectCountAggregateInputType | true
+    _avg?: PlanTrainingSubjectAvgAggregateInputType
+    _sum?: PlanTrainingSubjectSumAggregateInputType
     _min?: PlanTrainingSubjectMinAggregateInputType
     _max?: PlanTrainingSubjectMaxAggregateInputType
   }
@@ -123072,8 +123141,11 @@ export namespace Prisma {
     updatedAt: Date
     planTrainingId: string
     subjectVersionId: string
+    studentCount: number
     subjectClassType: $Enums.SubjectClassType
     _count: PlanTrainingSubjectCountAggregateOutputType | null
+    _avg: PlanTrainingSubjectAvgAggregateOutputType | null
+    _sum: PlanTrainingSubjectSumAggregateOutputType | null
     _min: PlanTrainingSubjectMinAggregateOutputType | null
     _max: PlanTrainingSubjectMaxAggregateOutputType | null
   }
@@ -123101,6 +123173,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    studentCount?: boolean
     subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -123117,6 +123190,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    studentCount?: boolean
     subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -123131,6 +123205,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    studentCount?: boolean
     subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -123145,10 +123220,11 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    studentCount?: boolean
     subjectClassType?: boolean
   }
 
-  export type PlanTrainingSubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "planTrainingId" | "subjectVersionId" | "subjectClassType", ExtArgs["result"]["planTrainingSubject"]>
+  export type PlanTrainingSubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "planTrainingId" | "subjectVersionId" | "studentCount" | "subjectClassType", ExtArgs["result"]["planTrainingSubject"]>
   export type PlanTrainingSubjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -123180,6 +123256,7 @@ export namespace Prisma {
       updatedAt: Date
       planTrainingId: string
       subjectVersionId: string
+      studentCount: number
       subjectClassType: $Enums.SubjectClassType
     }, ExtArgs["result"]["planTrainingSubject"]>
     composites: {}
@@ -123615,6 +123692,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"PlanTrainingSubject", 'DateTime'>
     readonly planTrainingId: FieldRef<"PlanTrainingSubject", 'String'>
     readonly subjectVersionId: FieldRef<"PlanTrainingSubject", 'String'>
+    readonly studentCount: FieldRef<"PlanTrainingSubject", 'Int'>
     readonly subjectClassType: FieldRef<"PlanTrainingSubject", 'SubjectClassType'>
   }
     
@@ -246335,6 +246413,7 @@ export namespace Prisma {
     lecturerId: string | null
     deadline: Date | null
     status: $Enums.EvaluationStatus | null
+    reviewerId: string | null
     currentSituation: string | null
     strengths: string | null
     weakness: string | null
@@ -246355,6 +246434,7 @@ export namespace Prisma {
     lecturerId: string | null
     deadline: Date | null
     status: $Enums.EvaluationStatus | null
+    reviewerId: string | null
     currentSituation: string | null
     strengths: string | null
     weakness: string | null
@@ -246375,6 +246455,7 @@ export namespace Prisma {
     lecturerId: number
     deadline: number
     status: number
+    reviewerId: number
     currentSituation: number
     strengths: number
     weakness: number
@@ -246405,6 +246486,7 @@ export namespace Prisma {
     lecturerId?: true
     deadline?: true
     status?: true
+    reviewerId?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -246425,6 +246507,7 @@ export namespace Prisma {
     lecturerId?: true
     deadline?: true
     status?: true
+    reviewerId?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -246445,6 +246528,7 @@ export namespace Prisma {
     lecturerId?: true
     deadline?: true
     status?: true
+    reviewerId?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -246552,6 +246636,7 @@ export namespace Prisma {
     lecturerId: string | null
     deadline: Date | null
     status: $Enums.EvaluationStatus
+    reviewerId: string | null
     currentSituation: string
     strengths: string
     weakness: string
@@ -246591,6 +246676,7 @@ export namespace Prisma {
     lecturerId?: boolean
     deadline?: boolean
     status?: boolean
+    reviewerId?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -246598,6 +246684,7 @@ export namespace Prisma {
     score?: boolean
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
     evaluationCriterionComments?: boolean | EvaluationCriterion$evaluationCriterionCommentsArgs<ExtArgs>
     _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCriterion"]>
@@ -246615,6 +246702,7 @@ export namespace Prisma {
     lecturerId?: boolean
     deadline?: boolean
     status?: boolean
+    reviewerId?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -246622,6 +246710,7 @@ export namespace Prisma {
     score?: boolean
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCriterion"]>
 
   export type EvaluationCriterionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -246637,6 +246726,7 @@ export namespace Prisma {
     lecturerId?: boolean
     deadline?: boolean
     status?: boolean
+    reviewerId?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -246644,6 +246734,7 @@ export namespace Prisma {
     score?: boolean
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCriterion"]>
 
   export type EvaluationCriterionSelectScalar = {
@@ -246659,6 +246750,7 @@ export namespace Prisma {
     lecturerId?: boolean
     deadline?: boolean
     status?: boolean
+    reviewerId?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -246666,20 +246758,23 @@ export namespace Prisma {
     score?: boolean
   }
 
-  export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>
+  export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "reviewerId" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>
   export type EvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
     evaluationCriterionComments?: boolean | EvaluationCriterion$evaluationCriterionCommentsArgs<ExtArgs>
     _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
   }
   export type EvaluationCriterionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
+    reviewer?: boolean | EvaluationCriterion$reviewerArgs<ExtArgs>
   }
 
   export type $EvaluationCriterionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -246687,6 +246782,7 @@ export namespace Prisma {
     objects: {
       criterionPeriod: Prisma.$CriterionPeriodPayload<ExtArgs>
       lecturer: Prisma.$LecturerPayload<ExtArgs> | null
+      reviewer: Prisma.$EvaluationCouncilMemberPayload<ExtArgs> | null
       evaluationCriterionComments: Prisma.$EvaluationCriterionCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -246702,6 +246798,7 @@ export namespace Prisma {
       lecturerId: string | null
       deadline: Date | null
       status: $Enums.EvaluationStatus
+      reviewerId: string | null
       /**
        * 1. Mô tả hiện trạng
        */
@@ -247118,6 +247215,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     criterionPeriod<T extends CriterionPeriodDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CriterionPeriodDefaultArgs<ExtArgs>>): Prisma__CriterionPeriodClient<$Result.GetResult<Prisma.$CriterionPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lecturer<T extends EvaluationCriterion$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reviewer<T extends EvaluationCriterion$reviewerArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$reviewerArgs<ExtArgs>>): Prisma__EvaluationCouncilMemberClient<$Result.GetResult<Prisma.$EvaluationCouncilMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     evaluationCriterionComments<T extends EvaluationCriterion$evaluationCriterionCommentsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$evaluationCriterionCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -247160,6 +247258,7 @@ export namespace Prisma {
     readonly lecturerId: FieldRef<"EvaluationCriterion", 'String'>
     readonly deadline: FieldRef<"EvaluationCriterion", 'DateTime'>
     readonly status: FieldRef<"EvaluationCriterion", 'EvaluationStatus'>
+    readonly reviewerId: FieldRef<"EvaluationCriterion", 'String'>
     readonly currentSituation: FieldRef<"EvaluationCriterion", 'String'>
     readonly strengths: FieldRef<"EvaluationCriterion", 'String'>
     readonly weakness: FieldRef<"EvaluationCriterion", 'String'>
@@ -247577,6 +247676,25 @@ export namespace Prisma {
      */
     include?: LecturerInclude<ExtArgs> | null
     where?: LecturerWhereInput
+  }
+
+  /**
+   * EvaluationCriterion.reviewer
+   */
+  export type EvaluationCriterion$reviewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCouncilMember
+     */
+    select?: EvaluationCouncilMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCouncilMember
+     */
+    omit?: EvaluationCouncilMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCouncilMemberInclude<ExtArgs> | null
+    where?: EvaluationCouncilMemberWhereInput
   }
 
   /**
@@ -251426,6 +251544,8 @@ export namespace Prisma {
     role?: boolean
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    evaluationCriterions?: boolean | EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>
+    _count?: boolean | EvaluationCouncilMemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationCouncilMember"]>
 
   export type EvaluationCouncilMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -251478,6 +251598,8 @@ export namespace Prisma {
   export type EvaluationCouncilMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    evaluationCriterions?: boolean | EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>
+    _count?: boolean | EvaluationCouncilMemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationCouncilMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evaluationCouncil?: boolean | EvaluationCouncilDefaultArgs<ExtArgs>
@@ -251493,6 +251615,7 @@ export namespace Prisma {
     objects: {
       evaluationCouncil: Prisma.$EvaluationCouncilPayload<ExtArgs>
       lecturer: Prisma.$LecturerPayload<ExtArgs>
+      evaluationCriterions: Prisma.$EvaluationCriterionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -251902,6 +252025,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     evaluationCouncil<T extends EvaluationCouncilDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCouncilDefaultArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    evaluationCriterions<T extends EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -252335,6 +252459,30 @@ export namespace Prisma {
      * Limit how many EvaluationCouncilMembers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EvaluationCouncilMember.evaluationCriterions
+   */
+  export type EvaluationCouncilMember$evaluationCriterionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationCriterion
+     */
+    select?: EvaluationCriterionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationCriterion
+     */
+    omit?: EvaluationCriterionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationCriterionInclude<ExtArgs> | null
+    where?: EvaluationCriterionWhereInput
+    orderBy?: EvaluationCriterionOrderByWithRelationInput | EvaluationCriterionOrderByWithRelationInput[]
+    cursor?: EvaluationCriterionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationCriterionScalarFieldEnum | EvaluationCriterionScalarFieldEnum[]
   }
 
   /**
@@ -346562,6 +346710,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     planTrainingId: 'planTrainingId',
     subjectVersionId: 'subjectVersionId',
+    studentCount: 'studentCount',
     subjectClassType: 'subjectClassType'
   };
 
@@ -348557,6 +348706,7 @@ export namespace Prisma {
     lecturerId: 'lecturerId',
     deadline: 'deadline',
     status: 'status',
+    reviewerId: 'reviewerId',
     currentSituation: 'currentSituation',
     strengths: 'strengths',
     weakness: 'weakness',
@@ -352472,6 +352622,7 @@ export namespace Prisma {
     createdBy: 'createdBy',
     criterionPeriodId: 'criterionPeriodId',
     lecturerId: 'lecturerId',
+    reviewerId: 'reviewerId',
     currentSituation: 'currentSituation',
     strengths: 'strengths',
     weakness: 'weakness',
@@ -362771,6 +362922,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    studentCount?: IntFilter<"PlanTrainingSubject"> | number
     subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
     planTraining?: XOR<PlanTrainingScalarRelationFilter, PlanTrainingWhereInput>
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
@@ -362786,6 +362938,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    studentCount?: SortOrder
     subjectClassType?: SortOrder
     planTraining?: PlanTrainingOrderByWithRelationInput
     subjectVersion?: SubjectVersionOrderByWithRelationInput
@@ -362805,6 +362958,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    studentCount?: IntFilter<"PlanTrainingSubject"> | number
     subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
     planTraining?: XOR<PlanTrainingScalarRelationFilter, PlanTrainingWhereInput>
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
@@ -362820,10 +362974,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    studentCount?: SortOrder
     subjectClassType?: SortOrder
     _count?: PlanTrainingSubjectCountOrderByAggregateInput
+    _avg?: PlanTrainingSubjectAvgOrderByAggregateInput
     _max?: PlanTrainingSubjectMaxOrderByAggregateInput
     _min?: PlanTrainingSubjectMinOrderByAggregateInput
+    _sum?: PlanTrainingSubjectSumOrderByAggregateInput
   }
 
   export type PlanTrainingSubjectScalarWhereWithAggregatesInput = {
@@ -362838,6 +362995,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringWithAggregatesFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringWithAggregatesFilter<"PlanTrainingSubject"> | string
+    studentCount?: IntWithAggregatesFilter<"PlanTrainingSubject"> | number
     subjectClassType?: EnumSubjectClassTypeWithAggregatesFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
   }
 
@@ -373896,6 +374054,7 @@ export namespace Prisma {
     lecturerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadline?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
+    reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -373903,6 +374062,7 @@ export namespace Prisma {
     score?: IntNullableFilter<"EvaluationCriterion"> | number | null
     criterionPeriod?: XOR<CriterionPeriodScalarRelationFilter, CriterionPeriodWhereInput>
     lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+    reviewer?: XOR<EvaluationCouncilMemberNullableScalarRelationFilter, EvaluationCouncilMemberWhereInput> | null
     evaluationCriterionComments?: EvaluationCriterionCommentListRelationFilter
   }
 
@@ -373919,6 +374079,7 @@ export namespace Prisma {
     lecturerId?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
     status?: SortOrder
+    reviewerId?: SortOrderInput | SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -373926,6 +374087,7 @@ export namespace Prisma {
     score?: SortOrderInput | SortOrder
     criterionPeriod?: CriterionPeriodOrderByWithRelationInput
     lecturer?: LecturerOrderByWithRelationInput
+    reviewer?: EvaluationCouncilMemberOrderByWithRelationInput
     evaluationCriterionComments?: EvaluationCriterionCommentOrderByRelationAggregateInput
     _relevance?: EvaluationCriterionOrderByRelevanceInput
   }
@@ -373946,6 +374108,7 @@ export namespace Prisma {
     lecturerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadline?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
+    reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -373953,6 +374116,7 @@ export namespace Prisma {
     score?: IntNullableFilter<"EvaluationCriterion"> | number | null
     criterionPeriod?: XOR<CriterionPeriodScalarRelationFilter, CriterionPeriodWhereInput>
     lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+    reviewer?: XOR<EvaluationCouncilMemberNullableScalarRelationFilter, EvaluationCouncilMemberWhereInput> | null
     evaluationCriterionComments?: EvaluationCriterionCommentListRelationFilter
   }, "id" | "code" | "criterionPeriodId">
 
@@ -373969,6 +374133,7 @@ export namespace Prisma {
     lecturerId?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
     status?: SortOrder
+    reviewerId?: SortOrderInput | SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -373997,6 +374162,7 @@ export namespace Prisma {
     lecturerId?: StringNullableWithAggregatesFilter<"EvaluationCriterion"> | string | null
     deadline?: DateTimeNullableWithAggregatesFilter<"EvaluationCriterion"> | Date | string | null
     status?: EnumEvaluationStatusWithAggregatesFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
+    reviewerId?: StringNullableWithAggregatesFilter<"EvaluationCriterion"> | string | null
     currentSituation?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
     strengths?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
     weakness?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
@@ -374306,6 +374472,7 @@ export namespace Prisma {
     role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
     evaluationCouncil?: XOR<EvaluationCouncilScalarRelationFilter, EvaluationCouncilWhereInput>
     lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    evaluationCriterions?: EvaluationCriterionListRelationFilter
   }
 
   export type EvaluationCouncilMemberOrderByWithRelationInput = {
@@ -374322,6 +374489,7 @@ export namespace Prisma {
     role?: SortOrder
     evaluationCouncil?: EvaluationCouncilOrderByWithRelationInput
     lecturer?: LecturerOrderByWithRelationInput
+    evaluationCriterions?: EvaluationCriterionOrderByRelationAggregateInput
     _relevance?: EvaluationCouncilMemberOrderByRelevanceInput
   }
 
@@ -374342,6 +374510,7 @@ export namespace Prisma {
     role?: EnumEvaluationMemberRoleNullableListFilter<"EvaluationCouncilMember">
     evaluationCouncil?: XOR<EvaluationCouncilScalarRelationFilter, EvaluationCouncilWhereInput>
     lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    evaluationCriterions?: EvaluationCriterionListRelationFilter
   }, "id" | "code">
 
   export type EvaluationCouncilMemberOrderByWithAggregationInput = {
@@ -391546,6 +391715,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
@@ -391561,6 +391731,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
@@ -391572,6 +391743,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
@@ -391587,6 +391759,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
@@ -391600,6 +391773,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
   }
 
@@ -391610,6 +391784,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -391622,6 +391797,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -404242,6 +404418,7 @@ export namespace Prisma {
     score?: number | null
     criterionPeriod: CriterionPeriodCreateNestedOneWithoutEvaluationCriterionInput
     lecturer?: LecturerCreateNestedOneWithoutEvaluationCriterionsInput
+    reviewer?: EvaluationCouncilMemberCreateNestedOneWithoutEvaluationCriterionsInput
     evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutEvaluationCriterionInput
   }
 
@@ -404258,6 +404435,7 @@ export namespace Prisma {
     lecturerId?: string | null
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -404284,6 +404462,7 @@ export namespace Prisma {
     score?: NullableIntFieldUpdateOperationsInput | number | null
     criterionPeriod?: CriterionPeriodUpdateOneRequiredWithoutEvaluationCriterionNestedInput
     lecturer?: LecturerUpdateOneWithoutEvaluationCriterionsNestedInput
+    reviewer?: EvaluationCouncilMemberUpdateOneWithoutEvaluationCriterionsNestedInput
     evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutEvaluationCriterionNestedInput
   }
 
@@ -404300,6 +404479,7 @@ export namespace Prisma {
     lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -404321,6 +404501,7 @@ export namespace Prisma {
     lecturerId?: string | null
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -404359,6 +404540,7 @@ export namespace Prisma {
     lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -404694,6 +404876,7 @@ export namespace Prisma {
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
     lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberUncheckedCreateInput = {
@@ -404708,6 +404891,7 @@ export namespace Prisma {
     evaluationCouncilId: string
     lecturerId: string
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberUpdateInput = {
@@ -404722,6 +404906,7 @@ export namespace Prisma {
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
     lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateInput = {
@@ -404736,6 +404921,7 @@ export namespace Prisma {
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
     lecturerId?: StringFieldUpdateOperationsInput | string
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberCreateManyInput = {
@@ -419177,6 +419363,17 @@ export namespace Prisma {
     semesterId?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumSubjectClassTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
     in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
@@ -419204,7 +419401,12 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    studentCount?: SortOrder
     subjectClassType?: SortOrder
+  }
+
+  export type PlanTrainingSubjectAvgOrderByAggregateInput = {
+    studentCount?: SortOrder
   }
 
   export type PlanTrainingSubjectMaxOrderByAggregateInput = {
@@ -419216,6 +419418,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    studentCount?: SortOrder
     subjectClassType?: SortOrder
   }
 
@@ -419228,7 +419431,28 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    studentCount?: SortOrder
     subjectClassType?: SortOrder
+  }
+
+  export type PlanTrainingSubjectSumOrderByAggregateInput = {
+    studentCount?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -420699,17 +420923,6 @@ export namespace Prisma {
     value?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type StudentNullableScalarRelationFilter = {
     is?: StudentWhereInput | null
     isNot?: StudentWhereInput | null
@@ -420814,22 +421027,6 @@ export namespace Prisma {
   export type FixedClassSumOrderByAggregateInput = {
     startYear?: SortOrder
     initSize?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type DM_DonViScalarRelationFilter = {
@@ -427508,6 +427705,11 @@ export namespace Prisma {
     not?: NestedEnumEvaluationStatusFilter<$PrismaModel> | $Enums.EvaluationStatus
   }
 
+  export type EvaluationCouncilMemberNullableScalarRelationFilter = {
+    is?: EvaluationCouncilMemberWhereInput | null
+    isNot?: EvaluationCouncilMemberWhereInput | null
+  }
+
   export type EvaluationCriterionOrderByRelevanceInput = {
     fields: EvaluationCriterionOrderByRelevanceFieldEnum | EvaluationCriterionOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -427527,6 +427729,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     deadline?: SortOrder
     status?: SortOrder
+    reviewerId?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -427551,6 +427754,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     deadline?: SortOrder
     status?: SortOrder
+    reviewerId?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -427571,6 +427775,7 @@ export namespace Prisma {
     lecturerId?: SortOrder
     deadline?: SortOrder
     status?: SortOrder
+    reviewerId?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -439251,6 +439456,14 @@ export namespace Prisma {
     connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumSubjectClassTypeFieldUpdateOperationsInput = {
     set?: $Enums.SubjectClassType
   }
@@ -441457,14 +441670,6 @@ export namespace Prisma {
     create?: XOR<PlanTrainingDelaySubjectCreateWithoutFixedClassesInput, PlanTrainingDelaySubjectUncheckedCreateWithoutFixedClassesInput> | PlanTrainingDelaySubjectCreateWithoutFixedClassesInput[] | PlanTrainingDelaySubjectUncheckedCreateWithoutFixedClassesInput[]
     connectOrCreate?: PlanTrainingDelaySubjectCreateOrConnectWithoutFixedClassesInput | PlanTrainingDelaySubjectCreateOrConnectWithoutFixedClassesInput[]
     connect?: PlanTrainingDelaySubjectWhereUniqueInput | PlanTrainingDelaySubjectWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type StudentUpdateOneWithoutClassMonitorNestedInput = {
@@ -451685,6 +451890,12 @@ export namespace Prisma {
     connect?: LecturerWhereUniqueInput
   }
 
+  export type EvaluationCouncilMemberCreateNestedOneWithoutEvaluationCriterionsInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput>
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutEvaluationCriterionsInput
+    connect?: EvaluationCouncilMemberWhereUniqueInput
+  }
+
   export type EvaluationCriterionCommentCreateNestedManyWithoutEvaluationCriterionInput = {
     create?: XOR<EvaluationCriterionCommentCreateWithoutEvaluationCriterionInput, EvaluationCriterionCommentUncheckedCreateWithoutEvaluationCriterionInput> | EvaluationCriterionCommentCreateWithoutEvaluationCriterionInput[] | EvaluationCriterionCommentUncheckedCreateWithoutEvaluationCriterionInput[]
     connectOrCreate?: EvaluationCriterionCommentCreateOrConnectWithoutEvaluationCriterionInput | EvaluationCriterionCommentCreateOrConnectWithoutEvaluationCriterionInput[]
@@ -451719,6 +451930,16 @@ export namespace Prisma {
     delete?: LecturerWhereInput | boolean
     connect?: LecturerWhereUniqueInput
     update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutEvaluationCriterionsInput, LecturerUpdateWithoutEvaluationCriterionsInput>, LecturerUncheckedUpdateWithoutEvaluationCriterionsInput>
+  }
+
+  export type EvaluationCouncilMemberUpdateOneWithoutEvaluationCriterionsNestedInput = {
+    create?: XOR<EvaluationCouncilMemberCreateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput>
+    connectOrCreate?: EvaluationCouncilMemberCreateOrConnectWithoutEvaluationCriterionsInput
+    upsert?: EvaluationCouncilMemberUpsertWithoutEvaluationCriterionsInput
+    disconnect?: EvaluationCouncilMemberWhereInput | boolean
+    delete?: EvaluationCouncilMemberWhereInput | boolean
+    connect?: EvaluationCouncilMemberWhereUniqueInput
+    update?: XOR<XOR<EvaluationCouncilMemberUpdateToOneWithWhereWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUpdateWithoutEvaluationCriterionsInput>, EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput>
   }
 
   export type EvaluationCriterionCommentUpdateManyWithoutEvaluationCriterionNestedInput = {
@@ -451956,6 +452177,20 @@ export namespace Prisma {
     connect?: LecturerWhereUniqueInput
   }
 
+  export type EvaluationCriterionCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput> | EvaluationCriterionCreateWithoutReviewerInput[] | EvaluationCriterionUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutReviewerInput | EvaluationCriterionCreateOrConnectWithoutReviewerInput[]
+    createMany?: EvaluationCriterionCreateManyReviewerInputEnvelope
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+  }
+
+  export type EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput> | EvaluationCriterionCreateWithoutReviewerInput[] | EvaluationCriterionUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutReviewerInput | EvaluationCriterionCreateOrConnectWithoutReviewerInput[]
+    createMany?: EvaluationCriterionCreateManyReviewerInputEnvelope
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+  }
+
   export type EvaluationCouncilMemberUpdateroleInput = {
     set?: $Enums.EvaluationMemberRole[]
     push?: $Enums.EvaluationMemberRole | $Enums.EvaluationMemberRole[]
@@ -451975,6 +452210,34 @@ export namespace Prisma {
     upsert?: LecturerUpsertWithoutEvaluationCouncilMemberInput
     connect?: LecturerWhereUniqueInput
     update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutEvaluationCouncilMemberInput, LecturerUpdateWithoutEvaluationCouncilMemberInput>, LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput>
+  }
+
+  export type EvaluationCriterionUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput> | EvaluationCriterionCreateWithoutReviewerInput[] | EvaluationCriterionUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutReviewerInput | EvaluationCriterionCreateOrConnectWithoutReviewerInput[]
+    upsert?: EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput | EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: EvaluationCriterionCreateManyReviewerInputEnvelope
+    set?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    disconnect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    delete?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    update?: EvaluationCriterionUpdateWithWhereUniqueWithoutReviewerInput | EvaluationCriterionUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutReviewerInput | EvaluationCriterionUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
+  }
+
+  export type EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput> | EvaluationCriterionCreateWithoutReviewerInput[] | EvaluationCriterionUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutReviewerInput | EvaluationCriterionCreateOrConnectWithoutReviewerInput[]
+    upsert?: EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput | EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: EvaluationCriterionCreateManyReviewerInputEnvelope
+    set?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    disconnect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    delete?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    connect?: EvaluationCriterionWhereUniqueInput | EvaluationCriterionWhereUniqueInput[]
+    update?: EvaluationCriterionUpdateWithWhereUniqueWithoutReviewerInput | EvaluationCriterionUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: EvaluationCriterionUpdateManyWithWhereWithoutReviewerInput | EvaluationCriterionUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: EvaluationCriterionScalarWhereInput | EvaluationCriterionScalarWhereInput[]
   }
 
   export type EvidenceCreateNestedOneWithoutEvidenceFileInput = {
@@ -457500,6 +457763,33 @@ export namespace Prisma {
     not?: NestedEnumSubjectClassTypeFilter<$PrismaModel> | $Enums.SubjectClassType
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
     in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
@@ -457515,17 +457805,6 @@ export namespace Prisma {
     in?: $Enums.ScoreConvertStatus[] | ListEnumScoreConvertStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ScoreConvertStatus[] | ListEnumScoreConvertStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumScoreConvertStatusFilter<$PrismaModel> | $Enums.ScoreConvertStatus
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumScoreConvertStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -457646,22 +457925,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAcademicRankingBaseTypeFilter<$PrismaModel>
     _max?: NestedEnumAcademicRankingBaseTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedEnumExamTypeFilter<$PrismaModel = never> = {
@@ -502550,6 +502813,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
     fixedClasses?: FixedClassCreateNestedManyWithoutPlanTrainingSubjectInput
@@ -502563,6 +502827,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
@@ -502733,6 +502998,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    studentCount?: IntFilter<"PlanTrainingSubject"> | number
     subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
   }
 
@@ -511925,6 +512191,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
@@ -511939,6 +512206,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
   }
 
@@ -516350,6 +516618,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     fixedClasses?: FixedClassCreateNestedManyWithoutPlanTrainingSubjectInput
@@ -516363,6 +516632,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     planTrainingId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
@@ -541341,6 +541611,7 @@ export namespace Prisma {
     createdBy?: string | null
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberUncheckedCreateWithoutLecturerInput = {
@@ -541354,6 +541625,7 @@ export namespace Prisma {
     createdBy?: string | null
     evaluationCouncilId: string
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberCreateOrConnectWithoutLecturerInput = {
@@ -541582,6 +541854,7 @@ export namespace Prisma {
     actionPlan?: string
     score?: number | null
     criterionPeriod: CriterionPeriodCreateNestedOneWithoutEvaluationCriterionInput
+    reviewer?: EvaluationCouncilMemberCreateNestedOneWithoutEvaluationCriterionsInput
     evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutEvaluationCriterionInput
   }
 
@@ -541597,6 +541870,7 @@ export namespace Prisma {
     criterionPeriodId: string
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -542445,6 +542719,7 @@ export namespace Prisma {
     lecturerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadline?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
+    reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -551006,6 +551281,7 @@ export namespace Prisma {
     score?: number | null
     criterionPeriod: CriterionPeriodCreateNestedOneWithoutEvaluationCriterionInput
     lecturer?: LecturerCreateNestedOneWithoutEvaluationCriterionsInput
+    reviewer?: EvaluationCouncilMemberCreateNestedOneWithoutEvaluationCriterionsInput
   }
 
   export type EvaluationCriterionUncheckedCreateWithoutEvaluationCriterionCommentsInput = {
@@ -551021,6 +551297,7 @@ export namespace Prisma {
     lecturerId?: string | null
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -551485,6 +551762,7 @@ export namespace Prisma {
     score?: NullableIntFieldUpdateOperationsInput | number | null
     criterionPeriod?: CriterionPeriodUpdateOneRequiredWithoutEvaluationCriterionNestedInput
     lecturer?: LecturerUpdateOneWithoutEvaluationCriterionsNestedInput
+    reviewer?: EvaluationCouncilMemberUpdateOneWithoutEvaluationCriterionsNestedInput
   }
 
   export type EvaluationCriterionUncheckedUpdateWithoutEvaluationCriterionCommentsInput = {
@@ -551500,6 +551778,7 @@ export namespace Prisma {
     lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -551819,6 +552098,7 @@ export namespace Prisma {
     actionPlan?: string
     score?: number | null
     lecturer?: LecturerCreateNestedOneWithoutEvaluationCriterionsInput
+    reviewer?: EvaluationCouncilMemberCreateNestedOneWithoutEvaluationCriterionsInput
     evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutEvaluationCriterionInput
   }
 
@@ -551834,6 +552114,7 @@ export namespace Prisma {
     lecturerId?: string | null
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -551961,6 +552242,7 @@ export namespace Prisma {
     actionPlan?: StringFieldUpdateOperationsInput | string
     score?: NullableIntFieldUpdateOperationsInput | number | null
     lecturer?: LecturerUpdateOneWithoutEvaluationCriterionsNestedInput
+    reviewer?: EvaluationCouncilMemberUpdateOneWithoutEvaluationCriterionsNestedInput
     evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutEvaluationCriterionNestedInput
   }
 
@@ -551976,6 +552258,7 @@ export namespace Prisma {
     lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -552452,6 +552735,39 @@ export namespace Prisma {
     create: XOR<LecturerCreateWithoutEvaluationCriterionsInput, LecturerUncheckedCreateWithoutEvaluationCriterionsInput>
   }
 
+  export type EvaluationCouncilMemberCreateWithoutEvaluationCriterionsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCouncil: EvaluationCouncilCreateNestedOneWithoutMembersInput
+    lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+  }
+
+  export type EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    evaluationCouncilId: string
+    lecturerId: string
+    role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+  }
+
+  export type EvaluationCouncilMemberCreateOrConnectWithoutEvaluationCriterionsInput = {
+    where: EvaluationCouncilMemberWhereUniqueInput
+    create: XOR<EvaluationCouncilMemberCreateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput>
+  }
+
   export type EvaluationCriterionCommentCreateWithoutEvaluationCriterionInput = {
     id?: string
     code?: string | null
@@ -552608,6 +552924,45 @@ export namespace Prisma {
     examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
     examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
     analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type EvaluationCouncilMemberUpsertWithoutEvaluationCriterionsInput = {
+    update: XOR<EvaluationCouncilMemberUpdateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput>
+    create: XOR<EvaluationCouncilMemberCreateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCriterionsInput>
+    where?: EvaluationCouncilMemberWhereInput
+  }
+
+  export type EvaluationCouncilMemberUpdateToOneWithWhereWithoutEvaluationCriterionsInput = {
+    where?: EvaluationCouncilMemberWhereInput
+    data: XOR<EvaluationCouncilMemberUpdateWithoutEvaluationCriterionsInput, EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput>
+  }
+
+  export type EvaluationCouncilMemberUpdateWithoutEvaluationCriterionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
+    lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+  }
+
+  export type EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCriterionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    evaluationCouncilId?: StringFieldUpdateOperationsInput | string
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
   }
 
   export type EvaluationCriterionCommentUpsertWithWhereUniqueWithoutEvaluationCriterionInput = {
@@ -553028,6 +553383,7 @@ export namespace Prisma {
     createdBy?: string | null
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
     lecturer: LecturerCreateNestedOneWithoutEvaluationCouncilMemberInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberUncheckedCreateWithoutEvaluationCouncilInput = {
@@ -553041,6 +553397,7 @@ export namespace Prisma {
     createdBy?: string | null
     lecturerId: string
     role?: EvaluationCouncilMemberCreateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutReviewerInput
   }
 
   export type EvaluationCouncilMemberCreateOrConnectWithoutEvaluationCouncilInput = {
@@ -553212,6 +553569,58 @@ export namespace Prisma {
     create: XOR<LecturerCreateWithoutEvaluationCouncilMemberInput, LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput>
   }
 
+  export type EvaluationCriterionCreateWithoutReviewerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    deadline?: Date | string | null
+    status?: $Enums.EvaluationStatus
+    currentSituation?: string
+    strengths?: string
+    weakness?: string
+    actionPlan?: string
+    score?: number | null
+    criterionPeriod: CriterionPeriodCreateNestedOneWithoutEvaluationCriterionInput
+    lecturer?: LecturerCreateNestedOneWithoutEvaluationCriterionsInput
+    evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutEvaluationCriterionInput
+  }
+
+  export type EvaluationCriterionUncheckedCreateWithoutReviewerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    criterionPeriodId: string
+    lecturerId?: string | null
+    deadline?: Date | string | null
+    status?: $Enums.EvaluationStatus
+    currentSituation?: string
+    strengths?: string
+    weakness?: string
+    actionPlan?: string
+    score?: number | null
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+  }
+
+  export type EvaluationCriterionCreateOrConnectWithoutReviewerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    create: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type EvaluationCriterionCreateManyReviewerInputEnvelope = {
+    data: EvaluationCriterionCreateManyReviewerInput | EvaluationCriterionCreateManyReviewerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EvaluationCouncilUpsertWithoutMembersInput = {
     update: XOR<EvaluationCouncilUpdateWithoutMembersInput, EvaluationCouncilUncheckedUpdateWithoutMembersInput>
     create: XOR<EvaluationCouncilCreateWithoutMembersInput, EvaluationCouncilUncheckedCreateWithoutMembersInput>
@@ -553324,6 +553733,22 @@ export namespace Prisma {
     examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
     evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
     analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    update: XOR<EvaluationCriterionUpdateWithoutReviewerInput, EvaluationCriterionUncheckedUpdateWithoutReviewerInput>
+    create: XOR<EvaluationCriterionCreateWithoutReviewerInput, EvaluationCriterionUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type EvaluationCriterionUpdateWithWhereUniqueWithoutReviewerInput = {
+    where: EvaluationCriterionWhereUniqueInput
+    data: XOR<EvaluationCriterionUpdateWithoutReviewerInput, EvaluationCriterionUncheckedUpdateWithoutReviewerInput>
+  }
+
+  export type EvaluationCriterionUpdateManyWithWhereWithoutReviewerInput = {
+    where: EvaluationCriterionScalarWhereInput
+    data: XOR<EvaluationCriterionUpdateManyMutationInput, EvaluationCriterionUncheckedUpdateManyWithoutReviewerInput>
   }
 
   export type EvidenceCreateWithoutEvidenceFileInput = {
@@ -598083,6 +598508,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
   }
 
@@ -598093,6 +598519,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
     fixedClasses?: FixedClassUpdateManyWithoutPlanTrainingSubjectNestedInput
@@ -598106,6 +598533,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
@@ -598118,6 +598546,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -602210,6 +602639,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
@@ -602224,6 +602654,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -602236,6 +602667,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -604043,6 +604475,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     planTrainingId: string
+    studentCount?: number
     subjectClassType?: $Enums.SubjectClassType
   }
 
@@ -605262,6 +605695,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     fixedClasses?: FixedClassUpdateManyWithoutPlanTrainingSubjectNestedInput
@@ -605275,6 +605709,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
@@ -605287,6 +605722,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
+    studentCount?: IntFieldUpdateOperationsInput | number
     subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
@@ -615436,6 +615872,7 @@ export namespace Prisma {
     criterionPeriodId: string
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
+    reviewerId?: string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -616433,6 +616870,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     evaluationCouncil?: EvaluationCouncilUpdateOneRequiredWithoutMembersNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateWithoutLecturerInput = {
@@ -616446,6 +616884,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     evaluationCouncilId?: StringFieldUpdateOperationsInput | string
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerInput = {
@@ -616714,6 +617153,7 @@ export namespace Prisma {
     actionPlan?: StringFieldUpdateOperationsInput | string
     score?: NullableIntFieldUpdateOperationsInput | number | null
     criterionPeriod?: CriterionPeriodUpdateOneRequiredWithoutEvaluationCriterionNestedInput
+    reviewer?: EvaluationCouncilMemberUpdateOneWithoutEvaluationCriterionsNestedInput
     evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutEvaluationCriterionNestedInput
   }
 
@@ -616729,6 +617169,7 @@ export namespace Prisma {
     criterionPeriodId?: StringFieldUpdateOperationsInput | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -616749,6 +617190,7 @@ export namespace Prisma {
     criterionPeriodId?: StringFieldUpdateOperationsInput | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -619468,6 +619910,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
     lecturer?: LecturerUpdateOneRequiredWithoutEvaluationCouncilMemberNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateWithoutEvaluationCouncilInput = {
@@ -619481,6 +619924,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerId?: StringFieldUpdateOperationsInput | string
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutReviewerNestedInput
   }
 
   export type EvaluationCouncilMemberUncheckedUpdateManyWithoutEvaluationCouncilInput = {
@@ -619494,6 +619938,88 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerId?: StringFieldUpdateOperationsInput | string
     role?: EvaluationCouncilMemberUpdateroleInput | $Enums.EvaluationMemberRole[]
+  }
+
+  export type EvaluationCriterionCreateManyReviewerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    criterionPeriodId: string
+    lecturerId?: string | null
+    deadline?: Date | string | null
+    status?: $Enums.EvaluationStatus
+    currentSituation?: string
+    strengths?: string
+    weakness?: string
+    actionPlan?: string
+    score?: number | null
+  }
+
+  export type EvaluationCriterionUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    currentSituation?: StringFieldUpdateOperationsInput | string
+    strengths?: StringFieldUpdateOperationsInput | string
+    weakness?: StringFieldUpdateOperationsInput | string
+    actionPlan?: StringFieldUpdateOperationsInput | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    criterionPeriod?: CriterionPeriodUpdateOneRequiredWithoutEvaluationCriterionNestedInput
+    lecturer?: LecturerUpdateOneWithoutEvaluationCriterionsNestedInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutEvaluationCriterionNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    criterionPeriodId?: StringFieldUpdateOperationsInput | string
+    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    currentSituation?: StringFieldUpdateOperationsInput | string
+    strengths?: StringFieldUpdateOperationsInput | string
+    weakness?: StringFieldUpdateOperationsInput | string
+    actionPlan?: StringFieldUpdateOperationsInput | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+  }
+
+  export type EvaluationCriterionUncheckedUpdateManyWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    criterionPeriodId?: StringFieldUpdateOperationsInput | string
+    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
+    currentSituation?: StringFieldUpdateOperationsInput | string
+    strengths?: StringFieldUpdateOperationsInput | string
+    weakness?: StringFieldUpdateOperationsInput | string
+    actionPlan?: StringFieldUpdateOperationsInput | string
+    score?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SurveySessionCreateManySurveyObjectTypeInput = {

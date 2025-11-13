@@ -19,7 +19,7 @@ const importCurriculumVersion = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importPhienBanCTĐT'),
+                    }).openapi('ImportPhienBanCTDT'),
                 },
             },
         },

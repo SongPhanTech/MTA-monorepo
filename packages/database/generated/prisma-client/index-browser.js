@@ -1479,6 +1479,7 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   updatedAt: 'updatedAt',
   planTrainingId: 'planTrainingId',
   subjectVersionId: 'subjectVersionId',
+  studentCount: 'studentCount',
   subjectClassType: 'subjectClassType'
 };
 
@@ -3189,6 +3190,7 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   lecturerId: 'lecturerId',
   deadline: 'deadline',
   status: 'status',
+  reviewerId: 'reviewerId',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',
@@ -6339,6 +6341,7 @@ exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   criterionPeriodId: 'criterionPeriodId',
   lecturerId: 'lecturerId',
+  reviewerId: 'reviewerId',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',

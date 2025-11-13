@@ -1,10 +1,10 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { $Enums } from '@workspace/db'
-import { read, utils } from 'xlsx'
-import { prisma } from '..'
-import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
-import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { ListOf, PaginationQuerySchema } from '../zod/base'
+import {createRoute, OpenAPIHono, z} from '@hono/zod-openapi'
+import {$Enums, Prisma} from '@workspace/db'
+import {read, utils} from 'xlsx'
+import {prisma} from '..'
+import {EnrollFixedClassOnSubjectClass, OpenSubjectClass} from '../dto/subject-class.dto'
+import {UploadExcelModel} from '../dto/upload-excel.dto'
+import {ListOf, PaginationQuerySchema} from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -392,6 +392,8 @@ app.openapi(openSubjectClass, async (c) => {
             },
         },
     })
+    const subjectAlreadyInPlan = planTraining?.planTrainingSubjects?.map(e => e.subjectVersionId) || []
+
     const res = await prisma.$queryRaw<
         {
             data: OpenSubjectClass
@@ -444,7 +446,7 @@ app.openapi(openSubjectClass, async (c) => {
                        AND fc."active" = TRUE
                        AND sv."deletedAt" IS NULL
                        AND sv."active" = TRUE
-                       AND sv.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+                       AND sv.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
                      GROUP BY sv.code,
                               tbs.semester,
                               fc."startYear",
@@ -594,6 +596,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
             },
         },
     })
+    const subjectAlreadyInPlan = planTraining?.planTrainingSubjects?.map(e => e.subjectVersionId) || []
     const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                                sv.code,
@@ -638,7 +641,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+          and id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -701,7 +704,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => e.subjectVersionId).join(',') : '0'})
+          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map(e => `'${e.subjectVersionId}'`).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )

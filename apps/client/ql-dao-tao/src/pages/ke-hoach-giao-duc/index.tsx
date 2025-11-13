@@ -14,6 +14,7 @@ import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
 import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
+import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc'
 
 interface TabItem {
     key: string
@@ -44,10 +45,19 @@ export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
             content: <LapKeHoach hocLai={hocLai} />,
         },
         {
-            key: 'ke-hoach-mo-lop-mon-hoc',
-            label: 'Kế hoạch mở lớp môn học',
+            key: 'mo-lop-mon-hoc',
+            label: 'Mở LMH',
             content: <KeHoachMoLopMonHoc hocLai={hocLai} />,
         },
+        ...(hocLai
+            ? []
+            : [
+                  {
+                      key: 'ghep-lop-mon-hoc',
+                      label: 'Ghép LMH',
+                      content: <KeHoachGhepLopMonHoc />,
+                  },
+              ]),
         {
             key: 'phan-cong-giang-day',
             label: 'Phân công giảng dạy',

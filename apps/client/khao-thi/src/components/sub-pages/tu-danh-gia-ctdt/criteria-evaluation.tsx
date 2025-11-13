@@ -4,7 +4,8 @@ import { Button, Collapse, Form, message } from 'antd'
 import { useEffect } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
-import type { CriterionPeriod, EvaluationCriterion } from '@workspace/db/client'
+import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
+import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
 
 export type PutRequirementCriterion = {
     opening: string
@@ -84,12 +85,36 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         }
     }
 
+    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
+
     const handleEvaluationForm = async () => {
         try {
             const dataSubmit = form.getFieldsValue()
+            showSpinner()
+            if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) return
 
-            console.log('dataSubmit ', dataSubmit)
+            await Promise.all(
+                dataSubmit.criteria.map(
+                    (
+                        i: CriterionPeriod & {
+                            evaluationCriterion: EvaluationCriterion
+                        }
+                    ) => {
+                        return updateEvaluationCriterion({
+                            where: {
+                                id: i.evaluationCriterion.id,
+                            },
+                            data: {
+                                status: $Enums.EvaluationStatus.SUBMITTED,
+                            },
+                        })
+                    }
+                )
+            )
+
+            message.success('Nộp phiếu đánh giá tiêu chí thành công')
         } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
         }

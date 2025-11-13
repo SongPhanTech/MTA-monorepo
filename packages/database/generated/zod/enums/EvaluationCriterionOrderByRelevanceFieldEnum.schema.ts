@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const EvaluationCriterionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "criterionPeriodId", "lecturerId", "currentSituation", "strengths", "weakness", "actionPlan"])
+export const EvaluationCriterionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "criterionPeriodId", "lecturerId", "reviewerId", "currentSituation", "strengths", "weakness", "actionPlan"])

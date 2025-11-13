@@ -7753,6 +7753,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'planTrainingSubject',
                     isRelationOwner: true,
+                }, studentCount: {
+                    name: "studentCount",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, subjectClassType: {
                     name: "subjectClassType",
                     type: "SubjectClassType",
@@ -18612,6 +18616,22 @@ const metadata = {
                     name: "status",
                     type: "EvaluationStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "EvaluationCouncilMember",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'evaluationCriterions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'reviewer',
                 }, evaluationCriterionComments: {
                     name: "evaluationCriterionComments",
                     type: "EvaluationCriterionComment",
@@ -18975,6 +18995,12 @@ const metadata = {
                     name: "role",
                     type: "EvaluationMemberRole",
                     isArray: true,
+                }, evaluationCriterions: {
+                    name: "evaluationCriterions",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'reviewer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -25664,6 +25690,7 @@ const metadata = {
         evidence: ['AnalysisFormEvidence'],
         requirementCriterion: ['EvaluationCriterionComment'],
         evaluationCouncil: ['EvaluationCouncilMember'],
+        evaluationCouncilMember: ['EvaluationCriterion'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],
         note: ['NoteReminder'],
