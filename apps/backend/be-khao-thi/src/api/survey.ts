@@ -1410,6 +1410,8 @@ app.openapi(getSurveysByProfile, async (c) => {
             lecture: { include: { organization: true } },
             surveyTopic: true,
             subjectClass: true,
+            surveyQuestion: true,
+            surveySessions:true
         },
         take: limit,
         skip: (page - 1) * limit,
