@@ -1,4 +1,4 @@
-import TableCollapse from '@components/commons/tableCollapse'
+import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -6,14 +6,13 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { ApplicationStatus, type Prisma } from '@workspace/db/client'
 import {
-    useCountTrainingCourse,
+    useCountGraduationDecision,
     useDeleteGraduationDecision,
     useFindManyDiplomaType,
+    useFindManyGraduationDecision,
     useFindManySemester,
-    useFindManyTrainingCourse,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookCheckIcon } from 'lucide-react'
@@ -41,183 +40,125 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const where: Prisma.TrainingCourseWhereInput = useMemo(
+    const where: Prisma.GraduationDecisionWhereInput = useMemo(
         () =>
             isFiltering
                 ? {
-                      academicRankingConvert: {
-                          some: {
-                              graduationDecision: {
-                                  some: {
-                                      student: {
-                                          ...(filters.code
-                                              ? {
-                                                    code: {
-                                                        contains: filters.code,
-                                                        mode: 'insensitive',
-                                                    },
-                                                }
-                                              : {}),
-                                          userProfile: {
-                                              ...(filters.name
-                                                  ? {
-                                                        fullname: {
-                                                            contains: filters.name,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.decisionDate
-                                                  ? {
-                                                        decisionDate: {
-                                                            gte: filters.decisionDate[0],
-                                                            lte: filters.decisionDate[1],
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.diplomaIssueDate
-                                                  ? {
-                                                        diplomaIssueDate: {
-                                                            gte: filters.diplomaIssueDate[0],
-                                                            lte: filters.diplomaIssueDate[1],
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.diplomaNumber
-                                                  ? {
-                                                        diplomaNumber: {
-                                                            contains: filters.diplomaNumber,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.originalDiplomaNumber
-                                                  ? {
-                                                        originalDiplomaNumber: {
-                                                            contains: filters.originalDiplomaNumber,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                          },
-                                      },
-                                  },
-                              },
+                      application: { sessionId },
+                      deletedAt: null,
+                      student: {
+                          ...(filters.code
+                              ? {
+                                    code: {
+                                        contains: filters.code,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
+                          fixedClass: {
+                              ...(filters.fixedClassName
+                                  ? {
+                                        name: {
+                                            contains: filters.fixedClassName,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.fixedClassCode
+                                  ? {
+                                        name: {
+                                            contains: filters.fixedClassCode,
+                                            mode: 'insensitive' as const,
+                                        },
+                                    }
+                                  : {}),
+                          },
+                          userProfile: {
+                              ...(filters.name
+                                  ? {
+                                        fullname: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.decisionDate
+                                  ? {
+                                        decisionDate: {
+                                            gte: filters.decisionDate[0],
+                                            lte: filters.decisionDate[1],
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.diplomaIssueDate
+                                  ? {
+                                        diplomaIssueDate: {
+                                            gte: filters.diplomaIssueDate[0],
+                                            lte: filters.diplomaIssueDate[1],
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.diplomaNumber
+                                  ? {
+                                        diplomaNumber: {
+                                            contains: filters.diplomaNumber,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.originalDiplomaNumber
+                                  ? {
+                                        originalDiplomaNumber: {
+                                            contains: filters.originalDiplomaNumber,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
                           },
                       },
                   }
-                : {
-                      academicRankingConvert: {
-                          some: {
-                              graduationDecision: {
-                                  some: {},
-                              },
-                          },
-                      },
-                  },
-        [filters, isFiltering]
+                : { application: { sessionId }, deletedAt: null },
+        [sessionId, filters, isFiltering]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
-    const { data = [] } = useFindManyTrainingCourse({
-        where: {
-            ...where,
-            trainingObjectTypeId,
-            deletedAt: null,
-            active: true,
-        },
+    const { data } = useFindManyGraduationDecision({
+        where,
         include: {
-            academicRankingConvert: {
-                where: {
-                    graduationDecision: {
-                        some: {
-                            application: {
-                                sessionId,
-                                status: ApplicationStatus.APPROVED,
-                            },
-                        },
-                    },
-                },
+            diplomaType: true,
+            application: true,
+            trainingMajor: true,
+            finalRanking: true,
+            student: {
                 include: {
-                    graduationDecision: {
-                        where: {
-                            application: {
-                                sessionId,
-                                status: ApplicationStatus.APPROVED,
-                            },
-                        },
+                    userProfile: true,
+                    curriculumVersion: {
                         include: {
                             diplomaType: true,
-                            application: true,
-                            student: {
-                                include: {
-                                    userProfile: true,
-                                    curriculumVersion: {
-                                        include: {
-                                            diplomaType: true,
-                                            trainingLevel: true,
-                                            curriculum: {
-                                                include: {
-                                                    trainingMajor: {
-                                                        include: {
-                                                            trainingField: true,
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                    fixedClass: {
-                                        include: {
-                                            trainingCourse: {
-                                                include: {
-                                                    scoreConverts: true,
-                                                },
-                                            },
-                                        },
-                                    },
-                                    trainingObjectType: true,
-                                },
-                            },
-
-                            finalRanking: true,
                         },
                     },
+                    fixedClass: {
+                        include: {
+                            trainingCourse: {
+                                include: {
+                                    scoreConverts: true,
+                                },
+                            },
+                        },
+                    },
+                    trainingObjectType: true,
                 },
-                orderBy: { rankOrder: 'asc' },
             },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: [
+            { originalDiplomaNumber: 'asc' },
+            { student: { userProfile: { firstName: 'asc' } } },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
-    const transformedData = useMemo(() => {
-        return data
-            .map((course) => ({
-                ...course,
-                academicRankingConvert: course.academicRankingConvert.map((ranking) => ({
-                    ...ranking,
-                    graduationDecision: undefined,
-                })),
-                graduationDecisions: course.academicRankingConvert.flatMap((ranking) =>
-                    ranking.graduationDecision.map((decision) => ({
-                        ...decision,
-                        academicRankingConvertId: ranking.id,
-                    }))
-                ),
-            }))
-            .filter((item) => item.graduationDecisions.length > 0)
-    }, [data])
 
-    const { data: count } = useCountTrainingCourse({
-        where: {
-            ...where,
-            trainingObjectTypeId,
-            deletedAt: null,
-            active: true,
-        },
-    })
+    const { data: count } = useCountGraduationDecision({ where })
 
     const { onOpen } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: 'PutGraduationDecision',
@@ -322,11 +263,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         <div className="bg-white rounded-lg shadow-sm px-4">
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <TableCollapse
-                        rowKey={'key'}
-                        headerTitleKey="name"
-                        childrenFieldName="graduationDecisions"
-                        data={transformedData}
+                    <Table
+                        rowKey={'id'}
+                        data={data}
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
@@ -334,21 +273,83 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         }}
                         columns={[
                             {
+                                title: 'STT',
+                                width: 40,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
                                 title: 'Mã sinh viên',
                                 align: 'center',
                                 dataIndex: 'code',
-                                width: 120,
+                                width: 100,
                                 fixed: 'left',
                                 type: 'input',
                                 render: (_, record) => record?.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',
-                                width: 200,
+                                width: 150,
                                 dataIndex: 'name',
                                 fixed: 'left',
                                 type: 'input',
                                 render: (_, record) => record?.student?.userProfile?.fullname,
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                width: 80,
+                                align: 'center',
+                                render: (_, record) =>
+                                    record?.student?.userProfile?.dateOfBirth
+                                        ? dayjs(record?.student?.userProfile?.dateOfBirth).format(
+                                              'DD/MM/YYYY'
+                                          )
+                                        : '',
+                            },
+                            {
+                                title: 'Lớp',
+                                width: 150,
+                                dataIndex: 'fixedClassName',
+                                type: 'input',
+                                align: 'center',
+                                render: (_, record) => record?.student?.fixedClass.name,
+                            },
+                            {
+                                title: 'Mã lớp',
+                                width: 80,
+                                dataIndex: 'fixedClassCode',
+                                type: 'input',
+                                align: 'center',
+                                render: (_, record) => record?.student?.fixedClass.code,
+                            },
+                            {
+                                title: 'SĐT',
+                                width: 100,
+                                align: 'center',
+                                render: (_, record) => record?.student?.userProfile?.phoneNumber,
+                            },
+                            {
+                                title: 'Giới tính',
+                                dataIndex: ['student', 'userProfile', 'gender'],
+                                align: 'center',
+                                width: 60,
+                                render: (_, record) => record?.userProfile?.gender?.sTen,
+                            },
+                            {
+                                title: 'Nơi sinh',
+                                dataIndex: ['student', 'userProfile', 'placeOfBirth'],
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Dân tộc',
+                                dataIndex: '',
+                                width: 80,
+                                align: 'center',
+                                render: (_, record) =>
+                                    record.student?.userProfile?.ethnicity?.sTen || '',
                             },
                             {
                                 title: 'Ngày duyệt đơn',

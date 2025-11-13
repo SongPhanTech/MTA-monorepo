@@ -18,6 +18,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
+    deadlineReview: z.coerce.date().nullish(),
     currentSituation: z.string().default(""),
     strengths: z.string().default(""),
     weakness: z.string().default(""),
@@ -36,6 +37,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
+    deadlineReview: z.coerce.date().nullish(),
     currentSituation: z.string(),
     strengths: z.string(),
     weakness: z.string(),
@@ -46,12 +48,14 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     criterionPeriod: z.record(z.string(), z.unknown()),
     lecturer: z.record(z.string(), z.unknown()).optional(),
+    reviewer: z.record(z.string(), z.unknown()).optional(),
     evaluationCriterionComments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     criterionPeriodId: z.string(),
     lecturerId: z.string().nullish(),
+    reviewerId: z.string().nullish(),
 }
 );
 
@@ -89,6 +93,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     deadline: z.coerce.date().nullish(),
     status: EvaluationStatusSchema,
+    deadlineReview: z.coerce.date().nullish(),
     currentSituation: z.string(),
     strengths: z.string(),
     weakness: z.string(),

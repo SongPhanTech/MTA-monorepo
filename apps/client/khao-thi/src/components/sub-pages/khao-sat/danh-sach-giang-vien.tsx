@@ -140,7 +140,7 @@ export default function DetailSurveyPage({
         },
     })
     return (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 4]}>
             <Col span={24}>
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
             </Col>

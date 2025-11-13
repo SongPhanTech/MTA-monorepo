@@ -180,8 +180,11 @@ model EvaluationCriterion extends Base {
 
   status                      EvaluationStatus             @default(LOCK)
 
-  evaluationCriterionComments EvaluationCriterionComment[]
+  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId                  String?
+  deadlineReview              DateTime?
 
+  evaluationCriterionComments EvaluationCriterionComment[]
 
   // Phiếu đánh giá
   /// 1. Mô tả hiện trạng
@@ -251,11 +254,13 @@ model EvaluationCouncil extends Base {
 }
 
 model EvaluationCouncilMember extends Base {
-  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
-  evaluationCouncilId String
-  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
-  lecturerId          String
-  role                EvaluationMemberRole[]
+  evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncilId  String
+  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturerId           String
+  role                 EvaluationMemberRole[]
+
+  evaluationCriterions EvaluationCriterion[]
 
   @@schema("khao-thi")
 }

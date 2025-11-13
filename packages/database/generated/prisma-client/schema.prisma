@@ -2819,8 +2819,8 @@ model CurriculumVersion {
   trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId                   String
-  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId                    String
+  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String?
   requiredCredits                  Int?
   electiveCredits                  Int?
   jobPosition                      String?
@@ -4821,6 +4821,9 @@ model EvaluationCriterion {
   lecturerId                  String?
   deadline                    DateTime?
   status                      EvaluationStatus             @default(LOCK)
+  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId                  String?
+  deadlineReview              DateTime?
   evaluationCriterionComments EvaluationCriterionComment[]
   /// 1. Mô tả hiện trạng
   currentSituation            String                       @default("")
@@ -4898,19 +4901,20 @@ model EvaluationCouncil {
 }
 
 model EvaluationCouncilMember {
-  id                  String                 @id() @default(cuid())
-  code                String?                @unique()
-  active              Boolean                @default(true)
-  description         String?                @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @default(now()) @updatedAt()
-  createdBy           String?                @db.Uuid()
-  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
-  evaluationCouncilId String
-  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
-  lecturerId          String
-  role                EvaluationMemberRole[]
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt()
+  createdBy            String?                @db.Uuid()
+  evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncilId  String
+  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturerId           String
+  role                 EvaluationMemberRole[]
+  evaluationCriterions EvaluationCriterion[]
 
   @@schema("khao-thi")
 }
