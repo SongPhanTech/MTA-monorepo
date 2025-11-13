@@ -3191,6 +3191,7 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   deadline: 'deadline',
   status: 'status',
   reviewerId: 'reviewerId',
+  deadlineReview: 'deadlineReview',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',

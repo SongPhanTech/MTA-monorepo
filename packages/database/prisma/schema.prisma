@@ -2819,8 +2819,8 @@ model CurriculumVersion {
   trainingTypeId                   String
   trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
   trainingTimeId                   String
-  diplomaType                      DiplomaType                        @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId                    String
+  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String?
   requiredCredits                  Int?
   electiveCredits                  Int?
   jobPosition                      String?
@@ -4823,6 +4823,7 @@ model EvaluationCriterion {
   status                      EvaluationStatus             @default(LOCK)
   reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewerId                  String?
+  deadlineReview              DateTime?
   evaluationCriterionComments EvaluationCriterionComment[]
   /// 1. Mô tả hiện trạng
   currentSituation            String                       @default("")

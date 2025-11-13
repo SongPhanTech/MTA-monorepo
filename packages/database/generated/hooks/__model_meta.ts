@@ -9374,12 +9374,14 @@ const metadata: ModelMeta = {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {
@@ -17689,6 +17691,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'reviewer',
+                }, deadlineReview: {
+                    name: "deadlineReview",
+                    type: "DateTime",
+                    isOptional: true,
                 }, evaluationCriterionComments: {
                     name: "evaluationCriterionComments",
                     type: "EvaluationCriterionComment",
