@@ -2,6 +2,8 @@ import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
 
+export { fastIsEqual } from './fast-is-equal'
+
 export function parseDate(date?: string): dayjs.Dayjs {
     const dateFormats = [
         // Year = 4 digits
@@ -321,4 +323,17 @@ export function getFilenameFromContentDisposition(contentDispositionHeader: stri
     return filename
 }
 
-export { fastIsEqual } from './fast-is-equal'
+export function genOriginalDiplomaNumber({
+    prefix,
+    suffix,
+    currentNumber,
+    maxLength,
+}: {
+    prefix?: string | null
+    suffix?: string | null
+    currentNumber: number
+    maxLength?: number | null
+}): string {
+    const serial = maxLength ? currentNumber.toString().padStart(maxLength, '0') : currentNumber
+    return `${prefix || ''}${serial}${suffix || ''}`
+}

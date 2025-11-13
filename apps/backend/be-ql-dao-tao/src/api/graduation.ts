@@ -13,6 +13,7 @@ import {
     TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
 import { getTemplateBuffer } from '@workspace/libs/server'
+import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
 import Decimal from 'decimal.js'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
@@ -798,9 +799,9 @@ const generateOriginalDiplomaNumber = createRoute({
                     schema: z.object({
                         sessionId: z.string(),
                         prefix: z.string().nullish(),
-                        suffix: z.string().nullish(),
                         start: z.number(),
                         maxLength: z.number().nullish(),
+                        suffix: z.string().nullish(),
                         rewrite: z.boolean().default(false),
                         skip: z
                             .string()
@@ -882,8 +883,15 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
             continue
         }
 
-        const serial = maxLength ? currentNumber.toString().padStart(maxLength, '0') : currentNumber
-        generatedNumbers.push(`${prefix || ''}${serial}${suffix || ''}`)
+        generatedNumbers.push(
+            genOriginalDiplomaNumber({
+                prefix,
+                suffix,
+                currentNumber,
+                maxLength,
+            })
+        )
+
         currentNumber++
         i++
     }
@@ -899,7 +907,7 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
     if (existing.length > 0) {
         return c.json(
             {
-                message: 'Số hiệu đã tồn tại.',
+                message: 'Số hiệu đã tồn tại',
                 existing: existing.flatMap((e) => e.originalDiplomaNumber || []),
                 shouldSkip: existing
                     .map((e) => e.originalDiplomaNumber)
@@ -942,7 +950,7 @@ app.openapi(generateOriginalDiplomaNumber, async (c) => {
             }),
             ...updates,
         ])
-        return c.json({ count: result.length - 1 }, 200)
+        return c.json({ count: result[0]?.count }, 200)
     }
 
     const result = await prisma.$transaction(updates)

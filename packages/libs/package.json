@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "exports": {
+    "./api/schemas": "./src/api/schemas/index.ts",
     "./api/*": "./src/api/*.ts",
     "./hook/*": "./src/hook/*.ts",
     "./constants": "./src/constants.ts",

@@ -1,3 +1,5 @@
+import { ClipboardButton } from '@components/commons/clipboard'
+import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -13,9 +15,29 @@ import {
     useFindManySemester,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { Col, message, Row, Tooltip } from 'antd'
+import type { GenerateOriginalDiplomaNumberBody } from '@workspace/libs/api/schemas'
+import {
+    generateOriginalDiplomaNumber,
+    graduationSessionDecision,
+} from '@workspace/libs/api/training'
+import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Popover,
+    Row,
+    Switch,
+    Tooltip,
+} from 'antd'
 import dayjs from 'dayjs'
-import { BookCheckIcon } from 'lucide-react'
+import { saveAs } from 'file-saver'
+import { BookCheckIcon, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -122,7 +144,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         [sessionId, filters, isFiltering]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
-    const { data } = useFindManyGraduationDecision({
+    const { data, refetch } = useFindManyGraduationDecision({
         where,
         include: {
             diplomaType: true,
@@ -160,11 +182,51 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
 
     const { data: count } = useCountGraduationDecision({ where })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const [openGenerateOriginalNumber, setOpenGenerateOriginalNumber] = useState(false)
+    type OriginalNumberFormType = Omit<GenerateOriginalDiplomaNumberBody, 'sessionId'> & {
+        sample: number
+    }
+    const [originalNumberForm] = Form.useForm<OriginalNumberFormType>()
+    const handleGenerateOriginalNumber = async (payload: OriginalNumberFormType) => {
+        showSpinner()
+        try {
+            const res = await generateOriginalDiplomaNumber({ sessionId, ...payload })
+            if (res?.status === 200) {
+                setOpenGenerateOriginalNumber(false)
+                message.success('Tạo thành công')
+                refetch()
+            } else if (res?.status === 400) {
+                Modal.warning({
+                    title: res?.data?.message,
+                    content: (
+                        <div>
+                            <p>Đã tồn tại: {res?.data?.existing?.join(', ')}</p>
+                            <div className="flex align-middle justify-between items-center">
+                                <p>Cần bỏ qua: {res?.data?.shouldSkip?.join(', ')}</p>
+                                <ClipboardButton text={res?.data?.shouldSkip?.join(', ') || ''} />
+                                {/* <Button type="text">
+                                    <Clipboard />
+                                </Button> */}
+                            </div>
+                        </div>
+                    ),
+                })
+            } else {
+                message.error(res?.data?.message)
+            }
+        } catch (error) {
+            console.log(error)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const { onOpen } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: 'PutGraduationDecision',
     })
-
-    const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: deleteGraduationDecision } = useDeleteGraduationDecision()
     const { mutateAsync: updateStudentGraduationApplication } =
@@ -176,11 +238,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 where: { id: applicationId },
                 data: { status: ApplicationStatus.IN_REVIEW },
             })
-            await deleteGraduationDecision({
-                where: {
-                    id,
-                },
-            })
+            await deleteGraduationDecision({ where: { id } })
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -192,7 +250,27 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         }
     }
 
-    const { onOpen: onOpenPhuLucVanBang, onClose } = useDisclosure<{
+    const [isExporting, setIsExporting] = useState(false)
+    const handleExportResult = async () => {
+        if (!sessionId) return
+        setIsExporting(true)
+        try {
+            const res = await graduationSessionDecision({ sessionId })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'DANH_SACH_TOT_NGHIEP.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExporting(false)
+        }
+    }
+
+    const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
         dataTable: any
         dataStudent: any
     }>({
@@ -261,6 +339,126 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
 
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
+            <Flex align="center" justify="space-between" className="px-4 mt-4">
+                <div className="flex align-middle items-center gap-2">
+                    <Popover
+                        content={
+                            <Form
+                                layout="horizontal"
+                                form={originalNumberForm}
+                                initialValues={{ isOverride: false }}
+                                className="gap-2 max-w-96"
+                                onFinish={handleGenerateOriginalNumber}
+                                onValuesChange={(_, allValues) => {
+                                    const originalDiplomaNumber = genOriginalDiplomaNumber({
+                                        ...allValues,
+                                        currentNumber: allValues.start,
+                                    })
+                                    originalNumberForm.setFieldValue(
+                                        'sample',
+                                        originalDiplomaNumber
+                                    )
+                                }}
+                            >
+                                <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        name="prefix"
+                                        label="Tiền tố"
+                                    >
+                                        <Input placeholder={`CQ/${new Date().getFullYear()}/`} />
+                                    </FormItem>
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        name="start"
+                                        label="Số từ"
+                                        required
+                                    >
+                                        <InputNumber type="number" className="ml-4" min={0} />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        name="suffix"
+                                        label="Hậu tố"
+                                    >
+                                        <Input placeholder={`/${new Date().getFullYear()}`} />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        className="mb-2"
+                                        name="maxLength"
+                                        label="Độ dài số"
+                                    >
+                                        <InputNumber placeholder="4" />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        className="mb-2"
+                                        name="sample"
+                                        label="Mẫu"
+                                    >
+                                        <Input readOnly bordered={false} />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={originalNumberForm}
+                                        className="mb-2"
+                                        name="rewrite"
+                                        label="Ghi đè số hiệu cũ"
+                                    >
+                                        <Switch className="mx-auto" defaultChecked={false} />
+                                    </FormItem>
+                                </div>
+                                <FormItem
+                                    form={originalNumberForm}
+                                    className="mb-2"
+                                    name="skip"
+                                    label="Giá trị bỏ qua"
+                                >
+                                    <Input className="w-full" placeholder="4" />
+                                </FormItem>
+                                <Col span={24} className="text-right mt-4">
+                                    <Button type="primary" htmlType="submit">
+                                        Xác nhận
+                                    </Button>
+                                </Col>
+                            </Form>
+                        }
+                        title="Gán hạn nhập điểm thi"
+                        trigger="click"
+                        placement="bottomRight"
+                        open={openGenerateOriginalNumber}
+                        onOpenChange={setOpenGenerateOriginalNumber}
+                    >
+                        <Button type="primary">Đặt hạn nhập điểm thi</Button>
+                    </Popover>
+                    <Form layout="inline" className="gap-2">
+                        <FormItem form={originalNumberForm} name="prefix" label="Tiền tố">
+                            <Input placeholder={`CQ/${new Date().getFullYear()}/`} />
+                        </FormItem>
+                        <FormItem form={originalNumberForm} name="start" label="Số từ" required>
+                            <InputNumber className="w-full" type="number" min={0} />
+                        </FormItem>
+                        <FormItem form={originalNumberForm} name="suffix" label="Hậu tố">
+                            <Input placeholder={`/${new Date().getFullYear()}`} />
+                        </FormItem>
+                        <Button type="primary">Tạo SVS</Button>
+                    </Form>
+                </div>
+                <div className="flex align-middle items-center gap-2">
+                    <Button
+                        type="primary"
+                        onClick={() => handleExportResult()}
+                        loading={isExporting}
+                    >
+                        <Sheet />
+                        Xuất kết quả
+                    </Button>
+                </div>
+            </Flex>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Table
