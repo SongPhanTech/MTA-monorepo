@@ -1393,10 +1393,7 @@ app.openapi(getSurveysByProfile, async (c) => {
         ...(q.subjectClassName
             ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
             : {}),
-<<<<<<< Updated upstream
-=======
           
->>>>>>> Stashed changes
         deletedAt: null,
         startDate: { lte: new Date() },
     }
