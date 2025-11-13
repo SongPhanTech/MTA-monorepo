@@ -331,9 +331,12 @@ export function genOriginalDiplomaNumber({
 }: {
     prefix?: string | null
     suffix?: string | null
-    currentNumber: number
+    currentNumber?: number | null
     maxLength?: number | null
 }): string {
-    const serial = maxLength ? currentNumber.toString().padStart(maxLength, '0') : currentNumber
+    const serial =
+        currentNumber && maxLength
+            ? currentNumber.toString().padStart(maxLength, '0')
+            : (currentNumber ?? '')
     return `${prefix || ''}${serial}${suffix || ''}`
 }

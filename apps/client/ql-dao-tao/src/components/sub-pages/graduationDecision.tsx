@@ -16,10 +16,7 @@ import {
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
 import type { GenerateOriginalDiplomaNumberBody } from '@workspace/libs/api/schemas'
-import {
-    generateOriginalDiplomaNumber,
-    graduationSessionDecision,
-} from '@workspace/libs/api/training'
+import { generateDiplomaNumber, graduationSessionDecision } from '@workspace/libs/api/training'
 import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
 import {
     Button,
@@ -185,15 +182,21 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     const { showSpinner, hideSpinner } = useSpinner()
 
     const [openGenerateOriginalNumber, setOpenGenerateOriginalNumber] = useState(false)
-    type OriginalNumberFormType = Omit<GenerateOriginalDiplomaNumberBody, 'sessionId'> & {
+    const [openGenerateDiplomaNumber, setOpenGenerateDiplomaNumber] = useState(false)
+    type DiplomaNumberFormType = Omit<GenerateOriginalDiplomaNumberBody, 'sessionId' | 'field'> & {
         sample: number
     }
-    const [originalNumberForm] = Form.useForm<OriginalNumberFormType>()
-    const handleGenerateOriginalNumber = async (payload: OriginalNumberFormType) => {
+    const [originalNumberForm] = Form.useForm<DiplomaNumberFormType>()
+    const [diplomaNumberForm] = Form.useForm<DiplomaNumberFormType>()
+    const handleGenerateDiplomaNumber = async (
+        type: 'originalDiplomaNumber' | 'diplomaNumber',
+        payload: DiplomaNumberFormType
+    ) => {
         showSpinner()
         try {
-            const res = await generateOriginalDiplomaNumber({ sessionId, ...payload })
+            const res = await generateDiplomaNumber({ field: type, sessionId, ...payload })
             if (res?.status === 200) {
+                setOpenGenerateDiplomaNumber(false)
                 setOpenGenerateOriginalNumber(false)
                 message.success('Tạo thành công')
                 refetch()
@@ -206,9 +209,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             <div className="flex align-middle justify-between items-center">
                                 <p>Cần bỏ qua: {res?.data?.shouldSkip?.join(', ')}</p>
                                 <ClipboardButton text={res?.data?.shouldSkip?.join(', ') || ''} />
-                                {/* <Button type="text">
-                                    <Clipboard />
-                                </Button> */}
                             </div>
                         </div>
                     ),
@@ -348,7 +348,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 form={originalNumberForm}
                                 initialValues={{ isOverride: false }}
                                 className="gap-2 max-w-96"
-                                onFinish={handleGenerateOriginalNumber}
+                                onFinish={(payload) => {
+                                    handleGenerateDiplomaNumber('originalDiplomaNumber', payload)
+                                }}
                                 onValuesChange={(_, allValues) => {
                                     const originalDiplomaNumber = genOriginalDiplomaNumber({
                                         ...allValues,
@@ -407,7 +409,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                         form={originalNumberForm}
                                         className="mb-2"
                                         name="rewrite"
-                                        label="Ghi đè số hiệu cũ"
+                                        label="Ghi đè số cũ"
                                     >
                                         <Switch className="mx-auto" defaultChecked={false} />
                                     </FormItem>
@@ -427,26 +429,104 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 </Col>
                             </Form>
                         }
-                        title="Gán hạn nhập điểm thi"
+                        title="Tạo số vào sổ gốc"
                         trigger="click"
                         placement="bottomRight"
                         open={openGenerateOriginalNumber}
                         onOpenChange={setOpenGenerateOriginalNumber}
                     >
-                        <Button type="primary">Đặt hạn nhập điểm thi</Button>
+                        <Button type="primary">Tạo số vào sổ gốc</Button>
                     </Popover>
-                    <Form layout="inline" className="gap-2">
-                        <FormItem form={originalNumberForm} name="prefix" label="Tiền tố">
-                            <Input placeholder={`CQ/${new Date().getFullYear()}/`} />
-                        </FormItem>
-                        <FormItem form={originalNumberForm} name="start" label="Số từ" required>
-                            <InputNumber className="w-full" type="number" min={0} />
-                        </FormItem>
-                        <FormItem form={originalNumberForm} name="suffix" label="Hậu tố">
-                            <Input placeholder={`/${new Date().getFullYear()}`} />
-                        </FormItem>
-                        <Button type="primary">Tạo SVS</Button>
-                    </Form>
+
+                    <Popover
+                        content={
+                            <Form
+                                layout="horizontal"
+                                form={diplomaNumberForm}
+                                initialValues={{ isOverride: false }}
+                                className="gap-2 max-w-96"
+                                onFinish={(payload) => {
+                                    handleGenerateDiplomaNumber('diplomaNumber', payload)
+                                }}
+                                onValuesChange={(_, allValues) => {
+                                    const originalDiplomaNumber = genOriginalDiplomaNumber({
+                                        ...allValues,
+                                        currentNumber: allValues.start,
+                                    })
+                                    diplomaNumberForm.setFieldValue('sample', originalDiplomaNumber)
+                                }}
+                            >
+                                <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                                    <FormItem
+                                        form={diplomaNumberForm}
+                                        name="prefix"
+                                        label="Tiền tố"
+                                    >
+                                        <Input placeholder="GV/" />
+                                    </FormItem>
+                                    <FormItem
+                                        form={diplomaNumberForm}
+                                        name="start"
+                                        label="Số từ"
+                                        required
+                                    >
+                                        <InputNumber type="number" className="ml-4" min={0} />
+                                    </FormItem>
+
+                                    <FormItem form={diplomaNumberForm} name="suffix" label="Hậu tố">
+                                        <Input />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={diplomaNumberForm}
+                                        className="mb-2"
+                                        name="maxLength"
+                                        label="Độ dài số"
+                                    >
+                                        <InputNumber placeholder="6" />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={diplomaNumberForm}
+                                        className="mb-2"
+                                        name="sample"
+                                        label="Mẫu"
+                                    >
+                                        <Input readOnly bordered={false} />
+                                    </FormItem>
+
+                                    <FormItem
+                                        form={diplomaNumberForm}
+                                        className="mb-2"
+                                        name="rewrite"
+                                        label="Ghi đè số hiệu cũ"
+                                    >
+                                        <Switch className="mx-auto" defaultChecked={false} />
+                                    </FormItem>
+                                </div>
+                                <FormItem
+                                    form={diplomaNumberForm}
+                                    className="mb-2"
+                                    name="skip"
+                                    label="Giá trị bỏ qua"
+                                >
+                                    <Input className="w-full" placeholder="4" />
+                                </FormItem>
+                                <Col span={24} className="text-right mt-4">
+                                    <Button type="primary" htmlType="submit">
+                                        Xác nhận
+                                    </Button>
+                                </Col>
+                            </Form>
+                        }
+                        title="Tạo số hiệu văn bằng"
+                        trigger="click"
+                        placement="bottomRight"
+                        open={openGenerateDiplomaNumber}
+                        onOpenChange={setOpenGenerateDiplomaNumber}
+                    >
+                        <Button type="primary">Tạo số hiệu văn bằng</Button>
+                    </Popover>
                 </div>
                 <div className="flex align-middle items-center gap-2">
                     <Button

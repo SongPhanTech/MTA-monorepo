@@ -53,10 +53,10 @@ import type {
     GenExamListCode404,
     GenExamListCodeResult,
     GenExamRoomCode,
-    GenerateOriginalDiplomaNumber200,
-    GenerateOriginalDiplomaNumber400,
-    GenerateOriginalDiplomaNumber404,
-    GenerateOriginalDiplomaNumberBody,
+    GenerateDiplomaNumber200,
+    GenerateDiplomaNumber400,
+    GenerateDiplomaNumber404,
+    GenerateDiplomaNumberBody,
     GraduationApplicationInit200,
     GraduationApplicationInit400,
     GraduationApplicationInitBody,
@@ -3306,68 +3306,64 @@ export const useGraduationCheck = <TError = GraduationCheck400, TContext = unkno
     return useMutation(mutationOptions, queryClient)
 }
 
-export type generateOriginalDiplomaNumberResponse200 = {
-    data: GenerateOriginalDiplomaNumber200
+export type generateDiplomaNumberResponse200 = {
+    data: GenerateDiplomaNumber200
     status: 200
 }
 
-export type generateOriginalDiplomaNumberResponse400 = {
-    data: GenerateOriginalDiplomaNumber400
+export type generateDiplomaNumberResponse400 = {
+    data: GenerateDiplomaNumber400
     status: 400
 }
 
-export type generateOriginalDiplomaNumberResponse404 = {
-    data: GenerateOriginalDiplomaNumber404
+export type generateDiplomaNumberResponse404 = {
+    data: GenerateDiplomaNumber404
     status: 404
 }
 
-export type generateOriginalDiplomaNumberResponseComposite =
-    | generateOriginalDiplomaNumberResponse200
-    | generateOriginalDiplomaNumberResponse400
-    | generateOriginalDiplomaNumberResponse404
+export type generateDiplomaNumberResponseComposite =
+    | generateDiplomaNumberResponse200
+    | generateDiplomaNumberResponse400
+    | generateDiplomaNumberResponse404
 
-export type generateOriginalDiplomaNumberResponse =
-    generateOriginalDiplomaNumberResponseComposite & {
-        headers: Headers
-    }
-
-export const getGenerateOriginalDiplomaNumberUrl = () => {
-    return '/api/graduation/generate-original-diploma-number'
+export type generateDiplomaNumberResponse = generateDiplomaNumberResponseComposite & {
+    headers: Headers
 }
 
-export const generateOriginalDiplomaNumber = async (
-    generateOriginalDiplomaNumberBody: GenerateOriginalDiplomaNumberBody,
+export const getGenerateDiplomaNumberUrl = () => {
+    return '/api/graduation/generate-diploma-number'
+}
+
+export const generateDiplomaNumber = async (
+    generateDiplomaNumberBody: GenerateDiplomaNumberBody,
     options?: RequestInit
-): Promise<generateOriginalDiplomaNumberResponse> => {
-    return customTrainingFetch<generateOriginalDiplomaNumberResponse>(
-        getGenerateOriginalDiplomaNumberUrl(),
-        {
-            ...options,
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(generateOriginalDiplomaNumberBody),
-        }
-    )
+): Promise<generateDiplomaNumberResponse> => {
+    return customTrainingFetch<generateDiplomaNumberResponse>(getGenerateDiplomaNumberUrl(), {
+        ...options,
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(generateDiplomaNumberBody),
+    })
 }
 
-export const getGenerateOriginalDiplomaNumberMutationOptions = <
-    TError = GenerateOriginalDiplomaNumber400 | GenerateOriginalDiplomaNumber404,
+export const getGenerateDiplomaNumberMutationOptions = <
+    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+        Awaited<ReturnType<typeof generateDiplomaNumber>>,
         TError,
-        { data: GenerateOriginalDiplomaNumberBody },
+        { data: GenerateDiplomaNumberBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+    Awaited<ReturnType<typeof generateDiplomaNumber>>,
     TError,
-    { data: GenerateOriginalDiplomaNumberBody },
+    { data: GenerateDiplomaNumberBody },
     TContext
 > => {
-    const mutationKey = ['generateOriginalDiplomaNumber']
+    const mutationKey = ['generateDiplomaNumber']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -3375,46 +3371,44 @@ export const getGenerateOriginalDiplomaNumberMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
-        { data: GenerateOriginalDiplomaNumberBody }
+        Awaited<ReturnType<typeof generateDiplomaNumber>>,
+        { data: GenerateDiplomaNumberBody }
     > = (props) => {
         const { data } = props ?? {}
 
-        return generateOriginalDiplomaNumber(data, requestOptions)
+        return generateDiplomaNumber(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type GenerateOriginalDiplomaNumberMutationResult = NonNullable<
-    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>
+export type GenerateDiplomaNumberMutationResult = NonNullable<
+    Awaited<ReturnType<typeof generateDiplomaNumber>>
 >
-export type GenerateOriginalDiplomaNumberMutationBody = GenerateOriginalDiplomaNumberBody
-export type GenerateOriginalDiplomaNumberMutationError =
-    | GenerateOriginalDiplomaNumber400
-    | GenerateOriginalDiplomaNumber404
+export type GenerateDiplomaNumberMutationBody = GenerateDiplomaNumberBody
+export type GenerateDiplomaNumberMutationError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404
 
-export const useGenerateOriginalDiplomaNumber = <
-    TError = GenerateOriginalDiplomaNumber400 | GenerateOriginalDiplomaNumber404,
+export const useGenerateDiplomaNumber = <
+    TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
     TContext = unknown,
 >(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+            Awaited<ReturnType<typeof generateDiplomaNumber>>,
             TError,
-            { data: GenerateOriginalDiplomaNumberBody },
+            { data: GenerateDiplomaNumberBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof generateOriginalDiplomaNumber>>,
+    Awaited<ReturnType<typeof generateDiplomaNumber>>,
     TError,
-    { data: GenerateOriginalDiplomaNumberBody },
+    { data: GenerateDiplomaNumberBody },
     TContext
 > => {
-    const mutationOptions = getGenerateOriginalDiplomaNumberMutationOptions(options)
+    const mutationOptions = getGenerateDiplomaNumberMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
