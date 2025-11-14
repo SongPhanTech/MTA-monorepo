@@ -16,7 +16,15 @@ import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number }) => {
+const CriteriaAnalysisSubPage = ({
+    data,
+    userRole,
+    idx,
+}: {
+    data: DataTabType
+    userRole: 'P13' | 'GV'
+    idx: number
+}) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const { can } = useAbility()
 
@@ -93,62 +101,83 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
 
                 return (
                     <div key={item.id} className="ml-4 mb-6">
-                        <div className="mb-3 flex items-center justify-between">
-                            <div className="text-base flex items-center gap-2">
-                                <span className="font-bold">Tiêu chí {idx + 1}: </span>
-                                <span>{item?.name}</span>
-                                {deadline && deadlineStatus && (
-                                    <Tag color={deadlineStatus.color}>
-                                        Hạn: {formatDate(deadline)}
-                                        {deadlineStatus.text && ` (${deadlineStatus.text})`}
-                                    </Tag>
+                        <div className="mb-3">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                    <div className="text-base flex items-start gap-2 mb-2">
+                                        <span className="font-bold whitespace-nowrap">
+                                            Tiêu chí {idx + 1}:
+                                        </span>
+                                        <span className="flex-1">{item?.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        {deadline && deadlineStatus && (
+                                            <Tag color={deadlineStatus.color}>
+                                                Hạn: {formatDate(deadline)}
+                                                {deadlineStatus.text && ` (${deadlineStatus.text})`}
+                                            </Tag>
+                                        )}
+                                        <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
+                                    </div>
+                                </div>
+                                {userRole === 'P13' && (
+                                    <div className="flex-shrink-0">
+                                        <span className="text-sm text-gray-600">
+                                            Người thực hiện:{' '}
+                                            {item?.analysisCriterions?.lecturer?.userProfile
+                                                ?.fullname || 'Chưa phân công'}
+                                        </span>
+                                    </div>
                                 )}
-                                <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
-                            </div>
-                            <div className="flex gap-2">
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                                    'THEM'
-                                ) &&
-                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
-                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
-                                        <Popconfirm
-                                            title="Xác nhận nộp tiêu chí"
-                                            description="Bạn chắc chắn muốn nộp tiêu chí này?"
-                                            onConfirm={() => {
-                                                const id = item.analysisCriterions?.id
-                                                if (id) {
-                                                    handleSubmitCriterion(id)
-                                                }
-                                            }}
-                                            okText="Đồng ý"
-                                            cancelText="Hủy"
-                                            placement="topRight"
-                                        >
-                                            <Button type="primary" className="bg-blue-500">
-                                                Nộp tiêu chí
-                                            </Button>
-                                        </Popconfirm>
-                                    )}
+                                {userRole !== 'P13' && (
+                                    <div className="flex gap-2 flex-shrink-0">
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                            'THEM'
+                                        ) &&
+                                            status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                            status !==
+                                                $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                                <Popconfirm
+                                                    title="Xác nhận nộp tiêu chí"
+                                                    description="Bạn chắc chắn muốn nộp tiêu chí này?"
+                                                    onConfirm={() => {
+                                                        const id = item.analysisCriterions?.id
+                                                        if (id) {
+                                                            handleSubmitCriterion(id)
+                                                        }
+                                                    }}
+                                                    okText="Đồng ý"
+                                                    cancelText="Hủy"
+                                                    placement="topRight"
+                                                >
+                                                    <Button type="primary" className="bg-blue-500">
+                                                        Nộp tiêu chí
+                                                    </Button>
+                                                </Popconfirm>
+                                            )}
 
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                                    'THEM'
-                                ) &&
-                                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
-                                    status !== $Enums.EvaluationCriterionStatus.COMPLETED && (
-                                        <Button
-                                            type="primary"
-                                            onClick={() =>
-                                                onOpen({
-                                                    analysisCriterionId:
-                                                        item.analysisCriterions?.id,
-                                                })
-                                            }
-                                        >
-                                            Thêm mới
-                                        </Button>
-                                    )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                            'THEM'
+                                        ) &&
+                                            status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                                            status !==
+                                                $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                                <Button
+                                                    type="primary"
+                                                    onClick={() =>
+                                                        onOpen({
+                                                            analysisCriterionId:
+                                                                item.analysisCriterions?.id,
+                                                        })
+                                                    }
+                                                >
+                                                    Thêm mới
+                                                </Button>
+                                            )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div>
