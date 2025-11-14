@@ -82,7 +82,15 @@ app.openapi(exportDiplomaVerification, async (c) => {
 
     const template = new XlsxTemplate(buffer)
 
-    template.substitute(1, { total, totalPending, totalAccepted, totalRejected, data })
+    template.substitute(1, {
+        startDate: dayjs(startDate).format('DD/MM/YYYY'),
+        endDate: dayjs(endDate).format('DD/MM/YYYY'),
+        total,
+        totalPending,
+        totalAccepted,
+        totalRejected,
+        data,
+    })
 
     const result = await template.generate({ type: 'arraybuffer' })
 

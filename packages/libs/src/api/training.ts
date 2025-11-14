@@ -42,6 +42,8 @@ import type {
     DebtStatisticsParams,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
+    ExportDiplomaVerification400,
+    ExportDiplomaVerificationParams,
     ExportLecturerProfile400,
     ExportLecturerProfileBody,
     ExportStudentResultSemesterJson200Item,
@@ -2757,6 +2759,172 @@ export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TCon
     const mutationOptions = getExportLecturerProfileMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+export type exportDiplomaVerificationResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportDiplomaVerificationResponse400 = {
+    data: ExportDiplomaVerification400
+    status: 400
+}
+
+export type exportDiplomaVerificationResponseComposite =
+    | exportDiplomaVerificationResponse200
+    | exportDiplomaVerificationResponse400
+
+export type exportDiplomaVerificationResponse = exportDiplomaVerificationResponseComposite & {
+    headers: Headers
+}
+
+export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificationParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}`
+        : '/api/diploma-verification/export-diploma-verification'
+}
+
+export const exportDiplomaVerification = async (
+    params?: ExportDiplomaVerificationParams,
+    options?: RequestInit
+): Promise<exportDiplomaVerificationResponse> => {
+    return customTrainingFetch<exportDiplomaVerificationResponse>(
+        getExportDiplomaVerificationUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams) => {
+    return [
+        '/api/diploma-verification/export-diploma-verification',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportDiplomaVerificationQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({
+        signal,
+    }) => exportDiplomaVerification(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportDiplomaVerification>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportDiplomaVerificationQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportDiplomaVerification>>
+>
+export type ExportDiplomaVerificationQueryError = ExportDiplomaVerification400
+
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params: undefined | ExportDiplomaVerificationParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportDiplomaVerification>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportDiplomaVerification<
+    TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
+    TError = ExportDiplomaVerification400,
+>(
+    params?: ExportDiplomaVerificationParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportDiplomaVerificationQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 /**

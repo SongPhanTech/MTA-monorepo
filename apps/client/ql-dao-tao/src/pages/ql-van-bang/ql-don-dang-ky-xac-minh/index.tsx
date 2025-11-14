@@ -1,3 +1,5 @@
+import DatePicker from '@components/commons/date-picker'
+import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -14,10 +16,12 @@ import {
     useFindManyDiplomaVerificationApplication,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
+import { exportDiplomaVerification } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Col, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Form, message, Popover, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import saveAs from 'file-saver'
 import { FileSearch } from 'lucide-react'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -42,6 +46,34 @@ export default function QLDONDANGKY() {
         diplomaNumber: '',
         originalDiplomaNumber: '',
     })
+
+    const [isExporting, setIsExporting] = useState(false)
+    const [openExportForm, setOpenExportForm] = useState(false)
+    type ExportForm = {
+        startDate?: dayjs.Dayjs | null
+        endDate?: dayjs.Dayjs | null
+    }
+    const [exportForm] = Form.useForm<ExportForm>()
+    const handleExport = async (payload: ExportForm) => {
+        if (!payload.startDate || !payload.endDate) return
+        setIsExporting(true)
+        try {
+            const res = await exportDiplomaVerification({
+                startDate: payload.startDate.toISOString(),
+                endDate: payload.endDate.toISOString(),
+            })
+            if (res?.status === 200) {
+                saveAs(res.data, 'KET_QUA.xlsx')
+            } else {
+                message.error(res?.data?.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            setIsExporting(false)
+        }
+    }
 
     const where = useMemo(
         () => ({
@@ -184,6 +216,57 @@ export default function QLDONDANGKY() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
+                    <div className="flex justify-end">
+                        <Popover
+                            content={
+                                <Form
+                                    layout="horizontal"
+                                    form={exportForm}
+                                    initialValues={{ isOverride: false }}
+                                    onFinish={handleExport}
+                                >
+                                    <FormItem
+                                        form={exportForm}
+                                        name="startDate"
+                                        label="Từ ngày"
+                                        required
+                                        labelCol={{ span: 9 }}
+                                        labelAlign="left"
+                                    >
+                                        <DatePicker />
+                                    </FormItem>
+                                    <FormItem
+                                        form={exportForm}
+                                        name="endDate"
+                                        label="Đến ngày"
+                                        required
+                                        labelCol={{ span: 9 }}
+                                        className="mt-2"
+                                        labelAlign="left"
+                                    >
+                                        <DatePicker />
+                                    </FormItem>
+
+                                    <Col span={24} className="text-right mt-4">
+                                        <Button
+                                            type="primary"
+                                            htmlType="submit"
+                                            loading={isExporting}
+                                        >
+                                            Xác nhận
+                                        </Button>
+                                    </Col>
+                                </Form>
+                            }
+                            title="Xuất kết quả xác minh văn bằng"
+                            trigger="click"
+                            placement="bottomRight"
+                            open={openExportForm}
+                            onOpenChange={setOpenExportForm}
+                        >
+                            <Button type="primary">Xuất kết quả</Button>
+                        </Popover>
+                    </div>
                     <Table
                         rowKey="id"
                         filters={filters}
