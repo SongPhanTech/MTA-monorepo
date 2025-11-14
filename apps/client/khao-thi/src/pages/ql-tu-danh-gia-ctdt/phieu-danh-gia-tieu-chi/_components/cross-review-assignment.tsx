@@ -300,7 +300,7 @@ export default function CrossReviewAssignment() {
                 <Flex justify="flex-end" gap={8} className="pb-2">
                     <Button
                         type="primary"
-                        className="bg-blue-500"
+                        className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border-0 shadow-sm disabled:from-purple-200 disabled:to-purple-300 disabled:cursor-not-allowed disabled:text-purple-700 h-8 px-4"
                         disabled={getSelectedCriteria().length === 0}
                         onClick={() =>
                             onOpen({

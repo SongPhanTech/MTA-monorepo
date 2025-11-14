@@ -300,7 +300,7 @@ const CriteriaAnalysisSubPage = ({ data, idx }: { data: DataTabType; idx: number
                                     expandedRowKeys: expandedRowKeys,
                                     expandedRowRender: (record) => {
                                         return (
-                                            <div className="px-4 py-3">
+                                            <div>
                                                 <CommentList
                                                     comments={
                                                         record.evaluationCriterionComment || []

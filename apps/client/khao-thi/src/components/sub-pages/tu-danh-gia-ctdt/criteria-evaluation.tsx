@@ -1,7 +1,7 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import { Button, Collapse, Form, message, Tag, Card, Timeline } from 'antd'
-import { useEffect } from 'react'
+import { Button, Collapse, Form, message, Tag, Card, Avatar, Badge } from 'antd'
+import { useEffect, useState } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
@@ -11,17 +11,17 @@ import {
     CheckCircleOutlined,
     ExclamationCircleOutlined,
     LockOutlined,
+    MessageOutlined,
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 export type PutRequirementCriterion = {
-    opening: string
-    conclusion: string
     criteria: Record<string, any>
 }
 
 const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
+    const [showComments, setShowComments] = useState(false)
 
     const { hideSpinner, showSpinner } = useSpinner()
 
@@ -51,21 +51,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
 
-        let listSqlTransaction: any = [
-            {
-                model: 'StandardPeriod',
-                operation: 'update',
-                data: {
-                    where: {
-                        id: data.id,
-                    },
-                    data: {
-                        opening: dataSubmit?.opening || '',
-                        conclusion: dataSubmit?.conclusion || '',
-                    },
-                },
-            },
-        ]
+        let listSqlTransaction: any[] = []
 
         if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
             listSqlTransaction = [
@@ -164,8 +150,6 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                         actionPlan: item.evaluationCriterion?.actionPlan || '',
                     },
                 })),
-                opening: data?.opening,
-                conclusion: data?.conclusion,
             })
         }
     }, [data, form])
@@ -174,168 +158,238 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
     )
 
+    const currentStatus =
+        data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
+
+    const commentsCount =
+        data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments?.length || 0
+
+    const getDeadlineStatus = (deadline: Date | string) => {
+        const now = dayjs()
+        const deadlineDate = dayjs(deadline)
+        const daysUntilDeadline = deadlineDate.diff(now, 'day')
+
+        if (daysUntilDeadline < 0) {
+            return {
+                color: 'red',
+                text: 'Quá hạn',
+            }
+        }
+        if (daysUntilDeadline <= 3) {
+            return {
+                color: 'orange',
+                text: 'Sắp quá hạn',
+            }
+        }
+
+        return { color: 'blue', text: '' }
+    }
+
+    const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
+    const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
+
     return (
-        <div className="flex gap-6">
-            {/* Left Sidebar - Info Panel */}
-            <div className="w-80 flex-shrink-0">
-                <Card title="Thông tin phiếu đánh giá" className="mb-4">
-                    <div className="space-y-4">
-                        <div>
-                            <div className="text-gray-500 text-sm mb-1">Trạng thái</div>
-                            <Tag
-                                color={statusConfig.color}
-                                icon={statusConfig.icon}
-                                className="text-sm"
-                            >
-                                {statusConfig.text}
-                            </Tag>
-                        </div>
+        <div className="overflow-x-hidden">
+            <div className="flex flex-col lg:flex-row justify-between items-start mb-4 pt-2 gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start sm:items-center flex-wrap">
+                    <div>
+                        <div className="text-gray-500 text-sm mb-1">Trạng thái</div>
+                        <Tag
+                            color={statusConfig.color}
+                            icon={statusConfig.icon}
+                            className="text-sm"
+                        >
+                            {statusConfig.text}
+                        </Tag>
+                    </div>
 
-                        <div>
-                            <div className="text-gray-500 text-sm mb-1">Hạn làm</div>
-                            <div className="flex items-center gap-2">
-                                <ClockCircleOutlined className="text-gray-400" />
-                                <span className="font-medium">
-                                    {data?.criteria?.[0]?.evaluationCriterion?.deadline
-                                        ? dayjs(
-                                              data.criteria[0].evaluationCriterion.deadline
-                                          ).format('DD/MM/YYYY HH:mm')
-                                        : 'Chưa có hạn'}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div className="text-gray-500 text-sm mb-1">Người được giao</div>
-                            <div className="font-medium">
-                                {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
-                                    ?.fullname || 'Chưa phân công'}
-                            </div>
+                    <div>
+                        <div className="text-gray-500 text-sm mb-1">Hạn làm phiếu</div>
+                        <div className="flex items-center gap-2">
+                            <ClockCircleOutlined className="text-gray-400" />
+                            <span className="font-medium">
+                                {data?.criteria?.[0]?.evaluationCriterion?.deadline
+                                    ? dayjs(data.criteria[0].evaluationCriterion.deadline).format(
+                                          'DD/MM/YYYY'
+                                      )
+                                    : 'Chưa có hạn'}
+                            </span>
+                            {deadline && deadlineStatus && deadlineStatus.text && (
+                                <Tag color={deadlineStatus.color}>{deadlineStatus.text}</Tag>
+                            )}
                         </div>
                     </div>
-                </Card>
 
-                {/* Comments Section */}
-                <Card title="Nhận xét đánh giá" className="mb-4">
-                    {data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments &&
-                    data.criteria[0].evaluationCriterion.evaluationCriterionComments.length > 0 ? (
-                        <Timeline
-                            items={data.criteria[0].evaluationCriterion.evaluationCriterionComments.map(
-                                (comment: any) => ({
-                                    children: (
-                                        <div>
-                                            <div className="font-medium text-sm mb-1">
-                                                {comment.reviewer?.fullname || 'Người đánh giá'}
-                                            </div>
-                                            <div
-                                                className="text-gray-600 text-sm mb-1"
-                                                dangerouslySetInnerHTML={{
-                                                    __html: comment.content,
-                                                }}
-                                            />
-
-                                            <div className="text-gray-400 text-xs">
-                                                {dayjs(comment.createdAt).format(
-                                                    'DD/MM/YYYY HH:mm'
-                                                )}
-                                            </div>
-                                        </div>
-                                    ),
-                                })
-                            )}
-                        />
-                    ) : (
-                        <div className="text-gray-400 text-sm text-center py-4">
-                            Chưa có nhận xét
+                    <div>
+                        <div className="text-gray-500 text-sm mb-1">Người được giao</div>
+                        <div className="font-medium">
+                            {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
+                                ?.fullname || 'Chưa phân công'}
                         </div>
-                    )}
-                </Card>
+                    </div>
+                </div>
+
+                <div className="flex gap-2 mt-2 mr-1">
+                    <Badge count={commentsCount} showZero offset={[-5, 5]}>
+                        <Button
+                            type="primary"
+                            className="bg-yellow-400"
+                            onClick={() => setShowComments(!showComments)}
+                        >
+                            Xem đánh giá
+                        </Button>
+                    </Badge>
+                    {currentStatus !== $Enums.EvaluationStatus.APPROVED &&
+                        currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
+                            <>
+                                <Button
+                                    type="primary"
+                                    className="bg-blue-500"
+                                    onClick={handleEvaluationForm}
+                                >
+                                    Nộp phiếu đánh giá
+                                </Button>
+                                <Button type="primary" onClick={handleSubmit}>
+                                    Lưu đánh giá
+                                </Button>
+                            </>
+                        )}
+                </div>
             </div>
 
-            {/* Main Content */}
-            <div className="flex-1">
-                <div className="flex justify-end gap-2" onClick={handleEvaluationForm}>
-                    <Button type="primary" className="bg-blue-500">
-                        Nộp phiếu đánh giá
-                    </Button>
-                    <Button type="primary" onClick={handleSubmit} className="mb-2">
-                        Lưu đánh giá
-                    </Button>
-                </div>
-                <Form form={form} layout="horizontal" className="form-evidence">
-                    <Form.Item label="Mở đầu" name={'opening'}>
-                        <RichTextEditor />
-                    </Form.Item>
-                    <div className="mb-3 font-bold">Đánh giá tiêu chí : </div>
+            {showComments && (
+                <Card
+                    title={
+                        <div className="flex items-center gap-2">
+                            <MessageOutlined />
+                            <span>Ý kiến phản biện</span>
+                            <span className="text-gray-400 font-normal text-sm ml-auto">
+                                {commentsCount} phản hồi
+                            </span>
+                        </div>
+                    }
+                    className="mb-4"
+                >
+                    <div className="max-h-96 overflow-y-auto">
+                        {data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments &&
+                        commentsCount > 0 ? (
+                            <div className="space-y-3">
+                                {data.criteria[0].evaluationCriterion.evaluationCriterionComments.map(
+                                    (comment: any, index: number) => (
+                                        <div
+                                            key={index}
+                                            className="flex gap-3 p-3 border border-gray-200 rounded-lg bg-gray-50"
+                                        >
+                                            <Avatar size={40} className="flex-shrink-0 bg-red-500">
+                                                {comment.reviewer?.fullname
+                                                    ?.charAt(0)
+                                                    ?.toUpperCase() || 'U'}
+                                            </Avatar>
+                                            <div className="flex-1">
+                                                <div className="flex items-start justify-between mb-1">
+                                                    <span className="font-semibold text-sm">
+                                                        {comment.reviewer?.fullname ||
+                                                            'Người đánh giá'}
+                                                    </span>
+                                                    <span className="text-red-500 text-sm font-medium">
+                                                        Đánh giá
+                                                    </span>
+                                                </div>
+                                                <div className="text-gray-400 text-xs mb-2 flex items-center gap-1">
+                                                    <ClockCircleOutlined />
+                                                    {dayjs(comment.createdAt).format(
+                                                        'DD/MM/YYYY HH:mm'
+                                                    )}
+                                                </div>
+                                                <div
+                                                    className="text-gray-700 text-sm"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: comment.content,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        ) : (
+                            <div className="text-gray-400 text-sm text-center py-8">
+                                Chưa có phản hồi nào
+                            </div>
+                        )}
+                    </div>
+                </Card>
+            )}
 
-                    <Form.List name="criteria">
-                        {(fields) => (
-                            <>
-                                {fields.map(({ key, name }, idx: number) => {
-                                    const item = data.criteria[name]
-                                    return (
-                                        <div key={key} style={{ marginBottom: 24 }}>
-                                            <Collapse
-                                                items={[
-                                                    {
-                                                        label: (
-                                                            <div>
-                                                                <span className="font-bold">
-                                                                    Tiêu chí {idx + 1}:{' '}
-                                                                </span>
-                                                                {item?.name}
+            <Form form={form} layout="horizontal" className="form-evidence">
+                <Form.List name="criteria">
+                    {(fields) => (
+                        <>
+                            {fields.map(({ key, name }, idx: number) => {
+                                const item = data.criteria[name]
+                                return (
+                                    <div key={key} style={{ marginBottom: 24 }}>
+                                        <Collapse
+                                            items={[
+                                                {
+                                                    label: (
+                                                        <div>
+                                                            <span className="font-bold">
+                                                                Tiêu chí {idx + 1}:{' '}
+                                                            </span>
+                                                            {item?.name}
+                                                        </div>
+                                                    ),
+                                                    key: item.id,
+                                                    children: (
+                                                        <>
+                                                            <Form.Item
+                                                                label="1. Mô tả hiện trạng"
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'currentSituation',
+                                                                ]}
+                                                            >
+                                                                <RichTextEditor id={item.id} />
+                                                            </Form.Item>
+
+                                                            <Form.Item
+                                                                label="2. Điểm mạnh"
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'strengths',
+                                                                ]}
+                                                            >
+                                                                <RichTextEditor id={item.id} />
+                                                            </Form.Item>
+
+                                                            <Form.Item
+                                                                label="3. Điểm tồn tại"
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'weakness',
+                                                                ]}
+                                                            >
+                                                                <RichTextEditor id={item.id} />
+                                                            </Form.Item>
+
+                                                            <Form.Item
+                                                                label="4. Kế hoạch hành động"
+                                                                name={[
+                                                                    name,
+                                                                    'evaluationCriterion',
+                                                                    'actionPlan',
+                                                                ]}
+                                                            >
+                                                                <RichTextEditor id={item.id} />
+                                                            </Form.Item>
+                                                            <div className="mb-3 font-bold">
+                                                                5. Tự đánh giá
                                                             </div>
-                                                        ),
-                                                        key: item.id,
-                                                        children: (
-                                                            <>
-                                                                <Form.Item
-                                                                    label="1. Mô tả hiện trạng"
-                                                                    name={[
-                                                                        name,
-                                                                        'evaluationCriterion',
-                                                                        'currentSituation',
-                                                                    ]}
-                                                                >
-                                                                    <RichTextEditor id={item.id} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="2. Điểm mạnh"
-                                                                    name={[
-                                                                        name,
-                                                                        'evaluationCriterion',
-                                                                        'strengths',
-                                                                    ]}
-                                                                >
-                                                                    <RichTextEditor id={item.id} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="3. Điểm tồn tại"
-                                                                    name={[
-                                                                        name,
-                                                                        'evaluationCriterion',
-                                                                        'weakness',
-                                                                    ]}
-                                                                >
-                                                                    <RichTextEditor id={item.id} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="4. Kế hoạch hành động"
-                                                                    name={[
-                                                                        name,
-                                                                        'evaluationCriterion',
-                                                                        'actionPlan',
-                                                                    ]}
-                                                                >
-                                                                    <RichTextEditor id={item.id} />
-                                                                </Form.Item>
-                                                                <div className="mb-3 font-bold">
-                                                                    5. Tự đánh giá
-                                                                </div>
-                                                                {/* <div className="mb-1">
+                                                            {/* <div className="mb-1">
                                                                 Điểm tối thiểu:{' '}
                                                                 <span className="font-bold">
                                                                     {item?.scoreScale?.minValue},{' '}
@@ -369,26 +423,21 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                                     className="w-full"
                                                                 />
                                                             </Form.Item> */}
-                                                            </>
-                                                        ),
-                                                    },
-                                                ]}
-                                                bordered={true}
-                                                expandIconPosition="end"
-                                                className="bg-transparent mb-6"
-                                            />
-                                        </div>
-                                    )
-                                })}
-                            </>
-                        )}
-                    </Form.List>
-
-                    <Form.Item label="Kết luận" name={'conclusion'}>
-                        <RichTextEditor />
-                    </Form.Item>
-                </Form>
-            </div>
+                                                        </>
+                                                    ),
+                                                },
+                                            ]}
+                                            bordered={true}
+                                            expandIconPosition="end"
+                                            className="bg-transparent mb-6"
+                                        />
+                                    </div>
+                                )
+                            })}
+                        </>
+                    )}
+                </Form.List>
+            </Form>
         </div>
     )
 }
