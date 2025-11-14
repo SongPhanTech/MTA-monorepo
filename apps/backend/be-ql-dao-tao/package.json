@@ -11,12 +11,17 @@
   "dependencies": {
     "@faker-js/faker": "catalog:",
     "@hono/oidc-auth": "catalog:",
+    "@hono/otel": "catalog:",
     "@hono/zod-openapi": "catalog:",
     "@opentelemetry/api": "catalog:",
+    "@opentelemetry/auto-instrumentations-node": "catalog:",
+    "@opentelemetry/exporter-metrics-otlp-http": "catalog:",
     "@opentelemetry/exporter-trace-otlp-http": "catalog:",
     "@opentelemetry/resources": "catalog:",
+    "@opentelemetry/sdk-node": "catalog:",
     "@opentelemetry/sdk-trace-base": "catalog:",
     "@opentelemetry/sdk-trace-web": "catalog:",
+    "@opentelemetry/semantic-conventions": "catalog:",
     "@scalar/hono-api-reference": "catalog:",
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
@@ -35,7 +40,7 @@
   },
   "devDependencies": {
     "@types/bun": "catalog:",
-    "@types/exceljs": "^1.3.2",
+    "@types/exceljs": "catalog:",
     "@workspace/auth": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:"

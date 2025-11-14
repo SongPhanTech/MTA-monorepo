@@ -16,13 +16,13 @@ declare module 'hono' {
 }
 
 export const tracingMiddleware = createMiddleware(async (c, next) => {
-    const tracer = trace.getTracer('ql-dao-tao-backend')
-    const traceParent = c.req.header('traceparent')
-    const carrier = traceParent ? { traceparent: traceParent } : {}
-    const extractedContext = propagation.extract(context.active(), carrier)
+    console.log('tracing')
 
-    await context.with(extractedContext, async () => {
-        const span = tracer.startSpan(c.req.path, {
+    const tracer = trace.getTracer('ql-dao-tao-backend')
+    const parent = propagation.extract(context.active(), c.req.header())
+
+    await context.with(parent, async () => {
+        const span = tracer.startSpan(`${c.req.method} ${c.req.path}`, {
             root: true,
             attributes: {
                 'http.route': c.req.path,
@@ -42,15 +42,7 @@ export const tracingMiddleware = createMiddleware(async (c, next) => {
 
         c.set('rootSpan', span) // set span to context
 
-        if (traceParent) {
-            const parts = traceParent.split('-')
-            if (parts.length === 4) {
-                span.setAttribute('trace.parent_id', parts[2] ?? '')
-                span.setAttribute('trace.trace_id', parts[1] ?? '')
-            }
-        }
-
-        await context.with(trace.setSpan(extractedContext, span), async () => {
+        await context.with(trace.setSpan(parent, span), async () => {
             await next()
             span.setAttribute('http.status_code', c.res.status)
             span.setAttribute('status_code', c.res.status)

@@ -1,5 +1,8 @@
+import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { context, SpanKind, trace } from '@opentelemetry/api'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -9,7 +12,6 @@ import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import { Registry } from 'prom-client'
 import ArchivedScoreApp from './api/archived-score'
 import CurriculumApp from './api/curriculum'
 import CurriculumSubjectApp from './api/curriculum-subject'
@@ -28,22 +30,27 @@ import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
-import { tracingMiddleware } from './middlewares/tracing'
+// import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
 
 import './otel'
 
+const openTelemetrySDK = new NodeSDK({
+    traceExporter: new OTLPTraceExporter(),
+})
+openTelemetrySDK.start()
+
 export const prisma = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
-const register = new Registry()
 
-// collectDefaultMetrics({ register })
+const instrumentationConfig = {
+    serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
+    serviceVersion: '1.0.0',
+    captureRequestHeaders: ['user-agent', 'service-name'],
+}
 
-app.get('/metrics', async (c) => {
-    c.header('Content-Type', register.contentType)
-    return c.text(await register.metrics())
-})
+app.use(httpInstrumentationMiddleware(instrumentationConfig))
 
 app.use(
     '*',
@@ -68,7 +75,7 @@ const config = {
     },
 }
 app.use(contextStorage())
-app.use(tracingMiddleware)
+// app.use(tracingMiddleware)
 app.use('*', checkIp)
 
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`

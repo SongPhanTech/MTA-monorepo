@@ -27,7 +27,7 @@
 		"@workspace/libs": "workspace:*",
 		"@workspace/permissions": "workspace:*",
 		"antd": "catalog:",
-		"antd-img-crop": "^4.25.0",
+		"antd-img-crop": "catalog:",
 		"axios": "catalog:",
 		"chart.js": "catalog:",
 		"class-variance-authority": "catalog:",
