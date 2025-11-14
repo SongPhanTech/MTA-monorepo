@@ -421,6 +421,14 @@ async function main() {
                 extensions: 'xlsx',
                 numberField: 0,
             },
+            {
+                name: 'Kết quả xác minh văn bằng',
+                code: 'XAC_MINH_VAN_BANG',
+                path: 'https://minio.swantech.vn/mta/template/XAC_MINH_VAN_BANG.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 
@@ -548,21 +556,22 @@ async function main() {
         skipDuplicates: true,
     })
 
-    await prisma.curriculumVersion.createMany({
-        data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
-            trainingMajors.flatMap(({ id: trainingMajorId, curriculums }) =>
-                curriculums.map((curriculum) => ({
-                    curriculumId: trainingMajorId,
-                    name: curriculum,
-                    trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
-                    trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
-                    trainingTimeId: '4years',
-                    trainingTypeId: '550e8403-e29b-41d4-a716-446655440000',
-                }))
-            )
-        ),
-        skipDuplicates: true,
-    })
+    // await prisma.curriculumVersion.createMany({
+    //     data: trainingData.flatMap(({ id: trainingFieldId, trainingMajors }) =>
+    //         trainingMajors.flatMap(({ id: trainingMajorId, curriculums }) =>
+    //             curriculums.map((curriculum) => ({
+    //                 curriculumId: trainingMajorId,
+    //                 name: curriculum,
+    //                 trainingLevelId: '550e8404-e29b-41d4-a716-446655440000',
+    //                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
+    //                 trainingTimeId: '4years',
+    //                 trainingTypeId: '550e8403-e29b-41d4-a716-446655440000',
+    //                 diplomaTypeId: '550e8406-e29b-41d4-a716-446655440000',
+    //             }))
+    //         )
+    //     ),
+    //     skipDuplicates: true,
+    // })
 
     const _curriculum = await prisma.curriculum.create({
         data: {
@@ -626,6 +635,9 @@ async function main() {
                             where: { id: '4years' },
                             create: { name: '4 năm' },
                         },
+                    },
+                    diplomaType: {
+                        connect: { code: 'BS' },
                     },
                 },
             },

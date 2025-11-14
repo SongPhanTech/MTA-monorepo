@@ -15,6 +15,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import ArchivedScoreApp from './api/archived-score'
 import CurriculumApp from './api/curriculum'
 import CurriculumSubjectApp from './api/curriculum-subject'
+import DiplomaVerificationApp from './api/diploma-verification'
 import ExamApp from './api/exam'
 import ExamScoreApp from './api/exam-score'
 import FixedClassApp from './api/fixed-class'
@@ -93,6 +94,7 @@ app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
 app.route('/api/lecturer', LecturerApp)
+app.route('/api/diploma-verification', DiplomaVerificationApp)
 app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
 app.route('/api/curriculum-subject', CurriculumSubjectApp)
