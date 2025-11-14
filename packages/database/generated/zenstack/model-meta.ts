@@ -9836,7 +9836,6 @@ const metadata: ModelMeta = {
                     name: "diplomaType",
                     type: "DiplomaType",
                     isDataModel: true,
-                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
@@ -9844,7 +9843,6 @@ const metadata: ModelMeta = {
                 }, diplomaTypeId: {
                     name: "diplomaTypeId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaType',
                 }, requiredCredits: {

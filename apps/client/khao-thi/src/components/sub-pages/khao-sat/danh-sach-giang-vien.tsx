@@ -56,20 +56,20 @@ export default function DetailSurveyPage({
                               },
                               {
                                   userProfile: {
-                                    OR: [
-                                        {
-                                            firstName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                        {
-                                            lastName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                    ]
+                                      OR: [
+                                          {
+                                              firstName: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive' as const,
+                                              },
+                                          },
+                                          {
+                                              lastName: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive' as const,
+                                              },
+                                          },
+                                      ],
                                   },
                               },
                           ],
@@ -79,68 +79,68 @@ export default function DetailSurveyPage({
 
             ...(filters.subjectClassName && filters.subjectClassName !== ''
                 ? {
-                     subjectClass:{
-                        OR: [
-                            {
-                                    code: {
+                      subjectClass: {
+                          OR: [
+                              {
+                                  code: {
                                       contains: filters.subjectClassName,
                                       mode: 'insensitive' as const,
                                   },
-                            },
-                               {
-                                    name: {
+                              },
+                              {
+                                  name: {
                                       contains: filters.subjectClassName,
                                       mode: 'insensitive' as const,
                                   },
-                            }
-                        ]
-                     }
+                              },
+                          ],
+                      },
                   }
                 : {}),
-                    ...(filters.idCardNumber && filters.idCardNumber !== ''
+            ...(filters.idCardNumber && filters.idCardNumber !== ''
                 ? {
-                 lecture: {
-                     userProfile: {
-                         idCardNumber: {
-                             contains: filters.idCardNumber,
-                             mode: 'insensitive' as const,
-                         },
-                     }
-                 }
+                      lecture: {
+                          userProfile: {
+                              idCardNumber: {
+                                  contains: filters.idCardNumber,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      },
                   }
                 : {}),
             ...(filters.phoneNumber && filters.phoneNumber !== ''
                 ? {
-                 lecture: {
-                     userProfile: {
-                         phoneNumber: {
-                             contains: filters.phoneNumber,
-                             mode: 'insensitive' as const,
-                         },
-                     }
-                 }
+                      lecture: {
+                          userProfile: {
+                              phoneNumber: {
+                                  contains: filters.phoneNumber,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      },
                   }
                 : {}),
-                      ...(filters.organizationId && filters.organizationId !== ''
+            ...(filters.organizationId && filters.organizationId !== ''
                 ? {
-                 lecture: {
-                     organization:{
-                        OR:[
-                            {
-                                    sMa: {
-                                      contains: filters.organizationId,
-                                      mode: 'insensitive' as const,
+                      lecture: {
+                          organization: {
+                              OR: [
+                                  {
+                                      sMa: {
+                                          contains: filters.organizationId,
+                                          mode: 'insensitive' as const,
+                                      },
                                   },
-                            },
-                               {
-                                    sTen: {
-                                      contains: filters.organizationId,
-                                      mode: 'insensitive' as const,
+                                  {
+                                      sTen: {
+                                          contains: filters.organizationId,
+                                          mode: 'insensitive' as const,
+                                      },
                                   },
-                            }
-                        ]
-                     }
-                 }
+                              ],
+                          },
+                      },
                   }
                 : {}),
         }),
@@ -221,11 +221,13 @@ export default function DetailSurveyPage({
     return (
         <Row gutter={[16, 4]}>
             <Col span={24}>
-            <Flex align="center" justify="space-between">
-                <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
-                <ExportLecturerInSurvey query={where} surveyName={data?.[0]?.clusterSurvey?.name ||''}/>
-            </Flex>
-
+                <Flex align="center" justify="space-between">
+                    <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
+                    <ExportLecturerInSurvey
+                        query={where}
+                        surveyName={data?.[0]?.clusterSurvey?.name || ''}
+                    />
+                </Flex>
             </Col>
             <Col span={24}>
                 <Table

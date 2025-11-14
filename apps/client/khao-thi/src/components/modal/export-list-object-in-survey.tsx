@@ -5,17 +5,10 @@ import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo } from 'react'
 
-const ExportObjectInSurvey = ({
-    query,
-    surveyName,
-}: {
-    query: any
-    surveyName: string
-}) => {
-
-        const { data:res } = useGetSurveyObjects({
-           ...query,
-        })
+const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: string }) => {
+    const { data: res } = useGetSurveyObjects({
+        ...query,
+    })
 
     const data = useMemo(() => {
         if (res?.status === 200) {
@@ -23,7 +16,6 @@ const ExportObjectInSurvey = ({
         }
         return
     }, [res])
-
 
     const exportTemplate = async () => {
         // Tạo workbook mới
@@ -172,19 +164,23 @@ const ExportObjectInSurvey = ({
             { width: 30 },
             { width: 20 },
         ]
-        if (data?.data &&data?.data?.length > 0) {
+        if (data?.data && data?.data?.length > 0) {
             data?.data.forEach((i: any, index: number) => {
                 const headerRowValue: any = worksheet.getRow(12 + index)
                 headerRowValue.values = [
                     index + 1,
-                    i?.educationAndTraining?.length>0?i?.educationAndTraining[0]?.code :'',
+                    i?.educationAndTraining?.length > 0 ? i?.educationAndTraining[0]?.code : '',
                     i?.lecturer?.code || '',
-                   `${i?.lastName || ''} ${i?.firstName || ''}`,
+                    `${i?.lastName || ''} ${i?.firstName || ''}`,
                     i?.idCardNumber || '',
                     i?.phoneNumber || '',
                     i?.lecturer?.organization?.sTen || '',
-                    i?.educationAndTraining?.length>0  ?`${i?.educationAndTraining[0]?.fixedClass?.code}-${i?.educationAndTraining[0]?.fixedClass?.name}` :"",
-                    i?.educationAndTraining?.length>0  ?`${i?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name ||''}` :"",
+                    i?.educationAndTraining?.length > 0
+                        ? `${i?.educationAndTraining[0]?.fixedClass?.code}-${i?.educationAndTraining[0]?.fixedClass?.name}`
+                        : '',
+                    i?.educationAndTraining?.length > 0
+                        ? `${i?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
+                        : '',
                     i?.surveySession ? 'Đã làm' : 'Chưa làm',
                 ]
             })

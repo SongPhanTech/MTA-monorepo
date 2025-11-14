@@ -7,7 +7,6 @@ import DefaultLayout from '@layouts/default-layout'
 import { Tabs, type TabsProps } from 'antd'
 
 function Page() {
-
     const onChange = (key: string) => {
         console.log(key)
     }
@@ -26,10 +25,7 @@ function Page() {
         {
             key: '3',
             label: 'Nhóm câu hỏi khảo sát',
-            children: (
-                <TabNhomCauHoi
-                />
-            ),
+            children: <TabNhomCauHoi />,
         },
         // {
         //     key: '4',

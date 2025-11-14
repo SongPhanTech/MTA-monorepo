@@ -109,8 +109,7 @@ function TabNhomCauHoi() {
     return (
         <div>
             <Row gutter={[16, 4]}>
-               
-                <Col span={selectedID?12:24}>
+                <Col span={selectedID ? 12 : 24}>
                     <Col span={24}>
                         <Flex justify="end">
                             {can(
@@ -267,15 +266,11 @@ function TabNhomCauHoi() {
                         }}
                     />
                 </Col>
-                {
-                    selectedID && (
-                        <Col span={12}>
-                            <CauHoiKhaoSat id={selectedID}/>
-                        </Col>
-                    )
-                }
-              
-
+                {selectedID && (
+                    <Col span={12}>
+                        <CauHoiKhaoSat id={selectedID} />
+                    </Col>
+                )}
             </Row>
         </div>
     )

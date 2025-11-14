@@ -161,7 +161,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'surveyQuestionType',
                                 type: 'select',
-                                 width: 150,
+                                width: 150,
                                 options: surveyQuestionTypeOptions,
                                 render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },

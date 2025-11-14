@@ -1033,11 +1033,18 @@ app.openapi(getSurveyObjects, async (c) => {
                                   ...(q.lecturerCode
                                       ? { code: { contains: q.lecturerCode, mode: 'insensitive' } }
                                       : {}),
-                                          organizationId:q?.isStudent==='student'?{}:{
-                                              in:q?.organizationId&& q?.organizationId?.length>0 
-                                          ? q.organizationId
-                                          : objectType.organizations.map((org) => org.Id),
-                                  },
+                                  organizationId:
+                                      q?.isStudent === 'student'
+                                          ? {}
+                                          : {
+                                                in:
+                                                    q?.organizationId &&
+                                                    q?.organizationId?.length > 0
+                                                        ? q.organizationId
+                                                        : objectType.organizations.map(
+                                                              (org) => org.Id
+                                                          ),
+                                            },
                               },
                           },
                           {
@@ -1045,100 +1052,117 @@ app.openapi(getSurveyObjects, async (c) => {
                                   ...(q.staffCode
                                       ? { code: { contains: q.staffCode, mode: 'insensitive' } }
                                       : {}),
-                                          organizationId: q?.isStudent==='student'?{}:{
-                                              in: q?.organizationId&& q?.organizationId?.length>0
-                                          ? q.organizationId
-                                          : objectType.organizations.map((org) => org.Id),
-                                  },
+                                  organizationId:
+                                      q?.isStudent === 'student'
+                                          ? {}
+                                          : {
+                                                in:
+                                                    q?.organizationId &&
+                                                    q?.organizationId?.length > 0
+                                                        ? q.organizationId
+                                                        : objectType.organizations.map(
+                                                              (org) => org.Id
+                                                          ),
+                                            },
                               },
                           },
                           {
-                              educationAndTraining: q?.isStudent !=='lecturer' ?{
-                                  some: {
-                                      ...(q.studentCode
-                                          ? {
-                                                code: {
-                                                    contains: q.studentCode,
-                                                    mode: 'insensitive',
+                              educationAndTraining:
+                                  q?.isStudent !== 'lecturer'
+                                      ? {
+                                            some: {
+                                                ...(q.studentCode
+                                                    ? {
+                                                          code: {
+                                                              contains: q.studentCode,
+                                                              mode: 'insensitive',
+                                                          },
+                                                      }
+                                                    : {}),
+                                                fixedClass: {
+                                                    ...(objectType.fixedClasses.length
+                                                        ? {
+                                                              id: {
+                                                                  in: objectType.fixedClasses.map(
+                                                                      (fc) => fc.id
+                                                                  ),
+                                                              },
+                                                          }
+                                                        : {}),
+                                                    ...(q.fixedClassIds
+                                                        ? {
+                                                              id: { in: q.fixedClassIds },
+                                                          }
+                                                        : {}),
+                                                    ...(objectType.trainingCourses.length
+                                                        ? {
+                                                              trainingCourseId: {
+                                                                  in: objectType.trainingCourses.map(
+                                                                      (tc) => tc.id
+                                                                  ),
+                                                              },
+                                                          }
+                                                        : {}),
+                                                    ...(q.trainingCourseIds
+                                                        ? {
+                                                              trainingCourseId: {
+                                                                  in: q.trainingCourseIds,
+                                                              },
+                                                          }
+                                                        : {}),
+                                                    ...(objectType.trainingMajors.length ||
+                                                    objectType.trainingFields.length
+                                                        ? {
+                                                              curriculumVersion: {
+                                                                  curriculum: {
+                                                                      trainingMajor: {
+                                                                          ...(objectType
+                                                                              .trainingMajors.length
+                                                                              ? {
+                                                                                    id: {
+                                                                                        in: objectType.trainingMajors.map(
+                                                                                            (tm) =>
+                                                                                                tm.id
+                                                                                        ),
+                                                                                    },
+                                                                                }
+                                                                              : {}),
+                                                                          ...(objectType
+                                                                              .trainingFields.length
+                                                                              ? {
+                                                                                    trainingFieldId:
+                                                                                        {
+                                                                                            in: objectType.trainingFields.map(
+                                                                                                (
+                                                                                                    tf
+                                                                                                ) =>
+                                                                                                    tf.id
+                                                                                            ),
+                                                                                        },
+                                                                                }
+                                                                              : {}),
+                                                                      },
+                                                                  },
+                                                              },
+                                                          }
+                                                        : {}),
                                                 },
-                                            }
-                                          : {}),
-                                      fixedClass: {
-                                          ...(objectType.fixedClasses.length
-                                              ? {
-                                                    id: {
-                                                        in: objectType.fixedClasses.map(
-                                                            (fc) => fc.id
-                                                        ),
-                                                    },
-                                                }
-                                              : {}),
-                                          ...(q.fixedClassIds
-                                              ? {
-                                                    id: { in: q.fixedClassIds },
-                                                }
-                                              : {}),
-                                          ...(objectType.trainingCourses.length
-                                              ? {
-                                                    trainingCourseId: {
-                                                        in: objectType.trainingCourses.map(
-                                                            (tc) => tc.id
-                                                        ),
-                                                    },
-                                                }
-                                              : {}),
-                                          ...(q.trainingCourseIds
-                                              ? {
-                                                    trainingCourseId: {
-                                                        in: q.trainingCourseIds,
-                                                    },
-                                                }
-                                              : {}),
-                                          ...(objectType.trainingMajors.length ||
-                                          objectType.trainingFields.length
-                                              ? {
-                                                    curriculumVersion: {
-                                                        curriculum: {
-                                                            trainingMajor: {
-                                                                ...(objectType.trainingMajors.length
-                                                                    ? {
-                                                                          id: {
-                                                                              in: objectType.trainingMajors.map(
-                                                                                  (tm) => tm.id
-                                                                              ),
-                                                                          },
-                                                                      }
-                                                                    : {}),
-                                                                ...(objectType.trainingFields.length
-                                                                    ? {
-                                                                          trainingFieldId: {
-                                                                              in: objectType.trainingFields.map(
-                                                                                  (tf) => tf.id
-                                                                              ),
-                                                                          },
-                                                                      }
-                                                                    : {}),
-                                                            },
-                                                        },
-                                                    },
-                                                }
-                                              : {}),
-                                      },
-                                      ...(objectType.subjectClasses.length
-                                          ? {
-                                                subjectClassStudent: {
-                                                    some: {
-                                                        subjectClassId: {
-                                                            in: objectType.subjectClasses.map(
-                                                                (sc) => sc.id
-                                                            ),
-                                                        },
-                                                    },
-                                                },
-                                            }
-                                          : {}),
-                                  },
-                              }:{},
+                                                ...(objectType.subjectClasses.length
+                                                    ? {
+                                                          subjectClassStudent: {
+                                                              some: {
+                                                                  subjectClassId: {
+                                                                      in: objectType.subjectClasses.map(
+                                                                          (sc) => sc.id
+                                                                      ),
+                                                                  },
+                                                              },
+                                                          },
+                                                      }
+                                                    : {}),
+                                            },
+                                        }
+                                      : {},
                           },
                       ],
                   },
@@ -1371,18 +1395,18 @@ app.openapi(getSurveysByProfile, async (c) => {
         OR: [
             audienceMatch,
             {
-                    subjectClass: {
-                        subjectClassStudent: {
-                            some: {
-                                student: {
-                                    userProfile: {
-                                        id,
-                                    },
+                subjectClass: {
+                    subjectClassStudent: {
+                        some: {
+                            student: {
+                                userProfile: {
+                                    id,
                                 },
                             },
                         },
+                    },
                 },
-            }
+            },
         ],
         ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
         ...(q.lecturerName
@@ -1395,7 +1419,7 @@ app.openapi(getSurveysByProfile, async (c) => {
         ...(q.subjectClassName
             ? { subjectClass: { name: { contains: q.subjectClassName, mode: 'insensitive' } } }
             : {}),
-          
+
         deletedAt: null,
         startDate: { lte: new Date() },
     }
@@ -1413,7 +1437,7 @@ app.openapi(getSurveysByProfile, async (c) => {
             surveyTopic: true,
             subjectClass: true,
             surveyQuestion: true,
-            surveySessions:true
+            surveySessions: true,
         },
         take: limit,
         skip: (page - 1) * limit,

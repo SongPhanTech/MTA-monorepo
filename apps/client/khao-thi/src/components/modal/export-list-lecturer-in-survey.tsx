@@ -5,32 +5,32 @@ import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-const ExportLecturerInSurvey = ({ query, surveyName }: { query:any ; surveyName: string }) => {
+const ExportLecturerInSurvey = ({ query, surveyName }: { query: any; surveyName: string }) => {
     const { data } = useFindManySurvey({
         where: { ...query },
-              include: {
-                clusterSurvey: true,
-                surveyObjectType: true,
-                lecture: {
-                    include: {
-                        userProfile: true,
-                        organization: true,
-                    },
+        include: {
+            clusterSurvey: true,
+            surveyObjectType: true,
+            lecture: {
+                include: {
+                    userProfile: true,
+                    organization: true,
                 },
-                subjectClass: {
-                    include: {
-                        subjectClassStudent: {
-                            include: {
-                                student: true,
-                            },
-                        },
-                        subject: true,
-                    },
-                },
-                surveyQuestion: true,
-                surveySessions: true,
             },
-            orderBy: { createdAt: 'desc' },
+            subjectClass: {
+                include: {
+                    subjectClassStudent: {
+                        include: {
+                            student: true,
+                        },
+                    },
+                    subject: true,
+                },
+            },
+            surveyQuestion: true,
+            surveySessions: true,
+        },
+        orderBy: { createdAt: 'desc' },
     })
 
     const exportTemplate = async () => {

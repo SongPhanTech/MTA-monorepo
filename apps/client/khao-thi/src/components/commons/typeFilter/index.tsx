@@ -17,9 +17,9 @@ import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
-    studentCode?: string|'',
-    lecturerCode?: string|'',
-    fullname?: string|'',
+    studentCode?: string | ''
+    lecturerCode?: string | ''
+    fullname?: string | ''
     name?: string | ''
     code?: string | ''
     sort?: string
@@ -141,7 +141,7 @@ export type FilterProps = {
     trainingCourseIds?: string[]
     fixedClassIds?: string[]
     isStudent?: string
-    subjectClassName?:string
+    subjectClassName?: string
 }
 
 export type ColumnTypeProps = ColumnsType & {

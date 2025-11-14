@@ -13,36 +13,34 @@ const ExportStudentInSurvey = ({
     surveyId: string
     surveyName: string
 }) => {
-
-      const { data } = useFindManyUserProfile({
-             where: { ...query },
-             include: {
-                 educationAndTraining: {
-                     include: {
-                         subjectClassStudent: {
-                             include: {
-                                 subjectClass: {
-                                     include: {
-                                         survey: {
-                                             include: {
-                                                 surveySessions: true,
-                                             },
-                                         },
-                                     },
-                                 },
-                             },
-                         },
-                     },
-                 },
-                 surveySession: {
-                     where: { surveyId },
-                 },
-             },
-             orderBy: {
-                 firstName: 'asc',
-             },
-         })
-
+    const { data } = useFindManyUserProfile({
+        where: { ...query },
+        include: {
+            educationAndTraining: {
+                include: {
+                    subjectClassStudent: {
+                        include: {
+                            subjectClass: {
+                                include: {
+                                    survey: {
+                                        include: {
+                                            surveySessions: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            surveySession: {
+                where: { surveyId },
+            },
+        },
+        orderBy: {
+            firstName: 'asc',
+        },
+    })
 
     const exportTemplate = async () => {
         // Tạo workbook mới
@@ -187,17 +185,21 @@ const ExportStudentInSurvey = ({
             { width: 30 },
             { width: 20 },
         ]
-        if (data &&data?.length > 0) {
+        if (data && data?.length > 0) {
             data.forEach((i: any, index: number) => {
                 const headerRowValue: any = worksheet.getRow(12 + index)
                 headerRowValue.values = [
                     index + 1,
-                    i?.educationAndTraining?.length>0?i?.educationAndTraining[0]?.code :'',
-                   `${i?.lastName || ''} ${i?.firstName || ''}`,
+                    i?.educationAndTraining?.length > 0 ? i?.educationAndTraining[0]?.code : '',
+                    `${i?.lastName || ''} ${i?.firstName || ''}`,
                     i?.idCardNumber || '',
                     i?.phoneNumber || '',
-                    i?.educationAndTraining?.length>0  ?`${i?.educationAndTraining[0]?.fixedClass?.code||''}-${i?.educationAndTraining[0]?.fixedClass?.name||''}` :"",
-                    i?.educationAndTraining?.length>0  ?`${i?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name ||''}` :"",
+                    i?.educationAndTraining?.length > 0
+                        ? `${i?.educationAndTraining[0]?.fixedClass?.code || ''}-${i?.educationAndTraining[0]?.fixedClass?.name || ''}`
+                        : '',
+                    i?.educationAndTraining?.length > 0
+                        ? `${i?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
+                        : '',
                     i?.surveySession ? 'Đã làm' : 'Chưa làm',
                 ]
             })

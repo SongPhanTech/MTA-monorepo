@@ -3,7 +3,12 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import ExportStudentInSurvey from '@components/modal/export-list-student-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { useCountUserProfile, useFindManyFixedClass, useFindManyTrainingCourse, useFindManyUserProfile } from '@workspace/db/hooks'
+import {
+    useCountUserProfile,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
+    useFindManyUserProfile,
+} from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { Col, Flex, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
@@ -21,31 +26,31 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
         statusSurvey: undefined,
     })
     const router = useRouter()
-        const { data: fixedClasses = []} = useFindManyFixedClass({
-                orderBy: { name: 'asc' },
-            })
-        const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
-            useFindManyTrainingCourse({
-                orderBy: { name: 'asc' },
-            })
-    
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingCourses = [], isLoading: trainingCoursesLoading } =
+        useFindManyTrainingCourse({
+            orderBy: { name: 'asc' },
+        })
+
     const where = useMemo(() => {
         return {
-                    educationAndTraining: {
+            educationAndTraining: {
+                some: {
+                    subjectClassStudent: {
                         some: {
-                            subjectClassStudent: {
-                                some: {
-                                    subjectClass: {
-                                        survey: {
-                                            some: {
-                                                id: surveyId,
-                                            },
-                                        },
+                            subjectClass: {
+                                survey: {
+                                    some: {
+                                        id: surveyId,
                                     },
                                 },
                             },
                         },
                     },
+                },
+            },
             ...(filters.statusSurvey &&
                 filters.statusSurvey?.length === 1 &&
                 filters.statusSurvey[0] === true && {
@@ -117,14 +122,13 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                                     },
                                 },
                             },
-                           
                         },
                     },
-                     fixedClass: {
-                                include: {
-                                    trainingCourse: true,
-                                }
-                            }
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                        },
+                    },
                 },
             },
             surveySession: {
@@ -155,7 +159,11 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
             <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <Flex justify="end">
-                        <ExportStudentInSurvey query={where} surveyId={surveyId} surveyName={'12381237'} />
+                        <ExportStudentInSurvey
+                            query={where}
+                            surveyId={surveyId}
+                            surveyName={'12381237'}
+                        />
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -200,19 +208,31 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                                 type: 'input',
                                 render: (_, record) => record?.phoneNumber || '',
                             },
-                                    {
+                            {
                                 title: 'Lớp quản lý',
                                 dataIndex: 'fixedClassIds',
-                                type:'select',
-                                options:fixedClasses?.map((fc) => ({ value: fc.id, label: fc.name })) || [],
-                                render: (_, record) => record?.educationAndTraining?.length>0  ?`${record?.educationAndTraining[0]?.fixedClass?.code ||''}` :"",
+                                type: 'select',
+                                options:
+                                    fixedClasses?.map((fc) => ({ value: fc.id, label: fc.name })) ||
+                                    [],
+                                render: (_, record) =>
+                                    record?.educationAndTraining?.length > 0
+                                        ? `${record?.educationAndTraining[0]?.fixedClass?.code || ''}`
+                                        : '',
                             },
                             {
                                 title: 'Khoá',
                                 dataIndex: 'trainingCourseIds',
-                                type:'select',
-                                options:trainingCourses?.map((tc) => ({ value: tc.id, label: tc.name })) || [],
-                                render: (_, record) => record?.educationAndTraining?.length>0  ?`${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name ||''}` :"",
+                                type: 'select',
+                                options:
+                                    trainingCourses?.map((tc) => ({
+                                        value: tc.id,
+                                        label: tc.name,
+                                    })) || [],
+                                render: (_, record) =>
+                                    record?.educationAndTraining?.length > 0
+                                        ? `${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái KS',

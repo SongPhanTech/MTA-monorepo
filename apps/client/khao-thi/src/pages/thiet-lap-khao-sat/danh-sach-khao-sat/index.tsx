@@ -88,15 +88,12 @@ export default function DetailSurveyPage() {
     //     }
     // )
 
-    const {data} = useGetSurveysOfProfile(
-        profileId as string,
-        {
-                page: currentPage,
-                limit: numberOfPages,
-                name: filters.name,
-                code: filters.code
-            },
-        )  
+    const { data } = useGetSurveysOfProfile(profileId as string, {
+        page: currentPage,
+        limit: numberOfPages,
+        name: filters.name,
+        code: filters.code,
+    })
 
     // const { data: count } = useCountSurvey({
     //     where: {
@@ -232,11 +229,11 @@ export default function DetailSurveyPage() {
                             ),
                         },
                     ]}
-                    data={data?.status === 200 && data?.data?.data||[]}
+                    data={(data?.status === 200 && data?.data?.data) || []}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
-                        total:data?.status === 200 && data?.data?.count ||0,
+                        total: (data?.status === 200 && data?.data?.count) || 0,
                         onChange: (page, pageSize) => {
                             if (numberOfPages === pageSize) {
                                 setCurrentPage(page)
