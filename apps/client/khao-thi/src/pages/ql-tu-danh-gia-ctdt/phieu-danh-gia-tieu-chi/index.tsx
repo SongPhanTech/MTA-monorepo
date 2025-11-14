@@ -4,6 +4,7 @@ import CriteriaEvaluationList from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-ti
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
+import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -80,6 +81,12 @@ export default function CriteriaEvaluationPage() {
                 children: <CrossReview />,
                 disabled: !selectedEvaluationPeriodId,
             },
+            {
+                key: '6',
+                label: 'Tổng hợp phiếu đánh giá',
+                children: <SumaryOfCriteriaEvaluation />,
+                disabled: !selectedEvaluationPeriodId,
+            },
         ]
 
         const isSecretary =
@@ -87,12 +94,20 @@ export default function CriteriaEvaluationPage() {
             councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY)
 
         if (isSecretary) {
-            tabs.push({
-                key: '4',
-                label: 'Phân công phản biện chéo',
-                children: <CrossReviewAssignment />,
-                disabled: !selectedEvaluationPeriodId,
-            })
+            tabs.push(
+                {
+                    key: '4',
+                    label: 'Phân công phản biện chéo',
+                    children: <CrossReviewAssignment />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '6',
+                    label: 'Tổng hợp phiếu đánh giá',
+                    children: <SumaryOfCriteriaEvaluation />,
+                    disabled: !selectedEvaluationPeriodId,
+                }
+            )
         }
 
         // if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM')) {
