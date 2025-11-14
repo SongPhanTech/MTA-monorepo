@@ -3,15 +3,11 @@ import useSpinner from '@hooks/spinner'
 import type { DataTabCrossReviewType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
-import { useCreateEvaluationCriterionComment } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Collapse, Drawer, Form, message, Card, Timeline } from 'antd'
+import { Button, Collapse, Form, message, Card } from 'antd'
 import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
 
 export type PutRequirementCriterion = {
-    opening: string
-    conclusion: string
     criteria: Record<string, any>
 }
 
@@ -23,9 +19,7 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
     const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
 
     const { hideSpinner, showSpinner } = useSpinner()
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-
-    const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
+    const [showComments, setShowComments] = useState(false)
 
     const handleSendCrossReview = async () => {
         try {
@@ -79,7 +73,6 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
             }
 
             message.success('Gửi ý kiến phản biện thành công')
-            setIsDrawerOpen(false)
             commentForm.resetFields()
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại')
@@ -148,28 +141,26 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                         actionPlan: item.evaluationCriterion?.actionPlan || '',
                     },
                 })),
-                opening: data?.opening,
-                conclusion: data?.conclusion,
             })
         }
     }, [data, form])
 
     return (
-        <div>
-            <div className="flex justify-end gap-2">
+        <div className="overflow-x-hidden">
+            <div className="flex justify-end gap-2 mb-4 pt-2">
+                <Button
+                    type="primary"
+                    className="bg-yellow-400"
+                    onClick={() => setShowComments(!showComments)}
+                >
+                    Gửi ý kiến phản biện
+                </Button>
                 <Button type="primary" onClick={handleSubmitCross}>
                     Phê duyệt
                 </Button>
-                <Button type="primary" className="mb-2" onClick={() => setIsDrawerOpen(true)}>
-                    Gửi ý kiến phản biện
-                </Button>
             </div>
-            <Form form={form} layout="horizontal" className="form-evidence">
-                <Form.Item label="Mở đầu" name={'opening'}>
-                    <RichTextEditor />
-                </Form.Item>
-                <div className="mb-3 font-bold">Đánh giá tiêu chí : </div>
 
+            <Form form={form} layout="horizontal" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -251,67 +242,34 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                         </>
                     )}
                 </Form.List>
-
-                <Form.Item label="Kết luận" name={'conclusion'}>
-                    <RichTextEditor />
-                </Form.Item>
             </Form>
 
-            <Drawer
-                title="Gửi ý kiến phản biện"
-                open={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}
-                width={720}
-                footer={
-                    <div className="flex justify-end gap-2">
-                        <Button onClick={() => setIsDrawerOpen(false)}>Hủy</Button>
-                        <Button type="primary" onClick={handleSendCrossReview}>
-                            Gửi ý kiến
-                        </Button>
-                    </div>
-                }
-            >
-                {data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments &&
-                    data.criteria[0].evaluationCriterion.evaluationCriterionComments.length > 0 && (
-                        <Card title="Lịch sử phản biện" className="mb-4">
-                            <Timeline
-                                items={data.criteria[0].evaluationCriterion.evaluationCriterionComments.map(
-                                    (comment: any) => ({
-                                        children: (
-                                            <div>
-                                                <div className="font-medium text-sm mb-1">
-                                                    {comment.reviewer?.fullname ||
-                                                        'Người phản biện'}
-                                                </div>
-                                                <div
-                                                    className="text-gray-600 text-sm mb-1"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: comment.content || '',
-                                                    }}
-                                                />
-                                                <div className="text-gray-400 text-xs">
-                                                    {dayjs(comment.createdAt).format(
-                                                        'DD/MM/YYYY HH:mm'
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ),
-                                    })
-                                )}
-                            />
-                        </Card>
-                    )}
-
-                <Form form={commentForm} layout="vertical">
-                    <Form.Item
-                        label="Ý kiến phản biện"
-                        name="crossReview"
-                        rules={[{ required: true, message: 'Vui lòng nhập ý kiến phản biện' }]}
-                    >
-                        <RichTextEditor />
-                    </Form.Item>
-                </Form>
-            </Drawer>
+            {showComments && (
+                <Card>
+                    <Form form={commentForm} layout="vertical">
+                        <Form.Item
+                            label="Gửi ý kiến phản biện"
+                            name="crossReview"
+                            rules={[{ required: true, message: 'Vui lòng nhập ý kiến phản biện' }]}
+                        >
+                            <RichTextEditor />
+                        </Form.Item>
+                        <div className="flex justify-end gap-2">
+                            <Button
+                                onClick={() => {
+                                    commentForm.resetFields()
+                                    setShowComments(false)
+                                }}
+                            >
+                                Hủy
+                            </Button>
+                            <Button type="primary" onClick={handleSendCrossReview}>
+                                Gửi ý kiến
+                            </Button>
+                        </div>
+                    </Form>
+                </Card>
+            )}
         </div>
     )
 }

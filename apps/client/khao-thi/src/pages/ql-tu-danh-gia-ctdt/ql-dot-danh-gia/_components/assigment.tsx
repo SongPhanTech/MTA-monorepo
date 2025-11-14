@@ -285,7 +285,7 @@ export default function AssigmentOfAssessmentTab() {
                 <Flex justify="flex-end" gap={8} className="pb-2">
                     <Button
                         type="primary"
-                        className="bg-blue-500"
+                        className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border-0 shadow-sm disabled:from-purple-200 disabled:to-purple-300 disabled:cursor-not-allowed disabled:text-purple-700 h-8 px-4"
                         disabled={getSelectedCriteria().length === 0}
                         onClick={() => {
                             openPhanCongHangLoat({
@@ -316,6 +316,56 @@ export default function AssigmentOfAssessmentTab() {
                             selectedRowKeys,
                             onChange: onSelectChange,
                         }}
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                const target = e.target as HTMLElement
+                                if (
+                                    target.closest('.ant-select') ||
+                                    target.closest('.ant-picker') ||
+                                    target.closest('input') ||
+                                    target.closest('button')
+                                ) {
+                                    return
+                                }
+
+                                const currentKeys = [...selectedRowKeys]
+                                const recordKey = record.id
+
+                                const isParent = tableData.some(
+                                    (standard) => standard.id === recordKey
+                                )
+
+                                if (isParent) {
+                                    const standard = tableData.find((s) => s.id === recordKey)
+                                    const childrenIds = standard?.criteria?.map((c) => c.id) || []
+                                    const allChildrenSelected = childrenIds.every((id) =>
+                                        currentKeys.includes(id)
+                                    )
+
+                                    if (allChildrenSelected) {
+                                        const newKeys = currentKeys.filter(
+                                            (key) => key !== recordKey && !childrenIds.includes(key)
+                                        )
+                                        onSelectChange(newKeys)
+                                    } else {
+                                        const newKeys = [
+                                            ...currentKeys.filter((key) => key !== recordKey),
+                                            recordKey,
+                                            ...childrenIds,
+                                        ]
+                                        onSelectChange([...new Set(newKeys)])
+                                    }
+                                } else {
+                                    if (currentKeys.includes(recordKey)) {
+                                        onSelectChange(
+                                            currentKeys.filter((key) => key !== recordKey)
+                                        )
+                                    } else {
+                                        onSelectChange([...currentKeys, recordKey])
+                                    }
+                                }
+                            },
+                        })}
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
