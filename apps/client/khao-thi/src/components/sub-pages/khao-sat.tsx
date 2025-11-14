@@ -7,6 +7,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
+import { Survey } from '@workspace/db'
 import {
     useCountSurvey,
     useFindManySurvey,
@@ -26,8 +27,8 @@ function TabDotKhaoSat({
     selectedId,
     setSelectedId,
 }: {
-    selectedId: string
-    setSelectedId: (value: string) => void
+    selectedId: Survey|null
+    setSelectedId: (value: Survey | null) => void
 }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -187,9 +188,9 @@ function TabDotKhaoSat({
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    setSelectedId(record.id)
+                                    setSelectedId(record as Survey)
                                 },
-                                className: cn(selectedId === record.id ? 'bg-orange-200' : ''),
+                                className: cn(selectedId?.id === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
                         columns={[

@@ -3,6 +3,7 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import ExportStudentInSurvey from '@components/modal/export-list-student-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { Survey } from '@workspace/db'
 import {
     useCountUserProfile,
     useFindManyFixedClass,
@@ -10,11 +11,11 @@ import {
     useFindManyUserProfile,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { Col, Flex, Row, Tag } from 'antd'
+import { Col, Flex, Row, Skeleton, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-function DanhSachHocVien({ surveyId }: { surveyId: string }) {
+function DanhSachHocVien({ survey }: { survey: Survey |null }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -43,7 +44,7 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                             subjectClass: {
                                 survey: {
                                     some: {
-                                        id: surveyId,
+                                        id: survey?.id,
                                     },
                                 },
                             },
@@ -56,7 +57,7 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                 filters.statusSurvey[0] === true && {
                     surveySession: {
                         some: {
-                            surveyId: surveyId,
+                            surveyId: survey?.id,
                         },
                     },
                 }),
@@ -65,7 +66,7 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                 filters.statusSurvey[0] === false && {
                     surveySession: {
                         none: {
-                            surveyId: surveyId,
+                            surveyId: survey?.id,
                         },
                     },
                 }),
@@ -105,8 +106,8 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                 },
             }),
         }
-    }, [surveyId, filters])
-    const { data } = useFindManyUserProfile({
+    }, [survey, filters])
+    const { data ,isLoading} = useFindManyUserProfile({
         where,
         include: {
             educationAndTraining: {
@@ -132,7 +133,7 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                 },
             },
             surveySession: {
-                where: { surveyId },
+                where: { surveyId:survey?.id },
             },
         },
         orderBy: {
@@ -151,18 +152,22 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
         }
         return <Tag color={'red'}>{'Chưa làm'}</Tag>
     }
+    console.log(survey);
+    
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     return (
         <div>
             <Row gutter={[16, 4]}>
-                <Col span={24}>
+                {
+                    isLoading ?<Skeleton/>:(<>
+                     <Col span={24}>
                     <Flex justify="end">
                         <ExportStudentInSurvey
                             query={where}
-                            surveyId={surveyId}
-                            surveyName={'12381237'}
+                            survey={survey || null}
+                       
                         />
                     </Flex>
                 </Col>
@@ -270,6 +275,9 @@ function DanhSachHocVien({ surveyId }: { surveyId: string }) {
                         }}
                     />
                 </Col>
+                    </>)
+                }
+               
             </Row>
         </div>
     )

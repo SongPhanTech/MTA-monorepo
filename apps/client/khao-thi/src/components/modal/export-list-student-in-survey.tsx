@@ -6,12 +6,10 @@ import { saveAs } from 'file-saver'
 
 const ExportStudentInSurvey = ({
     query,
-    surveyId,
-    surveyName,
+    survey
 }: {
     query: any
-    surveyId: string
-    surveyName: string
+    survey?:any
 }) => {
     const { data } = useFindManyUserProfile({
         where: { ...query },
@@ -31,15 +29,22 @@ const ExportStudentInSurvey = ({
                             },
                         },
                     },
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                        },
+                    },
                 },
             },
             surveySession: {
-                where: { surveyId },
+                where: { surveyId:survey?.id },
             },
         },
         orderBy: {
             firstName: 'asc',
         },
+    },{
+        enabled: !!survey?.id
     })
 
     const exportTemplate = async () => {
@@ -154,10 +159,21 @@ const ExportStudentInSurvey = ({
         worksheet.getCell('J1').style = headerTitleStyle
 
         worksheet.mergeCells('A4:R4')
-        worksheet.getCell('A4').value = `DANH SÁCH NGƯỜI LÀM KHẢO SÁT: ${surveyName}`
+        worksheet.getCell('A4').value = `DANH SÁCH NGƯỜI LÀM KHẢO SÁT: ${survey?.name}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
 
+        worksheet.getCell('F5').value = 'Giảng viên:'
+        worksheet.getCell('F5').style = headerSubtitleStyle
+        
+        worksheet.getCell('G5').value = `${survey?.lecture?.code} - ${survey?.lecture?.userProfile?.fullname}`
+        worksheet.getCell('G5').style = headerSubtitleStyle
+
+        worksheet.getCell('F6').value = 'Lớp môn học:'
+        worksheet.getCell('F6').style = headerTitleStyle
+        
+        worksheet.getCell('G6').value = `${survey?.subjectClass?.code} - ${survey?.subjectClass?.name}`
+        worksheet.getCell('G6').style = headerTitleStyle
         // Thêm tiêu đề bảng
         const headerRow = worksheet.getRow(11)
         headerRow.values = [

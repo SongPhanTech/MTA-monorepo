@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { Survey } from '@workspace/db'
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -9,7 +10,7 @@ import { Button, Col, Flex, Row, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
+function DanhSachDoiTuong({ selectedId }: { selectedId: Survey|null }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -38,7 +39,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
     const { data: res } = useGetSurveyObjects({
         limit: numberOfPages || DEFAULT_PAGINATE_SIZE,
         page: currentPage || 1,
-        id: selectedId,
+        id: selectedId?.id || '',
         fullname: filters.fullname,
         lecturerCode: filters.lecturerCode,
         studentCode: filters.studentCode,
@@ -65,7 +66,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
                             query={{
                                 limit: data?.count || 10,
                                 page: 1,
-                                id: selectedId,
+                                id: selectedId?.id,
                                 fullname: filters.fullname,
                                 lecturerCode: filters.lecturerCode,
                                 studentCode: filters.studentCode,
@@ -78,7 +79,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: string }) {
                                         : undefined,
                                 isStudent: filters?.isStudent,
                             }}
-                            surveyName={'123123'}
+                            surveyName={selectedId?.name||''}
                         />
                         <Button
                             color="blue"

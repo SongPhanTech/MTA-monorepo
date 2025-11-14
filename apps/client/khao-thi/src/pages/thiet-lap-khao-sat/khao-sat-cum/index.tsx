@@ -3,13 +3,14 @@ import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vie
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
+import { Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 
 export default function ClussterSurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
     const [selectedId, setSelectedId] = useState('')
-    const [surveyId, setSurveyId] = useState('')
+    const [survey, setSurvey] = useState<Survey|null>(null)
     const items = [
         {
             key: '1',
@@ -19,7 +20,7 @@ export default function ClussterSurveyPage() {
                     selectedId={selectedId}
                     setSelectedId={(value) => {
                         setSelectedId(value)
-                        setSurveyId('')
+                        setSurvey(null)
                     }}
                 />
             ),
@@ -30,10 +31,11 @@ export default function ClussterSurveyPage() {
             children: (
                 <DetailSurveyPage
                     selectedId={selectedId}
-                    surveyId={surveyId}
-                    setSurveyId={(value) => {
-                        setSurveyId(value)
+                    surveyId={survey?.id||''}
+                    setSurvey={(value) => {
+                        setSurvey(value)
                     }}
+
                 />
             ),
             disabled: !selectedId,
@@ -41,8 +43,8 @@ export default function ClussterSurveyPage() {
         {
             key: '3',
             label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien surveyId={surveyId} />,
-            disabled: !surveyId,
+            children: <DanhSachHocVien  survey={survey} />,
+            disabled: !survey?.id,
         },
         {
             key: '4',

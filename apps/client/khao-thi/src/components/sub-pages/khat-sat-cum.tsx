@@ -26,6 +26,7 @@ function TabDotKhaoSatCum({
 }: {
     selectedId: string
     setSelectedId: (value: string) => void
+   
 }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)

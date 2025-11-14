@@ -2,12 +2,13 @@ import TabDotKhaoSat from '@components/sub-pages/khao-sat'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import DanhSachDoiTuong from '@components/sub-pages/khao-sat/danh-sach-dt-lam-khao-sat'
 import DefaultLayout from '@layouts/default-layout'
+import { Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 
 export default function SurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const [selectedId, setSelectedId] = useState('')
+    const [selectedId, setSelectedId] = useState<Survey|null>(null)
 
     const items = [
         {
@@ -26,13 +27,13 @@ export default function SurveyPage() {
             key: '2',
             label: 'Danh sách người làm khảo sát',
             children: <DanhSachDoiTuong selectedId={selectedId} />,
-            disabled: !selectedId,
+            disabled: !selectedId?.id,
         },
         {
             key: '3',
             label: 'Báo cáo khảo sát',
-            children: <SurveyReport selectedId={selectedId} />,
-            disabled: !selectedId,
+            children: <SurveyReport selectedId={selectedId?.id||''} />,
+            disabled: !selectedId?.id,
         },
     ]
 

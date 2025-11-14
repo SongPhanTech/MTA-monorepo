@@ -1,5 +1,6 @@
 import { FilterFilled } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
     Button,
@@ -13,14 +14,13 @@ import {
     type TableProps as TableAntdProps,
     Tree,
 } from 'antd'
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import type { ColumnTypeProps, FilterProps } from '../typeFilter'
 import FilterSelect from './filter-select'
-import { cn } from '@lib/utils'
 
 dayjs.locale('vi')
 
@@ -30,13 +30,29 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
-type TableProps<T = Record<string, unknown>> = {
+declare type PropertyKey = string | number | symbol
+export type AnyObject = Record<PropertyKey, any>
+export type ColumnsType<RecordType = AnyObject> = ((
+    | ColumnGroupType<RecordType>
+    | ColumnType<RecordType>
+) & {
+    type?:
+        | 'input'
+        | 'input_search'
+        | 'select'
+        | 'tree_select'
+        | 'order'
+        | 'date'
+        | 'cmp'
+        | (string & {})
+})[]
+
+type TableProps<T = AnyObject> = {
     columns?: ColumnsType<T> & {
-        type?: string
         distinctFilters?: string[]
         options?: ColumnOption[]
     }
-    data?: T[]
+    data?: readonly T[]
     pagination?:
         | (TablePaginationConfig & {
               onShowSizeChange?: ((size: number) => void) | undefined
@@ -47,7 +63,7 @@ type TableProps<T = Record<string, unknown>> = {
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
     expandable?: TableAntdProps<T>['expandable']
-    rowKey?: string | any
+    rowKey?: string
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
@@ -55,7 +71,7 @@ type TableProps<T = Record<string, unknown>> = {
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
-const Table = <T extends Record<string, unknown>>({
+const Table = <T extends AnyObject>({
     columns = [],
     data,
     pagination,
@@ -380,7 +396,7 @@ const Table = <T extends Record<string, unknown>>({
                                 checkAll={checkAll}
                                 indeterminate={indeterminate}
                                 filtersTable={filtersTable}
-                            />
+                                    />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({
@@ -751,6 +767,98 @@ const Table = <T extends Record<string, unknown>>({
                 },
             }
         }
+        if (item?.type === 'cmp') {
+            return {
+                filterDropdown: (props: FilterDropdownProps) => (
+                    <div className="p-4 flex flex-col w-full min-w-[200px] max-w-[300px]">
+                        <div>
+                            Lớn hơn hoặc bằng
+                            <Input
+                                placeholder="0"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.gte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            gte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                            Nhỏ hơn hoặc bằng
+                            <Input
+                                placeholder="10"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.lte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            lte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                        </div>
+                        <ListButton
+                            clear={() => {
+                                setFiltersTable({
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                setFilters?.({
+                                    ...filters,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                props.confirm()
+                            }}
+                            click={() => {
+                                if (item.distinctFilters) {
+                                    const result = {
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
+                                    }
+                                    setFilters?.(result)
+                                    props.confirm()
+                                    return
+                                }
+                                const result = {
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]:
+                                        filtersTable[item.dataIndex as keyof FilterProps],
+                                }
+                                setFilters?.(result)
+                                props.confirm()
+                            }}
+                        />
+                    </div>
+                ),
+                filterIcon: () => {
+                    return (
+                        <FilterFilled
+                            style={{
+                                color: filters?.[item.dataIndex as keyof FilterProps]
+                                    ? '#005f37'
+                                    : undefined,
+                            }}
+                        />
+                    )
+                },
+            }
+        }
+
         if (item.slot) {
             return item.slot
         }
@@ -767,6 +875,10 @@ const Table = <T extends Record<string, unknown>>({
                 columns.map((column) => ({
                     ...column,
                     key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
+                    onCell: (record: T) => ({
+                        className: cn('px-2 py-[2px]', column.className || ''),
+                        ...(column.onCell ? column.onCell(record) : {}),
+                    }),
                     ...genFilter(column as ColumnTypeProps),
                 })) as ColumnsType<T>
             }

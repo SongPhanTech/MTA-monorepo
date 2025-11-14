@@ -7,10 +7,11 @@ import ExportLecturerInSurvey from '@components/modal/export-list-lecturer-in-su
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
+import { Survey } from '@workspace/db'
 import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Col, Flex, message, Row, Tooltip } from 'antd'
+import { Col, Flex, message, Row, Skeleton, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -19,11 +20,11 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function DetailSurveyPage({
     selectedId,
     surveyId,
-    setSurveyId,
+    setSurvey,
 }: {
     selectedId: string
     surveyId: string
-    setSurveyId: (value: string) => void
+    setSurvey: (value: Survey) => void
 }) {
     const { can, canSome } = useAbility()
 
@@ -146,7 +147,7 @@ export default function DetailSurveyPage({
         }),
         [filters, selectedId]
     )
-    const { data = [] } = useFindManySurvey(
+    const { data = [],isLoading } = useFindManySurvey(
         {
             where,
             include: {
@@ -220,7 +221,8 @@ export default function DetailSurveyPage({
     })
     return (
         <Row gutter={[16, 4]}>
-            <Col span={24}>
+            {isLoading?<Skeleton/>:(<>
+             <Col span={24}>
                 <Flex align="center" justify="space-between">
                     <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
                     <ExportLecturerInSurvey
@@ -231,6 +233,7 @@ export default function DetailSurveyPage({
             </Col>
             <Col span={24}>
                 <Table
+                    rowKey={'id'}
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)
@@ -239,7 +242,7 @@ export default function DetailSurveyPage({
                     onRow={(record) => {
                         return {
                             onClick: () => {
-                                setSurveyId(record.id)
+                                setSurvey(record as Survey)
                             },
                             className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
                         }
@@ -416,6 +419,8 @@ export default function DetailSurveyPage({
                     }}
                 />
             </Col>
+            </>)}
+           
         </Row>
     )
 }
