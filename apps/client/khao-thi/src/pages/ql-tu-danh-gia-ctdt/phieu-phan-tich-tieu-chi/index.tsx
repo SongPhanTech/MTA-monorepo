@@ -9,11 +9,15 @@ import ReviewCriteriaAnalysis from './_components/review-criteria-analysis'
 import { useSession } from '@workspace/auth/react'
 import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { $Enums } from '@workspace/db/client'
+import CriteriaAnalysisList from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis-list'
+import { useAbility } from '@workspace/permissions/hooks'
+// import { KHAO_THI_PERMISSION } from '@workspace/router'
 
 export default function CriteriaAnalysisPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || ''
+    const { can } = useAbility()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
@@ -60,12 +64,18 @@ export default function CriteriaAnalysisPage() {
             },
             {
                 key: '3',
-                label: 'Xét duyệt phiếu',
-                children: <ReviewCriteriaAnalysis />,
+                label: 'Danh sách phiếu phân tích tiêu chí',
+                children: <CriteriaAnalysisList />,
                 disabled: !selectedEvaluationPeriodId,
             },
             {
                 key: '4',
+                label: 'Xét duyệt phiếu',
+                children: <ReviewCriteriaAnalysis userRole="BAN_TU_VAN" />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '5',
                 label: 'Xét duyệt phiếu',
                 children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
                 disabled: !selectedEvaluationPeriodId,
@@ -82,7 +92,7 @@ export default function CriteriaAnalysisPage() {
 
         if (isAdvisoryBoard) {
             tabs.push({
-                key: '3',
+                key: '4',
                 label: 'Xét duyệt phiếu',
                 children: <ReviewCriteriaAnalysis />,
                 disabled: !selectedEvaluationPeriodId,
@@ -91,15 +101,39 @@ export default function CriteriaAnalysisPage() {
 
         if (isSecretary) {
             tabs.push({
-                key: '4',
+                key: '5',
                 label: 'Xét duyệt phiếu',
                 children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
 
+        // if (
+        //     can(
+        //         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+        //         'XEM_CHI_TIET'
+        //     )
+        // ) {
+        //     tabs.push({
+        //         key: '3',
+        //         label: 'Danh sách phiếu phân tích tiêu chí',
+        //         children: <CriteriaAnalysisList />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
+
+        // if (
+        //     can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'THEM')
+        // ) {
+        //     tabs.push({
+        //         key: '2',
+        //         label: 'Phiếu phân tích tiêu chí',
+        //         children: <CriteriaAnalysisWrite />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember?.role])
+    }, [selectedEvaluationPeriodId, councilMember, can])
 
     return (
         <Row gutter={[12, 0]}>

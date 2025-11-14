@@ -20,6 +20,7 @@ export type DataTabType = StandardPeriod & {
     criteria: (CriterionPeriod & {
         analysisCriterions?:
             | (AnalysisCriterion & {
+                  lecturer?: { userProfile?: { fullname?: string | null } } | null
                   requirementCriterions: (RequirementCriterion & {
                       evidences: (AnalysisFormEvidence & {
                           evidence: Evidence
@@ -87,6 +88,11 @@ export default function CriteriaAnalysisWrite() {
                             include: {
                                 analysisCriterions: {
                                     include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: true,
+                                            },
+                                        },
                                         requirementCriterions: {
                                             include: {
                                                 evidences: {
@@ -148,6 +154,7 @@ export default function CriteriaAnalysisWrite() {
                             key={standard.id}
                             data={standard}
                             idx={standard.order}
+                            userRole="GV"
                         />
                     ),
                 }

@@ -39,7 +39,7 @@ const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
         case $Enums.EvaluationCriterionStatus.PENDING:
             return {
                 color: 'yellow',
-                label: 'Chờ duyệt',
+                label: 'Chưa nộp',
             }
         case $Enums.EvaluationCriterionStatus.SUBMITTED:
             return {

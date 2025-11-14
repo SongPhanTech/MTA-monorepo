@@ -1,5 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
+import CriteriaEvaluationList from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation-list'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
@@ -8,6 +9,8 @@ import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db/client'
 import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+// import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
 
@@ -16,6 +19,7 @@ export default function CriteriaEvaluationPage() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || ''
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { can } = useAbility()
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -60,12 +64,18 @@ export default function CriteriaEvaluationPage() {
             },
             {
                 key: '3',
+                label: 'Danh sách phiếu đánh giá tiêu chí',
+                children: <CriteriaEvaluationList />,
+                disabled: !selectedEvaluationPeriodId,
+            },
+            {
+                key: '4',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
                 disabled: !selectedEvaluationPeriodId,
             },
             {
-                key: '4',
+                key: '5',
                 label: 'Phản biện chéo',
                 children: <CrossReview />,
                 disabled: !selectedEvaluationPeriodId,
@@ -78,16 +88,39 @@ export default function CriteriaEvaluationPage() {
 
         if (isSecretary) {
             tabs.push({
-                key: '3',
+                key: '4',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
 
+        // if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM')) {
+        //     tabs.push({
+        //         key: '2',
+        //         label: 'Phiếu đánh giá tiêu chí',
+        //         children: <CriteriaEvaluationWrite />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
+
+        // if (
+        //     can(
+        //         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        //         'XEM_CHI_TIET'
+        //     )
+        // ) {
+        //     tabs.push({
+        //         key: '3',
+        //         label: 'Danh sách phiếu đánh giá tiêu chí',
+        //         children: <CriteriaEvaluationList />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
+
         if (councilMember) {
             tabs.push({
-                key: '4',
+                key: '5',
                 label: 'Phản biện chéo',
                 children: <CrossReview />,
                 disabled: !selectedEvaluationPeriodId,
@@ -95,7 +128,7 @@ export default function CriteriaEvaluationPage() {
         }
 
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember])
+    }, [selectedEvaluationPeriodId, councilMember, can])
 
     return (
         <Row gutter={[12, 0]}>
