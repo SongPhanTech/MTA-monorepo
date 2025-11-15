@@ -855,7 +855,7 @@ const ModalCauHinhLuanVan = () => {
                     {/* Cột chính chứa thông tin thanh toán */}
                     <Col span={24}>
                         <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
-                            Thông tin thanh toán
+                            Thanh toán hướng dẫn
                         </Title>
 
                         {/* --- GVHD 1 --- */}
@@ -969,6 +969,125 @@ const ModalCauHinhLuanVan = () => {
                         </Row>
                     </Col>
                 </Row>
+            //      <Row gutter={32} className="w-full mt-4">
+            //      {/* Cột chính chứa thông tin thanh toán */}
+            //      <Col span={24}>
+            //          <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
+            //              Thanh toán hội đồng
+            //          </Title>
+
+            //          {/* --- GVHD 1 --- */}
+            //          <Row gutter={16} align="middle">
+            //              {/* Phần hiển thị Tên GVHD 1 (chiếm 12/24 cột) */}
+            //              <Col span={12}>
+            //                  <FormItem
+            //                      form={form}
+            //                      name="supervisorName"
+            //                      label="GVHD 1"
+            //                      className="mb-5"
+            //                      labelAlign="left"
+            //                      {...formItemLayout}
+            //                  >
+            //                      <Input className="w-full" disabled />
+            //                  </FormItem>
+            //                  <FormItem
+            //                      form={form}
+            //                      name="supervisorId"
+            //                      label="GVHD 1"
+            //                      className="mb-5 hidden"
+            //                      labelAlign="left"
+            //                      {...formItemLayout}
+            //                  >
+            //                      <Input className="w-full" disabled />
+            //                  </FormItem>
+            //              </Col>
+
+            //              <Col span={12}>
+            //                  <FormItem
+            //                      form={form}
+            //                      name="supervisorPaymentAmount" // Tên trường mới
+            //                      label="Số tiền "
+            //                      className="mb-5"
+            //                      labelAlign="left"
+            //                      rules={[
+            //                          {
+            //                              required: !form.getFieldValue('supervisorName')
+            //                                  ? false
+            //                                  : true,
+            //                              message: 'Vui lòng nhập số tiền thanh toán',
+            //                          },
+            //                      ]}
+            //                  >
+            //                      <InputNumber
+            //                          className="w-2/3"
+            //                          min={0}
+            //                          placeholder="Nhập số tiền"
+            //                          parser={(value) =>
+            //                              value?.replace(/\$\s?|(,*)/g, '') as unknown as number
+            //                          }
+            //                          suffix="VNĐ"
+            //                          disabled={!form.getFieldValue('supervisorName')}
+            //                      />
+            //                  </FormItem>
+            //              </Col>
+            //          </Row>
+
+            //          <Row gutter={16} align="middle">
+            //              <Col span={12}>
+            //                  <FormItem
+            //                      form={form}
+            //                      name="coSupervisorName"
+            //                      label="GVHD 2"
+            //                      className="mb-5"
+            //                      labelAlign="left"
+            //                      {...formItemLayout}
+            //                  >
+            //                      <Input className="w-full" disabled />
+            //                  </FormItem>
+            //              </Col>
+            //              <FormItem
+            //                  form={form}
+            //                  name="coSupervisorId"
+            //                  label="GVHD 2"
+            //                  className="mb-5 hidden"
+            //                  labelAlign="left"
+            //                  {...formItemLayout}
+            //              >
+            //                  <Input className="w-full" disabled />
+            //              </FormItem>
+
+            //              <Col span={12}>
+            //                  <FormItem
+            //                      form={form}
+            //                      name="coSupervisorPaymentAmount" // Tên trường mới
+            //                      label="Số tiền"
+            //                      className="mb-5"
+            //                      labelAlign="left"
+            //                      rules={[
+            //                          {
+            //                              required: !form.getFieldValue('coSupervisorName')
+            //                                  ? false
+            //                                  : true,
+            //                              message: 'Vui lòng nhập số tiền thanh toán',
+            //                          },
+            //                      ]}
+            //                  >
+            //                      <InputNumber
+            //                          className="w-2/3"
+            //                          min={0}
+            //                          parser={(value) =>
+            //                              value?.replace(/\$\s?|(,*)/g, '') as unknown as number
+            //                          }
+            //                          placeholder="Nhập số tiền"
+            //                          suffix="VNĐ"
+            //                          disabled={!form.getFieldValue('coSupervisorName')}
+            //                      />
+            //                  </FormItem>
+            //              </Col>
+            //          </Row>
+            //      </Col>
+            //  </Row>
+                
             ),
         },
     ]

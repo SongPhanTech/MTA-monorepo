@@ -88,6 +88,8 @@ const PutExpertProfile = () => {
                   lecturerId: selectedLecturer.id,
                   eligibleSecretary: output.eligibleSecretary,
                   eligiblePresident: output.eligiblePresident,
+                  bankAccountNumber: output.bankAccountNumber,
+                  bankName: output.bankName,
               }
             : {
                   academicRank: output.academicRank,
@@ -99,6 +101,8 @@ const PutExpertProfile = () => {
                   name: output?.name?.trim(),
                   eligibleSecretary: output.eligibleSecretary,
                   eligiblePresident: output.eligiblePresident,
+                  bankAccountNumber: output.bankAccountNumber,
+                  bankName: output.bankName,
               }
 
         try {
@@ -212,6 +216,17 @@ const PutExpertProfile = () => {
                     </FormItem>
                 </Col>
             )}
+            
+                <Col span={12}>
+                    <FormItem form={form} name="bankAccountNumber" label="Số tài khoản" required>
+                        <Input placeholder="Nhập số tài khoản" />
+                    </FormItem>
+                </Col>
+            <Col span={12}>
+                    <FormItem form={form} name="bankName" label="Ngân hàng" required>
+                        <Input placeholder="Nhập ngân hàng" />
+                    </FormItem>
+                </Col>
             {!isInternal && (
                 <Col span={12}>
                     <FormItem form={form} name="email" label="Email" required>

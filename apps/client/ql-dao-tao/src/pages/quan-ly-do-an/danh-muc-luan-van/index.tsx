@@ -30,7 +30,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { CouncilRole, ThesisType } from '@workspace/db/client'
 import { buildOrgTree } from '@lib/utils'
 // import { getMinioUrl } from '@workspace/constant'
-interface ExpertStat {
+ interface ExpertStat {
     expertId: string
     name: string
     sDonvi: string
@@ -591,6 +591,7 @@ export default function PostgraduateProject() {
             hideSpinner()
         }
     }
+
     const getExpertSupervisionStats = (): ExpertStat[] => {
         if (!allStudents || allStudents.length === 0) {
             return []
@@ -658,6 +659,7 @@ export default function PostgraduateProject() {
             id: 1,
             label: 'Phụ lục ds luận văn',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 2,
@@ -673,21 +675,25 @@ export default function PostgraduateProject() {
             id: 5,
             label: 'Giấy mời chấm LV PB',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 6,
             label: 'Phụ lục QĐHĐ',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 6.1,
             label: 'Bản sao HDDGLV',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 7,
             label: 'Đề xuất hội đồng',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 8,
@@ -703,23 +709,27 @@ export default function PostgraduateProject() {
             id: 10,
             label: 'Danh sách bảo vệ(Dán PBV)',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
 
         {
             id: 12,
             label: 'Danh sách chuyên gia',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
 
         {
             id: 13,
             label: 'Thanh toán hướng dẫn',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 13.1,
             label: 'Thanh toán hướng dẫn - Ngoài HV',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 14,
@@ -730,21 +740,25 @@ export default function PostgraduateProject() {
             id: 15,
             label: 'Thống kê cán bộ tham gia HĐ',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 16,
             label: 'Thống kê KQ BV LV',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 19,
             label: 'Danh sách nộp luận văn thư viện',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
         {
             id: 11,
             label: 'Thanh toán hội đồng bảo vệ',
             onClick: () => defaultButtonClick(),
+            disabled: true,
         },
     ]
     const { mutateAsync: createThesisProject } = useCreateThesisProject()
@@ -989,10 +1003,10 @@ export default function PostgraduateProject() {
                                         disabled={!thesisSessionSelected}
                                     />
                                 </Form.Item>
-                                <Form.Item name="searchText" label="Lớp học" required>
+                                <Form.Item name="searchText" label="Lớp học" >
                                     <Select
                                         mode="multiple"
-                                        className="w-36"
+                                        className="w-full min-w-36"
                                         options={fixedClasses?.map((x) => {
                                             return {
                                                 label: x.name,
@@ -1092,6 +1106,7 @@ export default function PostgraduateProject() {
                                         key={item.id}
                                         type="primary"
                                         onClick={async () => await item.onClick()}
+                                        disabled={item.disabled}
                                     >
                                         {item.id}. {item.label}
                                     </Button>
@@ -1412,6 +1427,7 @@ export default function PostgraduateProject() {
                         //             ThesisType.THESIS
                         //     ) || []
                         // }
+                        
                         data={students || []}
                         pagination={{
                             current: currentPage,
