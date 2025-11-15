@@ -16,7 +16,11 @@ import {
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
 import type { GenerateOriginalDiplomaNumberBody } from '@workspace/libs/api/schemas'
-import { generateDiplomaNumber, graduationSessionDecision } from '@workspace/libs/api/training'
+import {
+    exportGraduationDecisionPptx,
+    generateDiplomaNumber,
+    graduationSessionDecision,
+} from '@workspace/libs/api/training'
 import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
 import {
     Button,
@@ -34,7 +38,7 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
-import { BookCheckIcon, Sheet } from 'lucide-react'
+import { BookCheckIcon, Presentation, Sheet } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -270,6 +274,26 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         }
     }
 
+    const [isExportingPptx, setIsExportingPptx] = useState(false)
+    const handleExportPptx = async () => {
+        if (!sessionId) return
+        setIsExportingPptx(true)
+        try {
+            const res = await exportGraduationDecisionPptx({ sessionId })
+
+            if (res.status === 200) {
+                saveAs(res.data, 'slide_TN.xlsx')
+            } else {
+                message.error(res.data.message)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+        } finally {
+            setIsExportingPptx(false)
+        }
+    }
+
     const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
         dataTable: any
         dataStudent: any
@@ -339,7 +363,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
 
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
-            <Flex align="center" justify="space-between" className="px-4 mt-4">
+            <Flex align="center" justify="space-between" className="mt-4">
                 <div className="flex align-middle items-center gap-2">
                     <Popover
                         content={
@@ -536,6 +560,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                     >
                         <Sheet />
                         Xuất kết quả
+                    </Button>
+
+                    <Button
+                        type="primary"
+                        onClick={() => handleExportPptx()}
+                        loading={isExportingPptx}
+                    >
+                        <Presentation />
+                        Xuất slide
                     </Button>
                 </div>
             </Flex>

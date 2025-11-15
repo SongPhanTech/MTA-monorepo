@@ -6,9 +6,9 @@ await prisma.templateFile.createMany({
     skipDuplicates: true,
     data: [
         {
-            name: 'Kết quả xác minh văn bằng',
-            code: 'XAC_MINH_VAN_BANG',
-            path: 'https://minio.swantech.vn/mta/template/XAC_MINH_VAN_BANG.xlsx',
+            name: 'slide tốt nghiệp',
+            code: 'SLIDE_TN',
+            path: 'https://minio.swantech.vn/mta/template/slide_TN.pptx',
             fileType: 'DOWNLOAD',
             extensions: 'xlsx',
             numberField: 0,
