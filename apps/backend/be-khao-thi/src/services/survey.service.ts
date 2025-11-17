@@ -122,7 +122,10 @@ export const getSurveyStats = async (
         const answers = choices.map((choice) => {
             const key = `${question.id}-${choice.id}`
             const rate = Number(
-                ((answerCountMap[key] || 0) / (questionCountMap.get(question.id) || 1)).toFixed(1)
+                (
+                    ((answerCountMap[key] || 0) / (questionCountMap.get(question.id) || 1)) *
+                    100
+                ).toFixed(2)
             )
             const sRate = `${rate}%`
             const summary = `${answerCountMap[key]}/${questionCountMap.get(question.id)} (${rate})`
@@ -144,16 +147,29 @@ export const getSurveyStats = async (
         }
     })
 
-    const average = choices.map((choice) => {
+    const rawAverages = choices.map((choice) => {
         if (questionsStatistics.length === 0) return 0
 
         const totalRate = questionsStatistics.reduce((acc, curr) => {
             return acc + (curr.answers.find((i) => i.id === choice.id)?.rate || 0)
         }, 0)
 
-        const average = Number((totalRate / questionsStatistics.length).toFixed(1))
-        return average
+        return totalRate / questionsStatistics.length
     })
+
+    const sumOfAverages = rawAverages.reduce((acc, curr) => acc + curr, 0)
+    let average = rawAverages.map((avg) => (sumOfAverages === 0 ? 0 : (avg / sumOfAverages) * 100))
+
+    // Adjust for rounding to ensure the sum is exactly 100
+    if (sumOfAverages > 0) {
+        const roundedAverages = average.slice(0, -1).map((avg) => Number(avg.toFixed(2)))
+        const sumOfRounded = roundedAverages.reduce((acc, curr) => acc + curr, 0)
+        const lastAverage = Number((100 - sumOfRounded).toFixed(2))
+        average = [...roundedAverages, lastAverage]
+    } else {
+        // If sum is 0, just make sure all are properly formatted
+        average = average.map((avg) => Number(avg.toFixed(2)))
+    }
 
     return {
         surveyId: survey.id,
