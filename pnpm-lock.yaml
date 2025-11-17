@@ -40,7 +40,7 @@ catalogs:
       specifier: ^1.7.1
       version: 1.7.1
     '@hono/otel':
-      specifier: ^1.0.1
+      specifier: 1.0.1
       version: 1.0.1
     '@hono/zod-openapi':
       specifier: ^0.18.4
@@ -61,10 +61,10 @@ catalogs:
       specifier: ^0.208.0
       version: 0.208.0
     '@opentelemetry/exporter-trace-otlp-http':
-      specifier: ^0.208.0
+      specifier: 0.208.0
       version: 0.208.0
     '@opentelemetry/resources':
-      specifier: ^2.2.0
+      specifier: 2.2.0
       version: 2.2.0
     '@opentelemetry/sdk-node':
       specifier: 0.208.0
@@ -73,7 +73,7 @@ catalogs:
       specifier: ^2.2.0
       version: 2.2.0
     '@opentelemetry/sdk-trace-web':
-      specifier: ^2.2.0
+      specifier: 2.2.0
       version: 2.2.0
     '@opentelemetry/semantic-conventions':
       specifier: 1.38.0
@@ -559,9 +559,30 @@ importers:
       '@hono/oidc-auth':
         specifier: 'catalog:'
         version: 1.7.1(hono@4.10.3)
+      '@hono/otel':
+        specifier: 'catalog:'
+        version: 1.0.1(hono@4.10.3)
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 0.18.4(hono@4.10.3)(zod@3.25.76)
+      '@opentelemetry/auto-instrumentations-node':
+        specifier: 'catalog:'
+        version: 0.67.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: 'catalog:'
+        version: 0.208.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: 'catalog:'
+        version: 2.2.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node':
+        specifier: 'catalog:'
+        version: 0.208.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web':
+        specifier: 'catalog:'
+        version: 2.2.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: 'catalog:'
+        version: 1.38.0
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.3)
@@ -16596,7 +16617,7 @@ snapshots:
       string-argv: 0.3.2
       tsconfck: 2.1.2(typescript@5.9.2)
       typedoc: 0.28.11(typescript@5.9.2)
-      typedoc-plugin-markdown: 4.8.1(typedoc@0.28.11(typescript@5.9.2))
+      typedoc-plugin-markdown: 4.8.1(typedoc@0.28.11(typescript@5.9.3))
       typescript: 5.9.2
     transitivePeerDependencies:
       - encoding
@@ -18588,7 +18609,7 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typedoc-plugin-markdown@4.8.1(typedoc@0.28.11(typescript@5.9.2)):
+  typedoc-plugin-markdown@4.8.1(typedoc@0.28.11(typescript@5.9.3)):
     dependencies:
       typedoc: 0.28.11(typescript@5.9.2)
 

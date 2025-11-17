@@ -41,7 +41,7 @@ function TakeTestPage() {
     const [startAt, setStartAt] = useState<Date>(new Date())
     const id = router.query.id as string
     const { data: session } = useSession()
-    const profileId = '3e90f118-8220-4eff-88b6-4534d3afe601'
+    const profileId = session?.sDM_NhanVienId ||''
     const [form] = Form.useForm<PutSurveySession>()
     const [survey, setSurvey] = useState<SurveyType>()
     const [isLoading, setIsLoading] = useState(true)

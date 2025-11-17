@@ -1,4 +1,7 @@
+import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -14,8 +17,25 @@ import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
+
+import './otel'
+
+const openTelemetrySDK = new NodeSDK({
+    traceExporter: new OTLPTraceExporter(),
+})
+openTelemetrySDK.start()
+
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
+
+const instrumentationConfig = {
+    serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
+    serviceVersion: '1.0.0',
+    captureRequestHeaders: ['user-agent', 'service-name'],
+}
+
+app.use(httpInstrumentationMiddleware(instrumentationConfig))
+
 app.use(
     '*',
     cors({
