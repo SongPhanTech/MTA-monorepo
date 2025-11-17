@@ -89,7 +89,7 @@ function ConfigSurveyExam({
             <div>
                 <FormItem form={form} name="surveyChoice">
                     <Table
-                        rowKey={(record, index) => `${record?.id}-${record?.answer}-${index}`}
+                        rowKey={'id'}
                         columns={[
                             {
                                 title: 'Giá trị',
