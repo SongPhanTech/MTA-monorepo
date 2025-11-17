@@ -1246,9 +1246,9 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
                 slide.generate(async (pSlide, pptxGenJs) => {
                     const res = await getFilesEmployeeUserIdImage(decision.student.userProfile.id, {
                         fullName: decision.student.userProfile.fullname || '',
+                        tenantCode: 'dev',
                     })
                     const blob = res.data as unknown as Blob
-                    console.log('size', blob.size)
 
                     if (blob && blob.size > 0) {
                         const arrayBuffer = await blob.arrayBuffer()

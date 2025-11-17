@@ -53,8 +53,8 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { putDMNhanViens } from '@workspace/libs/api/system'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
-import dayjs from 'dayjs'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 interface itemType {
@@ -1065,6 +1065,7 @@ export default function UpdateUserPage() {
     )
 
     // Hàm fill thông tin từ dữ liệu cccdUserProfileData
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <dv>
     const fillUserInfo = useCallback(
         async (userData: any) => {
             if (!userData) return
