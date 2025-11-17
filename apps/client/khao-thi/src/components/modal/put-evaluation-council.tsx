@@ -27,14 +27,14 @@ const PutEvaluationCouncil = () => {
     const { mutateAsync: createEvaluationCouncil } = useCreateEvaluationCouncil()
     const { mutateAsync: updateEvaluationCouncil } = useUpdateEvaluationCouncil()
     async function onOk(output?: PutEvaluationCouncilType) {
-        if (!output || !input) return
+        if (!output || !input || !input.evaluationPeriodId) return
         try {
             showSpinner()
             const data = {
                 code: output.code,
                 name: output.name.trim(),
                 description: output.description,
-                periodId: output?.periodId,
+                periodId: input.evaluationPeriodId,
             }
             if (input.evaluationCouncilId) {
                 await updateEvaluationCouncil({
@@ -46,9 +46,7 @@ const PutEvaluationCouncil = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createEvaluationCouncil({
-                    data: {
-                        ...data,
-                    },
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

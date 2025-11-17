@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -50,9 +49,10 @@ const PutTieuChuanTieuChi = () => {
     const {
         isOpen,
         onClose,
-        input: id,
+        input: { id, refetch } = {},
     } = useDisclosure<{
         id?: string
+        refetch?: () => void
     }>({
         tag: 'PutTieuChuanTieuChi',
     })
@@ -436,9 +436,9 @@ const PutTieuChuanTieuChi = () => {
                 message.success('Thêm mới thành công')
             }
 
-            queryClient.invalidateQueries({
-                queryKey: ['StandardPeriod'],
-            })
+            if (refetch) {
+                refetch()
+            }
 
             onClose()
         } catch (error) {

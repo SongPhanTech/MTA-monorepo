@@ -20,6 +20,7 @@ export default function EvaluationStandardTab() {
 
     const { onOpen } = useDisclosure<{
         id?: string
+        refetch?: () => void
     }>({
         tag: 'PutTieuChuanTieuChi',
     })
@@ -46,7 +47,7 @@ export default function EvaluationStandardTab() {
         [filters.searchText, filters.name]
     )
 
-    const { data, isLoading } = useFindManyStandardPeriod(
+    const { data, isLoading, refetch } = useFindManyStandardPeriod(
         {
             where: {
                 ...where,
@@ -106,7 +107,9 @@ export default function EvaluationStandardTab() {
                             <Button
                                 type="primary"
                                 onClick={() => {
-                                    onOpen()
+                                    onOpen({
+                                        refetch,
+                                    })
                                 }}
                             >
                                 Thêm mới
@@ -115,7 +118,7 @@ export default function EvaluationStandardTab() {
                             <Button
                                 type="primary"
                                 onClick={() => {
-                                    onOpen({ id: data[0]?.id })
+                                    onOpen({ id: data[0]?.id, refetch })
                                 }}
                             >
                                 Chỉnh sửa

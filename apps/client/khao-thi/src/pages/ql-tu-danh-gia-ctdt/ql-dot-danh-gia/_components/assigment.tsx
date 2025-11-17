@@ -9,8 +9,6 @@ import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
@@ -44,7 +42,6 @@ export default function AssigmentOfAssessmentTab() {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
-    const { can } = useAbility()
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
@@ -442,38 +439,28 @@ export default function AssigmentOfAssessmentTab() {
                                 render: (_, record) => {
                                     return (
                                         <Flex justify="center" align="center" gap={8}>
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                'DUYET'
-                                            ) && (
-                                                <UserPlusIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        e.preventDefault()
-                                                        onOpen({
-                                                            criterionPeriodId: record.id,
-                                                            refetch: refetch,
-                                                        })
-                                                    }}
-                                                />
-                                            )}
+                                            <UserPlusIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        criterionPeriodId: record.id,
+                                                        refetch: refetch,
+                                                    })
+                                                }}
+                                            />
 
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                'SUA'
-                                            ) && (
-                                                <EditIcon
-                                                    className="text-blue-700 cursor-pointer"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        e.preventDefault()
-                                                        onOpen({
-                                                            criterionPeriodId: record.id,
-                                                            refetch: refetch,
-                                                        })
-                                                    }}
-                                                />
-                                            )}
+                                            <EditIcon
+                                                className="text-blue-700 cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        criterionPeriodId: record.id,
+                                                        refetch: refetch,
+                                                    })
+                                                }}
+                                            />
                                         </Flex>
                                     )
                                 },
