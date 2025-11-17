@@ -28,6 +28,8 @@ type ModalParams struct {
 	// HTMXIndicator is an optional ID of an HTMX indicator that
 	// should be inserted in the modal header.
 	HTMXIndicator string
+
+	ClassName string
 }
 
 // ModalResult is the result of creating a modal dialog.
@@ -98,9 +100,10 @@ func Modal(params ModalParams) ModalResult {
 				"bg-base-100 rounded-box overflow-y-auto p-0": true,
 				"overflow-x-hidden whitespace-normal":         true,
 
-				"w-[400px]": size == SizeSm,
-				"w-[600px]": size == SizeMd,
-				"w-[800px]": size == SizeLg,
+				"w-[400px]":      size == SizeSm,
+				"w-[600px]":      size == SizeMd,
+				"w-[800px]":      size == SizeLg,
+				params.ClassName: true,
 			},
 
 			nodx.Div(
