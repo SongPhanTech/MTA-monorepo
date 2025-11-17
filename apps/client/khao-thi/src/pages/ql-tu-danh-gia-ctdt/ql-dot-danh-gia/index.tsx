@@ -1,6 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-period'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 import { Store, useStore } from '@tanstack/react-store'
 import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council'
@@ -9,6 +9,8 @@ import AssigmentOfAssessmentTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia
 import { useSession } from '@workspace/auth/react'
 import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { $Enums } from '@workspace/db/client'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -23,6 +25,9 @@ export default function EvaluationPeriodTabPage() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || ''
+    const { can } = useAbility()
+
+    const BYPASS_PERMISSION_CHECK = false
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -53,29 +58,11 @@ export default function EvaluationPeriodTabPage() {
     )
 
     const tabItems = useMemo(() => {
-        const tabs = [
+        const tabs: TabsProps['items'] = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
                 children: <EvaluationPeriod />,
-            },
-            {
-                key: '2',
-                label: 'Hội đồng',
-                children: <EvaluationCouncilTab />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '3',
-                label: 'Tiêu chuẩn, tiêu chí',
-                children: <EvaluationStandardTab />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '4',
-                label: 'Phân công giảng viên',
-                children: <AssigmentOfAssessmentTab />,
-                disabled: !selectedEvaluationPeriodId,
             },
         ]
 
@@ -83,7 +70,27 @@ export default function EvaluationPeriodTabPage() {
             $Enums.EvaluationMemberRole.VICE_PRESIDENT
         )
 
-        if (isVicePersident) {
+        if (
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM') ||
+            BYPASS_PERMISSION_CHECK
+        ) {
+            tabs.push(
+                {
+                    key: '2',
+                    label: 'Hội đồng',
+                    children: <EvaluationCouncilTab />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '3',
+                    label: 'Tiêu chuẩn, tiêu chí',
+                    children: <EvaluationStandardTab />,
+                    disabled: !selectedEvaluationPeriodId,
+                }
+            )
+        }
+
+        if (isVicePersident || BYPASS_PERMISSION_CHECK) {
             tabs.push({
                 key: '4',
                 label: 'Phân công giảng viên',
@@ -93,7 +100,7 @@ export default function EvaluationPeriodTabPage() {
         }
 
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember?.role])
+    }, [selectedEvaluationPeriodId, councilMember, can])
 
     return (
         <Row gutter={[12, 0]}>

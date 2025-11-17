@@ -106,3 +106,21 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
 
     return { status: response.status, data, headers: response.headers } as T
 }
+
+export const customSystemShareFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
+    const requestUrl = getUrl('https://mta.swantech.vn/api/system/share', url)
+
+    const response = await fetchInstance(requestUrl, options)
+    const data = await getBody<T>(response)
+
+    return { status: response.status, data, headers: response.headers } as T
+}
+
+export const customStorageFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
+    const requestUrl = getUrl('https://mta.swantech.vn/api/system/storage', url)
+
+    const response = await fetchInstance(requestUrl, options)
+    const data = await getBody<T>(response)
+
+    return { status: response.status, data, headers: response.headers } as T
+}

@@ -1,7 +1,7 @@
 import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import KhaoSatLayout from '@layouts/khao-sat-layout'
+import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
 import type { SurveySession } from '@workspace/db'
 import { useFindFirstSurveySession } from '@workspace/db/hooks'
@@ -44,7 +44,7 @@ function TakeTestPage() {
     // const surveyObjectTypeId = router.query.surveyObjectTypeId as string
 
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId || ''
+    const profileId = 'fde8b90b-d93b-485d-aa5c-d403990678e5'
     console.log(profileId)
 
     // const { data } =  useGetPublicSurvey(id)
@@ -228,5 +228,5 @@ function TakeTestPage() {
 
 export default TakeTestPage
 TakeTestPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <KhaoSatLayout>{page}</KhaoSatLayout>
+    return <KhaoSatPrivateLayout headerName="Xem lại khảo sát">{page}</KhaoSatPrivateLayout>
 }

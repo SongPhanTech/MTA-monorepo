@@ -340,3 +340,9 @@ export function genOriginalDiplomaNumber({
             : (currentNumber ?? '')
     return `${prefix || ''}${serial}${suffix || ''}`
 }
+
+export function* chunk<T>(arr: T[], size: number): Generator<T[]> {
+    for (let i = 0; i < arr.length; i += size) {
+        yield arr.slice(i, i + size)
+    }
+}

@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import {
     AcademicActionType,
@@ -12,11 +13,14 @@ import {
     GraduationRankDowngradeConditionScalarSchema,
     TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
+import { getFilesEmployeeUserIdImage } from '@workspace/libs/api/system-share'
 import { getTemplateBuffer } from '@workspace/libs/server'
-import { genOriginalDiplomaNumber } from '@workspace/libs/utils'
+import { chunk, genOriginalDiplomaNumber } from '@workspace/libs/utils'
 import Decimal from 'decimal.js'
+import { Automizer } from 'pptx-automizer'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
+import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { evaluateCondition } from '../services/student-result.service'
 import type { StudentDataContext } from '../types/student-context'
 
@@ -757,36 +761,6 @@ app.openapi(graduationCheck, async (c) => {
     return c.json({ results }, 200)
 })
 
-const graduationSessionDecision = createRoute({
-    operationId: 'graduationSessionDecision',
-    tags: ['Graduation'],
-    path: '/session-decision',
-    method: 'get',
-    request: {
-        query: z.object({
-            sessionId: z.string(),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Success',
-            content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({ message: z.string() }),
-                },
-            },
-        },
-    },
-})
-
 const generateDiplomaNumber = createRoute({
     operationId: 'generateDiplomaNumber',
     tags: ['Graduation'],
@@ -956,6 +930,36 @@ app.openapi(generateDiplomaNumber, async (c) => {
     return c.json({ count: result.length }, 200)
 })
 
+const graduationSessionDecision = createRoute({
+    operationId: 'graduationSessionDecision',
+    tags: ['Graduation'],
+    path: '/session-decision',
+    method: 'get',
+    request: {
+        query: z.object({
+            sessionId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
 app.openapi(graduationSessionDecision, async (c) => {
     const { sessionId } = c.req.valid('query')
 
@@ -1087,6 +1091,231 @@ app.openapi(statisticsGraduationDecision, async (c) => {
         group by date_part('year', "decisionDate"), classification;
     `
     return c.json(res, 200)
+})
+
+const exportGraduationDecisionPptx = createRoute({
+    operationId: 'exportGraduationDecisionPptx',
+    tags: ['Graduation'],
+    path: '/export-graduation-decision-pptx',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'multipart/form-data': {
+                    schema: UploadExcelModel.partial().extend({
+                        sessionId: z.string().optional(),
+                        timeout: z.coerce.number().default(30),
+                    }),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(exportGraduationDecisionPptx, async (c) => {
+    const { sessionId, timeout, file } = c.req.valid('form')
+
+    const decisions = await prisma.graduationDecision.findMany({
+        where: { application: { sessionId } },
+        include: {
+            trainingMajor: { include: { trainingField: true } },
+            finalRanking: true,
+            diplomaType: true,
+            student: {
+                include: {
+                    userProfile: { include: { gender: true } },
+                    curriculumVersion: {
+                        include: {
+                            trainingType: true,
+                        },
+                    },
+                    fixedClass: {
+                        include: {
+                            curriculumVersion: {
+                                include: {
+                                    trainingType: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const bufferTemplate = await getTemplateBuffer(prisma, 'SLIDE_TN')
+
+    const automizer = new Automizer({
+        // templateDir: './templates',
+        // outputDir: './templates',
+        removeExistingSlides: true,
+    })
+
+    // automizer.load(bufferTemplate, 'slide_TN')
+    // const pres = automizer.loadRoot('slide_TN.pptx').load('slide_TN.pptx', 'main')
+
+    const pres = automizer.loadRoot(bufferTemplate).load(bufferTemplate, 'main')
+
+    const info = await pres.getInfo()
+    const slideNumbers = info.slidesByTemplate('main').map((s) => s.number)
+
+    const templateBaseIndex = slideNumbers[0]
+    const templateIndex = slideNumbers[1]
+    const listIndex = slideNumbers[2]
+    if (!templateBaseIndex || !templateIndex || !listIndex) {
+        return c.json({ message: 'Template not found' }, 400)
+    }
+
+    pres.addSlide('main', templateBaseIndex)
+
+    const chunkSize = 26
+    for (const c of chunk(decisions, chunkSize)) {
+        for (const decision of c) {
+            pres.addSlide('main', templateIndex, (slide) => {
+                const coords = {
+                    x: 1.5,
+                    y: 2,
+                    w: 3,
+                    h: 4,
+                }
+
+                //! some how slide.generate runs before slide.modify
+
+                slide.modify((xml) => {
+                    // const pic = Array.from(xml.getElementsByTagName('p:pic'))[0]
+                    // pic?.parentElement?.removeChild(pic)
+                    // if (pic) {
+                    //     const spPr = pic.getElementsByTagName('p:spPr')[0]
+                    //     if (!spPr) {
+                    //         console.warn('No spPr found for placeholder')
+                    //         return
+                    //     }
+
+                    //     const xfrm = spPr.getElementsByTagName('a:xfrm')[0]
+
+                    //     if (xfrm) {
+                    //         console.warn('No a:xfrm found in spPr')
+                    //         const off = xfrm.getElementsByTagName('a:off')[0]
+                    //         const ext = xfrm.getElementsByTagName('a:ext')[0]
+
+                    //         coords.x = Number.parseInt(off?.getAttribute('x') || '0', 10) / 914400
+                    //         coords.y = Number.parseInt(off?.getAttribute('y') || '0', 10) / 914400
+                    //         coords.w = Number.parseInt(ext?.getAttribute('cx') || '0', 10) / 914400
+                    //         coords.h = Number.parseInt(ext?.getAttribute('cy') || '0', 10) / 914400
+                    //     }
+                    // }
+
+                    const textNodes = xml.getElementsByTagName('a:t')
+                    for (const t of textNodes) {
+                        t.textContent = t.textContent
+                            .replace(
+                                '{{fullname}}',
+                                decision.student.userProfile.fullname?.toUpperCase() || ''
+                            )
+                            .replace(
+                                '{{field}}',
+                                decision.trainingMajor?.trainingField.name.toUpperCase() || ''
+                            )
+                            .replace(
+                                '{{classification}}',
+                                decision.finalRanking?.classification.toUpperCase() || ''
+                            )
+                    }
+                })
+
+                slide.generate(async (pSlide, pptxGenJs) => {
+                    const res = await getFilesEmployeeUserIdImage(decision.student.userProfile.id, {
+                        fullName: decision.student.userProfile.fullname || '',
+                        tenantCode: 'dev',
+                    })
+                    const blob = res.data as unknown as Blob
+
+                    if (blob && blob.size > 0) {
+                        const arrayBuffer = await blob.arrayBuffer()
+
+                        const buffer = Buffer.from(arrayBuffer).toBase64()
+                        const data = `image/png;base64,${buffer}`
+
+                        // const res = await getFilesDownloadAppCodeFileName(
+                        //     'lms',
+                        //     decision.student.userProfile.avatar,
+                        //     undefined,
+                        //     {
+                        //         headers: {
+                        //             'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        //             'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                        //         },
+                        //     }
+                        // )
+                        // console.log(res)
+
+                        pSlide.addImage({
+                            data,
+                            // path: 'https://randomuser.me/api/portraits/lego/6.jpg',
+                            ...coords,
+                        })
+                    }
+                })
+            })
+        }
+        pres.addSlide('main', listIndex, (slide) => {
+            const list1 = c
+                .slice(0, chunkSize / 2)
+                .map((d, i) => `${i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` || '')
+                .join('\n')
+            const list2 = c
+                .slice(chunkSize / 2)
+                .map(
+                    (d, i) =>
+                        `${chunkSize / 2 + i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` ||
+                        ''
+                )
+                .join('\n')
+            slide.modify((xml) => {
+                const textNodes = xml.getElementsByTagName('a:t')
+                for (const t of textNodes) {
+                    t.textContent = t.textContent
+                        .replace('{{list1}}', list1)
+                        .replace('{{list2}}', list2)
+                }
+            })
+        })
+    }
+
+    const nodeStream = (await pres.stream({
+        type: 'nodebuffer',
+        compression: 'DEFLATE',
+    })) as Readable
+    const webStream = Readable.toWeb(nodeStream)
+    // await pres.write('generated.pptx')
+
+    const fileName = 'slide_TN.pptx'
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(webStream as any, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app
