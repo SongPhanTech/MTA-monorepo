@@ -610,6 +610,8 @@ app.openapi(getFacultyStatisticsByParentUnit, async (c) => {
     return c.json(responseData, 200)
 })
 
+
+
 const getAnswerStatistics = createRoute({
     operationId: 'get-answer-statistics-by-level',
     path: '/statistics/answers/by-satisfaction-level',
@@ -1453,8 +1455,8 @@ const getPrivateSurvey = createRoute({
     operationId: 'get-private-survey',
     path: '/get-private-survey/{id}',
     tags: ['Survey'],
-    summary: 'Thông tin đợt khảo sát công khai',
-    description: 'Lấy thông tin đợt khảo sát công khai',
+    summary: 'Thông tin đợt khảo sát không công khai',
+    description: 'Lấy thông tin đợt khảo sát không công khai',
     method: 'get',
     request: {
         params: z.object({
