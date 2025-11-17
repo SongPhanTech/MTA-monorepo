@@ -47,6 +47,12 @@ func dashboardAside() nodx.Node {
 				false,
 			),
 			dashboardAsideItem(
+				lucide.Clock,
+				"Mốc sao lưu",
+				"/dashboard/milestones",
+				false,
+			),
+			dashboardAsideItem(
 				lucide.List,
 				"Lịch sử thực thi",
 				"/dashboard/executions",

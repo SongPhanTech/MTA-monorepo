@@ -30,9 +30,9 @@ func deleteExecutionButton(executionID uuid.UUID) nodx.Node {
 	return nodx.Button(
 		htmx.HxDelete("/dashboard/executions/"+executionID.String()),
 		htmx.HxDisabledELT("this"),
-		htmx.HxConfirm("Are you sure you want to delete this execution? It will delete the backup file from the destination and it can't be recovered."),
+		htmx.HxConfirm("Bạn có chắc chắn muốn xoá thực thi này không? Việc này sẽ xoá file backup khỏi đích đến và không thể khôi phục."),
 		nodx.Class("btn btn-error btn-outline"),
-		component.SpanText("Delete"),
+		component.SpanText("Xoá"),
 		lucide.Trash(),
 	)
 }

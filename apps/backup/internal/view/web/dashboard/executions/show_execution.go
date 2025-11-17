@@ -124,7 +124,7 @@ func showExecutionButton(
 							nodx.Href("/dashboard/executions/"+execution.ID.String()+"/download"),
 							nodx.Target("_blank"),
 							nodx.Class("btn btn-primary"),
-							component.SpanText("Download"),
+							component.SpanText("Tải xuống"),
 							lucide.Download(),
 						),
 					),

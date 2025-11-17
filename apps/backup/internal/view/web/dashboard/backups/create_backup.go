@@ -2,7 +2,6 @@ package backups
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/staticdata"
@@ -58,12 +57,18 @@ func (h *handlers) createBackupHandler(c echo.Context) error {
 			IsActive:       formData.IsActive == "true",
 			DestDir:        formData.DestDir,
 			RetentionDays:  formData.RetentionDays,
-			OptDataOnly:    formData.OptDataOnly == "true",
-			OptSchemaOnly:  formData.OptSchemaOnly == "true",
-			OptClean:       formData.OptClean == "true",
-			OptIfExists:    formData.OptIfExists == "true",
-			OptCreate:      formData.OptCreate == "true",
-			OptNoComments:  formData.OptNoComments == "true",
+			// OptDataOnly:    formData.OptDataOnly == "true",
+			OptDataOnly: false,
+			// OptSchemaOnly:  formData.OptSchemaOnly == "true",
+			OptSchemaOnly: false,
+			// OptClean:       formData.OptClean == "true",
+			OptClean: true,
+			// OptIfExists:    formData.OptIfExists == "true",
+			OptIfExists: false,
+			// OptCreate:      formData.OptCreate == "true",
+			OptCreate: false,
+			// OptNoComments:  formData.OptNoComments == "true",
+			OptNoComments: false,
 		},
 	)
 	if err != nil {
@@ -86,14 +91,20 @@ func (h *handlers) createBackupFormHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
+	milestones, err := h.servs.MilestonesService.GetAllMilestones(ctx)
+	if err != nil {
+		return respondhtmx.ToastError(c, err.Error())
+	}
+
 	return echoutil.RenderNodx(
-		c, http.StatusOK, createBackupForm(databases, destinations),
+		c, http.StatusOK, createBackupForm(databases, destinations, milestones),
 	)
 }
 
 func createBackupForm(
 	databases []dbgen.DatabasesServiceGetAllDatabasesRow,
 	destinations []dbgen.DestinationsServiceGetAllDestinationsRow,
+	milestones []dbgen.Milestone,
 ) nodx.Node {
 	yesNoOptions := func() nodx.Node {
 		return nodx.Group(
@@ -102,7 +113,7 @@ func createBackupForm(
 		)
 	}
 
-	serverTZ := time.Now().Location().String()
+	// serverTZ := time.Now().Location().String()
 
 	return nodx.FormEl(
 		htmx.HxPost("/dashboard/backups"),
@@ -166,16 +177,31 @@ func createBackupForm(
 			}),
 		),
 
-		component.InputControl(component.InputControlParams{
-			Name:               "cron_expression",
-			Label:              "Cron expression",
-			Placeholder:        "* * * * *",
-			Required:           true,
-			Type:               component.InputTypeText,
-			HelpText:           "Biểu thức cron để lập lịch sao lưu",
-			Pattern:            `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
-			HelpButtonChildren: cronExpressionHelp(),
+		component.SelectControl(component.SelectControlParams{
+			Name:        "cron_expression",
+			Label:       "Mốc sao lưu",
+			Required:    true,
+			Placeholder: "Chọn mốc sao lưu",
+			Children: []nodx.Node{
+				nodx.Map(
+					milestones,
+					func(db dbgen.Milestone) nodx.Node {
+						return nodx.Option(nodx.Value(db.CronExpression), nodx.Text(db.Name))
+					},
+				),
+			},
 		}),
+
+		// component.InputControl(component.InputControlParams{
+		// 	Name:               "cron_expression",
+		// 	Label:              "Cron expression",
+		// 	Placeholder:        "* * * * *",
+		// 	Required:           true,
+		// 	Type:               component.InputTypeText,
+		// 	HelpText:           "Biểu thức cron để lập lịch sao lưu",
+		// 	Pattern:            `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
+		// 	HelpButtonChildren: cronExpressionHelp(),
+		// }),
 
 		component.SelectControl(component.SelectControlParams{
 			Name:        "time_zone",
@@ -186,12 +212,7 @@ func createBackupForm(
 				nodx.Map(
 					staticdata.Timezones,
 					func(tz staticdata.Timezone) nodx.Node {
-						var selected nodx.Node
-						if tz.TzCode == serverTZ {
-							selected = nodx.Selected("")
-						}
-
-						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label), selected)
+						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label), nodx.Selected("Asia/Bangkok"), nodx.Default("Asia/Bangkok"))
 					},
 				),
 			},
@@ -225,7 +246,7 @@ func createBackupForm(
 
 		component.SelectControl(component.SelectControlParams{
 			Name:     "is_active",
-			Label:    "Kích hoạt sao lưu",
+			Label:    "Bật/Tắt sao lưu",
 			Required: true,
 			Children: []nodx.Node{
 				nodx.Option(nodx.Value("true"), nodx.Text("Có")),
@@ -235,6 +256,7 @@ func createBackupForm(
 
 		nodx.Div(
 			nodx.Class("pt-4"),
+			nodx.Hidden("true"),
 			nodx.Div(
 				nodx.Class("flex justify-start items-center space-x-1"),
 				component.H2Text("Tuỳ chọn"),

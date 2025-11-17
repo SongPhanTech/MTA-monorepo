@@ -37,18 +37,21 @@ func (h *handlers) listBackupsHandler(c echo.Context) error {
 			Limit: 20,
 		},
 	)
+
+	milestones, err := h.servs.MilestonesService.GetAllMilestones(ctx)
 	if err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
 	return echoutil.RenderNodx(
-		c, http.StatusOK, listBackups(pagination, backups),
+		c, http.StatusOK, listBackups(pagination, backups, milestones),
 	)
 }
 
 func listBackups(
 	pagination paginateutil.PaginateResponse,
 	backups []dbgen.BackupsServicePaginateBackupsRow,
+	milestones []dbgen.Milestone,
 ) nodx.Node {
 	if len(backups) < 1 {
 		return component.EmptyResultsTr(component.EmptyResultsParams{
@@ -66,6 +69,15 @@ func listBackups(
 
 	trs := []nodx.Node{}
 	for _, backup := range backups {
+
+		milestoneName := backup.CronExpression
+		for _, m := range milestones {
+			if m.CronExpression == backup.CronExpression {
+				milestoneName = m.Name
+				break
+			}
+		}
+
 		trs = append(trs, nodx.Tr(
 			nodx.Td(component.OptionsDropdown(
 				component.OptionsDropdownA(
@@ -78,7 +90,7 @@ func listBackups(
 					component.SpanText("Xem lịch sử thực thi"),
 				),
 				manualRunbutton(backup.ID),
-				editBackupButton(backup),
+				editBackupButton(backup, milestones),
 				duplicateBackupButton(backup.ID),
 				deleteBackupButton(backup.ID),
 			)),
@@ -97,7 +109,7 @@ func listBackups(
 				nodx.Class("font-mono"),
 				nodx.Div(
 					nodx.Class("flex flex-col items-start text-xs"),
-					component.SpanText(backup.CronExpression),
+					component.SpanText(milestoneName),
 					component.SpanText(backup.TimeZone),
 				),
 			),
@@ -111,12 +123,12 @@ func listBackups(
 					component.SpanText(fmt.Sprintf("%d days", backup.RetentionDays)),
 				),
 			),
-			nodx.Td(yesNoSpan(backup.OptDataOnly)),
-			nodx.Td(yesNoSpan(backup.OptSchemaOnly)),
-			nodx.Td(yesNoSpan(backup.OptClean)),
-			nodx.Td(yesNoSpan(backup.OptIfExists)),
-			nodx.Td(yesNoSpan(backup.OptCreate)),
-			nodx.Td(yesNoSpan(backup.OptNoComments)),
+			nodx.Td(yesNoSpan(backup.IsActive)),
+			// nodx.Td(yesNoSpan(backup.OptSchemaOnly)),
+			// nodx.Td(yesNoSpan(backup.OptClean)),
+			// nodx.Td(yesNoSpan(backup.OptIfExists)),
+			// nodx.Td(yesNoSpan(backup.OptCreate)),
+			// nodx.Td(yesNoSpan(backup.OptNoComments)),
 			nodx.Td(component.SpanText(
 				backup.CreatedAt.Local().Format(timeutil.LayoutYYYYMMDDHHMMSSPretty),
 			)),
