@@ -82,8 +82,8 @@ catalog:
   docxtemplater: 3.65.2
   dotenv: ^16.4.7
   easy-peasy: 6.0.5
-  echarts: ^6.0.0
-  echarts-for-react: ^3.0.5
+  echarts: 6.0.0
+  echarts-for-react: 3.0.5
   esbuild: 0.24.2
   esm-env: ^1.2.2
   exceljs: 4.4.0

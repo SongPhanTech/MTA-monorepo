@@ -110,6 +110,7 @@ function TabDotKhaoSat({
             surveyQuestion: true,
             surveySessions: true,
         },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
