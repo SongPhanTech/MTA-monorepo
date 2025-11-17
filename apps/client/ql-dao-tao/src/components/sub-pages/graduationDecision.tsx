@@ -282,7 +282,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             const res = await exportGraduationDecisionPptx({ sessionId })
 
             if (res.status === 200) {
-                saveAs(res.data, 'slide_TN.xlsx')
+                saveAs(res.data, 'slide_TN.pptx')
             } else {
                 message.error(res.data.message)
             }
