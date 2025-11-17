@@ -14,9 +14,9 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus } from 'lucide-react'
+import { BookLock, BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -113,6 +113,31 @@ export default function EvaluationPeriod() {
         }
     }
 
+    const handleCloseEvaluationPeriod = async () => {
+        if (!selectedEvaluationPeriodId) {
+            message.warning('Vui lòng chọn đợt đánh giá')
+            return
+        }
+
+        try {
+            showSpinner()
+            await updateEvaluationPeriod({
+                where: { id: selectedEvaluationPeriodId },
+                data: { active: false },
+            })
+            message.success('Đóng đợt đánh giá thành công')
+            refetch()
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -120,7 +145,7 @@ export default function EvaluationPeriod() {
                     <Row gutter={[16, 16]} align="top">
                         {/* Thêm mới */}
                         <Col span={24}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={8}>
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                     'THEM'
@@ -134,6 +159,26 @@ export default function EvaluationPeriod() {
                                         <BookPlus />
                                         Thêm mới
                                     </Button>
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                    'SUA'
+                                ) && (
+                                    <Tooltip placement="top" title="Đóng đợt đánh giá">
+                                        <Popconfirm
+                                            placement="topLeft"
+                                            title="Xác nhận đóng đợt đánh giá?"
+                                            description="Đợt đánh giá sẽ được đóng và không thể chỉnh sửa"
+                                            okText="Xác nhận"
+                                            cancelText="Hủy"
+                                            onConfirm={handleCloseEvaluationPeriod}
+                                        >
+                                            <Button type="primary" className="bg-yellow-600">
+                                                <BookLock />
+                                                Đóng đợt đánh giá
+                                            </Button>
+                                        </Popconfirm>
+                                    </Tooltip>
                                 )}
                             </Flex>
                         </Col>
@@ -230,6 +275,18 @@ export default function EvaluationPeriod() {
                                         <Tooltip title={value}>
                                             <div className="line-clamp-2">{value}</div>
                                         </Tooltip>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                width: 80,
+                                align: 'center',
+                                render: (_, record) => {
+                                    return record.active ? (
+                                        <Tag color="green">Đang hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="default">Kết thúc</Tag>
                                     )
                                 },
                             },
