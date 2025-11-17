@@ -112,4 +112,48 @@ export default defineConfig({
             afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
+    system_share_api: {
+        input: 'https://mta.swantech.vn/api/system/share/swagger/v1/swagger.json',
+        output: {
+            client: 'react-query',
+            httpClient: 'fetch',
+            mode: 'single',
+            target: './src/api/system-share.ts',
+            schemas: './src/api/schemas',
+            biome: true,
+            packageJson: 'fake',
+            override: {
+                query: { version: 5 },
+                mutator: {
+                    path: './src/api/custom-instance.ts',
+                    name: 'customSystemShareFetch',
+                },
+            },
+        },
+        hooks: {
+            afterAllFilesWrite: 'biome check --fix --unsafe .',
+        },
+    },
+    storage_api: {
+        input: 'https://mta.swantech.vn/api/system/storage/swagger/v1/swagger.json',
+        output: {
+            client: 'react-query',
+            httpClient: 'fetch',
+            mode: 'single',
+            target: './src/api/storage.ts',
+            schemas: './src/api/schemas',
+            biome: true,
+            packageJson: 'fake',
+            override: {
+                query: { version: 5 },
+                mutator: {
+                    path: './src/api/custom-instance.ts',
+                    name: 'customStorageFetch',
+                },
+            },
+        },
+        hooks: {
+            afterAllFilesWrite: 'biome check --fix --unsafe .',
+        },
+    },
 })

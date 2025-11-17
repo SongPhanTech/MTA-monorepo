@@ -10,19 +10,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 - Định dạng dữ liệu: JSON
 
 ## Xác thực API
-Để sử dụng API, bạn cần được cấp quyền truy cập thông qua x-clientid và x-clientsecret.
+Để sử dụng API, mỗi request phải gửi kèm header:
+- cookie x-token=accesstoken của phiên đăng nhập.
+- header k-appcode: Mã ứng dụng của bạn
+- header k-tenantcode: Mã tổ chức của bạn
 
 ### Cách lấy thông tin xác thực
-1. Liên hệ với phòng Quản trị Hệ thống (QTHT) để được cấp thông tin xác thực
-2. Cung cấp thông tin về ứng dụng của bạn và mục đích sử dụng API
-3. Sau khi được phê duyệt, bạn sẽ nhận được:
-    - x-clientid: ID định danh ứng dụng của bạn
-    - x-clientsecret: Mã bí mật để xác thực
+1. accesstoken lấy từ phiên đăng nhập    
+2. appcode và tenantcode lấy từ hệ thống
 
 ### Sử dụng thông tin xác thực
-- Thêm x-clientid và x-clientsecret vào header của mỗi request
+- Thêm accesstoken, appcode và tenantcode vào header của mỗi request
 - Không chia sẻ thông tin xác thực với bên thứ 3
-- Báo cáo ngay cho QTHT nếu phát hiện thông tin xác thực bị lộ
 
 ## Các lỗi thường gặp
 | Status Code | Mô tả |
@@ -33,7 +32,6 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
-| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -175,6 +173,8 @@ export * from './debtStatisticsParams'
 export * from './deleteDMNhanViensId400'
 export * from './deleteDMNhanViensId401'
 export * from './deleteDMNhanViensId403'
+export * from './deleteFilesDeleteSingleFileStorageFileFileNameParams'
+export * from './deleteFilesDeleteSingleStorageTypeFileNameParams'
 export * from './deviceLog'
 export * from './deviceLogEditDto'
 export * from './deviceLogEditDtoState'
@@ -341,6 +341,8 @@ export * from './excelMappingColumn'
 export * from './exportClusterSurveyStatistics404'
 export * from './exportDiplomaVerification400'
 export * from './exportDiplomaVerificationParams'
+export * from './exportGraduationDecisionPptx400'
+export * from './exportGraduationDecisionPptxBody'
 export * from './exportLecturerProfile400'
 export * from './exportLecturerProfileBody'
 export * from './exportLecturerProfileParams'
@@ -649,6 +651,12 @@ export * from './getDMXaPhuongsId403'
 export * from './getDMXaPhuongsIdParams'
 export * from './getFacultyStatisticsByParentUnit404'
 export * from './getFacultyStatisticsByParentUnitParams'
+export * from './getFilesAvatarInitialsParams'
+export * from './getFilesDownloadAppCodeFileNameParams'
+export * from './getFilesEmployeeUserIdImageParams'
+export * from './getFilesImageStorageTypeFileNameParams'
+export * from './getFilesStorageTypeFileNameFileDownloadNameParams'
+export * from './getFilesStorageTypeFileNameParams'
 export * from './getMenusPermissionByUserAndAppDTO'
 export * from './getMenusPermissionDTO'
 export * from './getParticipationByType404'
@@ -1139,6 +1147,10 @@ export * from './postDMXaPhuongNewsList403'
 export * from './postDMXaPhuongsList400'
 export * from './postDMXaPhuongsList401'
 export * from './postDMXaPhuongsList403'
+export * from './postFilesMultiStorageTypeBody'
+export * from './postFilesMultiStorageTypeParams'
+export * from './postFilesSingleStorageTypeBody'
+export * from './postFilesSingleStorageTypeParams'
 export * from './presignedGetObjectParams'
 export * from './presignedUrlDto'
 export * from './problemDetails'

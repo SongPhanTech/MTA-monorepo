@@ -44,6 +44,8 @@ import type {
     ExamCodes,
     ExportDiplomaVerification400,
     ExportDiplomaVerificationParams,
+    ExportGraduationDecisionPptx400,
+    ExportGraduationDecisionPptxBody,
     ExportLecturerProfile400,
     ExportLecturerProfileBody,
     ExportStudentResultSemesterJson200Item,
@@ -3907,6 +3909,123 @@ export function useStatisticsGraduationDecision<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+export type exportGraduationDecisionPptxResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportGraduationDecisionPptxResponse400 = {
+    data: ExportGraduationDecisionPptx400
+    status: 400
+}
+
+export type exportGraduationDecisionPptxResponseComposite =
+    | exportGraduationDecisionPptxResponse200
+    | exportGraduationDecisionPptxResponse400
+
+export type exportGraduationDecisionPptxResponse = exportGraduationDecisionPptxResponseComposite & {
+    headers: Headers
+}
+
+export const getExportGraduationDecisionPptxUrl = () => {
+    return '/api/graduation/export-graduation-decision-pptx'
+}
+
+export const exportGraduationDecisionPptx = async (
+    exportGraduationDecisionPptxBody: ExportGraduationDecisionPptxBody,
+    options?: RequestInit
+): Promise<exportGraduationDecisionPptxResponse> => {
+    const formData = new FormData()
+    if (exportGraduationDecisionPptxBody.file !== undefined) {
+        formData.append('file', exportGraduationDecisionPptxBody.file)
+    }
+    if (exportGraduationDecisionPptxBody.sessionId !== undefined) {
+        formData.append('sessionId', exportGraduationDecisionPptxBody.sessionId)
+    }
+    if (
+        exportGraduationDecisionPptxBody.timeout !== undefined &&
+        exportGraduationDecisionPptxBody.timeout !== null
+    ) {
+        formData.append('timeout', exportGraduationDecisionPptxBody.timeout.toString())
+    }
+
+    return customTrainingFetch<exportGraduationDecisionPptxResponse>(
+        getExportGraduationDecisionPptxUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getExportGraduationDecisionPptxMutationOptions = <
+    TError = ExportGraduationDecisionPptx400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+        TError,
+        { data: ExportGraduationDecisionPptxBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+    TError,
+    { data: ExportGraduationDecisionPptxBody },
+    TContext
+> => {
+    const mutationKey = ['exportGraduationDecisionPptx']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+        { data: ExportGraduationDecisionPptxBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportGraduationDecisionPptx(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportGraduationDecisionPptxMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>
+>
+export type ExportGraduationDecisionPptxMutationBody = ExportGraduationDecisionPptxBody
+export type ExportGraduationDecisionPptxMutationError = ExportGraduationDecisionPptx400
+
+export const useExportGraduationDecisionPptx = <
+    TError = ExportGraduationDecisionPptx400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+            TError,
+            { data: ExportGraduationDecisionPptxBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+    TError,
+    { data: ExportGraduationDecisionPptxBody },
+    TContext
+> => {
+    const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 /**
