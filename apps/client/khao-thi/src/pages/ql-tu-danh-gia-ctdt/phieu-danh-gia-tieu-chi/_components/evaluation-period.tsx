@@ -4,9 +4,14 @@ import { formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import { useCountEvaluationPeriod, useFindManyEvaluationPeriod } from '@workspace/db/hooks'
+import {
+    useCountEvaluationPeriod,
+    useFindManyEvaluationPeriod,
+    useFindUniqueLecturer,
+} from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
 import { Col, Row } from 'antd'
-import { type Key, useState } from 'react'
+import { type Key, useState, useMemo } from 'react'
 
 export default function EvaluationPeriodCriteriaEvaluation() {
     const { data: me } = useSession()
@@ -16,17 +21,30 @@ export default function EvaluationPeriodCriteriaEvaluation() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                standards: {
-                    some: {
-                        criteria: {
-                            some: {
-                                evaluationCriterion: {
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const whereClause = useMemo(() => {
+        return {
+            OR: [
+                {
+                    standards: {
+                        some: {
+                            criteria: {
+                                some: {
+                                    evaluationCriterion: {
+                                        lecturer: {
+                                            userProfile: {
+                                                id: idProfile,
+                                            },
                                         },
                                     },
                                 },
@@ -34,7 +52,30 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                         },
                     },
                 },
-            },
+                {
+                    councils: {
+                        some: {
+                            members: {
+                                some: {
+                                    lecturerId: lecturer?.id,
+                                    role: {
+                                        hasSome: [
+                                            $Enums.EvaluationMemberRole.ADVISORY_BOARD,
+                                            $Enums.EvaluationMemberRole.HEAD_SECRETARY,
+                                        ],
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            ],
+        }
+    }, [idProfile, lecturer?.id])
+
+    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
+        {
+            where: whereClause,
             include: {
                 councils: {
                     select: {
@@ -48,29 +89,18 @@ export default function EvaluationPeriodCriteriaEvaluation() {
             skip: (currentPage - 1) * numberOfPages,
         },
         {
-            enabled: !!idProfile,
+            enabled: !!idProfile && !!lecturer,
         }
     )
 
-    const { data: count } = useCountEvaluationPeriod({
-        where: {
-            standards: {
-                some: {
-                    criteria: {
-                        some: {
-                            evaluationCriterion: {
-                                lecturer: {
-                                    userProfile: {
-                                        id: idProfile,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
+    const { data: count } = useCountEvaluationPeriod(
+        {
+            where: whereClause,
         },
-    })
+        {
+            enabled: !!idProfile && !!lecturer,
+        }
+    )
 
     return (
         <Row gutter={[8, 0]}>
