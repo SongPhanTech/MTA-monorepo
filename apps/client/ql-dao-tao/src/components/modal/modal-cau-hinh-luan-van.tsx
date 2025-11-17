@@ -9,7 +9,7 @@ import {
     Row,
     Col,
     DatePicker,
-    TabsProps,
+    type TabsProps,
     Tabs,
     Checkbox,
     Input,
@@ -31,7 +31,7 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import { CouncilProposalStatus, CouncilRole, DocumentFile } from '@workspace/db'
+import { CouncilProposalStatus, CouncilRole, type DocumentFile } from '@workspace/db'
 import { useEffect, useState } from 'react'
 import DocumentPaths from '@components/commons/documentPaths'
 import { CloudUploadOutlined, DollarOutlined, SettingOutlined } from '@ant-design/icons'
@@ -72,7 +72,6 @@ export type ModalCauHinhLuanVanType = {
     coSupervisorPaymentDate?: string
     coSupervisorPaymentTransactionCode?: string
 }
-
 const ModalCauHinhLuanVan = () => {
     const isCouncilRolesDuplicated = (data: ModalCauHinhLuanVanType): boolean => {
         const expertIds = [
@@ -840,6 +839,7 @@ const ModalCauHinhLuanVan = () => {
                                 data={document}
                                 relationId={thesisProjectData?.librarySubmission?.id ?? ''}
                                 relationType="librarySubmissionId"
+                                titleForm='documentFile'
                             />
                         </FormItem>
                     </Col>
@@ -893,9 +893,7 @@ const ModalCauHinhLuanVan = () => {
                                     labelAlign="left"
                                     rules={[
                                         {
-                                            required: !form.getFieldValue('supervisorName')
-                                                ? false
-                                                : true,
+                                            required: !!form.getFieldValue('supervisorName'),
                                             message: 'Vui lòng nhập số tiền thanh toán',
                                         },
                                     ]}
