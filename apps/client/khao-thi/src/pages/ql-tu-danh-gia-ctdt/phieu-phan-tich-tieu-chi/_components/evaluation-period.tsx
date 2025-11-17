@@ -10,7 +10,7 @@ import { type Key, useState } from 'react'
 
 export default function EvaluationPeriodCriteriaAnalysis() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || ''
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
