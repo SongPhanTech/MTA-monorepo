@@ -1449,4 +1449,143 @@ app.openapi(getSurveysByProfile, async (c) => {
     return c.json({ data: surveys, count }, 200)
 })
 
+const getPrivateSurvey = createRoute({
+    operationId: 'get-private-survey',
+    path: '/get-private-survey/{id}',
+    tags: ['Survey'],
+    summary: 'Thông tin đợt khảo sát công khai',
+    description: 'Lấy thông tin đợt khảo sát công khai',
+    method: 'get',
+    request: {
+        params: z.object({
+            id: z.string().openapi({ description: 'ID của khảo sát.' }),
+        }),
+        query: z.object({
+            profileId: z.string().optional(),
+        })
+    },
+    responses: {
+        200: {
+            description: 'Get Survey result',
+            content: {
+                'application/json': {
+                    schema: models.SurveyScalarSchema.merge(
+                        z.object({
+                            surveyQuestion: z.array(
+                                models.SurveyQuestionScalarSchema.merge(
+                                    z.object({
+                                        surveyQuestionGroup:
+                                            models.SurveyQuestionGroupScalarSchema.nullable(),
+                                    })
+                                )
+                            ),
+                            surveyChoice: models.SurveyChoiceScalarSchema.array(),
+                            lectureInfo: z
+                                .object({
+                                    firstName: z.string(),
+                                    lastName: z.string(),
+                                    academicDegree: z.string().nullish(),
+                                    academicRank: z.string().nullish(),
+                                    organization: z.string().nullable(),
+                                })
+                                .nullable(),
+                        })
+                    ).openapi('get-survey-result'),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getPrivateSurvey, async (c) => {
+    const { id } = c.req.valid('param')
+    const { profileId, ...q } = c.req.valid('query')
+    const checkExist =await prisma.surveySession.findFirst({
+        where:{
+            profileId,
+            surveyId:id
+        }
+    })
+    if(checkExist){
+        return c.json({ message: 'Bạn đã làm khảo sát' }, 400)
+    }
+    const survey = await prisma.survey.findUnique({
+        where: { id, deletedAt: null, active: true },
+        include: {
+            surveyQuestion: {
+                include: {
+                    surveyQuestionGroup: true,
+                },
+            },
+            surveyChoice: true,
+            lecture: {
+                select: {
+                    userProfile: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            academicDegreeType: {
+                                select: { sTen: true },
+                            },
+                            academicRankType: {
+                                select: { sTen: true },
+                            },
+                        },
+                    },
+                    organization: {
+                        select: {
+                            sTen: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+    if (!survey) {
+        return c.json({ message: 'Đợt khảo sát không tồn tại' }, 404)
+    }
+
+    if (survey.startDate > new Date()) {
+        return c.json({ message: 'Khảo sát chưa mở' }, 400)
+    }
+
+    if (survey.endDate && survey.endDate < new Date()) {
+        return c.json({ message: 'Khảo sát đã đóng' }, 400)
+    }
+
+    const { lecture, ...data } = survey
+
+    const lectureInfo = lecture
+        ? {
+              firstName: lecture.userProfile.firstName,
+              lastName: lecture.userProfile.lastName,
+              academicDegree: lecture.userProfile.academicDegreeType?.sTen,
+              academicRank: lecture.userProfile.academicRankType?.sTen,
+              organization: lecture.organization.sTen,
+          }
+        : null
+
+    return c.json({ ...data, lectureInfo }, 200)
+})
+
 export default app

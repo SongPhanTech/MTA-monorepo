@@ -1096,7 +1096,7 @@ export default function UpdateUserPage() {
                     status: 'done',
                     url: imageUrl, // Sử dụng getMinioUrl để tạo URL hiển thị
                 }
-                // setFileList([avatarFile])
+                setFileList([avatarFile])
             }
         },
         [form]

@@ -48,6 +48,9 @@ import type {
     GetFacultyStatisticsByParentUnitParams,
     GetParticipationByType404,
     GetParticipationByTypeParams,
+    GetPrivateSurvey400,
+    GetPrivateSurvey404,
+    GetPrivateSurveyParams,
     GetPublicSurvey400,
     GetPublicSurvey404,
     GetSurveyCompletionByHourOfDayParams,
@@ -2571,6 +2574,182 @@ export function useGetSurveysOfProfile<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetSurveysOfProfileQueryOptions(id, params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy thông tin đợt khảo sát công khai
+ * @summary Thông tin đợt khảo sát công khai
+ */
+export type getPrivateSurveyResponse200 = {
+    data: GetSurveyResult
+    status: 200
+}
+
+export type getPrivateSurveyResponse400 = {
+    data: GetPrivateSurvey400
+    status: 400
+}
+
+export type getPrivateSurveyResponse404 = {
+    data: GetPrivateSurvey404
+    status: 404
+}
+
+export type getPrivateSurveyResponseComposite =
+    | getPrivateSurveyResponse200
+    | getPrivateSurveyResponse400
+    | getPrivateSurveyResponse404
+
+export type getPrivateSurveyResponse = getPrivateSurveyResponseComposite & {
+    headers: Headers
+}
+
+export const getGetPrivateSurveyUrl = (id: string, params?: GetPrivateSurveyParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/survey/get-private-survey/${id}?${stringifiedParams}`
+        : `/api/survey/get-private-survey/${id}`
+}
+
+export const getPrivateSurvey = async (
+    id: string,
+    params?: GetPrivateSurveyParams,
+    options?: RequestInit
+): Promise<getPrivateSurveyResponse> => {
+    return customExamFetch<getPrivateSurveyResponse>(getGetPrivateSurveyUrl(id, params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetPrivateSurveyQueryKey = (id: string, params?: GetPrivateSurveyParams) => {
+    return [`/api/survey/get-private-survey/${id}`, ...(params ? [params] : [])] as const
+}
+
+export const getGetPrivateSurveyQueryOptions = <
+    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+>(
+    id: string,
+    params?: GetPrivateSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetPrivateSurveyQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrivateSurvey>>> = ({ signal }) =>
+        getPrivateSurvey(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getPrivateSurvey>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPrivateSurveyQueryResult = NonNullable<Awaited<ReturnType<typeof getPrivateSurvey>>>
+export type GetPrivateSurveyQueryError = GetPrivateSurvey400 | GetPrivateSurvey404
+
+export function useGetPrivateSurvey<
+    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+>(
+    id: string,
+    params: undefined | GetPrivateSurveyParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getPrivateSurvey>>,
+                    TError,
+                    Awaited<ReturnType<typeof getPrivateSurvey>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPrivateSurvey<
+    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+>(
+    id: string,
+    params?: GetPrivateSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getPrivateSurvey>>,
+                    TError,
+                    Awaited<ReturnType<typeof getPrivateSurvey>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPrivateSurvey<
+    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+>(
+    id: string,
+    params?: GetPrivateSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thông tin đợt khảo sát công khai
+ */
+
+export function useGetPrivateSurvey<
+    TData = Awaited<ReturnType<typeof getPrivateSurvey>>,
+    TError = GetPrivateSurvey400 | GetPrivateSurvey404,
+>(
+    id: string,
+    params?: GetPrivateSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getPrivateSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetPrivateSurveyQueryOptions(id, params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
