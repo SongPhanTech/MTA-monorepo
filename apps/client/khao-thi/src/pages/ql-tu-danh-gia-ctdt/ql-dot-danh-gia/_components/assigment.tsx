@@ -320,10 +320,9 @@ export default function AssigmentOfAssessmentTab() {
                             onClick: (e) => {
                                 const target = e.target as HTMLElement
                                 if (
-                                    target.closest('.ant-select') ||
                                     target.closest('.ant-picker') ||
-                                    target.closest('input') ||
-                                    target.closest('button')
+                                    target.closest('.ant-picker-dropdown') ||
+                                    target.closest('.ant-picker-panel')
                                 ) {
                                     return
                                 }
@@ -390,6 +389,7 @@ export default function AssigmentOfAssessmentTab() {
                                         >
                                             <Select
                                                 placeholder="Chọn giáo viên"
+                                                onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
                                                         i.userProfile?.academicRankType?.sTen || ''
@@ -427,6 +427,7 @@ export default function AssigmentOfAssessmentTab() {
                                             <DatePicker
                                                 className="w-full"
                                                 format={'DD/MM/YYYY'}
+                                                onClick={(e) => e.stopPropagation()}
                                                 disabledDate={(current) =>
                                                     current?.isBefore(dayjs(), 'day')
                                                 }

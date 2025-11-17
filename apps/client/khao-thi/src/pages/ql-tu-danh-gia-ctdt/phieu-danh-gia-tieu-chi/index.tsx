@@ -11,16 +11,19 @@ import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db/client'
 import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-// import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Col, Row, Tabs } from 'antd'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 
 export default function CriteriaEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || ''
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
+
+    const BYPASS_PERMISSION_CHECK = false
+
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -51,93 +54,71 @@ export default function CriteriaEvaluationPage() {
     )
 
     const tabItems = useMemo(() => {
-        const tabs = [
+        const tabs: TabsProps['items'] = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
                 children: <EvaluationPeriodCriteriaEvaluation />,
             },
-            {
+        ]
+
+        if (
+            BYPASS_PERMISSION_CHECK ||
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM')
+        ) {
+            tabs.push({
                 key: '2',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
                 disabled: !selectedEvaluationPeriodId,
-            },
-            {
+            })
+        }
+
+        if (
+            BYPASS_PERMISSION_CHECK ||
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_CHI_TIET'
+            )
+        ) {
+            tabs.push({
                 key: '3',
                 label: 'Danh sách phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationList />,
                 disabled: !selectedEvaluationPeriodId,
-            },
-            {
+            })
+        }
+
+        const isSecretary =
+            BYPASS_PERMISSION_CHECK ||
+            councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
+            councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY)
+
+        const isCouncilMember = BYPASS_PERMISSION_CHECK || !!councilMember
+
+        if (isSecretary) {
+            tabs.push({
                 key: '4',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
                 disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '5',
-                label: 'Phản biện chéo',
-                children: <CrossReview />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '6',
-                label: 'Tổng hợp phiếu đánh giá',
-                children: <SumaryOfCriteriaEvaluation />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-        ]
-
-        const isSecretary =
-            councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
-            councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY)
-
-        if (isSecretary) {
-            tabs.push(
-                {
-                    key: '4',
-                    label: 'Phân công phản biện chéo',
-                    children: <CrossReviewAssignment />,
-                    disabled: !selectedEvaluationPeriodId,
-                },
-                {
-                    key: '6',
-                    label: 'Tổng hợp phiếu đánh giá',
-                    children: <SumaryOfCriteriaEvaluation />,
-                    disabled: !selectedEvaluationPeriodId,
-                }
-            )
+            })
         }
 
-        // if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM')) {
-        //     tabs.push({
-        //         key: '2',
-        //         label: 'Phiếu đánh giá tiêu chí',
-        //         children: <CriteriaEvaluationWrite />,
-        //         disabled: !selectedEvaluationPeriodId,
-        //     })
-        // }
-
-        // if (
-        //     can(
-        //         KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-        //         'XEM_CHI_TIET'
-        //     )
-        // ) {
-        //     tabs.push({
-        //         key: '3',
-        //         label: 'Danh sách phiếu đánh giá tiêu chí',
-        //         children: <CriteriaEvaluationList />,
-        //         disabled: !selectedEvaluationPeriodId,
-        //     })
-        // }
-
-        if (councilMember) {
+        if (isCouncilMember) {
             tabs.push({
                 key: '5',
                 label: 'Phản biện chéo',
                 children: <CrossReview />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (isSecretary) {
+            tabs.push({
+                key: '6',
+                label: 'Tổng hợp phiếu đánh giá',
+                children: <SumaryOfCriteriaEvaluation />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
