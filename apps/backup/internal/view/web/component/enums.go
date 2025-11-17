@@ -35,6 +35,8 @@ var (
 	InputTypeNumber   = inputType{"number"}
 	InputTypeTel      = inputType{"tel"}
 	InputTypeUrl      = inputType{"url"}
+	InputTypeDate     = inputType{"date"}
+	InputTypeTime     = inputType{"time"}
 
 	bgBase100 = bgBase{"bg-base-100"}
 	bgBase200 = bgBase{"bg-base-200"}

@@ -35,7 +35,8 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 							nodx.Tr(
 								nodx.Th(nodx.Class("w-1")),
 								nodx.Th(component.SpanText("Tên mốc sao lưu")),
-								nodx.Th(component.SpanText("Biểu thức mốc thời gian")),
+								nodx.Th(component.SpanText("Thời gian trong ngày")),
+								nodx.Th(component.SpanText("Tần suất sao lưu (ngày)")),
 								nodx.Th(component.SpanText("Ngày tạo")),
 							),
 						),

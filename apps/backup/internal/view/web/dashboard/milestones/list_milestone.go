@@ -3,6 +3,7 @@ package milestones
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/service/milestones"
@@ -58,6 +59,11 @@ func listMilestones(
 
 	trs := []nodx.Node{}
 	for _, milestone := range milestones {
+		time, dayInterval, err := CronToParams(milestone.CronExpression)
+		if err != nil {
+			time = "08:00"
+			dayInterval = 30
+		}
 		trs = append(trs, nodx.Tr(
 			nodx.Td(component.OptionsDropdown(
 				editMilestoneButton(milestone),
@@ -73,7 +79,14 @@ func listMilestones(
 				nodx.Class("font-mono"),
 				nodx.Div(
 					nodx.Class("flex flex-col items-start text-xs"),
-					component.SpanText(milestone.CronExpression),
+					component.SpanText(time),
+				),
+			),
+			nodx.Td(
+				nodx.Class("font-mono"),
+				nodx.Div(
+					nodx.Class("flex flex-col items-start text-xs"),
+					component.SpanText(strconv.Itoa(dayInterval)),
 				),
 			),
 			nodx.Td(component.SpanText(

@@ -212,7 +212,11 @@ func createBackupForm(
 				nodx.Map(
 					staticdata.Timezones,
 					func(tz staticdata.Timezone) nodx.Node {
-						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label), nodx.Selected("Asia/Bangkok"), nodx.Default("Asia/Bangkok"))
+						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label),
+							nodx.If(
+								tz.TzCode == "Asia/Bangkok",
+								nodx.Selected(""),
+							))
 					},
 				),
 			},

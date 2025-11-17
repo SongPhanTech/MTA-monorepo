@@ -2,6 +2,7 @@ package milestones
 
 import (
 	"database/sql"
+	"strconv"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -23,8 +24,9 @@ func (h *handlers) editMilestoneHandler(c echo.Context) error {
 	}
 
 	var formData struct {
-		Name           string `form:"name" validate:"required"`
-		CronExpression string `form:"cron_expression" validate:"required"`
+		Name        string `form:"name" validate:"required"`
+		Time        string `form:"time" validate:"required"`
+		DayInterval int    `form:"day_interval" validate:"required"`
 	}
 	if err := c.Bind(&formData); err != nil {
 		return respondhtmx.ToastError(c, err.Error())
@@ -32,12 +34,15 @@ func (h *handlers) editMilestoneHandler(c echo.Context) error {
 	if err := validate.Struct(&formData); err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
-
+	cronExpr, err := toCron(formData.Time, formData.DayInterval)
+	if err != nil {
+		return respondhtmx.ToastError(c, err.Error())
+	}
 	_, err = h.servs.MilestonesService.UpdateMilestone(
 		ctx, dbgen.MilestonesServiceUpdateMilestoneParams{
 			ID:             milestoneID,
 			Name:           sql.NullString{String: formData.Name, Valid: true},
-			CronExpression: sql.NullString{String: formData.CronExpression, Valid: true},
+			CronExpression: sql.NullString{String: cronExpr, Valid: true},
 			IsActive:       sql.NullBool{Bool: true, Valid: true},
 		},
 	)
@@ -49,6 +54,13 @@ func (h *handlers) editMilestoneHandler(c echo.Context) error {
 }
 
 func editMilestoneButton(milestone dbgen.Milestone) nodx.Node {
+
+	time, dayInterval, err := CronToParams(milestone.CronExpression)
+	if err != nil {
+		time = "08:00"
+		dayInterval = 30
+	}
+
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Chỉnh sửa mốc thời gian",
@@ -69,20 +81,29 @@ func editMilestoneButton(milestone dbgen.Milestone) nodx.Node {
 					},
 				}),
 
-				component.InputControl(component.InputControlParams{
-					Name:        "cron_expression",
-					Label:       "Cron expression",
-					Placeholder: "* * * * *",
-					Required:    true,
-					Type:        component.InputTypeText,
-					HelpText:    "Biểu thức cron để lập lịch sao lưu",
-					Pattern:     `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
-					Children: []nodx.Node{
-						nodx.Value(milestone.CronExpression),
-					},
-					HelpButtonChildren: cronExpressionHelp(),
-				}),
-
+				nodx.Div(
+					nodx.Class("flex gap-2"),
+					component.InputControl(component.InputControlParams{
+						Name:        "time",
+						Label:       "Thời gian trong ngày",
+						Placeholder: "08:00",
+						Required:    true,
+						Type:        component.InputTypeTime,
+						Children: []nodx.Node{
+							nodx.Value(time),
+						},
+					}),
+					component.InputControl(component.InputControlParams{
+						Name:        "day_interval",
+						Label:       "Tần suất sao lưu (ngày)",
+						Placeholder: "30",
+						Required:    true,
+						Type:        component.InputTypeNumber,
+						Children: []nodx.Node{
+							nodx.Value(strconv.Itoa(dayInterval)),
+						},
+					}),
+				),
 				nodx.Div(
 					nodx.Class("flex justify-end items-center space-x-2 pt-2"),
 					component.HxLoadingMd(),

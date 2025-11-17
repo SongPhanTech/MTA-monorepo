@@ -19,8 +19,9 @@ func (h *handlers) createMilestoneHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	var formData struct {
-		Name           string `form:"name" validate:"required"`
-		CronExpression string `form:"cron_expression" validate:"required"`
+		Name        string `form:"name" validate:"required"`
+		Time        string `form:"time" validate:"required"`
+		DayInterval int    `form:"day_interval" validate:"required"`
 	}
 	if err := c.Bind(&formData); err != nil {
 		return respondhtmx.ToastError(c, err.Error())
@@ -28,11 +29,14 @@ func (h *handlers) createMilestoneHandler(c echo.Context) error {
 	if err := validate.Struct(&formData); err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
-
-	_, err := h.servs.MilestonesService.CreateMilestone(
+	cronExpr, err := toCron(formData.Time, formData.DayInterval)
+	if err != nil {
+		return respondhtmx.ToastError(c, err.Error())
+	}
+	_, err = h.servs.MilestonesService.CreateMilestone(
 		ctx, dbgen.MilestonesServiceCreateMilestoneParams{
 			Name:           formData.Name,
-			CronExpression: formData.CronExpression,
+			CronExpression: cronExpr,
 			IsActive:       true,
 		},
 	)
@@ -68,16 +72,23 @@ func createMilestoneForm() nodx.Node {
 			Type:        component.InputTypeText,
 		}),
 
-		component.InputControl(component.InputControlParams{
-			Name:               "cron_expression",
-			Label:              "Cron expression",
-			Placeholder:        "* * * * *",
-			Required:           true,
-			Type:               component.InputTypeText,
-			HelpText:           "Biểu thức cron để lập lịch sao lưu",
-			Pattern:            `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
-			HelpButtonChildren: cronExpressionHelp(),
-		}),
+		nodx.Div(
+			nodx.Class("flex gap-2"),
+			component.InputControl(component.InputControlParams{
+				Name:        "time",
+				Label:       "Thời gian trong ngày",
+				Placeholder: "08:00",
+				Required:    true,
+				Type:        component.InputTypeTime,
+			}),
+			component.InputControl(component.InputControlParams{
+				Name:        "day_interval",
+				Label:       "Tần suất sao lưu (ngày)",
+				Placeholder: "30",
+				Required:    true,
+				Type:        component.InputTypeNumber,
+			}),
+		),
 
 		nodx.Div(
 			nodx.Class("flex justify-end items-center space-x-2 pt-2"),

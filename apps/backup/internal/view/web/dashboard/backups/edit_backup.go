@@ -120,7 +120,11 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow, milestones 
 						nodx.Map(
 							milestones,
 							func(db dbgen.Milestone) nodx.Node {
-								return nodx.Option(nodx.Value(db.CronExpression), nodx.Text(db.Name), nodx.Selected(db.CronExpression))
+								return nodx.Option(nodx.Value(db.CronExpression), nodx.Text(db.Name),
+									nodx.If(
+										db.CronExpression == backup.CronExpression,
+										nodx.Selected(""),
+									))
 							},
 						),
 					},

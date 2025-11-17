@@ -77,6 +77,7 @@ func InputControl(params InputControlParams) nodx.Node {
 				nodx.Pattern(params.Pattern),
 			),
 			nodx.Group(params.Children...),
+			nodx.Lang("vi-VN"),
 		),
 		nodx.If(
 			params.HelpText != "",
