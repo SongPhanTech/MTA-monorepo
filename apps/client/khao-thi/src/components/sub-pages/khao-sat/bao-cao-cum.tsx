@@ -1,6 +1,6 @@
 import useSpinner from '@hooks/spinner'
 import {
-    useExportClusterSurveyStatistics,
+    exportClusterSurveyStatistics,
     useExportReportSurveyOrganizational,
     useGetClusterSurveyStatistics,
 } from '@workspace/libs/api/exam'
@@ -19,7 +19,6 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
     // })
 
     const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
-    console.log(dataLevel)
 
     const dataBarchart = useMemo(() => {
         let choices: any = []
@@ -102,7 +101,6 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
         )
     }
     const { mutateAsync: exportApiForOrganizational } = useExportReportSurveyOrganizational()
-    const { mutateAsync: exportApi } = useExportClusterSurveyStatistics()
     const exportReportForOrganization = async () => {
         try {
             const res = await exportApiForOrganizational({
@@ -122,9 +120,9 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
 
     const exportReport = async () => {
         try {
-            const res = await exportApi(selectedId as string)
+            const res = await exportClusterSurveyStatistics(selectedId as string)
             if (res.status === 200) {
-                saveAs(res.data, 'Bao_cao.docx')
+                saveAs(res?.data, 'Bao_cao.docx')
             }
         } catch (error: any) {
             if (error?.info?.message) {
