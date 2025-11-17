@@ -1,6 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-period'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Row, Tabs, type TabsProps } from 'antd'
 import { useMemo, useState } from 'react'
 import { Store, useStore } from '@tanstack/react-store'
 import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council'
@@ -26,6 +26,8 @@ export default function EvaluationPeriodTabPage() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || ''
     const { can } = useAbility()
+
+    const BYPASS_PERMISSION_CHECK = false
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -56,29 +58,11 @@ export default function EvaluationPeriodTabPage() {
     )
 
     const tabItems = useMemo(() => {
-        const tabs = [
+        const tabs: TabsProps['items'] = [
             {
                 key: '1',
                 label: 'Danh sách đợt đánh giá',
                 children: <EvaluationPeriod />,
-            },
-            {
-                key: '2',
-                label: 'Hội đồng',
-                children: <EvaluationCouncilTab />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '3',
-                label: 'Tiêu chuẩn, tiêu chí',
-                children: <EvaluationStandardTab />,
-                disabled: !selectedEvaluationPeriodId,
-            },
-            {
-                key: '4',
-                label: 'Phân công giảng viên',
-                children: <AssigmentOfAssessmentTab />,
-                disabled: !selectedEvaluationPeriodId,
             },
         ]
 
@@ -86,16 +70,10 @@ export default function EvaluationPeriodTabPage() {
             $Enums.EvaluationMemberRole.VICE_PRESIDENT
         )
 
-        if (isVicePersident) {
-            tabs.push({
-                key: '4',
-                label: 'Phân công giảng viên',
-                children: <AssigmentOfAssessmentTab />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
-
-        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM')) {
+        if (
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM') ||
+            BYPASS_PERMISSION_CHECK
+        ) {
             tabs.push(
                 {
                     key: '2',
@@ -110,6 +88,15 @@ export default function EvaluationPeriodTabPage() {
                     disabled: !selectedEvaluationPeriodId,
                 }
             )
+        }
+
+        if (isVicePersident || BYPASS_PERMISSION_CHECK) {
+            tabs.push({
+                key: '4',
+                label: 'Phân công giảng viên',
+                children: <AssigmentOfAssessmentTab />,
+                disabled: !selectedEvaluationPeriodId,
+            })
         }
 
         return tabs
