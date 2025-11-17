@@ -1090,7 +1090,14 @@ app.openapi(statisticsGraduationDecision, async (c) => {
         where GS."trainingObjectTypeId" = ${trainingObjectTypeId}
         group by date_part('year', "decisionDate"), classification;
     `
-    return c.json(res, 200)
+    return c.json(
+        res.map((item) => ({
+            count: item.count ? Number(item.count) : 0,
+            year: item.year ? Number(item.year) : 0,
+            classification: item.classification,
+        })),
+        200
+    )
 })
 
 const exportGraduationDecisionPptx = createRoute({
