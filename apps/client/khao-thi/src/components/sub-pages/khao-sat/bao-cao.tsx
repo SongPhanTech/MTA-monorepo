@@ -456,9 +456,14 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                     <div className="bg-white h-full flex flex-col">
                         <div className="p-4 flex justify-between">
                             <Title level={4}>Thống kê theo từng tiêu chí</Title>
-                            <Button disabled={dataLevel?.status !== 200} type="primary" onClick={()=>exportTemplate(dataLevel?.data?.surveyName,dataLevel?.data?.questions)}>
+                            {
+                                dataLevel?.status === 200 &&(
+                                    <Button  type="primary" onClick={()=>exportTemplate(dataLevel?.data?.surveyName,dataLevel?.data?.questions)}>
                                 Xuất báo cáo
                             </Button>
+                                )
+                            }
+                            
                         </div>
                         <div className="flex-1">
                             {dataLevel?.status === 200 && dataLevel?.data?.questions?.length > 0 ? (
