@@ -84,8 +84,8 @@ const importFileGiaoVienCoGioGiay = async (
     }
     // Xóa các dòng trống ở đầu file (nếu có)
     rowData.splice(0, indexOffHeader + 1)
-    console.log('Số lượng bản ghi:', rowData.length);
-    
+    console.log('Số lượng bản ghi:', rowData.length)
+
     const danhSachTenGV = new Set<string>()
     const danhSachMaTKBMonHoc = new Set<string>()
     const danhSachMaLopNienChe = new Set<string>()
@@ -287,7 +287,9 @@ const importFileGiaoVienCoGioGiay = async (
                     const [, tenGvPhu] = tenGV
                         .split(',')
                         .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                    const gvChinh = danhSachGV.find((gv) => gv.code?.toLowerCase() === String(maGV).toLowerCase())
+                    const gvChinh = danhSachGV.find(
+                        (gv) => gv.code?.toLowerCase() === String(maGV).trim().toLowerCase()
+                    )
                     if (gvChinh) {
                         subjectClass.gvChinh = gvChinh.id
                     } else {
@@ -296,7 +298,8 @@ const importFileGiaoVienCoGioGiay = async (
                     if (tenGvPhu) {
                         const gvPhu = danhSachGV.find(
                             (gv) =>
-                                gv.userProfile.fullname?.toLowerCase() === tenGvPhu.toLowerCase()
+                                gv.userProfile.fullname?.toLowerCase() ===
+                                String(tenGvPhu).trim().toLowerCase()
                         )
                         if (gvPhu) {
                             subjectClass.gvPhu = gvPhu.id
@@ -307,7 +310,7 @@ const importFileGiaoVienCoGioGiay = async (
                 }
                 if (maMon) {
                     const monHoc = danhSachMonHoc.find(
-                        (mh) => mh.codeTkb?.toLowerCase() === String(maMon).toLowerCase()
+                        (mh) => mh.codeTkb?.toLowerCase() === String(maMon).trim().toLowerCase()
                     )
                     if (monHoc) {
                         subjectClass.monHoc = monHoc.id
@@ -317,7 +320,8 @@ const importFileGiaoVienCoGioGiay = async (
                 }
                 if (maLopNienChe) {
                     const lopNienChe = danhSachLopNienChe.find(
-                        (lop) => lop.code?.toLowerCase() === String(maLopNienChe).toLowerCase()
+                        (lop) =>
+                            lop.code?.toLowerCase() === String(maLopNienChe).trim().toLowerCase()
                     )
                     if (lopNienChe) {
                         subjectClass.lopNienChe.push(lopNienChe.id)
@@ -342,7 +346,7 @@ const importFileGiaoVienCoGioGiay = async (
                 }
                 if (maPhongHoc) {
                     const phongHoc = danhSachPhongHoc.find(
-                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).toLowerCase()
+                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).trim().toLowerCase()
                     )
                     if (phongHoc) {
                         subjectClass.phongHoc = phongHoc.id
@@ -351,7 +355,7 @@ const importFileGiaoVienCoGioGiay = async (
                     }
                 }
                 subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
-                const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
+                const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).trim().toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
 
                 const existSubjectClass = await tx.subjectClass.findFirst({
                     where: {
@@ -363,6 +367,14 @@ const importFileGiaoVienCoGioGiay = async (
                             : $Enums.SubjectClassType.NORMAL,
                     },
                 })
+                console.log(
+                    'Thông tin lớp môn học:',
+                    subjectClass.gvChinh,
+                    subjectClass.monHoc,
+                    subjectClass.lopNienChe.length > 0,
+                    subjectClass.phongHoc
+                )
+
                 if (existSubjectClass) {
                     const res = await tx.subjectClass.update({
                         where: {

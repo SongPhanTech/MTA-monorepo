@@ -43,7 +43,7 @@ func indexPage(reqCtx reqctx.Ctx, queryData resQueryData) nodx.Node {
 	}
 	content := []nodx.Node{
 		nodx.Div(
-			component.H1Text("Khôi phục dữ liệu"),
+			component.H2Text("Khôi phục dữ liệu"),
 		),
 		component.CardBox(component.CardBoxParams{
 			Class: "mt-4",

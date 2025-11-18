@@ -43,7 +43,7 @@ func indexPage(reqCtx reqctx.Ctx, queryData execsQueryData) nodx.Node {
 		logger.FatalError("error getting environment variables", logger.KV{"error": err})
 	}
 	content := []nodx.Node{
-		component.H1Text("Lịch sử thực thi"),
+		component.H2Text("Lịch sử thực thi"),
 		component.CardBox(component.CardBoxParams{
 			Class: "mt-4",
 			Children: []nodx.Node{

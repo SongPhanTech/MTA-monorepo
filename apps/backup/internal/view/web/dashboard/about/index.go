@@ -19,7 +19,7 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 
 func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 	content := []nodx.Node{
-		component.H1Text("About PG Back Web"),
+		component.H2Text("About PG Back Web"),
 		component.H2Text(config.Version),
 
 		nodx.Div(

@@ -28,7 +28,7 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 		nodx.Div(
 			nodx.Class("flex justify-between items-start space-x-2"),
 			nodx.Div(
-				component.H1Text("Đích đến lưu trữ"),
+				component.H2Text("Đích đến lưu trữ"),
 				component.PText(`
 					Tại đây, bạn có thể quản lý các đích lưu trữ của mình. Bạn có thể bỏ qua việc tạo đích lưu trữ nếu muốn sử dụng bộ nhớ cục bộ cho các bản sao lưu.
 				`),

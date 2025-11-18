@@ -40,7 +40,7 @@ func loginPage() nodx.Node {
 		logger.FatalError("error getting environment variables", logger.KV{"error": err})
 	}
 	content := []nodx.Node{
-		component.H1Text("Đăng nhập"),
+		component.H2Text("Đăng nhập"),
 
 		nodx.FormEl(
 			htmx.HxPost(env.PBW_PREFIX+"/auth/login"),

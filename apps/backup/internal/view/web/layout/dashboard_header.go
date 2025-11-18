@@ -15,7 +15,7 @@ func dashboardHeader() nodx.Node {
 	return nodx.Header(
 		nodx.ClassMap{
 			"sticky top-0 z-50":                 true,
-			"space-x-4 p-4 min-w-max":           true,
+			"space-x-2 p-2 min-w-max":           true,
 			"w-[full] bg-base-200 shadow-sm":    true,
 			"flex items-center justify-between": true,
 		},

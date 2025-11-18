@@ -1,8 +1,6 @@
 package view
 
 import (
-	"time"
-
 	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/service"
@@ -16,16 +14,16 @@ import (
 func MountRouter(app *echo.Echo, servs *service.Service, dbgen *dbgen.Queries, env config.Env) {
 	mids := middleware.New(servs, dbgen, env)
 
-	browserCache := mids.NewBrowserCacheMiddleware(
-		middleware.BrowserCacheMiddlewareConfig{
-			CacheDuration: time.Hour * 24 * 30,
-			ExcludedFiles: []string{"/robots.txt"},
-		},
-	)
+	// browserCache := mids.NewBrowserCacheMiddleware(
+	// 	middleware.BrowserCacheMiddlewareConfig{
+	// 		CacheDuration: time.Hour * 24 * 30,
+	// 		ExcludedFiles: []string{"/robots.txt"},
+	// 	},
+	// )
 
 	prefixGroup := app.Group(env.PBW_PREFIX)
 
-	prefixGroup.Use(browserCache)
+	// prefixGroup.Use(browserCache)
 	prefixGroup.StaticFS("/", static.StaticFs)
 	// app.Group("", browserCache).StaticFS("", static.StaticFs)
 

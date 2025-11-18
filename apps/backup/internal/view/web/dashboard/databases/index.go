@@ -27,7 +27,7 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 	content := []nodx.Node{
 		nodx.Div(
 			nodx.Class("flex justify-between items-start"),
-			component.H1Text("Cơ sở dữ liệu"),
+			component.H2Text("Cơ sở dữ liệu"),
 			createDatabaseButton(),
 		),
 		component.CardBox(component.CardBoxParams{

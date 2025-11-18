@@ -27,7 +27,7 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 	content := []nodx.Node{
 		nodx.Div(
 			nodx.Class("flex justify-between items-start"),
-			component.H1Text("Nhiệm vụ sao lưu"),
+			component.H2Text("Nhiệm vụ sao lưu"),
 			createBackupButton(),
 		),
 		component.CardBox(component.CardBoxParams{

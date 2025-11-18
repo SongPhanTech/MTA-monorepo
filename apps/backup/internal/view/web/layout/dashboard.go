@@ -33,7 +33,7 @@ func Dashboard(reqCtx reqctx.Ctx, params DashboardParams) nodx.Node {
 			dashboardHeader(),
 			nodx.Main(
 				nodx.Id("dashboard-main"),
-				nodx.Class("p-4"),
+				nodx.Class("p-2"),
 				nodx.Group(params.Body...),
 			),
 		),
