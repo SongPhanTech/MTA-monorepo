@@ -3,6 +3,7 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
+import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -50,6 +51,8 @@ const getAllKeys = (nodes: TreeNode[]) => {
 
 const PutEvaluationPeriod = () => {
     const [form] = Form.useForm<PutEvaluationPeriod>()
+    const { data: me } = useSession()
+    const idProfile = me?.sDM_NhanVienId || ''
     const {
         isOpen,
         onClose,
@@ -75,6 +78,7 @@ const PutEvaluationPeriod = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,
+                createdBy: idProfile,
             }
             if (id) {
                 await updateEvaluationPeriod({

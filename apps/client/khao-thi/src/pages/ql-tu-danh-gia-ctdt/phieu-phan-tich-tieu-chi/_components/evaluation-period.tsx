@@ -69,6 +69,9 @@ export default function EvaluationPeriodCriteriaAnalysis() {
                         },
                     },
                 },
+                {
+                    createdBy: idProfile,
+                },
             ],
         }
     }, [idProfile, lecturer?.id])
