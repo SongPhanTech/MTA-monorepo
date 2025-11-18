@@ -13,7 +13,7 @@ const CommentList = ({ comments }: CommentListProps) => {
         return (
             <div className="flex flex-col items-center justify-center py-16 text-gray-400">
                 <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-pink-100 rounded-full blur-xl opacity-50" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full blur-xl opacity-50" />
                     <div className="relative text-6xl">💬</div>
                 </div>
                 <div className="text-lg font-semibold text-gray-600 mb-2">Chưa có phản hồi</div>
@@ -29,15 +29,15 @@ const CommentList = ({ comments }: CommentListProps) => {
             <div className="bg-white border-b border-gray-200 px-4 py-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                             <MessageSquare className="w-4 h-4 text-white" />
                         </div>
                         <h3 className="font-semibold text-gray-900 text-sm">
                             Phản hồi từ ban tư vấn
                         </h3>
                     </div>
-                    <div className="bg-red-50 border border-red-200 px-3 py-1 rounded">
-                        <span className="text-red-600 font-semibold text-xs">
+                    <div className="bg-blue-50 border border-blue-200 px-3 py-1 rounded">
+                        <span className="text-blue-600 font-semibold text-xs">
                             {comments.length} phản hồi
                         </span>
                     </div>
@@ -50,7 +50,7 @@ const CommentList = ({ comments }: CommentListProps) => {
                         <div className="p-3">
                             <div className="flex items-start justify-between mb-3">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-9 h-9 bg-red-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                    <div className="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                                         {comment.reviewer?.fullname?.charAt(0).toUpperCase() || 'N'}
                                     </div>
 
@@ -65,7 +65,7 @@ const CommentList = ({ comments }: CommentListProps) => {
                                     </div>
                                 </div>
 
-                                <div className="bg-red-50 text-red-600 px-2 py-1 rounded text-xs font-medium border border-red-100">
+                                <div className="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-medium border border-blue-100">
                                     Đánh giá
                                 </div>
                             </div>

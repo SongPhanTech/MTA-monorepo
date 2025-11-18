@@ -28,7 +28,7 @@ export type DataTabEvaluationCriterionType = StandardPeriod & {
 
 export default function CriteriaEvaluationWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 

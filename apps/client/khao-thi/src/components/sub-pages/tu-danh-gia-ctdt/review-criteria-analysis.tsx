@@ -143,7 +143,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
             {data?.criteria?.map((item, idx: number) => {
                 return (
                     <div key={item.id} className="ml-4 mb-6">
-                        <div className="mb-3 flex items-center justify-between">
+                        <div className="mb-3">
                             <div className="text-base">
                                 <span className="font-bold">Tiêu chí {idx + 1}: </span>
                                 <span>{item?.name}</span>

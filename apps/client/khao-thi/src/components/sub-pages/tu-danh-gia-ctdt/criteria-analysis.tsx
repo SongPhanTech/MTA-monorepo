@@ -20,10 +20,12 @@ const CriteriaAnalysisSubPage = ({
     data,
     userRole,
     idx,
+    refetch,
 }: {
     data: DataTabType
     userRole: 'P13' | 'GV'
     idx: number
+    refetch: () => void
 }) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const { can } = useAbility()
@@ -31,6 +33,7 @@ const CriteriaAnalysisSubPage = ({
     const { onOpen } = useDisclosure<{
         id?: string
         analysisCriterionId?: string
+        refetch?: () => void
     }>({
         tag: 'PutTieuChiMinhChungModal',
     })
@@ -111,6 +114,13 @@ const CriteriaAnalysisSubPage = ({
                                         <span className="flex-1">{item?.name}</span>
                                     </div>
                                     <div className="flex items-center gap-2 flex-wrap">
+                                        {userRole === 'P13' && (
+                                            <span className="text-sm text-gray-600">
+                                                Người thực hiện:{' '}
+                                                {item?.analysisCriterions?.lecturer?.userProfile
+                                                    ?.fullname || 'Chưa phân công'}
+                                            </span>
+                                        )}
                                         {deadline && deadlineStatus && (
                                             <Tag color={deadlineStatus.color}>
                                                 Hạn: {formatDate(deadline)}
@@ -120,15 +130,6 @@ const CriteriaAnalysisSubPage = ({
                                         <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
                                     </div>
                                 </div>
-                                {userRole === 'P13' && (
-                                    <div className="flex-shrink-0">
-                                        <span className="text-sm text-gray-600">
-                                            Người thực hiện:{' '}
-                                            {item?.analysisCriterions?.lecturer?.userProfile
-                                                ?.fullname || 'Chưa phân công'}
-                                        </span>
-                                    </div>
-                                )}
                                 {userRole !== 'P13' && (
                                     <div className="flex gap-2 flex-shrink-0">
                                         {can(
@@ -170,6 +171,7 @@ const CriteriaAnalysisSubPage = ({
                                                         onOpen({
                                                             analysisCriterionId:
                                                                 item.analysisCriterions?.id,
+                                                            refetch: refetch,
                                                         })
                                                     }
                                                 >
@@ -300,6 +302,7 @@ const CriteriaAnalysisSubPage = ({
                                                                         id: record.id,
                                                                         analysisCriterionId:
                                                                             record.analysisCriterionId,
+                                                                        refetch: refetch,
                                                                     })
                                                                 }}
                                                                 className="text-sm text-blue-700 cursor-pointer"
