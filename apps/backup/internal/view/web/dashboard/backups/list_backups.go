@@ -126,7 +126,7 @@ func listBackups(
 				),
 				nodx.If(
 					backup.RetentionDays > 0,
-					component.SpanText(fmt.Sprintf("%d days", backup.RetentionDays)),
+					component.SpanText(fmt.Sprintf("%d ngày", backup.RetentionDays)),
 				),
 			),
 			nodx.Td(yesNoSpan(backup.IsActive)),
