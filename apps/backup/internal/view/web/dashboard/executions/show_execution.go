@@ -128,7 +128,6 @@ func showExecutionButton(
 						deleteExecutionButton(execution.ID),
 						nodx.A(
 							nodx.Href(env.PBW_PREFIX+"/dashboard/executions/"+execution.ID.String()+"/download"),
-							nodx.Target("_blank"),
 							nodx.Class("btn btn-primary"),
 							component.SpanText("Tải xuống"),
 							lucide.Download(),

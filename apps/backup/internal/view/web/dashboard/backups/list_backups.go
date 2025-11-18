@@ -91,7 +91,6 @@ func listBackups(
 					nodx.Href(
 						fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?backup=%s", backup.ID),
 					),
-					nodx.Target("_blank"),
 					lucide.List(),
 					component.SpanText("Xem lịch sử thực thi"),
 				),

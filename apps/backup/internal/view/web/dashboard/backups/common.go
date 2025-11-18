@@ -5,7 +5,6 @@ import (
 
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	nodx "github.com/nodxdev/nodxgo"
-	lucide "github.com/nodxdev/nodxgo-lucide"
 )
 
 func localBackupsHelp() []nodx.Node {
@@ -114,17 +113,6 @@ func pgDumpOptionsHelp() []nodx.Node {
 			component.PText(`
 				Đây là các tùy chọn sẽ được truyền cho tiện ích pg_dump. Theo mặc định, phần mềm không truyền bất kỳ tùy chọn nào, do đó các bản sao lưu sẽ là sao lưu đầy đủ.
 			`),
-
-			nodx.Div(
-				nodx.Class("flex justify-end"),
-				nodx.A(
-					nodx.Class("btn btn-ghost"),
-					nodx.Href("https://www.postgresql.org/docs/current/app-pgdump.html"),
-					nodx.Target("_blank"),
-					component.SpanText("Xem tài liệu"),
-					lucide.ExternalLink(nodx.Class("ml-1")),
-				),
-			),
 		),
 	}
 }

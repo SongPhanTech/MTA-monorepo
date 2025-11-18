@@ -72,7 +72,6 @@ func listDatabases(
 						nodx.Href(
 							fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?database=%s", database.ID),
 						),
-						nodx.Target("_blank"),
 						lucide.List(),
 						component.SpanText("Xem các thực thi"),
 					),

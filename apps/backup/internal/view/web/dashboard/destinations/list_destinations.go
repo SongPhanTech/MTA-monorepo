@@ -70,7 +70,6 @@ func listDestinations(
 					nodx.Href(
 						fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?destination=%s", destination.ID),
 					),
-					nodx.Target("_blank"),
 					lucide.List(),
 					component.SpanText("Xem lịch sử thực thi"),
 				),
