@@ -800,6 +800,112 @@ importers:
         specifier: 'catalog:'
         version: 7.9.0(openapi-types@12.1.3)
 
+  apps/backend/be-ql-dao-tao-shared:
+    dependencies:
+      '@faker-js/faker':
+        specifier: 'catalog:'
+        version: 10.1.0
+      '@hono/oidc-auth':
+        specifier: 'catalog:'
+        version: 1.7.1(hono@4.10.3)
+      '@hono/otel':
+        specifier: 'catalog:'
+        version: 1.0.1(hono@4.10.3)
+      '@hono/zod-openapi':
+        specifier: 'catalog:'
+        version: 0.18.4(hono@4.10.3)(zod@3.25.76)
+      '@opentelemetry/api':
+        specifier: 'catalog:'
+        version: 1.9.0
+      '@opentelemetry/auto-instrumentations-node':
+        specifier: 'catalog:'
+        version: 0.67.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))
+      '@opentelemetry/exporter-metrics-otlp-http':
+        specifier: 'catalog:'
+        version: 0.208.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: 'catalog:'
+        version: 0.208.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: 'catalog:'
+        version: 2.2.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node':
+        specifier: 'catalog:'
+        version: 0.208.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base':
+        specifier: 'catalog:'
+        version: 2.2.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web':
+        specifier: 'catalog:'
+        version: 2.2.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: 'catalog:'
+        version: 1.38.0
+      '@scalar/hono-api-reference':
+        specifier: 'catalog:'
+        version: 0.5.184(hono@4.10.3)
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
+      axios:
+        specifier: 'catalog:'
+        version: 1.7.9
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.15
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
+      docxtemplater:
+        specifier: 'catalog:'
+        version: 3.65.2
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
+      hono:
+        specifier: 'catalog:'
+        version: 4.10.3
+      pizzip:
+        specifier: 'catalog:'
+        version: 3.2.0
+      pptx-automizer:
+        specifier: 'catalog:'
+        version: 0.8.0
+      prom-client:
+        specifier: 'catalog:'
+        version: 15.1.3
+      xlsx:
+        specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      xlsx-style:
+        specifier: 'catalog:'
+        version: 0.8.13
+      xlsx-template:
+        specifier: 'catalog:'
+        version: 1.4.4
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
+    devDependencies:
+      '@types/bun':
+        specifier: 'catalog:'
+        version: 1.3.1(@types/react@18.3.24)
+      '@types/exceljs':
+        specifier: 'catalog:'
+        version: 1.3.2
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../../packages/typescript-config
+      orval:
+        specifier: 'catalog:'
+        version: 7.9.0(openapi-types@12.1.3)
+
   apps/client/dang-ky-hoc:
     dependencies:
       '@ant-design/cssinjs':
@@ -16617,7 +16723,7 @@ snapshots:
       string-argv: 0.3.2
       tsconfck: 2.1.2(typescript@5.9.2)
       typedoc: 0.28.11(typescript@5.9.2)
-      typedoc-plugin-markdown: 4.8.1(typedoc@0.28.11(typescript@5.9.3))
+      typedoc-plugin-markdown: 4.8.1(typedoc@0.28.11(typescript@5.9.2))
       typescript: 5.9.2
     transitivePeerDependencies:
       - encoding
@@ -18609,7 +18715,7 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typedoc-plugin-markdown@4.8.1(typedoc@0.28.11(typescript@5.9.3)):
+  typedoc-plugin-markdown@4.8.1(typedoc@0.28.11(typescript@5.9.2)):
     dependencies:
       typedoc: 0.28.11(typescript@5.9.2)
 
