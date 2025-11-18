@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/executions"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -72,7 +74,10 @@ func listExecutions(
 			Subtitle: "",
 		})
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	trs := []nodx.Node{}
 	for _, execution := range executions {
 		trs = append(trs, nodx.Tr(
@@ -117,7 +122,7 @@ func listExecutions(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(func() string {
-				url := "/dashboard/executions/list"
+				url := env.PBW_PREFIX + "/dashboard/executions/list"
 				url = strutil.AddQueryParamToUrl(url, "page", fmt.Sprintf("%d", pagination.NextPage))
 				if queryData.Database != uuid.Nil {
 					url = strutil.AddQueryParamToUrl(url, "database", queryData.Database.String())

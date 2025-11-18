@@ -1,7 +1,9 @@
 package destinations
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
@@ -57,6 +59,10 @@ func createDestinationButton() nodx.Node {
 			htmx.HxIndicator("#add-destination-loading"),
 			htmx.HxValidate("true"),
 		)
+	}
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
 	}
 
 	mo := component.Modal(component.ModalParams{
@@ -126,7 +132,7 @@ func createDestinationButton() nodx.Node {
 				nodx.Class("flex justify-between items-center pt-4"),
 				nodx.Div(
 					nodx.Button(
-						htmxAttributes("/dashboard/destinations/test"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/destinations/test"),
 						nodx.Class("add-destination-btn btn btn-neutral btn-outline"),
 						nodx.Type("button"),
 						component.SpanText("Kiểm tra kết nối"),
@@ -137,7 +143,7 @@ func createDestinationButton() nodx.Node {
 					nodx.Class("flex justify-end items-center space-x-2"),
 					component.HxLoadingMd("add-destination-loading"),
 					nodx.Button(
-						htmxAttributes("/dashboard/destinations"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/destinations"),
 						nodx.Class("add-destination-btn btn btn-primary"),
 						nodx.Type("button"),
 						component.SpanText("Thêm đích đến"),

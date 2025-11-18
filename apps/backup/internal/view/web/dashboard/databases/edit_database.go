@@ -3,7 +3,9 @@ package databases
 import (
 	"database/sql"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
@@ -62,7 +64,10 @@ func editDatabaseButton(
 			htmx.HxValidate("true"),
 		)
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeMd,
 		Title: "Edit database",
@@ -113,7 +118,7 @@ func editDatabaseButton(
 				nodx.Class("flex justify-between items-center pt-4"),
 				nodx.Div(
 					nodx.Button(
-						htmxAttributes("/dashboard/databases/test"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/databases/test"),
 						nodx.ClassMap{
 							btnClass:                      true,
 							"btn btn-neutral btn-outline": true,
@@ -127,7 +132,7 @@ func editDatabaseButton(
 					nodx.Class("flex justify-end items-center space-x-2"),
 					component.HxLoadingMd(loadingID),
 					nodx.Button(
-						htmxAttributes("/dashboard/databases/"+database.ID.String()+"/edit"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/databases/"+database.ID.String()+"/edit"),
 						nodx.ClassMap{
 							btnClass:          true,
 							"btn btn-primary": true,

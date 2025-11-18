@@ -1,7 +1,9 @@
 package databases
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
@@ -19,7 +21,10 @@ type createDatabaseDTO struct {
 
 func (h *handlers) createDatabaseHandler(c echo.Context) error {
 	ctx := c.Request().Context()
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	var formData createDatabaseDTO
 	if err := c.Bind(&formData); err != nil {
 		return respondhtmx.ToastError(c, err.Error())
@@ -28,7 +33,7 @@ func (h *handlers) createDatabaseHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	_, err := h.servs.DatabasesService.CreateDatabase(
+	_, err = h.servs.DatabasesService.CreateDatabase(
 		ctx, dbgen.DatabasesServiceCreateDatabaseParams{
 			Name:             formData.Name,
 			PgVersion:        "17",
@@ -39,10 +44,14 @@ func (h *handlers) createDatabaseHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.Redirect(c, "/dashboard/databases")
+	return respondhtmx.Redirect(c, env.PBW_PREFIX+"/dashboard/databases")
 }
 
 func createDatabaseButton() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	htmxAttributes := func(url string) nodx.Node {
 		return nodx.Group(
 			htmx.HxPost(url),
@@ -95,7 +104,7 @@ func createDatabaseButton() nodx.Node {
 				nodx.Class("flex justify-between items-center pt-4"),
 				nodx.Div(
 					nodx.Button(
-						htmxAttributes("/dashboard/databases/test"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/databases/test"),
 						nodx.Class("add-database-btn btn btn-neutral btn-outline"),
 						nodx.Type("button"),
 						component.SpanText("Kiểm tra kết nối"),
@@ -106,7 +115,7 @@ func createDatabaseButton() nodx.Node {
 					nodx.Class("flex justify-end items-center space-x-2"),
 					component.HxLoadingMd("add-database-loading"),
 					nodx.Button(
-						htmxAttributes("/dashboard/databases"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/databases"),
 						nodx.Class("add-database-btn btn btn-primary"),
 						nodx.Type("button"),
 						component.SpanText("Thêm cơ sở dữ liệu"),

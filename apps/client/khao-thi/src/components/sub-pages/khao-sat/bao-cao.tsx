@@ -2,7 +2,7 @@ import useSpinner from '@hooks/spinner'
 import {
     useExportReportSurvey,
     useExportReportSurveyOrganizational,
-    useGetParticipationByType,
+    useGetSurveyObjectCount,
     useGetSurveyStatistics,
 } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, message, Row, Typography } from 'antd'
@@ -33,8 +33,8 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data } = useGetParticipationByType({
-        surveyId: selectedId as string,
+    const { data } = useGetSurveyObjectCount({
+        id: selectedId as string,
     })
 
     const { data: dataLevel } = useGetSurveyStatistics(selectedId as string)

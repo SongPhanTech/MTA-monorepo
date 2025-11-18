@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/milestones"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -56,7 +58,10 @@ func listMilestones(
 			Subtitle: "Hãy tạo một mốc sao lưu mới để bắt đầu.",
 		})
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	trs := []nodx.Node{}
 	for _, milestone := range milestones {
 		time, dayInterval, err := CronToParams(milestone.CronExpression)
@@ -98,7 +103,7 @@ func listMilestones(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(fmt.Sprintf(
-				"/dashboard/milestones/list?page=%d", pagination.NextPage,
+				env.PBW_PREFIX+"/dashboard/milestones/list?page=%d", pagination.NextPage,
 			)),
 			htmx.HxTrigger("intersect once"),
 			htmx.HxSwap("afterend"),

@@ -3,16 +3,13 @@ package dashboard
 import (
 	"github.com/eduardolat/pgbackweb/internal/service"
 	"github.com/eduardolat/pgbackweb/internal/view/middleware"
-	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/about"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/backups"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/databases"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/destinations"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/executions"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/milestones"
-	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/profile"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/restorations"
 	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/summary"
-	"github.com/eduardolat/pgbackweb/internal/view/web/dashboard/webhooks"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,7 +25,7 @@ func MountRouter(
 	executions.MountRouter(parent.Group("/executions"), mids, servs)
 	milestones.MountRouter(parent.Group("/milestones"), mids, servs)
 	restorations.MountRouter(parent.Group("/restorations"), mids, servs)
-	webhooks.MountRouter(parent.Group("/webhooks"), mids, servs)
-	profile.MountRouter(parent.Group("/profile"), mids, servs)
-	about.MountRouter(parent.Group("/about"), mids, servs)
+	// webhooks.MountRouter(parent.Group("/webhooks"), mids, servs)
+	// profile.MountRouter(parent.Group("/profile"), mids, servs)
+	// about.MountRouter(parent.Group("/about"), mids, servs)
 }

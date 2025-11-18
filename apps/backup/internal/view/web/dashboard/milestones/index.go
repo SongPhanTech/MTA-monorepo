@@ -3,6 +3,8 @@ package milestones
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/view/reqctx"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -18,10 +20,14 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 }
 
 func indexPage(reqCtx reqctx.Ctx) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	content := []nodx.Node{
 		nodx.Div(
 			nodx.Class("flex justify-between items-start"),
-			component.H1Text("Mốc sao lưu"),
+			component.H2Text("Mốc sao lưu"),
 			createMilestonesButton(),
 		),
 		component.CardBox(component.CardBoxParams{
@@ -42,7 +48,7 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 						),
 						nodx.Tbody(
 							component.SkeletonTr(8),
-							htmx.HxGet("/dashboard/milestones/list?page=1"),
+							htmx.HxGet(env.PBW_PREFIX+"/dashboard/milestones/list?page=1"),
 							htmx.HxTrigger("load"),
 						),
 					),

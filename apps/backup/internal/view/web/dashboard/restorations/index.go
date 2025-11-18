@@ -3,6 +3,8 @@ package restorations
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/strutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -35,9 +37,13 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 }
 
 func indexPage(reqCtx reqctx.Ctx, queryData resQueryData) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	content := []nodx.Node{
 		nodx.Div(
-			component.H1Text("Khôi phục dữ liệu"),
+			component.H2Text("Khôi phục dữ liệu"),
 		),
 		component.CardBox(component.CardBoxParams{
 			Class: "mt-4",
@@ -61,7 +67,7 @@ func indexPage(reqCtx reqctx.Ctx, queryData resQueryData) nodx.Node {
 						nodx.Tbody(
 							component.SkeletonTr(8),
 							htmx.HxGet(func() string {
-								url := "/dashboard/restorations/list?page=1"
+								url := env.PBW_PREFIX + "/dashboard/restorations/list?page=1"
 								if queryData.Execution != uuid.Nil {
 									url = strutil.AddQueryParamToUrl(url, "execution", queryData.Execution.String())
 								}

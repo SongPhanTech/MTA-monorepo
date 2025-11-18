@@ -1,6 +1,8 @@
 package backups
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
 	"github.com/google/uuid"
@@ -26,8 +28,12 @@ func (h *handlers) deleteBackupHandler(c echo.Context) error {
 }
 
 func deleteBackupButton(backupID uuid.UUID) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return component.OptionsDropdownButton(
-		htmx.HxDelete("/dashboard/backups/"+backupID.String()),
+		htmx.HxDelete(env.PBW_PREFIX+"/dashboard/backups/"+backupID.String()),
 		htmx.HxConfirm("Bạn có chắc chắn muốn xóa nhiệm vụ sao lưu này không?"),
 		lucide.Trash(),
 		component.SpanText("Xóa nhiệm vụ sao lưu"),

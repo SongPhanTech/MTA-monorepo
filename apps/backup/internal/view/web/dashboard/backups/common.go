@@ -5,7 +5,6 @@ import (
 
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	nodx "github.com/nodxdev/nodxgo"
-	lucide "github.com/nodxdev/nodxgo-lucide"
 )
 
 func localBackupsHelp() []nodx.Node {
@@ -21,32 +20,6 @@ func localBackupsHelp() []nodx.Node {
 			component.PText(`
 				Sao lưu từ xa được lưu trữ tại một đích đến. Đích đến là một kho lưu trữ từ xa tương thích với S3. Với tùy chọn này, bạn không cần lo lắng về việc tạo và quản lý các volume của Docker.
 			`),
-		),
-	}
-}
-
-func cronExpressionHelp() []nodx.Node {
-	return []nodx.Node{
-		component.PText(`
-			Biểu thức cron là một chuỗi được sử dụng để xác định lịch trình chạy tác vụ trong các hệ điều hành giống Unix. Nó bao gồm năm trường đại diện cho phút, giờ, ngày trong tháng, tháng và ngày trong tuần. Biểu thức cron cho phép lập lịch chính xác cho các tác vụ định kỳ.
-		`),
-
-		nodx.Div(
-			nodx.Class("mt-4 flex justify-end items-center space-x-1"),
-			nodx.A(
-				nodx.Href("https://en.wikipedia.org/wiki/Cron"),
-				nodx.Target("_blank"),
-				nodx.Class("btn btn-ghost"),
-				component.SpanText("Xem thêm trên Wikipedia"),
-				lucide.ExternalLink(),
-			),
-			nodx.A(
-				nodx.Href("https://crontab.guru/examples.html"),
-				nodx.Target("_blank"),
-				nodx.Class("btn btn-ghost"),
-				component.SpanText("Xem ví dụ"),
-				lucide.ExternalLink(),
-			),
 		),
 	}
 }
@@ -140,17 +113,6 @@ func pgDumpOptionsHelp() []nodx.Node {
 			component.PText(`
 				Đây là các tùy chọn sẽ được truyền cho tiện ích pg_dump. Theo mặc định, phần mềm không truyền bất kỳ tùy chọn nào, do đó các bản sao lưu sẽ là sao lưu đầy đủ.
 			`),
-
-			nodx.Div(
-				nodx.Class("flex justify-end"),
-				nodx.A(
-					nodx.Class("btn btn-ghost"),
-					nodx.Href("https://www.postgresql.org/docs/current/app-pgdump.html"),
-					nodx.Target("_blank"),
-					component.SpanText("Xem tài liệu"),
-					lucide.ExternalLink(nodx.Class("ml-1")),
-				),
-			),
 		),
 	}
 }

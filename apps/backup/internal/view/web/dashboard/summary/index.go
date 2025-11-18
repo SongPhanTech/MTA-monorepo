@@ -155,7 +155,7 @@ func indexPage(
 
 	content := []nodx.Node{
 		nodx.Div(
-			component.H1Text("Tóm tắt"),
+			component.H2Text("Tóm tắt"),
 		),
 		nodx.Div(
 			nodx.Class("mt-4 flex justify-start flex-wrap gap-4"),

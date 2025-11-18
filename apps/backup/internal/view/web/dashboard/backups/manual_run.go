@@ -3,6 +3,8 @@ package backups
 import (
 	"context"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
 	"github.com/google/uuid"
@@ -26,8 +28,12 @@ func (h *handlers) manualRunHandler(c echo.Context) error {
 }
 
 func manualRunbutton(backupID uuid.UUID) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return component.OptionsDropdownButton(
-		htmx.HxPost("/dashboard/backups/"+backupID.String()+"/run"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups/"+backupID.String()+"/run"),
 		htmx.HxDisabledELT("this"),
 		lucide.Zap(),
 		component.SpanText("Chạy sao lưu ngay"),

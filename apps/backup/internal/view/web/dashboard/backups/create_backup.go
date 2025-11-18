@@ -3,7 +3,9 @@ package backups
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/staticdata"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -74,8 +76,11 @@ func (h *handlers) createBackupHandler(c echo.Context) error {
 	if err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
-
-	return respondhtmx.Redirect(c, "/dashboard/backups")
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
+	return respondhtmx.Redirect(c, env.PBW_PREFIX+"/dashboard/backups")
 }
 
 func (h *handlers) createBackupFormHandler(c echo.Context) error {
@@ -114,9 +119,12 @@ func createBackupForm(
 	}
 
 	// serverTZ := time.Now().Location().String()
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.FormEl(
-		htmx.HxPost("/dashboard/backups"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups"),
 		htmx.HxDisabledELT("find button"),
 		nodx.Class("space-y-2 text-base"),
 
@@ -343,12 +351,16 @@ func createBackupForm(
 }
 
 func createBackupButton() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Tạo nhiệm vụ sao lưu",
 		Content: []nodx.Node{
 			nodx.Div(
-				htmx.HxGet("/dashboard/backups/create-form"),
+				htmx.HxGet(env.PBW_PREFIX+"/dashboard/backups/create-form"),
 				htmx.HxSwap("outerHTML"),
 				htmx.HxTrigger("intersect once"),
 				nodx.Class("p-10 flex justify-center"),

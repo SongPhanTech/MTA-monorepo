@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -73,8 +75,11 @@ func (h *handlers) restoreExecutionHandler(c echo.Context) error {
 			formData.ConnString,
 		)
 	}()
-
-	return respondhtmx.AlertWithRedirect(c, "Quá trình khôi phục đã bắt đầu.", "/dashboard/restorations")
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
+	return respondhtmx.AlertWithRedirect(c, "Quá trình khôi phục đã bắt đầu.", env.PBW_PREFIX+"/dashboard/restorations")
 	// return respondhtmx.ToastSuccess(
 	// 	c, "Quá trình đã bắt đầu, hãy kiểm tra trang khôi phục để biết thêm chi tiết.",
 	// )
@@ -107,8 +112,12 @@ func restoreExecutionForm(
 	execution dbgen.ExecutionsServiceGetExecutionRow,
 	databases []dbgen.DatabasesServiceGetAllDatabasesRow,
 ) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.FormEl(
-		htmx.HxPost("/dashboard/executions/"+execution.ID.String()+"/restore"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/executions/"+execution.ID.String()+"/restore"),
 		htmx.HxConfirm("Bạn có chắc chắn muốn khôi phục bản sao lưu này không?"),
 		htmx.HxDisabledELT("find button"),
 
@@ -215,13 +224,16 @@ func restoreExecutionButton(execution dbgen.ExecutionsServicePaginateExecutionsR
 	if execution.Status != "success" || !execution.Path.Valid {
 		return nil
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeMd,
 		Title: "Khôi phục thực thi sao lưu.",
 		Content: []nodx.Node{
 			nodx.Div(
-				htmx.HxGet("/dashboard/executions/"+execution.ID.String()+"/restore-form"),
+				htmx.HxGet(env.PBW_PREFIX+"/dashboard/executions/"+execution.ID.String()+"/restore-form"),
 				htmx.HxSwap("outerHTML"),
 				htmx.HxTrigger("intersect once"),
 				nodx.Class("p-10 flex justify-center"),

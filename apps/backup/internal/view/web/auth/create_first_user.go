@@ -37,7 +37,7 @@ func (h *handlers) createFirstUserPageHandler(c echo.Context) error {
 
 func createFirstUserPage() nodx.Node {
 	content := []nodx.Node{
-		component.H1Text("Tạo người dùng đầu tiên"),
+		component.H2Text("Tạo người dùng đầu tiên"),
 
 		nodx.FormEl(
 			htmx.HxPost("/auth/create-first-user"),

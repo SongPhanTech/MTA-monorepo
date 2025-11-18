@@ -3,7 +3,9 @@ package destinations
 import (
 	"database/sql"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
@@ -55,7 +57,10 @@ func editDestinationButton(
 	formID := idPref + "-form"
 	btnClass := idPref + "-btn"
 	loadingID := idPref + "-loading"
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	htmxAttributes := func(url string) nodx.Node {
 		return nodx.Group(
 			htmx.HxPost(url),
@@ -148,7 +153,7 @@ func editDestinationButton(
 				nodx.Class("flex justify-between items-center pt-4"),
 				nodx.Div(
 					nodx.Button(
-						htmxAttributes("/dashboard/destinations/test"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/destinations/test"),
 						nodx.ClassMap{
 							btnClass:                      true,
 							"btn btn-neutral btn-outline": true,
@@ -162,7 +167,7 @@ func editDestinationButton(
 					nodx.Class("flex justify-end items-center space-x-2"),
 					component.HxLoadingMd(loadingID),
 					nodx.Button(
-						htmxAttributes("/dashboard/destinations/"+destination.ID.String()+"/edit"),
+						htmxAttributes(env.PBW_PREFIX+"/dashboard/destinations/"+destination.ID.String()+"/edit"),
 						nodx.ClassMap{
 							btnClass:          true,
 							"btn btn-primary": true,

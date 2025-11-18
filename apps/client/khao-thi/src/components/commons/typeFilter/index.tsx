@@ -12,6 +12,7 @@ import type {
     SubjectClassSchedule,
     SurveyQuestionType,
 } from '@workspace/db'
+import { GetSurveyObjectsIsStudent } from '@workspace/libs/api/schemas'
 import type { ColumnsType } from 'antd/es/table'
 
 export type FilterProps = {
@@ -140,7 +141,7 @@ export type FilterProps = {
     taken?: boolean[]
     trainingCourseIds?: string[]
     fixedClassIds?: string[]
-    isStudent?: string
+    isStudent?: GetSurveyObjectsIsStudent
     subjectClassName?: string
 }
 
