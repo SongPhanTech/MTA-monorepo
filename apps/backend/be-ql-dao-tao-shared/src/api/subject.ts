@@ -8,6 +8,7 @@ const getListSubject = createRoute({
     operationId: 'get-list-subject',
     tags: ['Subject'],
     path: 'get-list-subject',
+    summary: '2.15. Lấy danh sách môn học',
     method: 'post',
     request: {
         body: {
