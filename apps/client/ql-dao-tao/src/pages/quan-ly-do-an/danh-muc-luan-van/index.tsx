@@ -21,7 +21,6 @@ import {
 
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
-import { CircleX, Save } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
@@ -29,8 +28,9 @@ import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { CouncilRole, ThesisType } from '@workspace/db/client'
 import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 // import { getMinioUrl } from '@workspace/constant'
- interface ExpertStat {
+interface ExpertStat {
     expertId: string
     name: string
     sDonvi: string
@@ -151,7 +151,7 @@ export default function PostgraduateProject() {
     }
     const { TextArea } = Input
     const { id: trainingObjectId } = useTrainingObjectTypeStore()
-    const [trainingCourseSelected, setTrainingCourseSelected] = useState<string[]>([])
+    const [trainingCourseSelected, setTrainingCourseSelected] = useState<string | null>(null)
     const [fixedClassesSelected, setFixedClassesSelected] = useState<string[]>([])
     const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([])
     const [needAllStudents, setNeedAllStudents] = useState<boolean>(false)
@@ -165,7 +165,7 @@ export default function PostgraduateProject() {
     const { data: sDm_Donvi = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(sDm_Donvi ?? [], '0')
     const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null)
-
+    console.log('thesisSessionSelected', thesisSessionSelected)
     const { data: trainingCourses } = useFindManyTrainingCourse(
         {
             where: {
@@ -179,9 +179,7 @@ export default function PostgraduateProject() {
 
     const { data: fixedClasses } = useFindManyFixedClass({
         where: {
-            trainingCourseId: {
-                in: trainingCourseSelected,
-            },
+            trainingCourseId: trainingCourseSelected ?? '',
         },
     })
     const { data: expertProfileData } = useFindManyExpertProfile({
@@ -205,18 +203,21 @@ export default function PostgraduateProject() {
     const defaultButtonClick = () => {
         message.info('Tính năng đang trong quá trình phát triển')
     }
+
+    console.log('fixedClassesSelected', fixedClassesSelected)
     const saoQDHDLV = async () => {
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để sao QĐ HDLV')
+            return
+        }
         showSpinner()
         const presentDay = dayjs().format('DD/MM/YYYY')
         const ngayQD = presentDay.split('/')[0]
         const thangQD = presentDay.split('/')[1]
         const namQD = presentDay.split('/')[2]
-        if (!students?.length && !allStudents?.length) {
-            message.error('Không có dữ liệu để sao QĐ HDLV')
-            return
-        }
+
         try {
-            const allSheetOptions = allStudents?.map((student) => {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
                 const supervisor =
                     student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
                 const coSupervisor =
@@ -259,7 +260,7 @@ export default function PostgraduateProject() {
                 }
             })
             await exportFromTemplate({
-                templateUrl: '/lms/templates/chuong-trinh-dao-tao/BanSaoQDHuongDanLuanVan.xlsx',
+                templateUrl: getMinioUrl('mta/template/BanSaoQDHuongDanLuanVan.xlsx'),
                 sheets: allSheetOptions ?? [],
                 fileName: 'BanSaoQDHuongDanLuanVan',
                 mergeSheetsToOne: true,
@@ -273,17 +274,18 @@ export default function PostgraduateProject() {
         }
     }
     const giaymoihdlv = async () => {
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo giấy mời HDLV')
+            return
+        }
         showSpinner()
         const presentDay = dayjs().format('DD/MM/YYYY')
         const ngay = presentDay.split('/')[0]
         const thang = presentDay.split('/')[1]
         const nam = presentDay.split('/')[2]
-        if (!students?.length && !allStudents?.length) {
-            message.error('Không có dữ liệu để tạo giấy mời HDLV')
-            return
-        }
+
         try {
-            const allSheetOptions = allStudents?.map((student) => {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
                 const supervisor =
                     student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
 
@@ -317,7 +319,7 @@ export default function PostgraduateProject() {
                 }
             })
             await exportFromTemplate({
-                templateUrl: '/lms/templates/chuong-trinh-dao-tao/GiayMoiHDLV.xlsx',
+                templateUrl: getMinioUrl('mta/template/GiayMoiHDLV.xlsx'),
                 sheets: allSheetOptions ?? [],
                 fileName: 'GiayMoiHDLV',
                 mergeSheetsToOne: true,
@@ -330,9 +332,13 @@ export default function PostgraduateProject() {
         }
     }
     const hosobvlv = async () => {
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo hồ sơ bảo vệ LV')
+            return
+        }
         showSpinner()
         try {
-            const allSheetOptions = allStudents?.map((student) => {
+            const allSheetOptions = allStudentsInClasses?.map((student) => {
                 const thanhvienhoidong =
                     student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
                 const phanbien1 = thanhvienhoidong?.find(
@@ -389,7 +395,7 @@ export default function PostgraduateProject() {
                 }
             })
             await exportFromTemplate({
-                templateUrl: '/lms/templates/chuong-trinh-dao-tao/HoSoBVLVTN.xlsx',
+                templateUrl: getMinioUrl('mta/template/HoSoBVLVTN.xlsx'),
                 sheets: allSheetOptions ?? [],
                 fileName: 'Hosobvlv',
                 mergeSheetsToOne: true,
@@ -402,10 +408,14 @@ export default function PostgraduateProject() {
         }
     }
     const danhsachbaove = async () => {
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo danh sách bảo vệ LV')
+            return
+        }
         showSpinner()
         try {
             const row: TableRow[] =
-                allStudents?.map((student, index) => {
+                allStudentsInClasses?.map((student, index) => {
                     return {
                         cells: [
                             { value: index + 1, border: true, align: 'center' },
@@ -472,7 +482,7 @@ export default function PostgraduateProject() {
             const totalRow: TableRow = {
                 cells: [
                     {
-                        value: `(Tổng số: ${allStudents?.length} học viên)`,
+                        value: `(Tổng số: ${allStudentsInClasses?.length} học viên)`,
                         align: 'center',
                         colSpan: 13,
                         border: false,
@@ -481,7 +491,7 @@ export default function PostgraduateProject() {
                 ],
             }
             await exportFromTemplate({
-                templateUrl: '/lms/templates/chuong-trinh-dao-tao/DanhSachBaoVe.xlsx',
+                templateUrl: getMinioUrl('mta/template/DanhSachBaoVe.xlsx'),
                 sheets: [
                     {
                         sheet: 'DanhSachBaoVe',
@@ -501,6 +511,10 @@ export default function PostgraduateProject() {
         }
     }
     const thongkecbhdlv = async () => {
+        if (!students?.length && !allStudentsInClasses?.length) {
+            message.error('Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV')
+            return
+        }
         showSpinner()
         const dataMapping = getExpertSupervisionStats()
         const ngayhientai = dayjs().format('DD/MM/YYYY')
@@ -568,7 +582,7 @@ export default function PostgraduateProject() {
         }
         try {
             await exportFromTemplate({
-                templateUrl: '/lms/templates/chuong-trinh-dao-tao/ThongKeCanBoHuongDan.xlsx',
+                templateUrl: getMinioUrl('mta/template/ThongKeCanBoHuongDan.xlsx'),
                 sheets: [
                     {
                         sheet: 'ThongKeCanBoHuongDan',
@@ -593,13 +607,13 @@ export default function PostgraduateProject() {
     }
 
     const getExpertSupervisionStats = (): ExpertStat[] => {
-        if (!allStudents || allStudents.length === 0) {
+        if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
             return []
         }
 
         const expertStatsMap = new Map<string, ExpertStat>()
 
-        for (const student of allStudents) {
+        for (const student of allStudentsInClasses) {
             for (const registration of student.thesisRegistrations) {
                 const project = registration.thesisProject
 
@@ -776,7 +790,11 @@ export default function PostgraduateProject() {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
+    console.log(
+        'fixedClasses',
+        fixedClasses?.map((fixedClass) => fixedClass.id)
+    )
+    console.log('queryFixedClasses', queryFixedClasses)
     const { data: students, refetch } = useFindManyStudent(
         {
             where: {
@@ -784,12 +802,15 @@ export default function PostgraduateProject() {
                     some: {
                         thesisProject: {
                             thesisSessionId: thesisSessionSelected?.id ?? '',
-                            // thesisType: ThesisType.THESIS,
+                            thesisType: ThesisType.THESIS,
                         },
                     },
                 },
                 fixedClassId: {
-                    in: queryFixedClasses,
+                    in:
+                        queryFixedClasses.length > 0
+                            ? queryFixedClasses
+                            : fixedClasses?.map((fixedClass) => fixedClass.id),
                 },
             },
             include: {
@@ -826,18 +847,14 @@ export default function PostgraduateProject() {
             enabled: hasClickedFetch,
         }
     )
-    const { data: allStudents } = useFindManyStudent(
+    const { data: allStudentsInClasses } = useFindManyStudent(
         {
             where: {
-                thesisRegistrations: {
-                    some: {
-                        thesisProject: {
-                            thesisSessionId: thesisSessionSelected?.id ?? '',
-                        },
-                    },
-                },
                 fixedClassId: {
-                    in: queryFixedClasses,
+                    in:
+                        queryFixedClasses.length > 0
+                            ? queryFixedClasses
+                            : fixedClasses?.map((fixedClass) => fixedClass.id),
                 },
             },
             include: {
@@ -893,8 +910,19 @@ export default function PostgraduateProject() {
     const { data: countStudent, refetch: refetchCount } = useCountStudent(
         {
             where: {
+                thesisRegistrations: {
+                    some: {
+                        thesisProject: {
+                            thesisSessionId: thesisSessionSelected?.id ?? '',
+                            thesisType: ThesisType.THESIS,
+                        },
+                    },
+                },
                 fixedClassId: {
-                    in: queryFixedClasses,
+                    in:
+                        queryFixedClasses.length > 0
+                            ? queryFixedClasses
+                            : fixedClasses?.map((fixedClass) => fixedClass.id),
                 },
             },
         },
@@ -902,25 +930,23 @@ export default function PostgraduateProject() {
             enabled: hasClickedFetch,
         }
     )
+    console.log('allStudentsInClasses', allStudentsInClasses)
+
     const taodulieumau = async () => {
         showSpinner()
         setNeedAllStudents(true)
-        const createPromises = allStudents?.map(async (student) => {
+        const createPromises = allStudentsInClasses?.map(async (student) => {
+            const hasThesisRegistration = student.thesisRegistrations?.some(
+                (registration) => registration.thesisProject?.thesisType === ThesisType.THESIS
+            )
+
+            if (hasThesisRegistration) {
+                return null
+            }
             const payload = {
                 title: '',
                 summary: '',
                 titleEN: '',
-                supervisor: {
-                    connect: {
-                        id: expertProfileData?.[0]?.id ?? '', // Kết nối bằng ID
-                    },
-                },
-
-                organization: {
-                    connect: {
-                        Id: sDm_Donvi?.[0]?.Id ?? '',
-                    },
-                },
                 maxStudents: 1,
                 description: 'Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn',
                 thesisSession: {
@@ -952,8 +978,17 @@ export default function PostgraduateProject() {
             return { response, responseRegistration }
         })
         try {
-            await Promise.all(createPromises || [])
-            message.success('Tạo dữ liệu mẫu thành công')
+            const validPromises = (createPromises || []).filter((p) => p !== null)
+            await Promise.all(validPromises)
+
+            const skippedCount = (createPromises?.length || 0) - validPromises.length
+            if (skippedCount > 0) {
+                message.success(
+                    `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
+                )
+            } else {
+                message.success('Tạo dữ liệu mẫu thành công')
+            }
         } catch (error) {
             message.error('Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu')
         } finally {
@@ -980,7 +1015,7 @@ export default function PostgraduateProject() {
                                                 thesisSessionData?.find((x) => x.id === value) ||
                                                     null
                                             )
-                                            setTrainingCourseSelected([])
+                                            setTrainingCourseSelected(null)
                                             setFixedClassesSelected([])
                                         }}
                                         placeholder="Chọn đợt xét"
@@ -989,7 +1024,6 @@ export default function PostgraduateProject() {
                                 <Form.Item name="searchKhoaHoc" label="Khóa học" required>
                                     <Select
                                         className="w-36"
-                                        mode="multiple"
                                         options={
                                             trainingCourses?.map((item) => ({
                                                 label: item.name,
@@ -997,16 +1031,20 @@ export default function PostgraduateProject() {
                                             })) || []
                                         }
                                         onChange={(value) => {
-                                            setTrainingCourseSelected(value as string[])
+                                            setTrainingCourseSelected(value as string | null)
                                         }}
                                         placeholder="Chọn khóa học"
                                         disabled={!thesisSessionSelected}
                                     />
                                 </Form.Item>
-                                <Form.Item name="searchText" label="Lớp học" >
+                                <Form.Item name="searchText" label="Lớp học">
                                     <Select
                                         mode="multiple"
                                         className="w-full min-w-36"
+                                        maxTagCount={2}
+                                        maxTagPlaceholder={(omittedValues) =>
+                                            `+${omittedValues.length}`
+                                        }
                                         options={fixedClasses?.map((x) => {
                                             return {
                                                 label: x.name,
@@ -1427,7 +1465,7 @@ export default function PostgraduateProject() {
                         //             ThesisType.THESIS
                         //     ) || []
                         // }
-                        
+
                         data={students || []}
                         pagination={{
                             current: currentPage,
