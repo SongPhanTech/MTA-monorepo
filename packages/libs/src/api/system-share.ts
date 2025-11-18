@@ -106,7 +106,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
  * @summary Lấy ảnh mẫu của báo cáo
  */
 export type getFilesImageStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -327,7 +327,7 @@ export function useGetFilesImageStorageTypeFileName<
  * @summary Lấy ảnh nhân viên
  */
 export type getFilesEmployeeUserIdImageResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -503,7 +503,7 @@ export function useGetFilesEmployeeUserIdImage<
  * @summary Lấy avatar khởi tạo
  */
 export type getFilesAvatarInitialsResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -666,7 +666,7 @@ export function useGetFilesAvatarInitials<
  * @summary Upload single file
  */
 export type postFilesSingleStorageTypeResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -808,7 +808,7 @@ export const usePostFilesSingleStorageType = <TError = unknown, TContext = unkno
  * @summary Xóa single file
  */
 export type deleteFilesDeleteSingleStorageTypeFileNameResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
@@ -952,7 +952,7 @@ export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown, 
  * @summary Kiểm tra tình trạng API
  */
 export type getFilesHealthzResponse200 = {
-    data: undefined
+    data: void
     status: 200
 }
 
