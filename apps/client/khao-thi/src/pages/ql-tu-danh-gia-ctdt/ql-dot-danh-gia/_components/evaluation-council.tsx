@@ -81,6 +81,7 @@ export default function EvaluationCouncilTab() {
     const { data: count } = useCountEvaluationCouncil({
         where: {
             ...where,
+            periodId: selectedEvaluationPeriodId,
             deletedAt: null,
         },
     })
@@ -114,6 +115,9 @@ export default function EvaluationCouncilTab() {
                                     organization: true,
                                 },
                             },
+                        },
+                        orderBy: {
+                            createdAt: 'asc',
                         },
                     },
                 },
