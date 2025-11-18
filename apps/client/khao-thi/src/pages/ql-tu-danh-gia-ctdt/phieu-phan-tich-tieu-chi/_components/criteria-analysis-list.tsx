@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 export default function CriteriaAnalysisList() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data } = useFindUniqueEvaluationPeriod(
+    const { data, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
@@ -71,12 +71,13 @@ export default function CriteriaAnalysisList() {
                             data={standard}
                             idx={standard.order}
                             userRole="P13"
+                            refetch={refetch}
                         />
                     ),
                 }
             })
         }
-    }, [data])
+    }, [data, refetch])
 
     return (
         <div className="h-full">
