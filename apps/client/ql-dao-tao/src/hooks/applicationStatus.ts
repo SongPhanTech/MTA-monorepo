@@ -4,6 +4,7 @@ export type ApplicationStatusOption = {
     value: ApplicationStatus
     label: string
     color?: string
+    disabled?: boolean
 }
 
 export const useApplicationStatusOptions = () => {
@@ -14,6 +15,7 @@ export const useApplicationStatusOptions = () => {
             value: ApplicationStatus.APPROVED,
             label: 'Được chấp thuận',
             color: 'green',
+            disabled:true
         },
         { value: ApplicationStatus.REJECTED, label: 'Bị từ chối', color: 'red' },
     ]

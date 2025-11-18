@@ -215,10 +215,7 @@ const PutGraduationApplication = () => {
                     <FormItem form={form} name="status" label="Trạng thái">
                         <Select
                             placeholder="Chọn trạng thái"
-                            options={applicationStatusOptions?.map((item) => ({
-                                label: item.label,
-                                value: item.value,
-                            }))}
+                            options={applicationStatusOptions}
                             allowClear
                         />
                     </FormItem>
