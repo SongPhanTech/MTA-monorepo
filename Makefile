@@ -11,6 +11,7 @@ PKG_BE_MODEL := be-model
 PKG_BE_DAO_TAO := be-ql-dao-tao
 PKG_BE_KHAO_THI := be-khao-thi
 PKG_BE_PORTAL := be-portal
+PKG_BE_DAO_TAO_SHARED := be-ql-dao-tao-shared
 
 PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
@@ -18,7 +19,7 @@ PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
-BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
+BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED)
 FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) 
 
 # Targets
@@ -36,6 +37,7 @@ help:
 	@echo "  all-$(PKG_KHAO_THI)"
 	@echo "  all-$(PKG_AI)"
 	@echo "  all-$(PKG_PORTAL)"
+	@echo "  all-$(PKG_BE_DAO_TAO_SHARED)"
 	@echo "  all-clients"
 
 ql-dao-tao:

@@ -814,33 +814,6 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 0.18.4(hono@4.10.3)(zod@3.25.76)
-      '@opentelemetry/api':
-        specifier: 'catalog:'
-        version: 1.9.0
-      '@opentelemetry/auto-instrumentations-node':
-        specifier: 'catalog:'
-        version: 0.67.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))
-      '@opentelemetry/exporter-metrics-otlp-http':
-        specifier: 'catalog:'
-        version: 0.208.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/exporter-trace-otlp-http':
-        specifier: 'catalog:'
-        version: 0.208.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources':
-        specifier: 'catalog:'
-        version: 2.2.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-node':
-        specifier: 'catalog:'
-        version: 0.208.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base':
-        specifier: 'catalog:'
-        version: 2.2.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-web':
-        specifier: 'catalog:'
-        version: 2.2.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions':
-        specifier: 'catalog:'
-        version: 1.38.0
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.3)
@@ -859,33 +832,9 @@ importers:
       decimal.js:
         specifier: 'catalog:'
         version: 10.6.0
-      docxtemplater:
-        specifier: 'catalog:'
-        version: 3.65.2
-      exceljs:
-        specifier: 'catalog:'
-        version: 4.4.0
       hono:
         specifier: 'catalog:'
         version: 4.10.3
-      pizzip:
-        specifier: 'catalog:'
-        version: 3.2.0
-      pptx-automizer:
-        specifier: 'catalog:'
-        version: 0.8.0
-      prom-client:
-        specifier: 'catalog:'
-        version: 15.1.3
-      xlsx:
-        specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
-        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
-      xlsx-style:
-        specifier: 'catalog:'
-        version: 0.8.13
-      xlsx-template:
-        specifier: 'catalog:'
-        version: 1.4.4
       zod:
         specifier: 'catalog:'
         version: 3.25.76
@@ -893,9 +842,6 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.3.1(@types/react@18.3.24)
-      '@types/exceljs':
-        specifier: 'catalog:'
-        version: 1.3.2
       '@workspace/auth':
         specifier: workspace:*
         version: link:../../../packages/auth

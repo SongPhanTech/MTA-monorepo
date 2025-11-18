@@ -1,40 +1,15 @@
-import { httpInstrumentationMiddleware } from "@hono/otel";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { context, SpanKind, trace } from "@opentelemetry/api";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { NodeSDK } from "@opentelemetry/sdk-node";
-import { jwtAuth } from "@workspace/auth/hono";
-import { enhance, Prisma, PrismaClient } from "@workspace/db";
-import { createHonoHandler } from "@workspace/db/hono";
-import type { Context } from "hono";
-import { contextStorage, getContext } from "hono/context-storage";
+import { Prisma, PrismaClient } from "@workspace/db";
+import { contextStorage } from "hono/context-storage";
 import { cors } from "hono/cors";
 import { showRoutes } from "hono/dev";
 import { HTTPException } from "hono/http-exception";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import CurriculumSubjectApp from "./api/curriculum-subject";
-import { checkIp } from "./middlewares/check-ip";
-// import { tracingMiddleware } from './middlewares/tracing'
+import SubjectApp from "./api/subject";
 import { setupOpenApi } from "./utils/openapi";
-
-import "./otel";
-
-const openTelemetrySDK = new NodeSDK({
-  traceExporter: new OTLPTraceExporter(),
-});
-openTelemetrySDK.start();
-
-export const prisma = new PrismaClient();
+export const prisma: PrismaClient = new PrismaClient();
 
 const app = new OpenAPIHono({ strict: false });
-
-const instrumentationConfig = {
-  serviceName: process.env.OTEL_SERVICE_NAME || "mta-be-ql-dao-tao-shared",
-  serviceVersion: "1.0.0",
-  captureRequestHeaders: ["user-agent", "service-name"],
-};
-
-app.use(httpInstrumentationMiddleware(instrumentationConfig));
 
 app.use(
   "*",
@@ -52,58 +27,16 @@ app.use(
   })
 );
 
-const config = {
-  keycloak: {
-    url: process.env.KEYCLOAK_URL || "http://localhost:8080",
-    realm: process.env.KEYCLOAK_REALM || "swantech",
-    clientId: process.env.KEYCLOAK_CLIENT_ID || "fe-test-local",
-  },
-};
 app.use(contextStorage());
-// app.use(tracingMiddleware)
-app.use("*", checkIp);
-
-const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`;
-const jwksUri = `${issuer}/protocol/openid-connect/certs`;
-const audience = config.keycloak.clientId;
-// TODO!: remove `/check`
-app.use("/api/check/*", jwtAuth(jwksUri, audience, issuer, prisma));
 
 setupOpenApi(app);
 
-app.route("/api/curriculum-subject", CurriculumSubjectApp);
-
-const nv = await prisma.userProfile.findFirstOrThrow();
-
-app.use(
-  "/api/model/*",
-  createHonoHandler({
-    getPrisma: async (ctx: Context) => {
-      return enhance(prisma, { user: nv });
-      // return enhance(prisma, { user: ctx.get('user') })
-    },
-  })
-);
+app.route("/", SubjectApp);
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
     return c.json({ message: err.message }, err.status);
   }
-
-  const tracer = trace.getTracer("InternalError");
-  const parentSpan = getContext().var.rootSpan;
-
-  const subSpan = tracer.startSpan(
-    "internal-error",
-    {
-      attributes: { "error.message": err.message },
-      kind: SpanKind.INTERNAL,
-    },
-    parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
-  );
-
-  subSpan.recordException(err);
-  subSpan.end();
 
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     let status: ContentfulStatusCode = 500;
