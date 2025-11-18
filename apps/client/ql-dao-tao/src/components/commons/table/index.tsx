@@ -49,7 +49,7 @@ export type ColumnsType<RecordType = AnyObject> = ((
 type TableProps<T = AnyObject> = {
     columns?: ColumnsType<T> & {
         distinctFilters?: string[]
-        options?: ColumnOption[]
+        // options?: ColumnOption[]
     }
     data?: readonly T[]
     pagination?:

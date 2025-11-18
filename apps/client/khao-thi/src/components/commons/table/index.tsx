@@ -396,7 +396,7 @@ const Table = <T extends AnyObject>({
                                 checkAll={checkAll}
                                 indeterminate={indeterminate}
                                 filtersTable={filtersTable}
-                                    />
+                            />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({
