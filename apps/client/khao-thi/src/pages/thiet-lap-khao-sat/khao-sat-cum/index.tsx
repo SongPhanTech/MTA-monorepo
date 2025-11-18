@@ -3,6 +3,7 @@ import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vie
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
+import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
@@ -51,6 +52,12 @@ export default function ClussterSurveyPage() {
             label: 'Báo cáo khảo sát',
             children: <ClusterSurveyReport selectedId={selectedId} />,
             disabled: !selectedId,
+        },
+         {
+            key: '5',
+            label: 'Báo cáo chi tiết',
+            children: <SurveyReport selectedId={survey?.id||''} />,
+            disabled: !survey?.id,
         },
     ]
 

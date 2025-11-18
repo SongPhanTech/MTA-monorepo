@@ -1,7 +1,6 @@
 import useSpinner from '@hooks/spinner'
 import {
     exportClusterSurveyStatistics,
-    useExportReportSurveyOrganizational,
     useGetClusterSurveyStatistics,
 } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, message, Row, Typography } from 'antd'
@@ -9,6 +8,7 @@ import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
+import Table from '@components/commons/table'
 const { Title } = Typography
 function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
     const router = useRouter()
@@ -100,23 +100,6 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
             </div>
         )
     }
-    const { mutateAsync: exportApiForOrganizational } = useExportReportSurveyOrganizational()
-    const exportReportForOrganization = async () => {
-        try {
-            const res = await exportApiForOrganizational({
-                data: { surveyId: selectedId as string, semesterId: '', organizationId: '' },
-            })
-            if (res.status === 200) {
-                saveAs(res.data, 'Bao_cao.docx')
-            }
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-    }
 
     const exportReport = async () => {
         try {
@@ -145,41 +128,63 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
         click: onChartClick,
     }
 
+      const renderTable = (dataTable: any,choices:any) => {
+            return (
+                <Table
+                    columns={
+                        choices?.length > 0
+                            ? [
+                                  {
+                                      title: 'STT',
+                                      width: 60,
+                                      align: 'center',
+                                      fixed: 'left',
+                                      render: (_, __, index) => index + 1,
+                                  },
+                                  {
+                                      title: 'Đối tượng',
+                                      align: 'center',
+                                      render: (_, record) => {
+                                          return record?.lecture
+                                      },
+                                  },
+                                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                                  ...choices?.map((i: any,index:number) => ({
+                                      title: i?.description,
+                                      id: i?.id,
+                                      dataIndex: i?.id,
+                                      align: 'center',
+                                      render: (__: any, record: any) => {
+                                         return record?.average ? record?.average[index] : 0
+                                      },
+                                  })),
+                              ]:[
+                                    {
+                                      title: 'STT',
+                                      width: 60,
+                                      align: 'center',
+                                      fixed: 'left',
+                                      render: (_, __, index) => index + 1,
+                                  },
+                                  {
+                                      title: 'Đối tượng',
+                                      align: 'center',
+                                      render: (_, record) => {
+                                          return record?.lecture
+                                      },
+                                  },
+                              ]
+                          
+                    }
+                    dataSource={dataTable}
+                    pagination={false}
+                />
+            )
+        }
+
     return (
         <div>
-            <Row gutter={[16, 16]}>
-                {/* <Col span={24} className="px-6 mt-3 mb-0">
-                    <Flex justify="space-between">
-                        <Title level={3}>
-                            {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
-                        </Title>
-                    </Flex>
-                </Col> */}
-                {/* <Col span={24}>
-                    <div className="bg-white h-full flex flex-col">
-                        <div className="px-4 pb-4 flex justify-between">
-                            <Title level={4}>Thống kê số lượng người tham gia</Title>
-                        </div>
-                        <div className="flex-1">
-                            {data?.status === 200 && data?.data?.statistics?.length > 0 ? (
-                                <PieChart
-                                    className="h-full"
-                                    dataMap={data?.data?.statistics.map(
-                                        (i: { studentType: string; participantCount: number }) => {
-                                            return {
-                                                type: i.studentType,
-                                                value: i.participantCount,
-                                            }
-                                        }
-                                    )}
-                                />
-                            ) : (
-                                <Empty />
-                            )}
-                        </div>
-                    </div>
-                </Col> */}
-
+            <Row gutter={[16, 4]}>
                 <Col span={24}>
                     <div className="bg-white h-full flex flex-col">
                         <div className="p-4 flex justify-between">
@@ -192,13 +197,16 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
                             {dataLevel?.status === 200 && dataLevel?.data ? (
                                 <div
                                     style={{ width: '100%', height: '100%' }}
-                                    className="min-h-[400px]"
                                 >
                                     <ReactECharts
                                         onEvents={onEvents}
                                         option={dataBarchart}
-                                        style={{ height: '100%' }}
+                                        className="w-full min-h-[400px] mb-6"
                                     />
+
+                                   {dataLevel?.data?.data?.length > 0 &&
+                                        renderTable(dataLevel?.data?.data,dataLevel?.data?.choices)}
+
                                 </div>
                                 // <BarChart className="h-full" dataMap={dataBarchart} />
                             ) : (

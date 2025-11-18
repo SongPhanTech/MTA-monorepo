@@ -122,22 +122,34 @@ export default function DetailSurveyPage() {
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
+                            title: 'Đơt khảo sát',
+                            dataIndex: 'name',
+                            type: 'input',
+                            render: (__, record) => {
+                                return record?.name || ''
+                            },
+                        },
+                        {
                             title: 'Đối tượng được khảo sát',
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => {
-                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                                return record?.lecture
+                                    ? `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                                    : ''
                             },
                         },
                         {
                             title: 'Lớp môn học',
                             dataIndex: 'name',
                             type: 'input',
-                            render: (__, record) => (
-                                <div>
-                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
-                                </div>
-                            ),
+                            render: (__, record) => {
+                                return record?.lecture ? (
+                                    <div>
+                                        {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                    </div>
+                                ) : ''
+                            },
                         },
                         {
                             title: 'Ngày bắt đầu',
