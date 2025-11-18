@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { GetSurveyObjectsIsStudent } from './getSurveyObjectsIsStudent'
 
 export type GetSurveyObjectsParams = {
     page?: number | null
@@ -17,5 +18,5 @@ export type GetSurveyObjectsParams = {
     fixedClassIds?: string[]
     trainingCourseIds?: string[]
     taken?: boolean
-    isStudent?: string
+    isStudent?: GetSurveyObjectsIsStudent
 }

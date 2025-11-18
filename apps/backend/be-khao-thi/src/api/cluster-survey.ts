@@ -7,6 +7,183 @@ import { getSurveyStats, SurveyStatsSchema } from '../services/survey.service'
 
 const app = new OpenAPIHono({ strict: false })
 
+const createClusterSurvey = createRoute({
+    operationId: 'create-cluster-survey',
+    path: '/cluster-survey',
+    tags: ['ClusterSurvey'],
+    summary: 'Tạo cụm khảo sát',
+    description: 'Tạo cụm khảo sát',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            name: z.string(),
+                            additionalSuggestion: z.boolean(),
+                            startDate: z.coerce.date(),
+                            endDate: z.coerce.date().optional(),
+                            isPublic: z.boolean().default(false),
+                            anonymous: z.boolean().default(false),
+                            surveyTopicId: z.string(),
+                            surveyObjectTypeIds: z.array(z.string()).optional().default([]),
+                            lecturerIds: z.array(z.string()).nonempty(),
+                            surveyQuestionIds: z.array(z.string()).nonempty(),
+                            semesterId: z.string(),
+                            surveyChoices: z
+                                .array(
+                                    z.object({
+                                        answer: z.string(),
+                                        description: z.string(),
+                                        requireExplanation: z.boolean(),
+                                    })
+                                )
+                                .nonempty(),
+                        })
+                        .openapi('create-cluster-survey-request'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(createClusterSurvey, async (c) => {
+    const {
+        surveyQuestionIds,
+        surveyChoices,
+        surveyObjectTypeIds,
+        lecturerIds,
+        surveyTopicId,
+        semesterId,
+        ...payload
+    } = c.req.valid('json')
+
+    await prisma.$transaction(async (tx) => {
+        const cluster = await tx.clusterSurvey.create({
+            data: {
+                ...payload,
+                surveyTopic: {
+                    connect: { id: surveyTopicId },
+                },
+                surveyQuestion: {
+                    connect: surveyQuestionIds.map((id) => ({ id })),
+                },
+                surveyChoice: {
+                    create: surveyChoices,
+                },
+                surveyObjectType: {
+                    connect: surveyObjectTypeIds.map((id) => ({ id })),
+                },
+                lecturers: {
+                    connect: lecturerIds.map((id) => ({ id })),
+                },
+            },
+            include: {
+                surveyChoice: true,
+            },
+        })
+
+        // const lecturers = await tx.lecturer.findMany({
+        //     where: {
+        //         id: {
+        //             in: lecturerIds,
+        //         },
+        //         mainSubjectClasses: {
+        //             some: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        //     include: {
+        //         mainSubjectClasses: {
+        //             where: {
+        //                 semester: {
+        //                     id: semesterId,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // })
+        const subjectClasses = await prisma.subjectClass.findMany({
+            where: {
+                semesterId,
+                mainLecturer: {
+                    id: {
+                        in: lecturerIds,
+                    },
+                },
+            },
+            include: {
+                mainLecturer: true,
+            },
+        })
+
+        const surveys = await tx.survey.createManyAndReturn({
+            data: subjectClasses.map((cls) => ({
+                ...payload,
+                clusterSurveyId: cluster.id,
+                subjectClassId: cls.id,
+                surveyTopicId,
+                lectureId: cls.lecturerId,
+            })),
+        })
+
+        for (const survey of surveys) {
+            await tx.survey.update({
+                where: { id: survey.id },
+                data: {
+                    surveyQuestion: {
+                        connect: surveyQuestionIds.map((id) => ({ id })),
+                    },
+                    surveyChoice: {
+                        connect: cluster.surveyChoice.map((choice) => ({
+                            id: choice.id,
+                        })),
+                    },
+                    surveyObjectType: {
+                        connect: surveyObjectTypeIds.map((id) => ({ id })),
+                    },
+                },
+            })
+        }
+    })
+
+    return c.json({ message: 'Success' })
+})
+
 const getClusterSurveyStatistics = createRoute({
     operationId: 'get-cluster-survey-statistics',
     path: '/{id}/statistics',
