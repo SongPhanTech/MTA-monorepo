@@ -92,7 +92,7 @@ export default function EvaluationPeriodCriteriaAnalysis() {
             skip: (currentPage - 1) * numberOfPages,
         },
         {
-            enabled: !!idProfile && !!lecturer,
+            enabled: !!idProfile,
         }
     )
 
@@ -101,7 +101,7 @@ export default function EvaluationPeriodCriteriaAnalysis() {
             where: whereClause,
         },
         {
-            enabled: !!idProfile && !!lecturer,
+            enabled: !!idProfile,
         }
     )
 

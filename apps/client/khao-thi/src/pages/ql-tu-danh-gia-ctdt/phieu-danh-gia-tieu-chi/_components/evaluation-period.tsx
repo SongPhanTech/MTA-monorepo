@@ -69,6 +69,9 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                         },
                     },
                 },
+                {
+                    createdBy: idProfile,
+                },
             ],
         }
     }, [idProfile, lecturer?.id])
@@ -89,7 +92,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
             skip: (currentPage - 1) * numberOfPages,
         },
         {
-            enabled: !!idProfile && !!lecturer,
+            enabled: !!idProfile,
         }
     )
 
@@ -98,7 +101,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
             where: whereClause,
         },
         {
-            enabled: !!idProfile && !!lecturer,
+            enabled: !!idProfile,
         }
     )
 
