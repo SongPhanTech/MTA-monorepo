@@ -33,13 +33,13 @@ const BarChart: React.FC<ChartProps> = ({ className, dataMap }) => {
             },
         },
         yAxis: {
-  type: 'category',
-  axisLabel: {
-    width: 160,          // giới hạn chiều dài
-    overflow: 'break',   // tự xuống dòng
-    lineHeight: 18
-  }
-}
+            type: 'category',
+            axisLabel: {
+                width: 160, // giới hạn chiều dài
+                overflow: 'break', // tự xuống dòng
+                lineHeight: 18,
+            },
+        },
     }
 
     return (

@@ -66,7 +66,7 @@ export default function SinhPhach() {
     }
 
     return (
-        <>
+        <div className="max-w-screen-sm">
             <Col span={24}>
                 <Flex justify="space-between" align="center">
                     <Checkbox
@@ -133,6 +133,6 @@ export default function SinhPhach() {
                     pagination={false}
                 />
             </Col>
-        </>
+        </div>
     )
 }

@@ -216,17 +216,17 @@ const PutExpertProfile = () => {
                     </FormItem>
                 </Col>
             )}
-            
-                <Col span={12}>
-                    <FormItem form={form} name="bankAccountNumber" label="Số tài khoản" required>
-                        <Input placeholder="Nhập số tài khoản" />
-                    </FormItem>
-                </Col>
+
             <Col span={12}>
-                    <FormItem form={form} name="bankName" label="Ngân hàng" required>
-                        <Input placeholder="Nhập ngân hàng" />
-                    </FormItem>
-                </Col>
+                <FormItem form={form} name="bankAccountNumber" label="Số tài khoản" required>
+                    <Input placeholder="Nhập số tài khoản" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="bankName" label="Ngân hàng" required>
+                    <Input placeholder="Nhập ngân hàng" />
+                </FormItem>
+            </Col>
             {!isInternal && (
                 <Col span={12}>
                     <FormItem form={form} name="email" label="Email" required>

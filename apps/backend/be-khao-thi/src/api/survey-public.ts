@@ -131,8 +131,6 @@ app.openapi(getPublicSurvey, async (c) => {
     return c.json({ ...data, lectureInfo }, 200)
 })
 
-
-
 const savePublicSurvey = createRoute({
     operationId: 'save-public-survey',
     path: '/save-public-survey',

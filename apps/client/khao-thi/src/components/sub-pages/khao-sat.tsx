@@ -27,7 +27,7 @@ function TabDotKhaoSat({
     selectedId,
     setSelectedId,
 }: {
-    selectedId: Survey|null
+    selectedId: Survey | null
     setSelectedId: (value: Survey | null) => void
 }) {
     const { can, canSome } = useAbility()

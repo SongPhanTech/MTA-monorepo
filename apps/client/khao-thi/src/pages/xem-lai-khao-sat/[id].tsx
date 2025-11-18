@@ -44,7 +44,7 @@ function TakeTestPage() {
     // const surveyObjectTypeId = router.query.surveyObjectTypeId as string
 
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId ||''
+    const profileId = session?.sDM_NhanVienId || ''
 
     // const { data } =  useGetPublicSurvey(id)
     const { data, isLoading } = useFindFirstSurveySession(

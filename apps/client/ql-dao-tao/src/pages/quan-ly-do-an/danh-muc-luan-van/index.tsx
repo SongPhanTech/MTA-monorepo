@@ -30,7 +30,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { CouncilRole, ThesisType } from '@workspace/db/client'
 import { buildOrgTree } from '@lib/utils'
 // import { getMinioUrl } from '@workspace/constant'
- interface ExpertStat {
+interface ExpertStat {
     expertId: string
     name: string
     sDonvi: string
@@ -1003,7 +1003,7 @@ export default function PostgraduateProject() {
                                         disabled={!thesisSessionSelected}
                                     />
                                 </Form.Item>
-                                <Form.Item name="searchText" label="Lớp học" >
+                                <Form.Item name="searchText" label="Lớp học">
                                     <Select
                                         mode="multiple"
                                         className="w-full min-w-36"
@@ -1427,7 +1427,7 @@ export default function PostgraduateProject() {
                         //             ThesisType.THESIS
                         //     ) || []
                         // }
-                        
+
                         data={students || []}
                         pagination={{
                             current: currentPage,

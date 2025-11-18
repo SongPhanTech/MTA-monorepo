@@ -41,6 +41,7 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { validateExamScore, validateScore } from '@lib/utils'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -242,7 +243,10 @@ export default function NhapDiem({
         () =>
             dataTable.every(({ id }) => {
                 const f = listForm?.[id]
-                return f?.examBanned || (f?.attendanceScore && f?.midtermScore)
+                return (
+                    (f?.examBanned && f?.examBannedReason) ||
+                    (f?.attendanceScore && f?.midtermScore)
+                )
             }),
         [dataTable, listForm]
     )
@@ -250,12 +254,34 @@ export default function NhapDiem({
         () =>
             dataTable.every(({ id }) => {
                 const f = listForm?.[id]
-                return f?.examBanned || f?.examScore
+                return (
+                    (f?.examBanned && f?.examBannedReason) ||
+                    (f?.examPostponed && f?.examPostponedReason) ||
+                    f?.examScore
+                )
             }),
         [dataTable, listForm]
     )
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        for (const [_, value] of Object.entries(listForm)) {
+            try {
+                await validateScore(value.attendanceScore)
+                await validateScore(value.midtermScore)
+                await validateExamScore(value.examScore)
+                if (value.examBanned && !value.examBannedReason) {
+                    message.error('Vui lòng nhập lý do cấm thi')
+                    return
+                }
+                if (value.examPostponed && !value.examPostponedReason) {
+                    message.error('Vui lòng nhập lý do hoãn thi')
+                    return
+                }
+            } catch (_) {
+                message.warning('Vui lòng kiểm tra lại điểm')
+                return
+            }
+        }
         Modal.confirm({
             title: 'Xác nhận',
             content: 'Bạn có chắc chắn muốn lưu điểm không?',
@@ -279,6 +305,7 @@ export default function NhapDiem({
     const handleSaveScores = async () => {
         try {
             showSpinner()
+
             const listChange = Object.entries(listForm)
                 .map(([key, value]) => {
                     return {
@@ -816,33 +843,14 @@ export default function NhapDiem({
                                             label=""
                                             rules={[
                                                 {
-                                                    validator: (_, value) => {
-                                                        if (value == null || value === '')
-                                                            return Promise.resolve()
-                                                        if (value > 10 || value < 0) {
-                                                            message.error(
-                                                                'Điểm phải trong khoảng 0-10'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-                                                        if (value % 0.5 !== 0) {
-                                                            message.error(
-                                                                'Điểm phải là bội số của 0.5'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-
-                                                        return Promise.resolve()
-                                                    },
+                                                    validator: (_, value) => validateScore(value),
                                                 },
                                             ]}
                                         >
                                             <InputNumber
                                                 disabled={disabledForm}
                                                 id={`score-cc-${record.id}`}
-                                                style={{
-                                                    width: '100%',
-                                                }}
+                                                style={{ width: '100%' }}
                                                 step={0.5}
                                                 controls={false}
                                                 onKeyDown={(e) =>
@@ -876,24 +884,7 @@ export default function NhapDiem({
                                             label=""
                                             rules={[
                                                 {
-                                                    validator: (_, value) => {
-                                                        if (value == null || value === '')
-                                                            return Promise.resolve()
-                                                        if (value > 10 || value < 0) {
-                                                            message.error(
-                                                                'Điểm phải trong khoảng 0-10'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-                                                        if (value % 0.5 !== 0) {
-                                                            message.error(
-                                                                'Điểm phải là bội số của 0.5'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-
-                                                        return Promise.resolve()
-                                                    },
+                                                    validator: (_, value) => validateScore(value),
                                                 },
                                             ]}
                                         >
@@ -936,23 +927,8 @@ export default function NhapDiem({
                                             label=""
                                             rules={[
                                                 {
-                                                    validator: (_, value) => {
-                                                        if (value == null || value === '')
-                                                            return Promise.resolve()
-                                                        if (value > 10 || value < 0) {
-                                                            message.error(
-                                                                'Điểm phải trong khoảng 0-10'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-                                                        if (Math.round(value * 10) !== value * 10) {
-                                                            message.error(
-                                                                'Điểm phải là bội số của 0.1'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-                                                        return Promise.resolve()
-                                                    },
+                                                    validator: (_, value) =>
+                                                        validateExamScore(value),
                                                 },
                                             ]}
                                         >

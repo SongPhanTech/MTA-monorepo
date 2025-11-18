@@ -15,7 +15,7 @@ export const useApplicationStatusOptions = () => {
             value: ApplicationStatus.APPROVED,
             label: 'Được chấp thuận',
             color: 'green',
-            disabled:true
+            disabled: true,
         },
         { value: ApplicationStatus.REJECTED, label: 'Bị từ chối', color: 'red' },
     ]

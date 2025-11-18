@@ -1,31 +1,33 @@
 import clsx, { type ClassValue } from 'clsx'
 import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
+import { message } from 'antd'
 
-const cn = (...inputs: ClassValue[]) => {
+export const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }
-const getPageCount = (totalItems: number, itemsPerPage: number) => {
+export const getPageCount = (totalItems: number, itemsPerPage: number) => {
     return Math.ceil(totalItems / itemsPerPage)
 }
 
-const formatDate = (date: string | Date | Dayjs, unit?: 'Day' | 'Month' | 'Year') => {
+export const formatDate = (date?: string | Date | Dayjs, unit?: 'Day' | 'Month' | 'Year') => {
+    if (!date) return ''
     if (unit === 'Year') return dayjs(date).format('YYYY')
     if (unit === 'Month') return dayjs(date).format('MM/YYYY')
     return dayjs(date).format('DD/MM/YYYY')
 }
 
-const formatDateReadable = (date: string | Date | Dayjs) => {
+export const formatDateReadable = (date: string | Date | Dayjs) => {
     const d = dayjs(date)
     return `${d.hour().toString().padStart(2, '0')}h:${d.minute().toString().padStart(2, '0')} - ${d.date().toString().padStart(2, '0')}/${(d.month() + 1).toString().padStart(2, '0')}/${d.year()}`
 }
 
-const formatDateVN = (date: string | Date | Dayjs) => {
+export const formatDateVN = (date: string | Date | Dayjs) => {
     const d = dayjs(date)
     return `Ngày ${d.date().toString().padStart(2, '0')} tháng ${(d.month() + 1).toString().padStart(2, '0')} năm ${d.year()}`
 }
 
-const getColorByIndex = (index: number) => {
+export const getColorByIndex = (index: number) => {
     const colors = [
         '#3182CE',
         '#38A169',
@@ -48,7 +50,7 @@ const getColorByIndex = (index: number) => {
     return colors[index % colors.length]
 }
 
-const formatNiceBytes = (x: string) => {
+export const formatNiceBytes = (x: string) => {
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     let l = 0
     let n = Number.parseInt(x, 10) || 0
@@ -58,11 +60,11 @@ const formatNiceBytes = (x: string) => {
     return `${n.toFixed(n < 10 && l > 0 ? 1 : 0)} ${units[l]}`
 }
 
-const getUniqueArray = <T>(arr: Array<T>, key: keyof T) => {
+export const getUniqueArray = <T>(arr: Array<T>, key: keyof T) => {
     return [...new Map(arr.map((item) => [item[key], item])).values()]
 }
 
-const stringToSlug = (str: string) => {
+export const stringToSlug = (str: string) => {
     const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ'
     const to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
     let strOut = str
@@ -75,7 +77,7 @@ const stringToSlug = (str: string) => {
         .replace(/[^a-z0-9]/g, '_')
 }
 
-function generatePassword(length = 12): string {
+export function generatePassword(length = 12): string {
     const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
     const numberChars = '0123456789'
@@ -107,7 +109,7 @@ export type OrgTreeItem = {
     children?: OrgTreeItem[]
 }
 
-function buildOrgTree(
+export function buildOrgTree(
     list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
     parentId = '0'
 ): OrgTreeItem[] {
@@ -119,6 +121,40 @@ function buildOrgTree(
             children: buildOrgTree(list, item.Id),
         }))
 }
+
+export const validateExamScore = (score?: number | null) => {
+    if (score === null || score === undefined) {
+        return Promise.resolve()
+    }
+    if (score < 0 || score > 10) {
+        return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
+    }
+
+    const scaledValue = score * 10
+    if (scaledValue !== Math.round(scaledValue)) {
+        message.error('Điểm phải là bội số của 0.1')
+        return Promise.reject()
+    }
+
+    return Promise.resolve()
+}
+
+export const validateScore = (score?: number | null) => {
+    if (score === null || score === undefined) {
+        return Promise.resolve()
+    }
+    if (score < 0 || score > 10) {
+        return Promise.reject(new Error('Điểm phải nằm trong khoảng từ 0 đến 10'))
+    }
+
+    if (score % 0.5 !== 0) {
+        message.error('Điểm phải là bội số của 0.5')
+        return Promise.reject()
+    }
+
+    return Promise.resolve()
+}
+
 // function buildOrgTree(
 //     list: Array<{ id: string; name: string; parentId: string | null }>,
 //     parentId = '0'
@@ -131,16 +167,3 @@ function buildOrgTree(
 //             children: buildOrgTree(list, item.id),
 //         }))
 // }
-export {
-    formatDate,
-    formatDateReadable,
-    formatDateVN,
-    formatNiceBytes,
-    getColorByIndex,
-    getPageCount,
-    getUniqueArray,
-    cn,
-    stringToSlug,
-    generatePassword,
-    buildOrgTree,
-}

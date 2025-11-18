@@ -6,7 +6,7 @@ import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
 import type { SurveySession } from '@workspace/db'
 import { useSuspenseFindFirstStudent } from '@workspace/db/hooks'
-import {  useSavePublicSurvey,getPrivateSurvey } from '@workspace/libs/api/exam'
+import { useSavePublicSurvey, getPrivateSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 
@@ -41,7 +41,7 @@ function TakeTestPage() {
     const [startAt, setStartAt] = useState<Date>(new Date())
     const id = router.query.id as string
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId ||''
+    const profileId = session?.sDM_NhanVienId || ''
     const [form] = Form.useForm<PutSurveySession>()
     const [survey, setSurvey] = useState<SurveyType>()
     const [isLoading, setIsLoading] = useState(true)
@@ -206,8 +206,8 @@ function TakeTestPage() {
     }
 
     const fetchData = async () => {
-        const response = await getPrivateSurvey(id,{
-            profileId
+        const response = await getPrivateSurvey(id, {
+            profileId,
         })
         if (response?.status === 200) {
             if (response?.data?.isPublic) {

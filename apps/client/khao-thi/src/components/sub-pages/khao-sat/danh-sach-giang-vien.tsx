@@ -147,7 +147,7 @@ export default function DetailSurveyPage({
         }),
         [filters, selectedId]
     )
-    const { data = [],isLoading } = useFindManySurvey(
+    const { data = [], isLoading } = useFindManySurvey(
         {
             where,
             include: {
@@ -221,206 +221,222 @@ export default function DetailSurveyPage({
     })
     return (
         <Row gutter={[16, 4]}>
-            {isLoading?<Skeleton/>:(<>
-             <Col span={24}>
-                <Flex align="center" justify="space-between">
-                    <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
-                    <ExportLecturerInSurvey
-                        query={where}
-                        surveyName={data?.[0]?.clusterSurvey?.name || ''}
-                    />
-                </Flex>
-            </Col>
-            <Col span={24}>
-                <Table
-                    rowKey={'id'}
-                    filters={filters}
-                    setFilters={(value) => {
-                        setFilters(value)
-                        setCurrentPage(1)
-                    }}
-                    onRow={(record) => {
-                        return {
-                            onClick: () => {
-                                setSurvey(record as Survey)
-                            },
-                            className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
-                        }
-                    }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 20,
-                            align: 'center',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-
-                        {
-                            title: 'Lớp môn học',
-                            dataIndex: 'name',
-                            type: 'input',
-                            render: (__, record) => (
-                                <>
-                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
-                                </>
-                            ),
-                        },
-                        {
-                            title: 'Giảng viên',
-                            dataIndex: 'name',
-                            type: 'input',
-                            render: (__, record) => {
-                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
-                            },
-                        },
-                        {
-                            title: 'CCCD',
-                            dataIndex: 'idCardNumber',
-                            type: 'input',
-                            align: 'center',
-                            render: (__, record) => {
-                                return record?.lecture?.userProfile?.idCardNumber || ''
-                            },
-                        },
-                        {
-                            title: 'SĐT',
-                            dataIndex: 'phoneNumber',
-                            type: 'input',
-                            align: 'center',
-                            render: (__, record) => {
-                                return record?.lecture?.userProfile?.phoneNumber || ''
-                            },
-                        },
-                        {
-                            title: 'ĐVQL',
-                            dataIndex: 'organizationId',
-                            type: 'input',
-                            width: 100,
-                            align: 'center',
-                            render: (__, record) => {
-                                return record?.lecture?.organization?.sMa || ''
-                            },
-                        },
-                        {
-                            title: 'Ngày bắt đầu',
-                            dataIndex: 'startDate',
-                            type: 'date',
-                            render: (_, record) =>
-                                record?.startDate
-                                    ? dayjs(record?.startDate).format('DD/MM/YYYY')
-                                    : '',
-                        },
-                        {
-                            title: 'Ngày kết thúc',
-                            dataIndex: 'endDate',
-                            type: 'date',
-                            render: (_, record) =>
-                                record?.endDate ? dayjs(record?.endDate).format('DD/MM/YYYY') : '',
-                        },
-
-                        {
-                            title: 'Thao tác',
-                            width: 80,
-                            align: 'center',
-                            hidden: !canSome(
-                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                'THEM',
-                                'SUA',
-                                'XOA',
-                                'XEM_CHI_TIET'
-                            ),
-                            render: (
-                                _,
-                                { id, isPublic, surveyQuestion, surveyObjectType, surveySessions }
-                            ) => (
-                                <Row className="justify-end gap-2">
-                                    {can(
-                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                        'XEM_CHI_TIET'
-                                    ) &&
-                                        surveySessions.length > 0 && (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Báo cáo khảo sát'}
-                                                placement="top"
-                                            >
-                                                <BarChartOutlined
-                                                    onClick={() => {
-                                                        router.push(`/bao-cao-khao-sat/${id}`)
-                                                    }}
-                                                    style={{ fontSize: '16px' }}
-                                                />
-                                            </Tooltip>
-                                        )}
-
-                                    {surveyQuestion?.length > 0 &&
-                                        can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                            'XEM_CHI_TIET'
-                                        ) &&
-                                        !!isPublic && (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Xem đề khảo sát'}
-                                                placement="top"
-                                            >
-                                                <EyeOutlined
-                                                    onClick={() => {
-                                                        onOpenKhaoSat({
-                                                            dataTable: surveyObjectType,
-                                                            id: id,
-                                                        })
-                                                        // router.push(`/lam-khao-sat/${id}`)
-                                                    }}
-                                                    style={{ fontSize: '16px' }}
-                                                />
-                                            </Tooltip>
-                                        )}
-                                    {can(
-                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                        'SUA'
-                                    ) && (
-                                        <EditIcon
-                                            disabled={surveySessions.length > 0}
-                                            onClick={() => onOpen({ id, type: 'one' })}
-                                            className="text-sm text-blue-700 cursor-pointer mr-2"
-                                        />
-                                    )}
-
-                                    {can(
-                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                        'XOA'
-                                    ) && (
-                                        <DeleteIcon
-                                            disabled={surveySessions.length > 0}
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
-                                    )}
-                                </Row>
-                            ),
-                        },
-                    ]}
-                    data={data}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
+            {isLoading ? (
+                <Skeleton />
+            ) : (
+                <>
+                    <Col span={24}>
+                        <Flex align="center" justify="space-between">
+                            <div className="text-lg font-bold">
+                                {data?.[0]?.clusterSurvey?.name}
+                            </div>
+                            <ExportLecturerInSurvey
+                                query={where}
+                                surveyName={data?.[0]?.clusterSurvey?.name || ''}
+                            />
+                        </Flex>
+                    </Col>
+                    <Col span={24}>
+                        <Table
+                            rowKey={'id'}
+                            filters={filters}
+                            setFilters={(value) => {
+                                setFilters(value)
                                 setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
-                />
-            </Col>
-            </>)}
-           
+                            }}
+                            onRow={(record) => {
+                                return {
+                                    onClick: () => {
+                                        setSurvey(record as Survey)
+                                    },
+                                    className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
+                                }
+                            }}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 20,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+
+                                {
+                                    title: 'Lớp môn học',
+                                    dataIndex: 'name',
+                                    type: 'input',
+                                    render: (__, record) => (
+                                        <>
+                                            {record?.subjectClass?.code} -{' '}
+                                            {record?.subjectClass?.name}
+                                        </>
+                                    ),
+                                },
+                                {
+                                    title: 'Giảng viên',
+                                    dataIndex: 'name',
+                                    type: 'input',
+                                    render: (__, record) => {
+                                        return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                                    },
+                                },
+                                {
+                                    title: 'CCCD',
+                                    dataIndex: 'idCardNumber',
+                                    type: 'input',
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return record?.lecture?.userProfile?.idCardNumber || ''
+                                    },
+                                },
+                                {
+                                    title: 'SĐT',
+                                    dataIndex: 'phoneNumber',
+                                    type: 'input',
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return record?.lecture?.userProfile?.phoneNumber || ''
+                                    },
+                                },
+                                {
+                                    title: 'ĐVQL',
+                                    dataIndex: 'organizationId',
+                                    type: 'input',
+                                    width: 100,
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return record?.lecture?.organization?.sMa || ''
+                                    },
+                                },
+                                {
+                                    title: 'Ngày bắt đầu',
+                                    dataIndex: 'startDate',
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record?.startDate
+                                            ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                            : '',
+                                },
+                                {
+                                    title: 'Ngày kết thúc',
+                                    dataIndex: 'endDate',
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record?.endDate
+                                            ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                            : '',
+                                },
+
+                                {
+                                    title: 'Thao tác',
+                                    width: 80,
+                                    align: 'center',
+                                    hidden: !canSome(
+                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                        'THEM',
+                                        'SUA',
+                                        'XOA',
+                                        'XEM_CHI_TIET'
+                                    ),
+                                    render: (
+                                        _,
+                                        {
+                                            id,
+                                            isPublic,
+                                            surveyQuestion,
+                                            surveyObjectType,
+                                            surveySessions,
+                                        }
+                                    ) => (
+                                        <Row className="justify-end gap-2">
+                                            {can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'XEM_CHI_TIET'
+                                            ) &&
+                                                surveySessions.length > 0 && (
+                                                    <Tooltip
+                                                        className="mr-2"
+                                                        title={'Báo cáo khảo sát'}
+                                                        placement="top"
+                                                    >
+                                                        <BarChartOutlined
+                                                            onClick={() => {
+                                                                router.push(
+                                                                    `/bao-cao-khao-sat/${id}`
+                                                                )
+                                                            }}
+                                                            style={{ fontSize: '16px' }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+
+                                            {surveyQuestion?.length > 0 &&
+                                                can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                    'XEM_CHI_TIET'
+                                                ) &&
+                                                !!isPublic && (
+                                                    <Tooltip
+                                                        className="mr-2"
+                                                        title={'Xem đề khảo sát'}
+                                                        placement="top"
+                                                    >
+                                                        <EyeOutlined
+                                                            onClick={() => {
+                                                                onOpenKhaoSat({
+                                                                    dataTable: surveyObjectType,
+                                                                    id: id,
+                                                                })
+                                                                // router.push(`/lam-khao-sat/${id}`)
+                                                            }}
+                                                            style={{ fontSize: '16px' }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                            {can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    disabled={surveySessions.length > 0}
+                                                    onClick={() => onOpen({ id, type: 'one' })}
+                                                    className="text-sm text-blue-700 cursor-pointer mr-2"
+                                                />
+                                            )}
+
+                                            {can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    disabled={surveySessions.length > 0}
+                                                    popConfirm={{
+                                                        onConfirm: () => handleDelete(id),
+                                                    }}
+                                                />
+                                            )}
+                                        </Row>
+                                    ),
+                                },
+                            ]}
+                            data={data}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
+                            }}
+                        />
+                    </Col>
+                </>
+            )}
         </Row>
     )
 }
