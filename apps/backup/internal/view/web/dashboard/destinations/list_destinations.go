@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/destinations"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -56,14 +58,17 @@ func listDestinations(
 			Subtitle: "Hãy tạo một đích đến lưu trữ mới",
 		})
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	trs := []nodx.Node{}
 	for _, destination := range destinations {
 		trs = append(trs, nodx.Tr(
 			nodx.Td(component.OptionsDropdown(
 				component.OptionsDropdownA(
 					nodx.Href(
-						fmt.Sprintf("/dashboard/executions?destination=%s", destination.ID),
+						fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?destination=%s", destination.ID),
 					),
 					nodx.Target("_blank"),
 					lucide.List(),
@@ -71,7 +76,7 @@ func listDestinations(
 				),
 				editDestinationButton(destination),
 				component.OptionsDropdownButton(
-					htmx.HxPost("/dashboard/destinations/"+destination.ID.String()+"/test"),
+					htmx.HxPost(env.PBW_PREFIX+"/dashboard/destinations/"+destination.ID.String()+"/test"),
 					htmx.HxDisabledELT("this"),
 					lucide.PlugZap(),
 					component.SpanText("Kiểm tra kết nối"),
@@ -131,7 +136,7 @@ func listDestinations(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(fmt.Sprintf(
-				"/dashboard/destinations/list?page=%d", pagination.NextPage,
+				env.PBW_PREFIX+"/dashboard/destinations/list?page=%d", pagination.NextPage,
 			)),
 			htmx.HxTrigger("intersect once"),
 			htmx.HxSwap("afterend"),

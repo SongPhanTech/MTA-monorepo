@@ -4,7 +4,9 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/timeutil"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/google/uuid"
@@ -38,6 +40,10 @@ func (h *handlers) downloadExecutionHandler(c echo.Context) error {
 func showExecutionButton(
 	execution dbgen.ExecutionsServicePaginateExecutionsRow,
 ) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Title: "Chi tiết thực thi",
 		Size:  component.SizeMd,
@@ -51,15 +57,15 @@ func showExecutionButton(
 						nodx.Td(component.SpanText(execution.ID.String())),
 					),
 					nodx.Tr(
-						nodx.Th(component.SpanText("Status")),
+						nodx.Th(component.SpanText("Trạng thái")),
 						nodx.Td(component.StatusBadge(execution.Status)),
 					),
 					nodx.Tr(
-						nodx.Th(component.SpanText("Database")),
+						nodx.Th(component.SpanText("Cơ sở dữ liệu")),
 						nodx.Td(component.SpanText(execution.DatabaseName)),
 					),
 					nodx.Tr(
-						nodx.Th(component.SpanText("Destination")),
+						nodx.Th(component.SpanText("Đích đến")),
 						nodx.Td(component.PrettyDestinationName(
 							execution.BackupIsLocal, execution.DestinationName,
 						)),
@@ -67,7 +73,7 @@ func showExecutionButton(
 					nodx.If(
 						execution.Message.Valid,
 						nodx.Tr(
-							nodx.Th(component.SpanText("Message")),
+							nodx.Th(component.SpanText("Thông báo")),
 							nodx.Td(
 								nodx.Class("break-all"),
 								component.SpanText(execution.Message.String),
@@ -75,7 +81,7 @@ func showExecutionButton(
 						),
 					),
 					nodx.Tr(
-						nodx.Th(component.SpanText("Started at")),
+						nodx.Th(component.SpanText("Bắt đầu lúc")),
 						nodx.Td(component.SpanText(
 							execution.StartedAt.Local().Format(timeutil.LayoutYYYYMMDDHHMMSSPretty),
 						)),
@@ -83,7 +89,7 @@ func showExecutionButton(
 					nodx.If(
 						execution.FinishedAt.Valid,
 						nodx.Tr(
-							nodx.Th(component.SpanText("Finished at")),
+							nodx.Th(component.SpanText("Kết thúc lúc")),
 							nodx.Td(component.SpanText(
 								execution.FinishedAt.Time.Local().Format(timeutil.LayoutYYYYMMDDHHMMSSPretty),
 							)),
@@ -92,7 +98,7 @@ func showExecutionButton(
 					nodx.If(
 						execution.FinishedAt.Valid,
 						nodx.Tr(
-							nodx.Th(component.SpanText("Took")),
+							nodx.Th(component.SpanText("Thời gian thực hiện")),
 							nodx.Td(component.SpanText(
 								execution.FinishedAt.Time.Sub(execution.StartedAt).String(),
 							)),
@@ -101,7 +107,7 @@ func showExecutionButton(
 					nodx.If(
 						execution.DeletedAt.Valid,
 						nodx.Tr(
-							nodx.Th(component.SpanText("Deleted at")),
+							nodx.Th(component.SpanText("Xóa lúc")),
 							nodx.Td(component.SpanText(
 								execution.DeletedAt.Time.Local().Format(timeutil.LayoutYYYYMMDDHHMMSSPretty),
 							)),
@@ -110,7 +116,7 @@ func showExecutionButton(
 					nodx.If(
 						execution.FileSize.Valid,
 						nodx.Tr(
-							nodx.Th(component.SpanText("File size")),
+							nodx.Th(component.SpanText("Kích thước file")),
 							nodx.Td(component.PrettyFileSize(execution.FileSize)),
 						),
 					),
@@ -121,7 +127,7 @@ func showExecutionButton(
 						nodx.Class("flex justify-end items-center space-x-2"),
 						deleteExecutionButton(execution.ID),
 						nodx.A(
-							nodx.Href("/dashboard/executions/"+execution.ID.String()+"/download"),
+							nodx.Href(env.PBW_PREFIX+"/dashboard/executions/"+execution.ID.String()+"/download"),
 							nodx.Target("_blank"),
 							nodx.Class("btn btn-primary"),
 							component.SpanText("Tải xuống"),

@@ -1,6 +1,8 @@
 package backups
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
 	"github.com/google/uuid"
@@ -26,8 +28,12 @@ func (h *handlers) duplicateBackupHandler(c echo.Context) error {
 }
 
 func duplicateBackupButton(backupID uuid.UUID) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return component.OptionsDropdownButton(
-		htmx.HxPost("/dashboard/backups/"+backupID.String()+"/duplicate"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups/"+backupID.String()+"/duplicate"),
 		htmx.HxConfirm("Bạn có chắc chắn muốn nhân bản nhiệm vụ sao lưu này không?"),
 		lucide.CopyPlus(),
 		component.SpanText("Nhân bản nhiệm vụ sao lưu"),

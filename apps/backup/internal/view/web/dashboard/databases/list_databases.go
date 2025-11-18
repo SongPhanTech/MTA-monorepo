@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/databases"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -56,7 +58,10 @@ func listDatabases(
 			Subtitle: "Chờ cơ sở dữ liệu đầu tiên xuất hiện ở đây.",
 		})
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	trs := []nodx.Node{}
 	for _, database := range databases {
 		trs = append(trs, nodx.Tr(
@@ -65,7 +70,7 @@ func listDatabases(
 					nodx.Class("flex flex-col space-y-1"),
 					component.OptionsDropdownA(
 						nodx.Href(
-							fmt.Sprintf("/dashboard/executions?database=%s", database.ID),
+							fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?database=%s", database.ID),
 						),
 						nodx.Target("_blank"),
 						lucide.List(),
@@ -105,7 +110,7 @@ func listDatabases(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(fmt.Sprintf(
-				"/dashboard/databases/list?page=%d", pagination.NextPage,
+				env.PBW_PREFIX+"/dashboard/databases/list?page=%d", pagination.NextPage,
 			)),
 			htmx.HxTrigger("intersect once"),
 			htmx.HxSwap("afterend"),

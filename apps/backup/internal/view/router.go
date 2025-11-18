@@ -22,11 +22,18 @@ func MountRouter(app *echo.Echo, servs *service.Service, dbgen *dbgen.Queries, e
 			ExcludedFiles: []string{"/robots.txt"},
 		},
 	)
-	app.Group("", browserCache).StaticFS("", static.StaticFs)
 
-	apiGroup := app.Group("/api")
+	prefixGroup := app.Group(env.PBW_PREFIX)
+
+	prefixGroup.Use(browserCache)
+	prefixGroup.StaticFS("/", static.StaticFs)
+	// app.Group("", browserCache).StaticFS("", static.StaticFs)
+
+	// apiGroup := app.Group(env.PBW_PREFIX + "/api")
+	apiGroup := prefixGroup.Group("/api")
 	api.MountRouter(apiGroup, mids, servs)
 
-	webGroup := app.Group("", mids.InjectReqctx)
+	// webGroup := app.Group(env.PBW_PREFIX, mids.InjectReqctx)
+	webGroup := prefixGroup.Group("", mids.InjectReqctx)
 	web.MountRouter(webGroup, mids, servs)
 }

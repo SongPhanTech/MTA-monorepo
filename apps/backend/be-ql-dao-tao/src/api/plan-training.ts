@@ -84,7 +84,8 @@ const importFileGiaoVienCoGioGiay = async (
     }
     // Xóa các dòng trống ở đầu file (nếu có)
     rowData.splice(0, indexOffHeader + 1)
-
+    console.log('Số lượng bản ghi:', rowData.length);
+    
     const danhSachTenGV = new Set<string>()
     const danhSachMaTKBMonHoc = new Set<string>()
     const danhSachMaLopNienChe = new Set<string>()
@@ -286,7 +287,7 @@ const importFileGiaoVienCoGioGiay = async (
                     const [, tenGvPhu] = tenGV
                         .split(',')
                         .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                    const gvChinh = danhSachGV.find((gv) => gv.code === maGV)
+                    const gvChinh = danhSachGV.find((gv) => gv.code?.toLowerCase() === String(maGV).toLowerCase())
                     if (gvChinh) {
                         subjectClass.gvChinh = gvChinh.id
                     } else {
@@ -1102,7 +1103,10 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         retake
                     )
                 } catch (error) {}
-                console.log('danhSachLopMonHoc', danhSachLopMonHoc)
+                console.log(
+                    'danhSachLopMonHoc',
+                    danhSachLopMonHoc.map((e) => e.code)
+                )
             } else {
                 await importFileGiaoVienCoGioGiay(
                     sheet,

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/backups"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -66,6 +68,10 @@ func listBackups(
 		}
 		return component.SpanText("Không")
 	}
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 
 	trs := []nodx.Node{}
 	for _, backup := range backups {
@@ -83,7 +89,7 @@ func listBackups(
 				component.OptionsDropdownA(
 					nodx.Class("btn btn-sm btn-ghost btn-square"),
 					nodx.Href(
-						fmt.Sprintf("/dashboard/executions?backup=%s", backup.ID),
+						fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?backup=%s", backup.ID),
 					),
 					nodx.Target("_blank"),
 					lucide.List(),
@@ -138,7 +144,7 @@ func listBackups(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(fmt.Sprintf(
-				"/dashboard/backups/list?page=%d", pagination.NextPage,
+				env.PBW_PREFIX+"/dashboard/backups/list?page=%d", pagination.NextPage,
 			)),
 			htmx.HxTrigger("intersect once"),
 			htmx.HxSwap("afterend"),

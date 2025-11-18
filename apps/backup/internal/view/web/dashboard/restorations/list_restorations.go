@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/restorations"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -68,7 +70,10 @@ func listRestorations(
 			Subtitle: "",
 		})
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	trs := []nodx.Node{}
 	for _, restoration := range restorations {
 		trs = append(trs, nodx.Tr(
@@ -81,7 +86,7 @@ func listRestorations(
 				if restoration.DatabaseName.Valid {
 					return restoration.DatabaseName.String
 				}
-				return "Other database"
+				return "Cơ sở dữ liệu khác"
 			}())),
 			nodx.Td(component.SpanText(restoration.ExecutionID.String())),
 			nodx.Td(component.SpanText(
@@ -109,7 +114,7 @@ func listRestorations(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(func() string {
-				url := "/dashboard/restorations/list"
+				url := env.PBW_PREFIX + "/dashboard/restorations/list"
 				url = strutil.AddQueryParamToUrl(url, "page", fmt.Sprintf("%d", pagination.NextPage))
 				if queryData.Execution != uuid.Nil {
 					url = strutil.AddQueryParamToUrl(url, "execution", queryData.Execution.String())

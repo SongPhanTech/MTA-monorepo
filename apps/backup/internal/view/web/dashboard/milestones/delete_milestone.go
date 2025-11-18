@@ -1,6 +1,8 @@
 package milestones
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
 	"github.com/google/uuid"
@@ -26,8 +28,12 @@ func (h *handlers) deleteMilestoneHandler(c echo.Context) error {
 }
 
 func deleteMilestoneButton(milestoneID uuid.UUID) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return component.OptionsDropdownButton(
-		htmx.HxDelete("/dashboard/milestones/"+milestoneID.String()),
+		htmx.HxDelete(env.PBW_PREFIX+"/dashboard/milestones/"+milestoneID.String()),
 		htmx.HxConfirm("Bạn có chắc chắn muốn xóa mốc thời gian này không?"),
 		lucide.Trash(),
 		component.SpanText("Xóa mốc thời gian"),

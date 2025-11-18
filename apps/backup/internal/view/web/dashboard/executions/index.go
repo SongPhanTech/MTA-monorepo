@@ -3,6 +3,8 @@ package executions
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/strutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -36,6 +38,10 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 }
 
 func indexPage(reqCtx reqctx.Ctx, queryData execsQueryData) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	content := []nodx.Node{
 		component.H1Text("Lịch sử thực thi"),
 		component.CardBox(component.CardBoxParams{
@@ -61,7 +67,7 @@ func indexPage(reqCtx reqctx.Ctx, queryData execsQueryData) nodx.Node {
 						nodx.Tbody(
 							component.SkeletonTr(8),
 							htmx.HxGet(func() string {
-								url := "/dashboard/executions/list?page=1"
+								url := env.PBW_PREFIX + "/dashboard/executions/list?page=1"
 								if queryData.Database != uuid.Nil {
 									url = strutil.AddQueryParamToUrl(url, "database", queryData.Database.String())
 								}

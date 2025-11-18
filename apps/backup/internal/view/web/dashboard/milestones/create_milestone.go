@@ -3,7 +3,9 @@ package milestones
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -43,8 +45,12 @@ func (h *handlers) createMilestoneHandler(c echo.Context) error {
 	if err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 
-	return respondhtmx.Redirect(c, "/dashboard/milestones")
+	return respondhtmx.Redirect(c, env.PBW_PREFIX+"/dashboard/milestones")
 }
 
 func (h *handlers) createMilestoneFormHandler(c echo.Context) error {
@@ -54,9 +60,12 @@ func (h *handlers) createMilestoneFormHandler(c echo.Context) error {
 }
 
 func createMilestoneForm() nodx.Node {
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.FormEl(
-		htmx.HxPost("/dashboard/milestones"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/milestones"),
 		htmx.HxDisabledELT("find button"),
 		nodx.Class("space-y-2 text-base"),
 
@@ -104,12 +113,16 @@ func createMilestoneForm() nodx.Node {
 }
 
 func createMilestonesButton() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Tạo mốc thời gian",
 		Content: []nodx.Node{
 			nodx.Div(
-				htmx.HxGet("/dashboard/milestones/create-form"),
+				htmx.HxGet(env.PBW_PREFIX+"/dashboard/milestones/create-form"),
 				htmx.HxSwap("outerHTML"),
 				htmx.HxTrigger("intersect once"),
 				nodx.Class("p-10 flex justify-center"),

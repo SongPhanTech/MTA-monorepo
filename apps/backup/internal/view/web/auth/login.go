@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -34,11 +35,15 @@ func (h *handlers) loginPageHandler(c echo.Context) error {
 }
 
 func loginPage() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	content := []nodx.Node{
 		component.H1Text("Đăng nhập"),
 
 		nodx.FormEl(
-			htmx.HxPost("/auth/login"),
+			htmx.HxPost(env.PBW_PREFIX+"/auth/login"),
 			htmx.HxDisabledELT("find button"),
 			nodx.Class("mt-4 space-y-2"),
 			component.InputControl(component.InputControlParams{
@@ -78,7 +83,10 @@ func loginPage() nodx.Node {
 
 func (h *handlers) loginHandler(c echo.Context) error {
 	ctx := c.Request().Context()
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	var formData struct {
 		Username string `form:"username" validate:"required"`
 		Password string `form:"password" validate:"required,max=50"`
@@ -104,5 +112,5 @@ func (h *handlers) loginHandler(c echo.Context) error {
 	}
 
 	h.servs.AuthService.SetSessionCookie(c, session.DecryptedToken)
-	return respondhtmx.Redirect(c, "/dashboard")
+	return respondhtmx.Redirect(c, env.PBW_PREFIX+"/dashboard")
 }

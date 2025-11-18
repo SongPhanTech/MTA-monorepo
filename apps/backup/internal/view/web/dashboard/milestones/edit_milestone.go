@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"strconv"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
@@ -60,13 +62,16 @@ func editMilestoneButton(milestone dbgen.Milestone) nodx.Node {
 		time = "08:00"
 		dayInterval = 30
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Chỉnh sửa mốc thời gian",
 		Content: []nodx.Node{
 			nodx.FormEl(
-				htmx.HxPost("/dashboard/milestones/"+milestone.ID.String()+"/edit"),
+				htmx.HxPost(env.PBW_PREFIX+"/dashboard/milestones/"+milestone.ID.String()+"/edit"),
 				htmx.HxDisabledELT("find button"),
 				nodx.Class("space-y-2 text-base"),
 

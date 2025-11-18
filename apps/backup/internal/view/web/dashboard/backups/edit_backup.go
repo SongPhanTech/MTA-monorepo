@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/staticdata"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -90,13 +92,16 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow, milestones 
 			),
 		)
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Chỉnh sửa nhiệm vụ sao lưu",
 		Content: []nodx.Node{
 			nodx.FormEl(
-				htmx.HxPost("/dashboard/backups/"+backup.ID.String()+"/edit"),
+				htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups/"+backup.ID.String()+"/edit"),
 				htmx.HxDisabledELT("find button"),
 				nodx.Class("space-y-2 text-base"),
 

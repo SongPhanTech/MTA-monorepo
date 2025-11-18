@@ -3,6 +3,8 @@ package layout
 import (
 	"fmt"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	nodx "github.com/nodxdev/nodxgo"
 	alpine "github.com/nodxdev/nodxgo-alpine"
 	htmx "github.com/nodxdev/nodxgo-htmx"
@@ -10,6 +12,10 @@ import (
 )
 
 func dashboardAside() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.Aside(
 		nodx.Id("dashboard-aside"),
 		nodx.ClassMap{
@@ -25,43 +31,43 @@ func dashboardAside() nodx.Node {
 			dashboardAsideItem(
 				lucide.LayoutDashboard,
 				"Tóm tắt",
-				"/dashboard",
+				env.PBW_PREFIX+"/dashboard",
 				true,
 			),
 			dashboardAsideItem(
 				lucide.Database,
 				"Cơ sở dữ liệu",
-				"/dashboard/databases",
+				env.PBW_PREFIX+"/dashboard/databases",
 				false,
 			),
 			dashboardAsideItem(
 				lucide.HardDrive,
 				"Đích đến sao lưu",
-				"/dashboard/destinations",
+				env.PBW_PREFIX+"/dashboard/destinations",
 				false,
 			),
 			dashboardAsideItem(
 				lucide.DatabaseBackup,
 				"Sao lưu dữ liệu",
-				"/dashboard/backups",
+				env.PBW_PREFIX+"/dashboard/backups",
 				false,
 			),
 			dashboardAsideItem(
 				lucide.Clock,
 				"Mốc sao lưu",
-				"/dashboard/milestones",
+				env.PBW_PREFIX+"/dashboard/milestones",
 				false,
 			),
 			dashboardAsideItem(
 				lucide.List,
 				"Lịch sử thực thi",
-				"/dashboard/executions",
+				env.PBW_PREFIX+"/dashboard/executions",
 				false,
 			),
 			dashboardAsideItem(
 				lucide.ArchiveRestore,
 				"Khôi phục",
-				"/dashboard/restorations",
+				env.PBW_PREFIX+"/dashboard/restorations",
 				false,
 			),
 			// dashboardAsideItem(
