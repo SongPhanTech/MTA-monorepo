@@ -834,6 +834,7 @@ const getSurveysByProfile = createRoute({
                         models.SurveyScalarSchema.extend({
                             lecture: models.LecturerScalarSchema.extend({
                                 organization: models.DM_DonViScalarSchema,
+                                userProfile: models.UserProfileScalarSchema,
                             }).nullable(),
                             subjectClass: models.SubjectClassScalarSchema.nullable(),
                             surveyTopic: models.SurveyTopicScalarSchema,
@@ -976,7 +977,13 @@ app.openapi(getSurveysByProfile, async (c) => {
         audienceMatch.OR?.push({
             subjectClass: {
                 subjectClassStudent: {
-                    some: { studentId: et.id },
+                    some: {
+                        student: {
+                            userProfile: {
+                                id,
+                            },
+                        },
+                    },
                 },
             },
         })
@@ -1009,15 +1016,15 @@ app.openapi(getSurveysByProfile, async (c) => {
     }
 
     if (audienceMatch.OR?.length) {
-        where.AND = [{ OR: [{ isPublic: true }, audienceMatch] }]
+        where.AND = [{ OR: [{ anonymous: false }, audienceMatch] }]
     } else {
-        where.isPublic = true
+        where.anonymous = false
     }
 
     const surveys = await prisma.survey.findMany({
         where,
         include: {
-            lecture: { include: { organization: true } },
+            lecture: { include: { organization: true, userProfile: true } },
             surveyTopic: true,
             subjectClass: true,
             surveyQuestion: true,
