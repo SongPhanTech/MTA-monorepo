@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
 import { formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -10,7 +10,7 @@ import {
     useFindUniqueLecturer,
 } from '@workspace/db/hooks'
 import { $Enums } from '@workspace/db/client'
-import { Col, Row } from 'antd'
+import { Col, Row, Tag } from 'antd'
 import { type Key, useState, useMemo } from 'react'
 
 export default function EvaluationPeriodCriteriaEvaluation() {
@@ -53,17 +53,15 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                     },
                 },
                 {
-                    councils: {
-                        some: {
-                            members: {
-                                some: {
-                                    lecturerId: lecturer?.id,
-                                    role: {
-                                        hasSome: [
-                                            $Enums.EvaluationMemberRole.ADVISORY_BOARD,
-                                            $Enums.EvaluationMemberRole.HEAD_SECRETARY,
-                                        ],
-                                    },
+                    council: {
+                        members: {
+                            some: {
+                                lecturerId: lecturer?.id,
+                                role: {
+                                    hasSome: [
+                                        $Enums.EvaluationMemberRole.ADVISORY_BOARD,
+                                        $Enums.EvaluationMemberRole.HEAD_SECRETARY,
+                                    ],
                                 },
                             },
                         },
@@ -80,7 +78,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
         {
             where: whereClause,
             include: {
-                councils: {
+                council: {
                     select: {
                         id: true,
                         name: true,
@@ -148,19 +146,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                             title: 'Hội đồng đánh giá',
                             width: 200,
                             render: (_, record) => {
-                                if (!record.councils || record.councils.length === 0) return
-
-                                return (
-                                    <div className="text-left">
-                                        {record.councils.map(
-                                            (council: { id: string; name: string }) => (
-                                                <div key={council.id} className="py-0.5">
-                                                    - {council.name}
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                )
+                                return <div className="text-left">{record.council?.name}</div>
                             },
                         },
                         {
@@ -174,6 +160,31 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                             width: 150,
                             render: (_, record) =>
                                 record?.endDate ? formatDate(record.endDate) : undefined,
+                        },
+                        {
+                            title: 'Giai đoạn đợt',
+                            align: 'center',
+                            width: 110,
+                            render: (_, record) => {
+                                const statusInfo = EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                                return (
+                                    <Tag color={statusInfo?.color || 'default'}>
+                                        {statusInfo?.label || record.status}
+                                    </Tag>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Trạng thái đợt',
+                            width: 100,
+                            align: 'center',
+                            render: (_, record) => {
+                                return record.active ? (
+                                    <Tag color="green">Đang hoạt động</Tag>
+                                ) : (
+                                    <Tag color="default">Kết thúc</Tag>
+                                )
+                            },
                         },
                     ]}
                     pagination={{
