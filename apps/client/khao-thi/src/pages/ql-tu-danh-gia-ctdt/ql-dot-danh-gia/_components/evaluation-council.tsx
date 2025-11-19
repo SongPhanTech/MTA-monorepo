@@ -1,34 +1,21 @@
-import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE, EVALUATION_MEMBER_ROLE } from '@constants/constants'
+import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { $Enums, type EvaluationMemberRole } from '@workspace/db'
 import {
-    useCountEvaluationCouncil,
-    useFindManyEvaluationCouncil,
-    useFindUniqueEvaluationCouncil,
-    useUpdateEvaluationCouncil,
+    useFindFirstEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Card, Col, Descriptions, Empty, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        name: '',
-    })
-
-    const [selectedRowKey, setSelectedRowKey] = useState<string>()
-
     const { onOpen: onOpenPutEvaluationCouncil } = useDisclosure<{
         evaluationPeriodId?: string
         evaluationCouncilId?: string
@@ -47,54 +34,18 @@ export default function EvaluationCouncilTab() {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const where = useMemo(
-        () => ({
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-        }),
-        [filters.name]
-    )
-
-    const { data, isLoading } = useFindManyEvaluationCouncil(
-        {
-            where: {
-                ...where,
-                periodId: selectedEvaluationPeriodId,
-            },
-            include: {
-                members: true,
-            },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        },
-        {
-            enabled: !!selectedEvaluationPeriodId,
-        }
-    )
-
-    const { data: count } = useCountEvaluationCouncil({
-        where: {
-            ...where,
-            periodId: selectedEvaluationPeriodId,
-            deletedAt: null,
-        },
-    })
-
     const { data: evaluationCouncil, isLoading: isLoadingEvaluationCouncil } =
-        useFindUniqueEvaluationCouncil(
+        useFindFirstEvaluationCouncil(
             {
                 where: {
-                    id: selectedRowKey,
+                    periodId: selectedEvaluationPeriodId,
                 },
                 include: {
                     period: true,
                     members: {
+                        where: {
+                            deletedAt: null,
+                        },
                         include: {
                             lecturer: {
                                 include: {
@@ -123,7 +74,7 @@ export default function EvaluationCouncilTab() {
                 },
             },
             {
-                enabled: !!selectedRowKey,
+                enabled: !!selectedEvaluationPeriodId,
             }
         )
 
@@ -198,25 +149,6 @@ export default function EvaluationCouncilTab() {
         return result
     }, [evaluationCouncil?.members])
 
-    const { mutateAsync: updateEvaluationCouncil } = useUpdateEvaluationCouncil()
-    async function handleDeleteEvaluationCouncil(id: string) {
-        try {
-            showSpinner()
-            await updateEvaluationCouncil({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function handleDeleteEvaluationCouncilMember(id: string) {
         try {
@@ -236,10 +168,10 @@ export default function EvaluationCouncilTab() {
         }
     }
 
-    return (
-        <Row gutter={[8, 8]} align="top">
-            <Col span={10}>
-                <Flex justify="end">
+    if (!evaluationCouncil) {
+        return (
+            <Flex justify="center" align="center" style={{ minHeight: 500 }}>
+                <Empty description="Chưa có hội đồng đánh giá" image={Empty.PRESENTED_IMAGE_SIMPLE}>
                     <Button
                         type="primary"
                         onClick={() => {
@@ -249,240 +181,198 @@ export default function EvaluationCouncilTab() {
                         }}
                     >
                         <BookPlus />
-                        Thêm mới
+                        Tạo hội đồng
                     </Button>
-                </Flex>
-                <Table
-                    rowKey="id"
-                    loading={isLoading}
-                    filters={filters}
-                    setFilters={(value) => {
-                        setFilters(value)
-                        setCurrentPage(1)
-                    }}
-                    rowSelection={{
-                        type: 'radio',
-                        selectedRowKeys: selectedRowKey ? [selectedRowKey] : [],
-                        onChange: (selectedRowKeys) => {
-                            setSelectedRowKey(selectedRowKeys[0] as string)
-                        },
-                    }}
-                    onRow={(record) => {
-                        return {
-                            onClick: () => {
-                                setSelectedRowKey(record.id)
-                            },
+                </Empty>
+            </Flex>
+        )
+    }
+
+    return (
+        <div>
+            <Row gutter={[16, 16]}>
+                {/* Thông tin hội đồng */}
+                <Col span={10}>
+                    <Card
+                        size="small"
+                        title={
+                            <Flex justify="space-between" align="center">
+                                <span style={{ fontSize: 16, fontWeight: 600 }}>
+                                    Thông tin hội đồng
+                                </span>
+
+                                <EditIcon
+                                    onClick={(e) => {
+                                        onOpenPutEvaluationCouncil({
+                                            evaluationCouncilId: evaluationCouncil.id,
+                                        })
+                                    }}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                            </Flex>
                         }
-                    }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 50,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Tên hội đồng',
-                            dataIndex: 'name',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Số thành viên trong HĐ',
-                            dataIndex: 'members',
-                            width: 100,
-                            align: 'center',
-                            render: (__, record) => {
-                                return record?.members?.length || ''
-                            },
-                        },
-                        {
-                            title: 'Mô tả',
-                            dataIndex: 'description',
-                            width: 200,
-                        },
-                        {
-                            title: 'Thao tác',
-                            width: 70,
-                            align: 'center',
-                            render: (_, record) => {
-                                if (record?.id) {
-                                    return (
-                                        <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    onOpenPutEvaluationCouncil({
-                                                        evaluationCouncilId: record.id,
-                                                    })
-                                                }}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: (e) => {
-                                                        handleDeleteEvaluationCouncil(record?.id)
-                                                        e?.stopPropagation()
-                                                    },
-                                                }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                        </Row>
-                                    )
-                                }
-                                return ''
-                            },
-                        },
-                    ]}
-                    data={data}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
-                />
-            </Col>
-            <Col span={14}>
-                <Flex justify="end">
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            onOpen({
-                                evaluationCouncilId: selectedRowKey!,
-                            })
-                        }}
                     >
-                        <BookPlus />
-                        Thêm mới
-                    </Button>
-                </Flex>
-                <TableCollapse
-                    rowKey="id"
-                    loading={isLoadingEvaluationCouncil}
-                    filters={filters}
-                    setFilters={setFilters}
-                    headerTitleKey="name"
-                    childrenFieldName="children"
-                    defaultExpandAll
-                    columns={[
-                        {
-                            title: 'Tên đồng chí',
-                            dataIndex: 'name',
-                            width: 200,
-                            align: 'center',
-                            render: (__, record) => {
-                                if (record.$type === 'parent') return ''
+                        <Descriptions
+                            column={2}
+                            size="small"
+                            labelStyle={{
+                                fontWeight: 500,
+                                color: '#595959',
+                            }}
+                            items={[
+                                {
+                                    key: 'name',
+                                    label: 'Tên hội đồng',
+                                    children: <strong>{evaluationCouncil.name}</strong>,
+                                },
+                                {
+                                    key: 'members',
+                                    label: 'Số thành viên',
+                                    children: (
+                                        <strong style={{ color: '#1890ff' }}>
+                                            {evaluationCouncil.members?.length || 0}
+                                        </strong>
+                                    ),
+                                },
+                                {
+                                    key: 'description',
+                                    label: 'Mô tả',
+                                    children: evaluationCouncil.description || '',
+                                },
+                            ]}
+                        />
+                    </Card>
+                </Col>
 
-                                const academicRank =
-                                    record?.lecturer?.userProfile?.academicRankType?.sTen || ''
-                                const degree =
-                                    record?.lecturer?.userProfile?.academicDegreeType?.sTen || ''
+                {/* Danh sách thành viên */}
+                <Col span={24}>
+                    <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
+                        <span style={{ fontSize: 16, fontWeight: 600 }}>Danh sách thành viên</span>
+                        <Button
+                            type="primary"
+                            icon={<BookPlus size={16} />}
+                            onClick={() => {
+                                onOpen({
+                                    evaluationCouncilId: evaluationCouncil.id,
+                                })
+                            }}
+                        >
+                            Thêm thành viên
+                        </Button>
+                    </Flex>
 
-                                const fullName = record?.lecturer?.userProfile?.fullname
-                                    ? record?.lecturer?.userProfile?.fullname
-                                    : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
+                    <TableCollapse
+                        rowKey="id"
+                        loading={isLoadingEvaluationCouncil}
+                        headerTitleKey="name"
+                        childrenFieldName="children"
+                        defaultExpandAll
+                        columns={[
+                            {
+                                title: 'Tên đồng chí',
+                                dataIndex: 'name',
+                                width: 250,
+                                render: (__, record) => {
+                                    if (record.$type === 'parent') return ''
 
-                                const academicTitle = [academicRank, degree]
-                                    .filter(Boolean)
-                                    .join('.')
+                                    const academicRank =
+                                        record?.lecturer?.userProfile?.academicRankType?.sTen || ''
+                                    const degree =
+                                        record?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                                        ''
 
-                                return academicTitle ? `${academicTitle} ${fullName}` : fullName
+                                    const fullName = record?.lecturer?.userProfile?.fullname
+                                        ? record?.lecturer?.userProfile?.fullname
+                                        : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
+
+                                    const academicTitle = [academicRank, degree]
+                                        .filter(Boolean)
+                                        .join('.')
+
+                                    return academicTitle ? `${academicTitle} ${fullName}` : fullName
+                                },
                             },
-                        },
-                        {
-                            title: 'Đơn vị',
-                            dataIndex: 'period',
-                            width: 200,
-                            align: 'center',
-                            render: (__, record) => {
-                                if (record.$type === 'parent') return ''
+                            {
+                                title: 'Đơn vị',
+                                dataIndex: 'period',
+                                width: 300,
+                                render: (__, record) => {
+                                    if (record.$type === 'parent') return ''
 
-                                return record?.lecturer?.organization?.sTen || ''
+                                    return record?.lecturer?.organization?.sTen || ''
+                                },
                             },
-                        },
-                        {
-                            title: 'Chức vụ trong HĐ',
-                            dataIndex: 'role',
-                            width: 200,
-                            align: 'center',
-                            render: (__, record) => {
-                                if (record.$type === 'parent') return ''
+                            {
+                                title: 'Chức vụ trong HĐ',
+                                dataIndex: 'role',
+                                width: 250,
+                                render: (__, record) => {
+                                    if (record.$type === 'parent') return ''
 
-                                return (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                        }}
-                                    >
-                                        {record?.role?.map(
-                                            (val: EvaluationMemberRole, index: number) => (
-                                                <li key={index}>
-                                                    -{' '}
-                                                    {
-                                                        EVALUATION_MEMBER_ROLE.find(
-                                                            (i) => i.value === val
-                                                        )?.label
-                                                    }
-                                                </li>
-                                            )
-                                        )}
-                                    </ul>
-                                )
-                            },
-                        },
-                        {
-                            title: 'Thao tác',
-                            width: 100,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => {
-                                if (record?.id && record?.$type !== 'parent') {
                                     return (
-                                        <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    onOpen({
-                                                        evaluationCouncilMemberId: record.id,
-                                                    })
-                                                }}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: (e) => {
-                                                        handleDeleteEvaluationCouncilMember(
-                                                            record?.id
-                                                        )
-                                                        e?.stopPropagation()
-                                                    },
-                                                }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            />
-                                        </Row>
+                                        <ul
+                                            style={{
+                                                paddingLeft: 16,
+                                                margin: 0,
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            {record?.role?.map(
+                                                (val: EvaluationMemberRole, index: number) => (
+                                                    <li key={index}>
+                                                        {
+                                                            EVALUATION_MEMBER_ROLE.find(
+                                                                (i) => i.value === val
+                                                            )?.label
+                                                        }
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
                                     )
-                                }
-                                return ''
+                                },
                             },
-                        },
-                    ]}
-                    data={tableDataCollapse}
-                    pagination={false}
-                />
-            </Col>
-        </Row>
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, record) => {
+                                    if (record?.id && record?.$type !== 'parent') {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                <EditIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen({
+                                                            evaluationCouncilMemberId: record.id,
+                                                        })
+                                                    }}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: (e) => {
+                                                            handleDeleteEvaluationCouncilMember(
+                                                                record?.id
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
+                            },
+                        ]}
+                        data={tableDataCollapse}
+                        pagination={false}
+                    />
+                </Col>
+            </Row>
+        </div>
     )
 }

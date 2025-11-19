@@ -109,6 +109,9 @@ export default function PutPhanCongHangLoatModal() {
                 if (input?.refetch) {
                     input.refetch()
                 }
+                if (input?.clearSelected) {
+                    input.clearSelected()
+                }
                 onClose()
             }
         } catch (error) {

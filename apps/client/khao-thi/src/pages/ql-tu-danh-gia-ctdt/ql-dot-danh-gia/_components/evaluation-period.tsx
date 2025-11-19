@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -65,7 +65,7 @@ export default function EvaluationPeriod() {
     const { data, refetch } = useFindManyEvaluationPeriod({
         where,
         include: {
-            councils: {
+            council: {
                 select: {
                     id: true,
                     name: true,
@@ -222,33 +222,21 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Tên',
                                 dataIndex: 'name',
-                                width: 200,
+                                width: 150,
                                 align: 'center',
                                 type: 'input',
                             },
                             {
                                 title: 'Hội đồng đánh giá',
-                                width: 200,
+                                width: 150,
                                 render: (_, record) => {
-                                    if (!record.councils || record.councils.length === 0) return
-
-                                    return (
-                                        <div className="text-left">
-                                            {record.councils.map(
-                                                (council: { id: string; name: string }) => (
-                                                    <div key={council.id} className="py-0.5">
-                                                        - {council.name}
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                    )
+                                    return <div className="text-left">{record.council?.name}</div>
                                 },
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
-                                width: 150,
+                                width: 100,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.startDate
@@ -258,7 +246,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
-                                width: 150,
+                                width: 110,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.endDate
@@ -267,8 +255,8 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Mô tả',
-                                width: 200,
                                 align: 'center',
+                                width: 130,
                                 dataIndex: 'description',
                                 render: (value: string) => {
                                     return (
@@ -279,8 +267,22 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'Trạng thái',
-                                width: 80,
+                                title: 'Giai đoạn đợt',
+                                align: 'center',
+                                width: 110,
+                                render: (_, record) => {
+                                    const statusInfo =
+                                        EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                                    return (
+                                        <Tag color={statusInfo?.color || 'default'}>
+                                            {statusInfo?.label || record.status}
+                                        </Tag>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái đợt',
+                                width: 100,
                                 align: 'center',
                                 render: (_, record) => {
                                     return record.active ? (
@@ -292,8 +294,8 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
                                 align: 'center',
+                                width: 60,
                                 fixed: 'right',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
