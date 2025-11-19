@@ -848,7 +848,8 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
-                                                disabled={disabledForm}
+                                                readOnly={disabledForm}
+                                                variant={disabledForm ? 'underlined' : 'outlined'}
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.5}
@@ -889,7 +890,8 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
-                                                disabled={disabledForm}
+                                                readOnly={disabledForm}
+                                                variant={disabledForm ? 'underlined' : 'outlined'}
                                                 id={`score-tx-${record.id}`}
                                                 style={{
                                                     width: '100%',
@@ -933,6 +935,8 @@ export default function NhapDiem({
                                             ]}
                                         >
                                             <InputNumber
+                                                readOnly={disabledForm}
+                                                variant={disabledForm ? 'underlined' : 'outlined'}
                                                 disabled={disabledForm}
                                                 id={`score-thi-${record.id}`}
                                                 style={{
@@ -1004,15 +1008,19 @@ export default function NhapDiem({
                                             style={{ margin: 0 }}
                                             required={!!examBanned}
                                         >
-                                            <AutoComplete
-                                                placeholder="Nhập lý do cấm thi"
-                                                options={examBanReason.map((s) => ({
-                                                    label: s,
-                                                    value: s,
-                                                }))}
-                                                styles={{ popup: { root: { width: 'fit' } } }}
-                                                disabled={!examBanned}
-                                            />
+                                            {disabledForm ? (
+                                                <Input readOnly variant="underlined" />
+                                            ) : (
+                                                <AutoComplete
+                                                    placeholder="Nhập lý do cấm thi"
+                                                    options={examBanReason.map((s) => ({
+                                                        label: s,
+                                                        value: s,
+                                                    }))}
+                                                    styles={{ popup: { root: { width: 'fit' } } }}
+                                                    disabled={!examBanned}
+                                                />
+                                            )}
                                         </Form.Item>
                                     )
                                 },
@@ -1047,15 +1055,19 @@ export default function NhapDiem({
                                             style={{ margin: 0 }}
                                             required={!!examPostponed}
                                         >
-                                            <AutoComplete
-                                                placeholder="Nhập lý do hoãn thi"
-                                                options={examPostponeReason.map((s) => ({
-                                                    label: s,
-                                                    value: s,
-                                                }))}
-                                                styles={{ popup: { root: { width: 'fit' } } }}
-                                                disabled={!examPostponed}
-                                            />
+                                            {disabledForm ? (
+                                                <Input readOnly variant="underlined" />
+                                            ) : (
+                                                <AutoComplete
+                                                    placeholder="Nhập lý do hoãn thi"
+                                                    options={examPostponeReason.map((s) => ({
+                                                        label: s,
+                                                        value: s,
+                                                    }))}
+                                                    styles={{ popup: { root: { width: 'fit' } } }}
+                                                    disabled={!examPostponed}
+                                                />
+                                            )}
                                         </Form.Item>
                                     )
                                 },
@@ -1096,17 +1108,21 @@ export default function NhapDiem({
                                             style={{ margin: 0 }}
                                             required={!!suspended}
                                         >
-                                            <AutoComplete
-                                                placeholder="Nhập lý do hoãn thi"
-                                                options={examSuspendedReason.map((s) => ({
-                                                    label: s,
-                                                    value: s,
-                                                }))}
-                                                styles={{
-                                                    popup: { root: { width: 'fit' } },
-                                                }}
-                                                disabled={!suspended}
-                                            />
+                                            {disabledForm ? (
+                                                <Input readOnly variant="underlined" />
+                                            ) : (
+                                                <AutoComplete
+                                                    placeholder="Nhập lý do hoãn thi"
+                                                    options={examSuspendedReason.map((s) => ({
+                                                        label: s,
+                                                        value: s,
+                                                    }))}
+                                                    styles={{
+                                                        popup: { root: { width: 'fit' } },
+                                                    }}
+                                                    disabled={!suspended}
+                                                />
+                                            )}
                                         </Form.Item>
                                     )
                                 },
@@ -1124,7 +1140,8 @@ export default function NhapDiem({
                                             label=""
                                         >
                                             <Input
-                                                disabled={disabledForm}
+                                                readOnly={disabledForm}
+                                                variant={disabledForm ? 'underlined' : 'outlined'}
                                                 placeholder="Nhập ghi chú"
                                                 style={{
                                                     width: '100%',

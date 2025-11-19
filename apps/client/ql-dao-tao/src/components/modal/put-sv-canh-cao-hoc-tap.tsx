@@ -138,7 +138,14 @@ const PutAcademicWarning = () => {
                                     .join(' - '),
                             }
                         })}
-                        disabled={!!input?.id}
+                        {...(input?.id
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                     />
                 </FormItem>
             </Col>

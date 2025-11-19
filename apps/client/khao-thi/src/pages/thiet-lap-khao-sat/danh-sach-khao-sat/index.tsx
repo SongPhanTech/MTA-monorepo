@@ -148,7 +148,9 @@ export default function DetailSurveyPage() {
                                     <div>
                                         {record?.subjectClass?.code} - {record?.subjectClass?.name}
                                     </div>
-                                ) : ''
+                                ) : (
+                                    ''
+                                )
                             },
                         },
                         {

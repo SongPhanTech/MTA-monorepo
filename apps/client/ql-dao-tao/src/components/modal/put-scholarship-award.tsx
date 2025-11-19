@@ -169,7 +169,14 @@ const PutScholarshipAward = () => {
                                 label: [i.code, i.userProfile.fullname].filter(Boolean).join(' - '),
                             }
                         })}
-                        disabled={!!input?.id}
+                        {...(input?.id
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                         onChange={() => {
                             form.setFieldValue('scholarshipId', undefined)
                             form.setFieldValue('amount', undefined)

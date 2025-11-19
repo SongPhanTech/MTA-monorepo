@@ -189,12 +189,16 @@ const PutGraduationApplication = () => {
                                 .join(' - '),
                             value: item.id,
                         }))}
-                        showSearch
                         onSearch={handleSearch}
-                        filterOption={false}
-                        allowClear
-                        disabled={!!input?.id}
                         onChange={handleStudentChange}
+                        {...(input?.id
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                     />
                 </FormItem>
             </Col>

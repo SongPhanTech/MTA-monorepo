@@ -440,29 +440,35 @@ const PutVersionSubjectModal = () => {
             <Row gutter={[16, 16]} ref={modalContentRef}>
                 <Col span={4}>
                     <FormItem form={form} name="code" label="Mã môn học" required>
-                        <Input placeholder="Mã môn học" disabled={input?.isLocked} />
+                        <Input placeholder="Mã môn học" readOnly={input?.isLocked} />
                     </FormItem>
                 </Col>
                 <Col span={4}>
                     <FormItem form={form} name="codeTkb" label="Mã TKB" required>
-                        <Input placeholder="Mã TKB" disabled={input?.isLocked} />
+                        <Input placeholder="Mã TKB" readOnly={input?.isLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
                     <FormItem form={form} name="name" label="Tên môn học" required>
-                        <Input placeholder="Tên môn học" disabled={input?.isLocked} />
+                        <Input placeholder="Tên môn học" readOnly={input?.isLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="examType" label="Hình thức thi" required>
+                    <FormItem form={form} name="examType" label="Hình thức thi iii" required>
                         <Select
                             placeholder="Chọn hình thức thi"
                             options={options?.map((item) => ({
                                 label: item.label,
                                 value: item.value,
                             }))}
-                            allowClear
-                            disabled={input?.isLocked}
+                            {...(input?.isLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
@@ -496,8 +502,15 @@ const PutVersionSubjectModal = () => {
                                 label: item.name,
                                 value: item.id,
                             }))}
+                            {...(input?.isLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                             allowClear
-                            disabled={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -509,8 +522,14 @@ const PutVersionSubjectModal = () => {
                                 label: item.label,
                                 value: item.value,
                             }))}
-                            allowClear
-                            disabled={input?.isLocked}
+                            {...(input?.isLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
@@ -526,7 +545,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tín chỉ"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -548,7 +567,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết TKB"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -570,7 +589,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết bài tập"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -581,7 +600,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết thảo luận/tự học"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -596,7 +615,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết thí nghiệm/thực hành"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -607,7 +626,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết ôn tập"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -618,7 +637,7 @@ const PutVersionSubjectModal = () => {
                             type="number"
                             placeholder="Số tiết KT/thi"
                             className="w-full"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -629,11 +648,16 @@ const PutVersionSubjectModal = () => {
                             // treeCheckable={true}
                             multiple={true}
                             treeDefaultExpandAll
-                            showSearch
                             placeholder="Chọn môn học tiên quyết"
                             style={{ width: '100%' }}
-                            allowClear
-                            disabled={input?.isLocked}
+                            {...(input?.isLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </Form.Item>
                 </Col>
@@ -644,11 +668,16 @@ const PutVersionSubjectModal = () => {
                             // treeCheckable={true}
                             multiple={true}
                             treeDefaultExpandAll
-                            showSearch
                             placeholder="Chọn môn học song hành"
                             style={{ width: '100%' }}
-                            allowClear
-                            disabled={input?.isLocked}
+                            {...(input?.isLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </Form.Item>
                 </Col>
@@ -666,7 +695,7 @@ const PutVersionSubjectModal = () => {
                         <Input.TextArea
                             rows={3}
                             placeholder="Nhập mô tả"
-                            disabled={input?.isLocked}
+                            readOnly={input?.isLocked}
                         />
                     </FormItem>
                 </Col>
@@ -692,7 +721,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập mục tiêu"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -705,7 +734,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập chuẩn đầu ra"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -718,7 +747,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập cấu trúc chương trình đào tạo"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -731,7 +760,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập kế hoạch và phương pháp dạy học"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -744,7 +773,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập đánh giá kết quả học tập"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -757,7 +786,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập cơ sở vật chất, học liệu"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),
@@ -770,7 +799,7 @@ const PutVersionSubjectModal = () => {
                                         <Input.TextArea
                                             rows={6}
                                             placeholder="Nhập quy định của học phần"
-                                            disabled={input?.isLocked}
+                                            readOnly={input?.isLocked}
                                         />
                                     </FormItem>
                                 ),

@@ -4,8 +4,10 @@ import DeleteIcon from '@components/icons/delete'
 import SettingsIcon from '@components/icons/settings'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
-import TreeSelect from '@/components/commons/tree-select'
+import { buildOrgTree } from '@lib/utils'
+import { CouncilRole, ThesisType } from '@workspace/db/client'
 import {
     useCountStudent,
     useCreateStudentThesisRegistration,
@@ -18,17 +20,14 @@ import {
     useFindManyTrainingCourse,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
-import { CircleX, Save } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { CouncilRole, ThesisType } from '@workspace/db/client'
-import { buildOrgTree } from '@lib/utils'
+import TreeSelect from '@/components/commons/tree-select'
+
 // import { getMinioUrl } from '@workspace/constant'
 interface ExpertStat {
     expertId: string

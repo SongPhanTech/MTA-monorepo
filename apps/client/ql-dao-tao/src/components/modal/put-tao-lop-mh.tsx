@@ -51,17 +51,12 @@ const PutOpenSubjectClassModal = () => {
         where: semesterId
             ? {
                   subjectClass: {
-                      none: {
-                          semesterId: semesterId,
-                      },
+                      none: { semesterId },
                   },
               }
             : {},
     })
 
-    const disabledSubjectVersion = useMemo(() => {
-        return !semesterId
-    }, [semesterId])
     async function onOk(output?: PutSubjectClass) {
         if (!output) return
         try {
@@ -213,7 +208,14 @@ const PutOpenSubjectClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="subjectVersionId" label="Môn học" required>
                     <Select
-                        disabled={disabledSubjectVersion}
+                        {...(!semesterId
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                         placeholder="Chọn môn học"
                         options={subjectVersionData.map((item) => {
                             return {

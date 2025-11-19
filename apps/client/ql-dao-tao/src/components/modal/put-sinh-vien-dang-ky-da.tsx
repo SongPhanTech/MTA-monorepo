@@ -310,12 +310,17 @@ const PutStudentThesisRegistration = () => {
                                 .join(' - '),
                             value: item.student.id,
                         }))}
-                        showSearch
                         onSearch={handleSearch}
                         filterOption={false}
-                        allowClear
                         onChange={handleStudentChange}
-                        disabled={!!input?.studentThesisId}
+                        {...(input?.studentThesisId
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                     />
                 </FormItem>
             </Col>
