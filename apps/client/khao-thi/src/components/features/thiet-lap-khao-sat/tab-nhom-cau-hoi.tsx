@@ -19,8 +19,9 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CauHoiKhaoSat from './cau-hoi-khao-sat'
+import { SurveyTopic } from '@workspace/db'
 
-function TabNhomCauHoi() {
+function TabNhomCauHoi({topicSlected}: {topicSlected: SurveyTopic|null}) {
     const [selectedID, setSelectedID] = useState('')
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -41,15 +42,19 @@ function TabNhomCauHoi() {
                       },
                   }
                 : {}),
-            ...(filters.surveyTopicId
+            ...(topicSlected?.id
                 ? {
-                      surveyTopicId: {
-                          in: filters.surveyTopicId,
-                      },
+                      surveyTopic: {
+                        some: {
+                          id: {
+                              equals: topicSlected?.id,
+                          },
+                        }
+                      }
                   }
                 : {}),
         }),
-        [filters.name, filters.surveyTopicId]
+        [filters.name,topicSlected]
     )
 
     const { data = [] } = useFindManySurveyQuestionGroup({
@@ -61,7 +66,8 @@ function TabNhomCauHoi() {
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
-    })
+    },{
+        enabled: !!topicSlected?.id})
 
     const { data: count } = useCountSurveyQuestionGroup({
         where: {
@@ -108,7 +114,7 @@ function TabNhomCauHoi() {
 
     return (
         <div>
-            <Row gutter={[16, 4]}>
+            <Row gutter={[16, 8]}>
                 <Col span={selectedID ? 12 : 24}>
                     <Col span={24}>
                         <Flex justify="end">
@@ -116,13 +122,14 @@ function TabNhomCauHoi() {
                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                                 'THEM'
                             ) && (
-                                <Button onClick={handleModal} type="primary">
+                                <Button onClick={handleModal} type="primary" size="small" className="mb-2">
                                     Thêm mới
                                 </Button>
                             )}
                         </Flex>
                     </Col>
                     <Table
+                    className="h-[calc(100vh-200px)]"
                         rowKey={'id'}
                         filters={filters}
                         setFilters={(value) => {
@@ -162,11 +169,11 @@ function TabNhomCauHoi() {
                             {
                                 title: 'Chủ đề khảo sát',
                                 dataIndex: 'surveyTopicId',
-                                type: 'select',
-                                options: surveyTopicData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
+                                // type: 'select',
+                                // options: surveyTopicData?.map(({ id, name }) => ({
+                                //     value: id,
+                                //     label: name,
+                                // })),
                                 render: (_, record) => {
                                     return record.surveyTopic?.length ? (
                                         <TextTruncate

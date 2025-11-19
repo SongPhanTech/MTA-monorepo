@@ -13,7 +13,7 @@ export default function SurveyPage() {
     const items = [
         {
             key: '1',
-            label: 'Khảo sát chung',
+            label: 'Đợt khảo sát',
             children: (
                 <TabDotKhaoSat
                     selectedId={selectedId}

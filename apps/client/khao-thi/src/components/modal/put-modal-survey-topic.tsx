@@ -1,6 +1,7 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { SurveyTopic } from '@workspace/db'
 import {
@@ -36,6 +37,7 @@ const PutSurveyTopicModal = () => {
                         code: output.code,
                         name: output.name.trim(),
                         description: output.description,
+                        type: output.type
                     },
                     where: {
                         id,
@@ -48,6 +50,7 @@ const PutSurveyTopicModal = () => {
                         code: output.code,
                         name: output.name.trim(),
                         description: output.description,
+                        type: output.type
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -101,6 +104,17 @@ const PutSurveyTopicModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên chủ đề khảo sát" required>
                     <Input placeholder="Nhập tên chủ đề khảo sát" />
+                </FormItem>
+            </Col>
+                 <Col span={24}>
+                <FormItem form={form} name="type" label="Loại khảo sát" required>
+                   <Select options={[{
+                       label: 'Khảo sát chung',
+                       value: 'SINGLE'
+                   },{
+                       label: 'Khảo sát giảng viên',
+                       value: 'CLUSTER'
+                   }]} placeholder="Nhập loại khảo sát"/>
                 </FormItem>
             </Col>
         </PutFormModal>
