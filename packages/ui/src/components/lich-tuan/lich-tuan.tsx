@@ -232,9 +232,11 @@ const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
 export function LichCongTac({
     hiddenCalendarFilter = false,
     showTitle = true,
+    onlyMySchedule = false,
 }: {
     hiddenCalendarFilter?: boolean
     showTitle?: boolean
+    onlyMySchedule?: boolean
 }) {
     const { data: profile } = useSession()
     const profileIdLogin = profile?.sDM_NhanVienId || ''
@@ -249,46 +251,45 @@ export function LichCongTac({
         'calendar'
     )
 
-    const { weekStart, weekEnd } = useMemo(
-        () => getWeekBounds(currentWeekOffsetTableCalendar),
-        [currentWeekOffsetTableCalendar]
-    )
-
     // Shared query config
 
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
             OR: [
-                {
-                    subjectClass: {
-                        subjectClassStudent: {
-                            some: {
-                                student: {
-                                    userProfileId: profileIdLogin,
-                                },
-                            },
-                        },
-                    },
-                },
-                {
-                    lecturer: {
-                        userProfileId: profileIdLogin,
-                    },
-                },
-                {
-                    subjectClass: {
-                        mainLecturer: {
-                            userProfileId: profileIdLogin,
-                        },
-                    },
-                },
-                {
-                    subjectClass: {
-                        extraLecturer: {
-                            userProfileId: profileIdLogin,
-                        },
-                    },
-                },
+                ...(onlyMySchedule
+                    ? [
+                          {
+                              subjectClass: {
+                                  subjectClassStudent: {
+                                      some: {
+                                          student: {
+                                              userProfileId: profileIdLogin,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                          {
+                              lecturer: {
+                                  userProfileId: profileIdLogin,
+                              },
+                          },
+                          {
+                              subjectClass: {
+                                  mainLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
+                              },
+                          },
+                          {
+                              subjectClass: {
+                                  extraLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
                 {
                     periodType: 'WEEK',
                 },

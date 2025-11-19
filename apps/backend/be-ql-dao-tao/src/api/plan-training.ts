@@ -355,7 +355,7 @@ const importFileGiaoVienCoGioGiay = async (
                     }
                 }
                 subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
-                const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).trim().toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
+                const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).trim().toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString()}`
 
                 const existSubjectClass = await tx.subjectClass.findFirst({
                     where: {
@@ -367,14 +367,6 @@ const importFileGiaoVienCoGioGiay = async (
                             : $Enums.SubjectClassType.NORMAL,
                     },
                 })
-                console.log(
-                    'Thông tin lớp môn học:',
-                    subjectClass.gvChinh,
-                    subjectClass.monHoc,
-                    subjectClass.lopNienChe.length > 0,
-                    subjectClass.phongHoc
-                )
-
                 if (existSubjectClass) {
                     const res = await tx.subjectClass.update({
                         where: {
@@ -391,6 +383,7 @@ const importFileGiaoVienCoGioGiay = async (
                                     id: e,
                                 })),
                             },
+                            status: 'OFFICIAL',
                             cancelled: false,
                             approveLecturerAssignmentAt: new Date(),
                             classSchedules:
@@ -523,6 +516,7 @@ const importFileGiaoVienCoGioGiay = async (
                                     id: e,
                                 })),
                             },
+                            status: 'OFFICIAL',
                             classSchedules:
                                 scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                     ? {
