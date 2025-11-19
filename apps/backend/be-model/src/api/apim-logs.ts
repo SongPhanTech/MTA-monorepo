@@ -59,7 +59,6 @@ app.openapi(
                 ORDER BY time DESC;`
         return c.json(res.map(({ data }) => ({
             ...data,
-            payload: data.payload ? JSON.parse(data.payload) : null,
         }) as any), 200)
     }
 )
