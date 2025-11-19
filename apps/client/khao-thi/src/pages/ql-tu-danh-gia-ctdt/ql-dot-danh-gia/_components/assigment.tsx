@@ -6,7 +6,7 @@ import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import type { Prisma } from '@workspace/db/client'
+import { $Enums, type Prisma } from '@workspace/db/client'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
@@ -35,6 +35,7 @@ export type PutPhanCongHangLoatModalProps = {
     selectedCriteriaIds?: string[]
     tableData?: StandardData[]
     refetch?: () => void
+    clearSelected?: () => void
 }
 
 export default function AssigmentOfAssessmentTab() {
@@ -254,6 +255,18 @@ export default function AssigmentOfAssessmentTab() {
                         },
                     },
                 },
+                {
+                    model: 'EvaluationPeriod',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: selectedEvaluationPeriodId,
+                        },
+                        data: {
+                            status: $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING,
+                        },
+                    },
+                },
             ])
 
             const res = await sqlTransaction(operations)
@@ -289,13 +302,14 @@ export default function AssigmentOfAssessmentTab() {
                                 selectedCriteriaIds: getSelectedCriteria(),
                                 tableData: tableData,
                                 refetch: refetch,
+                                clearSelected: () => setSelectedRowKeys([]),
                             })
                         }}
                     >
                         Phân công hàng loạt
                     </Button>
                     <Button type="primary" onClick={handleSave}>
-                        Lưu
+                        Lưu phân công
                     </Button>
                 </Flex>
             </Col>

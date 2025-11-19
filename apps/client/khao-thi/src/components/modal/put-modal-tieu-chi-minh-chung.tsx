@@ -517,7 +517,7 @@ const PutTieuChiMinhChungModal = () => {
                                     </Col>
                                     <Col span={24}>
                                         <Col span={24} className="font-semibold mb-3">
-                                            Danh sách khối kiến thức trong CTĐT
+                                            Danh sách minh chứng
                                         </Col>
                                         <Col span={24}>
                                             <DndProvider backend={HTML5Backend}>
