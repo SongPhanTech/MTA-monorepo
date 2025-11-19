@@ -14,6 +14,7 @@ import { proxy } from 'hono/proxy'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
+import ApimLogsApp from './api/apim-logs'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -25,7 +26,7 @@ const openTelemetrySDK = new NodeSDK({
 })
 openTelemetrySDK.start()
 
-export const prisma = new PrismaClient()
+export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
 const instrumentationConfig = {
@@ -130,6 +131,7 @@ app.all('/api/system/:appcode/*', async (c) => {
 
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
+app.route('/api/apim-logs', ApimLogsApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow({})
 
