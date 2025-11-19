@@ -43,6 +43,7 @@ app.use(
         origin: [
             'http://localhost:3001',
             'http://localhost:3000',
+            'http://localhost:8081',
             'https://mta.swantech.vn',
             'https://user.mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
@@ -77,7 +78,7 @@ app.use('*', checkIp)
 // public route
 setupOpenApi(app)
 app.route('/api/auth', AuthApp)
-
+app.route('/api/apim-logs', ApimLogsApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
@@ -131,7 +132,6 @@ app.all('/api/system/:appcode/*', async (c) => {
 
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
-app.route('/api/apim-logs', ApimLogsApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow({})
 
