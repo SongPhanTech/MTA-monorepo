@@ -51,7 +51,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const [loading, setLoading] = useState(false)
 
     const canReadAll = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
         'XEM_TAT_CA'
     )
 
