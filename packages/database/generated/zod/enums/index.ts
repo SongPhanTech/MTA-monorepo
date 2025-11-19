@@ -548,6 +548,7 @@ export * from './DecisionType.schema';
 export * from './CouncilProposalStatus.schema';
 export * from './CouncilRole.schema';
 export * from './PaymentStatus.schema';
+export * from './EvaluationPeriodStatus.schema';
 export * from './EvaluationCriterionStatus.schema';
 export * from './EvaluationStatus.schema';
 export * from './EvaluationMemberRole.schema';
