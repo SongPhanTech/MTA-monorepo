@@ -9,7 +9,6 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountFixedClass,
     useFindManyCurriculumVersion,
@@ -32,7 +31,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+export default function FixedClassPage() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
