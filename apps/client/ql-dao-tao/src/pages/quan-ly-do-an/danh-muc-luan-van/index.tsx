@@ -36,9 +36,14 @@ import { useState } from "react";
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus";
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel";
 import { useDisclosure } from "react-hook-disclosure-modal";
-import { CouncilRole, ThesisType } from "@workspace/db/client";
+import {
+  CouncilProposalStatus,
+  CouncilRole,
+  ThesisType,
+} from "@workspace/db/client";
 import { buildOrgTree } from "@lib/utils";
 import { getMinioUrl } from "@workspace/constant";
+import { createStyles, css } from "antd-style";
 // import { getMinioUrl } from '@workspace/constant'
 interface ExpertStat {
   expertId: string;
@@ -50,7 +55,15 @@ interface ExpertStat {
   GVHD2Student: number;
   totalPayment: number;
 }
-export default function PostgraduateProject() {
+
+export interface PostgraduateProjectProps {
+  role?: "P7" | "P2" | "P13";
+  isManage?: boolean;
+}
+export default function PostgraduateProject({
+  role = "P7",
+  isManage = false,
+}: PostgraduateProjectProps) {
   const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
     useThesisProjectStatusOptions();
   const [editingRowKeys, setEditingRowKeys] = useState<string[]>([]);
@@ -66,8 +79,8 @@ export default function PostgraduateProject() {
       setSelectedRowKeys(newSelectedRowKeys);
     },
   };
-  console.log("selectedRowKeys", selectedRowKeys);
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
+
   const handleBatchSave = async () => {
     if (editingRowKeys.length === 0) {
       message.info("Không có hàng nào đang ở chế độ chỉnh sửa để lưu.");
@@ -174,6 +187,23 @@ export default function PostgraduateProject() {
     setEditingValues(initialEditingValues);
   };
   const { TextArea } = Input;
+  const useStyle = createStyles(({ css, token }) => {
+    const { antCls } = token;
+    return {
+      customTable: css`
+        ${antCls}-table {
+          ${antCls}-table-container {
+            ${antCls}-table-body,
+            ${antCls}-table-content {
+              scrollbar-width: thin;
+              scrollbar-color: #eaeaea transparent;
+              scrollbar-gutter: stable;
+            }
+          }
+        }
+      `,
+    };
+  });
   const { id: trainingObjectId } = useTrainingObjectTypeStore();
   const [trainingCourseSelected, setTrainingCourseSelected] = useState<
     string | null
@@ -874,6 +904,9 @@ export default function PostgraduateProject() {
           include: {
             thesisProject: {
               include: {
+                council: {
+                  include: { members: { include: { expert: true } } },
+                },
                 thesisSession: true,
                 organization: true,
                 supervisor: true,
@@ -890,6 +923,7 @@ export default function PostgraduateProject() {
       enabled: hasClickedFetch,
     }
   );
+  console.log("students", students);
   const { data: allStudentsInClasses } = useFindManyStudent(
     {
       where: {
@@ -1006,6 +1040,17 @@ export default function PostgraduateProject() {
             librarianNote: "",
           },
         },
+        council: {
+          create: {
+            proposedDate: new Date(),
+            status: CouncilProposalStatus.PENDING,
+          },
+        },
+        defenseRecord: {
+          create: {
+            isProfileComplete: false,
+          },
+        },
       };
       const response = await createThesisProject({
         data: {
@@ -1039,6 +1084,7 @@ export default function PostgraduateProject() {
       hideSpinner();
     }
   };
+  const { styles } = useStyle();
 
   return (
     <div>
@@ -1125,24 +1171,26 @@ export default function PostgraduateProject() {
                   >
                     Xem kết quả
                   </Button>
-                  <Popconfirm
-                    placement="rightTop"
-                    title="Xác nhận tạo dữ liệu mẫu"
-                    description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
-                    onConfirm={async () => {
-                      setEditingRowKeys([]);
-                      setQueryFixedClasses(fixedClassesSelected);
-                      if (!hasClickedFetch) {
-                        setHasClickedFetch(true);
-                      }
-                      await taodulieumau();
-                    }}
-                  >
-                    <Button type="primary" className="ml-2">
-                      Tạo dữ liệu mẫu
-                    </Button>
-                  </Popconfirm>
-                  {editingRowKeys.length > 0 ? (
+                  {role !== "P7" && (
+                    <Popconfirm
+                      placement="rightTop"
+                      title="Xác nhận tạo dữ liệu mẫu"
+                      description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
+                      onConfirm={async () => {
+                        setEditingRowKeys([]);
+                        setQueryFixedClasses(fixedClassesSelected);
+                        if (!hasClickedFetch) {
+                          setHasClickedFetch(true);
+                        }
+                        await taodulieumau();
+                      }}
+                    >
+                      <Button type="primary" className="ml-2">
+                        Tạo dữ liệu mẫu
+                      </Button>
+                    </Popconfirm>
+                  )}
+                  {editingRowKeys.length > 0 && isManage ? (
                     <>
                       <Button
                         type="default"
@@ -1168,7 +1216,7 @@ export default function PostgraduateProject() {
                       type="default"
                       className="ml-2"
                       onClick={handleActivateEdit}
-                      disabled={!students?.length}
+                      disabled={!students?.length || !isManage}
                     >
                       Chỉnh sửa
                     </Button>
@@ -1197,12 +1245,15 @@ export default function PostgraduateProject() {
 
         <Col span={24}>
           <Table
-            className="w-full custom-scrollbar mt-2 "
+            bordered
+            scroll={{ x: "max-content" }}
+            className={styles.customTable + " mt-2"}
             rowKey="id"
             columns={[
               {
                 title: "Đối tượng đào tạo",
                 width: 120,
+                fixed: "left",
                 render: (_, record) => {
                   return record?.trainingObjectType?.name;
                 },
@@ -1220,6 +1271,7 @@ export default function PostgraduateProject() {
               {
                 title: "Mã sinh viên",
                 width: 100,
+                fixed: "left",
                 render: (_, record) => {
                   return record?.code;
                 },
@@ -1227,6 +1279,7 @@ export default function PostgraduateProject() {
               {
                 title: "Họ tên",
                 width: 180,
+                fixed: "left",
                 dataIndex: "name",
                 render: (_, record) => {
                   return record?.userProfile?.fullname;
@@ -1249,7 +1302,7 @@ export default function PostgraduateProject() {
                 width: 200,
                 dataIndex: "title",
                 render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id)) {
+                  if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
@@ -1276,7 +1329,7 @@ export default function PostgraduateProject() {
                 width: 150,
                 dataIndex: "supervisor",
                 render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id)) {
+                  if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
                         ? editingValues[record?.id]?.supervisor
@@ -1308,7 +1361,7 @@ export default function PostgraduateProject() {
                 width: 150,
                 dataIndex: "coSupervisor",
                 render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id)) {
+                  if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.coSupervisor !== undefined
                         ? editingValues[record?.id]?.coSupervisor
@@ -1336,11 +1389,72 @@ export default function PostgraduateProject() {
                 },
               },
               {
+                title: "Chủ tịch ",
+                width: 150,
+                dataIndex: "councilChairman",
+                render: (text: string, record: any) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member) => member.role === CouncilRole.CHAIRMAN
+                    )?.expert?.name || ""
+                  );
+                },
+              },
+              {
+                title: "Thư kí",
+                width: 150,
+                dataIndex: "councilChairman",
+                render: (text: string, record: any) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member) => member.role === CouncilRole.SECRETARY
+                    )?.expert?.name || ""
+                  );
+                },
+              },
+              {
+                title: "Phản biện 1",
+                width: 150,
+                dataIndex: "councilChairman",
+                render: (text: string, record: any) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member) => member.role === CouncilRole.REVIEWER_1
+                    )?.expert?.name || ""
+                  );
+                },
+              },
+              {
+                title: "Phản biện 2",
+                width: 150,
+                dataIndex: "councilChairman",
+                render: (text: string, record: any) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member) => member.role === CouncilRole.REVIEWER_2
+                    )?.expert?.name || ""
+                  );
+                },
+              },
+              {
+                title: "Ủy viên",
+                width: 150,
+
+                dataIndex: "councilChairman",
+                render: (text: string, record: any) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                      (member) => member.role === CouncilRole.MEMBER
+                    )?.expert?.name || ""
+                  );
+                },
+              },
+              {
                 title: "Ngôn ngữ",
                 width: 100,
                 dataIndex: "language",
                 render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id)) {
+                  if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
@@ -1372,7 +1486,7 @@ export default function PostgraduateProject() {
                 width: 130,
                 dataIndex: "type",
                 render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id)) {
+                  if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
                         ? editingValues[record?.id]?.type
@@ -1403,6 +1517,7 @@ export default function PostgraduateProject() {
               {
                 title: "Trạng thái",
                 width: 100,
+                fixed: "right",
                 dataIndex: "status",
                 render: (text: string, record: any) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1439,6 +1554,7 @@ export default function PostgraduateProject() {
               {
                 title: "Thao tác",
                 width: 60,
+                fixed: "right",
                 align: "center",
                 render: (_, record: any) => {
                   if (record?.id) {
