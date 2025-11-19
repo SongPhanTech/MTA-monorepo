@@ -837,7 +837,7 @@ export default function ClassSubject() {
                             },
 
                             {
-                                title: 'Hạn ĐQT',
+                                title: 'Hạn ĐT',
                                 width: 100,
                                 align: 'center',
                                 render: (__, record) => {

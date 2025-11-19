@@ -12,7 +12,7 @@ function Page() {
     }
 
     const items: TabsProps['items'] = [
-           {
+        {
             key: '1',
             label: 'Đối tượng làm khảo sát',
             children: <TabDoiTuongKhaoSat />,

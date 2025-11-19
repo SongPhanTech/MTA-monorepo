@@ -59,16 +59,16 @@ app.openapi(getListSubject, async (c) => {
                 {
                     code: {
                         contains: key_word,
-                        mode: 'insensitive'
+                        mode: 'insensitive',
                     },
                 },
                 {
                     name: {
                         contains: key_word,
-                        mode: 'insensitive'
+                        mode: 'insensitive',
                     },
-                }
-            ]
+                },
+            ],
         },
         select: {
             code: true,
@@ -76,7 +76,7 @@ app.openapi(getListSubject, async (c) => {
             credit: true,
             period: true,
             examType: true,
-        }
+        },
     })
 
     const desExamType: Record<$Enums.ExamType, string> = {
@@ -87,7 +87,6 @@ app.openapi(getListSubject, async (c) => {
         Project: 'Đồ án',
     }
 
-
     return c.json(
         {
             result_code: '0000',
@@ -97,10 +96,7 @@ app.openapi(getListSubject, async (c) => {
                 subject_name: item.name,
                 courser: item.period,
                 class_credit_hour: item.credit,
-                dvht: Math.floor(
-                    item.period /
-                    15
-                ),
+                dvht: Math.floor(item.period / 15),
                 description: desExamType[item.examType],
             })),
         },
