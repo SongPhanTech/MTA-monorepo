@@ -2773,7 +2773,6 @@ model FixedClass {
   lecturerManagementId     String?
   staffManagement          Staff?                     @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
-  initSize                 Int                        @default(0)
   students                 Student[]
   curriculumVersion        CurriculumVersion?         @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?

@@ -1755,7 +1755,6 @@ exports.Prisma.FixedClassScalarFieldEnum = {
   managementOrganizationId: 'managementOrganizationId',
   lecturerManagementId: 'lecturerManagementId',
   staffManagementId: 'staffManagementId',
-  initSize: 'initSize',
   curriculumVersionId: 'curriculumVersionId'
 };
 

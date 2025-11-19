@@ -212,7 +212,6 @@ const PutFixedClassModal = () => {
             graduated: dataOutput.graduated,
             active: dataOutput.active,
             summary: dataOutput.summary,
-            initSize: dataOutput.initSize,
         }
         await updateFixedClass({
             data: {
@@ -256,7 +255,6 @@ const PutFixedClassModal = () => {
                 graduated: output.graduated,
                 active: output.active,
                 summary: output.summary,
-                initSize: output.initSize,
             }
             if (id) {
                 if (
@@ -528,29 +526,6 @@ const PutFixedClassModal = () => {
                     <Input placeholder="Nhập tên viết tắt" />
                 </FormItem>
             </Col>
-            {/* <Col span={12}>
-                <FormItem form={form} name="startYear" label="Năm bắt đầu">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập năm bắt đầu"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="initSize" label="Sĩ số">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập sĩ số"
-                    />
-                </FormItem>
-            </Col> */}
-
             <Col span={12}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
