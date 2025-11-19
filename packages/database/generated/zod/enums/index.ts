@@ -553,6 +553,7 @@ export * from './EvaluationCriterionStatus.schema';
 export * from './EvaluationStatus.schema';
 export * from './EvaluationMemberRole.schema';
 export * from './SurveyObject.schema';
+export * from './SurveyType.schema';
 export * from './SurveyQuestionType.schema';
 export * from './QuestionType.schema';
 export * from './ExamStatus.schema';

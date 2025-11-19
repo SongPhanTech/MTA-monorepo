@@ -12,15 +12,15 @@ function Page() {
     }
 
     const items: TabsProps['items'] = [
-        {
+           {
             key: '1',
-            label: 'Chủ đề khảo sát',
-            children: <TabChuDeKhaoSat />,
+            label: 'Đối tượng làm khảo sát',
+            children: <TabDoiTuongKhaoSat />,
         },
         {
             key: '2',
-            label: 'Đối tượng làm khảo sát',
-            children: <TabDoiTuongKhaoSat />,
+            label: 'Chủ đề khảo sát',
+            children: <TabChuDeKhaoSat />,
         },
         {
             key: '3',

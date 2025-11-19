@@ -49,6 +49,7 @@ import { EvaluationStatus } from "../prisma-client";
 import { EvaluationMemberRole } from "../prisma-client";
 import { SurveyQuestionType } from "../prisma-client";
 import { SurveyObject } from "../prisma-client";
+import { SurveyType } from "../prisma-client";
 import { QuestionType } from "../prisma-client";
 import { ExamStatus } from "../prisma-client";
 import { CriteriaField } from "../prisma-client";

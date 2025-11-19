@@ -456,6 +456,13 @@ enum SurveyObject {
   @@schema("khao-thi")
 }
 
+enum SurveyType {
+  SINGLE
+  CLUSTER
+
+  @@schema("khao-thi")
+}
+
 /// Loại câu hỏi
 enum QuestionType {
   ESSAY
@@ -4995,6 +5002,7 @@ model SurveyTopic {
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
+  type                SurveyType?
 
   @@schema("khao-thi")
 }

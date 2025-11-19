@@ -19297,6 +19297,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'surveyTopic',
                     isRelationOwner: true,
+                }, type: {
+                    name: "type",
+                    type: "SurveyType",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

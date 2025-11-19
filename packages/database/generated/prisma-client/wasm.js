@@ -3297,7 +3297,8 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  type: 'type'
 };
 
 exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
@@ -7462,6 +7463,11 @@ exports.SurveyObject = exports.$Enums.SurveyObject = {
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
   LECTURER: 'LECTURER',
   STAFF: 'STAFF'
+};
+
+exports.SurveyType = exports.$Enums.SurveyType = {
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER'
 };
 
 exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
