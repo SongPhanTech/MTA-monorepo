@@ -1114,7 +1114,9 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         importType,
                         retake
                     )
-                } catch (error) {}
+                } catch (error) {
+                    console.log('Error during preview import:', error)
+                }
                 console.log(
                     'danhSachLopMonHoc',
                     danhSachLopMonHoc.map((e) => e.code)
