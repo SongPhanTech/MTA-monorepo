@@ -44,6 +44,7 @@ app.use(
             'http://localhost:3001',
             'http://localhost:3000',
             'http://localhost:8081',
+            'https://localhost:8081',
             'https://mta.swantech.vn',
             'https://user.mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
