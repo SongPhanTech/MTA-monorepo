@@ -3,24 +3,11 @@ import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
-import type { SurveySession } from '@workspace/db'
 import { useFindFirstSurveySession } from '@workspace/db/hooks'
-import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Input, Row } from 'antd'
 
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-
-type PutSurveySession = SurveySession & {
-    responses: {
-        surveyQuestionId: string
-        surveyChoiceId?: string
-        answerText?: string
-        explanation?: string
-        requireExplanation?: boolean
-    }[]
-    additionalSuggestion: string
-}
 
 type GroupedSurveyQuestion = {
     id: string // group id
@@ -33,10 +20,7 @@ type GroupedSurveyQuestion = {
     }[]
 }
 
-type PutUser = {
-    code: string
-}
-type SurveyType = GetSurveyResult
+
 function TakeTestPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()

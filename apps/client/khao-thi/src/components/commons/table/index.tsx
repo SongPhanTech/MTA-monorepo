@@ -892,11 +892,12 @@ const Table = <T extends AnyObject>({
             pagination={
                 pagination !== false
                     ? {
-                          position: ['bottomRight'],
+                          position: ['bottomLeft'],
                           defaultPageSize: DEFAULT_PAGINATE_SIZE,
                           showSizeChanger: {
                               labelRender: ({ value }) => `${value} / trang`,
                               optionRender: (oriOption) => `${oriOption.value} / trang`,
+
                           },
                           showTotal: (total, range) =>
                               `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,

@@ -4,6 +4,8 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { cn } from '@lib/utils'
+import { SurveyTopic } from '@workspace/db'
 import {
     useCountSurveyTopic,
     useFindManySurveyTopic,
@@ -15,7 +17,7 @@ import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabChuDeKhaoSat() {
+function TabChuDeKhaoSat({topicSlected,setTopicSelected}:{topicSlected:SurveyTopic|null,setTopicSelected:(key:SurveyTopic|null)=>void}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -51,6 +53,7 @@ function TabChuDeKhaoSat() {
         include: {
             surveyQuestionGroup: true,
         },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -93,14 +96,14 @@ function TabChuDeKhaoSat() {
 
     return (
         <div>
-            <Row gutter={[16, 4]}>
+            <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                             'THEM'
                         ) && (
-                            <Button onClick={handleModal} type="primary">
+                            <Button onClick={handleModal} type="primary" size="small">
                                 Thêm mới
                             </Button>
                         )}
@@ -108,12 +111,21 @@ function TabChuDeKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        className="h-[calc(100vh-200px)]"
                         rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                                 onRow={(record) => {
+                                        return {
+                                            onClick: () => {
+                                                setTopicSelected(record as SurveyTopic)
+                                            },
+                                            className: cn(topicSlected?.id === record.id ? 'bg-orange-200' : ''),
+                                        }
+                                    }}
                         columns={[
                             {
                                 title: 'STT',
@@ -131,6 +143,14 @@ function TabChuDeKhaoSat() {
                                 title: 'Tên chủ đề khảo sát',
                                 dataIndex: 'name',
                                 type: 'input',
+                            },
+                            {
+                                title: 'Loại khảo sát',
+                                dataIndex: 'type',
+                                type: 'input',
+                                render:(__,record)=>{
+                                    return record.type === 'CLUSTER' ? 'Khảo sát giảng viên' : 'Khảo sát chung'
+                                }
                             },
                             {
                                 title: 'Thao tác',

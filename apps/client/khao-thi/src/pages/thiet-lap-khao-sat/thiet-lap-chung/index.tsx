@@ -4,9 +4,12 @@ import {
     TabNhomCauHoi,
 } from '@components/features/thiet-lap-khao-sat'
 import DefaultLayout from '@layouts/default-layout'
+import { SurveyTopic } from '@workspace/db'
 import { Tabs, type TabsProps } from 'antd'
+import { useState } from 'react'
 
 function Page() {
+    const [topicSlected, setTopicSelected] = useState<SurveyTopic|null>(null)
     const onChange = (key: string) => {
         console.log(key)
     }
@@ -20,12 +23,13 @@ function Page() {
         {
             key: '2',
             label: 'Chủ đề khảo sát',
-            children: <TabChuDeKhaoSat />,
+            children: <TabChuDeKhaoSat topicSlected={topicSlected} setTopicSelected={(value)=>{setTopicSelected(value)}} />,
         },
         {
             key: '3',
             label: 'Nhóm câu hỏi khảo sát',
-            children: <TabNhomCauHoi />,
+            children: <TabNhomCauHoi  topicSlected={topicSlected}/>,
+            disabled: !topicSlected?.id,
         },
         // {
         //     key: '4',

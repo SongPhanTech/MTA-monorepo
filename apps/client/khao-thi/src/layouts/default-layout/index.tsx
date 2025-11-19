@@ -6,8 +6,8 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Breadcrumb, Divider, Layout, theme } from 'antd'
+// import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
+import { Breadcrumb,  Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -145,20 +145,20 @@ const DefaultLayout = ({
                     }}
                 >
                     <Header
-                        className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
+                        className={`flex justify-between items-center bg-white fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
                     >
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
 
                         <div className="flex items-center">
-                            <SelectTrainingObjectType />
+                             <Breadcrumb items={listBreadcrumb} />
+                            {/* <SelectTrainingObjectType />
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">
                                 <p>Học kỳ</p>
                                 <TreeSelectSemester />
-                            </div>
-                            {/* <Divider type="vertical" className="bg-primary h-[30px]" /> */}
+                            </div> */}
                         </div>
                         <HeaderApp />
                     </Header>
@@ -168,16 +168,16 @@ const DefaultLayout = ({
                         ) : (
                             <div
                                 className={cn(
-                                    'min-h-[calc(100vh-64px-24px)] bg-white shadow-sm px-4',
+                                    'min-h-[calc(100vh-64px)] bg-white shadow-sm px-4',
                                     className
                                 )}
                                 style={{
                                     background: colorBgContainer,
                                 }}
                             >
-                                <div className="my-0">
+                                {/* <div className="my-0">
                                     <Breadcrumb items={listBreadcrumb} />
-                                </div>
+                                </div> */}
                                 {children}
                             </div>
                         )}

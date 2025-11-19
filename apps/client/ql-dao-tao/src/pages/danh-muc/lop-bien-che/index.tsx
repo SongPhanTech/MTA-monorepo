@@ -9,7 +9,6 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountFixedClass,
     useFindManyCurriculumVersion,
@@ -32,7 +31,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+export default function FixedClassPage() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -51,7 +50,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const [loading, setLoading] = useState(false)
 
     const canReadAll = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
         'XEM_TAT_CA'
     )
 

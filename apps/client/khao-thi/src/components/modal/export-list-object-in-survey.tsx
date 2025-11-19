@@ -1,24 +1,20 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import { useGetSurveyObjects } from '@workspace/libs/api/exam'
-import { Button, Flex } from 'antd'
+import { getSurveyObjects } from '@workspace/libs/api/exam'
+import { Button, Flex, message } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import { useMemo } from 'react'
 
 const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: string }) => {
-    const { data: res } = useGetSurveyObjects({
-        ...query,
-    })
-
-    const data = useMemo(() => {
-        if (res?.status === 200) {
-            return res?.data
-        }
-        return
-    }, [res])
 
     const exportTemplate = async () => {
-        // Tạo workbook mới
+
+        try {
+            const res = await getSurveyObjects({
+                ...query,
+            })
+            if (res?.status === 200) {
+               
+                  // Tạo workbook mới
         const workbook = new ExcelJS.Workbook()
         const worksheet = workbook.addWorksheet('Danh sách người làm khảo sát')
 
@@ -123,12 +119,12 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
         worksheet.getRow(1).height = 30
         worksheet.getRow(2).height = 30
 
-        worksheet.mergeCells('J1:R2')
-        worksheet.getCell('J1').value =
+        worksheet.mergeCells('G1:J2')
+        worksheet.getCell('G1').value =
             'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
-        worksheet.getCell('J1').style = headerTitleStyle
+        worksheet.getCell('G1').style = headerTitleStyle
 
-        worksheet.mergeCells('A4:R4')
+        worksheet.mergeCells('A4:J4')
         worksheet.getCell('A4').value = `DANH SÁCH NGƯỜI LÀM KHẢO SÁT: ${surveyName}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
@@ -164,8 +160,8 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
             { width: 30 },
             { width: 20 },
         ]
-        if (data?.data && data?.data?.length > 0) {
-            data?.data.forEach((i: any, index: number) => {
+        if (res?.data && res?.data?.data?.length > 0) {
+            res?.data?.data.forEach((i: any, index: number) => {
                 const headerRowValue: any = worksheet.getRow(12 + index)
                 headerRowValue.values = [
                     index + 1,
@@ -189,11 +185,19 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
         saveAs(new Blob([buffer]), `${surveyName}.xlsx`)
+            }
+        } catch (error: any) {
+            if (error?.info?.message) {
+                return
+            }
+            message.error('Đã xảy ra lỗi, vuiご kiểm tra lại')
+        }
+      
     }
 
     return (
         <Flex>
-            <Button type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
+            <Button size="small" type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
                 Xuất file excel
             </Button>
         </Flex>

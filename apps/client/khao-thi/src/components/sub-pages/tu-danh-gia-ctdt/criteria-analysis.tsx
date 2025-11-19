@@ -1,4 +1,5 @@
 import CommentList from '@components/commons/comment-list'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import { getStatusEvaluation, EVALUATION_CRITERION_STATUS_OPTIONS } from '@constants/constants'
@@ -10,7 +11,7 @@ import { $Enums } from '@workspace/db/client'
 import { useUpdateAnalysisCriterion } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Badge, Button, Empty, message, Popconfirm, Select, Tag } from 'antd'
+import { Badge, Button, Empty, message, Popconfirm, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -94,7 +95,6 @@ const CriteriaAnalysisSubPage = ({
     const DEADLINE_OPTIONS = [
         { value: 'overdue', label: 'Quá hạn' },
         { value: 'near', label: 'Sắp quá hạn' },
-        { value: 'normal', label: 'Còn hạn' },
     ]
 
     const filteredCriteria = data?.criteria?.filter((item) => {
