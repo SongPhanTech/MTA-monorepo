@@ -161,16 +161,16 @@ function TabDotKhaoSat({
     })
     return (
         <div>
-            <Row gutter={[16, 4]}>
+            <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end">
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                    'XEM_CHI_TIET'
+                                    'THEM'
                                 ) && (
-                                    <Button onClick={handleModal} type="primary">
+                                    <Button onClick={handleModal} type="primary" size="small">
                                         Thêm mới
                                     </Button>
                                 )}
@@ -180,6 +180,7 @@ function TabDotKhaoSat({
                 </Col>
                 <Col span={24}>
                     <Table
+                        className="h-[calc(100vh-200px)]"
                         rowKey={'id'}
                         filters={filters}
                         setFilters={(value) => {

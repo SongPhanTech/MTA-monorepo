@@ -86,7 +86,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             .map((a) => a.answer)
             .sort((a, b) => Number(a) - Number(b))
 
-        // Trục Y: danh sách tiêu chí
+        // Trục Y: danh sách Câu hỏi
         const categories = data.map((item) => item.name)
 
         // Series stack bar
@@ -109,7 +109,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     const dataBarchart = useMemo(() => {
         let label: string[] = []
         if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-            label = dataLevel?.data?.questions?.map((item, index) => `Tiêu chí ${index + 1}`)
+            label = dataLevel?.data?.questions?.map((item, index) => `Câu hỏi ${index + 1}`)
             const { categories, series } = convertToStackChartData(
                 dataLevel?.data?.questions,
                 dataLevel?.data?.questions[0]?.answers
@@ -214,19 +214,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             },
         }
 
-        worksheet.mergeCells('A1:D2')
+        worksheet.mergeCells('A1:C2')
         worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('A1').style = headerTitleStyle
 
         worksheet.getRow(1).height = 30
         worksheet.getRow(2).height = 30
 
-        worksheet.mergeCells('G1:N2')
-        worksheet.getCell('G1').value =
+        worksheet.mergeCells('E1:H2')
+        worksheet.getCell('E1').value =
             'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
-        worksheet.getCell('G1').style = headerTitleStyle
+        worksheet.getCell('E1').style = headerTitleStyle
 
-        worksheet.mergeCells('A4:N4')
+        worksheet.mergeCells('A4:H4')
         worksheet.getCell('A4').value = `Báo cáo khảo sát: ${name}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
@@ -255,7 +255,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         }
 
         worksheet.mergeCells(`A${rowIndex}:C${rowIndex}`)
-        worksheet.getCell(`A${rowIndex}`).value = 'Thống kê theo từng tiêu chí'
+        worksheet.getCell(`A${rowIndex}`).value = 'Thống kê theo từng Câu hỏi'
         worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
 
         // Thêm tiêu đề bảng
@@ -263,12 +263,12 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         headerRow.values = dataTable[0]?.answers?.length
             ? [
                   'STT',
-                  'Tiêu chí',
-                  'Tên tiêu chí',
+                  'Câu hỏi',
+                  'Tên Câu hỏi',
                   // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                   ...dataTable[0]?.answers?.map((i: any) => i?.description),
               ]
-            : ['STT', 'Tiêu chí', 'Tên tiêu chí']
+            : ['STT', 'Câu hỏi', 'Tên Câu hỏi']
         headerRow.eachCell((cell: any) => {
             cell.style = tableHeaderStyle
         })
@@ -289,7 +289,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
                 headerRowValue.values = [
                     index + 1,
-                    `Tiêu chí ${index + 1}`,
+                    `Câu hỏi ${index + 1}`,
                     i?.name,
                     ...calculatePercent(i?.answers).map(
                         (a: any) => `${a.percent || 0} (${a?.count || 0}/${a?.total || 0})`
@@ -326,10 +326,10 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   render: (_, __, index) => index + 1,
                               },
                               {
-                                  title: 'Tiêu chí',
+                                  title: 'Câu hỏi',
                                   align: 'center',
                                   render: (_, record, index) => {
-                                      return `Tiêu chí ${index + 1}`
+                                      return `Câu hỏi ${index + 1}`
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -359,10 +359,10 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   render: (_, __, index) => index + 1,
                               },
                               {
-                                  title: 'Tiêu chí',
+                                  title: 'Câu hỏi',
                                   align: 'center',
                                   render: (_, record, index) => {
-                                      return `Tiêu chí ${index + 1}`
+                                      return `Câu hỏi ${index + 1}`
                                   },
                               },
                           ]
@@ -375,7 +375,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
 
     return (
         <div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 8]}>
                 {data?.status === 200 && data?.data?.length > 0 && (
                     <Col span={24}>
                         <div className="bg-white h-full flex flex-col">
@@ -395,7 +395,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                         },
                                         {
                                             title: 'Đối tượng',
-                                            align: 'center',
                                             render: (_, record, index) => {
                                                 return record?.name
                                             },
@@ -420,7 +419,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 <Col span={24}>
                     <div className="bg-white h-full flex flex-col">
                         <div className="p-4 flex justify-between">
-                            <Title level={4}>Thống kê theo từng tiêu chí</Title>
+                            <Title level={4}>Thống kê theo từng Câu hỏi</Title>
                             {dataLevel?.status === 200 && (
                                 <Button
                                     type="primary"
@@ -431,12 +430,13 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                             data?.data
                                         )
                                     }
+                                    size="small"
                                 >
                                     Xuất báo cáo
                                 </Button>
                             )}
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 mb-6">
                             {dataLevel?.status === 200 && dataLevel?.data?.questions?.length > 0 ? (
                                 <div style={{ width: '100%', height: '100%' }}>
                                     <ReactECharts

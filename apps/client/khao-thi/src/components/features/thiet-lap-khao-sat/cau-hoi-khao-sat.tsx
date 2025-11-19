@@ -122,14 +122,14 @@ function CauHoiKhaoSat({ id }: { id: string }) {
 
     return (
         <div>
-            <Row gutter={[16, 4]}>
+            <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
                             'THEM'
                         ) && (
-                            <Button onClick={handleModal} type="primary">
+                            <Button onClick={handleModal} type="primary" size='small'>
                                 Thêm mới
                             </Button>
                         )}
@@ -137,6 +137,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                 </Col>
                 <Col span={24}>
                     <Table
+                    className="h-[calc(100vh-200px)]"
                         rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
