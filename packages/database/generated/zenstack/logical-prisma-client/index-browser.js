@@ -3044,7 +3044,8 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
-  endDate: 'endDate'
+  endDate: 'endDate',
+  status: 'status'
 };
 
 exports.Prisma.StandardCatalogScalarFieldEnum = {
@@ -7414,6 +7415,20 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PROCESSING: 'PROCESSING',
   PAID: 'PAID',
   FAILED: 'FAILED'
+};
+
+exports.EvaluationPeriodStatus = exports.$Enums.EvaluationPeriodStatus = {
+  COUNCIL_ESTABLISHED: 'COUNCIL_ESTABLISHED',
+  ASSIGNMENT: 'ASSIGNMENT',
+  ANALYSIS_WRITING: 'ANALYSIS_WRITING',
+  SECRETARY_REVIEW: 'SECRETARY_REVIEW',
+  DIRECTOR_REVIEW: 'DIRECTOR_REVIEW',
+  EVALUATION_WRITING: 'EVALUATION_WRITING',
+  CROSS_REVIEW_ASSIGNMENT: 'CROSS_REVIEW_ASSIGNMENT',
+  CROSS_REVIEW: 'CROSS_REVIEW',
+  CONSOLIDATION: 'CONSOLIDATION',
+  COUNCIL_APPROVAL: 'COUNCIL_APPROVAL',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.EvaluationCriterionStatus = exports.$Enums.EvaluationCriterionStatus = {

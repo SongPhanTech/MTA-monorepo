@@ -17764,17 +17764,21 @@ const metadata = {
                     name: "endDate",
                     type: "DateTime",
                     isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationPeriodStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, standards: {
                     name: "standards",
                     type: "StandardPeriod",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'period',
-                }, councils: {
-                    name: "councils",
+                }, council: {
+                    name: "council",
                     type: "EvaluationCouncil",
                     isDataModel: true,
-                    isArray: true,
+                    isOptional: true,
                     backLink: 'period',
                 },
             }, uniqueConstraints: {
@@ -18899,13 +18903,14 @@ const metadata = {
                     type: "EvaluationPeriod",
                     isDataModel: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
-                    backLink: 'councils',
+                    backLink: 'council',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
                     foreignKeyMapping: { "id": "periodId" },
                 }, periodId: {
                     name: "periodId",
                     type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'period',
                 }, name: {
@@ -18925,6 +18930,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, periodId: {
+                    name: "periodId",
+                    fields: ["periodId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
