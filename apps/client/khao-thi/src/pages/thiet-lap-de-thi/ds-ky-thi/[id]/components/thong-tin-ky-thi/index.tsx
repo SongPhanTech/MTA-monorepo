@@ -201,7 +201,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             className="w-full"
                             step={1}
                             placeholder="Nhập thời gian thi"
-                            disabled={!isDraft}
+                            readOnly={!isDraft}
                         />
                     </FormItem>
                 </Col>

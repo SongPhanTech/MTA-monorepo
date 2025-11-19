@@ -548,19 +548,26 @@ const PutTrainingCourseModal = () => {
                                     label: i.name,
                                 }
                             })}
-                            disabled={isGeneralInfoLocked}
+                            {...(isGeneralInfoLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
                 <Col span={8}>
                     <FormItem form={form} name="code" label="Mã khoá học" required>
-                        <Input placeholder="Nhập mã khoá học" disabled={isGeneralInfoLocked} />
+                        <Input placeholder="Nhập mã khoá học" readOnly={isGeneralInfoLocked} />
                     </FormItem>
                 </Col>
 
                 <Col span={8}>
                     <FormItem form={form} name="name" label="Tên khoá học" required>
-                        <Input placeholder="Nhập tên khoá học" disabled={isGeneralInfoLocked} />
+                        <Input placeholder="Nhập tên khoá học" readOnly={isGeneralInfoLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
@@ -573,7 +580,14 @@ const PutTrainingCourseModal = () => {
                                     label: i.name,
                                 }
                             })}
-                            disabled={isGeneralInfoLocked}
+                            {...(isGeneralInfoLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
@@ -587,7 +601,14 @@ const PutTrainingCourseModal = () => {
                                     label: [i?.name].filter(Boolean).join(' - '),
                                 }
                             })}
-                            disabled={isGeneralInfoLocked}
+                            {...(isGeneralInfoLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
@@ -599,14 +620,20 @@ const PutTrainingCourseModal = () => {
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            allowClear
-                            disabled={isGeneralInfoLocked}
+                            {...(isGeneralInfoLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
                 <Col span={8}>
                     <FormItem form={form} name="academicYear" label="Niên khoá">
-                        <Input placeholder="Nhập niên khoá" disabled={isGeneralInfoLocked} />
+                        <Input placeholder="Nhập niên khoá" readOnly={isGeneralInfoLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
@@ -617,7 +644,7 @@ const PutTrainingCourseModal = () => {
                             min={0}
                             step={1}
                             placeholder="Nhập thời gian đào tạo"
-                            disabled={isGeneralInfoLocked}
+                            readOnly={isGeneralInfoLocked}
                         />
                     </FormItem>
                 </Col>
@@ -649,7 +676,7 @@ const PutTrainingCourseModal = () => {
                             step={1}
                             placeholder="300"
                             className="w-full"
-                            disabled={isRegulationLocked}
+                            readOnly={isRegulationLocked}
                         />
                     </FormItem>
                 </Col>
@@ -661,7 +688,7 @@ const PutTrainingCourseModal = () => {
                                 type: 'mask',
                             }}
                             className="w-full"
-                            disabled={isRegulationLocked}
+                            readOnly={isRegulationLocked}
                         />
                     </FormItem>
                 </Col>
@@ -673,14 +700,14 @@ const PutTrainingCourseModal = () => {
                                 type: 'mask',
                             }}
                             className="w-full"
-                            disabled={isRegulationLocked}
+                            readOnly={isRegulationLocked}
                         />
                     </FormItem>
                 </Col>
 
                 <Col span={8}>
                     <FormItem form={form} name="admissionDecision" label="Số QĐ tuyển sinh">
-                        <Input placeholder="Mã/số QĐ" disabled={isRegulationLocked} />
+                        <Input placeholder="Mã/số QĐ" readOnly={isRegulationLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
@@ -689,12 +716,12 @@ const PutTrainingCourseModal = () => {
                         name="studentRecognitionDecision"
                         label="Số QĐ công nhận SV"
                     >
-                        <Input placeholder="Mã/số QĐ" disabled={isRegulationLocked} />
+                        <Input placeholder="Mã/số QĐ" readOnly={isRegulationLocked} />
                     </FormItem>
                 </Col>
                 <Col span={8}>
                     <FormItem form={form} name="regulation" label="Số QĐ quy chế đào tạo">
-                        <Input placeholder="Mã/số QĐ" disabled={isRegulationLocked} />
+                        <Input placeholder="Mã/số QĐ" readOnly={isRegulationLocked} />
                     </FormItem>
                 </Col>
             </Row>
@@ -735,7 +762,14 @@ const PutTrainingCourseModal = () => {
                                     }
                                 })}
                                 onChange={handleSelectChange}
-                                disabled={isScoreConfigLocked}
+                                {...(isScoreConfigLocked
+                                    ? {
+                                          showSearch: false,
+                                          allowClear: false,
+                                          showArrow: false,
+                                          open: false,
+                                      }
+                                    : {})}
                             />
                         </FormItem>
                     </Col>
@@ -754,7 +788,14 @@ const PutTrainingCourseModal = () => {
                                     value: 'Base4',
                                 },
                             ]}
-                            disabled={isScoreConfigLocked}
+                            {...(isScoreConfigLocked
+                                ? {
+                                      showSearch: false,
+                                      allowClear: false,
+                                      showArrow: false,
+                                      open: false,
+                                  }
+                                : {})}
                         />
                     </FormItem>
                 </Col>
@@ -770,7 +811,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm tối thiểu được thi"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -781,7 +822,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm tối thiểu để qua"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -796,7 +837,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm tối thiểu để qua môn điều kiện"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -811,7 +852,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm liệt môn tốt nghiệp"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -826,7 +867,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm để qua môn tốt nghiệp"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -851,7 +892,7 @@ const PutTrainingCourseModal = () => {
                             onChange={() => {
                                 setTimeout(() => debouncedValidate(['coef_2', 'coef_3']), 300)
                             }}
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -876,7 +917,7 @@ const PutTrainingCourseModal = () => {
                             onChange={() => {
                                 setTimeout(() => debouncedValidate(['coef_1', 'coef_3']), 300)
                             }}
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -904,7 +945,7 @@ const PutTrainingCourseModal = () => {
                             onChange={() => {
                                 setTimeout(() => debouncedValidate(['coef_1', 'coef_2']), 300)
                             }}
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -915,7 +956,7 @@ const PutTrainingCourseModal = () => {
                             type="number"
                             placeholder="Nhập điểm giữ lại khi lưu ban"
                             className="w-full"
-                            disabled={isScoreConfigLocked}
+                            readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
                 </Col>
@@ -974,7 +1015,7 @@ const PutTrainingCourseModal = () => {
                                     >
                                         <Input
                                             placeholder="Nhập mã tham số"
-                                            disabled={isScoreConfigLocked}
+                                            readOnly={isScoreConfigLocked}
                                         />
                                     </Form.Item>
                                 ),
@@ -996,7 +1037,7 @@ const PutTrainingCourseModal = () => {
                                     >
                                         <Input
                                             placeholder="Nhập tên tham số"
-                                            disabled={isScoreConfigLocked}
+                                            readOnly={isScoreConfigLocked}
                                         />
                                     </Form.Item>
                                 ),
@@ -1023,7 +1064,7 @@ const PutTrainingCourseModal = () => {
                                             min={0}
                                             max={10}
                                             placeholder="Nhập giá trị"
-                                            disabled={isScoreConfigLocked}
+                                            readOnly={isScoreConfigLocked}
                                         />
                                     </Form.Item>
                                 ),
@@ -1041,7 +1082,7 @@ const PutTrainingCourseModal = () => {
                                         <Input.TextArea
                                             rows={2}
                                             placeholder="Nhập mô tả chi tiết"
-                                            disabled={isScoreConfigLocked}
+                                            readOnly={isScoreConfigLocked}
                                         />
                                     </Form.Item>
                                 ),

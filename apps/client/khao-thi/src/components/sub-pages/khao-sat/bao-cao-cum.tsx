@@ -128,59 +128,59 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
         click: onChartClick,
     }
 
-      const renderTable = (dataTable: any,choices:any) => {
-            return (
-                <Table
-                    columns={
-                        choices?.length > 0
-                            ? [
-                                  {
-                                      title: 'STT',
-                                      width: 60,
-                                      align: 'center',
-                                      fixed: 'left',
-                                      render: (_, __, index) => index + 1,
+    const renderTable = (dataTable: any, choices: any) => {
+        return (
+            <Table
+                columns={
+                    choices?.length > 0
+                        ? [
+                              {
+                                  title: 'STT',
+                                  width: 60,
+                                  align: 'center',
+                                  fixed: 'left',
+                                  render: (_, __, index) => index + 1,
+                              },
+                              {
+                                  title: 'Đối tượng',
+                                  align: 'center',
+                                  render: (_, record) => {
+                                      return record?.lecture
                                   },
-                                  {
-                                      title: 'Đối tượng',
-                                      align: 'center',
-                                      render: (_, record) => {
-                                          return record?.lecture
-                                      },
+                              },
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...choices?.map((i: any, index: number) => ({
+                                  title: i?.description,
+                                  id: i?.id,
+                                  dataIndex: i?.id,
+                                  align: 'center',
+                                  render: (__: any, record: any) => {
+                                      return record?.average ? record?.average[index] : 0
                                   },
-                                  // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                                  ...choices?.map((i: any,index:number) => ({
-                                      title: i?.description,
-                                      id: i?.id,
-                                      dataIndex: i?.id,
-                                      align: 'center',
-                                      render: (__: any, record: any) => {
-                                         return record?.average ? record?.average[index] : 0
-                                      },
-                                  })),
-                              ]:[
-                                    {
-                                      title: 'STT',
-                                      width: 60,
-                                      align: 'center',
-                                      fixed: 'left',
-                                      render: (_, __, index) => index + 1,
+                              })),
+                          ]
+                        : [
+                              {
+                                  title: 'STT',
+                                  width: 60,
+                                  align: 'center',
+                                  fixed: 'left',
+                                  render: (_, __, index) => index + 1,
+                              },
+                              {
+                                  title: 'Đối tượng',
+                                  align: 'center',
+                                  render: (_, record) => {
+                                      return record?.lecture
                                   },
-                                  {
-                                      title: 'Đối tượng',
-                                      align: 'center',
-                                      render: (_, record) => {
-                                          return record?.lecture
-                                      },
-                                  },
-                              ]
-                          
-                    }
-                    dataSource={dataTable}
-                    pagination={false}
-                />
-            )
-        }
+                              },
+                          ]
+                }
+                dataSource={dataTable}
+                pagination={false}
+            />
+        )
+    }
 
     return (
         <div>
@@ -195,18 +195,18 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
                         </div>
                         <div className="flex-1">
                             {dataLevel?.status === 200 && dataLevel?.data ? (
-                                <div
-                                    style={{ width: '100%', height: '100%' }}
-                                >
+                                <div style={{ width: '100%', height: '100%' }}>
                                     <ReactECharts
                                         onEvents={onEvents}
                                         option={dataBarchart}
                                         className="w-full min-h-[400px] mb-6"
                                     />
 
-                                   {dataLevel?.data?.data?.length > 0 &&
-                                        renderTable(dataLevel?.data?.data,dataLevel?.data?.choices)}
-
+                                    {dataLevel?.data?.data?.length > 0 &&
+                                        renderTable(
+                                            dataLevel?.data?.data,
+                                            dataLevel?.data?.choices
+                                        )}
                                 </div>
                                 // <BarChart className="h-full" dataMap={dataBarchart} />
                             ) : (

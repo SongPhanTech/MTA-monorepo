@@ -391,7 +391,7 @@ const PutStudentScoreConvertModal = () => {
                         loading={loadingStudents}
                         filterOption={false}
                         onSearch={(v) => setStudentKeyword(v)}
-                        disabled={isEdit || isViewMode}
+                        {...(isEdit || isViewMode ? { variant: 'borderless', open: false } : {})}
                         options={studentList.map((s: any) => {
                             const fullName =
                                 s?.userProfile?.fullName ??
@@ -465,16 +465,18 @@ const PutStudentScoreConvertModal = () => {
                                                     max={10}
                                                     step={0.1}
                                                     style={{ width: '100%' }}
-                                                    disabled={
-                                                        isViewMode ||
-                                                        originalStatusRef.current[
-                                                            form.getFieldValue([
-                                                                'subjectScoreConvert',
-                                                                record.name,
-                                                                'id',
-                                                            ])
-                                                        ] === ScoreConvertStatus.APPROVED
-                                                    }
+                                                    readOnly
+                                                    variant="borderless"
+                                                    // disabled={
+                                                    //     isViewMode ||
+                                                    //     originalStatusRef.current[
+                                                    //         form.getFieldValue([
+                                                    //             'subjectScoreConvert',
+                                                    //             record.name,
+                                                    //             'id',
+                                                    //         ])
+                                                    //     ] === ScoreConvertStatus.APPROVED
+                                                    // }
                                                 />
                                             </FormItem>
                                             {!isEdit && (

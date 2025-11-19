@@ -1674,6 +1674,23 @@ export const PaymentStatus: {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const EvaluationPeriodStatus: {
+  COUNCIL_ESTABLISHED: 'COUNCIL_ESTABLISHED',
+  ASSIGNMENT: 'ASSIGNMENT',
+  ANALYSIS_WRITING: 'ANALYSIS_WRITING',
+  SECRETARY_REVIEW: 'SECRETARY_REVIEW',
+  DIRECTOR_REVIEW: 'DIRECTOR_REVIEW',
+  EVALUATION_WRITING: 'EVALUATION_WRITING',
+  CROSS_REVIEW_ASSIGNMENT: 'CROSS_REVIEW_ASSIGNMENT',
+  CROSS_REVIEW: 'CROSS_REVIEW',
+  CONSOLIDATION: 'CONSOLIDATION',
+  COUNCIL_APPROVAL: 'COUNCIL_APPROVAL',
+  COMPLETED: 'COMPLETED'
+};
+
+export type EvaluationPeriodStatus = (typeof EvaluationPeriodStatus)[keyof typeof EvaluationPeriodStatus]
+
+
 export const EvaluationCriterionStatus: {
   PENDING: 'PENDING',
   SUBMITTED: 'SUBMITTED',
@@ -1725,6 +1742,14 @@ export const SurveyObject: {
 };
 
 export type SurveyObject = (typeof SurveyObject)[keyof typeof SurveyObject]
+
+
+export const SurveyType: {
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER'
+};
+
+export type SurveyType = (typeof SurveyType)[keyof typeof SurveyType]
 
 
 export const QuestionType: {
@@ -2027,6 +2052,10 @@ export type PaymentStatus = $Enums.PaymentStatus
 
 export const PaymentStatus: typeof $Enums.PaymentStatus
 
+export type EvaluationPeriodStatus = $Enums.EvaluationPeriodStatus
+
+export const EvaluationPeriodStatus: typeof $Enums.EvaluationPeriodStatus
+
 export type EvaluationCriterionStatus = $Enums.EvaluationCriterionStatus
 
 export const EvaluationCriterionStatus: typeof $Enums.EvaluationCriterionStatus
@@ -2046,6 +2075,10 @@ export const SurveyQuestionType: typeof $Enums.SurveyQuestionType
 export type SurveyObject = $Enums.SurveyObject
 
 export const SurveyObject: typeof $Enums.SurveyObject
+
+export type SurveyType = $Enums.SurveyType
+
+export const SurveyType: typeof $Enums.SurveyType
 
 export type QuestionType = $Enums.QuestionType
 
@@ -29231,12 +29264,10 @@ export namespace Prisma {
 
   export type EvaluationPeriodCountOutputType = {
     standards: number
-    councils: number
   }
 
   export type EvaluationPeriodCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     standards?: boolean | EvaluationPeriodCountOutputTypeCountStandardsArgs
-    councils?: boolean | EvaluationPeriodCountOutputTypeCountCouncilsArgs
   }
 
   // Custom InputTypes
@@ -29255,13 +29286,6 @@ export namespace Prisma {
    */
   export type EvaluationPeriodCountOutputTypeCountStandardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StandardPeriodWhereInput
-  }
-
-  /**
-   * EvaluationPeriodCountOutputType without action
-   */
-  export type EvaluationPeriodCountOutputTypeCountCouncilsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EvaluationCouncilWhereInput
   }
 
 
@@ -234421,6 +234445,7 @@ export namespace Prisma {
     name: string | null
     startDate: Date | null
     endDate: Date | null
+    status: $Enums.EvaluationPeriodStatus | null
   }
 
   export type EvaluationPeriodMaxAggregateOutputType = {
@@ -234435,6 +234460,7 @@ export namespace Prisma {
     name: string | null
     startDate: Date | null
     endDate: Date | null
+    status: $Enums.EvaluationPeriodStatus | null
   }
 
   export type EvaluationPeriodCountAggregateOutputType = {
@@ -234449,6 +234475,7 @@ export namespace Prisma {
     name: number
     startDate: number
     endDate: number
+    status: number
     _all: number
   }
 
@@ -234465,6 +234492,7 @@ export namespace Prisma {
     name?: true
     startDate?: true
     endDate?: true
+    status?: true
   }
 
   export type EvaluationPeriodMaxAggregateInputType = {
@@ -234479,6 +234507,7 @@ export namespace Prisma {
     name?: true
     startDate?: true
     endDate?: true
+    status?: true
   }
 
   export type EvaluationPeriodCountAggregateInputType = {
@@ -234493,6 +234522,7 @@ export namespace Prisma {
     name?: true
     startDate?: true
     endDate?: true
+    status?: true
     _all?: true
   }
 
@@ -234580,6 +234610,7 @@ export namespace Prisma {
     name: string
     startDate: Date
     endDate: Date | null
+    status: $Enums.EvaluationPeriodStatus
     _count: EvaluationPeriodCountAggregateOutputType | null
     _min: EvaluationPeriodMinAggregateOutputType | null
     _max: EvaluationPeriodMaxAggregateOutputType | null
@@ -234611,8 +234642,9 @@ export namespace Prisma {
     name?: boolean
     startDate?: boolean
     endDate?: boolean
+    status?: boolean
     standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
-    councils?: boolean | EvaluationPeriod$councilsArgs<ExtArgs>
+    council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
     _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationPeriod"]>
 
@@ -234628,6 +234660,7 @@ export namespace Prisma {
     name?: boolean
     startDate?: boolean
     endDate?: boolean
+    status?: boolean
   }, ExtArgs["result"]["evaluationPeriod"]>
 
   export type EvaluationPeriodSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -234642,6 +234675,7 @@ export namespace Prisma {
     name?: boolean
     startDate?: boolean
     endDate?: boolean
+    status?: boolean
   }, ExtArgs["result"]["evaluationPeriod"]>
 
   export type EvaluationPeriodSelectScalar = {
@@ -234656,12 +234690,13 @@ export namespace Prisma {
     name?: boolean
     startDate?: boolean
     endDate?: boolean
+    status?: boolean
   }
 
-  export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate", ExtArgs["result"]["evaluationPeriod"]>
+  export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status", ExtArgs["result"]["evaluationPeriod"]>
   export type EvaluationPeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
-    councils?: boolean | EvaluationPeriod$councilsArgs<ExtArgs>
+    council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
     _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationPeriodIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -234671,7 +234706,7 @@ export namespace Prisma {
     name: "EvaluationPeriod"
     objects: {
       standards: Prisma.$StandardPeriodPayload<ExtArgs>[]
-      councils: Prisma.$EvaluationCouncilPayload<ExtArgs>[]
+      council: Prisma.$EvaluationCouncilPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -234685,6 +234720,7 @@ export namespace Prisma {
       name: string
       startDate: Date
       endDate: Date | null
+      status: $Enums.EvaluationPeriodStatus
     }, ExtArgs["result"]["evaluationPeriod"]>
     composites: {}
   }
@@ -235080,7 +235116,7 @@ export namespace Prisma {
   export interface Prisma__EvaluationPeriodClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     standards<T extends EvaluationPeriod$standardsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    councils<T extends EvaluationPeriod$councilsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$councilsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    council<T extends EvaluationPeriod$councilArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$councilArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -235121,6 +235157,7 @@ export namespace Prisma {
     readonly name: FieldRef<"EvaluationPeriod", 'String'>
     readonly startDate: FieldRef<"EvaluationPeriod", 'DateTime'>
     readonly endDate: FieldRef<"EvaluationPeriod", 'DateTime'>
+    readonly status: FieldRef<"EvaluationPeriod", 'EvaluationPeriodStatus'>
   }
     
 
@@ -235533,9 +235570,9 @@ export namespace Prisma {
   }
 
   /**
-   * EvaluationPeriod.councils
+   * EvaluationPeriod.council
    */
-  export type EvaluationPeriod$councilsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EvaluationPeriod$councilArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EvaluationCouncil
      */
@@ -235549,11 +235586,6 @@ export namespace Prisma {
      */
     include?: EvaluationCouncilInclude<ExtArgs> | null
     where?: EvaluationCouncilWhereInput
-    orderBy?: EvaluationCouncilOrderByWithRelationInput | EvaluationCouncilOrderByWithRelationInput[]
-    cursor?: EvaluationCouncilWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: EvaluationCouncilScalarFieldEnum | EvaluationCouncilScalarFieldEnum[]
   }
 
   /**
@@ -255128,6 +255160,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicMaxAggregateOutputType = {
@@ -255140,6 +255173,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    type: $Enums.SurveyType | null
   }
 
   export type SurveyTopicCountAggregateOutputType = {
@@ -255152,6 +255186,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     name: number
+    type: number
     _all: number
   }
 
@@ -255166,6 +255201,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    type?: true
   }
 
   export type SurveyTopicMaxAggregateInputType = {
@@ -255178,6 +255214,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    type?: true
   }
 
   export type SurveyTopicCountAggregateInputType = {
@@ -255190,6 +255227,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    type?: true
     _all?: true
   }
 
@@ -255275,6 +255313,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     name: string
+    type: $Enums.SurveyType | null
     _count: SurveyTopicCountAggregateOutputType | null
     _min: SurveyTopicMinAggregateOutputType | null
     _max: SurveyTopicMaxAggregateOutputType | null
@@ -255304,6 +255343,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    type?: boolean
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
     survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
     surveyQuestionGroup?: boolean | SurveyTopic$surveyQuestionGroupArgs<ExtArgs>
@@ -255320,6 +255360,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -255332,6 +255373,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    type?: boolean
   }, ExtArgs["result"]["surveyTopic"]>
 
   export type SurveyTopicSelectScalar = {
@@ -255344,9 +255386,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    type?: boolean
   }
 
-  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["surveyTopic"]>
+  export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "type", ExtArgs["result"]["surveyTopic"]>
   export type SurveyTopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
     survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
@@ -255373,6 +255416,7 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       name: string
+      type: $Enums.SurveyType | null
     }, ExtArgs["result"]["surveyTopic"]>
     composites: {}
   }
@@ -255808,6 +255852,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"SurveyTopic", 'DateTime'>
     readonly createdBy: FieldRef<"SurveyTopic", 'String'>
     readonly name: FieldRef<"SurveyTopic", 'String'>
+    readonly type: FieldRef<"SurveyTopic", 'SurveyType'>
   }
     
 
@@ -348543,7 +348588,8 @@ export namespace Prisma {
     createdBy: 'createdBy',
     name: 'name',
     startDate: 'startDate',
-    endDate: 'endDate'
+    endDate: 'endDate',
+    status: 'status'
   };
 
   export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum]
@@ -348846,7 +348892,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    name: 'name'
+    name: 'name',
+    type: 'type'
   };
 
   export type SurveyTopicScalarFieldEnum = (typeof SurveyTopicScalarFieldEnum)[keyof typeof SurveyTopicScalarFieldEnum]
@@ -354290,6 +354337,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EvaluationPeriodStatus'
+   */
+  export type EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationPeriodStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EvaluationPeriodStatus[]'
+   */
+  export type ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationPeriodStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'EvaluationCriterionStatus'
    */
   export type EnumEvaluationCriterionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EvaluationCriterionStatus'>
@@ -354342,6 +354403,20 @@ export namespace Prisma {
    * Reference to a field of type 'SurveyObject'
    */
   export type EnumSurveyObjectFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SurveyObject'>
+    
+
+
+  /**
+   * Reference to a field of type 'SurveyType'
+   */
+  export type EnumSurveyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SurveyType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SurveyType[]'
+   */
+  export type ListEnumSurveyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SurveyType[]'>
     
 
 
@@ -373135,8 +373210,9 @@ export namespace Prisma {
     name?: StringFilter<"EvaluationPeriod"> | string
     startDate?: DateTimeFilter<"EvaluationPeriod"> | Date | string
     endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
+    status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodListRelationFilter
-    councils?: EvaluationCouncilListRelationFilter
+    council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
   }
 
   export type EvaluationPeriodOrderByWithRelationInput = {
@@ -373151,8 +373227,9 @@ export namespace Prisma {
     name?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    status?: SortOrder
     standards?: StandardPeriodOrderByRelationAggregateInput
-    councils?: EvaluationCouncilOrderByRelationAggregateInput
+    council?: EvaluationCouncilOrderByWithRelationInput
     _relevance?: EvaluationPeriodOrderByRelevanceInput
   }
 
@@ -373171,8 +373248,9 @@ export namespace Prisma {
     name?: StringFilter<"EvaluationPeriod"> | string
     startDate?: DateTimeFilter<"EvaluationPeriod"> | Date | string
     endDate?: DateTimeNullableFilter<"EvaluationPeriod"> | Date | string | null
+    status?: EnumEvaluationPeriodStatusFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodListRelationFilter
-    councils?: EvaluationCouncilListRelationFilter
+    council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
   }, "id" | "code">
 
   export type EvaluationPeriodOrderByWithAggregationInput = {
@@ -373187,6 +373265,7 @@ export namespace Prisma {
     name?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    status?: SortOrder
     _count?: EvaluationPeriodCountOrderByAggregateInput
     _max?: EvaluationPeriodMaxOrderByAggregateInput
     _min?: EvaluationPeriodMinOrderByAggregateInput
@@ -373207,6 +373286,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"EvaluationPeriod"> | string
     startDate?: DateTimeWithAggregatesFilter<"EvaluationPeriod"> | Date | string
     endDate?: DateTimeNullableWithAggregatesFilter<"EvaluationPeriod"> | Date | string | null
+    status?: EnumEvaluationPeriodStatusWithAggregatesFilter<"EvaluationPeriod"> | $Enums.EvaluationPeriodStatus
   }
 
   export type StandardCatalogWhereInput = {
@@ -374427,6 +374507,7 @@ export namespace Prisma {
   export type EvaluationCouncilWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    periodId?: string
     AND?: EvaluationCouncilWhereInput | EvaluationCouncilWhereInput[]
     OR?: EvaluationCouncilWhereInput[]
     NOT?: EvaluationCouncilWhereInput | EvaluationCouncilWhereInput[]
@@ -374436,11 +374517,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EvaluationCouncil"> | Date | string
     updatedAt?: DateTimeFilter<"EvaluationCouncil"> | Date | string
     createdBy?: UuidNullableFilter<"EvaluationCouncil"> | string | null
-    periodId?: StringFilter<"EvaluationCouncil"> | string
     name?: StringFilter<"EvaluationCouncil"> | string
     period?: XOR<EvaluationPeriodScalarRelationFilter, EvaluationPeriodWhereInput>
     members?: EvaluationCouncilMemberListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "periodId">
 
   export type EvaluationCouncilOrderByWithAggregationInput = {
     id?: SortOrder
@@ -374790,6 +374870,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
     createdBy?: UuidNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
+    type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
     survey?: SurveyListRelationFilter
     surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
@@ -374805,6 +374886,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    type?: SortOrderInput | SortOrder
     clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
     survey?: SurveyOrderByRelationAggregateInput
     surveyQuestionGroup?: SurveyQuestionGroupOrderByRelationAggregateInput
@@ -374824,6 +374906,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
     createdBy?: UuidNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
+    type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyListRelationFilter
     survey?: SurveyListRelationFilter
     surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
@@ -374839,6 +374922,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    type?: SortOrderInput | SortOrder
     _count?: SurveyTopicCountOrderByAggregateInput
     _max?: SurveyTopicMaxOrderByAggregateInput
     _min?: SurveyTopicMinOrderByAggregateInput
@@ -374857,6 +374941,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SurveyTopic"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"SurveyTopic"> | string | null
     name?: StringWithAggregatesFilter<"SurveyTopic"> | string
+    type?: EnumSurveyTypeNullableWithAggregatesFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
 
   export type SurveyQuestionGroupWhereInput = {
@@ -403386,8 +403471,9 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
-    councils?: EvaluationCouncilCreateNestedManyWithoutPeriodInput
+    council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
   }
 
   export type EvaluationPeriodUncheckedCreateInput = {
@@ -403402,8 +403488,9 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
-    councils?: EvaluationCouncilUncheckedCreateNestedManyWithoutPeriodInput
+    council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
   }
 
   export type EvaluationPeriodUpdateInput = {
@@ -403418,8 +403505,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
-    councils?: EvaluationCouncilUpdateManyWithoutPeriodNestedInput
+    council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateInput = {
@@ -403434,8 +403522,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
-    councils?: EvaluationCouncilUncheckedUpdateManyWithoutPeriodNestedInput
+    council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
   }
 
   export type EvaluationPeriodCreateManyInput = {
@@ -403450,6 +403539,7 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
   }
 
   export type EvaluationPeriodUpdateManyMutationInput = {
@@ -403464,6 +403554,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
   }
 
   export type EvaluationPeriodUncheckedUpdateManyInput = {
@@ -403478,6 +403569,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
   }
 
   export type StandardCatalogCreateInput = {
@@ -404806,7 +404898,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    period: EvaluationPeriodCreateNestedOneWithoutCouncilsInput
+    period: EvaluationPeriodCreateNestedOneWithoutCouncilInput
     members?: EvaluationCouncilMemberCreateNestedManyWithoutEvaluationCouncilInput
   }
 
@@ -404834,7 +404926,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    period?: EvaluationPeriodUpdateOneRequiredWithoutCouncilsNestedInput
+    period?: EvaluationPeriodUpdateOneRequiredWithoutCouncilNestedInput
     members?: EvaluationCouncilMemberUpdateManyWithoutEvaluationCouncilNestedInput
   }
 
@@ -405244,6 +405336,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
     survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
@@ -405259,6 +405352,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
@@ -405274,6 +405368,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
     survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
@@ -405289,6 +405384,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
     survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
@@ -405304,6 +405400,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
   }
 
   export type SurveyTopicUpdateManyMutationInput = {
@@ -405316,6 +405413,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
 
   export type SurveyTopicUncheckedUpdateManyInput = {
@@ -405328,6 +405426,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
 
   export type SurveyQuestionGroupCreateInput = {
@@ -427037,23 +427136,25 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type EnumEvaluationPeriodStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel> | $Enums.EvaluationPeriodStatus
+  }
+
   export type StandardPeriodListRelationFilter = {
     every?: StandardPeriodWhereInput
     some?: StandardPeriodWhereInput
     none?: StandardPeriodWhereInput
   }
 
-  export type EvaluationCouncilListRelationFilter = {
-    every?: EvaluationCouncilWhereInput
-    some?: EvaluationCouncilWhereInput
-    none?: EvaluationCouncilWhereInput
+  export type EvaluationCouncilNullableScalarRelationFilter = {
+    is?: EvaluationCouncilWhereInput | null
+    isNot?: EvaluationCouncilWhereInput | null
   }
 
   export type StandardPeriodOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type EvaluationCouncilOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -427075,6 +427176,7 @@ export namespace Prisma {
     name?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    status?: SortOrder
   }
 
   export type EvaluationPeriodMaxOrderByAggregateInput = {
@@ -427089,6 +427191,7 @@ export namespace Prisma {
     name?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    status?: SortOrder
   }
 
   export type EvaluationPeriodMinOrderByAggregateInput = {
@@ -427103,6 +427206,17 @@ export namespace Prisma {
     name?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    status?: SortOrder
+  }
+
+  export type EnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel> | $Enums.EvaluationPeriodStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
+    _max?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
   }
 
   export type CriterionCatalogListRelationFilter = {
@@ -428195,6 +428309,13 @@ export namespace Prisma {
     name?: SortOrder
   }
 
+  export type EnumSurveyTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SurveyType | EnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSurveyTypeNullableFilter<$PrismaModel> | $Enums.SurveyType | null
+  }
+
   export type SurveyQuestionGroupListRelationFilter = {
     every?: SurveyQuestionGroupWhereInput
     some?: SurveyQuestionGroupWhereInput
@@ -428221,6 +428342,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    type?: SortOrder
   }
 
   export type SurveyTopicMaxOrderByAggregateInput = {
@@ -428233,6 +428355,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    type?: SortOrder
   }
 
   export type SurveyTopicMinOrderByAggregateInput = {
@@ -428245,6 +428368,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    type?: SortOrder
+  }
+
+  export type EnumSurveyTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SurveyType | EnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSurveyTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.SurveyType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSurveyTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumSurveyTypeNullableFilter<$PrismaModel>
   }
 
   export type SurveyQuestionListRelationFilter = {
@@ -451255,11 +451389,10 @@ export namespace Prisma {
     connect?: StandardPeriodWhereUniqueInput | StandardPeriodWhereUniqueInput[]
   }
 
-  export type EvaluationCouncilCreateNestedManyWithoutPeriodInput = {
-    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput> | EvaluationCouncilCreateWithoutPeriodInput[] | EvaluationCouncilUncheckedCreateWithoutPeriodInput[]
-    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput | EvaluationCouncilCreateOrConnectWithoutPeriodInput[]
-    createMany?: EvaluationCouncilCreateManyPeriodInputEnvelope
-    connect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
+  export type EvaluationCouncilCreateNestedOneWithoutPeriodInput = {
+    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
+    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
+    connect?: EvaluationCouncilWhereUniqueInput
   }
 
   export type StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput = {
@@ -451269,11 +451402,14 @@ export namespace Prisma {
     connect?: StandardPeriodWhereUniqueInput | StandardPeriodWhereUniqueInput[]
   }
 
-  export type EvaluationCouncilUncheckedCreateNestedManyWithoutPeriodInput = {
-    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput> | EvaluationCouncilCreateWithoutPeriodInput[] | EvaluationCouncilUncheckedCreateWithoutPeriodInput[]
-    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput | EvaluationCouncilCreateOrConnectWithoutPeriodInput[]
-    createMany?: EvaluationCouncilCreateManyPeriodInputEnvelope
-    connect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
+  export type EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput = {
+    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
+    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
+    connect?: EvaluationCouncilWhereUniqueInput
+  }
+
+  export type EnumEvaluationPeriodStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EvaluationPeriodStatus
   }
 
   export type StandardPeriodUpdateManyWithoutPeriodNestedInput = {
@@ -451290,18 +451426,14 @@ export namespace Prisma {
     deleteMany?: StandardPeriodScalarWhereInput | StandardPeriodScalarWhereInput[]
   }
 
-  export type EvaluationCouncilUpdateManyWithoutPeriodNestedInput = {
-    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput> | EvaluationCouncilCreateWithoutPeriodInput[] | EvaluationCouncilUncheckedCreateWithoutPeriodInput[]
-    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput | EvaluationCouncilCreateOrConnectWithoutPeriodInput[]
-    upsert?: EvaluationCouncilUpsertWithWhereUniqueWithoutPeriodInput | EvaluationCouncilUpsertWithWhereUniqueWithoutPeriodInput[]
-    createMany?: EvaluationCouncilCreateManyPeriodInputEnvelope
-    set?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    disconnect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    delete?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    connect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    update?: EvaluationCouncilUpdateWithWhereUniqueWithoutPeriodInput | EvaluationCouncilUpdateWithWhereUniqueWithoutPeriodInput[]
-    updateMany?: EvaluationCouncilUpdateManyWithWhereWithoutPeriodInput | EvaluationCouncilUpdateManyWithWhereWithoutPeriodInput[]
-    deleteMany?: EvaluationCouncilScalarWhereInput | EvaluationCouncilScalarWhereInput[]
+  export type EvaluationCouncilUpdateOneWithoutPeriodNestedInput = {
+    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
+    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
+    upsert?: EvaluationCouncilUpsertWithoutPeriodInput
+    disconnect?: EvaluationCouncilWhereInput | boolean
+    delete?: EvaluationCouncilWhereInput | boolean
+    connect?: EvaluationCouncilWhereUniqueInput
+    update?: XOR<XOR<EvaluationCouncilUpdateToOneWithWhereWithoutPeriodInput, EvaluationCouncilUpdateWithoutPeriodInput>, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
   }
 
   export type StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput = {
@@ -451318,18 +451450,14 @@ export namespace Prisma {
     deleteMany?: StandardPeriodScalarWhereInput | StandardPeriodScalarWhereInput[]
   }
 
-  export type EvaluationCouncilUncheckedUpdateManyWithoutPeriodNestedInput = {
-    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput> | EvaluationCouncilCreateWithoutPeriodInput[] | EvaluationCouncilUncheckedCreateWithoutPeriodInput[]
-    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput | EvaluationCouncilCreateOrConnectWithoutPeriodInput[]
-    upsert?: EvaluationCouncilUpsertWithWhereUniqueWithoutPeriodInput | EvaluationCouncilUpsertWithWhereUniqueWithoutPeriodInput[]
-    createMany?: EvaluationCouncilCreateManyPeriodInputEnvelope
-    set?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    disconnect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    delete?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    connect?: EvaluationCouncilWhereUniqueInput | EvaluationCouncilWhereUniqueInput[]
-    update?: EvaluationCouncilUpdateWithWhereUniqueWithoutPeriodInput | EvaluationCouncilUpdateWithWhereUniqueWithoutPeriodInput[]
-    updateMany?: EvaluationCouncilUpdateManyWithWhereWithoutPeriodInput | EvaluationCouncilUpdateManyWithWhereWithoutPeriodInput[]
-    deleteMany?: EvaluationCouncilScalarWhereInput | EvaluationCouncilScalarWhereInput[]
+  export type EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput = {
+    create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
+    connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
+    upsert?: EvaluationCouncilUpsertWithoutPeriodInput
+    disconnect?: EvaluationCouncilWhereInput | boolean
+    delete?: EvaluationCouncilWhereInput | boolean
+    connect?: EvaluationCouncilWhereUniqueInput
+    update?: XOR<XOR<EvaluationCouncilUpdateToOneWithWhereWithoutPeriodInput, EvaluationCouncilUpdateWithoutPeriodInput>, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
   }
 
   export type CriterionCatalogCreateNestedManyWithoutStandardInput = {
@@ -452134,9 +452262,9 @@ export namespace Prisma {
     update?: XOR<XOR<EvidenceUpdateToOneWithWhereWithoutAnalysisFormEvidenceInput, EvidenceUpdateWithoutAnalysisFormEvidenceInput>, EvidenceUncheckedUpdateWithoutAnalysisFormEvidenceInput>
   }
 
-  export type EvaluationPeriodCreateNestedOneWithoutCouncilsInput = {
-    create?: XOR<EvaluationPeriodCreateWithoutCouncilsInput, EvaluationPeriodUncheckedCreateWithoutCouncilsInput>
-    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutCouncilsInput
+  export type EvaluationPeriodCreateNestedOneWithoutCouncilInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutCouncilInput, EvaluationPeriodUncheckedCreateWithoutCouncilInput>
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutCouncilInput
     connect?: EvaluationPeriodWhereUniqueInput
   }
 
@@ -452154,12 +452282,12 @@ export namespace Prisma {
     connect?: EvaluationCouncilMemberWhereUniqueInput | EvaluationCouncilMemberWhereUniqueInput[]
   }
 
-  export type EvaluationPeriodUpdateOneRequiredWithoutCouncilsNestedInput = {
-    create?: XOR<EvaluationPeriodCreateWithoutCouncilsInput, EvaluationPeriodUncheckedCreateWithoutCouncilsInput>
-    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutCouncilsInput
-    upsert?: EvaluationPeriodUpsertWithoutCouncilsInput
+  export type EvaluationPeriodUpdateOneRequiredWithoutCouncilNestedInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutCouncilInput, EvaluationPeriodUncheckedCreateWithoutCouncilInput>
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutCouncilInput
+    upsert?: EvaluationPeriodUpsertWithoutCouncilInput
     connect?: EvaluationPeriodWhereUniqueInput
-    update?: XOR<XOR<EvaluationPeriodUpdateToOneWithWhereWithoutCouncilsInput, EvaluationPeriodUpdateWithoutCouncilsInput>, EvaluationPeriodUncheckedUpdateWithoutCouncilsInput>
+    update?: XOR<XOR<EvaluationPeriodUpdateToOneWithWhereWithoutCouncilInput, EvaluationPeriodUpdateWithoutCouncilInput>, EvaluationPeriodUncheckedUpdateWithoutCouncilInput>
   }
 
   export type EvaluationCouncilMemberUpdateManyWithoutEvaluationCouncilNestedInput = {
@@ -452692,6 +452820,10 @@ export namespace Prisma {
     create?: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput> | SurveyQuestionGroupCreateWithoutSurveyTopicInput[] | SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput[]
     connectOrCreate?: SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput | SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput[]
     connect?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
+  }
+
+  export type NullableEnumSurveyTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SurveyType | null
   }
 
   export type ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput = {
@@ -458520,6 +458652,23 @@ export namespace Prisma {
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumEvaluationPeriodStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel> | $Enums.EvaluationPeriodStatus
+  }
+
+  export type NestedEnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EvaluationPeriodStatus | EnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EvaluationPeriodStatus[] | ListEnumEvaluationPeriodStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEvaluationPeriodStatusWithAggregatesFilter<$PrismaModel> | $Enums.EvaluationPeriodStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
+    _max?: NestedEnumEvaluationPeriodStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumEvaluationCriterionStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EvaluationCriterionStatus | EnumEvaluationCriterionStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EvaluationCriterionStatus[] | ListEnumEvaluationCriterionStatusFieldRefInput<$PrismaModel>
@@ -458552,6 +458701,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEvaluationStatusFilter<$PrismaModel>
     _max?: NestedEnumEvaluationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSurveyTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SurveyType | EnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSurveyTypeNullableFilter<$PrismaModel> | $Enums.SurveyType | null
+  }
+
+  export type NestedEnumSurveyTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SurveyType | EnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SurveyType[] | ListEnumSurveyTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSurveyTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.SurveyType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSurveyTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumSurveyTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumSurveyQuestionTypeFilter<$PrismaModel = never> = {
@@ -550340,11 +550506,6 @@ export namespace Prisma {
     create: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
   }
 
-  export type EvaluationCouncilCreateManyPeriodInputEnvelope = {
-    data: EvaluationCouncilCreateManyPeriodInput | EvaluationCouncilCreateManyPeriodInput[]
-    skipDuplicates?: boolean
-  }
-
   export type StandardPeriodUpsertWithWhereUniqueWithoutPeriodInput = {
     where: StandardPeriodWhereUniqueInput
     update: XOR<StandardPeriodUpdateWithoutPeriodInput, StandardPeriodUncheckedUpdateWithoutPeriodInput>
@@ -550380,36 +550541,41 @@ export namespace Prisma {
     conclusion?: StringFilter<"StandardPeriod"> | string
   }
 
-  export type EvaluationCouncilUpsertWithWhereUniqueWithoutPeriodInput = {
-    where: EvaluationCouncilWhereUniqueInput
+  export type EvaluationCouncilUpsertWithoutPeriodInput = {
     update: XOR<EvaluationCouncilUpdateWithoutPeriodInput, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
     create: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
+    where?: EvaluationCouncilWhereInput
   }
 
-  export type EvaluationCouncilUpdateWithWhereUniqueWithoutPeriodInput = {
-    where: EvaluationCouncilWhereUniqueInput
+  export type EvaluationCouncilUpdateToOneWithWhereWithoutPeriodInput = {
+    where?: EvaluationCouncilWhereInput
     data: XOR<EvaluationCouncilUpdateWithoutPeriodInput, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
   }
 
-  export type EvaluationCouncilUpdateManyWithWhereWithoutPeriodInput = {
-    where: EvaluationCouncilScalarWhereInput
-    data: XOR<EvaluationCouncilUpdateManyMutationInput, EvaluationCouncilUncheckedUpdateManyWithoutPeriodInput>
+  export type EvaluationCouncilUpdateWithoutPeriodInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    members?: EvaluationCouncilMemberUpdateManyWithoutEvaluationCouncilNestedInput
   }
 
-  export type EvaluationCouncilScalarWhereInput = {
-    AND?: EvaluationCouncilScalarWhereInput | EvaluationCouncilScalarWhereInput[]
-    OR?: EvaluationCouncilScalarWhereInput[]
-    NOT?: EvaluationCouncilScalarWhereInput | EvaluationCouncilScalarWhereInput[]
-    id?: StringFilter<"EvaluationCouncil"> | string
-    code?: StringNullableFilter<"EvaluationCouncil"> | string | null
-    active?: BoolFilter<"EvaluationCouncil"> | boolean
-    description?: StringNullableFilter<"EvaluationCouncil"> | string | null
-    deletedAt?: DateTimeNullableFilter<"EvaluationCouncil"> | Date | string | null
-    createdAt?: DateTimeFilter<"EvaluationCouncil"> | Date | string
-    updatedAt?: DateTimeFilter<"EvaluationCouncil"> | Date | string
-    createdBy?: UuidNullableFilter<"EvaluationCouncil"> | string | null
-    periodId?: StringFilter<"EvaluationCouncil"> | string
-    name?: StringFilter<"EvaluationCouncil"> | string
+  export type EvaluationCouncilUncheckedUpdateWithoutPeriodInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    members?: EvaluationCouncilMemberUncheckedUpdateManyWithoutEvaluationCouncilNestedInput
   }
 
   export type CriterionCatalogCreateWithoutStandardInput = {
@@ -551906,7 +552072,8 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
-    councils?: EvaluationCouncilCreateNestedManyWithoutPeriodInput
+    status?: $Enums.EvaluationPeriodStatus
+    council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
   }
 
   export type EvaluationPeriodUncheckedCreateWithoutStandardsInput = {
@@ -551921,7 +552088,8 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
-    councils?: EvaluationCouncilUncheckedCreateNestedManyWithoutPeriodInput
+    status?: $Enums.EvaluationPeriodStatus
+    council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
   }
 
   export type EvaluationPeriodCreateOrConnectWithoutStandardsInput = {
@@ -551992,7 +552160,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    councils?: EvaluationCouncilUpdateManyWithoutPeriodNestedInput
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+    council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateWithoutStandardsInput = {
@@ -552007,7 +552176,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    councils?: EvaluationCouncilUncheckedUpdateManyWithoutPeriodNestedInput
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+    council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
   }
 
   export type CriterionPeriodUpsertWithWhereUniqueWithoutEvaluationStandardInput = {
@@ -553377,7 +553547,7 @@ export namespace Prisma {
     evidenceFile?: EvidenceFileUncheckedUpdateManyWithoutEvidenceNestedInput
   }
 
-  export type EvaluationPeriodCreateWithoutCouncilsInput = {
+  export type EvaluationPeriodCreateWithoutCouncilInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -553389,10 +553559,11 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
   }
 
-  export type EvaluationPeriodUncheckedCreateWithoutCouncilsInput = {
+  export type EvaluationPeriodUncheckedCreateWithoutCouncilInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -553404,12 +553575,13 @@ export namespace Prisma {
     name: string
     startDate?: Date | string
     endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
   }
 
-  export type EvaluationPeriodCreateOrConnectWithoutCouncilsInput = {
+  export type EvaluationPeriodCreateOrConnectWithoutCouncilInput = {
     where: EvaluationPeriodWhereUniqueInput
-    create: XOR<EvaluationPeriodCreateWithoutCouncilsInput, EvaluationPeriodUncheckedCreateWithoutCouncilsInput>
+    create: XOR<EvaluationPeriodCreateWithoutCouncilInput, EvaluationPeriodUncheckedCreateWithoutCouncilInput>
   }
 
   export type EvaluationCouncilMemberCreateWithoutEvaluationCouncilInput = {
@@ -553450,18 +553622,18 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EvaluationPeriodUpsertWithoutCouncilsInput = {
-    update: XOR<EvaluationPeriodUpdateWithoutCouncilsInput, EvaluationPeriodUncheckedUpdateWithoutCouncilsInput>
-    create: XOR<EvaluationPeriodCreateWithoutCouncilsInput, EvaluationPeriodUncheckedCreateWithoutCouncilsInput>
+  export type EvaluationPeriodUpsertWithoutCouncilInput = {
+    update: XOR<EvaluationPeriodUpdateWithoutCouncilInput, EvaluationPeriodUncheckedUpdateWithoutCouncilInput>
+    create: XOR<EvaluationPeriodCreateWithoutCouncilInput, EvaluationPeriodUncheckedCreateWithoutCouncilInput>
     where?: EvaluationPeriodWhereInput
   }
 
-  export type EvaluationPeriodUpdateToOneWithWhereWithoutCouncilsInput = {
+  export type EvaluationPeriodUpdateToOneWithWhereWithoutCouncilInput = {
     where?: EvaluationPeriodWhereInput
-    data: XOR<EvaluationPeriodUpdateWithoutCouncilsInput, EvaluationPeriodUncheckedUpdateWithoutCouncilsInput>
+    data: XOR<EvaluationPeriodUpdateWithoutCouncilInput, EvaluationPeriodUncheckedUpdateWithoutCouncilInput>
   }
 
-  export type EvaluationPeriodUpdateWithoutCouncilsInput = {
+  export type EvaluationPeriodUpdateWithoutCouncilInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -553473,10 +553645,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
   }
 
-  export type EvaluationPeriodUncheckedUpdateWithoutCouncilsInput = {
+  export type EvaluationPeriodUncheckedUpdateWithoutCouncilInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -553488,6 +553661,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
   }
 
@@ -553517,7 +553691,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
-    period: EvaluationPeriodCreateNestedOneWithoutCouncilsInput
+    period: EvaluationPeriodCreateNestedOneWithoutCouncilInput
   }
 
   export type EvaluationCouncilUncheckedCreateWithoutMembersInput = {
@@ -553684,7 +553858,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
-    period?: EvaluationPeriodUpdateOneRequiredWithoutCouncilsNestedInput
+    period?: EvaluationPeriodUpdateOneRequiredWithoutCouncilNestedInput
   }
 
   export type EvaluationCouncilUncheckedUpdateWithoutMembersInput = {
@@ -555568,6 +555742,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
     survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
   }
@@ -555582,6 +555757,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
   }
@@ -555653,6 +555829,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
     createdBy?: UuidNullableFilter<"SurveyTopic"> | string | null
     name?: StringFilter<"SurveyTopic"> | string
+    type?: EnumSurveyTypeNullableFilter<"SurveyTopic"> | $Enums.SurveyType | null
   }
 
   export type SurveyTopicCreateWithoutClusterSurveyInput = {
@@ -555665,6 +555842,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
   }
@@ -555679,6 +555857,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
   }
@@ -555962,6 +556141,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -555976,6 +556156,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -556316,6 +556497,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
   }
@@ -556330,6 +556512,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    type?: $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
   }
@@ -556739,6 +556922,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -556753,6 +556937,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
     surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -619193,18 +619378,6 @@ export namespace Prisma {
     conclusion?: string
   }
 
-  export type EvaluationCouncilCreateManyPeriodInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    name: string
-  }
-
   export type StandardPeriodUpdateWithoutPeriodInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619250,44 +619423,6 @@ export namespace Prisma {
     order?: IntFieldUpdateOperationsInput | number
     opening?: StringFieldUpdateOperationsInput | string
     conclusion?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type EvaluationCouncilUpdateWithoutPeriodInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    members?: EvaluationCouncilMemberUpdateManyWithoutEvaluationCouncilNestedInput
-  }
-
-  export type EvaluationCouncilUncheckedUpdateWithoutPeriodInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    members?: EvaluationCouncilMemberUncheckedUpdateManyWithoutEvaluationCouncilNestedInput
-  }
-
-  export type EvaluationCouncilUncheckedUpdateManyWithoutPeriodInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CriterionCatalogCreateManyStandardInput = {
@@ -621140,6 +621275,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
     survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -621154,6 +621290,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
     clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
     survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
   }
@@ -621168,6 +621305,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    type?: NullableEnumSurveyTypeFieldUpdateOperationsInput | $Enums.SurveyType | null
   }
 
   export type SurveyChoiceCreateManyClusterSurveyInput = {

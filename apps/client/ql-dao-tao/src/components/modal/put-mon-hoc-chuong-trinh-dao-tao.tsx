@@ -197,8 +197,14 @@ const PutTrainingBlockSubject = () => {
                 <FormItem form={form} name="subjectId" label="Môn học" required>
                     <Select
                         mode={input?.trainingBlockSubjectId ? undefined : 'multiple'}
-                        allowClear
-                        showSearch
+                        {...(input?.trainingBlockSubjectId
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                         placeholder="Chọn phiên bản môn học"
                         options={subjectVersionData.map((item: SubjectVersion) => {
                             return {
@@ -209,7 +215,6 @@ const PutTrainingBlockSubject = () => {
                                 value: item.id,
                             }
                         })}
-                        disabled={!!input?.trainingBlockSubjectId}
                     />
                 </FormItem>
             </Col>

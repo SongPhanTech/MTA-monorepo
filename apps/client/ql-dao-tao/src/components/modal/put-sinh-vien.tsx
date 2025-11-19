@@ -302,7 +302,14 @@ const PutStudentModal = () => {
                                 maxTagCount={'responsive'}
                                 placeholder="Chọn phiên bản ngân hàng câu hỏi"
                                 options={idCardOptions}
-                                disabled={!!id}
+                                {...(id
+                                    ? {
+                                          showSearch: false,
+                                          allowClear: false,
+                                          showArrow: false,
+                                          open: false,
+                                      }
+                                    : {})}
                             />
                         </FormItem>
                     </Col>

@@ -16868,17 +16868,21 @@ const metadata: ModelMeta = {
                     name: "endDate",
                     type: "DateTime",
                     isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationPeriodStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, standards: {
                     name: "standards",
                     type: "StandardPeriod",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'period',
-                }, councils: {
-                    name: "councils",
+                }, council: {
+                    name: "council",
                     type: "EvaluationCouncil",
                     isDataModel: true,
-                    isArray: true,
+                    isOptional: true,
                     backLink: 'period',
                 },
             }, uniqueConstraints: {
@@ -17943,7 +17947,7 @@ const metadata: ModelMeta = {
                     name: "period",
                     type: "EvaluationPeriod",
                     isDataModel: true,
-                    backLink: 'councils',
+                    backLink: 'council',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
                     foreignKeyMapping: { "id": "periodId" },
@@ -17969,6 +17973,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, periodId: {
+                    name: "periodId",
+                    fields: ["periodId"]
                 },
             },
         },
@@ -18317,6 +18324,10 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'surveyTopic',
                     isRelationOwner: true,
+                }, type: {
+                    name: "type",
+                    type: "SurveyType",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

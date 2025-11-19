@@ -11,7 +11,7 @@ import { useState } from 'react'
 export default function ClussterSurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
     const [selectedId, setSelectedId] = useState('')
-    const [survey, setSurvey] = useState<Survey|null>(null)
+    const [survey, setSurvey] = useState<Survey | null>(null)
     const items = [
         {
             key: '1',
@@ -32,11 +32,10 @@ export default function ClussterSurveyPage() {
             children: (
                 <DetailSurveyPage
                     selectedId={selectedId}
-                    surveyId={survey?.id||''}
+                    surveyId={survey?.id || ''}
                     setSurvey={(value) => {
                         setSurvey(value)
                     }}
-
                 />
             ),
             disabled: !selectedId,
@@ -44,7 +43,7 @@ export default function ClussterSurveyPage() {
         {
             key: '3',
             label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien  survey={survey} />,
+            children: <DanhSachHocVien survey={survey} />,
             disabled: !survey?.id,
         },
         {
@@ -53,10 +52,10 @@ export default function ClussterSurveyPage() {
             children: <ClusterSurveyReport selectedId={selectedId} />,
             disabled: !selectedId,
         },
-         {
+        {
             key: '5',
             label: 'Báo cáo chi tiết',
-            children: <SurveyReport selectedId={survey?.id||''} />,
+            children: <SurveyReport selectedId={survey?.id || ''} />,
             disabled: !survey?.id,
         },
     ]

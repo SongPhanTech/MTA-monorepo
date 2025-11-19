@@ -41,12 +41,20 @@ model SurveyObjectType extends Base {
   @@schema("khao-thi")
 }
 
+enum SurveyType {
+  SINGLE
+  CLUSTER
+  @@schema("khao-thi")
+}
+
 // chủ đề khảo sát (Đánh giá giảng viên, đánh giá cơ sở vật chất,...)
 model SurveyTopic extends Base {
   name                String
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
+
+  type                SurveyType?
 
   @@schema("khao-thi")
 }

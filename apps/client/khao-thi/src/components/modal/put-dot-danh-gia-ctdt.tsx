@@ -52,7 +52,7 @@ const getAllKeys = (nodes: TreeNode[]) => {
 const PutEvaluationPeriod = () => {
     const [form] = Form.useForm<PutEvaluationPeriod>()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || ''
+    const idProfile = me?.sDM_NhanVienId || 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
     const {
         isOpen,
         onClose,
@@ -64,7 +64,7 @@ const PutEvaluationPeriod = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: initialData } = useFindUniqueEvaluationPeriod(
-        { where: { id }, include: { councils: true } },
+        { where: { id }, include: { council: true } },
         { enabled: !!id }
     )
 

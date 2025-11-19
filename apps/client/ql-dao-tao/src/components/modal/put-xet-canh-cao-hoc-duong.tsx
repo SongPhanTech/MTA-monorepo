@@ -175,7 +175,14 @@ const PutDisciplinaryWarning = () => {
                                 label: [i.code, i.userProfile.fullname].filter(Boolean).join(' - '),
                             }
                         })}
-                        disabled={!!input?.id}
+                        {...(input?.id
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                     />
                 </FormItem>
             </Col>

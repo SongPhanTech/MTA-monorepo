@@ -162,13 +162,13 @@ const DefaultLayout = ({
                         </div>
                         <HeaderApp />
                     </Header>
-                    <Content className="mx-2 mt-20">
+                    <Content className="mt-16">
                         {unLayout ? (
                             children
                         ) : (
                             <div
                                 className={cn(
-                                    'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
+                                    'min-h-[calc(100vh-64px-24px)] bg-white shadow-sm px-4',
                                     className
                                 )}
                                 style={{
