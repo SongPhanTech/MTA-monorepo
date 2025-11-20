@@ -160,7 +160,6 @@ export default function ReviewCriteriaAnalysis({
                         tabBarStyle={{
                             height: '100%',
                             overflow: 'auto',
-                            width: '175px',
                         }}
                     />
                 </Col>

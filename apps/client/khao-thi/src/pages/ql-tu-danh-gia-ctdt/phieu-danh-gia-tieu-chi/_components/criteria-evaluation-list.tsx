@@ -68,7 +68,6 @@ export default function CriteriaEvaluationList() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

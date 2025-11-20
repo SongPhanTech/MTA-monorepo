@@ -118,13 +118,13 @@ export default function SumaryCriteriaEvaluationSubPage({
 
     return (
         <div className="overflow-x-hidden">
-            <div className="flex justify-end mb-4">
-                <Button type="primary" onClick={() => setShowComments(!showComments)}>
+            <div className="flex justify-end mb-2">
+                <Button type="primary" size="small" onClick={() => setShowComments(!showComments)}>
                     Yêu cầu chỉnh sửa
                 </Button>
             </div>
 
-            <Form form={form} layout="horizontal" className="form-evidence">
+            <Form form={form} layout="vertical" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -154,7 +154,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'currentSituation',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -165,7 +168,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'strengths',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -176,7 +182,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'weakness',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -187,11 +196,14 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'actionPlan',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
-                                                            <div className="mb-3 font-bold">
+                                                            {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     ),
                                                 },
