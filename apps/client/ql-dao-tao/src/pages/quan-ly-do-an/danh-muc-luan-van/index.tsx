@@ -30,6 +30,7 @@ import {
   Popconfirm,
   Row,
   Tag,
+  Tooltip,
 } from "antd";
 import type React from "react";
 import { useState } from "react";
@@ -39,11 +40,15 @@ import { useDisclosure } from "react-hook-disclosure-modal";
 import {
   CouncilProposalStatus,
   CouncilRole,
+  ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db/client";
 import { buildOrgTree } from "@lib/utils";
 import { getMinioUrl } from "@workspace/constant";
-import { createStyles, css } from "antd-style";
+import { createStyles } from "antd-style";
+import RejectIcon from "@components/icons/reject";
+import ApproveIcon from "@components/icons/approve";
+
 // import { getMinioUrl } from '@workspace/constant'
 interface ExpertStat {
   expertId: string;
@@ -104,12 +109,17 @@ export default function PostgraduateProject({
           title: rowData.title,
           description: description,
           status: rowData.status,
-          supervisor: {
-            connect: {
-              id: rowData.supervisor === "" ? null : rowData.supervisor,
-            },
-          },
         };
+        const supervisorPayload =
+          rowData.supervisor === "" || rowData.supervisor === null
+            ? { supervisor: { disconnect: true } }
+            : {
+                supervisor: {
+                  connect: {
+                    id: rowData.supervisor,
+                  },
+                },
+              };
         const coSupervisorPayload =
           rowData.coSupervisor === "" || rowData.coSupervisor === null
             ? { coSupervisor: { disconnect: true } }
@@ -123,6 +133,7 @@ export default function PostgraduateProject({
 
         const payload = {
           ...basePayload,
+          ...supervisorPayload,
           ...coSupervisorPayload,
         };
 
@@ -1129,8 +1140,8 @@ export default function PostgraduateProject({
                 <Form.Item name="searchText" label="Lớp học">
                   <Select
                     mode="multiple"
-                    className="w-full min-w-36"
-                    maxTagCount={2}
+                    className=" w-64"
+                    maxTagCount="responsive"
                     maxTagPlaceholder={(omittedValues) =>
                       `+${omittedValues.length}`
                     }
@@ -1171,7 +1182,7 @@ export default function PostgraduateProject({
                   >
                     Xem kết quả
                   </Button>
-                  {role !== "P7" && (
+                  {role === "P7" ? (
                     <Popconfirm
                       placement="rightTop"
                       title="Xác nhận tạo dữ liệu mẫu"
@@ -1189,7 +1200,7 @@ export default function PostgraduateProject({
                         Tạo dữ liệu mẫu
                       </Button>
                     </Popconfirm>
-                  )}
+                  ) : null}
                   {editingRowKeys.length > 0 && isManage ? (
                     <>
                       <Button
@@ -1310,13 +1321,19 @@ export default function PostgraduateProject({
                             ?.title || "";
 
                     return (
-                      <TextArea
-                        rows={2}
-                        value={currentValue}
-                        onChange={(e) => {
-                          handleEditChange(record?.id, "title", e.target.value);
-                        }}
-                      />
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <TextArea
+                          rows={2}
+                          value={currentValue}
+                          onChange={(e) => {
+                            handleEditChange(
+                              record?.id,
+                              "title",
+                              e.target.value
+                            );
+                          }}
+                        />
+                      </div>
                     );
                   }
                   return (
@@ -1337,17 +1354,21 @@ export default function PostgraduateProject({
                             ?.supervisor?.name || "";
 
                     return (
-                      <Select
-                        className="w-full"
-                        options={expertProfileData?.map((item) => ({
-                          label: item.name,
-                          value: item.id,
-                        }))}
-                        value={currentValue || ""}
-                        onChange={(value) =>
-                          handleEditChange(record?.id, "supervisor", value)
-                        }
-                      />
+                      <div
+                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                      >
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "supervisor", value)
+                          }
+                        />
+                      </div>
                     );
                   }
                   return (
@@ -1369,17 +1390,19 @@ export default function PostgraduateProject({
                             ?.coSupervisor?.name || "";
 
                     return (
-                      <Select
-                        className="w-full"
-                        options={expertProfileData?.map((item) => ({
-                          label: item.name,
-                          value: item.id,
-                        }))}
-                        value={currentValue || ""}
-                        onChange={(value) =>
-                          handleEditChange(record?.id, "coSupervisor", value)
-                        }
-                      />
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "coSupervisor", value)
+                          }
+                        />
+                      </div>
                     );
                   }
                   return (
@@ -1463,16 +1486,20 @@ export default function PostgraduateProject({
                             .trim()
                             .split(":")[1] || "";
                     return (
-                      <Input
-                        value={currentValue || ""}
-                        onChange={(e) =>
-                          handleEditChange(
-                            record?.id,
-                            "language",
-                            e.target.value
-                          )
-                        }
-                      />
+                      <div
+                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                      >
+                        <Input
+                          value={currentValue || ""}
+                          onChange={(e) =>
+                            handleEditChange(
+                              record?.id,
+                              "language",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
                     );
                   }
                   const data =
@@ -1495,17 +1522,21 @@ export default function PostgraduateProject({
                             .trim()
                             .split(":")[1] || "";
                     return (
-                      <Select
-                        className="w-full"
-                        options={["Luận văn", "Đề án"].map((item) => ({
-                          label: item,
-                          value: item,
-                        }))}
-                        value={currentValue || ""}
-                        onChange={(value) =>
-                          handleEditChange(record?.id, "type", value)
-                        }
-                      />
+                      <div
+                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                      >
+                        <Select
+                          className="w-full"
+                          options={["Luận văn", "Đề án"].map((item) => ({
+                            label: item,
+                            value: item,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "type", value)
+                          }
+                        />
+                      </div>
                     );
                   }
                   const data =
@@ -1527,19 +1558,23 @@ export default function PostgraduateProject({
                         : record?.thesisRegistrations?.[0]?.thesisProject
                             ?.status || "";
                     return (
-                      <Select
-                        className="w-full"
-                        options={useThesisProjectStatusOptions().thesisProjectStatusOptions.map(
-                          (item) => ({
-                            label: item.label,
-                            value: item.value,
-                          })
-                        )}
-                        value={currentValue || ""}
-                        onChange={(value) =>
-                          handleEditChange(record?.id, "status", value)
-                        }
-                      />
+                      <div
+                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                      >
+                        <Select
+                          className="w-full"
+                          options={useThesisProjectStatusOptions().thesisProjectStatusOptions.map(
+                            (item) => ({
+                              label: item.label,
+                              value: item.value,
+                            })
+                          )}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "status", value)
+                          }
+                        />
+                      </div>
                     );
                   }
                   const label = getThesisProjectStatusLabel(
@@ -1553,50 +1588,52 @@ export default function PostgraduateProject({
               },
               {
                 title: "Thao tác",
-                width: 60,
+                width: 100,
                 fixed: "right",
                 align: "center",
                 render: (_, record: any) => {
-                  if (record?.id) {
+                  if (record?.id && role === "P7") {
                     return (
                       <Row className="justify-center gap-2">
-                        <DeleteIcon
-                          className="text-sm text-red-700 cursor-pointer"
-                          onClick={async () => {
-                            const payload = {
-                              deletedAt: new Date(),
-                            };
-                            try {
-                              showSpinner();
-                              await updateThesisProject({
-                                data: payload,
-                                where: {
-                                  id: record?.id,
-                                },
-                              });
-                              message.success("Xóa thành công");
-                            } catch (error) {
-                              message.error(
-                                "Đã xảy ra lỗi, vui lòng kiểm tra lại"
-                              );
-                            } finally {
-                              hideSpinner();
-                            }
-                          }}
-                        />
+                        <div
+                          className="flex items-center gap-2"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ApproveIcon
+                            title="Phê duyệt"
+                            className="text-lg font-bold text-green-700"
+                            size={24}
+                          />
 
-                        <SettingsIcon
-                          title="Cấu hình bảo vệ luận văn/Đề án"
-                          className="text-sm text-yellow-700 cursor-pointer"
-                          onClick={() => {
-                            openModalCauHinhLuanVan({
-                              thesisProjectId:
-                                record?.thesisRegistrations?.[0]?.thesisProject
-                                  ?.id,
-                              thesisSessionId: thesisSessionSelected?.id || "",
-                            });
-                          }}
-                        />
+                          <DeleteIcon
+                            title="Xóa"
+                            size={24}
+                            className="text-lg font-bold text-red-700"
+                            onClick={async () => {
+                              const payload = {
+                                deletedAt: new Date(),
+                              };
+                              try {
+                                showSpinner();
+                                await updateThesisProject({
+                                  data: payload,
+                                  where: {
+                                    id:
+                                      record?.thesisRegistrations?.[0]
+                                        ?.thesisProject?.id || "",
+                                  },
+                                });
+                                message.success("Xóa thành công");
+                              } catch (error) {
+                                message.error(
+                                  "Đã xảy ra lỗi, vui lòng kiểm tra lại"
+                                );
+                              } finally {
+                                hideSpinner();
+                              }
+                            }}
+                          />
+                        </div>
                       </Row>
                     );
                   }
@@ -1606,6 +1643,15 @@ export default function PostgraduateProject({
             ]}
             data={students || []}
             rowSelection={rowSelection}
+            onRow={(record) => ({
+              onClick: () => {
+                openModalCauHinhLuanVan({
+                  thesisProjectId:
+                    record?.thesisRegistrations?.[0]?.thesisProject?.id,
+                  thesisSessionId: thesisSessionSelected?.id || "",
+                });
+              },
+            })}
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
@@ -1625,7 +1671,3 @@ export default function PostgraduateProject({
     </div>
   );
 }
-
-PostgraduateProject.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>;
-};

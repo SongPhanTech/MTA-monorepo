@@ -909,6 +909,7 @@ const ModalCauHinhLuanVan = () => {
                 data={document}
                 relationId={thesisProjectData?.librarySubmission?.id ?? ""}
                 relationType="librarySubmissionId"
+                titleForm="documentFile"
               />
             </FormItem>
           </Col>
