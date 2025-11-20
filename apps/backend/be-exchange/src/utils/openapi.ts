@@ -7,10 +7,6 @@ export function setupOpenApi(app: OpenAPIHono) {
         info: { version: '1.0.0', title: 'My API' },
         servers: [
             {
-                url: 'https://api.shared.daotao.mta.swantech.vn',
-                description: 'Dev environment',
-            },
-            {
                 url: new URL(c.req.url).origin,
                 description: 'Current environment',
             },

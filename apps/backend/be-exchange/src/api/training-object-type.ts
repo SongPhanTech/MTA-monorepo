@@ -7,7 +7,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const getTrainingObjectType = createRoute({
     operationId: 'getTrainingObjectType',
     tags: ['TrainingObjectType'],
-    path: 'get-list-training-object-type',
+    path: '/get-training-object-type',
     summary: 'DS Đối tượng đào tạo',
     method: 'get',
     request: {},
