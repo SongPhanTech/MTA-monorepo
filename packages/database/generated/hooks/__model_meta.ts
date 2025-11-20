@@ -9036,10 +9036,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'staffManagement',
-                }, initSize: {
-                    name: "initSize",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, students: {
                     name: "students",
                     type: "Student",

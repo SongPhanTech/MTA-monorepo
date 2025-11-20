@@ -41,17 +41,20 @@ const openTelemetrySDK = new NodeSDK({
 })
 openTelemetrySDK.start()
 
-export const prisma = new PrismaClient()
+export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
 
-const instrumentationConfig = {
-    serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
-    serviceVersion: '1.0.0',
-    captureRequestHeaders: ['user-agent', 'service-name'],
-}
+const tracer = trace.getTracer('mta-be-ql-dao-tao-tracer')
 
-app.use(httpInstrumentationMiddleware(instrumentationConfig))
+app.use(
+    httpInstrumentationMiddleware({
+        serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
+        serviceVersion: '1.0.0',
+        captureRequestHeaders: ['user-agent', 'service-name', 'x-forwarded-for'],
+        tracer,
+    })
+)
 
 app.use(
     '*',
@@ -124,8 +127,7 @@ app.onError((err, c) => {
         return c.json({ message: err.message }, err.status)
     }
 
-    const tracer = trace.getTracer('InternalError')
-    const parentSpan = getContext().var.rootSpan
+    const parentSpan = trace.getActiveSpan() || getContext().var.rootSpan
 
     const subSpan = tracer.startSpan(
         'internal-error',

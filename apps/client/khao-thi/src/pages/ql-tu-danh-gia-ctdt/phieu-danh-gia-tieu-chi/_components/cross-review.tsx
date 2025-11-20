@@ -20,6 +20,8 @@ export type DataTabCrossReviewType = StandardPeriod & {
                   evaluationCriterionComments?: (EvaluationCriterionComment & {
                       reviewer?: { fullname?: string | null }
                   })[]
+                  lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  deadlineReview?: Date | null
               })
             | null
     })[]
@@ -27,7 +29,7 @@ export type DataTabCrossReviewType = StandardPeriod & {
 
 export default function CrossReview() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'f596dc32-d3e2-48ff-a09c-734379bf3c46'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data } = useFindUniqueEvaluationPeriod(
@@ -85,6 +87,15 @@ export default function CrossReview() {
                             include: {
                                 evaluationCriterion: {
                                     include: {
+                                        lecturer: {
+                                            include: {
+                                                userProfile: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                        },
                                         evaluationCriterionComments: {
                                             include: {
                                                 reviewer: {
@@ -140,7 +151,6 @@ export default function CrossReview() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

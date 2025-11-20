@@ -87,6 +87,9 @@ margin: 0 0 8px 0;
     outline: 1px solid #f0f0f0;
     overflow: auto;
 }
+.ant-table-container {
+    outline: 1px solid #f0f0f0;
+}
 
 .ant-table .ant-table-thead > tr > th:first-child {
   border-top-left-radius: 0px!important;

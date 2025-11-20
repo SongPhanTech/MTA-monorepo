@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 import type { $Enums } from '@workspace/db'
 
-const app = new OpenAPIHono({ strict: false })
+const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getListSubject = createRoute({
     operationId: 'get-list-subject',
@@ -89,7 +89,7 @@ app.openapi(getListSubject, async (c) => {
 
     return c.json(
         {
-            result_code: '0000',
+            result_code: '000',
             result_desc: 'success',
             data: res.map((item) => ({
                 subject_code: item.code,

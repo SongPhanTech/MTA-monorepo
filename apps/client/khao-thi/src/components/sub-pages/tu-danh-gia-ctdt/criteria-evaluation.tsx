@@ -6,14 +6,10 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
-import {
-    ClockCircleOutlined,
-    CheckCircleOutlined,
-    ExclamationCircleOutlined,
-    LockOutlined,
-    MessageOutlined,
-} from '@ant-design/icons'
+import { ClockCircleOutlined, MessageOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
+import { getStatusConfig } from '@constants/constants'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -24,29 +20,6 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const [showComments, setShowComments] = useState(false)
 
     const { hideSpinner, showSpinner } = useSpinner()
-
-    const getStatusConfig = (status: $Enums.EvaluationStatus) => {
-        switch (status) {
-            case $Enums.EvaluationStatus.LOCK:
-                return { color: 'default', text: 'Khoá', icon: <LockOutlined /> }
-            case $Enums.EvaluationStatus.PENDING:
-                return { color: 'warning', text: 'Chưa nộp', icon: <ClockCircleOutlined /> }
-            case $Enums.EvaluationStatus.SUBMITTED:
-                return { color: 'processing', text: 'Đã nộp', icon: <CheckCircleOutlined /> }
-            case $Enums.EvaluationStatus.REVISION:
-                return {
-                    color: 'error',
-                    text: 'Yêu cầu chỉnh sửa',
-                    icon: <ExclamationCircleOutlined />,
-                }
-            case $Enums.EvaluationStatus.APPROVED:
-                return { color: 'success', text: 'Đã duyệt', icon: <CheckCircleOutlined /> }
-            case $Enums.EvaluationStatus.COMPLETED:
-                return { color: 'success', text: 'Hoàn thành', icon: <CheckCircleOutlined /> }
-            default:
-                return { color: 'default', text: 'Không xác định', icon: null }
-        }
-    }
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
@@ -164,92 +137,72 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const commentsCount =
         data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments?.length || 0
 
-    const getDeadlineStatus = (deadline: Date | string) => {
-        const now = dayjs()
-        const deadlineDate = dayjs(deadline)
-        const daysUntilDeadline = deadlineDate.diff(now, 'day')
-
-        if (daysUntilDeadline < 0) {
-            return {
-                color: 'red',
-                text: 'Quá hạn',
-            }
-        }
-        if (daysUntilDeadline <= 3) {
-            return {
-                color: 'orange',
-                text: 'Sắp quá hạn',
-            }
-        }
-
-        return { color: 'blue', text: '' }
-    }
+    const isReadOnly =
+        currentStatus === $Enums.EvaluationStatus.SUBMITTED ||
+        currentStatus === $Enums.EvaluationStatus.APPROVED ||
+        currentStatus === $Enums.EvaluationStatus.COMPLETED
 
     const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
     const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
 
     return (
         <div className="overflow-x-hidden">
-            <div className="flex flex-col lg:flex-row justify-between items-start mb-4 pt-2 gap-4">
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start sm:items-center flex-wrap">
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Trạng thái</div>
-                        <Tag
-                            color={statusConfig.color}
-                            icon={statusConfig.icon}
-                            className="text-sm"
-                        >
+            <div className=" bg-white py-2 border-b border-gray-100 flex flex-row justify-between items-center mb-4 gap-4">
+                <div className="flex flex-row gap-4 items-center text-xs">
+                    <div className="flex items-center gap-1">
+                        <span className="text-gray-500">Người được giao</span>
+                        <span className="font-medium">
+                            {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
+                                ?.fullname || 'Chưa phân công'}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        {/* <ClockCircleOutlined className="text-gray-400 text-xs" />
+                        <span className="text-gray-500">
+                            {data?.criteria?.[0]?.evaluationCriterion?.deadline
+                                ? dayjs(data.criteria[0].evaluationCriterion.deadline).format(
+                                      'DD/MM/YYYY'
+                                  )
+                                : 'Chưa có hạn'}
+                        </span> */}
+                        {deadline && deadlineStatus && deadlineStatus.text && (
+                            <Tag color={deadlineStatus.color} className="text-xs">
+                                {deadlineStatus.text}
+                            </Tag>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <span className="text-gray-500">Trạng thái</span>
+                        <Tag color={statusConfig.color} className="text-xs ml-1">
                             {statusConfig.text}
                         </Tag>
                     </div>
-
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Hạn làm phiếu</div>
-                        <div className="flex items-center gap-2">
-                            <ClockCircleOutlined className="text-gray-400" />
-                            <span className="font-medium">
-                                {data?.criteria?.[0]?.evaluationCriterion?.deadline
-                                    ? dayjs(data.criteria[0].evaluationCriterion.deadline).format(
-                                          'DD/MM/YYYY'
-                                      )
-                                    : 'Chưa có hạn'}
-                            </span>
-                            {deadline && deadlineStatus && deadlineStatus.text && (
-                                <Tag color={deadlineStatus.color}>{deadlineStatus.text}</Tag>
-                            )}
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Người được giao</div>
-                        <div className="font-medium">
-                            {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
-                                ?.fullname || 'Chưa phân công'}
-                        </div>
-                    </div>
                 </div>
 
-                <div className="flex gap-2 mt-2 mr-1">
+                <div className="flex gap-2 mr-2">
                     <Badge count={commentsCount} showZero offset={[-5, 5]}>
                         <Button
                             type="primary"
                             className="bg-yellow-400"
+                            size="small"
                             onClick={() => setShowComments(!showComments)}
                         >
                             Xem đánh giá
                         </Button>
                     </Badge>
-                    {currentStatus !== $Enums.EvaluationStatus.APPROVED &&
+                    {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
+                        currentStatus !== $Enums.EvaluationStatus.APPROVED &&
                         currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
                             <>
                                 <Button
                                     type="primary"
                                     className="bg-blue-500"
+                                    size="small"
                                     onClick={handleEvaluationForm}
                                 >
                                     Nộp phiếu đánh giá
                                 </Button>
-                                <Button type="primary" onClick={handleSubmit}>
+                                <Button type="primary" size="small" onClick={handleSubmit}>
                                     Lưu đánh giá
                                 </Button>
                             </>
@@ -321,7 +274,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 </Card>
             )}
 
-            <Form form={form} layout="horizontal" className="form-evidence">
+            <Form form={form} layout="vertical" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -351,7 +304,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                                     'currentSituation',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={!isReadOnly}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -362,7 +318,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                                     'strengths',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={!isReadOnly}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -373,7 +332,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                                     'weakness',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={!isReadOnly}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -384,11 +346,14 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                                     'actionPlan',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={!isReadOnly}
+                                                                />
                                                             </Form.Item>
-                                                            <div className="mb-3 font-bold">
+                                                            {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
-                                                            </div>
+                                                            </div> */}
                                                             {/* <div className="mb-1">
                                                                 Điểm tối thiểu:{' '}
                                                                 <span className="font-bold">

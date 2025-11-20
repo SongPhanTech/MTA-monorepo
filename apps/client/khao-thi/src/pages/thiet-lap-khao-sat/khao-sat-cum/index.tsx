@@ -4,14 +4,18 @@ import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
 import DefaultLayout from '@layouts/default-layout'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
-import { Survey } from '@workspace/db'
+import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
+
+export type LectuerType=Lecturer &{
+    survey:Survey[]
+}
 
 export default function ClussterSurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
     const [selectedId, setSelectedId] = useState('')
-    const [survey, setSurvey] = useState<Survey | null>(null)
+    const [lecturer, setLecturer] = useState<LectuerType | null>(null)
     const items = [
         {
             key: '1',
@@ -21,7 +25,7 @@ export default function ClussterSurveyPage() {
                     selectedId={selectedId}
                     setSelectedId={(value) => {
                         setSelectedId(value)
-                        setSurvey(null)
+                        setLecturer(null)
                     }}
                 />
             ),
@@ -32,9 +36,9 @@ export default function ClussterSurveyPage() {
             children: (
                 <DetailSurveyPage
                     selectedId={selectedId}
-                    surveyId={survey?.id || ''}
+                    surveyId={lecturer?.id || ''}
                     setSurvey={(value) => {
-                        setSurvey(value)
+                        setLecturer(value)
                     }}
                 />
             ),
@@ -43,8 +47,8 @@ export default function ClussterSurveyPage() {
         {
             key: '3',
             label: 'Danh sách người làm khảo sát',
-            children: <DanhSachHocVien survey={survey} />,
-            disabled: !survey?.id,
+            children: <DanhSachHocVien lecturer={lecturer} selectedId={selectedId} />,
+            disabled: !lecturer?.id,
         },
         {
             key: '4',
@@ -55,8 +59,8 @@ export default function ClussterSurveyPage() {
         {
             key: '5',
             label: 'Báo cáo chi tiết',
-            children: <SurveyReport selectedId={survey?.id || ''} />,
-            disabled: !survey?.id,
+            children: <SurveyReport selectedId={lecturer?.id || ''} />,
+            disabled: !lecturer?.id,
         },
     ]
 
