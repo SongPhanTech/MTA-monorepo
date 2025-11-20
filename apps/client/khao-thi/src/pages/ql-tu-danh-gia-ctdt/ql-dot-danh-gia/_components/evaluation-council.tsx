@@ -10,19 +10,12 @@ import {
     useFindFirstEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { Button, Card, Col, Descriptions, Empty, Flex, message, Row } from 'antd'
+import { Button, Col, Empty, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
-    const { onOpen: onOpenPutEvaluationCouncil } = useDisclosure<{
-        evaluationPeriodId?: string
-        evaluationCouncilId?: string
-    }>({
-        tag: 'PutEvaluationCouncil',
-    })
-
     const { onOpen } = useDisclosure<{
         evaluationCouncilId?: string
         evaluationCouncilMemberId?: string
@@ -168,209 +161,167 @@ export default function EvaluationCouncilTab() {
         }
     }
 
-    if (!evaluationCouncil) {
-        return (
-            <Flex justify="center" align="center" style={{ minHeight: 500 }}>
-                <Empty description="Chưa có hội đồng đánh giá" image={Empty.PRESENTED_IMAGE_SIMPLE}>
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            onOpenPutEvaluationCouncil({
-                                evaluationPeriodId: selectedEvaluationPeriodId,
-                            })
-                        }}
-                    >
-                        <BookPlus />
-                        Tạo hội đồng
-                    </Button>
-                </Empty>
-            </Flex>
-        )
-    }
-
     return (
         <div>
             <Row gutter={[16, 16]}>
-                {/* Thông tin hội đồng */}
-                <Col span={10}>
-                    <Card
-                        size="small"
-                        title={
-                            <Flex justify="space-between" align="center">
-                                <span style={{ fontSize: 16, fontWeight: 600 }}>
-                                    Thông tin hội đồng
-                                </span>
-
-                                <EditIcon
-                                    onClick={(e) => {
-                                        onOpenPutEvaluationCouncil({
-                                            evaluationCouncilId: evaluationCouncil.id,
+                <Col span={24}>
+                    {tableDataCollapse.length === 0 ? (
+                        <Flex justify="center" align="center" style={{ minHeight: 800 }}>
+                            <Empty
+                                description="Chưa có thành viên nào"
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            >
+                                <Button
+                                    type="primary"
+                                    icon={<BookPlus size={16} />}
+                                    onClick={() => {
+                                        onOpen({
+                                            evaluationCouncilId: evaluationCouncil?.id,
                                         })
                                     }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
+                                >
+                                    Thêm thành viên
+                                </Button>
+                            </Empty>
+                        </Flex>
+                    ) : (
+                        <>
+                            <Flex justify="space-between" align="center">
+                                <span style={{ fontSize: 16, fontWeight: 600 }}>
+                                    Danh sách thành viên
+                                </span>
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    icon={<BookPlus size={16} />}
+                                    onClick={() => {
+                                        onOpen({
+                                            evaluationCouncilId: evaluationCouncil?.id,
+                                        })
+                                    }}
+                                >
+                                    Thêm thành viên
+                                </Button>
                             </Flex>
-                        }
-                    >
-                        <Descriptions
-                            column={2}
-                            size="small"
-                            labelStyle={{
-                                fontWeight: 500,
-                                color: '#595959',
-                            }}
-                            items={[
-                                {
-                                    key: 'name',
-                                    label: 'Tên hội đồng',
-                                    children: <strong>{evaluationCouncil.name}</strong>,
-                                },
-                                {
-                                    key: 'members',
-                                    label: 'Số thành viên',
-                                    children: (
-                                        <strong style={{ color: '#1890ff' }}>
-                                            {evaluationCouncil.members?.length || 0}
-                                        </strong>
-                                    ),
-                                },
-                                {
-                                    key: 'description',
-                                    label: 'Mô tả',
-                                    children: evaluationCouncil.description || '',
-                                },
-                            ]}
-                        />
-                    </Card>
-                </Col>
 
-                {/* Danh sách thành viên */}
-                <Col span={24}>
-                    <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
-                        <span style={{ fontSize: 16, fontWeight: 600 }}>Danh sách thành viên</span>
-                        <Button
-                            type="primary"
-                            icon={<BookPlus size={16} />}
-                            onClick={() => {
-                                onOpen({
-                                    evaluationCouncilId: evaluationCouncil.id,
-                                })
-                            }}
-                        >
-                            Thêm thành viên
-                        </Button>
-                    </Flex>
+                            <TableCollapse
+                                rowKey="id"
+                                loading={isLoadingEvaluationCouncil}
+                                headerTitleKey="name"
+                                childrenFieldName="children"
+                                defaultExpandAll
+                                columns={[
+                                    {
+                                        title: 'Tên đồng chí',
+                                        dataIndex: 'name',
+                                        width: 200,
+                                        render: (__, record) => {
+                                            if (record.$type === 'parent') return ''
 
-                    <TableCollapse
-                        rowKey="id"
-                        loading={isLoadingEvaluationCouncil}
-                        headerTitleKey="name"
-                        childrenFieldName="children"
-                        defaultExpandAll
-                        columns={[
-                            {
-                                title: 'Tên đồng chí',
-                                dataIndex: 'name',
-                                width: 250,
-                                render: (__, record) => {
-                                    if (record.$type === 'parent') return ''
+                                            const academicRank =
+                                                record?.lecturer?.userProfile?.academicRankType
+                                                    ?.sTen || ''
+                                            const degree =
+                                                record?.lecturer?.userProfile?.academicDegreeType
+                                                    ?.sTen || ''
 
-                                    const academicRank =
-                                        record?.lecturer?.userProfile?.academicRankType?.sTen || ''
-                                    const degree =
-                                        record?.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                                        ''
+                                            const fullName = record?.lecturer?.userProfile?.fullname
+                                                ? record?.lecturer?.userProfile?.fullname
+                                                : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
 
-                                    const fullName = record?.lecturer?.userProfile?.fullname
-                                        ? record?.lecturer?.userProfile?.fullname
-                                        : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
+                                            const academicTitle = [academicRank, degree]
+                                                .filter(Boolean)
+                                                .join('.')
 
-                                    const academicTitle = [academicRank, degree]
-                                        .filter(Boolean)
-                                        .join('.')
+                                            return academicTitle
+                                                ? `${academicTitle} ${fullName}`
+                                                : fullName
+                                        },
+                                    },
+                                    {
+                                        title: 'Đơn vị',
+                                        dataIndex: 'period',
+                                        width: 200,
+                                        render: (__, record) => {
+                                            if (record.$type === 'parent') return ''
 
-                                    return academicTitle ? `${academicTitle} ${fullName}` : fullName
-                                },
-                            },
-                            {
-                                title: 'Đơn vị',
-                                dataIndex: 'period',
-                                width: 300,
-                                render: (__, record) => {
-                                    if (record.$type === 'parent') return ''
+                                            return record?.lecturer?.organization?.sTen || ''
+                                        },
+                                    },
+                                    {
+                                        title: 'Chức vụ trong HĐ',
+                                        dataIndex: 'role',
+                                        width: 200,
+                                        render: (__, record) => {
+                                            if (record.$type === 'parent') return ''
 
-                                    return record?.lecturer?.organization?.sTen || ''
-                                },
-                            },
-                            {
-                                title: 'Chức vụ trong HĐ',
-                                dataIndex: 'role',
-                                width: 250,
-                                render: (__, record) => {
-                                    if (record.$type === 'parent') return ''
-
-                                    return (
-                                        <ul
-                                            style={{
-                                                paddingLeft: 16,
-                                                margin: 0,
-                                                textAlign: 'left',
-                                            }}
-                                        >
-                                            {record?.role?.map(
-                                                (val: EvaluationMemberRole, index: number) => (
-                                                    <li key={index}>
-                                                        {
-                                                            EVALUATION_MEMBER_ROLE.find(
-                                                                (i) => i.value === val
-                                                            )?.label
-                                                        }
-                                                    </li>
+                                            return (
+                                                <ul
+                                                    style={{
+                                                        paddingLeft: 16,
+                                                        margin: 0,
+                                                        textAlign: 'left',
+                                                    }}
+                                                >
+                                                    {record?.role?.map(
+                                                        (
+                                                            val: EvaluationMemberRole,
+                                                            index: number
+                                                        ) => (
+                                                            <li key={index}>
+                                                                {
+                                                                    EVALUATION_MEMBER_ROLE.find(
+                                                                        (i) => i.value === val
+                                                                    )?.label
+                                                                }
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Thao tác',
+                                        width: 50,
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            if (record?.id && record?.$type !== 'parent') {
+                                                return (
+                                                    <Row className="justify-center gap-2">
+                                                        <EditIcon
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                onOpen({
+                                                                    evaluationCouncilMemberId:
+                                                                        record.id,
+                                                                })
+                                                            }}
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                        />
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                onConfirm: (e) => {
+                                                                    handleDeleteEvaluationCouncilMember(
+                                                                        record?.id
+                                                                    )
+                                                                    e?.stopPropagation()
+                                                                },
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    </Row>
                                                 )
-                                            )}
-                                        </ul>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                render: (_, record) => {
-                                    if (record?.id && record?.$type !== 'parent') {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpen({
-                                                            evaluationCouncilMemberId: record.id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvaluationCouncilMember(
-                                                                record?.id
-                                                            )
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        data={tableDataCollapse}
-                        pagination={false}
-                    />
+                                            }
+                                            return ''
+                                        },
+                                    },
+                                ]}
+                                data={tableDataCollapse}
+                                pagination={false}
+                            />
+                        </>
+                    )}
                 </Col>
             </Row>
         </div>

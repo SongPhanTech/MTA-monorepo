@@ -543,7 +543,7 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
 
     return (
         <>
-            <div className="flex space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
+            <div className="flex items-center space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
                 {groupedButtons.map((group, index) => (
                     <div
                         key={`group-${group.map((btn) => btn.id).join('-')}`}

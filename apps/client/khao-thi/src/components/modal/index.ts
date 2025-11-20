@@ -9,7 +9,6 @@ import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
-import PutEvaluationCouncil from './put-evaluation-council'
 import PutEvaluationCouncilMember from './put-evaluation-council-member'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutEvidence from './put-minh-chung'
@@ -57,7 +56,6 @@ export {
     PutEvidence,
     AddEvidenceToPeriod,
     PinEvidenceToPeriod,
-    PutEvaluationCouncil,
     PutEvaluationCouncilMember,
     ModalPrintDotDanhGia,
     ThongTinKhaoSatModal,
@@ -66,5 +64,5 @@ export {
     PutTieuChuanTieuChi,
     PutPhanCongHangLoatModal,
     PutPhanCongHangLoatCrossModal,
-    ReviewSurveyModal
+    ReviewSurveyModal,
 }

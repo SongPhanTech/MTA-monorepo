@@ -190,50 +190,50 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
 
     return (
         <div className="overflow-x-hidden">
-            <div className="flex flex-col lg:flex-row justify-between items-start mb-4 pt-2 gap-4">
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start sm:items-center flex-wrap">
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Trạng thái</div>
+            <div className=" bg-white py-2 border-b border-gray-100 flex flex-row justify-between items-center mb-4 gap-4">
+                <div className="flex flex-row gap-4 items-center text-xs">
+                    <div className="flex items-center gap-1">
+                        <span className="text-gray-500">Trạng thái</span>
                         <Tag
                             color={statusConfig.color}
                             icon={statusConfig.icon}
-                            className="text-sm"
+                            className="text-xs ml-1 !m-0"
                         >
                             {statusConfig.text}
                         </Tag>
                     </div>
 
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Hạn làm phiếu</div>
-                        <div className="flex items-center gap-2">
-                            <ClockCircleOutlined className="text-gray-400" />
-                            <span className="font-medium">
-                                {data?.criteria?.[0]?.evaluationCriterion?.deadline
-                                    ? dayjs(data.criteria[0].evaluationCriterion.deadline).format(
-                                          'DD/MM/YYYY'
-                                      )
-                                    : 'Chưa có hạn'}
-                            </span>
-                            {deadline && deadlineStatus && deadlineStatus.text && (
-                                <Tag color={deadlineStatus.color}>{deadlineStatus.text}</Tag>
-                            )}
-                        </div>
+                    <div className="flex items-center gap-1">
+                        <ClockCircleOutlined className="text-gray-400 text-xs" />
+                        <span className="text-gray-500">
+                            {data?.criteria?.[0]?.evaluationCriterion?.deadline
+                                ? dayjs(data.criteria[0].evaluationCriterion.deadline).format(
+                                      'DD/MM/YYYY'
+                                  )
+                                : 'Chưa có hạn'}
+                        </span>
+                        {deadline && deadlineStatus && deadlineStatus.text && (
+                            <Tag color={deadlineStatus.color} className="text-xs !m-0">
+                                {deadlineStatus.text}
+                            </Tag>
+                        )}
                     </div>
 
-                    <div>
-                        <div className="text-gray-500 text-sm mb-1">Người được giao</div>
-                        <div className="font-medium">
+                    <div className="flex items-center gap-1">
+                        <span className="text-gray-500">Người được giao</span>
+                        <span className="font-medium">
                             {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
                                 ?.fullname || 'Chưa phân công'}
-                        </div>
+                        </span>
                     </div>
                 </div>
 
-                <div className="flex gap-2 mt-2 mr-1">
+                <div className="flex gap-2">
                     <Badge count={commentsCount} showZero offset={[-5, 5]}>
                         <Button
                             type="primary"
                             className="bg-yellow-400"
+                            size="small"
                             onClick={() => setShowComments(!showComments)}
                         >
                             Xem đánh giá
@@ -245,11 +245,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                 <Button
                                     type="primary"
                                     className="bg-blue-500"
+                                    size="small"
                                     onClick={handleEvaluationForm}
                                 >
                                     Nộp phiếu đánh giá
                                 </Button>
-                                <Button type="primary" onClick={handleSubmit}>
+                                <Button type="primary" size="small" onClick={handleSubmit}>
                                     Lưu đánh giá
                                 </Button>
                             </>
@@ -386,9 +387,9 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                                             >
                                                                 <RichTextEditor id={item.id} />
                                                             </Form.Item>
-                                                            <div className="mb-3 font-bold">
+                                                            {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
-                                                            </div>
+                                                            </div> */}
                                                             {/* <div className="mb-1">
                                                                 Điểm tối thiểu:{' '}
                                                                 <span className="font-bold">

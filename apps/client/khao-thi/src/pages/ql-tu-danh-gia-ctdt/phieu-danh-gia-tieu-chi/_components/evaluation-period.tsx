@@ -128,6 +128,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                             },
                         }
                     }}
+                    className="h-[calc(100vh-200px)]"
                     columns={[
                         {
                             title: 'STT',
@@ -162,7 +163,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                                 record?.endDate ? formatDate(record.endDate) : undefined,
                         },
                         {
-                            title: 'Giai đoạn đợt',
+                            title: 'Trạng thái',
                             align: 'center',
                             width: 110,
                             render: (_, record) => {
@@ -171,18 +172,6 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                                     <Tag color={statusInfo?.color || 'default'}>
                                         {statusInfo?.label || record.status}
                                     </Tag>
-                                )
-                            },
-                        },
-                        {
-                            title: 'Trạng thái đợt',
-                            width: 100,
-                            align: 'center',
-                            render: (_, record) => {
-                                return record.active ? (
-                                    <Tag color="green">Đang hoạt động</Tag>
-                                ) : (
-                                    <Tag color="default">Kết thúc</Tag>
                                 )
                             },
                         },
