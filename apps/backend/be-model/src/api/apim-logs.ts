@@ -289,14 +289,16 @@ app.openapi(
             time: Date
             request_count: bigint
         }[]>`
-        SELECT
-            date_trunc(${type}, time) AS time,
-            COUNT(*) AS request_count
-        FROM apim_logs
-        WHERE data->>'service' = ${service}
-        AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
-        GROUP BY time
-        ORDER BY time DESC LIMIT 10;`
+        with RC as (SELECT date_trunc(${type}, time) AS time,
+                   COUNT(*)                 AS request_count
+            FROM apim_logs
+            WHERE data ->> 'service' = ${service}
+              AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
+            GROUP BY time)
+        select time, sum(request_count) as request_count
+        from RC
+        group by time
+        ORDER BY time DESC`
 
         return c.json(res.map(({ time, request_count }) => ({
             time,
