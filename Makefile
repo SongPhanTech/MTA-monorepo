@@ -12,6 +12,7 @@ PKG_BE_DAO_TAO := be-ql-dao-tao
 PKG_BE_KHAO_THI := be-khao-thi
 PKG_BE_PORTAL := be-portal
 PKG_BE_DAO_TAO_SHARED := be-ql-dao-tao-shared
+PKG_BE_EXCHANGE := be-exchange
 
 PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
@@ -19,7 +20,7 @@ PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
-BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED)
+BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
 FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) 
 
 # Targets

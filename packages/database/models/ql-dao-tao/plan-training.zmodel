@@ -58,7 +58,7 @@ model PlanTrainingSubject extends BaseNoCode {
   subjectVersion   SubjectVersion   @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   fixedClasses     FixedClass[] // Lớp niên chế
-  studentCount     Int              @default(0) // Số SV đăng ký học phần này trong kỳ  
+  studentCount     Int              @default(0) // Số SV đăng ký học phần này trong kỳ
   subjectClassType SubjectClassType @default(NORMAL)
   @@schema("ql-dao-tao")
 }
@@ -117,7 +117,7 @@ model StudentSubjectScore extends Base {
   /// điểm giữa kỳ
   midtermScore                 Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
   /// điểm cuối kỳ
-  examScore                    Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') 
+  examScore                    Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
   // dùng hàm `calcFinalScore` từ @workspace/libs/utils
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
@@ -127,18 +127,18 @@ model StudentSubjectScore extends Base {
   // bonusScore = sum(.awards.archivedAward.bonusScore)
   // finalScore = Math.max(computedFinalScore, maxCertFinalScore) + bonusScore
   /// điểm tổng kết
-  finalScore                   Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  
+  finalScore                   Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp manualFinalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
   /// điểm tổng kết chuyển trường
-  manualFinalScore             Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') 
+  manualFinalScore             Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
   // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
   examPostponed                Boolean                                    @default(false) // hoãn thi
-  examPostponedReason          String?                      
+  examPostponedReason          String?
 
   // Điểm R là điểm áp dụng cho học phần mà học viên được phép miễn học và
-  // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT. 
+  // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT.
   exempted                     Boolean                                    @default(false) // được miễn học
 
   // Điểm W được sử dụng để ghi chú cho học phần mà học viên
@@ -237,7 +237,7 @@ model ArchivedCertificate extends Base {
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
 
-  finalScore          Float          
+  finalScore          Float
   // TODO: dùng `code` cho mã/ID chứng chỉ
 
   /// điểm chứng chỉ
@@ -459,7 +459,6 @@ model FixedClass extends Base {
   staffManagement          Staff?                     @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
 
-  initSize                 Int                        @default(0) // sĩ số
   students                 Student[]
 
   curriculumVersion        CurriculumVersion?         @relation(fields: [curriculumVersionId], references: [id])
@@ -545,7 +544,7 @@ model CurriculumVersion extends Base {
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClasses                     FixedClass[] // Lớp niên chế
-  students                         Student[]                          @relation('CurriculumVersion') // Học viên 
+  students                         Student[]                          @relation('CurriculumVersion') // Học viên
   studentCurriculumVersionParallel Student[]                          @relation('CurriculumVersionParallel') // Học viên học song song CTĐT
 
   @@schema("ql-dao-tao")
@@ -875,7 +874,7 @@ model SubjectClass extends BaseNoCode {
 
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
-  
+
   // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
   /// khoá điểm CC/TX
   isLockScore                 Boolean               @default(false)
@@ -907,7 +906,7 @@ model SubjectClass extends BaseNoCode {
   subjectClassStudent         StudentSubjectScore[]
   fixedClasses                FixedClass[]
   classSchedules              ClassSchedule[]        // Thêm relation với thời khoá biểu
-  
+
   // Môn đồ án
   thesisProjects              ThesisProject[] // DS đồ án
   expertProfile               ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
@@ -980,7 +979,7 @@ model ClassSchedule extends Base {
 
   location            String?        // Địa điểm cụ thể nếu có
 
-  notes               String?         
+  notes               String?
 
   // Thông tin học bù
   isReplacement       Boolean        @default(false)  // Có phải tiết học bù

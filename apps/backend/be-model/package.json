@@ -12,6 +12,7 @@
     "@hono/oidc-auth": "catalog:",
     "@hono/otel": "catalog:",
     "@hono/zod-openapi": "catalog:",
+    "@opentelemetry/api": "catalog:",
     "@opentelemetry/auto-instrumentations-node": "catalog:",
     "@opentelemetry/exporter-trace-otlp-http": "catalog:",
     "@opentelemetry/resources": "catalog:",

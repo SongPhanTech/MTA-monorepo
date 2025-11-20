@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 import type { $Enums } from '@workspace/db'
 
-const app = new OpenAPIHono({ strict: false })
+const app:OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getListSubject = createRoute({
     operationId: 'get-list-subject',
