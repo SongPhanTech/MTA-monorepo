@@ -2,15 +2,10 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { Collapse, Form, Tag } from 'antd'
 import { useEffect } from 'react'
 import { $Enums } from '@workspace/db/client'
-
-import {
-    ClockCircleOutlined,
-    CheckCircleOutlined,
-    ExclamationCircleOutlined,
-    LockOutlined,
-} from '@ant-design/icons'
 import dayjs from 'dayjs'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
+import { getStatusConfig } from '@constants/constants'
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -22,29 +17,6 @@ export default function CriteriaEvaluationListSubPage({
     data: DataTabEvaluationCriterionType
 }) {
     const [form] = Form.useForm<PutRequirementCriterion>()
-
-    const getStatusConfig = (status: $Enums.EvaluationStatus) => {
-        switch (status) {
-            case $Enums.EvaluationStatus.LOCK:
-                return { color: 'default', text: 'Khoá', icon: <LockOutlined /> }
-            case $Enums.EvaluationStatus.PENDING:
-                return { color: 'warning', text: 'Chưa nộp', icon: <ClockCircleOutlined /> }
-            case $Enums.EvaluationStatus.SUBMITTED:
-                return { color: 'processing', text: 'Đã nộp', icon: <CheckCircleOutlined /> }
-            case $Enums.EvaluationStatus.REVISION:
-                return {
-                    color: 'error',
-                    text: 'Yêu cầu chỉnh sửa',
-                    icon: <ExclamationCircleOutlined />,
-                }
-            case $Enums.EvaluationStatus.APPROVED:
-                return { color: 'success', text: 'Đã duyệt', icon: <CheckCircleOutlined /> }
-            case $Enums.EvaluationStatus.COMPLETED:
-                return { color: 'success', text: 'Hoàn thành', icon: <CheckCircleOutlined /> }
-            default:
-                return { color: 'default', text: 'Không xác định', icon: null }
-        }
-    }
 
     useEffect(() => {
         if (data) {
@@ -63,27 +35,6 @@ export default function CriteriaEvaluationListSubPage({
             })
         }
     }, [data, form])
-
-    const getDeadlineStatus = (deadline: Date | string) => {
-        const now = dayjs()
-        const deadlineDate = dayjs(deadline)
-        const daysUntilDeadline = deadlineDate.diff(now, 'day')
-
-        if (daysUntilDeadline < 0) {
-            return {
-                color: 'red',
-                text: 'Quá hạn',
-            }
-        }
-        if (daysUntilDeadline <= 3) {
-            return {
-                color: 'orange',
-                text: 'Sắp quá hạn',
-            }
-        }
-
-        return { color: 'blue', text: '' }
-    }
 
     const groupedCriteria = data?.criteria?.reduce(
         (acc, criterion, index) => {
@@ -105,7 +56,7 @@ export default function CriteriaEvaluationListSubPage({
 
     return (
         <div className="overflow-x-hidden">
-            <Form form={form} layout="horizontal" className="form-evidence">
+            <Form form={form} layout="vertical" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -121,56 +72,22 @@ export default function CriteriaEvaluationListSubPage({
 
                                     return (
                                         <div key={lecturerId} className="mb-8">
-                                            <div className="flex flex-col lg:flex-row justify-between items-start mb-4 pt-2 gap-4">
-                                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start sm:items-center flex-wrap">
-                                                    <div>
-                                                        <div className="text-gray-500 text-sm mb-1">
-                                                            Trạng thái
-                                                        </div>
-                                                        <Tag
-                                                            color={statusConfig.color}
-                                                            icon={statusConfig.icon}
-                                                            className="text-sm"
-                                                        >
-                                                            {statusConfig.text}
-                                                        </Tag>
-                                                    </div>
-
-                                                    <div>
-                                                        <div className="text-gray-500 text-sm mb-1">
-                                                            Hạn làm phiếu
-                                                        </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <ClockCircleOutlined className="text-gray-400" />
-                                                            <span className="font-medium">
-                                                                {deadline
-                                                                    ? dayjs(deadline).format(
-                                                                          'DD/MM/YYYY'
-                                                                      )
-                                                                    : 'Chưa có hạn'}
-                                                            </span>
-                                                            {deadline &&
-                                                                deadlineStatus &&
-                                                                deadlineStatus.text && (
-                                                                    <Tag
-                                                                        color={deadlineStatus.color}
-                                                                    >
-                                                                        {deadlineStatus.text}
-                                                                    </Tag>
-                                                                )}
-                                                        </div>
-                                                    </div>
-
-                                                    <div>
-                                                        <div className="text-gray-500 text-sm mb-1">
-                                                            Người được giao
-                                                        </div>
-                                                        <div className="font-medium">
-                                                            {group.lecturer?.userProfile
-                                                                ?.fullname || 'Chưa phân công'}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div className="flex items-center gap-2 mb-3 flex-wrap">
+                                                <span className="text-sm text-gray-600">
+                                                    Người được giao:{' '}
+                                                    {group.lecturer?.userProfile?.fullname ||
+                                                        'Chưa phân công'}
+                                                </span>
+                                                {deadline && deadlineStatus && (
+                                                    <Tag color={deadlineStatus.color}>
+                                                        Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
+                                                        {deadlineStatus.text &&
+                                                            ` (${deadlineStatus.text})`}
+                                                    </Tag>
+                                                )}
+                                                <Tag color={statusConfig.color}>
+                                                    {statusConfig.text}
+                                                </Tag>
                                             </div>
 
                                             {group.criteria.map((item: any) => {
@@ -202,6 +119,7 @@ export default function CriteriaEvaluationListSubPage({
                                                                             >
                                                                                 <RichTextEditor
                                                                                     id={item.id}
+                                                                                    editable={false}
                                                                                 />
                                                                             </Form.Item>
 
@@ -215,6 +133,7 @@ export default function CriteriaEvaluationListSubPage({
                                                                             >
                                                                                 <RichTextEditor
                                                                                     id={item.id}
+                                                                                    editable={false}
                                                                                 />
                                                                             </Form.Item>
 
@@ -228,6 +147,7 @@ export default function CriteriaEvaluationListSubPage({
                                                                             >
                                                                                 <RichTextEditor
                                                                                     id={item.id}
+                                                                                    editable={false}
                                                                                 />
                                                                             </Form.Item>
 
@@ -241,6 +161,7 @@ export default function CriteriaEvaluationListSubPage({
                                                                             >
                                                                                 <RichTextEditor
                                                                                     id={item.id}
+                                                                                    editable={false}
                                                                                 />
                                                                             </Form.Item>
                                                                         </>

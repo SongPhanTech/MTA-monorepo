@@ -75,6 +75,28 @@ const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
     }
 }
 
+const getStatusConfig = (status: $Enums.EvaluationStatus) => {
+    switch (status) {
+        case $Enums.EvaluationStatus.LOCK:
+            return { color: 'default', text: 'Khoá' }
+        case $Enums.EvaluationStatus.PENDING:
+            return { color: 'warning', text: 'Chưa nộp' }
+        case $Enums.EvaluationStatus.SUBMITTED:
+            return { color: 'processing', text: 'Đã nộp' }
+        case $Enums.EvaluationStatus.REVISION:
+            return {
+                color: 'error',
+                text: 'Yêu cầu chỉnh sửa',
+            }
+        case $Enums.EvaluationStatus.APPROVED:
+            return { color: 'success', text: 'Đã duyệt' }
+        case $Enums.EvaluationStatus.COMPLETED:
+            return { color: 'success', text: 'Hoàn thành' }
+        default:
+            return { color: 'default', text: 'Không xác định' }
+    }
+}
+
 const EVALUATION_PERIOD_STATUS_LABELS: Record<string, { label: string; color: string }> = {
     [$Enums.EvaluationPeriodStatus.COUNCIL_ESTABLISHED]: {
         label: 'Thành lập hội đồng',
@@ -121,6 +143,7 @@ export {
     EVALUATION_MEMBER_ROLE,
     SUBJECT_OBJECT,
     getStatusEvaluation,
+    getStatusConfig,
     EVALUATION_PERIOD_STATUS_LABELS,
     EVALUATION_CRITERION_STATUS_OPTIONS,
 }
