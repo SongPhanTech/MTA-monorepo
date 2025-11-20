@@ -1,54 +1,31 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import { useFindManyUserProfile } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Flex } from 'antd'
+import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-const ExportStudentInSurvey = ({ query, survey }: { query: any; survey?: any }) => {
-    const { data } = useFindManyUserProfile(
-        {
-            where: { ...query },
-            include: {
-                educationAndTraining: {
-                    include: {
-                        subjectClassStudent: {
-                            include: {
-                                subjectClass: {
-                                    include: {
-                                        survey: {
-                                            include: {
-                                                surveySessions: true,
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        fixedClass: {
-                            include: {
-                                trainingCourse: true,
-                            },
-                        },
-                    },
-                },
-                surveySession: {
-                    where: { surveyId: survey?.id },
-                },
-            },
-            orderBy: {
-                firstName: 'asc',
-            },
-        },
-        {
-            enabled: !!survey?.id,
+const ExportStudentInSurvey = ({
+    query,
+    lecturer,
+    selectedId,
+}: {
+    query: any
+    lecturer: any
+    selectedId: string
+}) => {
+    const checkStatus = (record: any) => {
+        if (record?.student?.userProfile?.surveySession?.length > 0) {
+            const result = record?.student?.userProfile?.surveySession?.find(
+                (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
+            )
+            if (result) {
+                return result
+            }
         }
-    )
-
+        return null
+    }
     const exportTemplate = async () => {
-        // Tạo workbook mới
-        const workbook = new ExcelJS.Workbook()
-        const worksheet = workbook.addWorksheet('Danh sách người làm khảo sát')
-
         // Thiết lập style
         const golbalFontStyle = {
             name: 'Times New Roman',
@@ -142,92 +119,163 @@ const ExportStudentInSurvey = ({ query, survey }: { query: any; survey?: any }) 
                 },
             },
         }
-
-        worksheet.mergeCells('A1:D2')
-        worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
-        worksheet.getCell('A1').style = headerTitleStyle
-
-        worksheet.getRow(1).height = 30
-        worksheet.getRow(2).height = 30
-
-        worksheet.mergeCells('J1:R2')
-        worksheet.getCell('J1').value =
-            'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
-        worksheet.getCell('J1').style = headerTitleStyle
-
-        worksheet.mergeCells('A4:R4')
-        worksheet.getCell('A4').value = `DANH SÁCH NGƯỜI LÀM KHẢO SÁT: ${survey?.name}`
-        worksheet.getCell('A4').style = headerSubtitleStyle
-        worksheet.getRow(4).height = 20
-
-        worksheet.getCell('F5').value = 'Giảng viên:'
-        worksheet.getCell('F5').style = headerSubtitleStyle
-
-        worksheet.getCell('G5').value =
-            `${survey?.lecture?.code} - ${survey?.lecture?.userProfile?.fullname}`
-        worksheet.getCell('G5').style = headerSubtitleStyle
-
-        worksheet.getCell('F6').value = 'Lớp môn học:'
-        worksheet.getCell('F6').style = headerTitleStyle
-
-        worksheet.getCell('G6').value =
-            `${survey?.subjectClass?.code} - ${survey?.subjectClass?.name}`
-        worksheet.getCell('G6').style = headerTitleStyle
-        // Thêm tiêu đề bảng
-        const headerRow = worksheet.getRow(11)
-        headerRow.values = [
-            'STT',
-            'Mã học viên',
-            'Họ và tên',
-            'CCCD',
-            'SĐT',
-            'Lớp quản lý',
-            'Khoá',
-            'Trạng thái khảo sát',
+        const listSqlTransaction: any = [
+            {
+                model: 'SubjectClass',
+                operation: 'findMany',
+                data: {
+                    where: { ...query },
+                    include: {
+                        mainLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        subjectClassStudent: {
+                            include: {
+                                student: {
+                                    include: {
+                                        userProfile: {
+                                            include: {
+                                                surveySession: {
+                                                    where: {
+                                                        survey: {
+                                                            lectureId: lecturer?.id,
+                                                            clusterSurveyId: selectedId,
+                                                        },
+                                                    },
+                                                    include: {
+                                                        survey: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        fixedClass: {
+                                            include: {
+                                                trainingCourse: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    orderBy: {
+                        name: 'asc',
+                    },
+                },
+            },
         ]
-        headerRow.eachCell((cell: any) => {
-            cell.style = tableHeaderStyle
-        })
+        const res = await sqlTransaction(listSqlTransaction)
 
-        // Điều chỉnh độ rộng cột
-        worksheet.columns = [
-            { width: 10 },
-            { width: 20 },
-            { width: 40 },
-            { width: 20 },
-            { width: 20 },
-            { width: 30 },
-            { width: 30 },
-            { width: 20 },
-        ]
-        if (data && data?.length > 0) {
-            data.forEach((i: any, index: number) => {
-                const headerRowValue: any = worksheet.getRow(12 + index)
-                headerRowValue.values = [
-                    index + 1,
-                    i?.educationAndTraining?.length > 0 ? i?.educationAndTraining[0]?.code : '',
-                    `${i?.lastName || ''} ${i?.firstName || ''}`,
-                    i?.idCardNumber || '',
-                    i?.phoneNumber || '',
-                    i?.educationAndTraining?.length > 0
-                        ? `${i?.educationAndTraining[0]?.fixedClass?.code || ''}-${i?.educationAndTraining[0]?.fixedClass?.name || ''}`
-                        : '',
-                    i?.educationAndTraining?.length > 0
-                        ? `${i?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
-                        : '',
-                    i?.surveySession ? 'Đã làm' : 'Chưa làm',
+        if (res?.status === 200 && res?.data?.length > 0) {
+            const data: any = res?.data[0]
+            const workbook = new ExcelJS.Workbook()
+
+            data.forEach(async (item: any) => {
+                console.log(item, '12936')
+
+                // Tạo workbook mới
+                const worksheet = workbook.addWorksheet(`${item.code} - ${item.name}`)
+
+                worksheet.mergeCells('A1:D2')
+                worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
+                worksheet.getCell('A1').style = headerTitleStyle
+
+                worksheet.getRow(1).height = 30
+                worksheet.getRow(2).height = 30
+
+                worksheet.mergeCells('F1:I2')
+                worksheet.getCell('F1').value =
+                    'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
+                worksheet.getCell('F1').style = headerTitleStyle
+
+                worksheet.mergeCells('A4:I4')
+                worksheet.getCell('A4').value =
+                    `DANH SÁCH NGƯỜI LÀM KHẢO SÁT: ${lecturer?.survey[0]?.clusterSurvey?.name}`
+                worksheet.getCell('A4').style = headerSubtitleStyle
+                worksheet.getRow(4).height = 20
+
+                worksheet.getCell('D5').value = 'Giảng viên:'
+                worksheet.getCell('D5').style = headerSubtitleStyle
+                worksheet.mergeCells('E5:F5')
+                worksheet.getCell('E5').value =
+                    `${lecturer?.code} - ${lecturer?.userProfile?.fullname || ''}`
+                worksheet.getCell('E5').style = headerSubtitleStyle
+
+                worksheet.getCell('D6').value = 'Lớp môn học:'
+                worksheet.getCell('D6').style = headerTitleStyle
+                worksheet.mergeCells('E6:F6')
+                worksheet.getCell('E6').value = `${item.code} - ${item.name}`
+
+                worksheet.getCell('E6').style = headerTitleStyle
+                // Thêm tiêu đề bảng
+                const headerRow = worksheet.getRow(11)
+                headerRow.values = [
+                    'STT',
+                    'Mã học viên',
+                    'Họ và tên',
+                    'Ngày sinh',
+                    'CCCD',
+                    'SĐT',
+                    'Lớp quản lý',
+                    'Khoá',
+                    'Trạng thái khảo sát',
                 ]
-            })
-        }
+                headerRow.eachCell((cell: any) => {
+                    cell.style = tableHeaderStyle
+                })
 
-        // Xuất file
-        const buffer = await workbook.xlsx.writeBuffer()
-        saveAs(new Blob([buffer]), 'danh_sach_nguoi_lam_khao_sat.xlsx')
+                // Điều chỉnh độ rộng cột
+                worksheet.columns = [
+                    { width: 10 },
+                    { width: 20 },
+                    { width: 40 },
+                    { width: 20 },
+                    { width: 20 },
+                    { width: 20 },
+                    { width: 30 },
+                    { width: 30 },
+                    { width: 20 },
+                ]
+
+                if (item?.subjectClassStudent?.length > 0) {
+                    item?.subjectClassStudent.forEach(async (i: any, index: number) => {
+                        const headerRowValue: any = worksheet.getRow(12 + index)
+                        headerRowValue.values = [
+                            index + 1,
+                            i?.student?.code || '',
+                            `${i?.student?.userProfile?.lastName || ''} ${i?.student?.userProfile?.firstName || ''}`,
+                            i?.student?.userProfile?.dateOfBirth
+                                ? dayjs(i?.student?.userProfile?.dateOfBirth).format('DD/MM/YYYY')
+                                : '',
+                            i?.student?.userProfile?.idCardNumber || '',
+                            i?.student?.userProfile?.phoneNumber || '',
+                            i?.student ? `${i?.student?.fixedClass?.code || ''}` : '',
+                            i?.student
+                                ? `${i?.student?.fixedClass?.trainingCourse?.name || ''}`
+                                : '',
+                            checkStatus(i) ? 'Đã làm' : 'Chưa làm',
+                        ]
+                    })
+                }
+            })
+            const buffer = await workbook.xlsx.writeBuffer()
+            saveAs(
+                new Blob([buffer]),
+                `danh_sach_nguoi_lam_khao_sat${lecturer?.survey[0]?.clusterSurvey?.name}.xlsx`
+            )
+        }
     }
 
     return (
         <Flex>
-            <Button type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
+            <Button
+                type="primary"
+                size="small"
+                onClick={exportTemplate}
+                icon={<DownloadOutlined />}
+            >
                 Xuất file excel
             </Button>
         </Flex>

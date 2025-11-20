@@ -5,7 +5,7 @@ import ExportLecturerInSurvey from '@components/modal/export-list-lecturer-in-su
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { Survey } from '@workspace/db'
+import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 import { useCountLecturer, useFindManyLecturer, useUpdateSurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { Col, Flex, Row, Skeleton } from 'antd'
@@ -20,7 +20,7 @@ export default function DetailSurveyPage({
 }: {
     selectedId: string
     surveyId: string
-    setSurvey: (value: Survey) => void
+    setSurvey: (value: LectuerType) => void
 }) {
     const { can, canSome } = useAbility()
 
@@ -218,7 +218,7 @@ export default function DetailSurveyPage({
                             onRow={(record) => {
                                 return {
                                     onClick: () => {
-                                        setSurvey(record as Survey)
+                                        setSurvey(record as LectuerType)
                                     },
                                     className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
                                 }

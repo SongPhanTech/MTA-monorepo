@@ -75,7 +75,15 @@ const Button = ({
     </Tooltip>
 )
 
-export default function TextEditorMenuBar({ editor, id }: { editor: Editor | null; id?: string }) {
+export default function TextEditorMenuBar({
+    editor,
+    id,
+    editable = true,
+}: {
+    editor: Editor | null
+    id?: string
+    editable?: boolean
+}) {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [mathModalVisible, setMathModalVisible] = useState(false)
     const [mathInput, setMathInput] = useState('')
@@ -88,6 +96,9 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
     }>({
         tag: 'PinEvidenceToPeriod',
     })
+
+    // Ẩn toolbar nếu không editable
+    if (!editable) return null
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]

@@ -1,10 +1,12 @@
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
 import type { DataTabCrossReviewType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Collapse, Form, message, Card } from 'antd'
+import { Button, Collapse, Form, message, Card, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 export type PutRequirementCriterion = {
@@ -35,7 +37,7 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                 (criterion) => criterion.evaluationCriterion
             )
 
-            let listSqlTransaction: any[] = []
+            const listSqlTransaction: any[] = []
 
             for (const criterion of criteriaWithEvaluation) {
                 if (criterion.evaluationCriterion) {
@@ -145,22 +147,49 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
         }
     }, [data, form])
 
+    const firstEvaluationCriterion = data.criteria.find(
+        (c) => c.evaluationCriterion
+    )?.evaluationCriterion
+    const evaluatorName = firstEvaluationCriterion?.lecturer?.userProfile?.fullname
+    const reviewDeadline = firstEvaluationCriterion?.deadlineReview
+    const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
+
     return (
         <div className="overflow-x-hidden">
-            <div className="flex justify-end gap-2 mb-4 pt-2">
-                <Button
-                    type="primary"
-                    className="bg-yellow-400"
-                    onClick={() => setShowComments(!showComments)}
-                >
-                    Gửi ý kiến phản biện
-                </Button>
-                <Button type="primary" onClick={handleSubmitCross}>
-                    Phê duyệt
-                </Button>
+            <div className="flex justify-between items-center gap-2 mb-2 pt-2">
+                <div className="flex items-center gap-4">
+                    {evaluatorName && (
+                        <div className="text-sm">
+                            <span className="font-semibold">Người viết đánh giá:</span>{' '}
+                            {evaluatorName}
+                        </div>
+                    )}
+                    {reviewDeadline && (
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="font-semibold">Hạn phản biện:</span>
+                            <span>{dayjs(reviewDeadline).format('DD/MM/YYYY')}</span>
+                            {deadlineStatus?.text && (
+                                <Tag color={deadlineStatus.color}>{deadlineStatus.text}</Tag>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div className="flex gap-2">
+                    <Button
+                        type="primary"
+                        size="small"
+                        className="bg-yellow-400"
+                        onClick={() => setShowComments(!showComments)}
+                    >
+                        Gửi ý kiến phản biện
+                    </Button>
+                    <Button type="primary" size="small" onClick={handleSubmitCross}>
+                        Phê duyệt
+                    </Button>
+                </div>
             </div>
 
-            <Form form={form} layout="horizontal" className="form-evidence">
+            <Form form={form} layout="vertical" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -190,7 +219,10 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                                                                     'currentSituation',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -201,7 +233,10 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                                                                     'strengths',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -212,7 +247,10 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                                                                     'weakness',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -223,11 +261,14 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                                                                     'actionPlan',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
-                                                            <div className="mb-3 font-bold">
+                                                            {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     ),
                                                 },

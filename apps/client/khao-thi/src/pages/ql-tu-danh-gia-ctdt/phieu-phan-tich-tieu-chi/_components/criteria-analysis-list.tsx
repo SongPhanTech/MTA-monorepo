@@ -30,6 +30,14 @@ export default function CriteriaAnalysisList() {
                                                         order: 'asc',
                                                     },
                                                 },
+                                                evaluationCriterionComment: {
+                                                    include: {
+                                                        reviewer: true,
+                                                    },
+                                                    orderBy: {
+                                                        createdAt: 'desc',
+                                                    },
+                                                },
                                             },
                                             orderBy: {
                                                 order: 'asc',
@@ -91,7 +99,6 @@ export default function CriteriaAnalysisList() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

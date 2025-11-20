@@ -65,7 +65,6 @@ export default function SumaryOfCriteriaEvaluation() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

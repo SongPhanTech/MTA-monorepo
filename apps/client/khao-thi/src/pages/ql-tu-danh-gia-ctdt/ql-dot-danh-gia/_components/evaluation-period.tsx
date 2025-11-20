@@ -234,6 +234,14 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Trạng thái',
+                                // dataIndex: 'status',
+                                // type: 'select',
+                                // options: Object.entries(EVALUATION_PERIOD_STATUS_LABELS).map(
+                                //     ([value, { label }]) => ({
+                                //         value,
+                                //         label,
+                                //     })
+                                // ),
                                 align: 'center',
                                 width: 110,
                                 render: (_, record) => {

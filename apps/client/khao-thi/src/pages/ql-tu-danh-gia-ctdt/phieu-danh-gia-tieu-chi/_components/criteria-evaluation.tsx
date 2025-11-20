@@ -151,7 +151,6 @@ export default function CriteriaEvaluationWrite() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (
