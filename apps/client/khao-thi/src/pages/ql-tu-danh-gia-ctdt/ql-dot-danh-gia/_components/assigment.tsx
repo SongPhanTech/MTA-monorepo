@@ -288,14 +288,10 @@ export default function AssigmentOfAssessmentTab() {
     return (
         <Row gutter={0}>
             <Col span={24}>
-                <h1 className="text-xl font-bold text-gray-800 mb-2">
-                    Phân công giảng viên đánh giá
-                </h1>
-                <p className="text-gray-600 text-base">Đợt đánh giá: {data?.name}</p>
-                <Flex justify="flex-end" gap={8} className="pb-2">
+                <Flex justify="flex-end" align="center" gap={8} className="pb-2">
                     <Button
                         type="primary"
-                        className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border-0 shadow-sm disabled:from-purple-200 disabled:to-purple-300 disabled:cursor-not-allowed disabled:text-purple-700 h-8 px-4"
+                        size="small"
                         disabled={getSelectedCriteria().length === 0}
                         onClick={() => {
                             openPhanCongHangLoat({
@@ -308,7 +304,7 @@ export default function AssigmentOfAssessmentTab() {
                     >
                         Phân công hàng loạt
                     </Button>
-                    <Button type="primary" onClick={handleSave}>
+                    <Button type="primary" onClick={handleSave} size="small">
                         Lưu phân công
                     </Button>
                 </Flex>

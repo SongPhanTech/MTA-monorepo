@@ -421,71 +421,68 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                 deadline && dayjs(deadline).diff(dayjs(), 'day') < 0
 
                                             return (
-                                                <div>
-                                                    <Form form={form}>
+                                                <Form form={form} layout="vertical">
+                                                    <FormItem
+                                                        label="Yêu cầu chỉnh sửa"
+                                                        form={form}
+                                                        name="content"
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    'Vui lòng nhập yêu cầu chỉnh sửa',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        <RichTextEditor />
+                                                    </FormItem>
+                                                    {isOverdue && (
                                                         <FormItem
-                                                            label="Yêu cầu chỉnh sửa"
+                                                            label="Gia hạn mới"
                                                             form={form}
-                                                            name="content"
+                                                            name="newDeadline"
                                                             rules={[
                                                                 {
                                                                     required: true,
                                                                     message:
-                                                                        'Vui lòng nhập yêu cầu chỉnh sửa',
+                                                                        'Vui lòng chọn ngày gia hạn mới',
                                                                 },
                                                             ]}
                                                         >
-                                                            <RichTextEditor />
-                                                        </FormItem>
-                                                        {isOverdue && (
-                                                            <FormItem
-                                                                label="Gia hạn mới"
-                                                                form={form}
-                                                                name="newDeadline"
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message:
-                                                                            'Vui lòng chọn ngày gia hạn mới',
-                                                                    },
-                                                                ]}
-                                                            >
-                                                                <DatePicker
-                                                                    format="DD/MM/YYYY"
-                                                                    placeholder="Chọn ngày gia hạn"
-                                                                    disabledDate={(current) =>
-                                                                        current &&
-                                                                        current <
-                                                                            dayjs().startOf('day')
-                                                                    }
-                                                                    className="w-full"
-                                                                />
-                                                            </FormItem>
-                                                        )}
-                                                        <div className="flex justify-end gap-2 mt-3">
-                                                            <Button
-                                                                onClick={() => {
-                                                                    form.resetFields()
-                                                                    toggleCommentRow(record.id)
-                                                                }}
-                                                            >
-                                                                Hủy
-                                                            </Button>
-                                                            <Button
-                                                                type="primary"
-                                                                onClick={() =>
-                                                                    handleRejectCriterionAnalysis(
-                                                                        record.analysisCriterionId,
-                                                                        record.id,
-                                                                        !!isOverdue
-                                                                    )
+                                                            <DatePicker
+                                                                format="DD/MM/YYYY"
+                                                                placeholder="Chọn ngày gia hạn"
+                                                                disabledDate={(current) =>
+                                                                    current &&
+                                                                    current < dayjs().startOf('day')
                                                                 }
-                                                            >
-                                                                Gửi yêu cầu
-                                                            </Button>
-                                                        </div>
-                                                    </Form>
-                                                </div>
+                                                                className="w-full"
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                    <div className="flex justify-end gap-2 mt-2">
+                                                        <Button
+                                                            onClick={() => {
+                                                                form.resetFields()
+                                                                toggleCommentRow(record.id)
+                                                            }}
+                                                        >
+                                                            Hủy
+                                                        </Button>
+                                                        <Button
+                                                            type="primary"
+                                                            onClick={() =>
+                                                                handleRejectCriterionAnalysis(
+                                                                    record.analysisCriterionId,
+                                                                    record.id,
+                                                                    !!isOverdue
+                                                                )
+                                                            }
+                                                        >
+                                                            Gửi yêu cầu
+                                                        </Button>
+                                                    </div>
+                                                </Form>
                                             )
                                         },
                                         rowExpandable: (record) =>
