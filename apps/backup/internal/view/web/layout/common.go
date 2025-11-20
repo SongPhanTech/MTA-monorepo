@@ -1,6 +1,8 @@
 package layout
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/static"
 	nodx "github.com/nodxdev/nodxgo"
 )
@@ -20,12 +22,16 @@ func commonHtmlDoc(title string, bodyContentGroup nodx.Node) nodx.Node {
 }
 
 func commonHead() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	href := func(path string) nodx.Node {
-		return nodx.Href(static.GetVersionedFilePath(path))
+		return nodx.Href(env.PBW_PREFIX + static.GetVersionedFilePath(path))
 	}
 
 	src := func(path string) nodx.Node {
-		return nodx.Src(static.GetVersionedFilePath(path))
+		return nodx.Src(env.PBW_PREFIX + static.GetVersionedFilePath(path))
 	}
 
 	return nodx.Group(

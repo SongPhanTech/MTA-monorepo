@@ -28,13 +28,10 @@ func (m *Middleware) InjectReqctx(next echo.HandlerFunc) echo.HandlerFunc {
 
 		if found {
 			reqCtx.IsAuthed = true
-			reqCtx.SessionID = user.SessionID
 			reqCtx.User = dbgen.User{
-				ID:        user.ID,
-				Name:      user.Name,
-				Email:     user.Email,
-				CreatedAt: user.CreatedAt,
-				UpdatedAt: user.UpdatedAt,
+				ID:    user.SDMNhanVienID,
+				Name:  user.Name,
+				Email: user.Email,
 			}
 		}
 

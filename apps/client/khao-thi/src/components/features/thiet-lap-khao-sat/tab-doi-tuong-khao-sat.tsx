@@ -1,3 +1,4 @@
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
@@ -158,14 +159,7 @@ function TabDoiTuongKhaoSat() {
                 : {}),
         }),
         [
-            filters.code,
-            filters.name,
-            filters.trainingCourse,
-            filters.organization,
-            filters.trainingField,
-            filters.trainingMajors,
-            filters.subjectClass,
-            filters.fixedClass,
+            filters
         ]
     )
 
@@ -179,6 +173,7 @@ function TabDoiTuongKhaoSat() {
             fixedClasses: true,
             subjectClasses: true,
         },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -221,14 +216,14 @@ function TabDoiTuongKhaoSat() {
 
     return (
         <div>
-            <Row gutter={[16, 4]}>
+            <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Flex justify="end">
                         {can(
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                             'THEM'
                         ) && (
-                            <Button onClick={handleModal} type="primary">
+                            <Button onClick={handleModal} type="primary" size="small">
                                 Thêm mới
                             </Button>
                         )}
@@ -236,6 +231,7 @@ function TabDoiTuongKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        className="h-[calc(100vh-200px)]"
                         rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
@@ -262,7 +258,7 @@ function TabDoiTuongKhaoSat() {
                                 title: 'Tên đối tượng làm KS',
                                 dataIndex: 'name',
                                 type: 'input',
-                                width: 200,
+                                width: 250,
                                 fixed: 'left',
                             },
 
@@ -271,13 +267,20 @@ function TabDoiTuongKhaoSat() {
                                 dataIndex: 'organization',
                                 type: 'tree_select',
                                 options: treeData,
-                                width: 150,
-                                render: (_, record) =>
-                                    record?.organizations?.length
-                                        ? record?.organizations
-                                              .map((i: DM_DonVi) => i.sTen)
-                                              .join(',')
-                                        : '',
+                                width: 100,
+                                render: (_, record) =>{
+                                            return record?.organizations?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.organizations?.map((i: DM_DonVi) => (
+                                                    <li key={i.Id}>- {i.sMa}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                }
                             },
 
                             {
@@ -286,12 +289,19 @@ function TabDoiTuongKhaoSat() {
                                 type: 'select',
                                 width: 150,
                                 options: trainingFieldData,
-                                render: (_, record) =>
-                                    record?.trainingFields?.length
-                                        ? record?.trainingFields
-                                              .map((i: TrainingField) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) => {
+                                    return record?.trainingFields?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.trainingFields?.map((i: TrainingField) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Chuyên ngành',
@@ -299,12 +309,19 @@ function TabDoiTuongKhaoSat() {
                                 type: 'select',
                                 width: 150,
                                 options: trainingMajorData,
-                                render: (_, record) =>
-                                    record?.trainingMajors?.length
-                                        ? record?.trainingMajors
-                                              .map((i: TrainingMajor) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) => {
+                                    return record?.trainingMajors?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.trainingMajors?.map((i: TrainingMajor) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Khoá',
@@ -312,38 +329,59 @@ function TabDoiTuongKhaoSat() {
                                 type: 'select',
                                 width: 150,
                                 options: trainingCourses,
-                                render: (_, record) =>
-                                    record?.trainingCourses?.length
-                                        ? record?.trainingCourses
-                                              .map((i: TrainingCourse) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) => {
+                                    return record?.trainingCourses?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.trainingCourses?.map((i: TrainingCourse) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
-                                title: 'Lớp niên chế',
+                                title: 'Lớp quản lý',
                                 dataIndex: 'fixedClass',
                                 type: 'select',
                                 width: 150,
                                 options: fixedClasses,
-                                render: (_, record) =>
-                                    record?.fixedClasses?.length
-                                        ? record?.fixedClasses
-                                              .map((i: FixedClass) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) => {
+                                    return record?.fixedClasses?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.fixedClasses?.map((i: FixedClass) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Lớp môn học',
                                 dataIndex: 'subjectClass',
                                 type: 'select',
-                                width: 150,
+                                width: 100,
                                 options: subjectClassData,
-                                render: (_, record) =>
-                                    record?.subjectClasses?.length
-                                        ? record?.subjectClasses
-                                              .map((i: SubjectClass) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) => {
+                                    return record?.subjectClasses?.length ? (
+                                        <HtmlTruncate>
+                                            <ul>
+                                                {record?.subjectClasses?.map((i: SubjectClass) => (
+                                                    <li key={i.id}>- {i.code}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
 
                             {

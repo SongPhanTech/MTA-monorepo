@@ -5,6 +5,7 @@ import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { useEffect } from 'react'
+import { validateExamScore } from '@lib/utils'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
@@ -60,17 +61,26 @@ export default function NhapDiemPhach() {
             },
         })
     }
+
     const { mutateAsync: saveScore } = useSaveExamScore()
 
     // const listForm = Form.useWatch('list', form) || []
     const handleNhapDiem = async () => {
         const dataForm = form.getFieldsValue()
-        const dataSubmit = Object.entries(dataForm.list).map(([key, value]) => {
-            return {
-                id: key,
-                ...value,
+
+        const dataSubmit: { score: number | null; id: string }[] = []
+        for (const [key, { score }] of Object.entries(dataForm.list)) {
+            try {
+                await validateExamScore(score)
+            } catch (_) {
+                message.warning('Vui lòng kiểm tra lại điểm')
+                return
             }
-        })
+            dataSubmit.push({
+                id: key,
+                score,
+            })
+        }
         const res = await saveScore({
             data: dataSubmit,
         })
@@ -80,7 +90,7 @@ export default function NhapDiemPhach() {
         }
     }
     return (
-        <>
+        <div className="max-w-screen-sm">
             <Col span={24}>
                 <Flex justify="end" align="center">
                     <Button
@@ -109,11 +119,14 @@ export default function NhapDiemPhach() {
                                 {
                                     title: 'Phách',
                                     dataIndex: 'name',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'left',
                                     render: (_, record: any) => record?.examCode || '',
                                 },
                                 {
                                     title: 'Điểm',
-                                    width: 200,
+                                    width: 150,
                                     align: 'center',
                                     fixed: 'left',
                                     render: (_, record) => {
@@ -122,13 +135,16 @@ export default function NhapDiemPhach() {
                                                 className="w-full mb-0"
                                                 name={['list', record.id, 'score']}
                                                 label=""
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) =>
+                                                            validateExamScore(value),
+                                                    },
+                                                ]}
                                             >
                                                 <InputNumber
-                                                    min={0}
-                                                    style={{
-                                                        width: '100%',
-                                                    }}
-                                                    step={0}
+                                                    style={{ width: '100%' }}
+                                                    step={0.1}
                                                     controls={false}
                                                 />
                                             </Form.Item>
@@ -142,6 +158,6 @@ export default function NhapDiemPhach() {
                     </Form.Item>
                 </Form>
             </Col>
-        </>
+        </div>
     )
 }

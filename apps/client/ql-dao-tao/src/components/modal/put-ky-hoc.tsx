@@ -133,7 +133,14 @@ const PutSemesterModal = () => {
                 <FormItem form={form} name="schoolYearId" label="Năm học" required>
                     <Select
                         placeholder="Chọn năm học"
-                        disabled={!!input?.schoolYearId}
+                        {...(input?.schoolYearId
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                         options={data.map((i: SchoolYear) => {
                             return {
                                 value: i.id,

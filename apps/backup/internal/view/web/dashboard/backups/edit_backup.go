@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/staticdata"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -54,12 +56,18 @@ func (h *handlers) editBackupHandler(c echo.Context) error {
 			IsActive:       sql.NullBool{Bool: formData.IsActive == "true", Valid: true},
 			DestDir:        sql.NullString{String: formData.DestDir, Valid: true},
 			RetentionDays:  sql.NullInt16{Int16: formData.RetentionDays, Valid: true},
-			OptDataOnly:    sql.NullBool{Bool: formData.OptDataOnly == "true", Valid: true},
-			OptSchemaOnly:  sql.NullBool{Bool: formData.OptSchemaOnly == "true", Valid: true},
-			OptClean:       sql.NullBool{Bool: formData.OptClean == "true", Valid: true},
-			OptIfExists:    sql.NullBool{Bool: formData.OptIfExists == "true", Valid: true},
-			OptCreate:      sql.NullBool{Bool: formData.OptCreate == "true", Valid: true},
-			OptNoComments:  sql.NullBool{Bool: formData.OptNoComments == "true", Valid: true},
+			// OptDataOnly:    sql.NullBool{Bool: formData.OptDataOnly == "true", Valid: true},
+			OptDataOnly: sql.NullBool{Bool: false, Valid: true},
+			// OptSchemaOnly:  sql.NullBool{Bool: formData.OptSchemaOnly == "true", Valid: true},
+			OptSchemaOnly: sql.NullBool{Bool: false, Valid: true},
+			// OptClean:       sql.NullBool{Bool: formData.OptClean == "true", Valid: true},
+			OptClean: sql.NullBool{Bool: true, Valid: true},
+			// OptIfExists:   sql.NullBool{Bool: formData.OptIfExists == "true", Valid: true},
+			OptIfExists: sql.NullBool{Bool: false, Valid: true},
+			// OptCreate:     sql.NullBool{Bool: formData.OptCreate == "true", Valid: true},
+			OptCreate: sql.NullBool{Bool: false, Valid: true},
+			// OptNoComments: sql.NullBool{Bool: formData.OptNoComments == "true", Valid: true},
+			OptNoComments: sql.NullBool{Bool: false, Valid: true},
 		},
 	)
 	if err != nil {
@@ -69,7 +77,7 @@ func (h *handlers) editBackupHandler(c echo.Context) error {
 	return respondhtmx.AlertWithRefresh(c, "Nhiệm vụ sao lưu đã được cập nhật thành công.")
 }
 
-func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
+func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow, milestones []dbgen.Milestone) nodx.Node {
 	yesNoOptions := func(value bool) nodx.Node {
 		return nodx.Group(
 			nodx.Option(
@@ -84,13 +92,16 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 			),
 		)
 	}
-
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Chỉnh sửa nhiệm vụ sao lưu",
 		Content: []nodx.Node{
 			nodx.FormEl(
-				htmx.HxPost("/dashboard/backups/"+backup.ID.String()+"/edit"),
+				htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups/"+backup.ID.String()+"/edit"),
 				htmx.HxDisabledELT("find button"),
 				nodx.Class("space-y-2 text-base"),
 
@@ -105,19 +116,37 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 					},
 				}),
 
-				component.InputControl(component.InputControlParams{
+				component.SelectControl(component.SelectControlParams{
 					Name:        "cron_expression",
-					Label:       "Cron expression",
-					Placeholder: "* * * * *",
+					Label:       "Mốc sao lưu",
 					Required:    true,
-					Type:        component.InputTypeText,
-					HelpText:    "Biểu thức cron để lập lịch sao lưu",
-					Pattern:     `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
+					Placeholder: "Chọn mốc sao lưu",
 					Children: []nodx.Node{
-						nodx.Value(backup.CronExpression),
+						nodx.Map(
+							milestones,
+							func(db dbgen.Milestone) nodx.Node {
+								return nodx.Option(nodx.Value(db.CronExpression), nodx.Text(db.Name),
+									nodx.If(
+										db.CronExpression == backup.CronExpression,
+										nodx.Selected(""),
+									))
+							},
+						),
 					},
-					HelpButtonChildren: cronExpressionHelp(),
 				}),
+				// component.InputControl(component.InputControlParams{
+				// 	Name:        "cron_expression",
+				// 	Label:       "Cron expression",
+				// 	Placeholder: "* * * * *",
+				// 	Required:    true,
+				// 	Type:        component.InputTypeText,
+				// 	HelpText:    "Biểu thức cron để lập lịch sao lưu",
+				// 	Pattern:     `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
+				// 	Children: []nodx.Node{
+				// 		nodx.Value(backup.CronExpression),
+				// 	},
+				// 	HelpButtonChildren: cronExpressionHelp(),
+				// }),
 
 				component.SelectControl(component.SelectControlParams{
 					Name:        "time_zone",
@@ -173,7 +202,7 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 
 				component.SelectControl(component.SelectControlParams{
 					Name:     "is_active",
-					Label:    "Activate backup",
+					Label:    "Bật/Tắt",
 					Required: true,
 					Children: []nodx.Node{
 						yesNoOptions(backup.IsActive),
@@ -182,6 +211,7 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 
 				nodx.Div(
 					nodx.Class("pt-4"),
+					nodx.Hidden("true"),
 					nodx.Div(
 						nodx.Class("flex justify-start items-center space-x-1"),
 						component.H2Text("Tuỳ chọn"),

@@ -21,7 +21,6 @@ func dashboardHeaderUpdates() nodx.Node {
 
 		nodx.Class("btn btn-warning btn-sm"),
 		nodx.Href("https://github.com/eduardolat/pgbackweb/releases"),
-		nodx.Target("_blank"),
 		lucide.ExternalLink(),
 		component.SpanText("Update available"),
 		nodx.SpanEl(

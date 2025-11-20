@@ -22,7 +22,6 @@ func GetSHA256FromFS(fsys fs.FS) string {
 		if d.IsDir() {
 			return nil
 		}
-
 		file, err := fsys.Open(path)
 		if err != nil {
 			return err

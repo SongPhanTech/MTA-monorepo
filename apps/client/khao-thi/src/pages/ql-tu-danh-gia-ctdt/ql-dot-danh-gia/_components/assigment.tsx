@@ -6,11 +6,9 @@ import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import type { Prisma } from '@workspace/db/client'
+import { $Enums, type Prisma } from '@workspace/db/client'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
@@ -37,6 +35,7 @@ export type PutPhanCongHangLoatModalProps = {
     selectedCriteriaIds?: string[]
     tableData?: StandardData[]
     refetch?: () => void
+    clearSelected?: () => void
 }
 
 export default function AssigmentOfAssessmentTab() {
@@ -44,7 +43,6 @@ export default function AssigmentOfAssessmentTab() {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
-    const { can } = useAbility()
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
@@ -257,6 +255,18 @@ export default function AssigmentOfAssessmentTab() {
                         },
                     },
                 },
+                {
+                    model: 'EvaluationPeriod',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: selectedEvaluationPeriodId,
+                        },
+                        data: {
+                            status: $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING,
+                        },
+                    },
+                },
             ])
 
             const res = await sqlTransaction(operations)
@@ -292,13 +302,14 @@ export default function AssigmentOfAssessmentTab() {
                                 selectedCriteriaIds: getSelectedCriteria(),
                                 tableData: tableData,
                                 refetch: refetch,
+                                clearSelected: () => setSelectedRowKeys([]),
                             })
                         }}
                     >
                         Phân công hàng loạt
                     </Button>
                     <Button type="primary" onClick={handleSave}>
-                        Lưu
+                        Lưu phân công
                     </Button>
                 </Flex>
             </Col>
@@ -320,10 +331,9 @@ export default function AssigmentOfAssessmentTab() {
                             onClick: (e) => {
                                 const target = e.target as HTMLElement
                                 if (
-                                    target.closest('.ant-select') ||
                                     target.closest('.ant-picker') ||
-                                    target.closest('input') ||
-                                    target.closest('button')
+                                    target.closest('.ant-picker-dropdown') ||
+                                    target.closest('.ant-picker-panel')
                                 ) {
                                     return
                                 }
@@ -390,6 +400,7 @@ export default function AssigmentOfAssessmentTab() {
                                         >
                                             <Select
                                                 placeholder="Chọn giáo viên"
+                                                onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
                                                         i.userProfile?.academicRankType?.sTen || ''
@@ -427,6 +438,7 @@ export default function AssigmentOfAssessmentTab() {
                                             <DatePicker
                                                 className="w-full"
                                                 format={'DD/MM/YYYY'}
+                                                onClick={(e) => e.stopPropagation()}
                                                 disabledDate={(current) =>
                                                     current?.isBefore(dayjs(), 'day')
                                                 }
@@ -441,38 +453,28 @@ export default function AssigmentOfAssessmentTab() {
                                 render: (_, record) => {
                                     return (
                                         <Flex justify="center" align="center" gap={8}>
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                'DUYET'
-                                            ) && (
-                                                <UserPlusIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        e.preventDefault()
-                                                        onOpen({
-                                                            criterionPeriodId: record.id,
-                                                            refetch: refetch,
-                                                        })
-                                                    }}
-                                                />
-                                            )}
+                                            <UserPlusIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        criterionPeriodId: record.id,
+                                                        refetch: refetch,
+                                                    })
+                                                }}
+                                            />
 
-                                            {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                'SUA'
-                                            ) && (
-                                                <EditIcon
-                                                    className="text-blue-700 cursor-pointer"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        e.preventDefault()
-                                                        onOpen({
-                                                            criterionPeriodId: record.id,
-                                                            refetch: refetch,
-                                                        })
-                                                    }}
-                                                />
-                                            )}
+                                            <EditIcon
+                                                className="text-blue-700 cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        criterionPeriodId: record.id,
+                                                        refetch: refetch,
+                                                    })
+                                                }}
+                                            />
                                         </Flex>
                                     )
                                 },

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/service/backups"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -37,18 +39,21 @@ func (h *handlers) listBackupsHandler(c echo.Context) error {
 			Limit: 20,
 		},
 	)
+
+	milestones, err := h.servs.MilestonesService.GetAllMilestones(ctx)
 	if err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
 	return echoutil.RenderNodx(
-		c, http.StatusOK, listBackups(pagination, backups),
+		c, http.StatusOK, listBackups(pagination, backups, milestones),
 	)
 }
 
 func listBackups(
 	pagination paginateutil.PaginateResponse,
 	backups []dbgen.BackupsServicePaginateBackupsRow,
+	milestones []dbgen.Milestone,
 ) nodx.Node {
 	if len(backups) < 1 {
 		return component.EmptyResultsTr(component.EmptyResultsParams{
@@ -63,22 +68,34 @@ func listBackups(
 		}
 		return component.SpanText("Không")
 	}
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 
 	trs := []nodx.Node{}
 	for _, backup := range backups {
+
+		milestoneName := backup.CronExpression
+		for _, m := range milestones {
+			if m.CronExpression == backup.CronExpression {
+				milestoneName = m.Name
+				break
+			}
+		}
+
 		trs = append(trs, nodx.Tr(
 			nodx.Td(component.OptionsDropdown(
 				component.OptionsDropdownA(
 					nodx.Class("btn btn-sm btn-ghost btn-square"),
 					nodx.Href(
-						fmt.Sprintf("/dashboard/executions?backup=%s", backup.ID),
+						fmt.Sprintf(env.PBW_PREFIX+"/dashboard/executions?backup=%s", backup.ID),
 					),
-					nodx.Target("_blank"),
 					lucide.List(),
 					component.SpanText("Xem lịch sử thực thi"),
 				),
 				manualRunbutton(backup.ID),
-				editBackupButton(backup),
+				editBackupButton(backup, milestones),
 				duplicateBackupButton(backup.ID),
 				deleteBackupButton(backup.ID),
 			)),
@@ -97,7 +114,7 @@ func listBackups(
 				nodx.Class("font-mono"),
 				nodx.Div(
 					nodx.Class("flex flex-col items-start text-xs"),
-					component.SpanText(backup.CronExpression),
+					component.SpanText(milestoneName),
 					component.SpanText(backup.TimeZone),
 				),
 			),
@@ -108,15 +125,15 @@ func listBackups(
 				),
 				nodx.If(
 					backup.RetentionDays > 0,
-					component.SpanText(fmt.Sprintf("%d days", backup.RetentionDays)),
+					component.SpanText(fmt.Sprintf("%d ngày", backup.RetentionDays)),
 				),
 			),
-			nodx.Td(yesNoSpan(backup.OptDataOnly)),
-			nodx.Td(yesNoSpan(backup.OptSchemaOnly)),
-			nodx.Td(yesNoSpan(backup.OptClean)),
-			nodx.Td(yesNoSpan(backup.OptIfExists)),
-			nodx.Td(yesNoSpan(backup.OptCreate)),
-			nodx.Td(yesNoSpan(backup.OptNoComments)),
+			nodx.Td(yesNoSpan(backup.IsActive)),
+			// nodx.Td(yesNoSpan(backup.OptSchemaOnly)),
+			// nodx.Td(yesNoSpan(backup.OptClean)),
+			// nodx.Td(yesNoSpan(backup.OptIfExists)),
+			// nodx.Td(yesNoSpan(backup.OptCreate)),
+			// nodx.Td(yesNoSpan(backup.OptNoComments)),
 			nodx.Td(component.SpanText(
 				backup.CreatedAt.Local().Format(timeutil.LayoutYYYYMMDDHHMMSSPretty),
 			)),
@@ -126,7 +143,7 @@ func listBackups(
 	if pagination.HasNextPage {
 		trs = append(trs, nodx.Tr(
 			htmx.HxGet(fmt.Sprintf(
-				"/dashboard/backups/list?page=%d", pagination.NextPage,
+				env.PBW_PREFIX+"/dashboard/backups/list?page=%d", pagination.NextPage,
 			)),
 			htmx.HxTrigger("intersect once"),
 			htmx.HxSwap("afterend"),

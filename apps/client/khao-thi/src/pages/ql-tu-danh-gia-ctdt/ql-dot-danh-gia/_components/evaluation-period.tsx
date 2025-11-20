@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -14,9 +14,9 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus } from 'lucide-react'
+import { BookLock, BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -65,7 +65,7 @@ export default function EvaluationPeriod() {
     const { data, refetch } = useFindManyEvaluationPeriod({
         where,
         include: {
-            councils: {
+            council: {
                 select: {
                     id: true,
                     name: true,
@@ -113,6 +113,31 @@ export default function EvaluationPeriod() {
         }
     }
 
+    const handleCloseEvaluationPeriod = async () => {
+        if (!selectedEvaluationPeriodId) {
+            message.warning('Vui lòng chọn đợt đánh giá')
+            return
+        }
+
+        try {
+            showSpinner()
+            await updateEvaluationPeriod({
+                where: { id: selectedEvaluationPeriodId },
+                data: { active: false },
+            })
+            message.success('Đóng đợt đánh giá thành công')
+            refetch()
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -120,7 +145,7 @@ export default function EvaluationPeriod() {
                     <Row gutter={[16, 16]} align="top">
                         {/* Thêm mới */}
                         <Col span={24}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={8}>
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                     'THEM'
@@ -134,6 +159,26 @@ export default function EvaluationPeriod() {
                                         <BookPlus />
                                         Thêm mới
                                     </Button>
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                    'SUA'
+                                ) && (
+                                    <Tooltip placement="top" title="Đóng đợt đánh giá">
+                                        <Popconfirm
+                                            placement="topLeft"
+                                            title="Xác nhận đóng đợt đánh giá?"
+                                            description="Đợt đánh giá sẽ được đóng và không thể chỉnh sửa"
+                                            okText="Xác nhận"
+                                            cancelText="Hủy"
+                                            onConfirm={handleCloseEvaluationPeriod}
+                                        >
+                                            <Button type="primary" className="bg-yellow-600">
+                                                <BookLock />
+                                                Đóng đợt đánh giá
+                                            </Button>
+                                        </Popconfirm>
+                                    </Tooltip>
                                 )}
                             </Flex>
                         </Col>
@@ -177,33 +222,21 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Tên',
                                 dataIndex: 'name',
-                                width: 200,
+                                width: 150,
                                 align: 'center',
                                 type: 'input',
                             },
                             {
                                 title: 'Hội đồng đánh giá',
-                                width: 200,
+                                width: 150,
                                 render: (_, record) => {
-                                    if (!record.councils || record.councils.length === 0) return
-
-                                    return (
-                                        <div className="text-left">
-                                            {record.councils.map(
-                                                (council: { id: string; name: string }) => (
-                                                    <div key={council.id} className="py-0.5">
-                                                        - {council.name}
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                    )
+                                    return <div className="text-left">{record.council?.name}</div>
                                 },
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
-                                width: 150,
+                                width: 100,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.startDate
@@ -213,7 +246,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
-                                width: 150,
+                                width: 110,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.endDate
@@ -222,8 +255,8 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Mô tả',
-                                width: 200,
                                 align: 'center',
+                                width: 130,
                                 dataIndex: 'description',
                                 render: (value: string) => {
                                     return (
@@ -234,9 +267,35 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'Thao tác',
+                                title: 'Giai đoạn đợt',
+                                align: 'center',
+                                width: 110,
+                                render: (_, record) => {
+                                    const statusInfo =
+                                        EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                                    return (
+                                        <Tag color={statusInfo?.color || 'default'}>
+                                            {statusInfo?.label || record.status}
+                                        </Tag>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái đợt',
                                 width: 100,
                                 align: 'center',
+                                render: (_, record) => {
+                                    return record.active ? (
+                                        <Tag color="green">Đang hoạt động</Tag>
+                                    ) : (
+                                        <Tag color="default">Kết thúc</Tag>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                align: 'center',
+                                width: 60,
                                 fixed: 'right',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,

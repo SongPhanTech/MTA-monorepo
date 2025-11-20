@@ -690,15 +690,19 @@ export default function DanhSachSinhVien() {
                                             name={['list', record.id, 'examPostponedReason']}
                                             className="m-0"
                                         >
-                                            <AutoComplete
-                                                placeholder="Nhập lý do hoãn thi"
-                                                options={examPostponeReason.map((s) => ({
-                                                    label: s,
-                                                    value: s,
-                                                }))}
-                                                styles={{ popup: { root: { width: 'fit' } } }}
-                                                disabled={!examPostponed}
-                                            />
+                                            {!examPostponed ? (
+                                                <Input readOnly variant="underlined" />
+                                            ) : (
+                                                <AutoComplete
+                                                    placeholder="Nhập lý do hoãn thi"
+                                                    options={examPostponeReason.map((s) => ({
+                                                        label: s,
+                                                        value: s,
+                                                    }))}
+                                                    styles={{ popup: { root: { width: 'fit' } } }}
+                                                    disabled={!examPostponed}
+                                                />
+                                            )}
                                         </Form.Item>
                                     )
                                 },

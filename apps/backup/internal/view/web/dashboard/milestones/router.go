@@ -1,4 +1,4 @@
-package about
+package milestones
 
 import (
 	"github.com/eduardolat/pgbackweb/internal/service"
@@ -20,4 +20,9 @@ func MountRouter(
 	h := newHandlers(servs)
 
 	parent.GET("", h.indexPageHandler)
+	parent.GET("/list", h.listMilestonesHandler)
+	parent.GET("/create-form", h.createMilestoneFormHandler)
+	parent.POST("", h.createMilestoneHandler)
+	parent.DELETE("/:milestoneID", h.deleteMilestoneHandler)
+	parent.POST("/:milestoneID/edit", h.editMilestoneHandler)
 }

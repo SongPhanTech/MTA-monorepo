@@ -6,7 +6,7 @@ import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
 import type { SurveySession } from '@workspace/db'
 import { useSuspenseFindFirstStudent } from '@workspace/db/hooks'
-import { getPublicSurvey, useSavePublicSurvey } from '@workspace/libs/api/exam'
+import { useSavePublicSurvey, getPrivateSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 
@@ -206,7 +206,9 @@ function TakeTestPage() {
     }
 
     const fetchData = async () => {
-        const response = await getPublicSurvey(id)
+        const response = await getPrivateSurvey(id, {
+            profileId,
+        })
         if (response?.status === 200) {
             if (response?.data?.isPublic) {
                 return
@@ -430,5 +432,5 @@ function TakeTestPage() {
 
 export default TakeTestPage
 TakeTestPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <KhaoSatPrivateLayout>{page}</KhaoSatPrivateLayout>
+    return <KhaoSatPrivateLayout headerName="Làm khảo sát">{page}</KhaoSatPrivateLayout>
 }

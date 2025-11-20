@@ -1,0 +1,31 @@
+{
+  "name": "@backend/be-ql-dao-tao-shared",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build.ts",
+    "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
+    "postcompile": "rm -f .*.bun-build",
+    "start": "bun dist/index.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "catalog:",
+    "@hono/oidc-auth": "catalog:",
+    "@hono/otel": "catalog:",
+    "@hono/zod-openapi": "catalog:",
+    "@scalar/hono-api-reference": "catalog:",
+    "@workspace/db": "workspace:*",
+    "@workspace/libs": "workspace:*",
+    "axios": "catalog:",
+    "dayjs": "catalog:",
+    "decimal.js": "catalog:",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@workspace/auth": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "orval": "catalog:"
+  }
+}

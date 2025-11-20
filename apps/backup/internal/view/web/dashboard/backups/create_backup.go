@@ -2,9 +2,10 @@ package backups
 
 import (
 	"net/http"
-	"time"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/staticdata"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/validate"
@@ -58,19 +59,28 @@ func (h *handlers) createBackupHandler(c echo.Context) error {
 			IsActive:       formData.IsActive == "true",
 			DestDir:        formData.DestDir,
 			RetentionDays:  formData.RetentionDays,
-			OptDataOnly:    formData.OptDataOnly == "true",
-			OptSchemaOnly:  formData.OptSchemaOnly == "true",
-			OptClean:       formData.OptClean == "true",
-			OptIfExists:    formData.OptIfExists == "true",
-			OptCreate:      formData.OptCreate == "true",
-			OptNoComments:  formData.OptNoComments == "true",
+			// OptDataOnly:    formData.OptDataOnly == "true",
+			OptDataOnly: false,
+			// OptSchemaOnly:  formData.OptSchemaOnly == "true",
+			OptSchemaOnly: false,
+			// OptClean:       formData.OptClean == "true",
+			OptClean: true,
+			// OptIfExists:    formData.OptIfExists == "true",
+			OptIfExists: false,
+			// OptCreate:      formData.OptCreate == "true",
+			OptCreate: false,
+			// OptNoComments:  formData.OptNoComments == "true",
+			OptNoComments: false,
 		},
 	)
 	if err != nil {
 		return respondhtmx.ToastError(c, err.Error())
 	}
-
-	return respondhtmx.Redirect(c, "/dashboard/backups")
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
+	return respondhtmx.Redirect(c, env.PBW_PREFIX+"/dashboard/backups")
 }
 
 func (h *handlers) createBackupFormHandler(c echo.Context) error {
@@ -86,14 +96,20 @@ func (h *handlers) createBackupFormHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
+	milestones, err := h.servs.MilestonesService.GetAllMilestones(ctx)
+	if err != nil {
+		return respondhtmx.ToastError(c, err.Error())
+	}
+
 	return echoutil.RenderNodx(
-		c, http.StatusOK, createBackupForm(databases, destinations),
+		c, http.StatusOK, createBackupForm(databases, destinations, milestones),
 	)
 }
 
 func createBackupForm(
 	databases []dbgen.DatabasesServiceGetAllDatabasesRow,
 	destinations []dbgen.DestinationsServiceGetAllDestinationsRow,
+	milestones []dbgen.Milestone,
 ) nodx.Node {
 	yesNoOptions := func() nodx.Node {
 		return nodx.Group(
@@ -102,10 +118,13 @@ func createBackupForm(
 		)
 	}
 
-	serverTZ := time.Now().Location().String()
-
+	// serverTZ := time.Now().Location().String()
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.FormEl(
-		htmx.HxPost("/dashboard/backups"),
+		htmx.HxPost(env.PBW_PREFIX+"/dashboard/backups"),
 		htmx.HxDisabledELT("find button"),
 		nodx.Class("space-y-2 text-base"),
 
@@ -166,16 +185,31 @@ func createBackupForm(
 			}),
 		),
 
-		component.InputControl(component.InputControlParams{
-			Name:               "cron_expression",
-			Label:              "Cron expression",
-			Placeholder:        "* * * * *",
-			Required:           true,
-			Type:               component.InputTypeText,
-			HelpText:           "Biểu thức cron để lập lịch sao lưu",
-			Pattern:            `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
-			HelpButtonChildren: cronExpressionHelp(),
+		component.SelectControl(component.SelectControlParams{
+			Name:        "cron_expression",
+			Label:       "Mốc sao lưu",
+			Required:    true,
+			Placeholder: "Chọn mốc sao lưu",
+			Children: []nodx.Node{
+				nodx.Map(
+					milestones,
+					func(db dbgen.Milestone) nodx.Node {
+						return nodx.Option(nodx.Value(db.CronExpression), nodx.Text(db.Name))
+					},
+				),
+			},
 		}),
+
+		// component.InputControl(component.InputControlParams{
+		// 	Name:               "cron_expression",
+		// 	Label:              "Cron expression",
+		// 	Placeholder:        "* * * * *",
+		// 	Required:           true,
+		// 	Type:               component.InputTypeText,
+		// 	HelpText:           "Biểu thức cron để lập lịch sao lưu",
+		// 	Pattern:            `^\S+\s+\S+\s+\S+\s+\S+\s+\S+$`,
+		// 	HelpButtonChildren: cronExpressionHelp(),
+		// }),
 
 		component.SelectControl(component.SelectControlParams{
 			Name:        "time_zone",
@@ -186,12 +220,11 @@ func createBackupForm(
 				nodx.Map(
 					staticdata.Timezones,
 					func(tz staticdata.Timezone) nodx.Node {
-						var selected nodx.Node
-						if tz.TzCode == serverTZ {
-							selected = nodx.Selected("")
-						}
-
-						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label), selected)
+						return nodx.Option(nodx.Value(tz.TzCode), nodx.Text(tz.Label),
+							nodx.If(
+								tz.TzCode == "Asia/Bangkok",
+								nodx.Selected(""),
+							))
 					},
 				),
 			},
@@ -225,7 +258,7 @@ func createBackupForm(
 
 		component.SelectControl(component.SelectControlParams{
 			Name:     "is_active",
-			Label:    "Kích hoạt sao lưu",
+			Label:    "Bật/Tắt sao lưu",
 			Required: true,
 			Children: []nodx.Node{
 				nodx.Option(nodx.Value("true"), nodx.Text("Có")),
@@ -235,6 +268,7 @@ func createBackupForm(
 
 		nodx.Div(
 			nodx.Class("pt-4"),
+			nodx.Hidden("true"),
 			nodx.Div(
 				nodx.Class("flex justify-start items-center space-x-1"),
 				component.H2Text("Tuỳ chọn"),
@@ -317,12 +351,16 @@ func createBackupForm(
 }
 
 func createBackupButton() nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
 		Title: "Tạo nhiệm vụ sao lưu",
 		Content: []nodx.Node{
 			nodx.Div(
-				htmx.HxGet("/dashboard/backups/create-form"),
+				htmx.HxGet(env.PBW_PREFIX+"/dashboard/backups/create-form"),
 				htmx.HxSwap("outerHTML"),
 				htmx.HxTrigger("intersect once"),
 				nodx.Class("p-10 flex justify-center"),

@@ -101,7 +101,7 @@ const PutSubjectListModal = () => {
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên nhóm môn học" required>
-                    <Input placeholder="Nhập tên môn học" disabled={input?.isLocked} />
+                    <Input placeholder="Nhập tên môn học" readOnly={input?.isLocked} />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -118,18 +118,23 @@ const PutSubjectListModal = () => {
                 <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                     <TreeSelect
                         treeData={treeData}
-                        showSearch
                         placeholder="Chọn đơn vị quản lý"
                         style={{ width: '100%' }}
-                        allowClear
+                        {...(input?.isLocked
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                         treeDefaultExpandAll
-                        disabled={input?.isLocked}
                     />
                 </Form.Item>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" disabled={input?.isLocked} />
+                    <Input.TextArea placeholder="Nhập mô tả" readOnly={input?.isLocked} />
                 </FormItem>
             </Col>
             {input?.id && (

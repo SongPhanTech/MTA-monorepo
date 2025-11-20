@@ -1,9 +1,9 @@
-import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { createId, type EvaluationPeriod } from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import { useFindManyStandardCatalog, useFindManyStandardPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, message, Tree } from 'antd'
@@ -50,9 +50,10 @@ const PutTieuChuanTieuChi = () => {
     const {
         isOpen,
         onClose,
-        input: id,
+        input: { id, refetch } = {},
     } = useDisclosure<{
         id?: string
+        refetch?: () => void
     }>({
         tag: 'PutTieuChuanTieuChi',
     })
@@ -351,6 +352,18 @@ const PutTieuChuanTieuChi = () => {
                             ),
                         },
                     },
+                    {
+                        model: 'EvaluationPeriod',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: selectedEvaluationPeriodId,
+                            },
+                            data: {
+                                status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
+                            },
+                        },
+                    },
                 ])
 
                 if (res.status !== 200) {
@@ -426,6 +439,18 @@ const PutTieuChuanTieuChi = () => {
                             ),
                         },
                     },
+                    {
+                        model: 'EvaluationPeriod',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: selectedEvaluationPeriodId,
+                            },
+                            data: {
+                                status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
+                            },
+                        },
+                    },
                 ])
 
                 if (res.status !== 200) {
@@ -436,9 +461,9 @@ const PutTieuChuanTieuChi = () => {
                 message.success('Thêm mới thành công')
             }
 
-            queryClient.invalidateQueries({
-                queryKey: ['StandardPeriod'],
-            })
+            if (refetch) {
+                refetch()
+            }
 
             onClose()
         } catch (error) {

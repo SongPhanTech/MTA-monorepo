@@ -1,4 +1,6 @@
+import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
+import KyThi from '@components/sub-pages/danh-sach-ky-thi'
 import NhapDiem from '@components/sub-pages/nhap-diem'
 import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
 import PhongThi from '@components/sub-pages/ql-phong-thi'
@@ -10,7 +12,6 @@ import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/
 import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
@@ -32,6 +33,12 @@ export const diemLopMonHocStore = new Store<DiemLopMonHocStoreState>({
     selectedSubjectClassId: undefined,
 })
 
+export const kythiStore = new Store<{
+    examId?: string
+}>({
+    examId: undefined,
+})
+
 export const diemPhongThiStore = new Store<{
     selectedExamListId?: string
 }>({
@@ -45,6 +52,7 @@ export default function QuanLyDiemLopMonHoc({
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
     const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
+    const { examId } = useStore(kythiStore)
     const { selectedExamListId } = useStore(diemPhongThiStore)
     const { data } = useFindUniqueSubjectClass(
         {
@@ -89,9 +97,15 @@ export default function QuanLyDiemLopMonHoc({
             role === 'P13' && score === 'PHACH'
                 ? [
                       {
-                          label: 'Phòng thi',
+                          label: 'Kỳ thi',
                           key: '1',
+                          children: <KyThi />,
+                      },
+                      {
+                          label: 'Phòng thi',
+                          key: '11',
                           children: <PhongThi />,
+                          disabled: !examId,
                       },
                   ]
                 : [
@@ -160,7 +174,7 @@ export default function QuanLyDiemLopMonHoc({
             ]
         }
         return baseMenu
-    }, [data, role, score, activeKey, selectedExamListId])
+    }, [data, role, score, activeKey, examId, selectedExamListId])
 
     const reasonDate = useCallback(() => {
         if (score === 'CC/TX' && (data?.scoreDeadLineStart || data?.scoreDeadline)) {

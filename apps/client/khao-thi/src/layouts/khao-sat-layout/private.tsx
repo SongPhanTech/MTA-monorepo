@@ -16,10 +16,12 @@ interface breadcrumListProps {
 const KhaoSatPrivateLayout = ({
     children,
     className,
+    headerName,
     unLayout = false,
 }: {
     children: ReactNode
     className?: string
+    headerName?: string
     unLayout?: boolean
 }) => {
     const router = useRouter()
@@ -47,7 +49,9 @@ const KhaoSatPrivateLayout = ({
                     }}
                 >
                     <Header className="flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  w-full">
-                        <div className="text-lg font-bold text-primary">KHẢO THÍ</div>
+                        <div className="text-lg font-bold text-primary">
+                            {headerName || 'KHẢO THÍ'}{' '}
+                        </div>
                         <HeaderApp />
                     </Header>
                     <Content className="mx-2 mt-20">

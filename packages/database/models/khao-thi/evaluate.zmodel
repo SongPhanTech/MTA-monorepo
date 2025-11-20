@@ -5,15 +5,32 @@ import '../ql-dao-tao/categories'
 import '../ql-ho-so/profile'
 import '../ql-dao-tao/lecturer'
 
+/// Trạng thái đợt đánh giá
+enum EvaluationPeriodStatus {
+  COUNCIL_ESTABLISHED      // Thành lập hội đồng
+  ASSIGNMENT               // Phân công đánh giá
+  ANALYSIS_WRITING         // Viết phiếu phân tích
+  SECRETARY_REVIEW         // Xét duyệt Ban thư ký (Phê duyệt)
+  DIRECTOR_REVIEW          // Xét duyệt Trưởng ban thư ký (Phê duyệt)
+  EVALUATION_WRITING       // Viết phiếu đánh giá
+  CROSS_REVIEW_ASSIGNMENT  // Phân công phản biện chéo
+  CROSS_REVIEW             // Phản biện chéo
+  CONSOLIDATION            // Tổng hợp phiếu đánh giá
+  COUNCIL_APPROVAL         // Xét duyệt cuối cùng (Hội đồng)
+  COMPLETED                // Hoàn thành (P13 đóng)
+
+  @@schema("khao-thi")
+}
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod extends Base {
   name      String
-  startDate DateTime            @default(now())
+  startDate DateTime               @default(now())
   endDate   DateTime?
+  status    EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
 
   standards StandardPeriod[]
-  councils  EvaluationCouncil[]
+  council   EvaluationCouncil?
 
   @@schema("khao-thi")
 }
@@ -245,7 +262,7 @@ enum EvaluationMemberRole {
 /// Hội đồng đánh giá
 model EvaluationCouncil extends Base {
   period   EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId String
+  periodId String                    @unique
   name     String
 
   members  EvaluationCouncilMember[]

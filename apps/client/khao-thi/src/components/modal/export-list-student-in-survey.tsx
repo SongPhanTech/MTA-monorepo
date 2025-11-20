@@ -4,48 +4,45 @@ import { Button, Flex } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-const ExportStudentInSurvey = ({
-    query,
-    survey
-}: {
-    query: any
-    survey?:any
-}) => {
-    const { data } = useFindManyUserProfile({
-        where: { ...query },
-        include: {
-            educationAndTraining: {
-                include: {
-                    subjectClassStudent: {
-                        include: {
-                            subjectClass: {
-                                include: {
-                                    survey: {
-                                        include: {
-                                            surveySessions: true,
+const ExportStudentInSurvey = ({ query, survey }: { query: any; survey?: any }) => {
+    const { data } = useFindManyUserProfile(
+        {
+            where: { ...query },
+            include: {
+                educationAndTraining: {
+                    include: {
+                        subjectClassStudent: {
+                            include: {
+                                subjectClass: {
+                                    include: {
+                                        survey: {
+                                            include: {
+                                                surveySessions: true,
+                                            },
                                         },
                                     },
                                 },
                             },
                         },
-                    },
-                    fixedClass: {
-                        include: {
-                            trainingCourse: true,
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                            },
                         },
                     },
                 },
+                surveySession: {
+                    where: { surveyId: survey?.id },
+                },
             },
-            surveySession: {
-                where: { surveyId:survey?.id },
+            orderBy: {
+                firstName: 'asc',
             },
         },
-        orderBy: {
-            firstName: 'asc',
-        },
-    },{
-        enabled: !!survey?.id
-    })
+        {
+            enabled: !!survey?.id,
+        }
+    )
 
     const exportTemplate = async () => {
         // Tạo workbook mới
@@ -165,14 +162,16 @@ const ExportStudentInSurvey = ({
 
         worksheet.getCell('F5').value = 'Giảng viên:'
         worksheet.getCell('F5').style = headerSubtitleStyle
-        
-        worksheet.getCell('G5').value = `${survey?.lecture?.code} - ${survey?.lecture?.userProfile?.fullname}`
+
+        worksheet.getCell('G5').value =
+            `${survey?.lecture?.code} - ${survey?.lecture?.userProfile?.fullname}`
         worksheet.getCell('G5').style = headerSubtitleStyle
 
         worksheet.getCell('F6').value = 'Lớp môn học:'
         worksheet.getCell('F6').style = headerTitleStyle
-        
-        worksheet.getCell('G6').value = `${survey?.subjectClass?.code} - ${survey?.subjectClass?.name}`
+
+        worksheet.getCell('G6').value =
+            `${survey?.subjectClass?.code} - ${survey?.subjectClass?.name}`
         worksheet.getCell('G6').style = headerTitleStyle
         // Thêm tiêu đề bảng
         const headerRow = worksheet.getRow(11)

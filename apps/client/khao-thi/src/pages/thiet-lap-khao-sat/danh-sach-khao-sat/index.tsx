@@ -10,12 +10,13 @@ import dayjs from 'dayjs'
 import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DetailSurveyPage() {
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId
+    const profileId = session?.sDM_NhanVienId ||'fde8b90b-d93b-485d-aa5c-d403990678e5'
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -95,6 +96,10 @@ export default function DetailSurveyPage() {
         code: filters.code,
     })
 
+         const { onOpen } = useDisclosure<{userId: string, surveyId: string}>({
+                tag: 'ReviewSurveyModal',
+            })
+
     // const { data: count } = useCountSurvey({
     //     where: {
     //         ...where,
@@ -102,12 +107,13 @@ export default function DetailSurveyPage() {
     //     },
     // })
     return (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 8]}>
             {/* <Col span={24}>
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
             </Col> */}
             <Col span={24}>
                 <Table
+                className="h-[calc(100vh-130px)]"
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)
@@ -122,22 +128,36 @@ export default function DetailSurveyPage() {
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
+                            title: 'Đơt khảo sát',
+                            dataIndex: 'name',
+                            type: 'input',
+                            render: (__, record) => {
+                                return record?.name || ''
+                            },
+                        },
+                        {
                             title: 'Đối tượng được khảo sát',
                             dataIndex: 'name',
                             type: 'input',
                             render: (__, record) => {
-                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                                return record?.lecture
+                                    ? `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                                    : ''
                             },
                         },
                         {
                             title: 'Lớp môn học',
                             dataIndex: 'name',
                             type: 'input',
-                            render: (__, record) => (
-                                <div>
-                                    {record?.subjectClass?.code} - {record?.subjectClass?.name}
-                                </div>
-                            ),
+                            render: (__, record) => {
+                                return record?.lecture ? (
+                                    <div>
+                                        {record?.subjectClass?.code} - {record?.subjectClass?.name}
+                                    </div>
+                                ) : (
+                                    ''
+                                )
+                            },
                         },
                         {
                             title: 'Ngày bắt đầu',
@@ -211,7 +231,7 @@ export default function DetailSurveyPage() {
                                                 className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
                                                 onClick={() => {
                                                     if (surveySessions?.length > 0) {
-                                                        router.push(`/xem-lai-khao-sat/${id}`)
+                                                        onOpen({ userId:profileId||'',surveyId: id })
                                                         return
                                                     }
                                                     if (!isPublic) {

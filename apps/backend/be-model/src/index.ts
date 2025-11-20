@@ -1,4 +1,7 @@
+import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -11,17 +14,37 @@ import { proxy } from 'hono/proxy'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
+import ApimLogsApp from './api/apim-logs'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
-export const prisma = new PrismaClient()
+
+import './otel'
+
+const openTelemetrySDK = new NodeSDK({
+    traceExporter: new OTLPTraceExporter(),
+})
+openTelemetrySDK.start()
+
+export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
+
+const instrumentationConfig = {
+    serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
+    serviceVersion: '1.0.0',
+    captureRequestHeaders: ['user-agent', 'service-name'],
+}
+
+app.use(httpInstrumentationMiddleware(instrumentationConfig))
+
 app.use(
     '*',
     cors({
         origin: [
             'http://localhost:3001',
             'http://localhost:3000',
+            'http://localhost:8081',
+            'https://localhost:8081',
             'https://mta.swantech.vn',
             'https://user.mta.swantech.vn',
             'https://daotao.mta.swantech.vn',
@@ -56,7 +79,7 @@ app.use('*', checkIp)
 // public route
 setupOpenApi(app)
 app.route('/api/auth', AuthApp)
-
+app.route('/api/apim-logs', ApimLogsApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)

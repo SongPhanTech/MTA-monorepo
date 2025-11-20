@@ -1,6 +1,8 @@
 package executions
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	"github.com/eduardolat/pgbackweb/internal/view/web/respondhtmx"
 	"github.com/google/uuid"
@@ -27,12 +29,16 @@ func (h *handlers) deleteExecutionHandler(c echo.Context) error {
 }
 
 func deleteExecutionButton(executionID uuid.UUID) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	return nodx.Button(
-		htmx.HxDelete("/dashboard/executions/"+executionID.String()),
+		htmx.HxDelete(env.PBW_PREFIX+"/dashboard/executions/"+executionID.String()),
 		htmx.HxDisabledELT("this"),
-		htmx.HxConfirm("Are you sure you want to delete this execution? It will delete the backup file from the destination and it can't be recovered."),
+		htmx.HxConfirm("Bạn có chắc chắn muốn xoá thực thi này không? Việc này sẽ xoá file backup khỏi đích đến và không thể khôi phục."),
 		nodx.Class("btn btn-error btn-outline"),
-		component.SpanText("Delete"),
+		component.SpanText("Xoá"),
 		lucide.Trash(),
 	)
 }

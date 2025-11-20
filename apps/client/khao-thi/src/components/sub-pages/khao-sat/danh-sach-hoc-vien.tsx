@@ -15,7 +15,7 @@ import { Col, Flex, Row, Skeleton, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-function DanhSachHocVien({ survey }: { survey: Survey |null }) {
+function DanhSachHocVien({ survey }: { survey: Survey | null }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -107,7 +107,7 @@ function DanhSachHocVien({ survey }: { survey: Survey |null }) {
             }),
         }
     }, [survey, filters])
-    const { data ,isLoading} = useFindManyUserProfile({
+    const { data, isLoading } = useFindManyUserProfile({
         where,
         include: {
             educationAndTraining: {
@@ -133,7 +133,7 @@ function DanhSachHocVien({ survey }: { survey: Survey |null }) {
                 },
             },
             surveySession: {
-                where: { surveyId:survey?.id },
+                where: { surveyId: survey?.id },
             },
         },
         orderBy: {
@@ -152,132 +152,130 @@ function DanhSachHocVien({ survey }: { survey: Survey |null }) {
         }
         return <Tag color={'red'}>{'Chưa làm'}</Tag>
     }
-    console.log(survey);
-    
+    console.log(survey)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     return (
         <div>
             <Row gutter={[16, 4]}>
-                {
-                    isLoading ?<Skeleton/>:(<>
-                     <Col span={24}>
-                    <Flex justify="end">
-                        <ExportStudentInSurvey
-                            query={where}
-                            survey={survey || null}
-                       
-                        />
-                    </Flex>
-                </Col>
-                <Col span={24}>
-                    <Table
-                        rowKey={'id'}
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 20,
-                                align: 'center',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã người làm KS',
-                                dataIndex: 'code',
-                                type: 'input',
-                                render: (_, record) => record?.code || '',
-                            },
-                            {
-                                title: 'Người làm khảo sát',
-                                dataIndex: 'name',
-                                type: 'input',
-                                render: (_, record) => {
-                                    return `${record?.lastName || ''} ${record?.firstName || ''}`
-                                },
-                            },
-                            {
-                                title: 'CCCD',
-                                dataIndex: 'idCardNumber',
-                                type: 'input',
-                                render: (_, record) => record?.idCardNumber || '',
-                            },
-                            {
-                                title: 'SĐT',
-                                dataIndex: 'phoneNumber',
-                                type: 'input',
-                                render: (_, record) => record?.phoneNumber || '',
-                            },
-                            {
-                                title: 'Lớp quản lý',
-                                dataIndex: 'fixedClassIds',
-                                type: 'select',
-                                options:
-                                    fixedClasses?.map((fc) => ({ value: fc.id, label: fc.name })) ||
-                                    [],
-                                render: (_, record) =>
-                                    record?.educationAndTraining?.length > 0
-                                        ? `${record?.educationAndTraining[0]?.fixedClass?.code || ''}`
-                                        : '',
-                            },
-                            {
-                                title: 'Khoá',
-                                dataIndex: 'trainingCourseIds',
-                                type: 'select',
-                                options:
-                                    trainingCourses?.map((tc) => ({
-                                        value: tc.id,
-                                        label: tc.name,
-                                    })) || [],
-                                render: (_, record) =>
-                                    record?.educationAndTraining?.length > 0
-                                        ? `${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
-                                        : '',
-                            },
-                            {
-                                title: 'Trạng thái KS',
-                                dataIndex: 'statusSurvey',
-                                align: 'center',
-                                type: 'select',
-                                options: [
-                                    {
-                                        value: true,
-                                        label: 'Đã làm',
-                                    },
-                                    {
-                                        value: false,
-                                        label: 'Chưa làm',
-                                    },
-                                ],
-                                render: (__, record) => {
-                                    return checkStatus(record)
-                                },
-                            },
-                        ]}
-                        data={data || []}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
+                {isLoading ? (
+                    <Skeleton />
+                ) : (
+                    <>
+                        <Col span={24}>
+                            <Flex justify="end">
+                                <ExportStudentInSurvey query={where} survey={survey || null} />
+                            </Flex>
+                        </Col>
+                        <Col span={24}>
+                            <Table
+                                rowKey={'id'}
+                                filters={filters}
+                                setFilters={(value) => {
+                                    setFilters(value)
                                     setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Col>
-                    </>)
-                }
-               
+                                }}
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 20,
+                                        align: 'center',
+                                        render: (_, __, index) =>
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    },
+                                    {
+                                        title: 'Mã người làm KS',
+                                        dataIndex: 'code',
+                                        type: 'input',
+                                        render: (_, record) => record?.code || '',
+                                    },
+                                    {
+                                        title: 'Người làm khảo sát',
+                                        dataIndex: 'name',
+                                        type: 'input',
+                                        render: (_, record) => {
+                                            return `${record?.lastName || ''} ${record?.firstName || ''}`
+                                        },
+                                    },
+                                    {
+                                        title: 'CCCD',
+                                        dataIndex: 'idCardNumber',
+                                        type: 'input',
+                                        render: (_, record) => record?.idCardNumber || '',
+                                    },
+                                    {
+                                        title: 'SĐT',
+                                        dataIndex: 'phoneNumber',
+                                        type: 'input',
+                                        render: (_, record) => record?.phoneNumber || '',
+                                    },
+                                    {
+                                        title: 'Lớp quản lý',
+                                        dataIndex: 'fixedClassIds',
+                                        type: 'select',
+                                        options:
+                                            fixedClasses?.map((fc) => ({
+                                                value: fc.id,
+                                                label: fc.name,
+                                            })) || [],
+                                        render: (_, record) =>
+                                            record?.educationAndTraining?.length > 0
+                                                ? `${record?.educationAndTraining[0]?.fixedClass?.code || ''}`
+                                                : '',
+                                    },
+                                    {
+                                        title: 'Khoá',
+                                        dataIndex: 'trainingCourseIds',
+                                        type: 'select',
+                                        options:
+                                            trainingCourses?.map((tc) => ({
+                                                value: tc.id,
+                                                label: tc.name,
+                                            })) || [],
+                                        render: (_, record) =>
+                                            record?.educationAndTraining?.length > 0
+                                                ? `${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
+                                                : '',
+                                    },
+                                    {
+                                        title: 'Trạng thái KS',
+                                        dataIndex: 'statusSurvey',
+                                        align: 'center',
+                                        type: 'select',
+                                        options: [
+                                            {
+                                                value: true,
+                                                label: 'Đã làm',
+                                            },
+                                            {
+                                                value: false,
+                                                label: 'Chưa làm',
+                                            },
+                                        ],
+                                        render: (__, record) => {
+                                            return checkStatus(record)
+                                        },
+                                    },
+                                ]}
+                                data={data || []}
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: numberOfPages,
+                                    total: count,
+                                    onChange: (page, pageSize) => {
+                                        if (numberOfPages === pageSize) {
+                                            setCurrentPage(page)
+                                        } else {
+                                            setCurrentPage(1)
+                                            setNumberOfPages(pageSize)
+                                        }
+                                    },
+                                }}
+                            />
+                        </Col>
+                    </>
+                )}
             </Row>
         </div>
     )

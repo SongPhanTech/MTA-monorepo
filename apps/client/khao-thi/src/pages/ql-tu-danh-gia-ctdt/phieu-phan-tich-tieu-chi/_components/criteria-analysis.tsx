@@ -35,11 +35,11 @@ export type DataTabType = StandardPeriod & {
 
 export default function CriteriaAnalysisWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data } = useFindUniqueEvaluationPeriod(
+    const { data, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
@@ -155,12 +155,13 @@ export default function CriteriaAnalysisWrite() {
                             data={standard}
                             idx={standard.order}
                             userRole="GV"
+                            refetch={refetch}
                         />
                     ),
                 }
             })
         }
-    }, [data])
+    }, [data, refetch])
 
     return (
         <div className="h-full">

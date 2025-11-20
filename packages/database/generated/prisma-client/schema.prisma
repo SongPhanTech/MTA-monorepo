@@ -390,6 +390,23 @@ enum PaymentStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Trạng thái đợt đánh giá
+enum EvaluationPeriodStatus {
+  COUNCIL_ESTABLISHED
+  ASSIGNMENT
+  ANALYSIS_WRITING
+  SECRETARY_REVIEW
+  DIRECTOR_REVIEW
+  EVALUATION_WRITING
+  CROSS_REVIEW_ASSIGNMENT
+  CROSS_REVIEW
+  CONSOLIDATION
+  COUNCIL_APPROVAL
+  COMPLETED
+
+  @@schema("khao-thi")
+}
+
 enum EvaluationCriterionStatus {
   PENDING
   SUBMITTED
@@ -435,6 +452,13 @@ enum SurveyObject {
   CIVILIAN_STUDENT
   LECTURER
   STAFF
+
+  @@schema("khao-thi")
+}
+
+enum SurveyType {
+  SINGLE
+  CLUSTER
 
   @@schema("khao-thi")
 }
@@ -4605,19 +4629,20 @@ model SupervisorPaymentRecord {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod {
-  id          String              @id() @default(cuid())
-  code        String?             @unique()
-  active      Boolean             @default(true)
-  description String?             @db.Text()
+  id          String                 @id() @default(cuid())
+  code        String?                @unique()
+  active      Boolean                @default(true)
+  description String?                @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @default(now()) @updatedAt()
-  createdBy   String?             @db.Uuid()
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @default(now()) @updatedAt()
+  createdBy   String?                @db.Uuid()
   name        String
-  startDate   DateTime            @default(now())
+  startDate   DateTime               @default(now())
   endDate     DateTime?
+  status      EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
   standards   StandardPeriod[]
-  councils    EvaluationCouncil[]
+  council     EvaluationCouncil?
 
   @@schema("khao-thi")
 }
@@ -4893,7 +4918,7 @@ model EvaluationCouncil {
   updatedAt   DateTime                  @default(now()) @updatedAt()
   createdBy   String?                   @db.Uuid()
   period      EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId    String
+  periodId    String                    @unique()
   name        String
   members     EvaluationCouncilMember[]
 
@@ -4977,6 +5002,7 @@ model SurveyTopic {
   clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
+  type                SurveyType?
 
   @@schema("khao-thi")
 }

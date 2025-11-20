@@ -19,9 +19,6 @@ export default defineConfig({
                 },
             },
         },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
-        },
     },
     training_api: {
         input: 'https://api.daotao.mta.swantech.vn/openapi',
@@ -41,9 +38,6 @@ export default defineConfig({
                 },
             },
         },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
-        },
     },
     ems_api: {
         input: 'https://api.khaothi.mta.swantech.vn/openapi',
@@ -62,9 +56,6 @@ export default defineConfig({
                     name: 'customExamFetch',
                 },
             },
-        },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
     portal_api: {
@@ -86,9 +77,6 @@ export default defineConfig({
                 },
             },
         },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
-        },
     },
     system_api: {
         input: 'https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json',
@@ -107,9 +95,6 @@ export default defineConfig({
                     name: 'customSystemFetch',
                 },
             },
-        },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
     system_share_api: {
@@ -130,9 +115,6 @@ export default defineConfig({
                 },
             },
         },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
-        },
     },
     storage_api: {
         input: 'https://mta.swantech.vn/api/system/storage/swagger/v1/swagger.json',
@@ -151,9 +133,6 @@ export default defineConfig({
                     name: 'customStorageFetch',
                 },
             },
-        },
-        hooks: {
-            afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
 })

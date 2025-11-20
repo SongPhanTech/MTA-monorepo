@@ -674,7 +674,7 @@ export type classDivisionResponse200 = {
 }
 
 export type classDivisionResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -737,7 +737,7 @@ export const getClassDivisionMutationOptions = <TError = void, TContext = unknow
 
 export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
 export type ClassDivisionMutationBody = ClassDivision
-export type ClassDivisionMutationError = undefined
+export type ClassDivisionMutationError = void
 
 /**
  * @summary Class Division
@@ -937,7 +937,7 @@ export type openSubjectClassResponse200 = {
 }
 
 export type openSubjectClassResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1006,7 +1006,7 @@ export const getOpenSubjectClassQueryOptions = <
 }
 
 export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
-export type OpenSubjectClassQueryError = undefined
+export type OpenSubjectClassQueryError = void
 
 export function useOpenSubjectClass<
     TData = Awaited<ReturnType<typeof openSubjectClass>>,
@@ -1101,7 +1101,7 @@ export type openSubjectClassRetakeResponse200 = {
 }
 
 export type openSubjectClassRetakeResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1176,7 +1176,7 @@ export const getOpenSubjectClassRetakeQueryOptions = <
 export type OpenSubjectClassRetakeQueryResult = NonNullable<
     Awaited<ReturnType<typeof openSubjectClassRetake>>
 >
-export type OpenSubjectClassRetakeQueryError = undefined
+export type OpenSubjectClassRetakeQueryError = void
 
 export function useOpenSubjectClassRetake<
     TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
@@ -1271,7 +1271,7 @@ export type openSubjectClassRetakeStudentsResponse200 = {
 }
 
 export type openSubjectClassRetakeStudentsResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1358,7 +1358,7 @@ export const getOpenSubjectClassRetakeStudentsQueryOptions = <
 export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<
     Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
 >
-export type OpenSubjectClassRetakeStudentsQueryError = undefined
+export type OpenSubjectClassRetakeStudentsQueryError = void
 
 export function useOpenSubjectClassRetakeStudents<
     TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
@@ -1469,7 +1469,7 @@ export type enrollFixedClassOnSubjectClassResponse200 = {
 }
 
 export type enrollFixedClassOnSubjectClassResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1541,7 +1541,7 @@ export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
     Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
 >
 export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
-export type EnrollFixedClassOnSubjectClassMutationError = undefined
+export type EnrollFixedClassOnSubjectClassMutationError = void
 
 /**
  * @summary Đăng ký lớp môn học cho lớp quản lý
@@ -1578,7 +1578,7 @@ export type setScoreDeadLineResponse200 = {
 }
 
 export type setScoreDeadLineResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1643,7 +1643,7 @@ export type SetScoreDeadLineMutationResult = NonNullable<
     Awaited<ReturnType<typeof setScoreDeadLine>>
 >
 export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
-export type SetScoreDeadLineMutationError = undefined
+export type SetScoreDeadLineMutationError = void
 
 /**
  * @summary Đặt hạn nhập điểm
@@ -1680,7 +1680,7 @@ export type setExamScoreDeadLineResponse200 = {
 }
 
 export type setExamScoreDeadLineResponse400 = {
-    data: undefined
+    data: void
     status: 400
 }
 
@@ -1748,7 +1748,7 @@ export type SetExamScoreDeadLineMutationResult = NonNullable<
     Awaited<ReturnType<typeof setExamScoreDeadLine>>
 >
 export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
-export type SetExamScoreDeadLineMutationError = undefined
+export type SetExamScoreDeadLineMutationError = void
 
 /**
  * @summary Đặt hạn nhập điểm thi

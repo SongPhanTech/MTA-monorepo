@@ -30,7 +30,7 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 
 func indexPage(reqCtx reqctx.Ctx, sessions []dbgen.Session) nodx.Node {
 	content := []nodx.Node{
-		component.H1Text("Hồ sơ"),
+		component.H2Text("Hồ sơ"),
 
 		nodx.Div(
 			nodx.Class("mt-4 grid grid-cols-2 gap-4"),

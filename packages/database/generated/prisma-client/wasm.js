@@ -3044,7 +3044,8 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   startDate: 'startDate',
-  endDate: 'endDate'
+  endDate: 'endDate',
+  status: 'status'
 };
 
 exports.Prisma.StandardCatalogScalarFieldEnum = {
@@ -3296,7 +3297,8 @@ exports.Prisma.SurveyTopicScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  type: 'type'
 };
 
 exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
@@ -7416,6 +7418,20 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   FAILED: 'FAILED'
 };
 
+exports.EvaluationPeriodStatus = exports.$Enums.EvaluationPeriodStatus = {
+  COUNCIL_ESTABLISHED: 'COUNCIL_ESTABLISHED',
+  ASSIGNMENT: 'ASSIGNMENT',
+  ANALYSIS_WRITING: 'ANALYSIS_WRITING',
+  SECRETARY_REVIEW: 'SECRETARY_REVIEW',
+  DIRECTOR_REVIEW: 'DIRECTOR_REVIEW',
+  EVALUATION_WRITING: 'EVALUATION_WRITING',
+  CROSS_REVIEW_ASSIGNMENT: 'CROSS_REVIEW_ASSIGNMENT',
+  CROSS_REVIEW: 'CROSS_REVIEW',
+  CONSOLIDATION: 'CONSOLIDATION',
+  COUNCIL_APPROVAL: 'COUNCIL_APPROVAL',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.EvaluationCriterionStatus = exports.$Enums.EvaluationCriterionStatus = {
   PENDING: 'PENDING',
   SUBMITTED: 'SUBMITTED',
@@ -7447,6 +7463,11 @@ exports.SurveyObject = exports.$Enums.SurveyObject = {
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
   LECTURER: 'LECTURER',
   STAFF: 'STAFF'
+};
+
+exports.SurveyType = exports.$Enums.SurveyType = {
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER'
 };
 
 exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {

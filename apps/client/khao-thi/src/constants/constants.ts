@@ -15,6 +15,17 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
 ]
 
+const EVALUATION_CRITERION_STATUS_OPTIONS = [
+    { value: $Enums.EvaluationCriterionStatus.PENDING, label: 'Chưa nộp' },
+    { value: $Enums.EvaluationCriterionStatus.SUBMITTED, label: 'Đã nộp' },
+    { value: $Enums.EvaluationCriterionStatus.REVISION, label: 'Yêu cầu sửa đổi' },
+    {
+        value: $Enums.EvaluationCriterionStatus.APPROVED,
+        label: 'Đã duyệt',
+    },
+    { value: $Enums.EvaluationCriterionStatus.COMPLETED, label: 'Hoàn thành' },
+]
+
 const SUBJECT_OBJECT = [
     {
         value: $Enums.SurveyObject.MILITARY_STUDENT,
@@ -64,6 +75,44 @@ const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
     }
 }
 
+const EVALUATION_PERIOD_STATUS_LABELS: Record<string, { label: string; color: string }> = {
+    [$Enums.EvaluationPeriodStatus.COUNCIL_ESTABLISHED]: {
+        label: 'Thành lập hội đồng',
+        color: 'blue',
+    },
+    [$Enums.EvaluationPeriodStatus.ASSIGNMENT]: { label: 'Phân công đánh giá', color: 'cyan' },
+    [$Enums.EvaluationPeriodStatus.ANALYSIS_WRITING]: {
+        label: 'Viết phiếu phân tích',
+        color: 'geekblue',
+    },
+    [$Enums.EvaluationPeriodStatus.SECRETARY_REVIEW]: {
+        label: 'Xét duyệt ban tư vấn',
+        color: 'purple',
+    },
+    [$Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW]: {
+        label: 'Xét duyệt trưởng ban thư ký',
+        color: 'magenta',
+    },
+    [$Enums.EvaluationPeriodStatus.EVALUATION_WRITING]: {
+        label: 'Viết phiếu đánh giá',
+        color: 'orange',
+    },
+    [$Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT]: {
+        label: 'Phân công phản biện',
+        color: 'gold',
+    },
+    [$Enums.EvaluationPeriodStatus.CROSS_REVIEW]: { label: 'Phản biện chéo', color: 'gold' },
+    [$Enums.EvaluationPeriodStatus.CONSOLIDATION]: {
+        label: 'Tổng hợp phiếu đánh giá',
+        color: 'lime',
+    },
+    [$Enums.EvaluationPeriodStatus.COUNCIL_APPROVAL]: {
+        label: 'Xét duyệt cuối cùng',
+        color: 'green',
+    },
+    [$Enums.EvaluationPeriodStatus.COMPLETED]: { label: 'Hoàn thành', color: 'success' },
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -72,4 +121,6 @@ export {
     EVALUATION_MEMBER_ROLE,
     SUBJECT_OBJECT,
     getStatusEvaluation,
+    EVALUATION_PERIOD_STATUS_LABELS,
+    EVALUATION_CRITERION_STATUS_OPTIONS,
 }

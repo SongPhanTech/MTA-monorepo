@@ -1,26 +1,13 @@
 import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import KhaoSatLayout from '@layouts/khao-sat-layout'
+import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
-import type { SurveySession } from '@workspace/db'
 import { useFindFirstSurveySession } from '@workspace/db/hooks'
-import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Input, Row } from 'antd'
 
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-
-type PutSurveySession = SurveySession & {
-    responses: {
-        surveyQuestionId: string
-        surveyChoiceId?: string
-        answerText?: string
-        explanation?: string
-        requireExplanation?: boolean
-    }[]
-    additionalSuggestion: string
-}
 
 type GroupedSurveyQuestion = {
     id: string // group id
@@ -33,10 +20,7 @@ type GroupedSurveyQuestion = {
     }[]
 }
 
-type PutUser = {
-    code: string
-}
-type SurveyType = GetSurveyResult
+
 function TakeTestPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -45,7 +29,6 @@ function TakeTestPage() {
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
-    console.log(profileId)
 
     // const { data } =  useGetPublicSurvey(id)
     const { data, isLoading } = useFindFirstSurveySession(
@@ -228,5 +211,5 @@ function TakeTestPage() {
 
 export default TakeTestPage
 TakeTestPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <KhaoSatLayout>{page}</KhaoSatLayout>
+    return <KhaoSatPrivateLayout headerName="Xem lại khảo sát">{page}</KhaoSatPrivateLayout>
 }

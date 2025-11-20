@@ -233,10 +233,15 @@ const PutGraduationDecision = () => {
                                 .join(' - '),
                             value: item.id,
                         }))}
-                        showSearch
                         filterOption={false}
-                        allowClear
-                        disabled={!!input?.id}
+                        {...(input?.id
+                            ? {
+                                  showSearch: false,
+                                  allowClear: false,
+                                  showArrow: false,
+                                  open: false,
+                              }
+                            : {})}
                     />
                 </FormItem>
             </Col>

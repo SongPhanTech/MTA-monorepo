@@ -8,12 +8,12 @@ import { useState } from 'react'
 
 export default function SurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
-    const [selectedId, setSelectedId] = useState<Survey|null>(null)
+    const [selectedId, setSelectedId] = useState<Survey | null>(null)
 
     const items = [
         {
             key: '1',
-            label: 'Khảo sát chung',
+            label: 'Đợt khảo sát',
             children: (
                 <TabDotKhaoSat
                     selectedId={selectedId}
@@ -32,7 +32,7 @@ export default function SurveyPage() {
         {
             key: '3',
             label: 'Báo cáo khảo sát',
-            children: <SurveyReport selectedId={selectedId?.id||''} />,
+            children: <SurveyReport selectedId={selectedId?.id || ''} />,
             disabled: !selectedId?.id,
         },
     ]

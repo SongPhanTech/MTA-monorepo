@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod';
+import { EvaluationPeriodStatus } from '../../zenstack/models';
+import { EvaluationPeriodStatusSchema } from '../enums/EvaluationPeriodStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -17,6 +19,7 @@ const baseSchema = z.object({
     name: z.string(),
     startDate: z.coerce.date().default(() => new Date()),
     endDate: z.coerce.date().nullish(),
+    status: EvaluationPeriodStatusSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -31,11 +34,12 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
+    status: EvaluationPeriodStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
     standards: z.array(z.unknown()).optional(),
-    councils: z.array(z.unknown()).optional(),
+    council: z.record(z.string(), z.unknown()).optional(),
 }
 );
 
@@ -73,7 +77,8 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date().nullish()
+    endDate: z.coerce.date().nullish(),
+    status: EvaluationPeriodStatusSchema
 }).partial().passthrough();
 
 
@@ -81,7 +86,7 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
  * `EvaluationPeriod` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true, status: true
 });
 
 
@@ -89,7 +94,7 @@ export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.part
  * `EvaluationPeriod` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const EvaluationPeriodCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true, status: true
 });
 
 

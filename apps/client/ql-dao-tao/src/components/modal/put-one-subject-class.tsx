@@ -223,7 +223,7 @@ const PutOneSubjectClassModal = () => {
                                 value: item.id,
                             }
                         })}
-                        disabled={true}
+                        disabled
                     />
                 </FormItem>
             </Col>

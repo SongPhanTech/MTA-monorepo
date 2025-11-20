@@ -3,6 +3,8 @@ package backups
 import (
 	"net/http"
 
+	"github.com/eduardolat/pgbackweb/internal/config"
+	"github.com/eduardolat/pgbackweb/internal/logger"
 	"github.com/eduardolat/pgbackweb/internal/util/echoutil"
 	"github.com/eduardolat/pgbackweb/internal/view/reqctx"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -18,10 +20,14 @@ func (h *handlers) indexPageHandler(c echo.Context) error {
 }
 
 func indexPage(reqCtx reqctx.Ctx) nodx.Node {
+	env, err := config.GetEnv()
+	if err != nil {
+		logger.FatalError("error getting environment variables", logger.KV{"error": err})
+	}
 	content := []nodx.Node{
 		nodx.Div(
 			nodx.Class("flex justify-between items-start"),
-			component.H1Text("Nhiệm vụ sao lưu"),
+			component.H2Text("Nhiệm vụ sao lưu"),
 			createBackupButton(),
 		),
 		component.CardBox(component.CardBoxParams{
@@ -39,18 +45,19 @@ func indexPage(reqCtx reqctx.Ctx) nodx.Node {
 								nodx.Th(component.SpanText("Đích đến lưu trữ")),
 								nodx.Th(component.SpanText("Lịch trình")),
 								nodx.Th(component.SpanText("Thời gian giữ lại dữ liệu")),
-								nodx.Th(component.SpanText("--data-only")),
-								nodx.Th(component.SpanText("--schema-only")),
-								nodx.Th(component.SpanText("--clean")),
-								nodx.Th(component.SpanText("--if-exists")),
-								nodx.Th(component.SpanText("--create")),
-								nodx.Th(component.SpanText("--no-comments")),
+								nodx.Th(component.SpanText("Bật/Tắt sao lưu")),
+								// nodx.Th(component.SpanText("--data-only")),
+								// nodx.Th(component.SpanText("--schema-only")),
+								// nodx.Th(component.SpanText("--clean")),
+								// nodx.Th(component.SpanText("--if-exists")),
+								// nodx.Th(component.SpanText("--create")),
+								// nodx.Th(component.SpanText("--no-comments")),
 								nodx.Th(component.SpanText("Ngày tạo")),
 							),
 						),
 						nodx.Tbody(
 							component.SkeletonTr(8),
-							htmx.HxGet("/dashboard/backups/list?page=1"),
+							htmx.HxGet(env.PBW_PREFIX+"/dashboard/backups/list?page=1"),
 							htmx.HxTrigger("load"),
 						),
 					),

@@ -980,7 +980,7 @@ app.openapi(setScoreDeadLine, async (c) => {
                 END,
                 "scoreDeadline"      = CASE
                                            WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'}
-                                               THEN "examDate" + (${endPadding} * INTERVAL '1 day')
+                                               THEN "examDate" - (${endPadding} * INTERVAL '1 day')
                                            WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
                                            ELSE NULL
                     END

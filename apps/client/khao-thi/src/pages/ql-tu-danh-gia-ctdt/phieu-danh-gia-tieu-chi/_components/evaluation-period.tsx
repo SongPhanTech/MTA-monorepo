@@ -1,32 +1,50 @@
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, EVALUATION_PERIOD_STATUS_LABELS } from '@constants/constants'
 import { formatDate } from '@lib/utils'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import { useCountEvaluationPeriod, useFindManyEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row } from 'antd'
-import { type Key, useState } from 'react'
+import {
+    useCountEvaluationPeriod,
+    useFindManyEvaluationPeriod,
+    useFindUniqueLecturer,
+} from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
+import { Col, Row, Tag } from 'antd'
+import { type Key, useState, useMemo } from 'react'
 
 export default function EvaluationPeriodCriteriaEvaluation() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                standards: {
-                    some: {
-                        criteria: {
-                            some: {
-                                evaluationCriterion: {
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const whereClause = useMemo(() => {
+        return {
+            OR: [
+                {
+                    standards: {
+                        some: {
+                            criteria: {
+                                some: {
+                                    evaluationCriterion: {
+                                        lecturer: {
+                                            userProfile: {
+                                                id: idProfile,
+                                            },
                                         },
                                     },
                                 },
@@ -34,9 +52,33 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                         },
                     },
                 },
-            },
+                {
+                    council: {
+                        members: {
+                            some: {
+                                lecturerId: lecturer?.id,
+                                role: {
+                                    hasSome: [
+                                        $Enums.EvaluationMemberRole.ADVISORY_BOARD,
+                                        $Enums.EvaluationMemberRole.HEAD_SECRETARY,
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    createdBy: idProfile,
+                },
+            ],
+        }
+    }, [idProfile, lecturer?.id])
+
+    const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
+        {
+            where: whereClause,
             include: {
-                councils: {
+                council: {
                     select: {
                         id: true,
                         name: true,
@@ -52,25 +94,14 @@ export default function EvaluationPeriodCriteriaEvaluation() {
         }
     )
 
-    const { data: count } = useCountEvaluationPeriod({
-        where: {
-            standards: {
-                some: {
-                    criteria: {
-                        some: {
-                            evaluationCriterion: {
-                                lecturer: {
-                                    userProfile: {
-                                        id: idProfile,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
+    const { data: count } = useCountEvaluationPeriod(
+        {
+            where: whereClause,
         },
-    })
+        {
+            enabled: !!idProfile,
+        }
+    )
 
     return (
         <Row gutter={[8, 0]}>
@@ -115,19 +146,7 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                             title: 'Hội đồng đánh giá',
                             width: 200,
                             render: (_, record) => {
-                                if (!record.councils || record.councils.length === 0) return
-
-                                return (
-                                    <div className="text-left">
-                                        {record.councils.map(
-                                            (council: { id: string; name: string }) => (
-                                                <div key={council.id} className="py-0.5">
-                                                    - {council.name}
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                )
+                                return <div className="text-left">{record.council?.name}</div>
                             },
                         },
                         {
@@ -141,6 +160,31 @@ export default function EvaluationPeriodCriteriaEvaluation() {
                             width: 150,
                             render: (_, record) =>
                                 record?.endDate ? formatDate(record.endDate) : undefined,
+                        },
+                        {
+                            title: 'Giai đoạn đợt',
+                            align: 'center',
+                            width: 110,
+                            render: (_, record) => {
+                                const statusInfo = EVALUATION_PERIOD_STATUS_LABELS[record.status]
+                                return (
+                                    <Tag color={statusInfo?.color || 'default'}>
+                                        {statusInfo?.label || record.status}
+                                    </Tag>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Trạng thái đợt',
+                            width: 100,
+                            align: 'center',
+                            render: (_, record) => {
+                                return record.active ? (
+                                    <Tag color="green">Đang hoạt động</Tag>
+                                ) : (
+                                    <Tag color="default">Kết thúc</Tag>
+                                )
+                            },
                         },
                     ]}
                     pagination={{

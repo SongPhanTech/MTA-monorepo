@@ -147,7 +147,7 @@ export default function ReviewCriteriaAnalysis({
             }))
 
         return standardsWithSubmittedCriteria
-    }, [data])
+    }, [data, userRole])
 
     return (
         <div className="h-full">

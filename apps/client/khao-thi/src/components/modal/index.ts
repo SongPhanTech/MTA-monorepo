@@ -31,6 +31,7 @@ import PutTieuChiMinhChungModal from './put-modal-tieu-chi-minh-chung'
 import PutTieuChuanTieuChi from './ql-dot-tu-danh-gia/put-tieu-chuan-tieu-chi'
 import PutPhanCongHangLoatModal from './put-phan-cong-hang-loat'
 import PutPhanCongHangLoatCrossModal from './put-phan-cong-hang-loat-cross'
+import ReviewSurveyModal from './review-survey-modal'
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -65,4 +66,5 @@ export {
     PutTieuChuanTieuChi,
     PutPhanCongHangLoatModal,
     PutPhanCongHangLoatCrossModal,
+    ReviewSurveyModal
 }

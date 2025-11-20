@@ -5,10 +5,10 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { diemPhongThiStore, kythiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import { type Prisma } from '@workspace/db/client'
+import type { Prisma } from '@workspace/db/client'
 import { useCountExamList, useFindManyExamList } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -31,12 +31,14 @@ export default function PhongThi() {
         examType: undefined,
     })
 
+    const { examId } = useStore(kythiStore)
     const { selectedExamListId } = useStore(diemPhongThiStore)
 
-    const where = useMemo(() => {
+    const where: Prisma.ExamListWhereInput = useMemo(() => {
         return {
             examRoom: {
                 exam: {
+                    id: examId,
                     subjectClass: {
                         some: {
                             trainingObjectTypeId,
@@ -56,51 +58,51 @@ export default function PhongThi() {
                     not: null,
                 },
             },
-        } as Prisma.ExamListWhereInput
-    }, [trainingObjectTypeId, semesterId, filters])
+        }
+    }, [examId, trainingObjectTypeId, semesterId, filters])
 
-    const { data = [], refetch } = useFindManyExamList({
-        where,
-        include: {
-            examPapers: {
-                include: {
-                    studentSubjectScore: true,
+    const { data = [], refetch } = useFindManyExamList(
+        {
+            where,
+            include: {
+                examPapers: {
+                    include: {
+                        studentSubjectScore: true,
+                    },
                 },
-            },
-            examRoom: {
-                include: {
-                    exam: {
-                        include: {
-                            subjectClass: {
-                                include: {
-                                    subject: true,
+                examRoom: {
+                    include: {
+                        exam: {
+                            include: {
+                                subjectVersion: true,
+                                subjectClass: true,
+                            },
+                        },
+                        room: {
+                            include: {
+                                building: {
+                                    include: {
+                                        trainingLocation: true,
+                                    },
                                 },
                             },
                         },
                     },
-                    room: {
-                        include: {
-                            building: {
-                                include: {
-                                    trainingLocation: true,
-                                },
-                            },
-                        },
+                },
+                _count: {
+                    select: {
+                        examPapers: true,
                     },
                 },
             },
-            _count: {
-                select: {
-                    examPapers: true,
-                },
+            orderBy: {
+                createdAt: 'desc',
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+        { enabled: !!examId }
+    )
 
     const { data: count } = useCountExamList({
         where: {
@@ -209,20 +211,7 @@ export default function PhongThi() {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => {
-                                    return record?.examRoom?.exam?.subjectClass?.length ? (
-                                        <TextTruncate
-                                            arr={record?.examRoom?.exam?.subjectClass.map(
-                                                (i: any) => {
-                                                    return {
-                                                        key: i?.id,
-                                                        label: `${i?.subject?.name}`,
-                                                    }
-                                                }
-                                            )}
-                                        />
-                                    ) : (
-                                        ''
-                                    )
+                                    return record?.examRoom?.exam?.subjectVersion?.name || ''
                                 },
                             },
                             {

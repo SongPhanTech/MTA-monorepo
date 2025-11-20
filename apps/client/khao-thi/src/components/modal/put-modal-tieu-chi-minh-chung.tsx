@@ -1,18 +1,27 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { createId, type AnalysisFormEvidence, type RequirementCriterion } from '@workspace/db'
+import { useSession } from '@workspace/auth/react'
 import {
-    useCreateRequirementCriterion,
+    createId,
+    type AnalysisFormEvidence,
+    type Evidence,
+    type EvidenceFile,
+    type RequirementCriterion,
+} from '@workspace/db'
+import {
+    useCreateEvidence,
     useFindManyEvidence,
+    useFindManyEvidenceCategory,
     useFindUniqueRequirementCriterion,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
-import { Button, Col, Form, Input, InputNumber, type InputRef, message } from 'antd'
+import { Button, Col, Form, Input, InputNumber, type InputRef, message, Row, Tabs } from 'antd'
 import { GripVertical } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
@@ -40,14 +49,25 @@ const ItemType = 'LIST_ITEM'
 
 const PutTieuChiMinhChungModal = () => {
     const [form] = Form.useForm<PutRequirementCriterion>()
+    const [evidenceForm] = Form.useForm<Evidence & { evidenceFile?: EvidenceFile[] }>()
     const [items, setItems] = useState<ItemProps[]>([])
+    const [activeTab, setActiveTab] = useState<string>('1')
+    const [document, setDocument] = useState<EvidenceFile[]>([])
+
+    const { data: dataUser } = useSession()
 
     const { isOpen, onClose, input } = useDisclosure<{
         id?: string
         analysisCriterionId?: string
+        refetch?: () => void
     }>({
         tag: 'PutTieuChiMinhChungModal',
-        onClose: form.resetFields,
+        onClose: () => {
+            form.resetFields()
+            evidenceForm.resetFields()
+            setDocument([])
+            setActiveTab('1')
+        },
     })
 
     const { hideSpinner, showSpinner } = useSpinner()
@@ -55,6 +75,8 @@ const PutTieuChiMinhChungModal = () => {
     const lastInputRef = useRef<InputRef | null>(null)
 
     const { data: listEvidence } = useFindManyEvidence()
+    const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
+    const { mutateAsync: createEvidence } = useCreateEvidence()
 
     const { data: initialValue } = useFindUniqueRequirementCriterion(
         {
@@ -76,8 +98,6 @@ const PutTieuChiMinhChungModal = () => {
             enabled: !!input?.id,
         }
     )
-
-    const { mutateAsync: createRequirementCriterion } = useCreateRequirementCriterion()
 
     useEffect(() => {
         if (initialValue) {
@@ -250,6 +270,19 @@ const PutTieuChiMinhChungModal = () => {
                 queryKey: ['AnalysisFormEvidence'],
             })
 
+            queryClient.invalidateQueries({
+                queryKey: ['EvaluationPeriod'],
+            })
+
+            queryClient.invalidateQueries({
+                queryKey: ['AnalysisCriterion'],
+            })
+
+            // Call refetch callback if provided
+            if (input?.refetch) {
+                await input.refetch()
+            }
+
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -319,6 +352,62 @@ const PutTieuChiMinhChungModal = () => {
             )
         } else {
             setItems([])
+        }
+    }
+
+    const handleCreateNewEvidence = async () => {
+        try {
+            const values = await evidenceForm.validateFields()
+            showSpinner()
+
+            const result = await createEvidence({
+                data: {
+                    name: values.name,
+                    categoryId: values.categoryId,
+                    information: values.information,
+                    issuer: values.issuer,
+                    evidenceFile: {
+                        create: (values.evidenceFile || []).map((file: EvidenceFile) => ({
+                            name: file.name,
+                            path: file.path,
+                            mimeType: file.mimeType,
+                            size: file.size,
+                            userProfileId: dataUser?.sid || null,
+                        })),
+                    },
+                },
+            })
+
+            queryClient.invalidateQueries({
+                queryKey: ['Evidence'],
+            })
+
+            message.success('Tạo mới minh chứng thành công')
+            evidenceForm.resetFields()
+            setDocument([])
+            setActiveTab('1')
+
+            if (result) {
+                const newItem = {
+                    value: result.id,
+                    label: result.name,
+                    key: result.id,
+                }
+                setItems([...items, newItem])
+
+                const currentEvidences = form.getFieldValue('evidences') || []
+                form.setFieldsValue({
+                    evidences: [...currentEvidences, result.id],
+                })
+            }
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Tạo mới minh chứng thất bại')
+        } finally {
+            hideSpinner()
         }
     }
 
@@ -393,48 +482,160 @@ const PutTieuChiMinhChungModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} label="Minh chứng" name="evidences">
-                    <Select
-                        mode="multiple"
-                        maxTagCount={'responsive'}
-                        placeholder="Chọn minh chứng"
-                        options={listEvidence?.map((i) => {
-                            return {
-                                label: i.name,
-                                value: i.id,
-                                key: i.id,
-                            }
-                        })}
-                        onChange={(value, option: any) => {
-                            hanldeOnchange(option)
-                        }}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <Col span={24} className="font-semibold mb-3">
-                    Danh sách khối kiến thức trong CTĐT
-                </Col>
-                <Col span={24}>
-                    <DndProvider backend={HTML5Backend}>
-                        {items.map((i: Item, index: number) => (
-                            <DraggableItem
-                                key={i.value}
-                                item={i}
-                                index={index}
-                                moveItem={moveItem}
-                            />
-                        ))}
-                    </DndProvider>
-                </Col>
+                <Tabs
+                    activeKey={activeTab}
+                    onChange={setActiveTab}
+                    items={[
+                        {
+                            key: '1',
+                            label: 'Chọn minh chứng',
+                            children: (
+                                <>
+                                    <Col span={24}>
+                                        <FormItem
+                                            form={form}
+                                            label="Minh chứng"
+                                            name="evidences"
+                                            required
+                                        >
+                                            <Select
+                                                mode="multiple"
+                                                maxTagCount={'responsive'}
+                                                placeholder="Chọn minh chứng"
+                                                options={listEvidence?.map((i) => {
+                                                    return {
+                                                        label: i.name,
+                                                        value: i.id,
+                                                        key: i.id,
+                                                    }
+                                                })}
+                                                onChange={(value, option: any) => {
+                                                    hanldeOnchange(option)
+                                                }}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Col span={24} className="font-semibold mb-3">
+                                            Danh sách minh chứng
+                                        </Col>
+                                        <Col span={24}>
+                                            <DndProvider backend={HTML5Backend}>
+                                                {items.map((i: Item, index: number) => (
+                                                    <DraggableItem
+                                                        key={i.value}
+                                                        item={i}
+                                                        index={index}
+                                                        moveItem={moveItem}
+                                                    />
+                                                ))}
+                                            </DndProvider>
+                                        </Col>
+                                    </Col>
+                                </>
+                            ),
+                        },
+                        {
+                            key: '2',
+                            label: 'Tạo mới minh chứng',
+                            children: (
+                                <Form form={evidenceForm}>
+                                    <Row gutter={16}>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={evidenceForm}
+                                                name="name"
+                                                label="Tên minh chứng"
+                                                required
+                                            >
+                                                <Input placeholder="Nhập tên minh chứng" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={evidenceForm}
+                                                name="categoryId"
+                                                label="Danh mục minh chứng"
+                                                required
+                                            >
+                                                <Select
+                                                    placeholder="Chọn danh mục minh chứng"
+                                                    options={listEvidenceCategory?.map((i) => ({
+                                                        label: i.name,
+                                                        value: i.id,
+                                                        key: i.id,
+                                                    }))}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                    <Row gutter={16}>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={evidenceForm}
+                                                name="information"
+                                                label="Thông tin minh chứng"
+                                                required
+                                            >
+                                                <TextArea placeholder="Nhập thông tin minh chứng" />
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={evidenceForm}
+                                                name="issuer"
+                                                label="Người thực hiện"
+                                                required
+                                            >
+                                                <Input placeholder="Nhập người thực hiện" />
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            <FormItem
+                                                form={evidenceForm}
+                                                name="evidenceFile"
+                                                label="Tệp bằng chứng"
+                                            >
+                                                <DocumentPaths
+                                                    form={evidenceForm}
+                                                    data={document}
+                                                    relationId=""
+                                                    relationType="evidenceId"
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            <Button
+                                                type="primary"
+                                                onClick={handleCreateNewEvidence}
+                                                block
+                                            >
+                                                Tạo mới minh chứng
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            ),
+                        },
+                    ]}
+                />
             </Col>
             <Col span={24} className="mt-6">
-                <FormItem form={form} name="evidencePlaces" label="Nơi thu thập minh chứng">
+                <FormItem
+                    form={form}
+                    name="evidencePlaces"
+                    label="Nơi thu thập minh chứng"
+                    required
+                >
                     <TextArea placeholder="Nơi thu thập" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="collectionMethod" label="Phương pháp thu thập">
+                <FormItem form={form} name="collectionMethod" label="Phương pháp thu thập" required>
                     <TextArea placeholder="Phương pháp thu thập" />
                 </FormItem>
             </Col>
