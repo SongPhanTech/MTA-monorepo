@@ -30,6 +30,14 @@ export default function CriteriaAnalysisList() {
                                                         order: 'asc',
                                                     },
                                                 },
+                                                evaluationCriterionComment: {
+                                                    include: {
+                                                        reviewer: true,
+                                                    },
+                                                    orderBy: {
+                                                        createdAt: 'desc',
+                                                    },
+                                                },
                                             },
                                             orderBy: {
                                                 order: 'asc',

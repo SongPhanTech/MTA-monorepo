@@ -4,6 +4,7 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
+import { getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { ReviewDataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/review-criteria-analysis'
@@ -37,8 +38,9 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
     const { can } = useAbility()
+    const [form] = Form.useForm<CommentType>()
 
     const DEADLINE_OPTIONS = [
         { value: 'overdue', label: 'Quá hạn' },
@@ -83,8 +85,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
 
         return true
     })
-
-    const [form] = Form.useForm<CommentType>()
 
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
@@ -133,7 +133,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                 status: $Enums.EvaluationCriterionStatus.REVISION,
             }
 
-            // Nếu quá hạn và có gia hạn mới thì cập nhật deadline
             if (isOverdue && values.newDeadline) {
                 updateData.deadline = dayjs(values.newDeadline).toISOString()
             }
@@ -225,12 +224,13 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                     <span className="font-bold">Tiêu chí {idx + 1}: </span>
                                     <span>{item?.name}</span>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center">
                                     <span className="text-sm text-gray-600">
                                         Người thực hiện:{' '}
                                         {item?.analysisCriterions?.lecturer?.userProfile
                                             ?.fullname || 'Chưa phân công'}
                                     </span>
+
                                     {item?.analysisCriterions?.deadline && (
                                         <Tag
                                             color={
@@ -242,6 +242,19 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             {getDeadlineStatus(item.analysisCriterions.deadline)
                                                 .text &&
                                                 ` (${getDeadlineStatus(item.analysisCriterions.deadline).text})`}
+                                        </Tag>
+                                    )}
+                                    {item?.analysisCriterions?.status && (
+                                        <Tag
+                                            color={
+                                                getStatusEvaluation(item.analysisCriterions.status)
+                                                    ?.color
+                                            }
+                                        >
+                                            {
+                                                getStatusEvaluation(item.analysisCriterions.status)
+                                                    ?.label
+                                            }
                                         </Tag>
                                     )}
                                 </div>
@@ -346,6 +359,12 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             title: 'Thao tác',
                                             width: 100,
                                             align: 'center',
+                                            hidden:
+                                                item.analysisCriterions?.status ===
+                                                    $Enums.EvaluationCriterionStatus.COMPLETED ||
+                                                (role === 'BAN_TU_VAN' &&
+                                                    item.analysisCriterions?.status ===
+                                                        $Enums.EvaluationCriterionStatus.APPROVED),
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
