@@ -641,9 +641,27 @@ importers:
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.6)
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
+      axios:
+        specifier: 'catalog:'
+        version: 1.7.9
       dayjs:
         specifier: 'catalog:'
         version: 1.11.15
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
       hono:
         specifier: 'catalog:'
         version: 4.10.6
@@ -660,12 +678,6 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.3.2(@types/react@18.3.24)
-      '@workspace/auth':
-        specifier: workspace:*
-        version: link:../../../packages/auth
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../../../packages/typescript-config
