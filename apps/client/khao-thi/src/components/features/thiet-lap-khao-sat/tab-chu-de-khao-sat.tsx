@@ -17,7 +17,13 @@ import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabChuDeKhaoSat({topicSlected,setTopicSelected}:{topicSlected:SurveyTopic|null,setTopicSelected:(key:SurveyTopic|null)=>void}) {
+function TabChuDeKhaoSat({
+    topicSlected,
+    setTopicSelected,
+}: {
+    topicSlected: SurveyTopic | null
+    setTopicSelected: (key: SurveyTopic | null) => void
+}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -118,14 +124,16 @@ function TabChuDeKhaoSat({topicSlected,setTopicSelected}:{topicSlected:SurveyTop
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                                 onRow={(record) => {
-                                        return {
-                                            onClick: () => {
-                                                setTopicSelected(record as SurveyTopic)
-                                            },
-                                            className: cn(topicSlected?.id === record.id ? 'bg-orange-200' : ''),
-                                        }
-                                    }}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    setTopicSelected(record as SurveyTopic)
+                                },
+                                className: cn(
+                                    topicSlected?.id === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -148,9 +156,11 @@ function TabChuDeKhaoSat({topicSlected,setTopicSelected}:{topicSlected:SurveyTop
                                 title: 'Loại khảo sát',
                                 dataIndex: 'type',
                                 type: 'input',
-                                render:(__,record)=>{
-                                    return record.type === 'CLUSTER' ? 'Khảo sát giảng viên' : 'Khảo sát chung'
-                                }
+                                render: (__, record) => {
+                                    return record.type === 'CLUSTER'
+                                        ? 'Khảo sát giảng viên'
+                                        : 'Khảo sát chung'
+                                },
                             },
                             {
                                 title: 'Thao tác',

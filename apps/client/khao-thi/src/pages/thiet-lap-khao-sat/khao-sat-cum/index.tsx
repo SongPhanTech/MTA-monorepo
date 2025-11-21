@@ -8,8 +8,8 @@ import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 
-export type LectuerType=Lecturer &{
-    survey:Survey[]
+export type LectuerType = Lecturer & {
+    survey: Survey[]
 }
 
 export default function ClussterSurveyPage() {

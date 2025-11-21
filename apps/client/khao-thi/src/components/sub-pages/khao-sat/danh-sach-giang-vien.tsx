@@ -179,7 +179,6 @@ export default function DetailSurveyPage({
         }
     )
 
-
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
     const { data: count } = useCountLecturer({

@@ -5,12 +5,12 @@ import { SuccessResponseSchema } from './base'
 export const TYPE_PROGRAM = {
     NOT_IN_CURRICULUM: '0',
     IN_CURRICULUM: '1',
-}
+} as const
 
 export const TYPE_REGISTRABLE = {
     REGISTRABLE: '0',
     UN_REGISTRABLE: '1',
-}
+} as const
 
 export const OpenCoursesRequest = z
     .object({
@@ -59,13 +59,13 @@ export const CoursesDetailRequest = z.object({
 // 2: Viết
 // 3: Trực tuyến
 // 4: Trắc nghiệm
-export const EXAM_TYPE: Record<ExamType, number> = {
+export const EXAM_TYPE = {
     Oral: 1,
     OfflineWritten: 2,
     Practice: 3,
     Project: 4,
     Other: 5,
-}
+} as const satisfies Record<ExamType, number>
 
 export const CoursesDetailResponse = SuccessResponseSchema.extend({
     class_terms: z.string(),

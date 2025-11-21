@@ -158,9 +158,7 @@ function TabDoiTuongKhaoSat() {
                   }
                 : {}),
         }),
-        [
-            filters
-        ]
+        [filters]
     )
 
     const { data = [], refetch } = useFindManySurveyObjectType({
@@ -268,8 +266,8 @@ function TabDoiTuongKhaoSat() {
                                 type: 'tree_select',
                                 options: treeData,
                                 width: 100,
-                                render: (_, record) =>{
-                                            return record?.organizations?.length ? (
+                                render: (_, record) => {
+                                    return record?.organizations?.length ? (
                                         <HtmlTruncate>
                                             <ul>
                                                 {record?.organizations?.map((i: DM_DonVi) => (
@@ -280,7 +278,7 @@ function TabDoiTuongKhaoSat() {
                                     ) : (
                                         ''
                                     )
-                                }
+                                },
                             },
 
                             {
@@ -333,9 +331,11 @@ function TabDoiTuongKhaoSat() {
                                     return record?.trainingCourses?.length ? (
                                         <HtmlTruncate>
                                             <ul>
-                                                {record?.trainingCourses?.map((i: TrainingCourse) => (
-                                                    <li key={i.id}>- {i.name}</li>
-                                                ))}
+                                                {record?.trainingCourses?.map(
+                                                    (i: TrainingCourse) => (
+                                                        <li key={i.id}>- {i.name}</li>
+                                                    )
+                                                )}
                                             </ul>
                                         </HtmlTruncate>
                                     ) : (

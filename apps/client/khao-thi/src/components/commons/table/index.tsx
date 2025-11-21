@@ -897,7 +897,6 @@ const Table = <T extends AnyObject>({
                           showSizeChanger: {
                               labelRender: ({ value }) => `${value} / trang`,
                               optionRender: (oriOption) => `${oriOption.value} / trang`,
-
                           },
                           showTotal: (total, range) =>
                               `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,

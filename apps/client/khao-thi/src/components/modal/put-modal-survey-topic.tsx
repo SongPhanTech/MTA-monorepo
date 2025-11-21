@@ -37,7 +37,7 @@ const PutSurveyTopicModal = () => {
                         code: output.code,
                         name: output.name.trim(),
                         description: output.description,
-                        type: output.type
+                        type: output.type,
                     },
                     where: {
                         id,
@@ -50,7 +50,7 @@ const PutSurveyTopicModal = () => {
                         code: output.code,
                         name: output.name.trim(),
                         description: output.description,
-                        type: output.type
+                        type: output.type,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -106,15 +106,21 @@ const PutSurveyTopicModal = () => {
                     <Input placeholder="Nhập tên chủ đề khảo sát" />
                 </FormItem>
             </Col>
-                 <Col span={24}>
+            <Col span={24}>
                 <FormItem form={form} name="type" label="Loại khảo sát" required>
-                   <Select options={[{
-                       label: 'Khảo sát chung',
-                       value: 'SINGLE'
-                   },{
-                       label: 'Khảo sát giảng viên',
-                       value: 'CLUSTER'
-                   }]} placeholder="Nhập loại khảo sát"/>
+                    <Select
+                        options={[
+                            {
+                                label: 'Khảo sát chung',
+                                value: 'SINGLE',
+                            },
+                            {
+                                label: 'Khảo sát giảng viên',
+                                value: 'CLUSTER',
+                            },
+                        ]}
+                        placeholder="Nhập loại khảo sát"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>
