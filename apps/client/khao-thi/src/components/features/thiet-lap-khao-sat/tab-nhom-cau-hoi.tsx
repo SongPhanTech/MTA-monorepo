@@ -21,7 +21,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import CauHoiKhaoSat from './cau-hoi-khao-sat'
 import { SurveyTopic } from '@workspace/db'
 
-function TabNhomCauHoi({topicSlected}: {topicSlected: SurveyTopic|null}) {
+function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
     const [selectedID, setSelectedID] = useState('')
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -45,29 +45,33 @@ function TabNhomCauHoi({topicSlected}: {topicSlected: SurveyTopic|null}) {
             ...(topicSlected?.id
                 ? {
                       surveyTopic: {
-                        some: {
-                          id: {
-                              equals: topicSlected?.id,
+                          some: {
+                              id: {
+                                  equals: topicSlected?.id,
+                              },
                           },
-                        }
-                      }
+                      },
                   }
                 : {}),
         }),
-        [filters.name,topicSlected]
+        [filters.name, topicSlected]
     )
 
-    const { data = [] } = useFindManySurveyQuestionGroup({
-        where,
-        include: {
-            surveyTopic: true,
-            surveyQuestion: true,
+    const { data = [] } = useFindManySurveyQuestionGroup(
+        {
+            where,
+            include: {
+                surveyTopic: true,
+                surveyQuestion: true,
+            },
+            orderBy: { createdAt: 'desc' },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: { createdAt: 'desc' },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    },{
-        enabled: !!topicSlected?.id})
+        {
+            enabled: !!topicSlected?.id,
+        }
+    )
 
     const { data: count } = useCountSurveyQuestionGroup({
         where: {
@@ -122,14 +126,19 @@ function TabNhomCauHoi({topicSlected}: {topicSlected: SurveyTopic|null}) {
                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                                 'THEM'
                             ) && (
-                                <Button onClick={handleModal} type="primary" size="small" className="mb-2">
+                                <Button
+                                    onClick={handleModal}
+                                    type="primary"
+                                    size="small"
+                                    className="mb-2"
+                                >
                                     Thêm mới
                                 </Button>
                             )}
                         </Flex>
                     </Col>
                     <Table
-                    className="h-[calc(100vh-200px)]"
+                        className="h-[calc(100vh-200px)]"
                         rowKey={'id'}
                         filters={filters}
                         setFilters={(value) => {

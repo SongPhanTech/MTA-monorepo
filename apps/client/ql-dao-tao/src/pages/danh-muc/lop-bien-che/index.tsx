@@ -49,10 +49,7 @@ export default function FixedClassPage() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [loading, setLoading] = useState(false)
 
-    const canReadAll = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-        'XEM_TAT_CA'
-    )
+    const canReadAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE, 'XEM_TAT_CA')
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''

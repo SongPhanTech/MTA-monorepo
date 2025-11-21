@@ -16,7 +16,7 @@ export default function DetailSurveyPage() {
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId ||'fde8b90b-d93b-485d-aa5c-d403990678e5'
+    const profileId = session?.sDM_NhanVienId || 'fde8b90b-d93b-485d-aa5c-d403990678e5'
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -96,9 +96,9 @@ export default function DetailSurveyPage() {
         code: filters.code,
     })
 
-         const { onOpen } = useDisclosure<{userId: string, surveyId: string}>({
-                tag: 'ReviewSurveyModal',
-            })
+    const { onOpen } = useDisclosure<{ userId: string; surveyId: string }>({
+        tag: 'ReviewSurveyModal',
+    })
 
     // const { data: count } = useCountSurvey({
     //     where: {
@@ -113,7 +113,7 @@ export default function DetailSurveyPage() {
             </Col> */}
             <Col span={24}>
                 <Table
-                className="h-[calc(100vh-130px)]"
+                    className="h-[calc(100vh-130px)]"
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)
@@ -231,7 +231,10 @@ export default function DetailSurveyPage() {
                                                 className="flex items-center justify-center h-8 w-8 rounded-[50%] hover:bg-gray-200"
                                                 onClick={() => {
                                                     if (surveySessions?.length > 0) {
-                                                        onOpen({ userId:profileId||'',surveyId: id })
+                                                        onOpen({
+                                                            userId: profileId || '',
+                                                            surveyId: id,
+                                                        })
                                                         return
                                                     }
                                                     if (!isPublic) {

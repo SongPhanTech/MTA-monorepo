@@ -54,8 +54,8 @@ const ExportLecturerInSurvey = ({
         ]
         const res = await sqlTransaction(listSqlTransaction)
         if (res?.status === 200) {
-            const data:any = res?.data[0]
-            
+            const data: any = res?.data[0]
+
             // Tạo workbook mới
             const workbook = new ExcelJS.Workbook()
             const worksheet = workbook.addWorksheet('Danh sách bài khảo sát')
@@ -119,7 +119,6 @@ const ExportLecturerInSurvey = ({
                 },
             }
 
-
             worksheet.mergeCells('A1:C2')
             worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
             worksheet.getCell('A1').style = headerTitleStyle
@@ -170,9 +169,14 @@ const ExportLecturerInSurvey = ({
                     headerRowValue.values = [
                         index + 1,
                         `${i?.code || ''} - ${i?.userProfile?.lastName || ''} ${i?.userProfile?.firstName || ''}`,
-                       i?.survey?.length > 0 ? i?.survey
-                            ?.map((t: any) => `${t.subjectClass?.code || ''} - ${t.subjectClass?.name || ''}`)
-                            .join('\n'):'',
+                        i?.survey?.length > 0
+                            ? i?.survey
+                                  ?.map(
+                                      (t: any) =>
+                                          `${t.subjectClass?.code || ''} - ${t.subjectClass?.name || ''}`
+                                  )
+                                  .join('\n')
+                            : '',
                         i?.userProfile?.idCardNumber || '',
                         i?.userProfile?.phoneNumber || '',
                         i?.organization?.sMa || '',
