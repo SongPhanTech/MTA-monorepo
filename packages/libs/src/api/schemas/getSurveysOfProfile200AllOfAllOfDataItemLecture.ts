@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization } from './getSurveysOfProfile200AllOfAllOfDataItemLectureOrganization'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile } from './getSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile'
 
 /**
  * @nullable
@@ -31,4 +32,5 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemLecture = {
     /** @nullable */
     serviceDate?: string | null
     organization: GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization
+    userProfile: GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile
 } | null

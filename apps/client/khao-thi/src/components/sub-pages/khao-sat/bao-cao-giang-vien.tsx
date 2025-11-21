@@ -1,0 +1,223 @@
+import useSpinner from '@hooks/spinner'
+import {
+    exportClusterSurveyStatistics,
+    useGetClusterSurveyStatistics,
+} from '@workspace/libs/api/exam'
+import { Button, Col, Empty, message, Row, Typography } from 'antd'
+import { saveAs } from 'file-saver'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+import ReactECharts from 'echarts-for-react'
+import Table from '@components/commons/table'
+const { Title } = Typography
+function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
+    const router = useRouter()
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    // const { data } = useGetParticipationByType({
+    //     surveyId: selectedId as string,
+    // })
+
+    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
+
+    const dataBarchart = useMemo(() => {
+        let choices: any = []
+
+        if (dataLevel?.status !== 200) {
+            return
+        }
+        choices = dataLevel?.data?.choices.map((i) => {
+            return {
+                name: i?.description,
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true,
+                },
+                emphasis: {
+                    focus: 'series',
+                },
+                data: [],
+            }
+        })
+        dataLevel?.data?.data.forEach((i: any) => {
+            choices.forEach((j: any, index: number) => {
+                j?.data.push(i?.average[index] || 0)
+            })
+        })
+
+        return {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    // Use axis to trigger tooltip
+                    type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+                },
+            },
+            legend: {},
+            xAxis: {
+                type: 'value',
+            },
+            yAxis: {
+                type: 'category',
+                data:
+                    dataLevel?.data?.data?.map((i) => {
+                        return `${i?.lecture}`
+                    }) || [],
+            },
+            series: choices,
+        }
+    }, [dataLevel])
+
+    const renderQuestionReport = (item: {
+        name: string
+        answers: { answer: string; count: number }[]
+    }) => {
+        let total = 0
+        if (item?.answers?.length) {
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+            for (const i of item?.answers) {
+                total += i?.count
+            }
+        }
+
+        return (
+            <div className="flex items-center justify-between">
+                <div>{item?.name}</div>
+                <div className="flex items-center justify-end">
+                    {item?.answers.map((j) => {
+                        return (
+                            <div className="mr-1">
+                                {j?.answer}:
+                                {total > 0
+                                    ? Number.parseFloat(((j?.count * 100) / total).toFixed(2))
+                                    : 0}
+                                %
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        )
+    }
+
+    const exportReport = async () => {
+        try {
+            const res = await exportClusterSurveyStatistics(selectedId as string)
+            if (res.status === 200) {
+                saveAs(res?.data, 'Bao_cao.docx')
+            }
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+    }
+
+    const onChartClick = (params: any) => {
+        if (dataLevel?.status !== 200) {
+            return
+        }
+        const result = dataLevel?.data?.data[params?.dataIndex]
+        router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
+    }
+
+    const onEvents = {
+        click: onChartClick,
+    }
+
+    const renderTable = (dataTable: any, choices: any) => {
+        return (
+            <Table
+                columns={
+                    choices?.length > 0
+                        ? [
+                              {
+                                  title: 'STT',
+                                  width: 60,
+                                  align: 'center',
+                                  fixed: 'left',
+                                  render: (_, __, index) => index + 1,
+                              },
+                              {
+                                  title: 'Đối tượng',
+                                  align: 'center',
+                                  render: (_, record) => {
+                                      return record?.lecture
+                                  },
+                              },
+                              // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                              ...choices?.map((i: any, index: number) => ({
+                                  title: i?.description,
+                                  id: i?.id,
+                                  dataIndex: i?.id,
+                                  align: 'center',
+                                  render: (__: any, record: any) => {
+                                      return record?.average ? record?.average[index] : 0
+                                  },
+                              })),
+                          ]
+                        : [
+                              {
+                                  title: 'STT',
+                                  width: 60,
+                                  align: 'center',
+                                  fixed: 'left',
+                                  render: (_, __, index) => index + 1,
+                              },
+                              {
+                                  title: 'Đối tượng',
+                                  align: 'center',
+                                  render: (_, record) => {
+                                      return record?.lecture
+                                  },
+                              },
+                          ]
+                }
+                dataSource={dataTable}
+                pagination={false}
+            />
+        )
+    }
+
+    return (
+        <div>
+            <Row gutter={[16, 4]}>
+                <Col span={24}>
+                    <div className="bg-white h-full flex flex-col">
+                        <div className="p-4 flex justify-between">
+                            <Title level={4}>Thống kê khảo sát</Title>
+                            <Button size="small" type="primary" onClick={exportReport}>
+                                Xuất báo cáo
+                            </Button>
+                        </div>
+                        <div className="flex-1">
+                            {dataLevel?.status === 200 && dataLevel?.data ? (
+                                <div style={{ width: '100%', height: '100%' }}>
+                                    <ReactECharts
+                                        onEvents={onEvents}
+                                        option={dataBarchart}
+                                        className="w-full min-h-[400px] mb-6"
+                                    />
+
+                                    {dataLevel?.data?.data?.length > 0 &&
+                                        renderTable(
+                                            dataLevel?.data?.data,
+                                            dataLevel?.data?.choices
+                                        )}
+                                </div>
+                                // <BarChart className="h-full" dataMap={dataBarchart} />
+                            ) : (
+                                <Empty />
+                            )}
+                        </div>
+                    </div>
+                </Col>
+            </Row>
+        </div>
+    )
+}
+
+export default LecturerSurveyReport

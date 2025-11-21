@@ -31,7 +31,6 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass = {
     startYear?: number | null
     /** @nullable */
     graduated?: boolean | null
-    initSize?: number
     /** @nullable */
     curriculumVersion: ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersion
 } | null

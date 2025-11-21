@@ -1,24 +1,24 @@
 import useSpinner from '@hooks/spinner'
-import {
-    exportClusterSurveyStatistics,
-    useGetClusterSurveyStatistics,
-} from '@workspace/libs/api/exam'
+import { useGetLectureSurveyStatistics } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, message, Row, Typography } from 'antd'
+import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 const { Title } = Typography
-function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
+function ClusterSurveyReport({
+    selectedId,
+    surveyName,
+}: {
+    selectedId: string
+    surveyName: string
+}) {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
 
-    // const { data } = useGetParticipationByType({
-    //     surveyId: selectedId as string,
-    // })
-
-    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
+    const { data: dataLevel } = useGetLectureSurveyStatistics(selectedId as string)
 
     const dataBarchart = useMemo(() => {
         let choices: any = []
@@ -40,9 +40,10 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
                 data: [],
             }
         })
+
         dataLevel?.data?.data.forEach((i: any) => {
             choices.forEach((j: any, index: number) => {
-                j?.data.push(i?.average[index] || 0)
+                j?.data.push(i?.average[index]?.totalCount || 0)
             })
         })
 
@@ -60,53 +61,131 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
             },
             yAxis: {
                 type: 'category',
-                data:
-                    dataLevel?.data?.data?.map((i) => {
-                        return `${i?.lecture}`
-                    }) || [],
+                data: dataLevel?.data?.data.map(
+                    (i) => `${i?.lecture?.code || ''} - ${i?.lecture?.userProfile?.fullname || ''}`
+                ),
             },
             series: choices,
         }
     }, [dataLevel])
 
-    const renderQuestionReport = (item: {
-        name: string
-        answers: { answer: string; count: number }[]
-    }) => {
-        let total = 0
-        if (item?.answers?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-            for (const i of item?.answers) {
-                total += i?.count
-            }
-        }
-
-        return (
-            <div className="flex items-center justify-between">
-                <div>{item?.name}</div>
-                <div className="flex items-center justify-end">
-                    {item?.answers.map((j) => {
-                        return (
-                            <div className="mr-1">
-                                {j?.answer}:
-                                {total > 0
-                                    ? Number.parseFloat(((j?.count * 100) / total).toFixed(2))
-                                    : 0}
-                                %
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        )
-    }
-
-    const exportReport = async () => {
+    const exportReport = async (dataExport: any, choices: any) => {
         try {
-            const res = await exportClusterSurveyStatistics(selectedId as string)
-            if (res.status === 200) {
-                saveAs(res?.data, 'Bao_cao.docx')
+            if (choices?.length <= 0) {
+                return
             }
+            const workbook = new ExcelJS.Workbook()
+            const worksheet = workbook.addWorksheet('Báo cáo khảo sát theo giảng viên')
+
+            // Thiết lập style
+            const golbalFontStyle = {
+                name: 'Times New Roman',
+            }
+
+            const headerTitleStyle = {
+                font: { ...golbalFontStyle, bold: true, size: 14 },
+                alignment: {
+                    horizontal: 'center' as const,
+                    vertical: 'middle' as const,
+                    wrapText: true as const,
+                },
+            }
+
+            const headerSubtitleStyle = {
+                font: { ...golbalFontStyle, bold: true, size: 16 },
+                alignment: {
+                    horizontal: 'center' as const,
+                    vertical: 'middle' as const,
+                    wrapText: true as const,
+                },
+            }
+
+            const tableHeaderStyle = {
+                font: {
+                    ...golbalFontStyle,
+                    bold: true,
+                    size: 14,
+                    color: { argb: 'FF000000' },
+                },
+                fill: {
+                    type: 'pattern',
+                    pattern: 'none',
+                },
+                alignment: {
+                    horizontal: 'center',
+                    vertical: 'middle',
+                    wrapText: true,
+                },
+                border: {
+                    top: {
+                        style: 'thin' as ExcelJS.BorderStyle,
+                        color: { argb: 'FF000000' },
+                    },
+                    left: {
+                        style: 'thin' as ExcelJS.BorderStyle,
+                        color: { argb: 'FF000000' },
+                    },
+                    right: {
+                        style: 'thin' as ExcelJS.BorderStyle,
+                        color: { argb: 'FF000000' },
+                    },
+                    bottom: {
+                        style: 'thin' as ExcelJS.BorderStyle,
+                        color: { argb: 'FF000000' },
+                    },
+                },
+            }
+
+            worksheet.mergeCells('A1:C2')
+            worksheet.getCell('A1').value = 'BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ'
+            worksheet.getCell('A1').style = headerTitleStyle
+
+            worksheet.getRow(1).height = 30
+            worksheet.getRow(2).height = 30
+
+            worksheet.mergeCells('E1:H2')
+            worksheet.getCell('E1').value =
+                'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc'
+            worksheet.getCell('E1').style = headerTitleStyle
+
+            worksheet.mergeCells('A4:H4')
+            worksheet.getCell('A4').value = `Báo khảo sát: ${surveyName}`
+            worksheet.getCell('A4').style = headerSubtitleStyle
+            worksheet.getRow(4).height = 20
+
+            // Thêm tiêu đề bảng
+            const headerRow = worksheet.getRow(7)
+            headerRow.values = ['STT', 'Đối tượng', ...choices.map((i: any) => i?.description)]
+            headerRow.eachCell((cell: any) => {
+                cell.style = tableHeaderStyle
+            })
+
+            // Điều chỉnh độ rộng cột
+            worksheet.columns = [
+                { width: 10 },
+                { width: 40 },
+                { width: 40 },
+                { width: 20 },
+                { width: 20 },
+                { width: 20 },
+                { width: 20 },
+                { width: 20 },
+            ]
+            if (dataExport && dataExport.length > 0) {
+                dataExport.forEach((i: any, index: number) => {
+                    const headerRowValue: any = worksheet.getRow(8 + index)
+                    headerRowValue.values = [
+                        index + 1,
+                        `${i?.lecture?.code || ''} - ${i?.lecture?.userProfile?.fullname || ''}`,
+                        // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                        ...i?.average.map((t: any) => t?.totalCount),
+                    ]
+                })
+            }
+
+            // Xuất file
+            const buffer = await workbook.xlsx.writeBuffer()
+            saveAs(new Blob([buffer]), 'Baocao.xlsx')
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -120,8 +199,8 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
         if (dataLevel?.status !== 200) {
             return
         }
-        const result = dataLevel?.data?.data[params?.dataIndex]
-        router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
+        // const result = dataLevel?.data?.data[params?.dataIndex]
+        // router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
     }
 
     const onEvents = {
@@ -145,7 +224,7 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
                                   title: 'Đối tượng',
                                   align: 'center',
                                   render: (_, record) => {
-                                      return record?.lecture
+                                      return `${record?.lecture?.code || ''} - ${record?.lecture?.userProfile?.fullname || ''}`
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -155,7 +234,9 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
                                   dataIndex: i?.id,
                                   align: 'center',
                                   render: (__: any, record: any) => {
-                                      return record?.average ? record?.average[index] : 0
+                                      return record?.average
+                                          ? record?.average[index]?.totalCount
+                                          : 0
                                   },
                               })),
                           ]
@@ -186,34 +267,45 @@ function ClusterSurveyReport({ selectedId }: { selectedId: string }) {
         <div>
             <Row gutter={[16, 4]}>
                 <Col span={24}>
-                    <div className="bg-white h-full flex flex-col">
-                        <div className="p-4 flex justify-between">
-                            <Title level={4}>Thống kê khảo sát</Title>
-                            <Button type="primary" onClick={exportReport}>
-                                Xuất báo cáo
-                            </Button>
-                        </div>
-                        <div className="flex-1">
-                            {dataLevel?.status === 200 && dataLevel?.data ? (
-                                <div style={{ width: '100%', height: '100%' }}>
-                                    <ReactECharts
-                                        onEvents={onEvents}
-                                        option={dataBarchart}
-                                        className="w-full min-h-[400px] mb-6"
-                                    />
-
-                                    {dataLevel?.data?.data?.length > 0 &&
-                                        renderTable(
+                    {dataLevel?.status === 200 && (
+                        <div className="bg-white h-full flex flex-col">
+                            <div className="p-4 flex justify-between">
+                                <Title level={4}>Thống kê theo giảng viên</Title>
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    onClick={() =>
+                                        exportReport(
                                             dataLevel?.data?.data,
                                             dataLevel?.data?.choices
-                                        )}
-                                </div>
-                                // <BarChart className="h-full" dataMap={dataBarchart} />
-                            ) : (
-                                <Empty />
-                            )}
+                                        )
+                                    }
+                                >
+                                    Xuất báo cáo
+                                </Button>
+                            </div>
+                            <div className="flex-1">
+                                {dataLevel?.status === 200 && dataLevel?.data ? (
+                                    <div style={{ width: '100%', height: '100%' }}>
+                                        <ReactECharts
+                                            onEvents={onEvents}
+                                            option={dataBarchart}
+                                            className="w-full min-h-[400px] mb-6"
+                                        />
+
+                                        {dataLevel?.data?.data?.length > 0 &&
+                                            renderTable(
+                                                dataLevel?.data?.data,
+                                                dataLevel?.data?.choices
+                                            )}
+                                    </div>
+                                    // <BarChart className="h-full" dataMap={dataBarchart} />
+                                ) : (
+                                    <Empty />
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </Col>
             </Row>
         </div>
