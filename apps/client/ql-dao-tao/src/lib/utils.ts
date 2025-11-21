@@ -3,6 +3,31 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 import { message } from 'antd'
 
+function normalizeVietnamese(str: string): string {
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+}
+export function searchVietnamese(
+    data: { value: string; label: string }[],
+    keyword: string
+): { value: string; label: string }[] {
+    const normalizedKeyword = normalizeVietnamese(keyword.trim())
+    if (!normalizedKeyword) return data
+
+    return data.filter((item) => {
+        const normalizedLabel = normalizeVietnamese(item.label)
+        const normalizedValue = normalizeVietnamese(item.value)
+        return (
+            normalizedLabel.includes(normalizedKeyword) ||
+            normalizedValue.includes(normalizedKeyword)
+        )
+    })
+}
+
 export const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs))
 }

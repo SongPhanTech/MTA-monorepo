@@ -133,7 +133,9 @@ export default function CrossReview() {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-                    children: <CrossReviewSubPage key={standard.id} data={standard} onRefetch={refetch} />,
+                    children: (
+                        <CrossReviewSubPage key={standard.id} data={standard} onRefetch={refetch} />
+                    ),
                 }
             })
         }

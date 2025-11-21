@@ -20,6 +20,7 @@ import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/inter
 import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import FilterSelect from './filter-select'
 
 dayjs.locale('vi')
 
@@ -388,74 +389,16 @@ const Table = <T extends AnyObject>({
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
-                    const [input, setInput] = useState('')
-                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
-                    const handleSearch = async (value: string) => {
-                        if (!value.trim()) {
-                            setOptionsSearch(item?.options || [])
-                            return
-                        }
-
-                        try {
-                            const response = searchVietnamese(item?.options || [], value.trim())
-                            setOptionsSearch(response)
-                        } catch (_error: unknown) {
-                            setOptionsSearch(item?.options || [])
-                        }
-                    }
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
-                            {item.options.length > 0 && (
-                                <div className="max-h-[500px] overflow-y-auto">
-                                    <div className="mb-2">Tìm kiếm</div>
-                                    <Input
-                                        placeholder="Nhập từ khoá cần tìm kiếm"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                        value={input}
-                                        onChange={(e) => {
-                                            setInput(e.target.value)
-                                            handleSearch(e.target.value)
-                                        }}
-                                        style={{ height: 36, width: '100%', marginBottom: 16 }}
-                                    />
-                                    {!input && optionsSearch.length > 0 && (
-                                        <Checkbox
-                                            onChange={(e: CheckboxChangeEvent) =>
-                                                onCheckAllChange(item, e)
-                                            }
-                                            indeterminate={indeterminate(item)}
-                                            checked={checkAll(item)}
-                                            className="mb-3"
-                                        >
-                                            Chọn tất cả
-                                        </Checkbox>
-                                    )}
-
-                                    <Checkbox.Group
-                                        className="mb-3"
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 12,
-                                        }}
-                                        value={
-                                            filtersTable[
-                                                item.dataIndex as keyof FilterProps
-                                            ] as string[]
-                                        }
-                                        onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={optionsSearch}
-                                    />
-                                </div>
-                            )}
+                            <FilterSelect
+                                item={item}
+                                onCheckAllChange={onCheckAllChange}
+                                onCheckChange={onCheckChange}
+                                checkAll={checkAll}
+                                indeterminate={indeterminate}
+                                filtersTable={filtersTable}
+                            />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({
@@ -569,7 +512,11 @@ const Table = <T extends AnyObject>({
                                     })
                                 }}
                                 checkStrictly={!!input}
-                                fieldNames={{ title: 'label', key: 'value', children: 'children' }}
+                                fieldNames={{
+                                    title: 'label',
+                                    key: 'value',
+                                    children: 'children',
+                                }}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton
@@ -843,7 +790,7 @@ const Table = <T extends AnyObject>({
                                     setFiltersTable({
                                         ...filters,
                                         [item.dataIndex as keyof FilterProps]: {
-                                            // @ts-expect-error
+                                            //   @ts-expect-error
                                             ...filtersTable[item.dataIndex as keyof FilterProps],
                                             gte: e.target.value,
                                         },

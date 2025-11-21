@@ -44,6 +44,14 @@ export default function ClassRegisterSession() {
         () =>
             ({
                 deletedAt: null,
+                ...(filters.code
+                    ? {
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
                 ...(filters.name && filters.name !== ''
                     ? {
                           name: {
@@ -198,18 +206,6 @@ export default function ClassRegisterSession() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        onRowClick={({ id }) => {
-                            if (
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
-                                    'XEM_CHI_TIET'
-                                )
-                            ) {
-                                router.push(
-                                    `${ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID}/${id}`
-                                )
-                            }
-                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -218,6 +214,14 @@ export default function ClassRegisterSession() {
                                 fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * numberOfPages,
+                            },
+                            {
+                                title: 'Mã đợt đăng ký',
+                                align: 'center',
+                                dataIndex: 'code',
+                                type: 'input',
+                                width: 100,
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên đợt đăng ký',
@@ -328,7 +332,17 @@ export default function ClassRegisterSession() {
                                             'XEM_CHI_TIET'
                                         ) && (
                                             <Tooltip title="Xem các đơn đăng ký" placement="top">
-                                                <EyeOutlined className="text-sm cursor-pointer" />
+                                                <EyeOutlined
+                                                    onClick={() => {
+                                                        router.push(
+                                                            ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID.replace(
+                                                                '[id]',
+                                                                id
+                                                            )
+                                                        )
+                                                    }}
+                                                    className="text-sm cursor-pointer"
+                                                />
                                             </Tooltip>
                                         )}
                                         {can(

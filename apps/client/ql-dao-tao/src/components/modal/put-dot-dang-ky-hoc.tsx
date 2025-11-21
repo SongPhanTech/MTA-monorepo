@@ -253,7 +253,7 @@ const PutClassRegisterSession = () => {
                         disabledDate={(current) => {
                             const startTime = form.getFieldValue('startDate')
                             if (!startTime) return false
-                            return current && current < dayjs(startTime).startOf('minute')
+                            return current && current < dayjs(startTime).subtract(1, 'd')
                         }}
                     />
                 </FormItem>
