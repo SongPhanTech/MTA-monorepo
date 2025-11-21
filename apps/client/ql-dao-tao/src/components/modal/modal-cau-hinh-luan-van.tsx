@@ -3,20 +3,23 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import {
-    Form,
-    message,
-    Typography,
-    Row,
+    Checkbox,
     Col,
     DatePicker,
-    type TabsProps,
-    Tabs,
-    Checkbox,
+    Form,
     Input,
     InputNumber,
+    message,
+    Row,
+    Tabs,
+    type TabsProps,
+    Typography,
 } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { CloudUploadOutlined, DollarOutlined, SettingOutlined } from '@ant-design/icons'
+import DocumentPaths from '@components/commons/documentPaths'
+import { CouncilProposalStatus, CouncilRole, type DocumentFile } from '@workspace/db'
 import {
     useCreateCouncil,
     useCreateCouncilMember,
@@ -31,11 +34,8 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
-import { CouncilProposalStatus, CouncilRole, type DocumentFile } from '@workspace/db'
-import { useEffect, useState } from 'react'
-import DocumentPaths from '@components/commons/documentPaths'
-import { CloudUploadOutlined, DollarOutlined, SettingOutlined } from '@ant-design/icons'
 import Decimal from 'decimal.js'
+import { useEffect, useState } from 'react'
 
 const { Title } = Typography
 
@@ -71,7 +71,23 @@ export type ModalCauHinhLuanVanType = {
     coSupervisorPaymentAmount?: number
     coSupervisorPaymentDate?: string
     coSupervisorPaymentTransactionCode?: string
+    councilChairmanName?: string
+    councilChairmanId?: string
+    councilChairmanPaymentAmount?: number
+    councilSecretaryName?: string
+    councilSecretaryId?: string
+    councilSecretaryPaymentAmount?: number
+    councilReviewer1Name?: string
+    councilReviewer1Id?: string
+    councilReviewer1PaymentAmount?: number
+    councilReviewer2Name?: string
+    councilReviewer2Id?: string
+    councilReviewer2PaymentAmount?: number
+    councilMemberName?: string
+    councilMemberId?: string
+    councilMemberPaymentAmount?: number
 }
+
 const ModalCauHinhLuanVan = () => {
     const isCouncilRolesDuplicated = (data: ModalCauHinhLuanVanType): boolean => {
         const expertIds = [
@@ -232,7 +248,6 @@ const ModalCauHinhLuanVan = () => {
         }
     }
 
-    //TODO: chưa xử lý được upload file mới
     const handleSubmitThesis = async (data: ModalCauHinhLuanVanType) => {
         const filesInForm = (data as any).documentFile || []
         const initialFiles = document
@@ -382,13 +397,45 @@ const ModalCauHinhLuanVan = () => {
             hideSpinner()
         }
     }
-    const onOk = async (data: ModalCauHinhLuanVanType) => {
-        if (activeTabKey === 'defenseConfig') {
-            await handleConfigDefense(data)
-        } else if (activeTabKey === 'defenseInforSubmit') {
-            await handleSubmitThesis(data)
-        } else if (activeTabKey === 'defenseInforPayment') {
-            await handlePaymentThesis(data)
+    const onOk = async () => {
+        const defenseConfigFields: (keyof ModalCauHinhLuanVanType)[] = [
+            'chairman',
+            'secretary',
+            'reviewer1',
+            'reviewer2',
+            'member',
+            'roomId',
+            'defenseDate',
+            'sessionId',
+        ]
+
+        const submitThesisFields: (keyof ModalCauHinhLuanVanType)[] = [
+            'submissionDate',
+            'isHardcopy',
+            'isSoftcopy',
+            'librarianNote',
+            'documentFile',
+        ]
+
+        const paymentThesisFields: (keyof ModalCauHinhLuanVanType)[] = [
+            'supervisorPaymentAmount',
+            'coSupervisorPaymentAmount',
+        ]
+        const dataFormValue = form.getFieldsValue()
+
+        try {
+            if (activeTabKey === 'defenseConfig') {
+                await form.validateFields(defenseConfigFields as string[])
+                await handleConfigDefense(dataFormValue)
+            } else if (activeTabKey === 'defenseInforSubmit') {
+                await form.validateFields(submitThesisFields as string[])
+                await handleSubmitThesis(dataFormValue)
+            } else if (activeTabKey === 'defenseInforPayment') {
+                await form.validateFields(paymentThesisFields as string[])
+                await handlePaymentThesis(dataFormValue)
+            }
+        } catch (error) {
+            return
         }
     }
 
@@ -855,7 +902,7 @@ const ModalCauHinhLuanVan = () => {
                     {/* Cột chính chứa thông tin thanh toán */}
                     <Col span={24}>
                         <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
-                            Thanh toán hướng dẫn
+                            Thanh toán giáo viên hướng dẫn
                         </Title>
 
                         {/* --- GVHD 1 --- */}
@@ -893,7 +940,9 @@ const ModalCauHinhLuanVan = () => {
                                     labelAlign="left"
                                     rules={[
                                         {
-                                            required: !!form.getFieldValue('supervisorName'),
+                                            required: !form.getFieldValue('supervisorName')
+                                                ? false
+                                                : true,
                                             message: 'Vui lòng nhập số tiền thanh toán',
                                         },
                                     ]}
@@ -966,125 +1015,121 @@ const ModalCauHinhLuanVan = () => {
                             </Col>
                         </Row>
                     </Col>
+                    <Col span={24}>
+                        <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
+                            Thanh toán hội đồng
+                        </Title>
+
+                        {/* --- GVHD 1 --- */}
+                        <Row gutter={16} align="middle">
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="councilChairmanName"
+                                    label="Chủ tịch "
+                                    className="mb-5"
+                                    labelAlign="left"
+                                    {...formItemLayout}
+                                >
+                                    <Input className="w-full" disabled />
+                                </FormItem>
+                                <FormItem
+                                    form={form}
+                                    name="councilChairmanId"
+                                    label="GVHD 1"
+                                    className="mb-5 hidden"
+                                    labelAlign="left"
+                                    {...formItemLayout}
+                                >
+                                    <Input className="w-full" disabled />
+                                </FormItem>
+                            </Col>
+
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="councilChairmanPaymentAmount" // Tên trường mới
+                                    label="Số tiền "
+                                    className="mb-5"
+                                    labelAlign="left"
+                                    rules={[
+                                        {
+                                            required: !form.getFieldValue('councilChairmanName')
+                                                ? false
+                                                : true,
+                                            message: 'Vui lòng nhập số tiền thanh toán',
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber
+                                        className="w-2/3"
+                                        min={0}
+                                        placeholder="Nhập số tiền"
+                                        parser={(value) =>
+                                            value?.replace(/\$\s?|(,*)/g, '') as unknown as number
+                                        }
+                                        suffix="VNĐ"
+                                        disabled={!form.getFieldValue('councilChairmanName')}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+
+                        <Row gutter={16} align="middle">
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="councilSecretaryName"
+                                    label="Thư kí"
+                                    className="mb-5"
+                                    labelAlign="left"
+                                    {...formItemLayout}
+                                >
+                                    <Input className="w-full" disabled />
+                                </FormItem>
+                            </Col>
+                            <FormItem
+                                form={form}
+                                name="councilSecretaryId"
+                                label="Thư kí"
+                                className="mb-5 hidden"
+                                labelAlign="left"
+                                {...formItemLayout}
+                            >
+                                <Input className="w-full" disabled />
+                            </FormItem>
+
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="councilSecretaryPaymentAmount" // Tên trường mới
+                                    label="Số tiền"
+                                    className="mb-5"
+                                    labelAlign="left"
+                                    rules={[
+                                        {
+                                            required: !form.getFieldValue('councilSecretaryName')
+                                                ? false
+                                                : true,
+                                            message: 'Vui lòng nhập số tiền thanh toán',
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber
+                                        className="w-2/3"
+                                        min={0}
+                                        parser={(value) =>
+                                            value?.replace(/\$\s?|(,*)/g, '') as unknown as number
+                                        }
+                                        placeholder="Nhập số tiền"
+                                        suffix="VNĐ"
+                                        disabled={!form.getFieldValue('councilSecretaryName')}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Col>
                 </Row>
-                //      <Row gutter={32} className="w-full mt-4">
-                //      {/* Cột chính chứa thông tin thanh toán */}
-                //      <Col span={24}>
-                //          <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
-                //              Thanh toán hội đồng
-                //          </Title>
-
-                //          {/* --- GVHD 1 --- */}
-                //          <Row gutter={16} align="middle">
-                //              {/* Phần hiển thị Tên GVHD 1 (chiếm 12/24 cột) */}
-                //              <Col span={12}>
-                //                  <FormItem
-                //                      form={form}
-                //                      name="supervisorName"
-                //                      label="GVHD 1"
-                //                      className="mb-5"
-                //                      labelAlign="left"
-                //                      {...formItemLayout}
-                //                  >
-                //                      <Input className="w-full" disabled />
-                //                  </FormItem>
-                //                  <FormItem
-                //                      form={form}
-                //                      name="supervisorId"
-                //                      label="GVHD 1"
-                //                      className="mb-5 hidden"
-                //                      labelAlign="left"
-                //                      {...formItemLayout}
-                //                  >
-                //                      <Input className="w-full" disabled />
-                //                  </FormItem>
-                //              </Col>
-
-                //              <Col span={12}>
-                //                  <FormItem
-                //                      form={form}
-                //                      name="supervisorPaymentAmount" // Tên trường mới
-                //                      label="Số tiền "
-                //                      className="mb-5"
-                //                      labelAlign="left"
-                //                      rules={[
-                //                          {
-                //                              required: !form.getFieldValue('supervisorName')
-                //                                  ? false
-                //                                  : true,
-                //                              message: 'Vui lòng nhập số tiền thanh toán',
-                //                          },
-                //                      ]}
-                //                  >
-                //                      <InputNumber
-                //                          className="w-2/3"
-                //                          min={0}
-                //                          placeholder="Nhập số tiền"
-                //                          parser={(value) =>
-                //                              value?.replace(/\$\s?|(,*)/g, '') as unknown as number
-                //                          }
-                //                          suffix="VNĐ"
-                //                          disabled={!form.getFieldValue('supervisorName')}
-                //                      />
-                //                  </FormItem>
-                //              </Col>
-                //          </Row>
-
-                //          <Row gutter={16} align="middle">
-                //              <Col span={12}>
-                //                  <FormItem
-                //                      form={form}
-                //                      name="coSupervisorName"
-                //                      label="GVHD 2"
-                //                      className="mb-5"
-                //                      labelAlign="left"
-                //                      {...formItemLayout}
-                //                  >
-                //                      <Input className="w-full" disabled />
-                //                  </FormItem>
-                //              </Col>
-                //              <FormItem
-                //                  form={form}
-                //                  name="coSupervisorId"
-                //                  label="GVHD 2"
-                //                  className="mb-5 hidden"
-                //                  labelAlign="left"
-                //                  {...formItemLayout}
-                //              >
-                //                  <Input className="w-full" disabled />
-                //              </FormItem>
-
-                //              <Col span={12}>
-                //                  <FormItem
-                //                      form={form}
-                //                      name="coSupervisorPaymentAmount" // Tên trường mới
-                //                      label="Số tiền"
-                //                      className="mb-5"
-                //                      labelAlign="left"
-                //                      rules={[
-                //                          {
-                //                              required: !form.getFieldValue('coSupervisorName')
-                //                                  ? false
-                //                                  : true,
-                //                              message: 'Vui lòng nhập số tiền thanh toán',
-                //                          },
-                //                      ]}
-                //                  >
-                //                      <InputNumber
-                //                          className="w-2/3"
-                //                          min={0}
-                //                          parser={(value) =>
-                //                              value?.replace(/\$\s?|(,*)/g, '') as unknown as number
-                //                          }
-                //                          placeholder="Nhập số tiền"
-                //                          suffix="VNĐ"
-                //                          disabled={!form.getFieldValue('coSupervisorName')}
-                //                      />
-                //                  </FormItem>
-                //              </Col>
-                //          </Row>
-                //      </Col>
-                //  </Row>
             ),
         },
     ]
@@ -1093,6 +1138,7 @@ const ModalCauHinhLuanVan = () => {
             open={isOpen}
             form={form}
             onFinish={onOk}
+            onOk={onOk}
             onCancel={onClose}
             maskClosable={true}
             title={'Cấu hình bảo vệ Luận văn/Đề án'}

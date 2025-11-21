@@ -178,15 +178,22 @@ function DanhSachHocVien({
                                     },
                                 },
                             }),
-                              ...(filters.dateOfBirth?.length === 2
-                                            ? {
-                                                userProfile:{
-                                                  dateOfBirth: {
-                                                      gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                                                      lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                                                }}
-                                              }
-                                            : {}),
+                            ...(filters.dateOfBirth?.length === 2
+                                ? {
+                                      userProfile: {
+                                          dateOfBirth: {
+                                              gte: dayjs(
+                                                  filters.dateOfBirth?.[0],
+                                                  'DD/MM/YYYY'
+                                              ).toDate(),
+                                              lte: dayjs(
+                                                  filters.dateOfBirth?.[1],
+                                                  'DD/MM/YYYY'
+                                              ).toDate(),
+                                          },
+                                      },
+                                  }
+                                : {}),
                         },
                     },
                     include: {
@@ -305,11 +312,13 @@ function DanhSachHocVien({
                                         width: 120,
                                         align: 'center',
                                         type: 'date',
-                                        render: (_, record) =>{
-                                           return record?.student?.userProfile?.dateOfBirth ? dayjs(record?.student?.userProfile?.dateOfBirth).format(
-                                                    'DD/MM/YYYY'
-                                                ):''
-                                        }
+                                        render: (_, record) => {
+                                            return record?.student?.userProfile?.dateOfBirth
+                                                ? dayjs(
+                                                      record?.student?.userProfile?.dateOfBirth
+                                                  ).format('DD/MM/YYYY')
+                                                : ''
+                                        },
                                     },
                                     {
                                         title: 'CCCD',

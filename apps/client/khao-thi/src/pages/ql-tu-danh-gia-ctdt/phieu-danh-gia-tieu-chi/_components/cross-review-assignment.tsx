@@ -8,6 +8,7 @@ import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
+    useUpdateEvaluationPeriod,
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
@@ -247,6 +248,7 @@ export default function CrossReviewAssignment() {
     }, [data, form])
 
     const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
 
     const handleSave = async () => {
         try {
@@ -263,6 +265,12 @@ export default function CrossReviewAssignment() {
                         : undefined,
                 }))
                 .filter((item) => item.reviewerId || item.deadlineReview)
+
+            if (submitData.length === 0) {
+                message.error('Vui lòng nhập ít nhất một phân công phản biện')
+                hideSpinner()
+                return
+            }
 
             await Promise.all(
                 submitData.map((item) =>
@@ -282,6 +290,15 @@ export default function CrossReviewAssignment() {
                     })
                 )
             )
+
+            await updateEvaluationPeriod({
+                where: {
+                    id: selectedEvaluationPeriodId,
+                },
+                data: {
+                    status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW,
+                },
+            })
 
             message.success('Lưu phân công phản biện chéo thành công')
             refetch()
@@ -328,6 +345,9 @@ export default function CrossReviewAssignment() {
                             type: 'checkbox',
                             selectedRowKeys,
                             onChange: onSelectChange,
+                        }}
+                        expandable={{
+                            expandRowByClick: false,
                         }}
                         onRow={(record) => ({
                             onClick: (e) => {
@@ -381,7 +401,7 @@ export default function CrossReviewAssignment() {
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
-                        scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
+                        scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
                         className="w-full"
                         columns={[
                             {

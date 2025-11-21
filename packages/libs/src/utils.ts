@@ -4,6 +4,14 @@ import Decimal from 'decimal.js'
 
 export { fastIsEqual } from './fast-is-equal'
 
+export function range(start: number, end: number): number[] {
+    const result: number[] = []
+    for (let i = start; i < end; i++) {
+        result.push(i)
+    }
+    return result
+}
+
 export function parseDate(date?: string): dayjs.Dayjs {
     const dateFormats = [
         // Year = 4 digits

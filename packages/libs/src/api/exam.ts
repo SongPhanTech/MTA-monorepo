@@ -27,6 +27,7 @@ import type {
     CreateClusterSurvey404,
     CreateClusterSurveyRequest,
     ExportClusterSurveyStatistics404,
+    ExportClusterSurveyStatisticsParams,
     ExportReportSurvey,
     ExportReportSurvey400,
     ExportReportSurvey404,
@@ -39,6 +40,10 @@ import type {
     GenExamBankResult,
     GetClusterSurveyStatistics200,
     GetClusterSurveyStatistics404,
+    GetClusterSurveyStatisticsParams,
+    GetLectureSurveyStatistics200,
+    GetLectureSurveyStatistics404,
+    GetLectureSurveyStatisticsParams,
     GetPrivateSurvey400,
     GetPrivateSurvey404,
     GetPrivateSurveyParams,
@@ -1816,16 +1821,32 @@ export type getClusterSurveyStatisticsResponse = getClusterSurveyStatisticsRespo
     headers: Headers
 }
 
-export const getGetClusterSurveyStatisticsUrl = (id: string) => {
-    return `/api/cluster-survey/${id}/statistics`
+export const getGetClusterSurveyStatisticsUrl = (
+    id: string,
+    params?: GetClusterSurveyStatisticsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/cluster-survey/${id}/statistics?${stringifiedParams}`
+        : `/api/cluster-survey/${id}/statistics`
 }
 
 export const getClusterSurveyStatistics = async (
     id: string,
+    params?: GetClusterSurveyStatisticsParams,
     options?: RequestInit
 ): Promise<getClusterSurveyStatisticsResponse> => {
     return customExamFetch<getClusterSurveyStatisticsResponse>(
-        getGetClusterSurveyStatisticsUrl(id),
+        getGetClusterSurveyStatisticsUrl(id, params),
         {
             ...options,
             method: 'GET',
@@ -1833,8 +1854,11 @@ export const getClusterSurveyStatistics = async (
     )
 }
 
-export const getGetClusterSurveyStatisticsQueryKey = (id: string) => {
-    return [`/api/cluster-survey/${id}/statistics`] as const
+export const getGetClusterSurveyStatisticsQueryKey = (
+    id: string,
+    params?: GetClusterSurveyStatisticsParams
+) => {
+    return [`/api/cluster-survey/${id}/statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClusterSurveyStatisticsQueryOptions = <
@@ -1842,6 +1866,7 @@ export const getGetClusterSurveyStatisticsQueryOptions = <
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
+    params?: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -1851,11 +1876,11 @@ export const getGetClusterSurveyStatisticsQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsQueryKey(id)
+    const queryKey = queryOptions?.queryKey ?? getGetClusterSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClusterSurveyStatistics>>> = ({
         signal,
-    }) => getClusterSurveyStatistics(id, { signal, ...requestOptions })
+    }) => getClusterSurveyStatistics(id, params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClusterSurveyStatistics>>,
@@ -1874,6 +1899,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
+    params: undefined | GetClusterSurveyStatisticsParams,
     options: {
         query: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -1895,6 +1921,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
+    params?: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -1916,6 +1943,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
+    params?: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -1933,6 +1961,7 @@ export function useGetClusterSurveyStatistics<
     TError = GetClusterSurveyStatistics404,
 >(
     id: string,
+    params?: GetClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClusterSurveyStatistics>>, TError, TData>
@@ -1941,7 +1970,188 @@ export function useGetClusterSurveyStatistics<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClusterSurveyStatisticsQueryOptions(id, options)
+    const queryOptions = getGetClusterSurveyStatisticsQueryOptions(id, params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * @summary Thống kê câu trả lời theo giảng viên trong một cụm khảo sát
+ */
+export type getLectureSurveyStatisticsResponse200 = {
+    data: GetLectureSurveyStatistics200
+    status: 200
+}
+
+export type getLectureSurveyStatisticsResponse404 = {
+    data: GetLectureSurveyStatistics404
+    status: 404
+}
+
+export type getLectureSurveyStatisticsResponseComposite =
+    | getLectureSurveyStatisticsResponse200
+    | getLectureSurveyStatisticsResponse404
+
+export type getLectureSurveyStatisticsResponse = getLectureSurveyStatisticsResponseComposite & {
+    headers: Headers
+}
+
+export const getGetLectureSurveyStatisticsUrl = (
+    id: string,
+    params?: GetLectureSurveyStatisticsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/cluster-survey/${id}/lecture-statistics?${stringifiedParams}`
+        : `/api/cluster-survey/${id}/lecture-statistics`
+}
+
+export const getLectureSurveyStatistics = async (
+    id: string,
+    params?: GetLectureSurveyStatisticsParams,
+    options?: RequestInit
+): Promise<getLectureSurveyStatisticsResponse> => {
+    return customExamFetch<getLectureSurveyStatisticsResponse>(
+        getGetLectureSurveyStatisticsUrl(id, params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetLectureSurveyStatisticsQueryKey = (
+    id: string,
+    params?: GetLectureSurveyStatisticsParams
+) => {
+    return [`/api/cluster-survey/${id}/lecture-statistics`, ...(params ? [params] : [])] as const
+}
+
+export const getGetLectureSurveyStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError = GetLectureSurveyStatistics404,
+>(
+    id: string,
+    params?: GetLectureSurveyStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetLectureSurveyStatisticsQueryKey(id, params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLectureSurveyStatistics>>> = ({
+        signal,
+    }) => getLectureSurveyStatistics(id, params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetLectureSurveyStatisticsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+>
+export type GetLectureSurveyStatisticsQueryError = GetLectureSurveyStatistics404
+
+export function useGetLectureSurveyStatistics<
+    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError = GetLectureSurveyStatistics404,
+>(
+    id: string,
+    params: undefined | GetLectureSurveyStatisticsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLectureSurveyStatistics<
+    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError = GetLectureSurveyStatistics404,
+>(
+    id: string,
+    params?: GetLectureSurveyStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getLectureSurveyStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLectureSurveyStatistics<
+    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError = GetLectureSurveyStatistics404,
+>(
+    id: string,
+    params?: GetLectureSurveyStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thống kê câu trả lời theo giảng viên trong một cụm khảo sát
+ */
+
+export function useGetLectureSurveyStatistics<
+    TData = Awaited<ReturnType<typeof getLectureSurveyStatistics>>,
+    TError = GetLectureSurveyStatistics404,
+>(
+    id: string,
+    params?: GetLectureSurveyStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getLectureSurveyStatistics>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetLectureSurveyStatisticsQueryOptions(id, params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
@@ -1974,16 +2184,32 @@ export type exportClusterSurveyStatisticsResponse =
         headers: Headers
     }
 
-export const getExportClusterSurveyStatisticsUrl = (id: string) => {
-    return `/api/cluster-survey/${id}/statistics/export`
+export const getExportClusterSurveyStatisticsUrl = (
+    id: string,
+    params?: ExportClusterSurveyStatisticsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/cluster-survey/${id}/statistics/export?${stringifiedParams}`
+        : `/api/cluster-survey/${id}/statistics/export`
 }
 
 export const exportClusterSurveyStatistics = async (
     id: string,
+    params?: ExportClusterSurveyStatisticsParams,
     options?: RequestInit
 ): Promise<exportClusterSurveyStatisticsResponse> => {
     return customExamFetch<exportClusterSurveyStatisticsResponse>(
-        getExportClusterSurveyStatisticsUrl(id),
+        getExportClusterSurveyStatisticsUrl(id, params),
         {
             ...options,
             method: 'GET',
@@ -1991,8 +2217,11 @@ export const exportClusterSurveyStatistics = async (
     )
 }
 
-export const getExportClusterSurveyStatisticsQueryKey = (id: string) => {
-    return [`/api/cluster-survey/${id}/statistics/export`] as const
+export const getExportClusterSurveyStatisticsQueryKey = (
+    id: string,
+    params?: ExportClusterSurveyStatisticsParams
+) => {
+    return [`/api/cluster-survey/${id}/statistics/export`, ...(params ? [params] : [])] as const
 }
 
 export const getExportClusterSurveyStatisticsQueryOptions = <
@@ -2000,6 +2229,7 @@ export const getExportClusterSurveyStatisticsQueryOptions = <
     TError = ExportClusterSurveyStatistics404,
 >(
     id: string,
+    params?: ExportClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2013,11 +2243,11 @@ export const getExportClusterSurveyStatisticsQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getExportClusterSurveyStatisticsQueryKey(id)
+    const queryKey = queryOptions?.queryKey ?? getExportClusterSurveyStatisticsQueryKey(id, params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof exportClusterSurveyStatistics>>> = ({
         signal,
-    }) => exportClusterSurveyStatistics(id, { signal, ...requestOptions })
+    }) => exportClusterSurveyStatistics(id, params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof exportClusterSurveyStatistics>>,
@@ -2036,6 +2266,7 @@ export function useExportClusterSurveyStatistics<
     TError = ExportClusterSurveyStatistics404,
 >(
     id: string,
+    params: undefined | ExportClusterSurveyStatisticsParams,
     options: {
         query: Partial<
             UseQueryOptions<
@@ -2061,6 +2292,7 @@ export function useExportClusterSurveyStatistics<
     TError = ExportClusterSurveyStatistics404,
 >(
     id: string,
+    params?: ExportClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2086,6 +2318,7 @@ export function useExportClusterSurveyStatistics<
     TError = ExportClusterSurveyStatistics404,
 >(
     id: string,
+    params?: ExportClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2107,6 +2340,7 @@ export function useExportClusterSurveyStatistics<
     TError = ExportClusterSurveyStatistics404,
 >(
     id: string,
+    params?: ExportClusterSurveyStatisticsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
@@ -2119,7 +2353,7 @@ export function useExportClusterSurveyStatistics<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getExportClusterSurveyStatisticsQueryOptions(id, options)
+    const queryOptions = getExportClusterSurveyStatisticsQueryOptions(id, params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

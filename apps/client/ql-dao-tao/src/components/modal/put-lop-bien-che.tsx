@@ -29,8 +29,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
-import TreeSelect from '@/components/commons/tree-select'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -165,23 +165,27 @@ const PutFixedClassModal = () => {
             },
         })
 
-    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor({
-            where: {
-                curriculum: {
-                    some: {
-                        curriculumVersion: {
-                            some: {
-                                id: curriculumVersionIdForm ?? undefined,
-                            },
-                        },
-                    },
-                },
-            },
-            orderBy: {
-                name: 'asc',
-            },
-        })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: {
+            active: true,
+            ...(curriculumVersionIdForm
+                ? {
+                      curriculum: {
+                          some: {
+                              curriculumVersion: {
+                                  some: {
+                                      id: curriculumVersionIdForm,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        },
+        orderBy: {
+            name: 'asc',
+        },
+    })
     const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
         {
             where: { id: curriculumVersionIdForm ?? undefined },

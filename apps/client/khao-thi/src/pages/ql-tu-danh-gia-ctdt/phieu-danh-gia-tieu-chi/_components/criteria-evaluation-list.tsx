@@ -25,6 +25,18 @@ export default function CriteriaEvaluationList() {
                                                 userProfile: true,
                                             },
                                         },
+                                        evaluationCriterionComments: {
+                                            include: {
+                                                reviewer: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                            orderBy: {
+                                                createdAt: 'desc',
+                                            },
+                                        },
                                     },
                                 },
                             },

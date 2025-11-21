@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
-const app = new OpenAPIHono({ strict: false })
+const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const getSemester = createRoute({
     operationId: 'get-class-terms',
     tags: ['Semester'],
@@ -95,7 +95,7 @@ const getAllYear = createRoute({
                         .object({
                             result_code: z.string(),
                             result_desc: z.string(),
-                            Data: z.array(
+                            data: z.array(
                                 z.object({
                                     year_code: z.string(),
                                     year: z.string(),
@@ -120,14 +120,14 @@ app.openapi(getAllYear, async (c) => {
     const data = res.map((r) => {
         return {
             year_code: r.code ?? '',
-            year: r.name??'',
+            year: r.name ?? '',
         }
     })
 
     return c.json({
         result_code: '000',
         result_desc: 'success',
-        Data: data,
+        data,
     })
 })
 

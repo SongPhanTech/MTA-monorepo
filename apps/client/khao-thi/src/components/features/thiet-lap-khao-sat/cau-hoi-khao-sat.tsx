@@ -129,7 +129,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
                             'THEM'
                         ) && (
-                            <Button onClick={handleModal} type="primary" size='small'>
+                            <Button onClick={handleModal} type="primary" size="small">
                                 Thêm mới
                             </Button>
                         )}
@@ -137,7 +137,7 @@ function CauHoiKhaoSat({ id }: { id: string }) {
                 </Col>
                 <Col span={24}>
                     <Table
-                    className="h-[calc(100vh-200px)]"
+                        className="h-[calc(100vh-200px)]"
                         rowKey="id"
                         filters={filters}
                         setFilters={(value) => {

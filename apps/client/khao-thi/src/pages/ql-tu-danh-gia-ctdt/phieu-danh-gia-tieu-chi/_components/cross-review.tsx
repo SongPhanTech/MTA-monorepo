@@ -32,7 +32,7 @@ export default function CrossReview() {
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data } = useFindUniqueEvaluationPeriod(
+    const { data, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
@@ -133,11 +133,13 @@ export default function CrossReview() {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-                    children: <CrossReviewSubPage key={standard.id} data={standard} />,
+                    children: (
+                        <CrossReviewSubPage key={standard.id} data={standard} onRefetch={refetch} />
+                    ),
                 }
             })
         }
-    }, [data])
+    }, [data, refetch])
 
     return (
         <div className="h-full">

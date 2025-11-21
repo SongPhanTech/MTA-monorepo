@@ -10,14 +10,14 @@ import {
     OpenCoursesRequest,
     TYPE_PROGRAM,
     TYPE_REGISTRABLE,
-} from '../dto/class-register'
+} from '../dto/course.dto'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getOpenCourses = createRoute({
     operationId: 'get-open-courses',
     path: '/registration/open-courses',
-    tags: ['Registration'],
+    tags: ['Courses'],
     summary: '2.1. Học phần mở đăng ký tín chỉ',
     description: '2.1. Học phần mở đăng ký tín chỉ',
     method: 'post',
@@ -303,7 +303,7 @@ app.openapi(getOpenCourses, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
+            result_desc: 'success' as const,
             data,
         },
         200
@@ -313,7 +313,7 @@ app.openapi(getOpenCourses, async (c) => {
 const getCoursesDetail = createRoute({
     operationId: 'get-courses-detail',
     path: '/registration/courses_detail',
-    tags: ['Registration'],
+    tags: ['Courses'],
     summary: '2.2. Chi tiết học phần',
     description: '2.2. Chi tiết học phần',
     method: 'post',

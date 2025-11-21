@@ -1,10 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
-const app = new OpenAPIHono({ strict: false })
+const app: OpenAPIHono = new OpenAPIHono({ strict: false })
+
 const getRegistration = createRoute({
     operationId: 'get-registration',
-    tags: ['Registration'],
+    tags: ['Get Registration'],
     path: 'get-registration',
     summary: '2.5 Lấy danh sách học phần đã đăng kí',
     method: 'post',

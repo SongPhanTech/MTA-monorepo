@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { prisma } from '..'
 import type { $Enums } from '@workspace/db'
+import { prisma } from '..'
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 

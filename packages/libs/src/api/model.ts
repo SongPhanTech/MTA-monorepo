@@ -22,14 +22,41 @@ import type {
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { customModelFetch } from './custom-instance'
 import type {
+    AccessRequests200Item,
+    AccessRequestsParams,
+    Applications200Item,
+    ApplicationsParams,
     BucketItemDto,
+    CheckExportTableBySql200,
+    CheckExportTableBySql500,
+    CheckExportTableBySqlParams,
+    CountRequests200Item,
+    CountRequestsParams,
+    ErrorRate200Item,
+    ErrorRateParams,
+    ExportTableByColumnsParams,
+    ExportTableBySqlParams,
+    GetColumns200Item,
+    GetColumnsParams,
+    GetDatabases200Item,
+    GetDatabasesParams,
     GetSessionParams,
+    GetTables200Item,
+    GetTablesParams,
+    ImportExcelToDatabase200,
+    ImportExcelToDatabaseBody,
+    LatencyAverage200Item,
+    LatencyAverageParams,
     ListObjectsParams,
     PresignedGetObjectParams,
     PresignedUrlDto,
+    ReadExcelColumns200,
+    ReadExcelColumnsBody,
     Session,
     SqlTransaction200Item,
     SqlTransactionBodyItem,
+    Throughput200Item,
+    ThroughputParams,
     Unauthorized,
     UrlDto,
 } from './schemas'
@@ -183,6 +210,1856 @@ export function useGetSession<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+export type accessRequestsResponse200 = {
+    data: AccessRequests200Item[]
+    status: 200
+}
+
+export type accessRequestsResponseComposite = accessRequestsResponse200
+
+export type accessRequestsResponse = accessRequestsResponseComposite & {
+    headers: Headers
+}
+
+export const getAccessRequestsUrl = (params: AccessRequestsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/access-requests?${stringifiedParams}`
+        : '/api/apim-logs/access-requests'
+}
+
+export const accessRequests = async (
+    params: AccessRequestsParams,
+    options?: RequestInit
+): Promise<accessRequestsResponse> => {
+    return customModelFetch<accessRequestsResponse>(getAccessRequestsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getAccessRequestsQueryKey = (params: AccessRequestsParams) => {
+    return ['/api/apim-logs/access-requests', ...(params ? [params] : [])] as const
+}
+
+export const getAccessRequestsQueryOptions = <
+    TData = Awaited<ReturnType<typeof accessRequests>>,
+    TError = unknown,
+>(
+    params: AccessRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getAccessRequestsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof accessRequests>>> = ({ signal }) =>
+        accessRequests(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof accessRequests>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type AccessRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof accessRequests>>>
+export type AccessRequestsQueryError = unknown
+
+export function useAccessRequests<
+    TData = Awaited<ReturnType<typeof accessRequests>>,
+    TError = unknown,
+>(
+    params: AccessRequestsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof accessRequests>>,
+                    TError,
+                    Awaited<ReturnType<typeof accessRequests>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAccessRequests<
+    TData = Awaited<ReturnType<typeof accessRequests>>,
+    TError = unknown,
+>(
+    params: AccessRequestsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof accessRequests>>,
+                    TError,
+                    Awaited<ReturnType<typeof accessRequests>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAccessRequests<
+    TData = Awaited<ReturnType<typeof accessRequests>>,
+    TError = unknown,
+>(
+    params: AccessRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useAccessRequests<
+    TData = Awaited<ReturnType<typeof accessRequests>>,
+    TError = unknown,
+>(
+    params: AccessRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getAccessRequestsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type countRequestsResponse200 = {
+    data: CountRequests200Item[]
+    status: 200
+}
+
+export type countRequestsResponseComposite = countRequestsResponse200
+
+export type countRequestsResponse = countRequestsResponseComposite & {
+    headers: Headers
+}
+
+export const getCountRequestsUrl = (params: CountRequestsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/count-requests?${stringifiedParams}`
+        : '/api/apim-logs/count-requests'
+}
+
+export const countRequests = async (
+    params: CountRequestsParams,
+    options?: RequestInit
+): Promise<countRequestsResponse> => {
+    return customModelFetch<countRequestsResponse>(getCountRequestsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getCountRequestsQueryKey = (params: CountRequestsParams) => {
+    return ['/api/apim-logs/count-requests', ...(params ? [params] : [])] as const
+}
+
+export const getCountRequestsQueryOptions = <
+    TData = Awaited<ReturnType<typeof countRequests>>,
+    TError = unknown,
+>(
+    params: CountRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getCountRequestsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof countRequests>>> = ({ signal }) =>
+        countRequests(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof countRequests>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CountRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof countRequests>>>
+export type CountRequestsQueryError = unknown
+
+export function useCountRequests<
+    TData = Awaited<ReturnType<typeof countRequests>>,
+    TError = unknown,
+>(
+    params: CountRequestsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof countRequests>>,
+                    TError,
+                    Awaited<ReturnType<typeof countRequests>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCountRequests<
+    TData = Awaited<ReturnType<typeof countRequests>>,
+    TError = unknown,
+>(
+    params: CountRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof countRequests>>,
+                    TError,
+                    Awaited<ReturnType<typeof countRequests>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCountRequests<
+    TData = Awaited<ReturnType<typeof countRequests>>,
+    TError = unknown,
+>(
+    params: CountRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCountRequests<
+    TData = Awaited<ReturnType<typeof countRequests>>,
+    TError = unknown,
+>(
+    params: CountRequestsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getCountRequestsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type latencyAverageResponse200 = {
+    data: LatencyAverage200Item[]
+    status: 200
+}
+
+export type latencyAverageResponseComposite = latencyAverageResponse200
+
+export type latencyAverageResponse = latencyAverageResponseComposite & {
+    headers: Headers
+}
+
+export const getLatencyAverageUrl = (params: LatencyAverageParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/latency-average?${stringifiedParams}`
+        : '/api/apim-logs/latency-average'
+}
+
+export const latencyAverage = async (
+    params: LatencyAverageParams,
+    options?: RequestInit
+): Promise<latencyAverageResponse> => {
+    return customModelFetch<latencyAverageResponse>(getLatencyAverageUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getLatencyAverageQueryKey = (params: LatencyAverageParams) => {
+    return ['/api/apim-logs/latency-average', ...(params ? [params] : [])] as const
+}
+
+export const getLatencyAverageQueryOptions = <
+    TData = Awaited<ReturnType<typeof latencyAverage>>,
+    TError = unknown,
+>(
+    params: LatencyAverageParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getLatencyAverageQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof latencyAverage>>> = ({ signal }) =>
+        latencyAverage(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof latencyAverage>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type LatencyAverageQueryResult = NonNullable<Awaited<ReturnType<typeof latencyAverage>>>
+export type LatencyAverageQueryError = unknown
+
+export function useLatencyAverage<
+    TData = Awaited<ReturnType<typeof latencyAverage>>,
+    TError = unknown,
+>(
+    params: LatencyAverageParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof latencyAverage>>,
+                    TError,
+                    Awaited<ReturnType<typeof latencyAverage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLatencyAverage<
+    TData = Awaited<ReturnType<typeof latencyAverage>>,
+    TError = unknown,
+>(
+    params: LatencyAverageParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof latencyAverage>>,
+                    TError,
+                    Awaited<ReturnType<typeof latencyAverage>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLatencyAverage<
+    TData = Awaited<ReturnType<typeof latencyAverage>>,
+    TError = unknown,
+>(
+    params: LatencyAverageParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useLatencyAverage<
+    TData = Awaited<ReturnType<typeof latencyAverage>>,
+    TError = unknown,
+>(
+    params: LatencyAverageParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getLatencyAverageQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type errorRateResponse200 = {
+    data: ErrorRate200Item[]
+    status: 200
+}
+
+export type errorRateResponseComposite = errorRateResponse200
+
+export type errorRateResponse = errorRateResponseComposite & {
+    headers: Headers
+}
+
+export const getErrorRateUrl = (params: ErrorRateParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/error-rate?${stringifiedParams}`
+        : '/api/apim-logs/error-rate'
+}
+
+export const errorRate = async (
+    params: ErrorRateParams,
+    options?: RequestInit
+): Promise<errorRateResponse> => {
+    return customModelFetch<errorRateResponse>(getErrorRateUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getErrorRateQueryKey = (params: ErrorRateParams) => {
+    return ['/api/apim-logs/error-rate', ...(params ? [params] : [])] as const
+}
+
+export const getErrorRateQueryOptions = <
+    TData = Awaited<ReturnType<typeof errorRate>>,
+    TError = unknown,
+>(
+    params: ErrorRateParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getErrorRateQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof errorRate>>> = ({ signal }) =>
+        errorRate(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof errorRate>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ErrorRateQueryResult = NonNullable<Awaited<ReturnType<typeof errorRate>>>
+export type ErrorRateQueryError = unknown
+
+export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = unknown>(
+    params: ErrorRateParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof errorRate>>,
+                    TError,
+                    Awaited<ReturnType<typeof errorRate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = unknown>(
+    params: ErrorRateParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof errorRate>>,
+                    TError,
+                    Awaited<ReturnType<typeof errorRate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = unknown>(
+    params: ErrorRateParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = unknown>(
+    params: ErrorRateParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getErrorRateQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type throughputResponse200 = {
+    data: Throughput200Item[]
+    status: 200
+}
+
+export type throughputResponseComposite = throughputResponse200
+
+export type throughputResponse = throughputResponseComposite & {
+    headers: Headers
+}
+
+export const getThroughputUrl = (params: ThroughputParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/throughput?${stringifiedParams}`
+        : '/api/apim-logs/throughput'
+}
+
+export const throughput = async (
+    params: ThroughputParams,
+    options?: RequestInit
+): Promise<throughputResponse> => {
+    return customModelFetch<throughputResponse>(getThroughputUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getThroughputQueryKey = (params: ThroughputParams) => {
+    return ['/api/apim-logs/throughput', ...(params ? [params] : [])] as const
+}
+
+export const getThroughputQueryOptions = <
+    TData = Awaited<ReturnType<typeof throughput>>,
+    TError = unknown,
+>(
+    params: ThroughputParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getThroughputQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof throughput>>> = ({ signal }) =>
+        throughput(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof throughput>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ThroughputQueryResult = NonNullable<Awaited<ReturnType<typeof throughput>>>
+export type ThroughputQueryError = unknown
+
+export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = unknown>(
+    params: ThroughputParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof throughput>>,
+                    TError,
+                    Awaited<ReturnType<typeof throughput>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = unknown>(
+    params: ThroughputParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof throughput>>,
+                    TError,
+                    Awaited<ReturnType<typeof throughput>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = unknown>(
+    params: ThroughputParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = unknown>(
+    params: ThroughputParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getThroughputQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type applicationsResponse200 = {
+    data: Applications200Item[]
+    status: 200
+}
+
+export type applicationsResponseComposite = applicationsResponse200
+
+export type applicationsResponse = applicationsResponseComposite & {
+    headers: Headers
+}
+
+export const getApplicationsUrl = (params?: ApplicationsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/wso2am/applications?${stringifiedParams}`
+        : '/api/wso2am/applications'
+}
+
+export const applications = async (
+    params?: ApplicationsParams,
+    options?: RequestInit
+): Promise<applicationsResponse> => {
+    return customModelFetch<applicationsResponse>(getApplicationsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getApplicationsQueryKey = (params?: ApplicationsParams) => {
+    return ['/api/wso2am/applications', ...(params ? [params] : [])] as const
+}
+
+export const getApplicationsQueryOptions = <
+    TData = Awaited<ReturnType<typeof applications>>,
+    TError = unknown,
+>(
+    params?: ApplicationsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getApplicationsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof applications>>> = ({ signal }) =>
+        applications(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof applications>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ApplicationsQueryResult = NonNullable<Awaited<ReturnType<typeof applications>>>
+export type ApplicationsQueryError = unknown
+
+export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = unknown>(
+    params: undefined | ApplicationsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof applications>>,
+                    TError,
+                    Awaited<ReturnType<typeof applications>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = unknown>(
+    params?: ApplicationsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof applications>>,
+                    TError,
+                    Awaited<ReturnType<typeof applications>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = unknown>(
+    params?: ApplicationsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = unknown>(
+    params?: ApplicationsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getApplicationsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type getDatabasesResponse200 = {
+    data: GetDatabases200Item[]
+    status: 200
+}
+
+export type getDatabasesResponseComposite = getDatabasesResponse200
+
+export type getDatabasesResponse = getDatabasesResponseComposite & {
+    headers: Headers
+}
+
+export const getGetDatabasesUrl = (params: GetDatabasesParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/get-databases?${stringifiedParams}`
+        : '/api/excel-import-export/get-databases'
+}
+
+export const getDatabases = async (
+    params: GetDatabasesParams,
+    options?: RequestInit
+): Promise<getDatabasesResponse> => {
+    return customModelFetch<getDatabasesResponse>(getGetDatabasesUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetDatabasesQueryKey = (params: GetDatabasesParams) => {
+    return ['/api/excel-import-export/get-databases', ...(params ? [params] : [])] as const
+}
+
+export const getGetDatabasesQueryOptions = <
+    TData = Awaited<ReturnType<typeof getDatabases>>,
+    TError = unknown,
+>(
+    params: GetDatabasesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetDatabasesQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDatabases>>> = ({ signal }) =>
+        getDatabases(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getDatabases>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDatabasesQueryResult = NonNullable<Awaited<ReturnType<typeof getDatabases>>>
+export type GetDatabasesQueryError = unknown
+
+export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = unknown>(
+    params: GetDatabasesParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDatabases>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDatabases>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = unknown>(
+    params: GetDatabasesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getDatabases>>,
+                    TError,
+                    Awaited<ReturnType<typeof getDatabases>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = unknown>(
+    params: GetDatabasesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = unknown>(
+    params: GetDatabasesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetDatabasesQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type getTablesResponse200 = {
+    data: GetTables200Item[]
+    status: 200
+}
+
+export type getTablesResponseComposite = getTablesResponse200
+
+export type getTablesResponse = getTablesResponseComposite & {
+    headers: Headers
+}
+
+export const getGetTablesUrl = (params: GetTablesParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/get-tables?${stringifiedParams}`
+        : '/api/excel-import-export/get-tables'
+}
+
+export const getTables = async (
+    params: GetTablesParams,
+    options?: RequestInit
+): Promise<getTablesResponse> => {
+    return customModelFetch<getTablesResponse>(getGetTablesUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetTablesQueryKey = (params: GetTablesParams) => {
+    return ['/api/excel-import-export/get-tables', ...(params ? [params] : [])] as const
+}
+
+export const getGetTablesQueryOptions = <
+    TData = Awaited<ReturnType<typeof getTables>>,
+    TError = unknown,
+>(
+    params: GetTablesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetTablesQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTables>>> = ({ signal }) =>
+        getTables(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getTables>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTablesQueryResult = NonNullable<Awaited<ReturnType<typeof getTables>>>
+export type GetTablesQueryError = unknown
+
+export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = unknown>(
+    params: GetTablesParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getTables>>,
+                    TError,
+                    Awaited<ReturnType<typeof getTables>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = unknown>(
+    params: GetTablesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getTables>>,
+                    TError,
+                    Awaited<ReturnType<typeof getTables>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = unknown>(
+    params: GetTablesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = unknown>(
+    params: GetTablesParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetTablesQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type getColumnsResponse200 = {
+    data: GetColumns200Item[]
+    status: 200
+}
+
+export type getColumnsResponseComposite = getColumnsResponse200
+
+export type getColumnsResponse = getColumnsResponseComposite & {
+    headers: Headers
+}
+
+export const getGetColumnsUrl = (params: GetColumnsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/get-columns?${stringifiedParams}`
+        : '/api/excel-import-export/get-columns'
+}
+
+export const getColumns = async (
+    params: GetColumnsParams,
+    options?: RequestInit
+): Promise<getColumnsResponse> => {
+    return customModelFetch<getColumnsResponse>(getGetColumnsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetColumnsQueryKey = (params: GetColumnsParams) => {
+    return ['/api/excel-import-export/get-columns', ...(params ? [params] : [])] as const
+}
+
+export const getGetColumnsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getColumns>>,
+    TError = unknown,
+>(
+    params: GetColumnsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetColumnsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getColumns>>> = ({ signal }) =>
+        getColumns(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getColumns>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetColumnsQueryResult = NonNullable<Awaited<ReturnType<typeof getColumns>>>
+export type GetColumnsQueryError = unknown
+
+export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = unknown>(
+    params: GetColumnsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getColumns>>,
+                    TError,
+                    Awaited<ReturnType<typeof getColumns>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = unknown>(
+    params: GetColumnsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getColumns>>,
+                    TError,
+                    Awaited<ReturnType<typeof getColumns>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = unknown>(
+    params: GetColumnsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = unknown>(
+    params: GetColumnsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetColumnsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type exportTableByColumnsResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportTableByColumnsResponseComposite = exportTableByColumnsResponse200
+
+export type exportTableByColumnsResponse = exportTableByColumnsResponseComposite & {
+    headers: Headers
+}
+
+export const getExportTableByColumnsUrl = (params: ExportTableByColumnsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/export-table-by-columns?${stringifiedParams}`
+        : '/api/excel-import-export/export-table-by-columns'
+}
+
+export const exportTableByColumns = async (
+    params: ExportTableByColumnsParams,
+    options?: RequestInit
+): Promise<exportTableByColumnsResponse> => {
+    return customModelFetch<exportTableByColumnsResponse>(getExportTableByColumnsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getExportTableByColumnsQueryKey = (params: ExportTableByColumnsParams) => {
+    return [
+        '/api/excel-import-export/export-table-by-columns',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportTableByColumnsQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError = unknown,
+>(
+    params: ExportTableByColumnsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportTableByColumnsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableByColumns>>> = ({ signal }) =>
+        exportTableByColumns(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportTableByColumns>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportTableByColumnsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportTableByColumns>>
+>
+export type ExportTableByColumnsQueryError = unknown
+
+export function useExportTableByColumns<
+    TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError = unknown,
+>(
+    params: ExportTableByColumnsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportTableByColumns>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportTableByColumns>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableByColumns<
+    TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError = unknown,
+>(
+    params: ExportTableByColumnsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportTableByColumns>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportTableByColumns>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableByColumns<
+    TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError = unknown,
+>(
+    params: ExportTableByColumnsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportTableByColumns<
+    TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError = unknown,
+>(
+    params: ExportTableByColumnsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportTableByColumnsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type checkExportTableBySqlResponse200 = {
+    data: CheckExportTableBySql200
+    status: 200
+}
+
+export type checkExportTableBySqlResponse500 = {
+    data: CheckExportTableBySql500
+    status: 500
+}
+
+export type checkExportTableBySqlResponseComposite =
+    | checkExportTableBySqlResponse200
+    | checkExportTableBySqlResponse500
+
+export type checkExportTableBySqlResponse = checkExportTableBySqlResponseComposite & {
+    headers: Headers
+}
+
+export const getCheckExportTableBySqlUrl = (params: CheckExportTableBySqlParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/check-export-table-by-sql?${stringifiedParams}`
+        : '/api/excel-import-export/check-export-table-by-sql'
+}
+
+export const checkExportTableBySql = async (
+    params: CheckExportTableBySqlParams,
+    options?: RequestInit
+): Promise<checkExportTableBySqlResponse> => {
+    return customModelFetch<checkExportTableBySqlResponse>(getCheckExportTableBySqlUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getCheckExportTableBySqlQueryKey = (params: CheckExportTableBySqlParams) => {
+    return [
+        '/api/excel-import-export/check-export-table-by-sql',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getCheckExportTableBySqlQueryOptions = <
+    TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError = CheckExportTableBySql500,
+>(
+    params: CheckExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getCheckExportTableBySqlQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkExportTableBySql>>> = ({
+        signal,
+    }) => checkExportTableBySql(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof checkExportTableBySql>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckExportTableBySqlQueryResult = NonNullable<
+    Awaited<ReturnType<typeof checkExportTableBySql>>
+>
+export type CheckExportTableBySqlQueryError = CheckExportTableBySql500
+
+export function useCheckExportTableBySql<
+    TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError = CheckExportTableBySql500,
+>(
+    params: CheckExportTableBySqlParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof checkExportTableBySql>>,
+                    TError,
+                    Awaited<ReturnType<typeof checkExportTableBySql>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckExportTableBySql<
+    TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError = CheckExportTableBySql500,
+>(
+    params: CheckExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof checkExportTableBySql>>,
+                    TError,
+                    Awaited<ReturnType<typeof checkExportTableBySql>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckExportTableBySql<
+    TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError = CheckExportTableBySql500,
+>(
+    params: CheckExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCheckExportTableBySql<
+    TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError = CheckExportTableBySql500,
+>(
+    params: CheckExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getCheckExportTableBySqlQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type exportTableBySqlResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportTableBySqlResponseComposite = exportTableBySqlResponse200
+
+export type exportTableBySqlResponse = exportTableBySqlResponseComposite & {
+    headers: Headers
+}
+
+export const getExportTableBySqlUrl = (params: ExportTableBySqlParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/excel-import-export/export-table-by-sql?${stringifiedParams}`
+        : '/api/excel-import-export/export-table-by-sql'
+}
+
+export const exportTableBySql = async (
+    params: ExportTableBySqlParams,
+    options?: RequestInit
+): Promise<exportTableBySqlResponse> => {
+    return customModelFetch<exportTableBySqlResponse>(getExportTableBySqlUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getExportTableBySqlQueryKey = (params: ExportTableBySqlParams) => {
+    return ['/api/excel-import-export/export-table-by-sql', ...(params ? [params] : [])] as const
+}
+
+export const getExportTableBySqlQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportTableBySql>>,
+    TError = unknown,
+>(
+    params: ExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportTableBySqlQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableBySql>>> = ({ signal }) =>
+        exportTableBySql(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportTableBySql>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportTableBySqlQueryResult = NonNullable<Awaited<ReturnType<typeof exportTableBySql>>>
+export type ExportTableBySqlQueryError = unknown
+
+export function useExportTableBySql<
+    TData = Awaited<ReturnType<typeof exportTableBySql>>,
+    TError = unknown,
+>(
+    params: ExportTableBySqlParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportTableBySql>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportTableBySql>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableBySql<
+    TData = Awaited<ReturnType<typeof exportTableBySql>>,
+    TError = unknown,
+>(
+    params: ExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportTableBySql>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportTableBySql>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableBySql<
+    TData = Awaited<ReturnType<typeof exportTableBySql>>,
+    TError = unknown,
+>(
+    params: ExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useExportTableBySql<
+    TData = Awaited<ReturnType<typeof exportTableBySql>>,
+    TError = unknown,
+>(
+    params: ExportTableBySqlParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportTableBySqlQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type readExcelColumnsResponse200 = {
+    data: ReadExcelColumns200
+    status: 200
+}
+
+export type readExcelColumnsResponseComposite = readExcelColumnsResponse200
+
+export type readExcelColumnsResponse = readExcelColumnsResponseComposite & {
+    headers: Headers
+}
+
+export const getReadExcelColumnsUrl = () => {
+    return '/api/excel-import-export/read-excel-columns'
+}
+
+export const readExcelColumns = async (
+    readExcelColumnsBody: ReadExcelColumnsBody,
+    options?: RequestInit
+): Promise<readExcelColumnsResponse> => {
+    const formData = new FormData()
+    formData.append('file', readExcelColumnsBody.file)
+
+    return customModelFetch<readExcelColumnsResponse>(getReadExcelColumnsUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getReadExcelColumnsMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof readExcelColumns>>,
+        TError,
+        { data: ReadExcelColumnsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof readExcelColumns>>,
+    TError,
+    { data: ReadExcelColumnsBody },
+    TContext
+> => {
+    const mutationKey = ['readExcelColumns']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof readExcelColumns>>,
+        { data: ReadExcelColumnsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return readExcelColumns(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ReadExcelColumnsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof readExcelColumns>>
+>
+export type ReadExcelColumnsMutationBody = ReadExcelColumnsBody
+export type ReadExcelColumnsMutationError = unknown
+
+export const useReadExcelColumns = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof readExcelColumns>>,
+            TError,
+            { data: ReadExcelColumnsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof readExcelColumns>>,
+    TError,
+    { data: ReadExcelColumnsBody },
+    TContext
+> => {
+    const mutationOptions = getReadExcelColumnsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importExcelToDatabaseResponse200 = {
+    data: ImportExcelToDatabase200
+    status: 200
+}
+
+export type importExcelToDatabaseResponseComposite = importExcelToDatabaseResponse200
+
+export type importExcelToDatabaseResponse = importExcelToDatabaseResponseComposite & {
+    headers: Headers
+}
+
+export const getImportExcelToDatabaseUrl = () => {
+    return '/api/excel-import-export/import-excel-to-database'
+}
+
+export const importExcelToDatabase = async (
+    importExcelToDatabaseBody: ImportExcelToDatabaseBody,
+    options?: RequestInit
+): Promise<importExcelToDatabaseResponse> => {
+    const formData = new FormData()
+    formData.append('file', importExcelToDatabaseBody.file)
+    formData.append('url', importExcelToDatabaseBody.url)
+    formData.append('database', importExcelToDatabaseBody.database)
+    formData.append('table', importExcelToDatabaseBody.table)
+    formData.append('columns', importExcelToDatabaseBody.columns)
+    if (importExcelToDatabaseBody.dbType !== undefined) {
+        formData.append('dbType', importExcelToDatabaseBody.dbType)
+    }
+
+    return customModelFetch<importExcelToDatabaseResponse>(getImportExcelToDatabaseUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportExcelToDatabaseMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importExcelToDatabase>>,
+        TError,
+        { data: ImportExcelToDatabaseBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importExcelToDatabase>>,
+    TError,
+    { data: ImportExcelToDatabaseBody },
+    TContext
+> => {
+    const mutationKey = ['importExcelToDatabase']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importExcelToDatabase>>,
+        { data: ImportExcelToDatabaseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importExcelToDatabase(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportExcelToDatabaseMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importExcelToDatabase>>
+>
+export type ImportExcelToDatabaseMutationBody = ImportExcelToDatabaseBody
+export type ImportExcelToDatabaseMutationError = unknown
+
+export const useImportExcelToDatabase = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importExcelToDatabase>>,
+            TError,
+            { data: ImportExcelToDatabaseBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importExcelToDatabase>>,
+    TError,
+    { data: ImportExcelToDatabaseBody },
+    TContext
+> => {
+    const mutationOptions = getImportExcelToDatabaseMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 export type generatePresignedUrlResponse200 = {

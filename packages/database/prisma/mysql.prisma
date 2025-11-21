@@ -1,0 +1,10 @@
+datasource mysql_db {
+  provider = "mysql"
+  url     = env("MYSQL_DATABASE_URL")
+}
+
+generator mysql_client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x", "darwin", "darwin-arm64", "windows"]
+  output          = "../generated/mysql-client"
+}

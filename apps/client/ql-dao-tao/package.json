@@ -43,6 +43,7 @@
 		"@workspace/router": "workspace:*",
 		"@workspace/ui": "workspace:*",
 		"antd": "catalog:",
+		"antd-style": "^3.7.1",
 		"axios": "catalog:",
 		"chart.js": "catalog:",
 		"class-variance-authority": "catalog:",

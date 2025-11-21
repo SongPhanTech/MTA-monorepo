@@ -63,24 +63,23 @@
 }
 
 .ant-tabs .ant-tabs-tab {
-    padding: 4px 0px ;
+    padding: 4px 0px;
 }
 
-.ant-tabs .ant-tabs-tab+.ant-tabs-tab {
-        margin: 0 0 0 24px;
-
+.ant-tabs .ant-tabs-tab + .ant-tabs-tab {
+    margin: 0 0 0 24px;
 }
 
-.ant-tabs-top >.ant-tabs-nav{
-margin: 0 0 8px 0;
+.ant-tabs-top > .ant-tabs-nav {
+    margin: 0 0 8px 0;
 }
 
-.ant-table  {
+.ant-table {
     height: calc(100% - 32px);
 }
 
-.ant-table-wrapper div{
-    height:100%
+.ant-table-wrapper div {
+    height: 100%;
 }
 
 .ant-table-content {
@@ -92,15 +91,15 @@ margin: 0 0 8px 0;
 }
 
 .ant-table .ant-table-thead > tr > th:first-child {
-  border-top-left-radius: 0px!important;
+    border-top-left-radius: 0px !important;
 }
 
 .ant-table .ant-table-thead > tr > th:last-child {
-  border-top-right-radius: 0px!important;
+    border-top-right-radius: 0px !important;
 }
 
 .ant-pagination-options .ant-select-dropdown {
-  bottom: 100% !important;
-  top: auto !important;
-  min-height: 100px;
+    bottom: 100% !important;
+    top: auto !important;
+    min-height: 100px;
 }

@@ -1,19 +1,20 @@
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
+
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useClassRegisterStatus } from '@hooks/classRegisterStatus'
 import DefaultLayout from '@layouts/default-layout'
-import type { SubjectClassTime } from '@workspace/db/client'
+import { ClassRegisterStatus } from '@workspace/db'
 import {
-    useCountSubjectClass,
+    useCountClassRegisterLogs,
+    useFindManyClassRegisterLogs,
     useFindManySubjectClass,
     useFindUniqueClassRegisterSession,
-    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Divider, message, Row, Tag } from 'antd'
+import { Col, Divider, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { TriangleAlert } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
@@ -46,6 +47,7 @@ export default function ClassRegisterLogs() {
 
     const where = useMemo(
         () => ({
+            classRegisterSessionId: id,
             ...(filters.code && filters.code !== ''
                 ? {
                       student: {
@@ -84,76 +86,70 @@ export default function ClassRegisterLogs() {
                       },
                   }
                 : {}),
+            ...(filters.subjectClassId
+                ? {
+                      subjectClassId: {
+                          in: Array.isArray(filters.subjectClassId)
+                              ? filters.subjectClassId
+                              : [filters.subjectClassId],
+                      },
+                  }
+                : {}),
+            ...(filters.classRegisterStatus
+                ? {
+                      status: { in: filters.classRegisterStatus },
+                  }
+                : {}),
         }),
-        [filters.name, filters.code]
+        [id, filters.name, filters.code, filters.subjectClassId, filters.classRegisterStatus]
     )
 
-    const { data } = useFindManySubjectClass(
+    const { data } = useFindManyClassRegisterLogs(
+        {
+            where,
+
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                subjectClass: true,
+            },
+            orderBy: [{ student: { userProfile: { firstName: 'asc' } } }, { createdAt: 'desc' }],
+        },
+        {
+            enabled: !!id,
+        }
+    )
+
+    const { data: count } = useCountClassRegisterLogs(
         {
             where: {
                 ...where,
                 deletedAt: null,
+            },
+        },
+        {
+            enabled: !!id,
+        }
+    )
+
+    const { data: subjectClass } = useFindManySubjectClass(
+        {
+            where: {
                 classRegisterLogs: {
                     some: {
                         classRegisterSessionId: id,
                     },
                 },
-                cancelled: false,
-                active: true,
-                status: 'OFFICIAL',
             },
-            include: {
-                classRegisterLogs: {
-                    where: {
-                        classRegisterSessionId: id,
-                    },
-                    include: {
-                        student: {
-                            include: {
-                                userProfile: true,
-                            },
-                        },
-                    },
-                },
-                subject: true,
-                mainLecturer: {
-                    select: {
-                        userProfile: true,
-                    },
-                },
-                extraLecturer: {
-                    select: {
-                        userProfile: true,
-                    },
-                },
-                room: true,
-                subjectClassTimes: true,
-                _count: {
-                    select: {
-                        classRegisterLogs: true,
-                    },
-                },
-            },
-            orderBy: { createdAt: 'desc' },
+            orderBy: [{ name: 'asc' }],
         },
         {
             enabled: !!id,
         }
     )
-
-    const { data: count } = useCountSubjectClass(
-        {
-            where: {
-                ...where,
-                deletedAt: null,
-            },
-        },
-        {
-            enabled: !!id,
-        }
-    )
-
-    const { mutate: updateSubjectClass } = useUpdateSubjectClass()
 
     return (
         <div>
@@ -187,114 +183,80 @@ export default function ClassRegisterLogs() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã LMH',
+                                title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
                                 type: 'input',
+                                render: (_, record) => record?.student?.code || '',
                             },
                             {
-                                title: 'Tên LMH',
+                                title: 'Họ và tên',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
                                 type: 'input',
-                            },
-                            {
-                                title: 'Số TC',
-                                width: 200,
-                                align: 'center',
-                                render: (_, record) => record?.subject?.credit || '',
-                            },
-                            {
-                                title: 'Giảng viên',
-                                width: 300,
+
                                 render: (_, record) =>
+                                    record?.student?.userProfile?.fullname ||
                                     [
-                                        record.mainLecturer?.userProfile.fullname,
-                                        record.extraLecturer?.userProfile.fullname,
+                                        record?.student?.userProfile?.lastName,
+                                        record?.student?.userProfile?.firstName,
                                     ]
                                         .filter(Boolean)
-                                        .join(', '),
+                                        .join(' ') ||
+                                    '',
                             },
                             {
-                                title: 'Phòng học',
+                                title: 'Lớp',
+                                dataIndex: 'subjectClassId',
+                                width: 200,
                                 align: 'center',
-                                width: 150,
-                                render: (_, record) => record.room?.name,
-                            },
-                            {
-                                title: 'Số lượng',
-                                align: 'center',
-                                width: 80,
-                                render: (_, record) =>
-                                    `${record._count?.classRegisterLogs || 0}/${record.maxStudent}`,
-                            },
-                            {
-                                title: 'Thời khoá biểu',
-                                width: 150,
-                                align: 'center',
-                                render: (_, record) => {
-                                    return record.subjectClassTimes?.map?.(
-                                        (tkb: SubjectClassTime) => {
-                                            return (
-                                                <p>
-                                                    {tkb.dayOfWeek === 8
-                                                        ? 'CN'
-                                                        : `T${tkb.dayOfWeek}`}{' '}
-                                                    - {tkb.startPeriod} - {tkb.endPeriod}
-                                                </p>
-                                            )
-                                        }
-                                    )
-                                },
+                                type: 'select',
+                                options: subjectClass?.map((i) => {
+                                    return {
+                                        label: i?.name,
+                                        value: i?.id,
+                                    }
+                                }),
+                                render: (_, record) => record?.subjectClass?.name || '',
                             },
                             {
                                 title: 'Trạng thái',
-                                width: 300,
+                                dataIndex: 'classRegisterStatus',
+
                                 align: 'center',
+                                width: 140,
+                                fixed: 'right',
+                                type: 'select',
+                                options: classRegisterStatusOptions.map((i) => ({
+                                    value: i.value,
+                                    label: i.label,
+                                })),
                                 render: (_, record) => {
-                                    return record.cancelled ? (
-                                        <Tag color="red">Đã huỷ</Tag>
-                                    ) : (
-                                        <Tag color="green">Đang mở</Tag>
-                                    )
+                                    const label = getClassRegisterStatusLabel(record.status)
+                                    const color = getClassRegisterStatusColor(record.status)
+                                    return <Tag color={color}>{label}</Tag>
                                 },
                             },
                             {
-                                title: 'Thao tác',
-                                width: 100,
+                                title: 'Ghi chú',
+                                dataIndex: 'reason',
                                 align: 'center',
-                                render: (_, record) => {
-                                    return (
-                                        <div className="flex items-center justify-center gap-2">
-                                            <DeleteIcon
-                                                title="Huỷ lớp học phần"
-                                                popConfirm={{
-                                                    title: 'Bạn có chắc chắn muốn huỷ lớp học phần này?',
-                                                    description:
-                                                        'Hành động này sẽ huỷ tất cả các đăng ký học phần của sinh viên trong lớp này.',
-                                                    onConfirm: async () => {
-                                                        try {
-                                                            await updateSubjectClass({
-                                                                where: { id: record.id },
-                                                                data: { cancelled: true },
-                                                            })
-                                                            message.success(
-                                                                'Huỷ lớp học phần thành công!'
-                                                            )
-                                                        } catch (error) {
-                                                            console.log(error)
-                                                            message.error(
-                                                                'Có lỗi xảy ra, vui lòng thử lại sau!'
-                                                            )
-                                                        }
-                                                    },
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                },
+                                width: 100,
+                                fixed: 'right',
+                                render: (_, record) =>
+                                    record?.status === ClassRegisterStatus.FAILED && (
+                                        <Row className="justify-center gap-2">
+                                            <Tooltip title={record?.reason}>
+                                                <TriangleAlert
+                                                    size={16}
+                                                    strokeWidth={1.5}
+                                                    className="text-red-600 cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                        </Row>
+                                    ),
                             },
                         ]}
                         data={data}
@@ -327,7 +289,7 @@ ClassRegisterLogs.getLayout = function getLayout(page: React.ReactElement) {
                     title: 'Đợt đăng ký học',
                     href: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                 },
-                { title: 'Các lớp môn học' },
+                { title: 'Các đơn đăng ký học' },
             ]}
         >
             {page}

@@ -11,6 +11,7 @@ export type PutModalFormType = {}
 export type ModalProps<T = PutModalFormType> = {
     form: FormInstance<T>
     onFinish: (values: T) => void
+    onOk?: () => void
     layout?: 'horizontal' | 'vertical' // Cho phép truyền layout là horizontal hoặc vertical
     labelCol?: { span: number }
     wrapperCol?: { span: number }
@@ -26,6 +27,7 @@ const PutFormModal = <T extends PutModalFormType>({
     labelCol,
     wrapperCol,
     rowWrap = true,
+    onOk = form.submit,
     ...rest
 }: ModalProps<T>) => {
     return (
@@ -34,7 +36,7 @@ const PutFormModal = <T extends PutModalFormType>({
             cancelText="Hủy"
             width={800}
             maskClosable={false}
-            onOk={form.submit}
+            onOk={onOk}
             {...rest}
         >
             <Form
