@@ -662,7 +662,7 @@ app.openapi(
             } else {
                 // MSSQL
                 sql = `INSERT INTO [${database}].[dbo].[${table}] (${keys.map((k) => `[${k}]`).join(', ')})
-                VALUES (${keys.map(() => '?').join(', ')});`
+                VALUES (${keys.map((_, i) => `@p${i + 1}`).join(', ')});`
             }
 
             await prismaDB.$queryRawUnsafe(sql, ...values)
