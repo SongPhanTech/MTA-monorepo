@@ -323,9 +323,13 @@ export default function AssigmentOfAssessmentTab() {
                             selectedRowKeys,
                             onChange: onSelectChange,
                         }}
+                        expandable={{
+                            expandRowByClick: false,
+                        }}
                         onRow={(record) => ({
                             onClick: (e) => {
                                 const target = e.target as HTMLElement
+
                                 if (
                                     target.closest('.ant-picker') ||
                                     target.closest('.ant-picker-dropdown') ||
@@ -375,7 +379,7 @@ export default function AssigmentOfAssessmentTab() {
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
-                        scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
+                        scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
                         className="w-full"
                         columns={[
                             {
