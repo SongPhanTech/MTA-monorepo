@@ -1,41 +1,39 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import ApproveIcon from '@components/icons/approve'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import TreeSelect from '@/components/commons/tree-select'
-import {
-    useCountStudent,
-    useCreateStudentThesisRegistration,
-    useCreateThesisProject,
-    useFindManyDM_DonVi,
-    useFindManyExpertProfile,
-    useFindManyFixedClass,
-    useFindManyRoom,
-    useFindManyStudent,
-    useFindManyDefenseSession,
-    useFindManyThesisSession,
-    useFindManyTrainingCourse,
-    useUpdateThesisProject,
-} from '@workspace/db/hooks'
-
-import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
-import type React from 'react'
-import { useState } from 'react'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import {
     CouncilProposalStatus,
     CouncilRole,
     ThesisProjectStatus,
     ThesisType,
 } from '@workspace/db/client'
-import { buildOrgTree } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
-import { createStyles } from 'antd-style'
-import ApproveIcon from '@components/icons/approve'
+import {
+    useCountStudent,
+    useCreateStudentThesisRegistration,
+    useCreateThesisProject,
+    useFindManyDefenseSession,
+    useFindManyDM_DonVi,
+    useFindManyExpertProfile,
+    useFindManyFixedClass,
+    useFindManyRoom,
+    useFindManyStudent,
+    useFindManyThesisSession,
+    useFindManyTrainingCourse,
+    useUpdateThesisProject,
+} from '@workspace/db/hooks'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
+import type React from 'react'
+import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 
 // import { getMinioUrl } from '@workspace/constant'
 
@@ -67,25 +65,25 @@ export default function PostgraduateProject({
     // dùng cho spinner
     const { showSpinner, hideSpinner } = useSpinner()
     // dùng cho custom table
-    const useStyle = createStyles(({ css, token }) => {
-        const { antCls } = token
-        return {
-            customTable: css`
-        ${antCls}-table {
-          ${antCls}-table-container {
-            ${antCls}-table-body,
-            ${antCls}-table-content {
-              scrollbar-width: thin;
-              scrollbar-color: #eaeaea transparent;
-              scrollbar-gutter: stable;
-            }
-          }
-        }
-      `,
-        }
-    })
+    // const useStyle = createStyles(({ css, token }) => {
+    //     const { antCls } = token
+    //     return {
+    //         customTable: css`
+    //     ${antCls}-table {
+    //       ${antCls}-table-container {
+    //         ${antCls}-table-body,
+    //         ${antCls}-table-content {
+    //           scrollbar-width: thin;
+    //           scrollbar-color: #eaeaea transparent;
+    //           scrollbar-gutter: stable;
+    //         }
+    //       }
+    //     }
+    //   `,
+    //     }
+    // })
     // hàm xử lý lấy ra styles cho bảng
-    const { styles } = useStyle()
+    // const { styles } = useStyle()
     // state cho session đang chọn
     const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null)
     // state cho row keys đang chỉnh sửa
@@ -1280,7 +1278,7 @@ export default function PostgraduateProject({
                     <Table
                         bordered
                         scroll={{ x: 'max-content' }}
-                        className={styles.customTable + ' mt-2'}
+                        className={'mt-2'}
                         rowKey="id"
                         columns={[
                             {
@@ -1475,7 +1473,7 @@ export default function PostgraduateProject({
                                             editingValues[record?.id]?.councilChairman !== undefined
                                                 ? editingValues[record?.id]?.councilChairman
                                                 : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                                      (member) =>
+                                                      (member: any) =>
                                                           member.role === CouncilRole.CHAIRMAN
                                                   )?.expert?.name || ''
                                         return (
@@ -1500,7 +1498,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                            (member) => member.role === CouncilRole.CHAIRMAN
+                                            (member: any) => member.role === CouncilRole.CHAIRMAN
                                         )?.expert?.name || ''
                                     )
                                 },
@@ -1519,7 +1517,7 @@ export default function PostgraduateProject({
                                             undefined
                                                 ? editingValues[record?.id]?.councilSecretary
                                                 : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                                      (member) =>
+                                                      (member: any) =>
                                                           member.role === CouncilRole.SECRETARY
                                                   )?.expert?.name || ''
                                         return (
@@ -1544,7 +1542,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                            (member) => member.role === CouncilRole.SECRETARY
+                                            (member: any) => member.role === CouncilRole.SECRETARY
                                         )?.expert?.name || ''
                                     )
                                 },
@@ -1562,7 +1560,7 @@ export default function PostgraduateProject({
                                             editingValues[record?.id]?.reviewer1 !== undefined
                                                 ? editingValues[record?.id]?.reviewer1
                                                 : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                                      (member) =>
+                                                      (member: any) =>
                                                           member.role === CouncilRole.REVIEWER_1
                                                   )?.expert?.name || ''
                                         return (
@@ -1587,7 +1585,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                            (member) => member.role === CouncilRole.REVIEWER_1
+                                            (member: any) => member.role === CouncilRole.REVIEWER_1
                                         )?.expert?.name || ''
                                     )
                                 },
@@ -1605,7 +1603,7 @@ export default function PostgraduateProject({
                                             editingValues[record?.id]?.reviewer2 !== undefined
                                                 ? editingValues[record?.id]?.reviewer2
                                                 : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                                      (member) =>
+                                                      (member: any) =>
                                                           member.role === CouncilRole.REVIEWER_2
                                                   )?.expert?.name || ''
                                         return (
@@ -1630,7 +1628,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                            (member) => member.role === CouncilRole.REVIEWER_2
+                                            (member: any) => member.role === CouncilRole.REVIEWER_2
                                         )?.expert?.name || ''
                                     )
                                 },
@@ -1648,7 +1646,8 @@ export default function PostgraduateProject({
                                             editingValues[record?.id]?.councilMember !== undefined
                                                 ? editingValues[record?.id]?.councilMember
                                                 : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                                      (member) => member.role === CouncilRole.MEMBER
+                                                      (member: any) =>
+                                                          member.role === CouncilRole.MEMBER
                                                   )?.expert?.name || ''
                                         return (
                                             <div onClick={(e) => e.stopPropagation()}>
@@ -1672,7 +1671,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                                            (member) => member.role === CouncilRole.MEMBER
+                                            (member: any) => member.role === CouncilRole.MEMBER
                                         )?.expert?.name || ''
                                     )
                                 },
