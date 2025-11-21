@@ -38,10 +38,16 @@ export const useThesisProjectStatusOptions = () => {
     const getThesisProjectStatusColor = (value: ThesisProjectStatus | null | undefined): string => {
         return thesisProjectStatusOptions.find((opt) => opt.value === value)?.color || 'default'
     }
+    const ignoreProjectStatus = (
+        ignoreStatuses: ThesisProjectStatus[]
+    ): ThesisProjectStatusOption[] => {
+        return thesisProjectStatusOptions.filter((option) => !ignoreStatuses.includes(option.value))
+    }
 
     return {
         thesisProjectStatusOptions,
         getThesisProjectStatusLabel,
         getThesisProjectStatusColor,
+        ignoreProjectStatus,
     }
 }
