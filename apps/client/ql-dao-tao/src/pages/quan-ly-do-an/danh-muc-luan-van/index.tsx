@@ -387,7 +387,6 @@ export default function PostgraduateProject({
             },
           },
         },
-
         trainingObjectType: true,
         thesisRegistrations: {
           include: {
@@ -490,9 +489,11 @@ export default function PostgraduateProject({
 
     try {
       const allSheetOptions = allStudentsInClasses?.map((student) => {
-        console.log(student);
         const supervisor =
           student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name;
+        if (!supervisor) {
+          return null;
+        }
         const coSupervisor =
           student?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name;
 
@@ -535,7 +536,7 @@ export default function PostgraduateProject({
       });
       await exportFromTemplate({
         templateUrl: getMinioUrl("mta/template/BanSaoQDHuongDanLuanVan.xlsx"),
-        sheets: allSheetOptions ?? [],
+        sheets: allSheetOptions?.filter((item) => item !== null) ?? [],
         fileName: "BanSaoQDHuongDanLuanVan",
         mergeSheetsToOne: true,
         sheetName: "BanSaoQDHuongDanLuanVan",
