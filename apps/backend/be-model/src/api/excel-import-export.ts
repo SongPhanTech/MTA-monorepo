@@ -1,8 +1,13 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { PrismaClient as MysqlPrismaClient, Prisma } from '@workspace/db/mysql'
+import { PrismaClient as MysqlPrismaClient } from '@workspace/db/mysql'
+import { PrismaClient as MssqlPrismaClient } from '@workspace/db/mssql'
+import { Prisma } from '@workspace/db'
 import xlsx from 'exceljs'
 import { ensureDatabaseInUrl } from '../utils/database'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
+
+const DatabaseTypeSchema = z.enum(['mysql', 'mssql']).default('mysql')
+
 const app = new OpenAPIHono({ strict: false })
 
 app.openapi(
@@ -13,6 +18,7 @@ app.openapi(
         request: {
             query: z.object({
                 url: z.string(),
+                dbType: DatabaseTypeSchema,
             }),
         },
         responses: {
@@ -31,16 +37,19 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { url } = c.req.valid('query')
-        const prismaApimLogs = new MysqlPrismaClient({
-            datasourceUrl: url,
-        })
+        const { url, dbType } = c.req.valid('query')
 
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                Database: string
-            }[]
-        >`SHOW DATABASES;`
+        let res: { Database: string }[]
+        if (dbType === 'mysql') {
+            const prismaClient = new MysqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRaw<{ Database: string }[]>`SHOW DATABASES;`
+        } else {
+            // MSSQL
+            const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRaw<
+                { Database: string }[]
+            >`SELECT name AS "Database" FROM sys.databases;`
+        }
         return c.json(res, 200)
     }
 )
@@ -54,6 +63,7 @@ app.openapi(
             query: z.object({
                 url: z.string(),
                 database: z.string(),
+                dbType: DatabaseTypeSchema,
             }),
         },
         responses: {
@@ -72,15 +82,21 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { url, database } = c.req.valid('query')
-        const prismaApimLogs = new MysqlPrismaClient({
-            datasourceUrl: url,
-        })
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                tableName: string
-            }[]
-        >`select TABLE_NAME as tableName from information_schema.tables where TABLE_SCHEMA = ${database};`
+        const { url, database, dbType } = c.req.valid('query')
+
+        let res: { tableName: string }[]
+        if (dbType === 'mysql') {
+            const prismaClient = new MysqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRaw<
+                { tableName: string }[]
+            >`SELECT TABLE_NAME as tableName FROM information_schema.tables WHERE TABLE_SCHEMA = ${database};`
+        } else {
+            // MSSQL
+            const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRawUnsafe<{ tableName: string }[]>(
+                `SELECT TABLE_NAME as "tableName" FROM ${database}.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';`
+            )
+        }
         return c.json(res, 200)
     }
 )
@@ -95,6 +111,7 @@ app.openapi(
                 url: z.string(),
                 database: z.string(),
                 table: z.string(),
+                dbType: DatabaseTypeSchema,
             }),
         },
         responses: {
@@ -122,36 +139,63 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { url, database, table } = c.req.valid('query')
-        const prismaApimLogs = new MysqlPrismaClient({
-            datasourceUrl: url,
-        })
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                columnName: string
-                isNullable: string
-                dataType: string
-                characterMaximumLength: bigint | null
-                numericPrecision: bigint | null
-                numericScale: bigint | null
-                datetimePrecision: bigint | null
-                columnType: string
-                columnKey: string
-                columnComment: string
-            }[]
-        >`select COLUMN_NAME AS columnName,
-       IS_NULLABLE AS isNullable,
-       DATA_TYPE AS dataType,
-       CHARACTER_MAXIMUM_LENGTH AS characterMaximumLength,
-       NUMERIC_PRECISION AS numericPrecision,
-       NUMERIC_SCALE AS numericScale,
-       DATETIME_PRECISION AS datetimePrecision,
-       COLUMN_TYPE AS columnType,
-       COLUMN_KEY AS columnKey,
-       COLUMN_COMMENT AS columnComment
-        from information_schema.columns
-        where TABLE_SCHEMA = ${database}
-        and TABLE_NAME = ${table};`
+        const { url, database, table, dbType } = c.req.valid('query')
+
+        let res: {
+            columnName: string
+            isNullable: string
+            dataType: string
+            characterMaximumLength: bigint | null
+            numericPrecision: bigint | null
+            numericScale: bigint | null
+            datetimePrecision: bigint | null
+            columnType: string
+            columnKey: string
+            columnComment: string
+        }[]
+
+        if (dbType === 'mysql') {
+            const prismaClient = new MysqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRaw`
+                SELECT COLUMN_NAME AS columnName,
+                    IS_NULLABLE AS isNullable,
+                    DATA_TYPE AS dataType,
+                    CHARACTER_MAXIMUM_LENGTH AS characterMaximumLength,
+                    NUMERIC_PRECISION AS numericPrecision,
+                    NUMERIC_SCALE AS numericScale,
+                    DATETIME_PRECISION AS datetimePrecision,
+                    COLUMN_TYPE AS columnType,
+                    COLUMN_KEY AS columnKey,
+                    COLUMN_COMMENT AS columnComment
+                FROM information_schema.columns
+                WHERE TABLE_SCHEMA = ${database}
+                AND TABLE_NAME = ${table};`
+        } else {
+            // MSSQL
+            const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })
+            res = await prismaClient.$queryRawUnsafe(`
+                SELECT 
+                    c.COLUMN_NAME AS columnName,
+                    c.IS_NULLABLE AS isNullable,
+                    c.DATA_TYPE AS dataType,
+                    c.CHARACTER_MAXIMUM_LENGTH AS characterMaximumLength,
+                    c.NUMERIC_PRECISION AS numericPrecision,
+                    c.NUMERIC_SCALE AS numericScale,
+                    c.DATETIME_PRECISION AS datetimePrecision,
+                    c.DATA_TYPE AS columnType,
+                    CASE WHEN pk.COLUMN_NAME IS NOT NULL THEN 'PRI' ELSE '' END AS columnKey,
+                    CAST(ep.value AS NVARCHAR(MAX)) AS columnComment
+                FROM ${database}.INFORMATION_SCHEMA.COLUMNS c
+                LEFT JOIN ${database}.INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc 
+                    ON c.TABLE_NAME = tc.TABLE_NAME AND tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+                LEFT JOIN ${database}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE pk 
+                    ON c.COLUMN_NAME = pk.COLUMN_NAME AND c.TABLE_NAME = pk.TABLE_NAME AND tc.CONSTRAINT_NAME = pk.CONSTRAINT_NAME
+                LEFT JOIN sys.extended_properties ep 
+                    ON ep.major_id = OBJECT_ID(c.TABLE_CATALOG + '.' + c.TABLE_SCHEMA + '.' + c.TABLE_NAME)
+                    AND ep.minor_id = c.ORDINAL_POSITION AND ep.name = 'MS_Description'
+                WHERE c.TABLE_NAME = '${table}';`)
+        }
+
         return c.json(
             res.map((r) => ({
                 ...r,
@@ -179,6 +223,7 @@ app.openapi(
                 database: z.string(),
                 table: z.string(),
                 columns: z.array(z.string()).or(z.string()),
+                dbType: DatabaseTypeSchema,
             }),
         },
         responses: {
@@ -193,29 +238,47 @@ app.openapi(
         },
     }),
     async (c) => {
-        let { url, database, table, columns } = c.req.valid('query')
+        let { url, database, table, columns, dbType } = c.req.valid('query')
         if (typeof columns === 'string') {
             columns = [columns]
         }
-        const prismaApimLogs = new MysqlPrismaClient({
-            datasourceUrl: url,
-        })
-        const allColumn = await prismaApimLogs.$queryRaw<
-            {
-                columnName: string
-            }[]
-        >`select COLUMN_NAME AS columnName
-        from information_schema.columns
-        where TABLE_SCHEMA = ${database}
-        and TABLE_NAME = ${table};`
 
-        const selectedColumns = allColumn
-            .filter((col) => columns.includes(col.columnName))
-            .map((col) => `\`${col.columnName}\``)
-            .join(', ')
+        let allColumn: { columnName: string }[]
+        let res: any[]
 
-        const res = await prismaApimLogs.$queryRaw<any[]>`SELECT ${Prisma.raw(selectedColumns)}
-        from ${Prisma.raw(`\`${database}\`.\`${table}\``)};`
+        if (dbType === 'mysql') {
+            const prismaClient = new MysqlPrismaClient({ datasourceUrl: url })
+            allColumn = await prismaClient.$queryRaw<
+                { columnName: string }[]
+            >`SELECT COLUMN_NAME AS columnName
+            FROM information_schema.columns
+            WHERE TABLE_SCHEMA = ${database}
+            AND TABLE_NAME = ${table};`
+
+            const selectedColumns = allColumn
+                .filter((col) => columns.includes(col.columnName))
+                .map((col) => `\`${col.columnName}\``)
+                .join(', ')
+
+            res = await prismaClient.$queryRaw<any[]>`SELECT ${Prisma.raw(selectedColumns)}
+            FROM ${Prisma.raw(`\`${database}\`.\`${table}\``)};`
+        } else {
+            // MSSQL
+            const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })
+            allColumn = await prismaClient.$queryRaw<
+                { columnName: string }[]
+            >`SELECT COLUMN_NAME AS columnName
+            FROM ${Prisma.raw(database)}.INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = ${table};`
+
+            const selectedColumns = allColumn
+                .filter((col) => columns.includes(col.columnName))
+                .map((col) => `[${col.columnName}]`)
+                .join(', ')
+
+            res = await prismaClient.$queryRaw<any[]>`SELECT ${Prisma.raw(selectedColumns)}
+            FROM ${Prisma.raw(`[${database}].[dbo].[${table}]`)};`
+        }
 
         const workbook = new xlsx.Workbook()
         const worksheet = workbook.addWorksheet(table)
@@ -246,6 +309,7 @@ app.openapi(
                 url: z.string(),
                 database: z.string(),
                 sql: z.string(),
+                dbType: DatabaseTypeSchema,
             }),
         },
         responses: {
@@ -260,11 +324,14 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { url, database, sql } = c.req.valid('query')
-        const prismaApimLogs = new MysqlPrismaClient({
-            datasourceUrl: ensureDatabaseInUrl(url, database),
-        })
-        const res = await prismaApimLogs.$queryRawUnsafe<any[]>(`${sql}`)
+        const { url, database, sql, dbType } = c.req.valid('query')
+        const datasourceUrl = ensureDatabaseInUrl(url, database)
+
+        // SQL is user-provided, works for both MySQL and MSSQL
+        const res =
+            dbType === 'mysql'
+                ? await new MysqlPrismaClient({ datasourceUrl }).$queryRawUnsafe<any[]>(sql)
+                : await new MssqlPrismaClient({ datasourceUrl }).$queryRawUnsafe<any[]>(sql)
 
         const columns = Object.keys(res[0] || {})
 
@@ -272,7 +339,7 @@ app.openapi(
         const worksheet = workbook.addWorksheet(database)
         worksheet.addRow(columns)
 
-        res.forEach((row) => {
+        res.forEach((row: any) => {
             const rowData = columns.map((col) => row[col])
             worksheet.addRow(rowData)
         })
@@ -391,6 +458,7 @@ app.openapi(
                             columns: z
                                 .string()
                                 .transform((val) => val.split(',').map((c) => c.trim().split(':'))),
+                            dbType: DatabaseTypeSchema,
                         }),
                     },
                 },
@@ -410,7 +478,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { file, url, columns, database, table } = c.req.valid('form')
+        const { file, url, columns, database, table, dbType } = c.req.valid('form')
 
         const buf = await file.arrayBuffer()
         const workbook = new xlsx.Workbook()
@@ -434,9 +502,11 @@ app.openapi(
         const dataRowNumber = headerRowNumber + 1
 
         // Chuẩn bị prisma
-        const prismaDB = new MysqlPrismaClient({
-            datasourceUrl: ensureDatabaseInUrl(url, database),
-        })
+        const datasourceUrl = ensureDatabaseInUrl(url, database)
+        const prismaDB =
+            dbType === 'mysql'
+                ? new MysqlPrismaClient({ datasourceUrl })
+                : new MssqlPrismaClient({ datasourceUrl })
 
         // Tạo map excelHeader → dbColumn
         const columnMap = new Map<string, string>()
@@ -481,10 +551,15 @@ app.openapi(
             const keys = Object.keys(row)
             const values = Object.values(row)
 
-            const sql = `
-        INSERT INTO \`${database}\`.\`${table}\` (${keys.map((k) => `\`${k}\``).join(', ')})
-        VALUES (${keys.map(() => '?').join(', ')});
-    `
+            let sql: string
+            if (dbType === 'mysql') {
+                sql = `INSERT INTO \`${database}\`.\`${table}\` (${keys.map((k) => `\`${k}\``).join(', ')})
+                VALUES (${keys.map(() => '?').join(', ')});`
+            } else {
+                // MSSQL
+                sql = `INSERT INTO [${database}].[dbo].[${table}] (${keys.map((k) => `[${k}]`).join(', ')})
+                VALUES (${keys.map(() => '?').join(', ')});`
+            }
 
             await prismaDB.$queryRawUnsafe(sql, ...values)
         }

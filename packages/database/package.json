@@ -11,6 +11,7 @@
         "./client": "./src/client/index.ts",
         ".": "./src/index.ts",
         "./mysql": "./src/mysql.ts",
+        "./mssql": "./src/mssql.ts",
         "./sql": "./src/typedSql.ts",
         "./zod": "./generated/zod/index.ts",
         "./zod/models": "./generated/zod/models/index.ts",
