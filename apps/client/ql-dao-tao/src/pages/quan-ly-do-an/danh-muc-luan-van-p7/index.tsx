@@ -5,7 +5,7 @@ import PostgraduateProject, {
 
 export default function PostgraduateProjectP7() {
   const data: PostgraduateProjectProps = {
-    isManage: true,
+    isManage: false,
     role: "P7",
   };
   return <PostgraduateProject {...data} />;

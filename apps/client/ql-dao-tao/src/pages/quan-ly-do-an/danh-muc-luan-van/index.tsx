@@ -13,7 +13,9 @@ import {
   useFindManyDM_DonVi,
   useFindManyExpertProfile,
   useFindManyFixedClass,
+  useFindManyRoom,
   useFindManyStudent,
+  useFindManyDefenseSession,
   useFindManyThesisSession,
   useFindManyTrainingCourse,
   useUpdateThesisProject,
@@ -30,7 +32,6 @@ import {
   Popconfirm,
   Row,
   Tag,
-  Tooltip,
 } from "antd";
 import type React from "react";
 import { useState } from "react";
@@ -46,10 +47,11 @@ import {
 import { buildOrgTree } from "@lib/utils";
 import { getMinioUrl } from "@workspace/constant";
 import { createStyles } from "antd-style";
-import RejectIcon from "@components/icons/reject";
 import ApproveIcon from "@components/icons/approve";
 
 // import { getMinioUrl } from '@workspace/constant'
+
+// interface thống kê các chuyên gia hướng dẫn
 interface ExpertStat {
   expertId: string;
   name: string;
@@ -61,31 +63,77 @@ interface ExpertStat {
   totalPayment: number;
 }
 
+// interface props cho component PostgraduateProject
 export interface PostgraduateProjectProps {
   role?: "P7" | "P2" | "P13";
   isManage?: boolean;
 }
+
+// component PostgraduateProject
 export default function PostgraduateProject({
   role = "P7",
   isManage = false,
 }: PostgraduateProjectProps) {
-  const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
-    useThesisProjectStatusOptions();
+  // dùng cho textarea của antd
+  const { TextArea } = Input;
+  // dùng cho spinner
+  const { showSpinner, hideSpinner } = useSpinner();
+  // dùng cho custom table
+  const useStyle = createStyles(({ css, token }) => {
+    const { antCls } = token;
+    return {
+      customTable: css`
+        ${antCls}-table {
+          ${antCls}-table-container {
+            ${antCls}-table-body,
+            ${antCls}-table-content {
+              scrollbar-width: thin;
+              scrollbar-color: #eaeaea transparent;
+              scrollbar-gutter: stable;
+            }
+          }
+        }
+      `,
+    };
+  });
+  // hàm xử lý lấy ra styles cho bảng
+  const { styles } = useStyle();
+  // state cho session đang chọn
+  const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null);
+  // state cho row keys đang chỉnh sửa
   const [editingRowKeys, setEditingRowKeys] = useState<string[]>([]);
+  // state cho values đang chỉnh sửa
   const [editingValues, setEditingValues] = useState<
     Record<string, Record<string, any>>
   >({});
+  // state cho current page
   const [currentPage, setCurrentPage] = useState(1);
+  // state cho selected row keys
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  // state cho training course đang chọn
+  const [trainingCourseSelected, setTrainingCourseSelected] = useState<
+    string | null
+  >(null);
+  // state cho fixed classes đang chọn
+  const [fixedClassesSelected, setFixedClassesSelected] = useState<string[]>(
+    []
+  );
+  // state cho query fixed classes
+  const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([]);
+  // state cho need all students để lấy tất cả sinh viên trong lớp học
+  const [needAllStudents, setNeedAllStudents] = useState<boolean>(false);
+  // state cho has clicked fetch để check xem đã click vào button xem kết quả hay chưa
+  const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false);
+  // hàm xử lý row selection để chọn sinh viên
   const rowSelection = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
       setSelectedRowKeys(newSelectedRowKeys);
     },
   };
+  // state cho số lượng trang để phân trang
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
-
+  // hàm xử lý batch save
   const handleBatchSave = async () => {
     if (editingRowKeys.length === 0) {
       message.info("Không có hàng nào đang ở chế độ chỉnh sửa để lưu.");
@@ -104,11 +152,14 @@ export default function PostgraduateProject({
         if (!thesisProjectId || !rowData) return;
 
         const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`;
-
+        let status = rowData.status;
+        if (status === ThesisProjectStatus.PROPOSED) {
+          status = ThesisProjectStatus.APPROVED_BY_DEPT;
+        }
         const basePayload = {
           title: rowData.title,
           description: description,
-          status: rowData.status,
+          status: status,
         };
         const supervisorPayload =
           rowData.supervisor === "" || rowData.supervisor === null
@@ -161,6 +212,7 @@ export default function PostgraduateProject({
     setEditingRowKeys([]);
     setEditingValues({});
   };
+  // hàm xử lý bật chế edit cho bảng
   const handleActivateEdit = () => {
     if (!students || students.length === 0) {
       message.info("Không có dữ liệu sinh viên để chỉnh sửa.");
@@ -197,44 +249,29 @@ export default function PostgraduateProject({
     setEditingRowKeys(newEditingRowKeys);
     setEditingValues(initialEditingValues);
   };
-  const { TextArea } = Input;
-  const useStyle = createStyles(({ css, token }) => {
-    const { antCls } = token;
-    return {
-      customTable: css`
-        ${antCls}-table {
-          ${antCls}-table-container {
-            ${antCls}-table-body,
-            ${antCls}-table-content {
-              scrollbar-width: thin;
-              scrollbar-color: #eaeaea transparent;
-              scrollbar-gutter: stable;
-            }
-          }
-        }
-      `,
-    };
-  });
+
+  // hàm xử lý chọn training object type lấy ra từ store
   const { id: trainingObjectId } = useTrainingObjectTypeStore();
-  const [trainingCourseSelected, setTrainingCourseSelected] = useState<
-    string | null
-  >(null);
-  const [fixedClassesSelected, setFixedClassesSelected] = useState<string[]>(
-    []
-  );
-  const [queryFixedClasses, setQueryFixedClasses] = useState<string[]>([]);
-  const [needAllStudents, setNeedAllStudents] = useState<boolean>(false);
-  const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false);
+  // hàm xử lý mở modal cau hinh luan van
   const { onOpen: openModalCauHinhLuanVan } = useDisclosure<{
     thesisProjectId: string;
     thesisSessionId: string;
   }>({
     tag: "ModalCauHinhLuanVan",
   });
+  // hàm xử lý lấy ra danh sách đơn vị
   const { data: sDm_Donvi = [] } = useFindManyDM_DonVi();
+  // hàm xử lý lấy ra danh sách phòng bảo vệ
+  const { data: roomData } = useFindManyRoom();
+  // hàm xử lý lấy ra danh sách ca bảo vệ
+  const { data: defenseSessionData } = useFindManyDefenseSession();
+
+  // hàm xử lý build tree cho danh sách đơn vị
   const treeData = buildOrgTree(sDm_Donvi ?? [], "0");
-  const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null);
-  console.log("thesisSessionSelected", thesisSessionSelected);
+  // hàm xử lý lấy ra label và color cho trạng thái đồ án
+  const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
+    useThesisProjectStatusOptions();
+  // hàm xử lý lấy ra danh sách khóa học
   const { data: trainingCourses } = useFindManyTrainingCourse(
     {
       where: {
@@ -245,12 +282,13 @@ export default function PostgraduateProject({
       enabled: !!thesisSessionSelected?.trainingCourseId,
     }
   );
-
+  // hàm xử lý lấy ra danh sách lớp học
   const { data: fixedClasses } = useFindManyFixedClass({
     where: {
       trainingCourseId: trainingCourseSelected ?? "",
     },
   });
+  // hàm xử lý lấy ra danh sách chuyên gia hướng dẫn
   const { data: expertProfileData } = useFindManyExpertProfile({
     include: {
       lecturer: {
@@ -260,6 +298,170 @@ export default function PostgraduateProject({
       },
     },
   });
+  // hàm xử lý lấy ra danh sách sinh viên để hiển thị trong bảng
+  const { data: students, refetch } = useFindManyStudent(
+    {
+      where: {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: thesisSessionSelected?.id ?? "",
+              thesisType: ThesisType.THESIS,
+            },
+          },
+        },
+        fixedClassId: {
+          in:
+            queryFixedClasses.length > 0
+              ? queryFixedClasses
+              : fixedClasses?.map((fixedClass) => fixedClass.id),
+        },
+      },
+      include: {
+        userProfile: true,
+        fixedClass: {
+          include: {
+            trainingCourse: true,
+          },
+        },
+        trainingObjectType: true,
+        thesisRegistrations: {
+          where: {
+            thesisProject: {
+              thesisSessionId: thesisSessionSelected?.id ?? "",
+              thesisType: ThesisType.THESIS,
+            },
+          },
+          include: {
+            thesisProject: {
+              include: {
+                council: {
+                  include: { members: { include: { expert: true } } },
+                },
+                thesisSession: true,
+                defenseSession: true,
+                defenseRecord: true,
+                room: true,
+                organization: true,
+                supervisor: true,
+                coSupervisor: true,
+              },
+            },
+          },
+        },
+      },
+      skip: (currentPage - 1) * numberOfPages,
+      take: numberOfPages,
+    },
+    {
+      enabled: hasClickedFetch,
+    }
+  );
+  // hàm xử lý lấy ra danh sách sinh viên để dùng cho các hàm xuất excel
+  const { data: allStudentsInClasses } = useFindManyStudent(
+    {
+      where: {
+        fixedClassId: {
+          in:
+            queryFixedClasses.length > 0
+              ? queryFixedClasses
+              : fixedClasses?.map((fixedClass) => fixedClass.id),
+        },
+      },
+      include: {
+        userProfile: true,
+        fixedClass: {
+          include: {
+            trainingCourse: true,
+            curriculumVersion: {
+              include: {
+                curriculum: {
+                  include: {
+                    trainingMajor: {
+                      include: { trainingField: true },
+                    },
+                    trainingObjectType: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        trainingObjectType: true,
+        thesisRegistrations: {
+          include: {
+            thesisProject: {
+              include: {
+                defenseSession: true,
+                thesisSession: true,
+                organization: true,
+                supervisor: true,
+                coSupervisor: true,
+                room: true,
+                defenseRecord: true,
+                supervisorPayments: {
+                  include: {
+                    expert: true,
+                  },
+                  orderBy: {
+                    description: "asc",
+                  },
+                },
+                council: {
+                  include: { members: { include: { expert: true } } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    { enabled: needAllStudents }
+  );
+  // hàm xử lý lấy ra số lượng sinh viên để hiển thị trong bảng
+  const { data: countStudent, refetch: refetchCount } = useCountStudent(
+    {
+      where: {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: thesisSessionSelected?.id ?? "",
+              thesisType: ThesisType.THESIS,
+            },
+          },
+        },
+        fixedClassId: {
+          in:
+            queryFixedClasses.length > 0
+              ? queryFixedClasses
+              : fixedClasses?.map((fixedClass) => fixedClass.id),
+        },
+      },
+    },
+    {
+      enabled: hasClickedFetch,
+    }
+  );
+  // hàm xử lý lấy ra danh sách session
+  const { data: thesisSessionData } = useFindManyThesisSession({
+    orderBy: { startDate: "desc" },
+    where: {
+      trainingObjectTypeId: trainingObjectId,
+    },
+    include: {
+      trainingObjectType: true,
+      trainingCourse: true,
+    },
+  });
+  // hàm xử lý tạo đồ án
+  const { mutateAsync: createThesisProject } = useCreateThesisProject();
+  // hàm xử lý tạo sinh viên đồ án
+  const { mutateAsync: createStudentThesisRegistration } =
+    useCreateStudentThesisRegistration();
+  // hàm xử lý cập nhật đồ án
+  const { mutateAsync: updateThesisProject } = useUpdateThesisProject();
+  // hàm xử lý xử lý thay đổi giá trị trong bảng
   const handleEditChange = (rowId: string, field: string, value: any) => {
     setEditingValues((prev) => ({
       ...prev,
@@ -269,11 +471,12 @@ export default function PostgraduateProject({
       },
     }));
   };
+  // hàm xử lý click vào button mặc định
   const defaultButtonClick = () => {
     message.info("Tính năng đang trong quá trình phát triển");
   };
 
-  console.log("fixedClassesSelected", fixedClassesSelected);
+  // hàm xử lý xuất file sao QĐ HDLV
   const saoQDHDLV = async () => {
     if (!students?.length && !allStudentsInClasses?.length) {
       message.error("Không có dữ liệu để sao QĐ HDLV");
@@ -287,6 +490,7 @@ export default function PostgraduateProject({
 
     try {
       const allSheetOptions = allStudentsInClasses?.map((student) => {
+        console.log(student);
         const supervisor =
           student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name;
         const coSupervisor =
@@ -323,7 +527,7 @@ export default function PostgraduateProject({
           cells: [{ value: null, colSpan: 18, border: false }],
         };
         return {
-          sheet: `${student.userProfile?.fullname} - ${student.userProfile?.code}`,
+          sheet: `${student.userProfile?.code} `,
           data: data,
           tableStartCell: { row: 40, col: 1 },
           rows: [gapRow],
@@ -343,6 +547,7 @@ export default function PostgraduateProject({
       hideSpinner();
     }
   };
+  // hàm xử lý xuất file giấy mời HDLV
   const giaymoihdlv = async () => {
     if (!students?.length && !allStudentsInClasses?.length) {
       message.error("Không có dữ liệu để tạo giấy mời HDLV");
@@ -402,6 +607,7 @@ export default function PostgraduateProject({
       hideSpinner();
     }
   };
+  // hàm xử lý xuất file hồ sơ bảo vệ LV
   const hosobvlv = async () => {
     if (!students?.length && !allStudentsInClasses?.length) {
       message.error("Không có dữ liệu để tạo hồ sơ bảo vệ LV");
@@ -479,6 +685,7 @@ export default function PostgraduateProject({
       hideSpinner();
     }
   };
+  // hàm xử lý xuất file danh sách bảo vệ LV
   const danhsachbaove = async () => {
     if (!students?.length && !allStudentsInClasses?.length) {
       message.error("Không có dữ liệu để tạo danh sách bảo vệ LV");
@@ -583,6 +790,7 @@ export default function PostgraduateProject({
       hideSpinner();
     }
   };
+  // hàm xử lý xuất file thống kê cán bộ hướng dẫn LV
   const thongkecbhdlv = async () => {
     if (!students?.length && !allStudentsInClasses?.length) {
       message.error("Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV");
@@ -685,6 +893,7 @@ export default function PostgraduateProject({
     }
   };
 
+  // hàm xử lý lấy ra danh sách thống kê cán bộ hướng dẫn LV
   const getExpertSupervisionStats = (): ExpertStat[] => {
     if (!allStudentsInClasses || allStudentsInClasses.length === 0) {
       return [];
@@ -751,6 +960,83 @@ export default function PostgraduateProject({
 
     return Array.from(expertStatsMap.values());
   };
+  // hàm xử lý tạo dữ liệu mẫu
+  const taodulieumau = async () => {
+    showSpinner();
+    setNeedAllStudents(true);
+    const createPromises = allStudentsInClasses?.map(async (student) => {
+      const hasThesisRegistration = student.thesisRegistrations?.some(
+        (registration) =>
+          registration.thesisProject?.thesisType === ThesisType.THESIS
+      );
+
+      if (hasThesisRegistration) {
+        return null;
+      }
+      const payload = {
+        title: "",
+        summary: "",
+        titleEN: "",
+        maxStudents: 1,
+        description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
+        thesisSession: {
+          connect: {
+            id: thesisSessionSelected?.id ?? "",
+          },
+        },
+        thesisType: ThesisType.THESIS,
+        librarySubmission: {
+          create: {
+            isHardcopy: false,
+            isSoftcopy: false,
+            librarianNote: "",
+          },
+        },
+        council: {
+          create: {
+            proposedDate: new Date(),
+            status: CouncilProposalStatus.PENDING,
+          },
+        },
+        defenseRecord: {
+          create: {
+            isProfileComplete: false,
+          },
+        },
+      };
+      const response = await createThesisProject({
+        data: {
+          ...payload,
+        },
+      });
+      const payloadRegistration = {
+        thesisProjectId: response?.id ?? "",
+        studentId: student.id,
+      };
+      const responseRegistration = await createStudentThesisRegistration({
+        data: payloadRegistration,
+      });
+      return { response, responseRegistration };
+    });
+    try {
+      const validPromises = (createPromises || []).filter((p) => p !== null);
+      await Promise.all(validPromises);
+
+      const skippedCount = (createPromises?.length || 0) - validPromises.length;
+      if (skippedCount > 0) {
+        message.success(
+          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
+        );
+      } else {
+        message.success("Tạo dữ liệu mẫu thành công");
+      }
+    } catch (error) {
+      message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu");
+    } finally {
+      hideSpinner();
+    }
+  };
+  // hàm xử lý lấy ra danh sách button
   const buttonList = [
     {
       id: 1,
@@ -858,245 +1144,7 @@ export default function PostgraduateProject({
       disabled: true,
     },
   ];
-  const { mutateAsync: createThesisProject } = useCreateThesisProject();
-  const { mutateAsync: createStudentThesisRegistration } =
-    useCreateStudentThesisRegistration();
-  const { mutateAsync: updateThesisProject } = useUpdateThesisProject();
-  const { data: thesisSessionData } = useFindManyThesisSession({
-    orderBy: { startDate: "desc" },
-    where: {
-      trainingObjectTypeId: trainingObjectId,
-    },
-    include: {
-      trainingObjectType: true,
-      trainingCourse: true,
-    },
-  });
-
-  const { showSpinner, hideSpinner } = useSpinner();
-  console.log(
-    "fixedClasses",
-    fixedClasses?.map((fixedClass) => fixedClass.id)
-  );
-  console.log("queryFixedClasses", queryFixedClasses);
-  const { data: students, refetch } = useFindManyStudent(
-    {
-      where: {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: thesisSessionSelected?.id ?? "",
-              thesisType: ThesisType.THESIS,
-            },
-          },
-        },
-        fixedClassId: {
-          in:
-            queryFixedClasses.length > 0
-              ? queryFixedClasses
-              : fixedClasses?.map((fixedClass) => fixedClass.id),
-        },
-      },
-      include: {
-        userProfile: true,
-        fixedClass: {
-          include: {
-            trainingCourse: true,
-          },
-        },
-        trainingObjectType: true,
-        thesisRegistrations: {
-          where: {
-            thesisProject: {
-              thesisSessionId: thesisSessionSelected?.id ?? "",
-              thesisType: ThesisType.THESIS,
-            },
-          },
-          include: {
-            thesisProject: {
-              include: {
-                council: {
-                  include: { members: { include: { expert: true } } },
-                },
-                thesisSession: true,
-                organization: true,
-                supervisor: true,
-                coSupervisor: true,
-              },
-            },
-          },
-        },
-      },
-      skip: (currentPage - 1) * numberOfPages,
-      take: numberOfPages,
-    },
-    {
-      enabled: hasClickedFetch,
-    }
-  );
-  console.log("students", students);
-  const { data: allStudentsInClasses } = useFindManyStudent(
-    {
-      where: {
-        fixedClassId: {
-          in:
-            queryFixedClasses.length > 0
-              ? queryFixedClasses
-              : fixedClasses?.map((fixedClass) => fixedClass.id),
-        },
-      },
-      include: {
-        userProfile: true,
-        fixedClass: {
-          include: {
-            trainingCourse: true,
-            curriculumVersion: {
-              include: {
-                curriculum: {
-                  include: {
-                    trainingMajor: {
-                      include: { trainingField: true },
-                    },
-                    trainingObjectType: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-
-        trainingObjectType: true,
-        thesisRegistrations: {
-          include: {
-            thesisProject: {
-              include: {
-                defenseSession: true,
-                thesisSession: true,
-                organization: true,
-                supervisor: true,
-                coSupervisor: true,
-                room: true,
-                supervisorPayments: {
-                  include: {
-                    expert: true,
-                  },
-                  orderBy: {
-                    description: "asc",
-                  },
-                },
-                council: {
-                  include: { members: { include: { expert: true } } },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    { enabled: needAllStudents }
-  );
-  const { data: countStudent, refetch: refetchCount } = useCountStudent(
-    {
-      where: {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: thesisSessionSelected?.id ?? "",
-              thesisType: ThesisType.THESIS,
-            },
-          },
-        },
-        fixedClassId: {
-          in:
-            queryFixedClasses.length > 0
-              ? queryFixedClasses
-              : fixedClasses?.map((fixedClass) => fixedClass.id),
-        },
-      },
-    },
-    {
-      enabled: hasClickedFetch,
-    }
-  );
-  console.log("allStudentsInClasses", allStudentsInClasses);
-
-  const taodulieumau = async () => {
-    showSpinner();
-    setNeedAllStudents(true);
-    const createPromises = allStudentsInClasses?.map(async (student) => {
-      const hasThesisRegistration = student.thesisRegistrations?.some(
-        (registration) =>
-          registration.thesisProject?.thesisType === ThesisType.THESIS
-      );
-
-      if (hasThesisRegistration) {
-        return null;
-      }
-      const payload = {
-        title: "",
-        summary: "",
-        titleEN: "",
-        maxStudents: 1,
-        description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
-        thesisSession: {
-          connect: {
-            id: thesisSessionSelected?.id ?? "",
-          },
-        },
-        thesisType: ThesisType.THESIS,
-        librarySubmission: {
-          create: {
-            isHardcopy: false,
-            isSoftcopy: false,
-            librarianNote: "",
-          },
-        },
-        council: {
-          create: {
-            proposedDate: new Date(),
-            status: CouncilProposalStatus.PENDING,
-          },
-        },
-        defenseRecord: {
-          create: {
-            isProfileComplete: false,
-          },
-        },
-      };
-      const response = await createThesisProject({
-        data: {
-          ...payload,
-        },
-      });
-      const payloadRegistration = {
-        thesisProjectId: response?.id ?? "",
-        studentId: student.id,
-      };
-      const responseRegistration = await createStudentThesisRegistration({
-        data: payloadRegistration,
-      });
-      return { response, responseRegistration };
-    });
-    try {
-      const validPromises = (createPromises || []).filter((p) => p !== null);
-      await Promise.all(validPromises);
-
-      const skippedCount = (createPromises?.length || 0) - validPromises.length;
-      if (skippedCount > 0) {
-        message.success(
-          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn.`
-        );
-      } else {
-        message.success("Tạo dữ liệu mẫu thành công");
-      }
-    } catch (error) {
-      message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu");
-    } finally {
-      hideSpinner();
-    }
-  };
-  const { styles } = useStyle();
-
+  // hàm xử lý render component
   return (
     <div>
       <Row gutter={[16, 0]}>
@@ -1178,6 +1226,7 @@ export default function PostgraduateProject({
                       if (!hasClickedFetch) {
                         setHasClickedFetch(true);
                       }
+                      console.log("allStudentsInClasses", students);
                     }}
                   >
                     Xem kết quả
@@ -1227,7 +1276,7 @@ export default function PostgraduateProject({
                       type="default"
                       className="ml-2"
                       onClick={handleActivateEdit}
-                      disabled={!students?.length || !isManage}
+                      disabled={!students?.length}
                     >
                       Chỉnh sửa
                     </Button>
@@ -1312,8 +1361,15 @@ export default function PostgraduateProject({
                 title: "Đề tài",
                 width: 200,
                 dataIndex: "title",
-                render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id) && isManage) {
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (
+                    editingRowKeys.includes(record?.id) &&
+                    isManage &&
+                    status === ThesisProjectStatus.PROPOSED
+                  ) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
@@ -1321,7 +1377,9 @@ export default function PostgraduateProject({
                             ?.title || "";
 
                     return (
-                      <div onClick={(e) => e.stopPropagation()}>
+                      <div
+                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
+                      >
                         <TextArea
                           rows={2}
                           value={currentValue}
@@ -1345,8 +1403,15 @@ export default function PostgraduateProject({
                 title: "GVHD 1",
                 width: 150,
                 dataIndex: "supervisor",
-                render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id) && isManage) {
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (
+                    editingRowKeys.includes(record?.id) &&
+                    isManage &&
+                    status === ThesisProjectStatus.PROPOSED
+                  ) {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
                         ? editingValues[record?.id]?.supervisor
@@ -1354,9 +1419,7 @@ export default function PostgraduateProject({
                             ?.supervisor?.name || "";
 
                     return (
-                      <div
-                        onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
-                      >
+                      <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
                           options={expertProfileData?.map((item) => ({
@@ -1381,8 +1444,15 @@ export default function PostgraduateProject({
                 title: "GVHD 2",
                 width: 150,
                 dataIndex: "coSupervisor",
-                render: (text: string, record: any) => {
-                  if (editingRowKeys.includes(record?.id) && isManage) {
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (
+                    editingRowKeys.includes(record?.id) &&
+                    isManage &&
+                    status === ThesisProjectStatus.PROPOSED
+                  ) {
                     const currentValue =
                       editingValues[record?.id]?.coSupervisor !== undefined
                         ? editingValues[record?.id]?.coSupervisor
@@ -1415,7 +1485,37 @@ export default function PostgraduateProject({
                 title: "Chủ tịch ",
                 width: 150,
                 dataIndex: "councilChairman",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.councilChairman !== undefined
+                        ? editingValues[record?.id]?.councilChairman
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                            (member) => member.role === CouncilRole.CHAIRMAN
+                          )?.expert?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "councilChairman",
+                              value
+                            )
+                          }
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member) => member.role === CouncilRole.CHAIRMAN
@@ -1424,10 +1524,40 @@ export default function PostgraduateProject({
                 },
               },
               {
-                title: "Thư kí",
+                title: "Thư ký",
                 width: 150,
-                dataIndex: "councilChairman",
-                render: (text: string, record: any) => {
+                dataIndex: "councilSecretary",
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.councilSecretary !== undefined
+                        ? editingValues[record?.id]?.councilSecretary
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                            (member) => member.role === CouncilRole.SECRETARY
+                          )?.expert?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "councilSecretary",
+                              value
+                            )
+                          }
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member) => member.role === CouncilRole.SECRETARY
@@ -1438,8 +1568,34 @@ export default function PostgraduateProject({
               {
                 title: "Phản biện 1",
                 width: 150,
-                dataIndex: "councilChairman",
-                render: (text: string, record: any) => {
+                dataIndex: "reviewer1",
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.reviewer1 !== undefined
+                        ? editingValues[record?.id]?.reviewer1
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                            (member) => member.role === CouncilRole.REVIEWER_1
+                          )?.expert?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "reviewer1", value)
+                          }
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member) => member.role === CouncilRole.REVIEWER_1
@@ -1450,8 +1606,34 @@ export default function PostgraduateProject({
               {
                 title: "Phản biện 2",
                 width: 150,
-                dataIndex: "councilChairman",
-                render: (text: string, record: any) => {
+                dataIndex: "reviewer2",
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.reviewer2 !== undefined
+                        ? editingValues[record?.id]?.reviewer2
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                            (member) => member.role === CouncilRole.REVIEWER_2
+                          )?.expert?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "reviewer2", value)
+                          }
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member) => member.role === CouncilRole.REVIEWER_2
@@ -1462,9 +1644,34 @@ export default function PostgraduateProject({
               {
                 title: "Ủy viên",
                 width: 150,
-
-                dataIndex: "councilChairman",
-                render: (text: string, record: any) => {
+                dataIndex: "councilMember",
+                render: (_, record) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.councilMember !== undefined
+                        ? editingValues[record?.id]?.councilMember
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                            (member) => member.role === CouncilRole.MEMBER
+                          )?.expert?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={expertProfileData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                          value={currentValue || ""}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "councilMember", value)
+                          }
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member) => member.role === CouncilRole.MEMBER
@@ -1473,10 +1680,96 @@ export default function PostgraduateProject({
                 },
               },
               {
+                title: "Phòng bảo vệ",
+                width: 150,
+                dataIndex: "room",
+                render: (text: string, record: any) => {
+                  const status =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                    "";
+                  if (editingRowKeys.includes(record?.id)) {
+                    const currentValue =
+                      editingValues[record?.id]?.room !== undefined
+                        ? editingValues[record?.id]?.room
+                        : record?.thesisRegistrations?.[0]?.thesisProject?.room
+                            ?.name || "";
+                    return (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select
+                          className="w-full"
+                          options={roomData?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                          }))}
+                        />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.room
+                      ?.name || ""
+                  );
+                },
+              },
+              {
+                title: "Ngày bảo vệ",
+                width: 150,
+                dataIndex: "defenseDate",
+                render: (_, record) => {
+                  return record?.thesisRegistrations?.[0]?.thesisProject
+                    ?.defenseDate
+                    ? dayjs(
+                        record?.thesisRegistrations?.[0]?.thesisProject
+                          ?.defenseDate
+                      ).format("DD/MM/YYYY")
+                    : "";
+                },
+              },
+
+              {
+                title: "Ca bảo vệ",
+                width: 90,
+                dataIndex: "defenseSession",
+                render: (_, record) => {
+                  return record?.thesisRegistrations?.[0]?.thesisProject
+                    ?.defenseSession?.startTime
+                    ? dayjs(
+                        record?.thesisRegistrations?.[0]?.thesisProject
+                          ?.defenseSession?.startTime
+                      ).format("HH:mm")
+                    : "";
+                },
+              },
+              {
+                title: "Điểm",
+                width: 150,
+                align: "center",
+
+                dataIndex: "score",
+                render: (_, record) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore?.toString() ||
+                    ""
+                  );
+                },
+              },
+              {
+                title: "Nhận xét",
+                width: 150,
+                dataIndex: "comments",
+                render: (_, record) => {
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject
+                      ?.defenseRecord?.comments || ""
+                  );
+                },
+              },
+              {
                 title: "Ngôn ngữ",
                 width: 100,
                 dataIndex: "language",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
@@ -1512,7 +1805,7 @@ export default function PostgraduateProject({
                 title: "Luận văn/Đề án",
                 width: 130,
                 dataIndex: "type",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id) && isManage) {
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
@@ -1550,7 +1843,7 @@ export default function PostgraduateProject({
                 width: 100,
                 fixed: "right",
                 dataIndex: "status",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.status !== undefined
@@ -1563,12 +1856,13 @@ export default function PostgraduateProject({
                       >
                         <Select
                           className="w-full"
-                          options={useThesisProjectStatusOptions().thesisProjectStatusOptions.map(
-                            (item) => ({
+                          disabled={role !== "P7"}
+                          options={useThesisProjectStatusOptions()
+                            .ignoreProjectStatus([ThesisProjectStatus.ASSIGNED])
+                            .map((item) => ({
                               label: item.label,
                               value: item.value,
-                            })
-                          )}
+                            }))}
                           value={currentValue || ""}
                           onChange={(value) =>
                             handleEditChange(record?.id, "status", value)
@@ -1591,19 +1885,64 @@ export default function PostgraduateProject({
                 width: 100,
                 fixed: "right",
                 align: "center",
-                render: (_, record: any) => {
-                  if (record?.id && role === "P7") {
+                render: (_, record) => {
+                  if (record?.id) {
+                    const status =
+                      record?.thesisRegistrations?.[0]?.thesisProject?.status ||
+                      "";
                     return (
                       <Row className="justify-center gap-2">
                         <div
                           className="flex items-center gap-2"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <ApproveIcon
-                            title="Phê duyệt"
-                            className="text-lg font-bold text-green-700"
-                            size={24}
-                          />
+                          {!isManage &&
+                          status === ThesisProjectStatus.APPROVED_BY_DEPT ? (
+                            <ApproveIcon
+                              title="Phê duyệt"
+                              className="text-lg font-bold text-green-700"
+                              size={24}
+                              onClick={async () => {
+                                let status =
+                                  record?.thesisRegistrations?.[0]
+                                    ?.thesisProject?.status || "";
+                                switch (status) {
+                                  case ThesisProjectStatus.APPROVED_BY_DEPT:
+                                    status = ThesisProjectStatus.IN_PROGRESS;
+                                    break;
+                                }
+                                const payload = {
+                                  status: status,
+                                };
+                                await updateThesisProject({
+                                  data: payload,
+                                  where: {
+                                    id: record?.thesisRegistrations?.[0]
+                                      ?.thesisProject?.id,
+                                  },
+                                });
+                              }}
+                            />
+                          ) : null}
+                          {status === ThesisProjectStatus.IN_PROGRESS ? (
+                            <ApproveIcon
+                              title="Đủ điều kiện bảo vệ"
+                              className="text-lg font-bold text-green-700"
+                              size={24}
+                              onClick={async () => {
+                                const payload = {
+                                  status: ThesisProjectStatus.DEFENSE_ELIGIBLE,
+                                };
+                                await updateThesisProject({
+                                  data: payload,
+                                  where: {
+                                    id: record?.thesisRegistrations?.[0]
+                                      ?.thesisProject?.id,
+                                  },
+                                });
+                              }}
+                            />
+                          ) : null}
 
                           <DeleteIcon
                             title="Xóa"

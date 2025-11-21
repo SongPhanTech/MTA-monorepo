@@ -13,7 +13,7 @@ const lightThemeCustom = {
             headerColor: '#26273D',
             headerBorderRadius: 8,
             // rowSelectedBg: '#FFFFFF',
-            rowHoverBg: '#FAFAFA00',
+            rowHoverBg: '#FAFAFA',
             rowSelectedHoverBg: '#02885022',
         },
         Menu: {
