@@ -303,7 +303,7 @@ app.openapi(getOpenCourses, async (c) => {
     return c.json(
         {
             result_code: '000',
-            result_desc: 'success',
+            result_desc: 'success' as const,
             data,
         },
         200

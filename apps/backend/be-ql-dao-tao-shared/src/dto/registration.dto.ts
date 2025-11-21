@@ -19,4 +19,4 @@ export const RegistrationResponse = SuccessResponseSchema.extend({
     class_valid: z.array(z.string()),
     class_invalid: z.array(z.string()),
     invalid_desc: z.string(),
-})
+}).openapi('RegistrationResponse')

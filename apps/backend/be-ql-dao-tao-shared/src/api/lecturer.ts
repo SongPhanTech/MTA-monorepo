@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { prisma } from '..'
 
-const app = new OpenAPIHono({ strict: false })
+const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getListTeacher = createRoute({
     operationId: 'get-list-teacher',

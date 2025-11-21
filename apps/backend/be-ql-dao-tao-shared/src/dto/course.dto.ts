@@ -50,9 +50,11 @@ export const OpenCourseResponse = SuccessResponseSchema.extend({
 
 export type OpenCourseResponse = z.infer<typeof OpenCourseResponse>
 
-export const CoursesDetailRequest = z.object({
-    class_id: z.string(),
-})
+export const CoursesDetailRequest = z
+    .object({
+        class_id: z.string(),
+    })
+    .openapi('CoursesDetailRequest')
 
 // Kiểu thi
 // 1: Vấn đáp

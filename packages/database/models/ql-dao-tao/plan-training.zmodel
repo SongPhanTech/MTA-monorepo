@@ -756,7 +756,6 @@ model ClassRegisterSessionCredit extends Base {
   @@schema("ql-dao-tao")
 }
 
-
 model ClassRegisterSession extends Base {
   name              String
   startDate         DateTime
