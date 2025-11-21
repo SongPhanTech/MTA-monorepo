@@ -1,12 +1,14 @@
 import type {
     Lecturer,
     PrismaClient,
+    SubjectClass,
     Survey,
     SurveyChoice,
     SurveyQuestion,
     UserProfile,
 } from '@workspace/db'
 import { prisma } from '..'
+import { models } from '@workspace/db/zod'
 
 // Define the surveyReportTable type (replace fields with actual structure as needed)
 type surveyReportTable = {
@@ -66,18 +68,37 @@ const QuestionStatSchema = z.object({
     answers: z.array(AnswerStatSchema),
 })
 
+const AverageLecturerSchema = models.SurveyChoiceSchema.extend({
+    totalCount: z.number(),
+})
+
+const AverageSchema = z.object({
+    totalRate: z.number(),
+    average: z.number(),
+})
+
 export const SurveyStatsSchema = z.object({
     surveyId: z.string(),
     lecture: z.string().optional().nullable(),
     questions: z.array(QuestionStatSchema),
-    average: z.array(z.number()),
+    average: z.array(AverageSchema),
+})
+
+export const LecturerSurveyStatsSchema = z.object({
+    lecture: models.LecturerScalarSchema.extend({
+        userProfile: models.UserProfileScalarSchema.nullish(),
+    }),
+    average: z.array(AverageLecturerSchema),
 })
 
 export type SurveyStats = z.infer<typeof SurveyStatsSchema>
 
 export const getSurveyStats = async (
     prisma: PrismaClient,
-    survey: Survey & { lecture?: (Lecturer & { userProfile: UserProfile | null }) | null },
+    survey: Survey & {
+        subjectClass?: SubjectClass | null
+        lecture?: (Lecturer & { userProfile: UserProfile | null }) | null
+    },
     questions: SurveyQuestion[],
     choices: SurveyChoice[]
 ) => {
@@ -122,10 +143,7 @@ export const getSurveyStats = async (
         const answers = choices.map((choice) => {
             const key = `${question.id}-${choice.id}`
             const rate = Number(
-                (
-                    ((answerCountMap[key] || 0) / (questionCountMap.get(question.id) || 1)) *
-                    100
-                ).toFixed(2)
+                ((answerCountMap[key] || 0) / (questionCountMap.get(question.id) || 1)).toFixed(1)
             )
             const sRate = `${rate}%`
             const summary = `${answerCountMap[key]}/${questionCountMap.get(question.id)} (${rate})`
@@ -147,34 +165,73 @@ export const getSurveyStats = async (
         }
     })
 
-    const rawAverages = choices.map((choice) => {
-        if (questionsStatistics.length === 0) return 0
+    const average = choices.map((choice) => {
+        if (questionsStatistics.length === 0)
+            return {
+                average: 0,
+                totalRate: 0,
+            }
 
         const totalRate = questionsStatistics.reduce((acc, curr) => {
             return acc + (curr.answers.find((i) => i.id === choice.id)?.rate || 0)
         }, 0)
 
-        return totalRate / questionsStatistics.length
+        const average = Number((totalRate / questionsStatistics.length).toFixed(2))
+        return { average, totalRate }
     })
-
-    const sumOfAverages = rawAverages.reduce((acc, curr) => acc + curr, 0)
-    let average = rawAverages.map((avg) => (sumOfAverages === 0 ? 0 : (avg / sumOfAverages) * 100))
-
-    // Adjust for rounding to ensure the sum is exactly 100
-    if (sumOfAverages > 0) {
-        const roundedAverages = average.slice(0, -1).map((avg) => Number(avg.toFixed(2)))
-        const sumOfRounded = roundedAverages.reduce((acc, curr) => acc + curr, 0)
-        const lastAverage = Number((100 - sumOfRounded).toFixed(2))
-        average = [...roundedAverages, lastAverage]
-    } else {
-        // If sum is 0, just make sure all are properly formatted
-        average = average.map((avg) => Number(avg.toFixed(2)))
-    }
 
     return {
         surveyId: survey.id,
+        subjectClassId: survey?.subjectClass?.id,
+        subjectClassName: `${survey?.subjectClass?.code} - ${survey?.subjectClass?.name}`,
         lecture: survey.lecture?.userProfile?.fullname,
+        lectureId: survey.lecture?.id,
         questions: questionsStatistics,
+        average,
+    }
+}
+
+export const getLecturerSurveyStats = async (
+    prisma: PrismaClient,
+    lecture: Lecturer & { userProfile: UserProfile | null },
+    // survey: Survey & {subjectClass?:SubjectClass |null, lecture?: (Lecturer & { userProfile: UserProfile | null }) | null },
+    questions: SurveyQuestion[],
+    choices: SurveyChoice[]
+) => {
+    const questionIds = questions.map((q) => q.id)
+
+    const answerCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyChoiceId'],
+        where: {
+            surveySession: {
+                survey: {
+                    lectureId: lecture?.id,
+                    clusterSurveyId: 'cmi4d204w000dmk01xib67tkc',
+                },
+            },
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
+        },
+        _count: { surveyChoiceId: true },
+    })
+
+    const answerCountMap = answerCounts.reduce(
+        (acc, curr) => {
+            if (curr.surveyChoiceId) {
+                const key = curr.surveyChoiceId
+                acc[key] = curr._count.surveyChoiceId
+            }
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const average = choices.map((i) => {
+        return { ...i, totalCount: answerCountMap[i.id] || 0 }
+    })
+
+    return {
+        lecture: lecture,
         average,
     }
 }

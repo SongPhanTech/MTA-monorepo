@@ -4,6 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+
+import type { GetClusterSurveyStatistics200DataItemAverageItem } from './getClusterSurveyStatistics200DataItemAverageItem'
 import type { GetClusterSurveyStatistics200DataItemQuestionsItem } from './getClusterSurveyStatistics200DataItemQuestionsItem'
 
 export type GetClusterSurveyStatistics200DataItem = {
@@ -11,5 +13,5 @@ export type GetClusterSurveyStatistics200DataItem = {
     /** @nullable */
     lecture?: string | null
     questions: GetClusterSurveyStatistics200DataItemQuestionsItem[]
-    average: number[]
+    average: GetClusterSurveyStatistics200DataItemAverageItem[]
 }
