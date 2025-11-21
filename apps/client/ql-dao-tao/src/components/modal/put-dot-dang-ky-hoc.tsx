@@ -78,6 +78,7 @@ const PutClassRegisterSession = () => {
         try {
             showSpinner()
             const data = {
+                code: output.code,
                 name: output.name.trim(),
                 startDate: dayjs(output.startDate).toDate(),
                 endDate: dayjs(output.endDate).toDate(),
@@ -106,9 +107,7 @@ const PutClassRegisterSession = () => {
                             // },
                         },
                     },
-                    where: {
-                        id,
-                    },
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
@@ -184,10 +183,50 @@ const PutClassRegisterSession = () => {
             }}
         >
             <Col span={12}>
+                <FormItem form={form} name="code" label="Mã đợt đăng ký" required>
+                    <Input placeholder="Nhập mã đợt đăng ký" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt đăng ký" required>
                     <Input placeholder="Nhập tên đợt đăng ký" />
                 </FormItem>
             </Col>
+
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourses" label="Khoá" required>
+                    <Select
+                        mode="multiple"
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn khoá"
+                        options={trainingCourses.map((i: TrainingCourse) => ({
+                            value: i.id,
+                            label: i.name,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    required
+                    name="tuitionPerCredit"
+                    label="Học phí (theo tín chỉ)"
+                >
+                    <InputNumber
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập học phí (theo tín chỉ)"
+                        suffix="VNĐ"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
+                    />
+                </FormItem>
+            </Col>
+
             <Col span={12}>
                 <FormItem form={form} name="startDate" label="Ngày mở đợt" required>
                     <DatePicker
@@ -219,45 +258,13 @@ const PutClassRegisterSession = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingCourses" label="Khoá" required>
-                    <Select
-                        mode="multiple"
-                        maxTagCount={'responsive'}
-                        placeholder="Chọn khoá"
-                        options={trainingCourses.map((i: TrainingCourse) => ({
-                            value: i.id,
-                            label: i.name,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
 
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    required
-                    name="tuitionPerCredit"
-                    label="Học phí (theo tín chỉ)"
-                >
-                    <InputNumber
-                        className="w-full"
-                        min={0}
-                        placeholder="Nhập học phí (theo tín chỉ)"
-                        suffix="VNĐ"
-                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={(value) =>
-                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
-                        }
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
+
             <Col span={24}>
                 <FormItem hidden form={form} name="creditLimit" />
                 <span>Giới hạn đăng ký tín chỉ</span>

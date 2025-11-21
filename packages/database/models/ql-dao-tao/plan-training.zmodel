@@ -762,7 +762,8 @@ model ClassRegisterSession extends Base {
   endDate           DateTime
   semester          Semester                     @relation(fields: [semesterId], references: [id])
   semesterId        String
-  tuitionPerCredit  Float                        @default(0) // học phí/tín chỉ
+  /// học phí/tín chỉ
+  tuitionPerCredit  Float                        @default(0)
 
   creditLimit       ClassRegisterSessionCredit[] // giới hạn tín chỉ
   trainingCourses   TrainingCourse[]
