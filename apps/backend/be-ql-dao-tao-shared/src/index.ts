@@ -5,15 +5,17 @@ import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import ClassFixedApp from './api/class-fixed'
 import CourseApp from './api/courses'
+import DepartmentApp from './api/get-department'
 import GetRegistrationApp from './api/get-registration'
 import TeacherApp from './api/lecturer'
 import RegistrationApp from './api/registration'
 import RegistrationSessionApp from './api/registration-session'
 import SemesterApp from './api/Semester'
+import SchedulesApp from './api/student-schedule'
 import SubjectApp from './api/subject'
 import { setupOpenApi } from './utils/openapi'
-import SchedulesApp from './api/student-schedule'
 export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
@@ -39,6 +41,7 @@ app.use(contextStorage())
 setupOpenApi(app)
 
 app.route('/', SubjectApp)
+app.route('/', ClassFixedApp)
 app.route('/', TeacherApp)
 app.route('/', GetRegistrationApp)
 app.route('/', RegistrationApp)
@@ -46,6 +49,7 @@ app.route('/', RegistrationSessionApp)
 app.route('/', SemesterApp)
 app.route('/', CourseApp)
 app.route('/', SchedulesApp)
+app.route('/', DepartmentApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
