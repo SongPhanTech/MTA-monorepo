@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { PrismaClient as MysqlPrismaClient } from '@workspace/db/mysql'
 import { PrismaClient as MssqlPrismaClient } from '@workspace/db/mssql'
-import { Prisma } from '@workspace/db'
+import { Prisma, type PrismaClient } from '@workspace/db'
 import xlsx from 'exceljs'
 import { ensureDatabaseInUrl } from '../utils/database'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
@@ -279,20 +279,18 @@ app.openapi(
 
             res = await prismaClient.$queryRawUnsafe<any[]>(`SELECT ${selectedColumns}
             FROM [${database}].[dbo].[${table}];`)
-
-            console.log(res)
         }
 
         const workbook = new xlsx.Workbook()
         const worksheet = workbook.addWorksheet(table)
         const headerRow = worksheet.addRow(columns)
-            headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
-            headerRow.border = {
-                top: { style: 'thin' },
-                left: { style: 'thin' },
-                bottom: { style: 'thin' },
-                right: { style: 'thin' },
-            }
+        headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
+        headerRow.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+        }
 
         res.forEach((row) => {
             const rowData = columns.map((col) => row[col])
@@ -313,6 +311,82 @@ app.openapi(
             'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition': disposition,
         })
+    }
+)
+
+app.openapi(
+    createRoute({
+        operationId: 'check-export-table-by-sql',
+        path: '/check-export-table-by-sql',
+        method: 'get',
+        request: {
+            query: z.object({
+                url: z.string(),
+                database: z.string(),
+                sql: z.string(),
+                dbType: DatabaseTypeSchema,
+            }),
+        },
+        responses: {
+            200: {
+                description: 'Successfully',
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            message: z.string(),
+                        }),
+                    },
+                },
+            },
+            500: {
+                description: 'Error executing SQL',
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            message: z.string(),
+                        }),
+                    },
+                },
+            },
+        },
+    }),
+    async (c) => {
+        const { url, database, sql, dbType } = c.req.valid('query')
+        // SQL is user-provided, works for both MySQL and MSSQL
+        try {
+            const datasourceUrl = dbType === 'mysql' ? ensureDatabaseInUrl(url, database) : url
+            const prisma = (
+                dbType === 'mysql'
+                    ? await new MysqlPrismaClient({ datasourceUrl })
+                    : await new MssqlPrismaClient({ datasourceUrl })
+            ) as PrismaClient
+            await prisma.$transaction(async (tx) => {
+                await tx.$queryRawUnsafe<any[]>(sql)
+                throw new Error('Rollback transaction after check')
+            })
+            return c.json(
+                {
+                    message: 'Câu lệnh SQL hợp lệ và có thể thực thi.',
+                },
+                200
+            )
+        } catch (error) {
+            if ((error as Error).message === 'Rollback transaction after check') {
+                return c.json(
+                    {
+                        message: 'Câu lệnh SQL hợp lệ và có thể thực thi.',
+                    },
+                    200
+                )
+            }
+            const CLEAN_ALL_PRISMA_WRAPPER = /Invalid[\s\S]*?invocation:\s*/gi
+            return c.json(
+                {
+                    message: `Lỗi thực thi SQL: ${(error as Error)?.message?.replace?.(CLEAN_ALL_PRISMA_WRAPPER, '')?.trim?.()}`,
+                },
+                500
+            )
+        }
     }
 )
 
@@ -355,13 +429,13 @@ app.openapi(
         const workbook = new xlsx.Workbook()
         const worksheet = workbook.addWorksheet(database)
         const headerRow = worksheet.addRow(columns)
-            headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
-            headerRow.border = {
-                top: { style: 'thin' },
-                left: { style: 'thin' },
-                bottom: { style: 'thin' },
-                right: { style: 'thin' },
-            }
+        headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
+        headerRow.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+        }
 
         res.forEach((row: any) => {
             const rowData = columns.map((col) => row[col])
@@ -532,7 +606,7 @@ app.openapi(
         const dataRowNumber = headerRowNumber + 1
 
         // Chuẩn bị prisma
-        const datasourceUrl = ensureDatabaseInUrl(url, database)
+        const datasourceUrl = dbType === 'mysql' ? ensureDatabaseInUrl(url, database) : url
         const prismaDB =
             dbType === 'mysql'
                 ? new MysqlPrismaClient({ datasourceUrl })
