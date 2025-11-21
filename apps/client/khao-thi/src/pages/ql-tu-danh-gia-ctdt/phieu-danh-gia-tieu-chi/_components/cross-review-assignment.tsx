@@ -329,6 +329,9 @@ export default function CrossReviewAssignment() {
                             selectedRowKeys,
                             onChange: onSelectChange,
                         }}
+                        expandable={{
+                            expandRowByClick: false,
+                        }}
                         onRow={(record) => ({
                             onClick: (e) => {
                                 const target = e.target as HTMLElement
@@ -381,7 +384,7 @@ export default function CrossReviewAssignment() {
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
-                        scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
+                        scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
                         className="w-full"
                         columns={[
                             {
