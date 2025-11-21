@@ -16,6 +16,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
 import ApimLogsApp from './api/apim-logs'
+import WSO2AmApp from './api/wso2am'
 import ExcelImportExportApp from './api/excel-import-export'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
@@ -85,6 +86,7 @@ app.use('*', checkIp)
 setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 app.route('/api/apim-logs', ApimLogsApp)
+app.route('/api/wso2am', WSO2AmApp)
 app.route('/api/excel-import-export', ExcelImportExportApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
