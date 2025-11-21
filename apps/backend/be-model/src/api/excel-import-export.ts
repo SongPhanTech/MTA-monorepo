@@ -265,28 +265,45 @@ app.openapi(
         } else {
             // MSSQL
             const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })
-            allColumn = await prismaClient.$queryRaw<
+
+            allColumn = await prismaClient.$queryRawUnsafe<
                 { columnName: string }[]
-            >`SELECT COLUMN_NAME AS columnName
-            FROM ${Prisma.raw(database)}.INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = ${table};`
+            >(`SELECT COLUMN_NAME AS columnName
+            FROM ${database}.INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '${table}';`)
 
             const selectedColumns = allColumn
                 .filter((col) => columns.includes(col.columnName))
                 .map((col) => `[${col.columnName}]`)
                 .join(', ')
 
-            res = await prismaClient.$queryRaw<any[]>`SELECT ${Prisma.raw(selectedColumns)}
-            FROM ${Prisma.raw(`[${database}].[dbo].[${table}]`)};`
+            res = await prismaClient.$queryRawUnsafe<any[]>(`SELECT ${selectedColumns}
+            FROM [${database}].[dbo].[${table}];`)
+
+            console.log(res)
         }
 
         const workbook = new xlsx.Workbook()
         const worksheet = workbook.addWorksheet(table)
-        worksheet.addRow(columns)
+        const headerRow = worksheet.addRow(columns)
+            headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
+            headerRow.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            }
 
         res.forEach((row) => {
             const rowData = columns.map((col) => row[col])
-            worksheet.addRow(rowData)
+            const rowAdded = worksheet.addRow(rowData)
+            rowAdded.font = { name: 'Times New Roman', size: 14 }
+            rowAdded.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            }
         })
 
         const buffer = await workbook.xlsx.writeBuffer()
@@ -325,7 +342,7 @@ app.openapi(
     }),
     async (c) => {
         const { url, database, sql, dbType } = c.req.valid('query')
-        const datasourceUrl = ensureDatabaseInUrl(url, database)
+        const datasourceUrl = dbType === 'mysql' ? ensureDatabaseInUrl(url, database) : url
 
         // SQL is user-provided, works for both MySQL and MSSQL
         const res =
@@ -337,13 +354,26 @@ app.openapi(
 
         const workbook = new xlsx.Workbook()
         const worksheet = workbook.addWorksheet(database)
-        worksheet.addRow(columns)
+        const headerRow = worksheet.addRow(columns)
+            headerRow.font = { bold: true, name: 'Times New Roman', size: 14 }
+            headerRow.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            }
 
         res.forEach((row: any) => {
             const rowData = columns.map((col) => row[col])
-            worksheet.addRow(rowData)
+            const rowAdded = worksheet.addRow(rowData)
+            rowAdded.font = { name: 'Times New Roman', size: 14 }
+            rowAdded.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            }
         })
-
         const buffer = await workbook.xlsx.writeBuffer()
         const fileName = `${database}-sql.xlsx`
         const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
