@@ -6,6 +6,9 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import SubjectApp from './api/subject'
+import TeacherApp from './api/lecturer'
+import RegistrationApp from './api/resgitration'
+import SemesterApp from './api/Semester'
 import ClassRegisterApp from './api/class-register'
 import { setupOpenApi } from './utils/openapi'
 export const prisma: PrismaClient = new PrismaClient()
@@ -33,6 +36,9 @@ app.use(contextStorage())
 setupOpenApi(app)
 
 app.route('/', SubjectApp)
+app.route('/',TeacherApp)
+app.route('/',RegistrationApp)
+app.route('/',SemesterApp)
 app.route('/', ClassRegisterApp)
 
 app.onError((err, c) => {
