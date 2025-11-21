@@ -306,7 +306,16 @@ app.openapi(
                 description: 'Successfully',
                 content: {
                     'application/json': {
-                        schema: z.array(z.string()),
+                        schema: z.object({
+                            columns: z.array(
+                                z.object({
+                                    name: z.string(),
+                                    sampleData1: z.any().nullish(),
+                                    sampleData2: z.any().nullish(),
+                                })
+                            ),
+                            count: z.number(),
+                        }),
                     },
                 },
             },
@@ -319,7 +328,13 @@ app.openapi(
         await workbook.xlsx.load(buf)
         const worksheet = workbook.worksheets[0]
         if (!worksheet) {
-            return c.json([], 200)
+            return c.json(
+                {
+                    columns: [],
+                    count: 0,
+                },
+                200
+            )
         }
         let headerRowNumber = 1
         for (let i = 1; i <= worksheet.rowCount; i++) {
@@ -334,11 +349,29 @@ app.openapi(
             // Kiểm tra xem row có ít nhất 1 ô có dữ liệu
         }
         const firstRow = worksheet.getRow(headerRowNumber)
-        const columns: string[] = []
+        const columns: {
+            name: string
+            sampleData1?: string | null
+            sampleData2?: string | null
+        }[] = []
         firstRow.eachCell((cell) => {
-            columns.push(cell.value?.toString() || '')
+            columns.push({
+                name: cell.value?.toString().trim() || '',
+                sampleData1: worksheet.getRow(headerRowNumber + 1).getCell(cell.col).value
+                    ? worksheet
+                          .getRow(headerRowNumber + 1)
+                          .getCell(cell.col)
+                          .value?.toString()
+                    : null,
+                sampleData2: worksheet.getRow(headerRowNumber + 2).getCell(cell.col).value
+                    ? worksheet
+                          .getRow(headerRowNumber + 2)
+                          .getCell(cell.col)
+                          .value?.toString()
+                    : null,
+            })
         })
-        return c.json(columns, 200)
+        return c.json({ columns, count: worksheet.rowCount - headerRowNumber }, 200)
     }
 )
 
