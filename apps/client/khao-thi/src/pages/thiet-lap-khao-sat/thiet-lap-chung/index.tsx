@@ -9,7 +9,7 @@ import { Tabs, type TabsProps } from 'antd'
 import { useState } from 'react'
 
 function Page() {
-    const [topicSlected, setTopicSelected] = useState<SurveyTopic|null>(null)
+    const [topicSlected, setTopicSelected] = useState<SurveyTopic | null>(null)
     const onChange = (key: string) => {
         console.log(key)
     }
@@ -23,12 +23,19 @@ function Page() {
         {
             key: '2',
             label: 'Chủ đề khảo sát',
-            children: <TabChuDeKhaoSat topicSlected={topicSlected} setTopicSelected={(value)=>{setTopicSelected(value)}} />,
+            children: (
+                <TabChuDeKhaoSat
+                    topicSlected={topicSlected}
+                    setTopicSelected={(value) => {
+                        setTopicSelected(value)
+                    }}
+                />
+            ),
         },
         {
             key: '3',
             label: 'Nhóm câu hỏi khảo sát',
-            children: <TabNhomCauHoi  topicSlected={topicSlected}/>,
+            children: <TabNhomCauHoi topicSlected={topicSlected} />,
             disabled: !topicSlected?.id,
         },
         // {

@@ -29,8 +29,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
-import TreeSelect from '@/components/commons/tree-select'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -165,23 +165,27 @@ const PutFixedClassModal = () => {
             },
         })
 
-    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor({
-            where: {
-                curriculum: {
-                    some: {
-                        curriculumVersion: {
-                            some: {
-                                id: curriculumVersionIdForm ?? undefined,
-                            },
-                        },
-                    },
-                },
-            },
-            orderBy: {
-                name: 'asc',
-            },
-        })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        where: {
+            active: true,
+            ...(curriculumVersionIdForm
+                ? {
+                      curriculum: {
+                          some: {
+                              curriculumVersion: {
+                                  some: {
+                                      id: curriculumVersionIdForm,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        },
+        orderBy: {
+            name: 'asc',
+        },
+    })
     const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
         {
             where: { id: curriculumVersionIdForm ?? undefined },
@@ -212,7 +216,6 @@ const PutFixedClassModal = () => {
             graduated: dataOutput.graduated,
             active: dataOutput.active,
             summary: dataOutput.summary,
-            initSize: dataOutput.initSize,
         }
         await updateFixedClass({
             data: {
@@ -256,7 +259,6 @@ const PutFixedClassModal = () => {
                 graduated: output.graduated,
                 active: output.active,
                 summary: output.summary,
-                initSize: output.initSize,
             }
             if (id) {
                 if (
@@ -528,29 +530,6 @@ const PutFixedClassModal = () => {
                     <Input placeholder="Nhập tên viết tắt" />
                 </FormItem>
             </Col>
-            {/* <Col span={12}>
-                <FormItem form={form} name="startYear" label="Năm bắt đầu">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập năm bắt đầu"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="initSize" label="Sĩ số">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập sĩ số"
-                    />
-                </FormItem>
-            </Col> */}
-
             <Col span={12}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />

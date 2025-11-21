@@ -43,6 +43,7 @@ type TextEditorProps = {
     mentions?: Array<MentionType>
     editorProps?: Omit<EditorContentProps, 'ref' | 'editor'>
     id?: string
+    editable?: boolean
 }
 
 export function RichTextEditor({
@@ -52,9 +53,11 @@ export function RichTextEditor({
     mentions = [],
     editorProps,
     id,
+    editable = true,
 }: TextEditorProps) {
     const editor = useEditor({
         immediatelyRender: false,
+        editable,
         extensions: [
             StarterKit,
             Underline,
@@ -327,7 +330,7 @@ export function RichTextEditor({
 
     return (
         <div>
-            <TextEditorMenuBar editor={editor} id={id} />
+            <TextEditorMenuBar editor={editor} id={id} editable={editable} />
             <EditorContent editor={editor} {...editorProps} />
         </div>
     )

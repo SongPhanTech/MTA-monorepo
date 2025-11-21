@@ -12,6 +12,7 @@
     "@hono/oidc-auth": "catalog:",
     "@hono/otel": "catalog:",
     "@hono/zod-openapi": "catalog:",
+    "@opentelemetry/api": "catalog:",
     "@opentelemetry/auto-instrumentations-node": "catalog:",
     "@opentelemetry/exporter-trace-otlp-http": "catalog:",
     "@opentelemetry/resources": "catalog:",
@@ -23,12 +24,16 @@
     "hono": "catalog:",
     "minio": "catalog:",
     "prom-client": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@workspace/auth": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/libs": "workspace:*",
+    "axios": "catalog:",
+    "decimal.js": "catalog:",
+    "exceljs": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "catalog:",
-    "@workspace/auth": "workspace:*",
-    "@workspace/db": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }
 }

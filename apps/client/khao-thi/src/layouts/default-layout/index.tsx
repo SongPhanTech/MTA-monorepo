@@ -7,7 +7,7 @@ import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 // import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Breadcrumb,  Layout, theme } from 'antd'
+import { Breadcrumb, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -152,7 +152,7 @@ const DefaultLayout = ({
                         </span> */}
 
                         <div className="flex items-center">
-                             <Breadcrumb items={listBreadcrumb} />
+                            <Breadcrumb items={listBreadcrumb} />
                             {/* <SelectTrainingObjectType />
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <div className="flex items-center space-x-2">

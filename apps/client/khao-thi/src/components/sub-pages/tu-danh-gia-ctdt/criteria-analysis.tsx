@@ -1,3 +1,4 @@
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
@@ -6,9 +7,12 @@ import { getStatusEvaluation, EVALUATION_CRITERION_STATUS_OPTIONS } from '@const
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useStore } from '@tanstack/react-store'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
-import { useUpdateAnalysisCriterion } from '@workspace/db/hooks'
+import { useUpdateAnalysisCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Badge, Button, Empty, message, Popconfirm, Tag } from 'antd'
@@ -32,6 +36,7 @@ const CriteriaAnalysisSubPage = ({
     const [statusFilter, setStatusFilter] = useState<$Enums.EvaluationCriterionStatus | null>(null)
     const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
     const { can } = useAbility()
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { onOpen } = useDisclosure<{
         id?: string
@@ -49,28 +54,65 @@ const CriteriaAnalysisSubPage = ({
         )
     }
 
-    const getDeadlineStatus = (deadline: Date | string) => {
-        const now = dayjs()
-        const deadlineDate = dayjs(deadline)
-        const daysUntilDeadline = deadlineDate.diff(now, 'day')
-
-        if (daysUntilDeadline < 0) {
-            return {
-                color: 'red',
-                text: 'Quá hạn',
-            }
-        }
-        if (daysUntilDeadline <= 3) {
-            return {
-                color: 'orange',
-                text: 'Sắp quá hạn',
-            }
-        }
-
-        return { color: 'blue', text: '' }
-    }
-
     const { mutateAsync: updateCriterion } = useUpdateAnalysisCriterion()
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+
+    const checkAndUpdateStatusPeriodStatus = async () => {
+        if (!selectedEvaluationPeriodId) return
+
+        try {
+            const totalCriteria = await sqlTransaction([
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            const submittedCriteria = await sqlTransaction([
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            if (
+                (totalCriteria.data[0] as number) > 0 &&
+                totalCriteria.data[0] === submittedCriteria.data[0]
+            ) {
+                await updateEvaluationPeriod({
+                    where: {
+                        id: selectedEvaluationPeriodId,
+                    },
+                    data: {
+                        status: $Enums.EvaluationPeriodStatus.SECRETARY_REVIEW,
+                    },
+                })
+            }
+        } catch (error) {
+            console.error('Error updating evaluation period status:', error)
+        }
+    }
 
     const handleSubmitCriterion = async (analysisCriterionId: string) => {
         try {
@@ -83,6 +125,8 @@ const CriteriaAnalysisSubPage = ({
                     status: $Enums.EvaluationCriterionStatus.SUBMITTED,
                 },
             })
+
+            await checkAndUpdateStatusPeriodStatus()
 
             message.success('Nộp tiêu chí thành công.')
         } catch (error) {
@@ -198,7 +242,9 @@ const CriteriaAnalysisSubPage = ({
                                                 status !==
                                                     $Enums.EvaluationCriterionStatus.APPROVED &&
                                                 status !==
-                                                    $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                                    $Enums.EvaluationCriterionStatus.COMPLETED &&
+                                                status !==
+                                                    $Enums.EvaluationCriterionStatus.SUBMITTED && (
                                                     <Popconfirm
                                                         title="Xác nhận nộp tiêu chí"
                                                         description="Bạn chắc chắn muốn nộp tiêu chí này?"
@@ -214,6 +260,7 @@ const CriteriaAnalysisSubPage = ({
                                                     >
                                                         <Button
                                                             type="primary"
+                                                            size="small"
                                                             className="bg-blue-500"
                                                         >
                                                             Nộp tiêu chí
@@ -228,9 +275,14 @@ const CriteriaAnalysisSubPage = ({
                                                 status !==
                                                     $Enums.EvaluationCriterionStatus.APPROVED &&
                                                 status !==
-                                                    $Enums.EvaluationCriterionStatus.COMPLETED && (
+                                                    $Enums.EvaluationCriterionStatus.COMPLETED &&
+                                                status !==
+                                                    $Enums.EvaluationCriterionStatus.SUBMITTED &&
+                                                status !==
+                                                    $Enums.EvaluationCriterionStatus.REVISION && (
                                                     <Button
                                                         type="primary"
+                                                        size="small"
                                                         onClick={() =>
                                                             onOpen({
                                                                 analysisCriterionId:

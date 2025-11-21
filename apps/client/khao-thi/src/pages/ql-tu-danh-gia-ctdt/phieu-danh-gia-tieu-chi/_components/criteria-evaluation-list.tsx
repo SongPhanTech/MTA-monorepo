@@ -25,6 +25,18 @@ export default function CriteriaEvaluationList() {
                                                 userProfile: true,
                                             },
                                         },
+                                        evaluationCriterionComments: {
+                                            include: {
+                                                reviewer: {
+                                                    select: {
+                                                        fullname: true,
+                                                    },
+                                                },
+                                            },
+                                            orderBy: {
+                                                createdAt: 'desc',
+                                            },
+                                        },
                                     },
                                 },
                             },
@@ -68,7 +80,6 @@ export default function CriteriaEvaluationList() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

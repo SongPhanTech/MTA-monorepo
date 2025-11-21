@@ -7514,7 +7514,6 @@ export namespace Prisma {
         managementOrganizationId: 'managementOrganizationId',
         lecturerManagementId: 'lecturerManagementId',
         staffManagementId: 'staffManagementId',
-        initSize: 'initSize',
         curriculumVersionId: 'curriculumVersionId'
     };
     export const CurriculumScalarFieldEnum: {
@@ -46831,7 +46830,6 @@ export namespace Prisma {
         readonly managementOrganizationId: FieldRef<"FixedClass", 'String'>;
         readonly lecturerManagementId: FieldRef<"FixedClass", 'String'>;
         readonly staffManagementId: FieldRef<"FixedClass", 'String'>;
-        readonly initSize: FieldRef<"FixedClass", 'Int'>;
         readonly curriculumVersionId: FieldRef<"FixedClass", 'String'>;
     }
 
@@ -203589,11 +203587,9 @@ export namespace Prisma {
     };
     export type FixedClassAvgAggregateOutputType = {
         startYear: number | null
-        initSize: number | null
     };
     export type FixedClassSumAggregateOutputType = {
         startYear: number | null
-        initSize: number | null
     };
     export type FixedClassMinAggregateOutputType = {
         id: string | null
@@ -203614,7 +203610,6 @@ export namespace Prisma {
         managementOrganizationId: string | null
         lecturerManagementId: string | null
         staffManagementId: string | null
-        initSize: number | null
         curriculumVersionId: string | null
     };
     export type FixedClassMaxAggregateOutputType = {
@@ -203636,7 +203631,6 @@ export namespace Prisma {
         managementOrganizationId: string | null
         lecturerManagementId: string | null
         staffManagementId: string | null
-        initSize: number | null
         curriculumVersionId: string | null
     };
     export type FixedClassCountAggregateOutputType = {
@@ -203658,17 +203652,14 @@ export namespace Prisma {
         managementOrganizationId: number
         lecturerManagementId: number
         staffManagementId: number
-        initSize: number
         curriculumVersionId: number
         _all: number
     };
     export type FixedClassAvgAggregateInputType = {
         startYear?: true
-        initSize?: true
     };
     export type FixedClassSumAggregateInputType = {
         startYear?: true
-        initSize?: true
     };
     export type FixedClassMinAggregateInputType = {
         id?: true
@@ -203689,7 +203680,6 @@ export namespace Prisma {
         managementOrganizationId?: true
         lecturerManagementId?: true
         staffManagementId?: true
-        initSize?: true
         curriculumVersionId?: true
     };
     export type FixedClassMaxAggregateInputType = {
@@ -203711,7 +203701,6 @@ export namespace Prisma {
         managementOrganizationId?: true
         lecturerManagementId?: true
         staffManagementId?: true
-        initSize?: true
         curriculumVersionId?: true
     };
     export type FixedClassCountAggregateInputType = {
@@ -203733,7 +203722,6 @@ export namespace Prisma {
         managementOrganizationId?: true
         lecturerManagementId?: true
         staffManagementId?: true
-        initSize?: true
         curriculumVersionId?: true
         _all?: true
     };
@@ -203836,7 +203824,6 @@ export namespace Prisma {
         managementOrganizationId: string | null
         lecturerManagementId: string | null
         staffManagementId: string | null
-        initSize: number
         curriculumVersionId: string | null
         _count: FixedClassCountAggregateOutputType | null
         _avg: FixedClassAvgAggregateOutputType | null
@@ -203875,7 +203862,6 @@ export namespace Prisma {
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
         staffManagementId?: boolean
-        initSize?: boolean
         curriculumVersionId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
@@ -203911,7 +203897,6 @@ export namespace Prisma {
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
         staffManagementId?: boolean
-        initSize?: boolean
         curriculumVersionId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
@@ -203940,7 +203925,6 @@ export namespace Prisma {
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
         staffManagementId?: boolean
-        initSize?: boolean
         curriculumVersionId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
@@ -203969,10 +203953,9 @@ export namespace Prisma {
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
         staffManagementId?: boolean
-        initSize?: boolean
         curriculumVersionId?: boolean
     };
-    export type FixedClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "summary" | "startYear" | "graduated" | "classMonitorId" | "unionLeaderId" | "trainingCourseId" | "managementOrganizationId" | "lecturerManagementId" | "staffManagementId" | "initSize" | "curriculumVersionId", ExtArgs["result"]["fixedClass"]>;
+    export type FixedClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "summary" | "startYear" | "graduated" | "classMonitorId" | "unionLeaderId" | "trainingCourseId" | "managementOrganizationId" | "lecturerManagementId" | "staffManagementId" | "curriculumVersionId", ExtArgs["result"]["fixedClass"]>;
     export type FixedClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
@@ -204043,7 +204026,6 @@ export namespace Prisma {
             managementOrganizationId: string | null
             lecturerManagementId: string | null
             staffManagementId: string | null
-            initSize: number
             curriculumVersionId: string | null
         }, ExtArgs["result"]["fixedClass"]>
         composites: {}
@@ -338819,7 +338801,6 @@ export namespace Prisma {
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
         staffManagementId?: StringNullableFilter<"FixedClass"> | string | null
-        initSize?: IntFilter<"FixedClass"> | number
         curriculumVersionId?: StringNullableFilter<"FixedClass"> | string | null
         classMonitor?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         unionLeader?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
@@ -338854,7 +338835,6 @@ export namespace Prisma {
         managementOrganizationId?: SortOrderInput | SortOrder
         lecturerManagementId?: SortOrderInput | SortOrder
         staffManagementId?: SortOrderInput | SortOrder
-        initSize?: SortOrder
         curriculumVersionId?: SortOrderInput | SortOrder
         classMonitor?: StudentOrderByWithRelationInput
         unionLeader?: StudentOrderByWithRelationInput
@@ -338894,7 +338874,6 @@ export namespace Prisma {
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
         staffManagementId?: StringNullableFilter<"FixedClass"> | string | null
-        initSize?: IntFilter<"FixedClass"> | number
         curriculumVersionId?: StringNullableFilter<"FixedClass"> | string | null
         classMonitor?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         unionLeader?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
@@ -338929,7 +338908,6 @@ export namespace Prisma {
         managementOrganizationId?: SortOrderInput | SortOrder
         lecturerManagementId?: SortOrderInput | SortOrder
         staffManagementId?: SortOrderInput | SortOrder
-        initSize?: SortOrder
         curriculumVersionId?: SortOrderInput | SortOrder
         _count?: FixedClassCountOrderByAggregateInput
         _avg?: FixedClassAvgOrderByAggregateInput
@@ -338959,7 +338937,6 @@ export namespace Prisma {
         managementOrganizationId?: UuidNullableWithAggregatesFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         staffManagementId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
-        initSize?: IntWithAggregatesFilter<"FixedClass"> | number
         curriculumVersionId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
     };
     export type CurriculumWhereInput = {
@@ -366460,7 +366437,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -366494,7 +366470,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -366516,7 +366491,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -366550,7 +366524,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -366578,7 +366551,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
     };
     export type FixedClassUpdateManyMutationInput = {
@@ -366594,7 +366566,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
     };
     export type FixedClassUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -366615,7 +366586,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CurriculumCreateInput = {
@@ -391840,12 +391810,10 @@ export namespace Prisma {
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
         staffManagementId?: SortOrder
-        initSize?: SortOrder
         curriculumVersionId?: SortOrder
     };
     export type FixedClassAvgOrderByAggregateInput = {
         startYear?: SortOrder
-        initSize?: SortOrder
     };
     export type FixedClassMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -391866,7 +391834,6 @@ export namespace Prisma {
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
         staffManagementId?: SortOrder
-        initSize?: SortOrder
         curriculumVersionId?: SortOrder
     };
     export type FixedClassMinOrderByAggregateInput = {
@@ -391888,12 +391855,10 @@ export namespace Prisma {
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
         staffManagementId?: SortOrder
-        initSize?: SortOrder
         curriculumVersionId?: SortOrder
     };
     export type FixedClassSumOrderByAggregateInput = {
         startYear?: SortOrder
-        initSize?: SortOrder
     };
     export type DM_DonViScalarRelationFilter = {
         is?: DM_DonViWhereInput
@@ -457987,7 +457952,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -458019,7 +457983,6 @@ export namespace Prisma {
         trainingCourseId: string
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -458753,7 +458716,6 @@ export namespace Prisma {
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
         staffManagementId?: StringNullableFilter<"FixedClass"> | string | null
-        initSize?: IntFilter<"FixedClass"> | number
         curriculumVersionId?: StringNullableFilter<"FixedClass"> | string | null
     };
     export type SubjectVersionUpsertWithWhereUniqueWithoutManagementOrganizationInput = {
@@ -467877,7 +467839,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -467910,7 +467871,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -468514,7 +468474,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -468547,7 +468506,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -474831,7 +474789,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -474863,7 +474820,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -478861,7 +478817,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -478894,7 +478849,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetClassesInput
@@ -485018,7 +484972,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -485051,7 +485004,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetClassesInput
@@ -495000,7 +494952,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -495032,7 +494983,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -495058,7 +495008,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
@@ -495090,7 +495039,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -495116,7 +495064,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -495149,7 +495096,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetClassesInput
@@ -496853,7 +496799,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -496885,7 +496830,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -496916,7 +496860,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -496948,7 +496891,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -496979,7 +496921,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -497012,7 +496953,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
@@ -498960,7 +498900,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -498993,7 +498932,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -504278,7 +504216,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -504310,7 +504247,6 @@ export namespace Prisma {
         trainingCourseId: string
         managementOrganizationId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -517138,7 +517074,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -517171,7 +517106,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -524865,7 +524799,6 @@ export namespace Prisma {
         summary?: string | null
         startYear?: number | null
         graduated?: boolean | null
-        initSize?: number
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
@@ -524897,7 +524830,6 @@ export namespace Prisma {
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
@@ -544322,7 +544254,6 @@ export namespace Prisma {
         trainingCourseId: string
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
     };
     export type SubjectVersionCreateManyManagementOrganizationInput = {
@@ -544790,7 +544721,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -544822,7 +544752,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -544849,7 +544778,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectVersionUpdateWithoutManagementOrganizationInput = {
@@ -559070,7 +558998,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -559103,7 +559030,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -559130,7 +559056,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PlanTrainingSubjectCreateManyPlanTrainingInput = {
@@ -559192,7 +559117,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -559225,7 +559149,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -559252,7 +559175,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileCreateManyStudentScoreConvertInput = {
@@ -561768,7 +561690,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
     };
     export type ScoreConvertCreateManyTrainingCourseInput = {
@@ -561953,7 +561874,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
@@ -561985,7 +561905,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -562012,7 +561931,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ScoreConvertUpdateWithoutTrainingCourseInput = {
@@ -563561,7 +563479,6 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
-        initSize?: number
     };
     export type StudentCreateManyCurriculumVersionInput = {
         id?: string
@@ -563808,7 +563725,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -563841,7 +563757,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
@@ -563868,7 +563783,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
     };
     export type StudentUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -566735,7 +566649,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -566768,7 +566681,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
@@ -566795,7 +566707,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ClassScheduleUpdateWithoutSubjectClassInput = {
@@ -574352,7 +574263,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -574385,7 +574295,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -574412,7 +574321,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentUpdateWithoutNotificationsInput = {
@@ -575609,7 +575517,6 @@ export namespace Prisma {
         trainingCourseId: string
         managementOrganizationId?: string | null
         staffManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
     };
     export type ClassScheduleCreateManyLecturerInput = {
@@ -576289,7 +576196,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -576321,7 +576227,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -576348,7 +576253,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ClassScheduleUpdateWithoutLecturerInput = {
@@ -580196,7 +580100,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -580229,7 +580132,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -580256,7 +580158,6 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassUpdateWithoutSurveyObjectTypesInput = {
@@ -582826,7 +582727,6 @@ export namespace Prisma {
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
-        initSize?: number
         curriculumVersionId?: string | null
     };
     export type FixedClassUpdateWithoutStaffManagementInput = {
@@ -582842,7 +582742,6 @@ export namespace Prisma {
         summary?: NullableStringFieldUpdateOperationsInput | string | null
         startYear?: NullableIntFieldUpdateOperationsInput | number | null
         graduated?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        initSize?: IntFieldUpdateOperationsInput | number
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
@@ -582874,7 +582773,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
@@ -582901,7 +582799,6 @@ export namespace Prisma {
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        initSize?: IntFieldUpdateOperationsInput | number
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ScholarshipCriteriaCreateManyScholarshipInput = {

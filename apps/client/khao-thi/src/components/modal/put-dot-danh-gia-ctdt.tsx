@@ -99,6 +99,17 @@ const PutEvaluationPeriod = () => {
                             data: { id: periodId, ...data },
                         },
                     },
+                    {
+                        model: 'EvaluationCouncil',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                name: output.name,
+                                periodId,
+                                createdBy: idProfile,
+                            },
+                        },
+                    },
                 ])
 
                 if (res.status !== 200) {

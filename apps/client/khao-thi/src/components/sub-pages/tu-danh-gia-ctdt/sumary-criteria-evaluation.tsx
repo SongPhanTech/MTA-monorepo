@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react'
 import { $Enums } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSession } from '@workspace/auth/react'
+import { useStore } from '@tanstack/react-store'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useUpdateEvaluationCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -18,10 +21,14 @@ export default function SumaryCriteriaEvaluationSubPage({
     const [form] = Form.useForm<PutRequirementCriterion>()
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [commentForm] = Form.useForm<{ crossReview: string }>()
     const [showComments, setShowComments] = useState(false)
 
     const { hideSpinner, showSpinner } = useSpinner()
+
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
 
     const handleSendCrossReview = async () => {
         try {
@@ -83,6 +90,15 @@ export default function SumaryCriteriaEvaluationSubPage({
         }
     }
 
+    const handleFinal = async () => {
+        try {
+            showSpinner()
+        } catch (error) {
+        } finally {
+            hideSpinner()
+        }
+    }
+
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -118,13 +134,21 @@ export default function SumaryCriteriaEvaluationSubPage({
 
     return (
         <div className="overflow-x-hidden">
-            <div className="flex justify-end mb-4">
-                <Button type="primary" onClick={() => setShowComments(!showComments)}>
+            <div className="flex justify-end mb-2 gap-2">
+                <Button
+                    type="primary"
+                    size="small"
+                    className="bg-yellow-400"
+                    onClick={() => setShowComments(!showComments)}
+                >
                     Yêu cầu chỉnh sửa
+                </Button>
+                <Button type="primary" size="small" onClick={handleFinal}>
+                    Phê duyệt
                 </Button>
             </div>
 
-            <Form form={form} layout="horizontal" className="form-evidence">
+            <Form form={form} layout="vertical" className="form-evidence">
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -154,7 +178,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'currentSituation',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -165,7 +192,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'strengths',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -176,7 +206,10 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'weakness',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
 
                                                             <Form.Item
@@ -187,11 +220,14 @@ export default function SumaryCriteriaEvaluationSubPage({
                                                                     'actionPlan',
                                                                 ]}
                                                             >
-                                                                <RichTextEditor id={item.id} />
+                                                                <RichTextEditor
+                                                                    id={item.id}
+                                                                    editable={false}
+                                                                />
                                                             </Form.Item>
-                                                            <div className="mb-3 font-bold">
+                                                            {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     ),
                                                 },

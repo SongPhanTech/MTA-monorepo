@@ -1,5 +1,6 @@
 import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { context, SpanKind, trace } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
@@ -15,6 +16,8 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
 import ApimLogsApp from './api/apim-logs'
+import WSO2AmApp from './api/wso2am'
+import ExcelImportExportApp from './api/excel-import-export'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -29,13 +32,16 @@ openTelemetrySDK.start()
 export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
-const instrumentationConfig = {
-    serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
-    serviceVersion: '1.0.0',
-    captureRequestHeaders: ['user-agent', 'service-name'],
-}
+const tracer = trace.getTracer('mta-be-ql-dao-tao-tracer')
 
-app.use(httpInstrumentationMiddleware(instrumentationConfig))
+app.use(
+    httpInstrumentationMiddleware({
+        serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
+        serviceVersion: '1.0.0',
+        captureRequestHeaders: ['user-agent', 'service-name', 'x-forwarded-for'],
+        tracer,
+    })
+)
 
 app.use(
     '*',
@@ -80,6 +86,8 @@ app.use('*', checkIp)
 setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 app.route('/api/apim-logs', ApimLogsApp)
+app.route('/api/wso2am', WSO2AmApp)
+app.route('/api/excel-import-export', ExcelImportExportApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
@@ -199,6 +207,20 @@ app.use(
 
 app.onError((err, c) => {
     console.log('[BE-MODEL] Error: ', err)
+    const parentSpan = trace.getActiveSpan()
+
+    const subSpan = tracer.startSpan(
+        'internal-error',
+        {
+            attributes: { 'error.message': err.message },
+            kind: SpanKind.INTERNAL,
+        },
+        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
+    )
+
+    subSpan.recordException(err)
+    subSpan.end()
+
     if (err instanceof HTTPException) {
         return err.getResponse()
     }

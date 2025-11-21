@@ -60,9 +60,9 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
         return
     }, [res])
 
-        const { onOpen } = useDisclosure<{userId: string, surveyId: string,userName?: string}>({
-            tag: 'ReviewSurveyModal',
-        })
+    const { onOpen } = useDisclosure<{ userId: string; surveyId: string; userName?: string }>({
+        tag: 'ReviewSurveyModal',
+    })
 
     return (
         <div>
@@ -104,7 +104,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 setFilters({ ...filters, isStudent: 'student' })
                             }}
                             variant="solid"
-                            size='small'
+                            size="small"
                         >
                             Học viên
                         </Button>
@@ -141,7 +141,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Mã HV',
                                 dataIndex: 'studentCode',
                                 type: 'input',
-                                width:125,
+                                width: 125,
                                 render: (_, record) =>
                                     record?.educationAndTraining?.length > 0
                                         ? record?.educationAndTraining[0]?.code
@@ -151,7 +151,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Mã GV',
                                 dataIndex: 'lecturerCode',
                                 type: 'input',
-                                width:125,
+                                width: 125,
                                 render: (_, record) => record?.lecturer?.code || '',
                             },
                             {
@@ -167,7 +167,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'idCardNumber',
                                 type: 'input',
                                 align: 'center',
-                                width:125,
+                                width: 125,
                                 render: (_, record) => record?.idCardNumber || '',
                             },
                             {
@@ -175,21 +175,21 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'phoneNumber',
                                 type: 'input',
                                 align: 'center',
-                                width:125,
+                                width: 125,
                                 render: (_, record) => record?.phoneNumber || '',
                             },
                             {
                                 title: 'ĐVQL',
                                 dataIndex: 'organizationId',
                                 type: 'input',
-                                width:150,
+                                width: 150,
                                 align: 'center',
                                 render: (_, record) => record?.lecturer?.organization?.sMa || '',
                             },
                             {
                                 title: 'Lớp QL',
                                 dataIndex: 'fixedClassIds',
-                                width:150,
+                                width: 150,
                                 type: 'select',
                                 align: 'center',
                                 options:
@@ -205,7 +205,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'trainingCourseIds',
                                 type: 'select',
                                 align: 'center',
-                                width:150,
+                                width: 150,
                                 options:
                                     trainingCourses?.map((tc) => ({
                                         value: tc.id,
@@ -221,7 +221,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'taken',
                                 align: 'center',
                                 type: 'select',
-                                width:120,
+                                width: 120,
                                 options: [
                                     {
                                         value: true,
@@ -240,25 +240,32 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                     )
                                 },
                             },
-                                 {
+                            {
                                 title: 'Thao tác',
                                 align: 'center',
-                                width:80,
-                              render: (_, record) => (
-                                <Row className="justify-center gap-0">
-                                    {can(
-                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                                        'XEM_TAT_CA'
-                                    ) && (
-                                        <Tooltip title="Xem khảo sát" placement="top">
-                                            <Eye className="m-0" size={14} onClick={()=>{
-                                                onOpen({userId:record?.id,surveyId:selectedId?.id || '',userName:`${record?.lastName || ''} ${record?.firstName || ''}`})
-                                            }}/>
-                                        </Tooltip>
-                                    )}
-                                </Row>
-                            ),
-                                  
+                                width: 80,
+                                render: (_, record) => (
+                                    <Row className="justify-center gap-0">
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                            'XEM_TAT_CA'
+                                        ) && (
+                                            <Tooltip title="Xem khảo sát" placement="top">
+                                                <Eye
+                                                    className="m-0"
+                                                    size={14}
+                                                    onClick={() => {
+                                                        onOpen({
+                                                            userId: record?.id,
+                                                            surveyId: selectedId?.id || '',
+                                                            userName: `${record?.lastName || ''} ${record?.firstName || ''}`,
+                                                        })
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                    </Row>
+                                ),
                             },
                         ]}
                         data={data?.data || []}

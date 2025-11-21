@@ -1,21 +1,30 @@
-import Table from '@components/commons/table'
+import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportStudentInSurvey from '@components/modal/export-list-student-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { Survey } from '@workspace/db'
+import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 import {
-    useCountUserProfile,
     useFindManyFixedClass,
+    useFindManySubjectClass,
     useFindManyTrainingCourse,
-    useFindManyUserProfile,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { Col, Flex, Row, Skeleton, Tag } from 'antd'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { Col, Flex, Row, Skeleton, Tag, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function DanhSachHocVien({ survey }: { survey: Survey | null }) {
+function DanhSachHocVien({
+    lecturer,
+    selectedId,
+}: {
+    lecturer: LectuerType | null
+    selectedId: string
+}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -25,6 +34,10 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
         idCardNumber: '',
         phoneNumber: '',
         statusSurvey: undefined,
+        fixedClassIds: undefined,
+        trainingCourseIds: undefined,
+        organization: undefined,
+        dateOfBirth: undefined,
     })
     const router = useRouter()
     const { data: fixedClasses = [] } = useFindManyFixedClass({
@@ -37,124 +50,208 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
 
     const where = useMemo(() => {
         return {
-            educationAndTraining: {
-                some: {
-                    subjectClassStudent: {
-                        some: {
-                            subjectClass: {
-                                survey: {
-                                    some: {
-                                        id: survey?.id,
+            id: {
+                in: lecturer?.survey?.map((item) => item.subjectClassId) as string[],
+            },
+
+            // ...(filters.statusSurvey &&
+            //     filters.statusSurvey?.length === 1 &&
+            //     filters.statusSurvey[0] === false && {
+            //         surveySession: {
+            //             none: {
+            //                 surveyId: survey?.id,
+            //             },
+            //         },
+            //     }),
+
+            // ...(filters.name && {
+            //     subjectClassStudent: {
+            //         some: {
+            //             student: {
+            //                 userProfile: {
+            //                     OR: [
+            //                         {
+            //                             firstName: {
+            //                                 contains: filters.name,
+            //                                 mode: 'insensitive' as const,
+            //                             },
+            //                         },
+            //                         {
+            //                             lastName: {
+            //                                 contains: filters.name,
+            //                                 mode: 'insensitive' as const,
+            //                             },
+            //                         },
+            //                     ],
+            //                 },
+            //             },
+            //         },
+            //     },
+            // }),
+            // ...(filters.code && {
+            //     subjectClassStudent: {
+            //         some: {
+            //             student: {
+            //                 code: {
+            //                     contains: filters.code,
+            //                     mode: 'insensitive' as const,
+            //                 },
+            //             },
+            //         },
+            //     },
+            // }),
+            // ...(filters.idCardNumber && {
+            //     idCardNumber: {
+            //         contains: filters.idCardNumber,
+            //         mode: 'insensitive' as const,
+            //     },
+            // }),
+            // ...(filters.phoneNumber && {
+            //     phoneNumber: {
+            //         contains: filters.phoneNumber,
+            //         mode: 'insensitive' as const,
+            //     },
+            // }),
+        }
+    }, [lecturer, filters])
+    const { data, isLoading } = useFindManySubjectClass(
+        {
+            where,
+            include: {
+                mainLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                subjectClassStudent: {
+                    where: {
+                        student: {
+                            ...(filters.name && {
+                                userProfile: {
+                                    OR: [
+                                        {
+                                            firstName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                        {
+                                            lastName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                    ],
+                                },
+                            }),
+                            ...(filters.code && {
+                                code: {
+                                    contains: filters.code,
+                                    mode: 'insensitive' as const,
+                                },
+                            }),
+                            ...(filters.idCardNumber && {
+                                userProfile: {
+                                    idCardNumber: {
+                                        contains: filters.idCardNumber,
+                                        mode: 'insensitive' as const,
                                     },
                                 },
-                            },
+                            }),
+                            ...(filters.phoneNumber && {
+                                userProfile: {
+                                    idCardNumber: {
+                                        contains: filters.phoneNumber,
+                                        mode: 'insensitive' as const,
+                                    },
+                                },
+                            }),
+                            ...(filters.fixedClassIds && {
+                                fixedClassId: {
+                                    in: filters.fixedClassIds,
+                                },
+                            }),
+                            ...(filters.trainingCourseIds && {
+                                fixedClass: {
+                                    trainingCourseId: {
+                                        in: filters.trainingCourseIds,
+                                    },
+                                },
+                            }),
+                            ...(filters.dateOfBirth?.length === 2
+                                ? {
+                                      userProfile: {
+                                          dateOfBirth: {
+                                              gte: dayjs(
+                                                  filters.dateOfBirth?.[0],
+                                                  'DD/MM/YYYY'
+                                              ).toDate(),
+                                              lte: dayjs(
+                                                  filters.dateOfBirth?.[1],
+                                                  'DD/MM/YYYY'
+                                              ).toDate(),
+                                          },
+                                      },
+                                  }
+                                : {}),
                         },
                     },
-                },
-            },
-            ...(filters.statusSurvey &&
-                filters.statusSurvey?.length === 1 &&
-                filters.statusSurvey[0] === true && {
-                    surveySession: {
-                        some: {
-                            surveyId: survey?.id,
-                        },
-                    },
-                }),
-            ...(filters.statusSurvey &&
-                filters.statusSurvey?.length === 1 &&
-                filters.statusSurvey[0] === false && {
-                    surveySession: {
-                        none: {
-                            surveyId: survey?.id,
-                        },
-                    },
-                }),
-
-            ...(filters.name && {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                ],
-            }),
-            ...(filters.code && {
-                code: {
-                    contains: filters.code,
-                    mode: 'insensitive' as const,
-                },
-            }),
-            ...(filters.idCardNumber && {
-                idCardNumber: {
-                    contains: filters.idCardNumber,
-                    mode: 'insensitive' as const,
-                },
-            }),
-            ...(filters.phoneNumber && {
-                phoneNumber: {
-                    contains: filters.phoneNumber,
-                    mode: 'insensitive' as const,
-                },
-            }),
-        }
-    }, [survey, filters])
-    const { data, isLoading } = useFindManyUserProfile({
-        where,
-        include: {
-            educationAndTraining: {
-                include: {
-                    subjectClassStudent: {
-                        include: {
-                            subjectClass: {
-                                include: {
-                                    survey: {
-                                        include: {
-                                            surveySessions: true,
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: {
+                                    include: {
+                                        surveySession: {
+                                            where: {
+                                                survey: {
+                                                    lectureId: lecturer?.id,
+                                                    clusterSurveyId: selectedId,
+                                                },
+                                            },
+                                            include: {
+                                                survey: true,
+                                            },
                                         },
                                     },
                                 },
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
                             },
-                        },
-                    },
-                    fixedClass: {
-                        include: {
-                            trainingCourse: true,
                         },
                     },
                 },
             },
-            surveySession: {
-                where: { surveyId: survey?.id },
+            orderBy: {
+                name: 'asc',
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        orderBy: {
-            firstName: 'asc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-    const { data: count } = useCountUserProfile({
-        where: { ...where, deletedAt: null },
-    })
+        {
+            enabled: lecturer?.survey && lecturer?.survey?.length > 0,
+        }
+    )
 
     const checkStatus = (record: any) => {
-        if (record?.surveySession?.length === 1) {
-            return <Tag color="green">{'Đã làm'}</Tag>
+        if (record?.student?.userProfile?.surveySession?.length > 0) {
+            const result = record?.student?.userProfile?.surveySession?.find(
+                (item: any) => item?.survey?.subjectClassId === record?.subjectClassId
+            )
+            if (result) {
+                return result
+            }
         }
-        return <Tag color={'red'}>{'Chưa làm'}</Tag>
+        return null
     }
-    console.log(survey)
 
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const { onOpen } = useDisclosure<{ userId: string; surveyId: string; userName?: string }>({
+        tag: 'ReviewSurveyModal',
+    })
 
     return (
         <div>
@@ -165,54 +262,87 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
                     <>
                         <Col span={24}>
                             <Flex justify="end">
-                                <ExportStudentInSurvey query={where} survey={survey || null} />
+                                <ExportStudentInSurvey
+                                    query={where}
+                                    lecturer={lecturer || null}
+                                    selectedId={selectedId}
+                                />
                             </Flex>
                         </Col>
                         <Col span={24}>
-                            <Table
+                            <TableCollapse
+                                childrenFieldName="subjectClassStudent"
                                 rowKey={'id'}
                                 filters={filters}
+                                headerTitleKey={({ code, name }) =>
+                                    `${[code, name].filter(Boolean).join(' - ')}`
+                                }
                                 setFilters={(value) => {
                                     setFilters(value)
                                     setCurrentPage(1)
                                 }}
+                                scroll={{ y: 'calc(100vh - 225px)', x: 'max-content' }}
+                                className="w-full"
                                 columns={[
+                                    // {
+                                    //     title: 'STT',
+                                    //     width: 20,
+                                    //     align: 'center',
+                                    //     render: (_, __, index) =>
+                                    //         index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    // },
                                     {
-                                        title: 'STT',
-                                        width: 20,
-                                        align: 'center',
-                                        render: (_, __, index) =>
-                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                    },
-                                    {
-                                        title: 'Mã người làm KS',
+                                        title: 'Mã SV',
                                         dataIndex: 'code',
+                                        width: 150,
                                         type: 'input',
-                                        render: (_, record) => record?.code || '',
+                                        render: (_, record) => record?.student?.code || '',
                                     },
                                     {
-                                        title: 'Người làm khảo sát',
+                                        title: 'Họ và tên',
                                         dataIndex: 'name',
                                         type: 'input',
                                         render: (_, record) => {
-                                            return `${record?.lastName || ''} ${record?.firstName || ''}`
+                                            return `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`
+                                        },
+                                    },
+                                    {
+                                        title: 'Ngày sinh',
+                                        dataIndex: 'dateOfBirth',
+                                        width: 120,
+                                        align: 'center',
+                                        type: 'date',
+                                        render: (_, record) => {
+                                            return record?.student?.userProfile?.dateOfBirth
+                                                ? dayjs(
+                                                      record?.student?.userProfile?.dateOfBirth
+                                                  ).format('DD/MM/YYYY')
+                                                : ''
                                         },
                                     },
                                     {
                                         title: 'CCCD',
                                         dataIndex: 'idCardNumber',
+                                        width: 120,
+                                        align: 'center',
                                         type: 'input',
-                                        render: (_, record) => record?.idCardNumber || '',
+                                        render: (_, record) =>
+                                            record?.student?.userProfile?.idCardNumber || '',
                                     },
                                     {
                                         title: 'SĐT',
                                         dataIndex: 'phoneNumber',
+                                        width: 120,
+                                        align: 'center',
                                         type: 'input',
-                                        render: (_, record) => record?.phoneNumber || '',
+                                        render: (_, record) =>
+                                            record?.student?.userProfile?.phoneNumber || '',
                                     },
                                     {
                                         title: 'Lớp quản lý',
                                         dataIndex: 'fixedClassIds',
+                                        width: 120,
+                                        align: 'center',
                                         type: 'select',
                                         options:
                                             fixedClasses?.map((fc) => ({
@@ -220,13 +350,15 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
                                                 label: fc.name,
                                             })) || [],
                                         render: (_, record) =>
-                                            record?.educationAndTraining?.length > 0
-                                                ? `${record?.educationAndTraining[0]?.fixedClass?.code || ''}`
+                                            record?.student
+                                                ? `${record?.student?.fixedClass?.code || ''}`
                                                 : '',
                                     },
                                     {
                                         title: 'Khoá',
                                         dataIndex: 'trainingCourseIds',
+                                        width: 120,
+                                        align: 'center',
                                         type: 'select',
                                         options:
                                             trainingCourses?.map((tc) => ({
@@ -234,15 +366,16 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
                                                 label: tc.name,
                                             })) || [],
                                         render: (_, record) =>
-                                            record?.educationAndTraining?.length > 0
-                                                ? `${record?.educationAndTraining[0]?.fixedClass?.trainingCourse?.name || ''}`
+                                            record?.student
+                                                ? `${record?.student?.fixedClass?.trainingCourse?.name || ''}`
                                                 : '',
                                     },
                                     {
-                                        title: 'Trạng thái KS',
+                                        title: 'Trạng thái',
                                         dataIndex: 'statusSurvey',
                                         align: 'center',
                                         type: 'select',
+                                        width: 120,
                                         options: [
                                             {
                                                 value: true,
@@ -254,24 +387,56 @@ function DanhSachHocVien({ survey }: { survey: Survey | null }) {
                                             },
                                         ],
                                         render: (__, record) => {
-                                            return checkStatus(record)
+                                            return checkStatus(record) ? (
+                                                <Tag color="green">Đã làm</Tag>
+                                            ) : (
+                                                <Tag color="red">Chưa làm</Tag>
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Thao tác',
+                                        align: 'center',
+                                        width: 70,
+                                        render: (_, record) => {
+                                            const result = checkStatus(record)
+                                            return (
+                                                <Row className="justify-center gap-0">
+                                                    {can(
+                                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                                        'XEM_TAT_CA'
+                                                    ) && (
+                                                        <Tooltip
+                                                            title="Xem khảo sát"
+                                                            placement="top"
+                                                        >
+                                                            <Eye
+                                                                className={`m-0 ${!result ? 'opacity-[0.5] pointer-events-none !cursor-not-allowed' : ''}`}
+                                                                size={14}
+                                                                onClick={() => {
+                                                                    if (!!result) {
+                                                                        onOpen({
+                                                                            userId:
+                                                                                record?.student
+                                                                                    ?.userProfile
+                                                                                    ?.id || '',
+                                                                            surveyId:
+                                                                                result?.surveyId ||
+                                                                                '',
+                                                                            userName: `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`,
+                                                                        })
+                                                                    }
+                                                                }}
+                                                            />
+                                                        </Tooltip>
+                                                    )}
+                                                </Row>
+                                            )
                                         },
                                     },
                                 ]}
                                 data={data || []}
-                                pagination={{
-                                    current: currentPage,
-                                    pageSize: numberOfPages,
-                                    total: count,
-                                    onChange: (page, pageSize) => {
-                                        if (numberOfPages === pageSize) {
-                                            setCurrentPage(page)
-                                        } else {
-                                            setCurrentPage(1)
-                                            setNumberOfPages(pageSize)
-                                        }
-                                    },
-                                }}
+                                pagination={false}
                             />
                         </Col>
                     </>

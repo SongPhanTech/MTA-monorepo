@@ -1,21 +1,16 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@components/commons/typeFilter'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { useCountStandardPeriod, useFindManyStandardPeriod } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, Row } from 'antd'
-import { Search } from 'lucide-react'
+import { useFindManyStandardPeriod } from '@workspace/db/hooks'
+import { Button, Col, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationStandardTab() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
-        searchText: '',
     })
 
     const { onOpen } = useDisclosure<{
@@ -27,12 +22,6 @@ export default function EvaluationStandardTab() {
 
     const where = useMemo(
         () => ({
-            ...(filters.searchText && {
-                name: {
-                    contains: filters.searchText,
-                    mode: 'insensitive' as const,
-                },
-            }),
             ...(filters.name && {
                 criteria: {
                     some: {
@@ -44,7 +33,7 @@ export default function EvaluationStandardTab() {
                 },
             }),
         }),
-        [filters.searchText, filters.name]
+        [filters.name]
     )
 
     const { data, isLoading, refetch } = useFindManyStandardPeriod(
@@ -59,53 +48,21 @@ export default function EvaluationStandardTab() {
             orderBy: {
                 order: 'asc',
             },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!selectedEvaluationPeriodId,
         }
     )
 
-    const { data: count } = useCountStandardPeriod({
-        where: {
-            ...where,
-            periodId: selectedEvaluationPeriodId,
-        },
-    })
-
     return (
         <Row gutter={[8, 0]}>
             <Col span={24}>
-                <Row gutter={[8, 8]} align="middle" justify="space-between">
-                    <Col flex="auto" style={{ maxWidth: '400px' }}>
-                        <Form.Item name="searchText" className="mb-0">
-                            <Input
-                                id="search"
-                                onChange={(e) =>
-                                    setFilters({
-                                        ...filters,
-                                        searchText: e.target.value,
-                                    })
-                                }
-                                className="py-0 h-8"
-                                placeholder="Tìm kiếm tiêu chuẩn đánh giá CTĐT"
-                                prefix={
-                                    <Search
-                                        size={15}
-                                        style={{
-                                            color: 'rgba(0, 0, 0, 0.25)',
-                                        }}
-                                    />
-                                }
-                                allowClear
-                            />
-                        </Form.Item>
-                    </Col>
+                <Row gutter={[8, 8]} align="middle" justify="end">
                     <Col>
                         {!data || data.length === 0 ? (
                             <Button
                                 type="primary"
+                                size="small"
                                 onClick={() => {
                                     onOpen({
                                         refetch,
@@ -117,6 +74,7 @@ export default function EvaluationStandardTab() {
                         ) : (
                             <Button
                                 type="primary"
+                                size="small"
                                 onClick={() => {
                                     onOpen({ id: data[0]?.id, refetch })
                                 }}
@@ -139,10 +97,10 @@ export default function EvaluationStandardTab() {
                     filters={filters}
                     setFilters={(value) => {
                         setFilters(value)
-                        setCurrentPage(1)
                     }}
                     loading={isLoading}
-                    scroll={{ y: 'calc(100vh - 260px)' }}
+                    scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
+                    className="w-full mt-2"
                     columns={[
                         {
                             title: 'Thứ tự',
@@ -159,19 +117,7 @@ export default function EvaluationStandardTab() {
                         },
                     ]}
                     data={data}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
+                    pagination={false}
                 />
             </Col>
         </Row>

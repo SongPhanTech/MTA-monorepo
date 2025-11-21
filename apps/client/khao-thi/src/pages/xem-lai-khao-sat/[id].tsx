@@ -20,7 +20,6 @@ type GroupedSurveyQuestion = {
     }[]
 }
 
-
 function TakeTestPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()

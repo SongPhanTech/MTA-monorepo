@@ -452,33 +452,33 @@ app.openapi(classRegister, async (c) => {
     })
 
     // now directly register here, need to implement a job queue
-    // await prisma.$transaction(async (tx) => {
-    //     for (const subjectClassId of subjectClassIds) {
-    //         const isExist = await tx.studentSubjectScore.findFirst({
-    //             where: {
-    //                 studentId,
-    //                 subjectClassId,
-    //             },
-    //         })
-    //         if (isExist) {
-    //             throw new Error('Bạn đã đăng ký học phần này rồi')
-    //         }
-    //         const subjectClass = await tx.subjectClass.findUniqueOrThrow({
-    //             where: { id: subjectClassId },
-    //             include: { subject: true, _count: { select: { subjectClassStudent: true } } },
-    //         })
-    //         if ((subjectClass.maxStudent || 0) <= (subjectClass._count?.subjectClassStudent || 0)) {
-    //             throw new Error('Lớp học đã đủ số lượng sinh viên')
-    //         }
-    //         await tx.studentSubjectScore.create({
-    //             data: {
-    //                 subjectClassId,
-    //                 studentId,
-    //                 subjectVersionId: subjectClass.subjectId,
-    //             },
-    //         })
-    //     }
-    // })
+    await prisma.$transaction(async (tx) => {
+        for (const subjectClassId of subjectClassIds) {
+            const isExist = await tx.studentSubjectScore.findFirst({
+                where: {
+                    studentId,
+                    subjectClassId,
+                },
+            })
+            if (isExist) {
+                throw new Error('Bạn đã đăng ký học phần này rồi')
+            }
+            const subjectClass = await tx.subjectClass.findUniqueOrThrow({
+                where: { id: subjectClassId },
+                include: { subject: true, _count: { select: { subjectClassStudent: true } } },
+            })
+            if ((subjectClass.maxStudent || 0) <= (subjectClass._count?.subjectClassStudent || 0)) {
+                throw new Error('Lớp học đã đủ số lượng sinh viên')
+            }
+            await tx.studentSubjectScore.create({
+                data: {
+                    subjectClassId,
+                    studentId,
+                    subjectVersionId: subjectClass.subjectId,
+                },
+            })
+        }
+    })
 
     return c.json({ message: 'success' }, 200)
 })

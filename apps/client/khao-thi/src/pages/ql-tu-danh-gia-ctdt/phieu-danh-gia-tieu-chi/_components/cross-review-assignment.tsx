@@ -8,6 +8,7 @@ import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
+    useUpdateEvaluationPeriod,
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
@@ -247,6 +248,7 @@ export default function CrossReviewAssignment() {
     }, [data, form])
 
     const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
 
     const handleSave = async () => {
         try {
@@ -263,6 +265,12 @@ export default function CrossReviewAssignment() {
                         : undefined,
                 }))
                 .filter((item) => item.reviewerId || item.deadlineReview)
+
+            if (submitData.length === 0) {
+                message.error('Vui lòng nhập ít nhất một phân công phản biện')
+                hideSpinner()
+                return
+            }
 
             await Promise.all(
                 submitData.map((item) =>
@@ -283,6 +291,15 @@ export default function CrossReviewAssignment() {
                 )
             )
 
+            await updateEvaluationPeriod({
+                where: {
+                    id: selectedEvaluationPeriodId,
+                },
+                data: {
+                    status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW,
+                },
+            })
+
             message.success('Lưu phân công phản biện chéo thành công')
             refetch()
         } catch (error: any) {
@@ -295,12 +312,10 @@ export default function CrossReviewAssignment() {
     return (
         <Row gutter={0}>
             <Col span={24}>
-                <h1 className="text-xl font-bold text-gray-800 mb-2">Phân công phản biện chéo</h1>
-                <p className="text-gray-600 text-base">Đợt đánh giá: {data?.name}</p>
                 <Flex justify="flex-end" gap={8} className="pb-2">
                     <Button
                         type="primary"
-                        className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border-0 shadow-sm disabled:from-purple-200 disabled:to-purple-300 disabled:cursor-not-allowed disabled:text-purple-700 h-8 px-4"
+                        size="small"
                         disabled={getSelectedCriteria().length === 0}
                         onClick={() =>
                             onOpen({
@@ -312,8 +327,8 @@ export default function CrossReviewAssignment() {
                     >
                         Phân công hàng loạt
                     </Button>
-                    <Button type="primary" onClick={handleSave}>
-                        Lưu
+                    <Button type="primary" size="small" onClick={handleSave}>
+                        Lưu phản biện
                     </Button>
                 </Flex>
             </Col>
@@ -330,6 +345,9 @@ export default function CrossReviewAssignment() {
                             type: 'checkbox',
                             selectedRowKeys,
                             onChange: onSelectChange,
+                        }}
+                        expandable={{
+                            expandRowByClick: false,
                         }}
                         onRow={(record) => ({
                             onClick: (e) => {
@@ -383,7 +401,7 @@ export default function CrossReviewAssignment() {
                         loading={isLoading}
                         data={tableData}
                         pagination={false}
-                        scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
+                        scroll={{ y: 'calc(100vh - 240px)', x: 'max-content' }}
                         className="w-full"
                         columns={[
                             {

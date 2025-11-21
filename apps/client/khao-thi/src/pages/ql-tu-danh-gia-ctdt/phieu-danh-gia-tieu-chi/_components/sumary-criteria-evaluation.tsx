@@ -19,7 +19,7 @@ export default function SumaryOfCriteriaEvaluation() {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.COMPLETED,
+                                    status: $Enums.EvaluationStatus.APPROVED,
                                 },
                             },
                             include: {
@@ -65,7 +65,6 @@ export default function SumaryOfCriteriaEvaluation() {
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',
-                                width: '175px',
                             }}
                         />
                     ) : (

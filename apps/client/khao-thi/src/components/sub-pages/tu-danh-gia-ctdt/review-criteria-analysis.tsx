@@ -1,20 +1,25 @@
+import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import DatePicker from '@components/commons/date-picker'
-import FormItem from '@components/commons/form-item'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
+import { getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { ReviewDataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/review-criteria-analysis'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
-import { $Enums, type EvaluationCriterionComment } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 import {
     useCreateEvaluationCriterionComment,
     useUpdateAnalysisCriterion,
     useUpdateEvaluationCriterion,
+    useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Empty, Form, message, Tag, Tooltip } from 'antd'
@@ -22,8 +27,14 @@ import dayjs from 'dayjs'
 import { SquareX } from 'lucide-react'
 import { useState } from 'react'
 
-type CommentType = EvaluationCriterionComment & {
-    newDeadline?: Date
+type CommentType = {
+    comment: Record<
+        string,
+        {
+            content?: string
+            newDeadline?: Date
+        }
+    >
 }
 
 type Props = {
@@ -35,36 +46,17 @@ type Props = {
 const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
     const { can } = useAbility()
+    const [form] = Form.useForm<CommentType>()
 
     const DEADLINE_OPTIONS = [
         { value: 'overdue', label: 'Quá hạn' },
         { value: 'near', label: 'Sắp quá hạn' },
     ]
-
-    const getDeadlineStatus = (deadline: Date | string) => {
-        const now = dayjs()
-        const deadlineDate = dayjs(deadline)
-        const daysUntilDeadline = deadlineDate.diff(now, 'day')
-
-        if (daysUntilDeadline < 0) {
-            return {
-                color: 'red',
-                text: 'Quá hạn',
-            }
-        }
-        if (daysUntilDeadline <= 3) {
-            return {
-                color: 'orange',
-                text: 'Sắp quá hạn',
-            }
-        }
-
-        return { color: 'blue', text: '' }
-    }
 
     const filteredCriteria = data?.criteria?.filter((item) => {
         if (!item.analysisCriterions) return false
@@ -84,8 +76,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
         return true
     })
 
-    const [form] = Form.useForm<CommentType>()
-
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
             prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
@@ -95,6 +85,73 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
     const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
     const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+
+    const handleCheckAndChangeStatus = async () => {
+        if (!selectedEvaluationPeriodId) return
+        try {
+            const totalCriteria = await sqlTransaction([
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            const checkStatus =
+                role === 'BAN_TU_VAN'
+                    ? $Enums.EvaluationCriterionStatus.APPROVED
+                    : $Enums.EvaluationCriterionStatus.COMPLETED
+
+            const submittedCriteria = await sqlTransaction([
+                {
+                    model: 'AnalysisCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            status: checkStatus,
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            if (
+                (totalCriteria.data[0] as number) > 0 &&
+                totalCriteria.data[0] === submittedCriteria.data[0]
+            ) {
+                const newStatus =
+                    role === 'BAN_TU_VAN'
+                        ? $Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW
+                        : $Enums.EvaluationPeriodStatus.EVALUATION_WRITING
+
+                await updateEvaluationPeriod({
+                    where: {
+                        id: selectedEvaluationPeriodId,
+                    },
+                    data: {
+                        status: newStatus,
+                    },
+                })
+            }
+        } catch (error) {
+            console.error('Error updating evaluation period status:', error)
+        }
+    }
 
     const handleApproveCriterionAnalysis = async (analysisCriterionId: string) => {
         try {
@@ -107,6 +164,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                     status: $Enums.EvaluationCriterionStatus.APPROVED,
                 },
             })
+
+            await handleCheckAndChangeStatus()
 
             message.success('Phê duyệt tiêu chí thành công')
         } catch (error) {
@@ -126,6 +185,18 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
             if (!values) return
             showSpinner()
 
+            const commentData = values.comment[requirementCriterionId]
+
+            const filteredCommentData = Object.entries(commentData).reduce(
+                (acc, [key, value]) => {
+                    if (value !== undefined && value !== null) {
+                        acc[key] = value
+                    }
+                    return acc
+                },
+                {} as Record<string, any>
+            )
+
             const updateData: {
                 status: $Enums.EvaluationCriterionStatus
                 deadline?: string
@@ -133,9 +204,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                 status: $Enums.EvaluationCriterionStatus.REVISION,
             }
 
-            // Nếu quá hạn và có gia hạn mới thì cập nhật deadline
-            if (isOverdue && values.newDeadline) {
-                updateData.deadline = dayjs(values.newDeadline).toISOString()
+            if (isOverdue && filteredCommentData?.newDeadline) {
+                updateData.deadline = dayjs(filteredCommentData.newDeadline).toISOString()
             }
 
             await updateAnalysisCriterion({
@@ -150,7 +220,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                     reviewerId: idProfile,
                     requirementCriterionId: requirementCriterionId,
                     analysisCriterionId: analysisCriterionId,
-                    content: values.content,
+                    content: filteredCommentData?.content,
                 },
             })
 
@@ -178,6 +248,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                     status: $Enums.EvaluationCriterionStatus.COMPLETED,
                 },
             })
+
+            await handleCheckAndChangeStatus()
 
             await updateEvaluationCriterion({
                 where: {
@@ -225,12 +297,13 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                     <span className="font-bold">Tiêu chí {idx + 1}: </span>
                                     <span>{item?.name}</span>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center">
                                     <span className="text-sm text-gray-600">
                                         Người thực hiện:{' '}
                                         {item?.analysisCriterions?.lecturer?.userProfile
                                             ?.fullname || 'Chưa phân công'}
                                     </span>
+
                                     {item?.analysisCriterions?.deadline && (
                                         <Tag
                                             color={
@@ -242,6 +315,19 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             {getDeadlineStatus(item.analysisCriterions.deadline)
                                                 .text &&
                                                 ` (${getDeadlineStatus(item.analysisCriterions.deadline).text})`}
+                                        </Tag>
+                                    )}
+                                    {item?.analysisCriterions?.status && (
+                                        <Tag
+                                            color={
+                                                getStatusEvaluation(item.analysisCriterions.status)
+                                                    ?.color
+                                            }
+                                        >
+                                            {
+                                                getStatusEvaluation(item.analysisCriterions.status)
+                                                    ?.label
+                                            }
                                         </Tag>
                                     )}
                                 </div>
@@ -346,6 +432,12 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             title: 'Thao tác',
                                             width: 100,
                                             align: 'center',
+                                            hidden:
+                                                item.analysisCriterions?.status ===
+                                                    $Enums.EvaluationCriterionStatus.COMPLETED ||
+                                                (role === 'BAN_TU_VAN' &&
+                                                    item.analysisCriterions?.status ===
+                                                        $Enums.EvaluationCriterionStatus.APPROVED),
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
@@ -421,71 +513,70 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                 deadline && dayjs(deadline).diff(dayjs(), 'day') < 0
 
                                             return (
-                                                <div>
-                                                    <Form form={form}>
-                                                        <FormItem
-                                                            label="Yêu cầu chỉnh sửa"
-                                                            form={form}
-                                                            name="content"
+                                                <Form form={form} layout="vertical">
+                                                    <Form.Item
+                                                        label="Yêu cầu chỉnh sửa"
+                                                        name={['comment', record.id, 'content']}
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                message:
+                                                                    'Vui lòng nhập yêu cầu chỉnh sửa',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        <RichTextEditor />
+                                                    </Form.Item>
+                                                    {isOverdue && (
+                                                        <Form.Item
+                                                            label="Gia hạn mới"
+                                                            name={[
+                                                                'comment',
+                                                                record.id,
+                                                                'newDeadline',
+                                                            ]}
                                                             rules={[
                                                                 {
                                                                     required: true,
                                                                     message:
-                                                                        'Vui lòng nhập yêu cầu chỉnh sửa',
+                                                                        'Vui lòng chọn ngày gia hạn mới',
                                                                 },
                                                             ]}
                                                         >
-                                                            <RichTextEditor />
-                                                        </FormItem>
-                                                        {isOverdue && (
-                                                            <FormItem
-                                                                label="Gia hạn mới"
-                                                                form={form}
-                                                                name="newDeadline"
-                                                                rules={[
-                                                                    {
-                                                                        required: true,
-                                                                        message:
-                                                                            'Vui lòng chọn ngày gia hạn mới',
-                                                                    },
-                                                                ]}
-                                                            >
-                                                                <DatePicker
-                                                                    format="DD/MM/YYYY"
-                                                                    placeholder="Chọn ngày gia hạn"
-                                                                    disabledDate={(current) =>
-                                                                        current &&
-                                                                        current <
-                                                                            dayjs().startOf('day')
-                                                                    }
-                                                                    className="w-full"
-                                                                />
-                                                            </FormItem>
-                                                        )}
-                                                        <div className="flex justify-end gap-2 mt-3">
-                                                            <Button
-                                                                onClick={() => {
-                                                                    form.resetFields()
-                                                                    toggleCommentRow(record.id)
-                                                                }}
-                                                            >
-                                                                Hủy
-                                                            </Button>
-                                                            <Button
-                                                                type="primary"
-                                                                onClick={() =>
-                                                                    handleRejectCriterionAnalysis(
-                                                                        record.analysisCriterionId,
-                                                                        record.id,
-                                                                        !!isOverdue
-                                                                    )
+                                                            <DatePicker
+                                                                format="DD/MM/YYYY"
+                                                                placeholder="Chọn ngày gia hạn"
+                                                                disabledDate={(current) =>
+                                                                    current &&
+                                                                    current < dayjs().startOf('day')
                                                                 }
-                                                            >
-                                                                Gửi yêu cầu
-                                                            </Button>
-                                                        </div>
-                                                    </Form>
-                                                </div>
+                                                                className="w-full"
+                                                            />
+                                                        </Form.Item>
+                                                    )}
+                                                    <div className="flex justify-end gap-2 mt-2">
+                                                        <Button
+                                                            onClick={() => {
+                                                                form.resetFields()
+                                                                toggleCommentRow(record.id)
+                                                            }}
+                                                        >
+                                                            Hủy
+                                                        </Button>
+                                                        <Button
+                                                            type="primary"
+                                                            onClick={() =>
+                                                                handleRejectCriterionAnalysis(
+                                                                    record.analysisCriterionId,
+                                                                    record.id,
+                                                                    !!isOverdue
+                                                                )
+                                                            }
+                                                        >
+                                                            Gửi yêu cầu
+                                                        </Button>
+                                                    </div>
+                                                </Form>
                                             )
                                         },
                                         rowExpandable: (record) =>
