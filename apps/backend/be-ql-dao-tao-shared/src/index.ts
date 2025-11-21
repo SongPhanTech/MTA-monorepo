@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import ClassFixedApp from './api/class-fixed'
 import CourseApp from './api/courses'
+import DepartmentApp from './api/get-department'
 import GetRegistrationApp from './api/get-registration'
 import TeacherApp from './api/lecturer'
 import RegistrationApp from './api/registration'
@@ -48,6 +49,7 @@ app.route('/', RegistrationSessionApp)
 app.route('/', SemesterApp)
 app.route('/', CourseApp)
 app.route('/', SchedulesApp)
+app.route('/', DepartmentApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
