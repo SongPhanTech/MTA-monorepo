@@ -10,9 +10,10 @@ import GetRegistrationApp from './api/get-registration'
 import TeacherApp from './api/lecturer'
 import RegistrationApp from './api/registration'
 import RegistrationSessionApp from './api/registration-session'
-import SemesterApp from './api/semester'
+import SemesterApp from './api/Semester'
 import SubjectApp from './api/subject'
 import { setupOpenApi } from './utils/openapi'
+import SchedulesApp from './api/student-schedule'
 export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
@@ -44,6 +45,7 @@ app.route('/', RegistrationApp)
 app.route('/', RegistrationSessionApp)
 app.route('/', SemesterApp)
 app.route('/', CourseApp)
+app.route('/', SchedulesApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
