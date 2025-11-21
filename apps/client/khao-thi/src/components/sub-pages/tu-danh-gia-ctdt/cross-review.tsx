@@ -1,9 +1,13 @@
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
+import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { DataTabCrossReviewType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
+import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Collapse, Form, message, Card, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -13,12 +17,19 @@ export type PutRequirementCriterion = {
     criteria: Record<string, any>
 }
 
-export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewType }) {
+export default function CrossReviewSubPage({
+    data,
+    onRefetch,
+}: {
+    data: DataTabCrossReviewType
+    onRefetch: () => void
+}) {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [commentForm] = Form.useForm<{ crossReview: string }>()
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
 
     const { hideSpinner, showSpinner } = useSpinner()
     const [showComments, setShowComments] = useState(false)
@@ -76,10 +87,70 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
 
             message.success('Gửi ý kiến phản biện thành công')
             commentForm.resetFields()
+            onRefetch()
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại')
         } finally {
             hideSpinner()
+        }
+    }
+
+    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+
+    const checkAndUpdateEvaluationPeriodStatus = async () => {
+        if (!selectedEvaluationPeriodId) return
+
+        try {
+            const totalCriteria = await sqlTransaction([
+                {
+                    model: 'EvaluationCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            const submittedEvaluationCriterion = await sqlTransaction([
+                {
+                    model: 'EvaluationCriterion',
+                    operation: 'count',
+                    data: {
+                        where: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: selectedEvaluationPeriodId,
+                                },
+                            },
+                            status: $Enums.EvaluationStatus.APPROVED,
+                            deletedAt: null,
+                        },
+                    },
+                },
+            ])
+
+            if (
+                (totalCriteria.data[0] as number) > 0 &&
+                totalCriteria.data[0] === submittedEvaluationCriterion.data[0]
+            ) {
+                await updateEvaluationPeriod({
+                    where: {
+                        id: selectedEvaluationPeriodId,
+                    },
+                    data: {
+                        status: $Enums.EvaluationPeriodStatus.CONSOLIDATION,
+                    },
+                })
+            }
+        } catch (error) {
+            console.error('Error updating evaluation period status:', error)
         }
     }
 
@@ -107,7 +178,7 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                                         criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
                                     },
                                     data: {
-                                        status: $Enums.EvaluationStatus.COMPLETED,
+                                        status: $Enums.EvaluationStatus.APPROVED,
                                     },
                                 },
                             }
@@ -117,11 +188,16 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
             }
 
             const res = await sqlTransaction(listSqlTransaction)
+
             if (res.status !== 200) {
                 message.error('Có lỗi xảy ra, vui lòng thử lại')
                 return
             }
+
+            await checkAndUpdateEvaluationPeriodStatus()
+
             message.success('Phê duyệt thành công')
+            onRefetch()
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại')
         } finally {
@@ -153,40 +229,43 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
     const evaluatorName = firstEvaluationCriterion?.lecturer?.userProfile?.fullname
     const reviewDeadline = firstEvaluationCriterion?.deadlineReview
     const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
+    const status = firstEvaluationCriterion?.status
+    const statusConfig = getStatusConfig(status || $Enums.EvaluationStatus.LOCK)
 
     return (
         <div className="overflow-x-hidden">
             <div className="flex justify-between items-center gap-2 mb-2 pt-2">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 flex-wrap">
                     {evaluatorName && (
-                        <div className="text-sm">
+                        <span className="text-sm">
                             <span className="font-semibold">Người viết đánh giá:</span>{' '}
                             {evaluatorName}
+                        </span>
+                    )}
+                    {reviewDeadline && deadlineStatus && (
+                        <Tag color={deadlineStatus.color}>
+                            Hạn phản biện: {dayjs(reviewDeadline).format('DD/MM/YYYY')}
+                            {deadlineStatus.text && ` (${deadlineStatus.text})`}
+                        </Tag>
+                    )}
+                    <Tag color={statusConfig.color}>{statusConfig.text}</Tag>
+                </div>
+                {status !== $Enums.EvaluationStatus.APPROVED &&
+                    status !== $Enums.EvaluationStatus.COMPLETED && (
+                        <div className="flex gap-2">
+                            <Button
+                                type="primary"
+                                size="small"
+                                className="bg-yellow-400"
+                                onClick={() => setShowComments(!showComments)}
+                            >
+                                Gửi ý kiến phản biện
+                            </Button>
+                            <Button type="primary" size="small" onClick={handleSubmitCross}>
+                                Phê duyệt
+                            </Button>
                         </div>
                     )}
-                    {reviewDeadline && (
-                        <div className="flex items-center gap-2 text-sm">
-                            <span className="font-semibold">Hạn phản biện:</span>
-                            <span>{dayjs(reviewDeadline).format('DD/MM/YYYY')}</span>
-                            {deadlineStatus?.text && (
-                                <Tag color={deadlineStatus.color}>{deadlineStatus.text}</Tag>
-                            )}
-                        </div>
-                    )}
-                </div>
-                <div className="flex gap-2">
-                    <Button
-                        type="primary"
-                        size="small"
-                        className="bg-yellow-400"
-                        onClick={() => setShowComments(!showComments)}
-                    >
-                        Gửi ý kiến phản biện
-                    </Button>
-                    <Button type="primary" size="small" onClick={handleSubmitCross}>
-                        Phê duyệt
-                    </Button>
-                </div>
             </div>
 
             <Form form={form} layout="vertical" className="form-evidence">
@@ -304,7 +383,13 @@ export default function CrossReviewSubPage({ data }: { data: DataTabCrossReviewT
                             >
                                 Hủy
                             </Button>
-                            <Button type="primary" onClick={handleSendCrossReview}>
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    handleSendCrossReview()
+                                    setShowComments(false)
+                                }}
+                            >
                                 Gửi ý kiến
                             </Button>
                         </div>

@@ -19,7 +19,7 @@ export default function SumaryOfCriteriaEvaluation() {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
-                                    status: $Enums.EvaluationStatus.COMPLETED,
+                                    status: $Enums.EvaluationStatus.APPROVED,
                                 },
                             },
                             include: {

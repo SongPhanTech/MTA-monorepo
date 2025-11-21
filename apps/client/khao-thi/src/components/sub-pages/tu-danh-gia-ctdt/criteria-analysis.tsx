@@ -89,13 +89,7 @@ const CriteriaAnalysisSubPage = ({
                                     periodId: selectedEvaluationPeriodId,
                                 },
                             },
-                            status: {
-                                in: [
-                                    $Enums.EvaluationCriterionStatus.SUBMITTED,
-                                    $Enums.EvaluationCriterionStatus.APPROVED,
-                                    $Enums.EvaluationCriterionStatus.COMPLETED,
-                                ],
-                            },
+                            status: $Enums.EvaluationCriterionStatus.SUBMITTED,
                             deletedAt: null,
                         },
                     },
@@ -266,6 +260,7 @@ const CriteriaAnalysisSubPage = ({
                                                     >
                                                         <Button
                                                             type="primary"
+                                                            size="small"
                                                             className="bg-blue-500"
                                                         >
                                                             Nộp tiêu chí
@@ -287,6 +282,7 @@ const CriteriaAnalysisSubPage = ({
                                                     $Enums.EvaluationCriterionStatus.REVISION && (
                                                     <Button
                                                         type="primary"
+                                                        size="small"
                                                         onClick={() =>
                                                             onOpen({
                                                                 analysisCriterionId:
