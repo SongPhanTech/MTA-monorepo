@@ -394,10 +394,10 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
             )
         })
     )
-    const data={
+    const data = {
         choices: cluster.surveyChoice,
         choicesAnswer: cluster.surveyChoice.map((c) => c.answer),
-        data:statsRaw
+        data: statsRaw,
     }
 
     return c.json(data, 200)

@@ -53,7 +53,7 @@ export default function ClussterSurveyPage() {
         {
             key: '4',
             label: 'Báo cáo khảo sát',
-            children: <ClusterSurveyReport selectedId={selectedId} surveyName=''/>,
+            children: <ClusterSurveyReport selectedId={selectedId} surveyName="" />,
             disabled: !selectedId,
         },
         {

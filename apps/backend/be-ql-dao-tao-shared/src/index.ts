@@ -13,6 +13,7 @@ import TeacherApp from './api/lecturer'
 import RegistrationApp from './api/registration'
 import RegistrationSessionApp from './api/registration-session'
 import SemesterApp from './api/Semester'
+import SpecializedApp from './api/specialized'
 import SchedulesApp from './api/student-schedule'
 import SubjectApp from './api/subject'
 import { setupOpenApi } from './utils/openapi'
@@ -50,6 +51,7 @@ app.route('/', SemesterApp)
 app.route('/', CourseApp)
 app.route('/', SchedulesApp)
 app.route('/', DepartmentApp)
+app.route('/', SpecializedApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
