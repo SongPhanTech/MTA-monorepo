@@ -90,7 +90,11 @@ export default function EvaluationPeriodTabPage() {
             )
         }
 
-        if (isVicePersident || BYPASS_PERMISSION_CHECK) {
+        if (
+            isVicePersident ||
+            BYPASS_PERMISSION_CHECK ||
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
+        ) {
             tabs.push({
                 key: '4',
                 label: 'Phân công giảng viên',

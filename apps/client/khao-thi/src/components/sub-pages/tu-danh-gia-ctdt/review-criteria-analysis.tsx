@@ -437,7 +437,12 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                     $Enums.EvaluationCriterionStatus.COMPLETED ||
                                                 (role === 'BAN_TU_VAN' &&
                                                     item.analysisCriterions?.status ===
-                                                        $Enums.EvaluationCriterionStatus.APPROVED),
+                                                        $Enums.EvaluationCriterionStatus
+                                                            .APPROVED) ||
+                                                can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                    'DUYET'
+                                                ),
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">

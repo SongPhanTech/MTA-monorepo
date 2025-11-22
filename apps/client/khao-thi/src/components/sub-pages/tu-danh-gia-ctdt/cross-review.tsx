@@ -7,7 +7,11 @@ import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gi
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
-import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
+import {
+    useFindFirstEvaluationCouncilMember,
+    useFindUniqueLecturer,
+    useUpdateEvaluationPeriod,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Collapse, Form, message, Card, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -30,6 +34,36 @@ export default function CrossReviewSubPage({
 
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+
+    const { data: lecturer } = useFindUniqueLecturer(
+        {
+            where: {
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const { data: councilMember } = useFindFirstEvaluationCouncilMember(
+        {
+            where: {
+                lecturerId: lecturer?.id || '',
+                evaluationCouncil: {
+                    periodId: selectedEvaluationPeriodId || '',
+                },
+            },
+            include: {
+                evaluationCouncil: true,
+            },
+        },
+        {
+            enabled: !!lecturer?.id && !!selectedEvaluationPeriodId,
+        }
+    )
+
+    const isCouncilMember = !!councilMember
 
     const { hideSpinner, showSpinner } = useSpinner()
     const [showComments, setShowComments] = useState(false)
@@ -250,7 +284,8 @@ export default function CrossReviewSubPage({
                     )}
                     <Tag color={statusConfig.color}>{statusConfig.text}</Tag>
                 </div>
-                {status !== $Enums.EvaluationStatus.APPROVED &&
+                {isCouncilMember &&
+                    status !== $Enums.EvaluationStatus.APPROVED &&
                     status !== $Enums.EvaluationStatus.COMPLETED && (
                         <div className="flex gap-2">
                             <Button
@@ -364,7 +399,7 @@ export default function CrossReviewSubPage({
                 </Form.List>
             </Form>
 
-            {showComments && (
+            {showComments && isCouncilMember && (
                 <Card>
                     <Form form={commentForm} layout="vertical">
                         <Form.Item
@@ -372,7 +407,7 @@ export default function CrossReviewSubPage({
                             name="crossReview"
                             rules={[{ required: true, message: 'Vui lòng nhập ý kiến phản biện' }]}
                         >
-                            <RichTextEditor />
+                            <RichTextEditor editable={isCouncilMember} />
                         </Form.Item>
                         <div className="flex justify-end gap-2">
                             <Button

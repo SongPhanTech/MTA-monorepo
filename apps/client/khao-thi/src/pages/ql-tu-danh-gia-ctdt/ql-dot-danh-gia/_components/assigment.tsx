@@ -6,8 +6,14 @@ import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
+import { useSession } from '@workspace/auth/react'
 import { $Enums, type Prisma } from '@workspace/db/client'
-import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
+import {
+    useFindFirstEvaluationCouncilMember,
+    useFindManyLecturer,
+    useFindUniqueEvaluationPeriod,
+    useFindUniqueLecturer,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -43,6 +49,9 @@ export default function AssigmentOfAssessmentTab() {
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
+
+    const { data: me } = useSession()
+    const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
@@ -103,6 +112,38 @@ export default function AssigmentOfAssessmentTab() {
         {
             enabled: !!selectedEvaluationPeriodId,
         }
+    )
+
+    const { data: lecturer } = useFindUniqueLecturer(
+        {
+            where: {
+                userProfileId: idProfile || '',
+            },
+        },
+        {
+            enabled: !!idProfile,
+        }
+    )
+
+    const { data: councilMember } = useFindFirstEvaluationCouncilMember(
+        {
+            where: {
+                lecturerId: lecturer?.id || '',
+                evaluationCouncil: {
+                    periodId: selectedEvaluationPeriodId || '',
+                },
+            },
+            include: {
+                evaluationCouncil: true,
+            },
+        },
+        {
+            enabled: !!lecturer?.id && !!selectedEvaluationPeriodId,
+        }
+    )
+
+    const isVicePersident = councilMember?.role?.includes(
+        $Enums.EvaluationMemberRole.VICE_PRESIDENT
     )
 
     const tableData = useMemo(() => {
@@ -287,28 +328,30 @@ export default function AssigmentOfAssessmentTab() {
 
     return (
         <Row gutter={0}>
-            <Col span={24}>
-                <Flex justify="flex-end" align="center" gap={8} className="pb-2">
-                    <Button
-                        type="primary"
-                        size="small"
-                        disabled={getSelectedCriteria().length === 0}
-                        onClick={() => {
-                            openPhanCongHangLoat({
-                                selectedCriteriaIds: getSelectedCriteria(),
-                                tableData: tableData,
-                                refetch: refetch,
-                                clearSelected: () => setSelectedRowKeys([]),
-                            })
-                        }}
-                    >
-                        Phân công hàng loạt
-                    </Button>
-                    <Button type="primary" onClick={handleSave} size="small">
-                        Lưu phân công
-                    </Button>
-                </Flex>
-            </Col>
+            {isVicePersident && (
+                <Col span={24}>
+                    <Flex justify="flex-end" align="center" gap={8} className="pb-2">
+                        <Button
+                            type="primary"
+                            size="small"
+                            disabled={getSelectedCriteria().length === 0}
+                            onClick={() => {
+                                openPhanCongHangLoat({
+                                    selectedCriteriaIds: getSelectedCriteria(),
+                                    tableData: tableData,
+                                    refetch: refetch,
+                                    clearSelected: () => setSelectedRowKeys([]),
+                                })
+                            }}
+                        >
+                            Phân công hàng loạt
+                        </Button>
+                        <Button type="primary" onClick={handleSave} size="small">
+                            Lưu phân công
+                        </Button>
+                    </Flex>
+                </Col>
+            )}
 
             <Col span={24}>
                 <Form form={form}>
@@ -400,6 +443,7 @@ export default function AssigmentOfAssessmentTab() {
                                         >
                                             <Select
                                                 placeholder="Chọn giáo viên"
+                                                disabled={!isVicePersident}
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
@@ -438,6 +482,7 @@ export default function AssigmentOfAssessmentTab() {
                                             <DatePicker
                                                 className="w-full"
                                                 format={'DD/MM/YYYY'}
+                                                disabled={!isVicePersident}
                                                 onClick={(e) => e.stopPropagation()}
                                                 disabledDate={(current) =>
                                                     current?.isBefore(dayjs(), 'day')
@@ -450,6 +495,7 @@ export default function AssigmentOfAssessmentTab() {
                             {
                                 title: 'Thao tác',
                                 width: 80,
+                                hidden: !isVicePersident,
                                 render: (_, record) => {
                                     return (
                                         <Flex justify="center" align="center" gap={8}>

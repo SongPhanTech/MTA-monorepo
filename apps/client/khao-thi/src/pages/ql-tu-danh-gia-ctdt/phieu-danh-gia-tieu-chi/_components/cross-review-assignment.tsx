@@ -11,6 +11,8 @@ import {
     useUpdateEvaluationPeriod,
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
@@ -60,6 +62,12 @@ export default function CrossReviewAssignment() {
     const [form] = Form.useForm<CrossReviewFormType>()
     const listForm = Form.useWatch('list', form) || {}
     const { showSpinner, hideSpinner } = useSpinner()
+    const { can } = useAbility()
+
+    const canApprove = can(
+        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        'DUYET'
+    )
 
     const { onOpen } = useDisclosure<PutPhanCongHangLoatCrossModalInput>({
         tag: 'PutPhanCongHangLoatCrossModal',
@@ -312,25 +320,27 @@ export default function CrossReviewAssignment() {
     return (
         <Row gutter={0}>
             <Col span={24}>
-                <Flex justify="flex-end" gap={8} className="pb-2">
-                    <Button
-                        type="primary"
-                        size="small"
-                        disabled={getSelectedCriteria().length === 0}
-                        onClick={() =>
-                            onOpen({
-                                refetch: refetch,
-                                selectedCriteriaIds: getSelectedCriteria(),
-                                tableData: tableData,
-                            })
-                        }
-                    >
-                        Phân công hàng loạt
-                    </Button>
-                    <Button type="primary" size="small" onClick={handleSave}>
-                        Lưu phản biện
-                    </Button>
-                </Flex>
+                {canApprove && (
+                    <Flex justify="flex-end" gap={8} className="pb-2">
+                        <Button
+                            type="primary"
+                            size="small"
+                            disabled={getSelectedCriteria().length === 0}
+                            onClick={() =>
+                                onOpen({
+                                    refetch: refetch,
+                                    selectedCriteriaIds: getSelectedCriteria(),
+                                    tableData: tableData,
+                                })
+                            }
+                        >
+                            Phân công hàng loạt
+                        </Button>
+                        <Button type="primary" size="small" onClick={handleSave}>
+                            Lưu phản biện
+                        </Button>
+                    </Flex>
+                )}
             </Col>
 
             <Col span={24}>
@@ -432,6 +442,7 @@ export default function CrossReviewAssignment() {
                                                 placeholder="Chọn người phản biện"
                                                 className="w-full"
                                                 onClick={(e) => e.stopPropagation()}
+                                                disabled={!canApprove}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
                                                         i.lecturer.userProfile?.academicRankType
@@ -472,6 +483,7 @@ export default function CrossReviewAssignment() {
                                                 className="w-full"
                                                 format={'DD/MM/YYYY'}
                                                 onClick={(e) => e.stopPropagation()}
+                                                disabled={!canApprove}
                                                 disabledDate={(current) =>
                                                     current?.isBefore(dayjs(), 'day')
                                                 }

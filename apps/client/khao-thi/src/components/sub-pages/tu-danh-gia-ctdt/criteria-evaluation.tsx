@@ -12,6 +12,8 @@ import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import { useStore } from '@tanstack/react-store'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -21,6 +23,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showComments, setShowComments] = useState(false)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { can } = useAbility()
+
+    const canEdit = can(
+        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        'THEM'
+    )
 
     const { hideSpinner, showSpinner } = useSpinner()
 
@@ -205,6 +213,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments?.length || 0
 
     const isReadOnly =
+        !canEdit ||
         currentStatus === $Enums.EvaluationStatus.SUBMITTED ||
         currentStatus === $Enums.EvaluationStatus.APPROVED ||
         currentStatus === $Enums.EvaluationStatus.COMPLETED
@@ -258,10 +267,16 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     className="bg-blue-500"
                                     size="small"
                                     onClick={handleEvaluationForm}
+                                    disabled={!canEdit}
                                 >
                                     Nộp phiếu đánh giá
                                 </Button>
-                                <Button type="primary" size="small" onClick={handleSubmit}>
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    onClick={handleSubmit}
+                                    disabled={!canEdit}
+                                >
                                     Lưu đánh giá
                                 </Button>
                             </>
