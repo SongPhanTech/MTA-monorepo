@@ -97,16 +97,6 @@ app.openapi(postStudentSchedule, async (c) => {
         },
     })
 
-    // if (!student) {
-    //     return c.json(
-    //         {
-    //             result_code: '404',
-    //             result_desc: 'student_not_found',
-    //         },
-    //         404
-    //     )
-    // }
-    console.log(student)
     const studentScheduleList = student.map((item) => {
         const subjectClass = item.subjectClass
 

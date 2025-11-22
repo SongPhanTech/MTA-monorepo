@@ -16,6 +16,7 @@ import SemesterApp from './api/semester'
 import SpecializedApp from './api/specialized'
 import SchedulesApp from './api/student-schedule'
 import SubjectApp from './api/subject'
+import StudentScoreApp from './api/student-score'
 import { setupOpenApi } from './utils/openapi'
 export const prisma: PrismaClient = new PrismaClient()
 
@@ -52,6 +53,7 @@ app.route('/', CourseApp)
 app.route('/', SchedulesApp)
 app.route('/', DepartmentApp)
 app.route('/', SpecializedApp)
+app.route('/', StudentScoreApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {

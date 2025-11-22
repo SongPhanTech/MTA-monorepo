@@ -20,10 +20,12 @@
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "hono": "catalog:",
+    "lodash": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "catalog:",
+    "@types/lodash": "catalog:",
     "@workspace/auth": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:"
