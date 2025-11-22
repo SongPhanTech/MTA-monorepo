@@ -66,7 +66,10 @@ export default function CriteriaAnalysisPage() {
                 KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                 'THEM'
             ) ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                'XEM_CHI_TIET'
+            )
         ) {
             tabs.push({
                 key: '2',
@@ -81,8 +84,7 @@ export default function CriteriaAnalysisPage() {
             can(
                 KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                 'XEM_CHI_TIET'
-            ) ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
+            )
         ) {
             tabs.push({
                 key: '3',
@@ -95,13 +97,19 @@ export default function CriteriaAnalysisPage() {
         const isAdvisoryBoard =
             BYPASS_PERMISSION_CHECK ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.ADVISORY_BOARD) ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                'XEM_CHI_TIET'
+            )
 
         const isSecretary =
             BYPASS_PERMISSION_CHECK ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                'XEM_CHI_TIET'
+            )
 
         if (isAdvisoryBoard) {
             tabs.push({
