@@ -287,7 +287,7 @@ const getLectureSurveyStatistics = createRoute({
     request: {
         params: z.object({ id: z.string() }),
         query: z.object({
-            organizations: z.string().array().optional(),
+            organizations: z.string().optional(),
         }),
     },
     responses: {
@@ -316,7 +316,7 @@ const getLectureSurveyStatistics = createRoute({
 
 app.openapi(getLectureSurveyStatistics, async (c) => {
     const { id } = c.req.valid('param')
-
+    const { organizations, ...q } = c.req.valid('query')
     const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
@@ -328,11 +328,13 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
             surveyChoice: { orderBy: { answer: 'asc' } },
             surveys: {
                 where: {
-                    lecture: {
-                        organizationId: {
-                            in: c.req.valid('query').organizations,
+                    ...(!!organizations && {
+                        lecture: {
+                            organizationId: {
+                                in: organizations.split(','),
+                            },
                         },
-                    },
+                    }),
                 },
                 include: {
                     subjectClass: true,
@@ -355,6 +357,11 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
                     clusterSurveyId: id,
                 },
             },
+            ...(!!organizations && {
+                organizationId: {
+                    in: organizations.split(','),
+                },
+            }),
         },
         include: {
             userProfile: true,

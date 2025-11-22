@@ -1,12 +1,14 @@
-import useSpinner from '@hooks/spinner'
 import { useGetLectureSurveyStatistics } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, message, Row, Typography } from 'antd'
+import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
+import TreeSelect from '@components/commons/tree-select'
+import { useFindManyDM_DonVi } from '@workspace/db/hooks'
+import { buildOrgTree } from '@lib/utils'
 const { Title } = Typography
 function ClusterSurveyReport({
     selectedId,
@@ -16,9 +18,18 @@ function ClusterSurveyReport({
     surveyName: string
 }) {
     const router = useRouter()
-    const { showSpinner, hideSpinner } = useSpinner()
+    const [organization, setOrganization] = useState<string[]>([])
 
-    const { data: dataLevel } = useGetLectureSurveyStatistics(selectedId as string)
+    const { data: dataLevel } = useGetLectureSurveyStatistics(
+        selectedId as string,
+        organization?.length > 0
+            ? {
+                  organizations: organization.join(','),
+              }
+            : {}
+    )
+    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(organizations)
 
     const dataBarchart = useMemo(() => {
         let choices: any = []
@@ -269,20 +280,36 @@ function ClusterSurveyReport({
                 <Col span={24}>
                     {dataLevel?.status === 200 && (
                         <div className="bg-white h-full flex flex-col">
-                            <div className="p-4 flex justify-between">
+                            <div className="px-4 py-2 flex justify-between">
                                 <Title level={4}>Thống kê theo giảng viên</Title>
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    onClick={() =>
-                                        exportReport(
-                                            dataLevel?.data?.data,
-                                            dataLevel?.data?.choices
-                                        )
-                                    }
-                                >
-                                    Xuất báo cáo
-                                </Button>
+                                <Flex justify="end">
+                                    <TreeSelect
+                                        multiple
+                                        maxTagCount="responsive"
+                                        allowClear
+                                        showSearch
+                                        placeholder="Chọn đơn vị quản lý"
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
+                                        value={organization}
+                                        className="mr-4 w-[300px]"
+                                        onChange={(value) => {
+                                            setOrganization(value)
+                                        }}
+                                    />
+                                    <Button
+                                        size="small"
+                                        type="primary"
+                                        onClick={() =>
+                                            exportReport(
+                                                dataLevel?.data?.data,
+                                                dataLevel?.data?.choices
+                                            )
+                                        }
+                                    >
+                                        Xuất báo cáo
+                                    </Button>
+                                </Flex>
                             </div>
                             <div className="flex-1">
                                 {dataLevel?.status === 200 && dataLevel?.data ? (
