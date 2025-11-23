@@ -12,6 +12,12 @@ export type GetClusterSurveyStatistics200DataItem = {
     surveyId: string
     /** @nullable */
     lecture?: string | null
+    /** @nullable */
+    subjectClassId?: string | null
+    /** @nullable */
+    subjectClassName?: string | null
+    /** @nullable */
+    lectureId?: string | null
     questions: GetClusterSurveyStatistics200DataItemQuestionsItem[]
     average: GetClusterSurveyStatistics200DataItemAverageItem[]
 }

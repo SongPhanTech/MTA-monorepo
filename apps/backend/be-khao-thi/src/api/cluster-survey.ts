@@ -249,6 +249,7 @@ app.openapi(getClusterSurveyStatistics, async (c) => {
                     },
                 },
                 include: {
+                    subjectClass:true,
                     lecture: {
                         include: {
                             userProfile: true,
