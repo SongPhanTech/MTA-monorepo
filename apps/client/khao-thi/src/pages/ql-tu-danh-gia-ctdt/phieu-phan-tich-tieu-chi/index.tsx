@@ -19,8 +19,6 @@ export default function CriteriaAnalysisPage() {
     const idProfile = me?.sDM_NhanVienId || ''
     const { can } = useAbility()
 
-    const BYPASS_PERMISSION_CHECK = false
-
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data: lecturer } = useFindUniqueLecturer(
@@ -61,15 +59,11 @@ export default function CriteriaAnalysisPage() {
         ]
 
         if (
-            BYPASS_PERMISSION_CHECK ||
             can(
                 KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                 'THEM'
             ) ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_CHI_TIET'
-            )
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
         ) {
             tabs.push({
                 key: '2',
@@ -79,13 +73,7 @@ export default function CriteriaAnalysisPage() {
             })
         }
 
-        if (
-            BYPASS_PERMISSION_CHECK ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_CHI_TIET'
-            )
-        ) {
+        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')) {
             tabs.push({
                 key: '3',
                 label: 'Danh sách phiếu phân tích tiêu chí',
@@ -95,21 +83,13 @@ export default function CriteriaAnalysisPage() {
         }
 
         const isAdvisoryBoard =
-            BYPASS_PERMISSION_CHECK ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.ADVISORY_BOARD) ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_CHI_TIET'
-            )
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
 
         const isSecretary =
-            BYPASS_PERMISSION_CHECK ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
             councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_CHI_TIET'
-            )
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI, 'XEM')
 
         if (isAdvisoryBoard) {
             tabs.push({

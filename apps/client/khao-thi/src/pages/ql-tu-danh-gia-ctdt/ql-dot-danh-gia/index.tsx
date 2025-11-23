@@ -27,8 +27,6 @@ export default function EvaluationPeriodTabPage() {
     const idProfile = me?.sDM_NhanVienId || ''
     const { can } = useAbility()
 
-    const BYPASS_PERMISSION_CHECK = false
-
     const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
@@ -70,10 +68,7 @@ export default function EvaluationPeriodTabPage() {
             $Enums.EvaluationMemberRole.VICE_PRESIDENT
         )
 
-        if (
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM') ||
-            BYPASS_PERMISSION_CHECK
-        ) {
+        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'THEM')) {
             tabs.push(
                 {
                     key: '2',
@@ -92,7 +87,6 @@ export default function EvaluationPeriodTabPage() {
 
         if (
             isVicePersident ||
-            BYPASS_PERMISSION_CHECK ||
             can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
         ) {
             tabs.push({
