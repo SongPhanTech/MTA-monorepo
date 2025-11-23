@@ -128,7 +128,7 @@ function LecturerSurveyReport({ selectedId,lectureId,sublectClass, setSublectCla
                                   dataIndex: i?.id,
                                   align: 'center',
                                   render: (__: any, record: any) => {
-                                      return record?.average ? record?.average[index] : 0
+                                      return record?.average ? record?.average[index]?.totalRate : 0
                                   },
                               })),
                           ]

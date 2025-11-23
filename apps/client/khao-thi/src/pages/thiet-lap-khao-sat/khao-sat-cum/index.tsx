@@ -78,8 +78,8 @@ export default function ClussterSurveyPage() {
         {
             key: '6',
             label: 'Báo cáo theo lớp môn học',
-            children: <SurveyReport selectedId={sublectClass?.id || ''} />,
-            disabled: !sublectClass?.id,
+            children: <SurveyReport selectedId={sublectClass?.surveyId || ''} />,
+            disabled: !sublectClass?.surveyId,
         },
     ]
 

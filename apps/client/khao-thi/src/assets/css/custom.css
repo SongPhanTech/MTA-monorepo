@@ -103,7 +103,7 @@
     top: auto !important;
     min-height: 100px;
 }
-.ant-table-wrapper .ant-table-tbody >tr >td{
+.ant-table-empty .ant-table-wrapper .ant-table-tbody >tr >td{
     border-bottom:0px solid #f0f0f0
 }
 .ant-layout {
