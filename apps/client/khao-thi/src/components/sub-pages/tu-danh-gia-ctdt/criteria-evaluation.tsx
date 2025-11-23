@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
-import { useUpdateEvaluationCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
+import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import { ClockCircleOutlined, MessageOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { getStatusConfig } from '@constants/constants'
@@ -85,7 +85,6 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         }
     }
 
-    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
 
     const checkAndUpdateEvaluationPeriodStatus = async () => {
@@ -151,33 +150,42 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
             showSpinner()
             if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) return
 
-            await Promise.all(
-                dataSubmit.criteria.map(
-                    (
-                        i: CriterionPeriod & {
-                            evaluationCriterion: EvaluationCriterion
-                        }
-                    ) => {
-                        return updateEvaluationCriterion({
+            const listSqlTransaction = dataSubmit.criteria.map(
+                (
+                    i: CriterionPeriod & {
+                        evaluationCriterion: EvaluationCriterion
+                    }
+                ) => {
+                    return {
+                        model: 'EvaluationCriterion',
+                        operation: 'update',
+                        data: {
                             where: {
                                 id: i.evaluationCriterion.id,
                             },
                             data: {
                                 status: $Enums.EvaluationStatus.SUBMITTED,
                             },
-                        })
+                        },
                     }
-                )
+                }
             )
 
-            try {
-                await checkAndUpdateEvaluationPeriodStatus()
-            } catch (statusError) {
-                console.error('Error checking evaluation period status:', statusError)
+            const res = await sqlTransaction(listSqlTransaction)
+
+            if (res.status !== 200) {
+                message.error('Có lỗi xảy ra, vui lòng thử lại')
+                return
             }
 
+            await checkAndUpdateEvaluationPeriodStatus()
+
             message.success('Nộp phiếu đánh giá tiêu chí thành công')
-        } catch (error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
