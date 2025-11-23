@@ -7,6 +7,7 @@ import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
+import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 
 export type LectuerType = Lecturer & {
     survey: Survey[]
@@ -16,6 +17,7 @@ export default function ClussterSurveyPage() {
     const [activeKey, setActiveKey] = useState('1')
     const [selectedId, setSelectedId] = useState('')
     const [lecturer, setLecturer] = useState<LectuerType | null>(null)
+    const [sublectClass, setSublectClass] = useState<any>(null)
     const items = [
         {
             key: '1',
@@ -53,14 +55,31 @@ export default function ClussterSurveyPage() {
         {
             key: '4',
             label: 'Báo cáo khảo sát',
-            children: <ClusterSurveyReport selectedId={selectedId} surveyName="" />,
+            children: (
+                <ClusterSurveyReport
+                    selectedId={selectedId}
+                    surveyName=""
+                    surveyId={lecturer?.id || ''}
+                    setSurvey={(value) => {
+                        setLecturer(value)
+                    }}
+                />
+            ),
             disabled: !selectedId,
         },
         {
             key: '5',
-            label: 'Báo cáo chi tiết',
-            children: <SurveyReport selectedId={lecturer?.id || ''} />,
+            label: 'Báo cáo theo giảng viên',
+            children: (
+                <LecturerSurveyReport selectedId={selectedId} lectureId={lecturer?.id || ''} sublectClass={sublectClass} setSublectClass={(value:any)=>{setSublectClass(value)}} />
+            ),
             disabled: !lecturer?.id,
+        },
+        {
+            key: '6',
+            label: 'Báo cáo theo lớp môn học',
+            children: <SurveyReport selectedId={sublectClass?.id || ''} />,
+            disabled: !sublectClass?.id,
         },
     ]
 

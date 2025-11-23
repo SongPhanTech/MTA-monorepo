@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Calendar, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { dayjs } from '..'

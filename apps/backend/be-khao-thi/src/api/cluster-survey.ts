@@ -199,6 +199,7 @@ const getClusterSurveyStatistics = createRoute({
         params: z.object({ id: z.string() }),
         query: z.object({
             organizations: z.string().array().optional(),
+            lectureId:z.string().optional()
         }),
     },
     responses: {
@@ -228,7 +229,7 @@ const getClusterSurveyStatistics = createRoute({
 
 app.openapi(getClusterSurveyStatistics, async (c) => {
     const { id } = c.req.valid('param')
-
+    const {organizations,lectureId,...q}=c.req.valid('query')
     const cluster = await prisma.clusterSurvey.findUnique({
         where: { id },
         include: {
@@ -241,8 +242,9 @@ app.openapi(getClusterSurveyStatistics, async (c) => {
             surveys: {
                 where: {
                     lecture: {
+                        id:lectureId,
                         organizationId: {
-                            in: c.req.valid('query').organizations,
+                            in: organizations,
                         },
                     },
                 },

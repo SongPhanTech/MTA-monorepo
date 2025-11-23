@@ -1,4 +1,3 @@
-import useSpinner from '@hooks/spinner'
 import {
     exportClusterSurveyStatistics,
     useGetClusterSurveyStatistics,
@@ -9,16 +8,14 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
+import { cn } from '@lib/utils'
 const { Title } = Typography
-function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
+function LecturerSurveyReport({ selectedId,lectureId,sublectClass, setSublectClass }: { selectedId: string,lectureId:string,sublectClass:any,setSublectClass:any }) {
     const router = useRouter()
-    const { showSpinner, hideSpinner } = useSpinner()
 
-    // const { data } = useGetParticipationByType({
-    //     surveyId: selectedId as string,
-    // })
-
-    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string)
+    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string,{
+       lectureId
+    })
 
     const dataBarchart = useMemo(() => {
         let choices: any = []
@@ -42,7 +39,7 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
         })
         dataLevel?.data?.data.forEach((i: any) => {
             choices.forEach((j: any, index: number) => {
-                j?.data.push(i?.average[index] || 0)
+                j?.data.push(i?.average[index]?.totalRate || 0)
             })
         })
 
@@ -62,44 +59,12 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
                 type: 'category',
                 data:
                     dataLevel?.data?.data?.map((i) => {
-                        return `${i?.lecture}`
+                        return `${i?.subjectClassName}`
                     }) || [],
             },
             series: choices,
         }
     }, [dataLevel])
-
-    const renderQuestionReport = (item: {
-        name: string
-        answers: { answer: string; count: number }[]
-    }) => {
-        let total = 0
-        if (item?.answers?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-            for (const i of item?.answers) {
-                total += i?.count
-            }
-        }
-
-        return (
-            <div className="flex items-center justify-between">
-                <div>{item?.name}</div>
-                <div className="flex items-center justify-end">
-                    {item?.answers.map((j) => {
-                        return (
-                            <div className="mr-1">
-                                {j?.answer}:
-                                {total > 0
-                                    ? Number.parseFloat(((j?.count * 100) / total).toFixed(2))
-                                    : 0}
-                                %
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        )
-    }
 
     const exportReport = async () => {
         try {
@@ -120,8 +85,8 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
         if (dataLevel?.status !== 200) {
             return
         }
-        const result = dataLevel?.data?.data[params?.dataIndex]
-        router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
+        // const result = dataLevel?.data?.data[params?.dataIndex]
+        // router.push(`/bao-cao-khao-sat/${result?.surveyId}`)
     }
 
     const onEvents = {
@@ -131,6 +96,14 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
+               onRow={(record) => {
+                    return {
+                        onClick: () => {
+                            setSublectClass(record as any)
+                        },
+                        className: cn(sublectClass?.id === record.id ? 'bg-orange-200' : ''),
+                    }
+                }}
                 columns={
                     choices?.length > 0
                         ? [
@@ -142,10 +115,10 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
                                   render: (_, __, index) => index + 1,
                               },
                               {
-                                  title: 'Đối tượng',
+                                  title: 'Lớp môn học',
                                   align: 'center',
                                   render: (_, record) => {
-                                      return record?.lecture
+                                      return record?.subjectClassName
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -185,36 +158,43 @@ function LecturerSurveyReport({ selectedId }: { selectedId: string }) {
     return (
         <div>
             <Row gutter={[16, 4]}>
-                <Col span={24}>
-                    <div className="bg-white h-full flex flex-col">
-                        <div className="p-4 flex justify-between">
-                            <Title level={4}>Thống kê khảo sát</Title>
-                            <Button size="small" type="primary" onClick={exportReport}>
-                                Xuất báo cáo
-                            </Button>
-                        </div>
-                        <div className="flex-1">
-                            {dataLevel?.status === 200 && dataLevel?.data ? (
-                                <div style={{ width: '100%', height: '100%' }}>
-                                    <ReactECharts
-                                        onEvents={onEvents}
-                                        option={dataBarchart}
-                                        className="w-full min-h-[400px] mb-6"
-                                    />
+                {dataLevel?.status === 200 && dataLevel?.data && (
+                    <Col span={24}>
+                        <div className="bg-white h-full flex flex-col">
+                            <div className="p-4 flex justify-between">
+                                <Title level={4}>
+                                    Thống kê khảo sát:{' '}
+                                    {dataLevel?.data?.data?.length > 0
+                                        ? dataLevel?.data?.data[0]?.lecture
+                                        : ''}
+                                </Title>
+                                <Button size="small" type="primary" onClick={exportReport}>
+                                    Xuất báo cáo
+                                </Button>
+                            </div>
+                            <div className="flex-1">
+                                {dataLevel?.status === 200 && dataLevel?.data ? (
+                                    <div style={{ width: '100%', height: '100%' }}>
+                                        <ReactECharts
+                                            onEvents={onEvents}
+                                            option={dataBarchart}
+                                            className="w-full min-h-[400px] mb-6"
+                                        />
 
-                                    {dataLevel?.data?.data?.length > 0 &&
-                                        renderTable(
-                                            dataLevel?.data?.data,
-                                            dataLevel?.data?.choices
-                                        )}
-                                </div>
-                                // <BarChart className="h-full" dataMap={dataBarchart} />
-                            ) : (
-                                <Empty />
-                            )}
+                                        {dataLevel?.data?.data?.length > 0 &&
+                                            renderTable(
+                                                dataLevel?.data?.data,
+                                                dataLevel?.data?.choices
+                                            )}
+                                    </div>
+                                    // <BarChart className="h-full" dataMap={dataBarchart} />
+                                ) : (
+                                    <Empty />
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </Col>
+                    </Col>
+                )}
             </Row>
         </div>
     )

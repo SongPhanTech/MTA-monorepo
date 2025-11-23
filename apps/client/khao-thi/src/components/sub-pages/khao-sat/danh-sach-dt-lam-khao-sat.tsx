@@ -182,14 +182,14 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'ĐVQL',
                                 dataIndex: 'organizationId',
                                 type: 'input',
-                                width: 150,
+                                width: 125,
                                 align: 'center',
                                 render: (_, record) => record?.lecturer?.organization?.sMa || '',
                             },
                             {
                                 title: 'Lớp QL',
                                 dataIndex: 'fixedClassIds',
-                                width: 150,
+                                width: 125,
                                 type: 'select',
                                 align: 'center',
                                 options:
@@ -205,7 +205,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 dataIndex: 'trainingCourseIds',
                                 type: 'select',
                                 align: 'center',
-                                width: 150,
+                                width: 125,
                                 options:
                                     trainingCourses?.map((tc) => ({
                                         value: tc.id,

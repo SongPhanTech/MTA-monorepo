@@ -8,14 +8,19 @@ import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import TreeSelect from '@components/commons/tree-select'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgTree, cn } from '@lib/utils'
+import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 const { Title } = Typography
 function ClusterSurveyReport({
     selectedId,
     surveyName,
+    surveyId,
+    setSurvey,
 }: {
     selectedId: string
     surveyName: string
+    surveyId: string
+    setSurvey: (value: LectuerType) => void
 }) {
     const router = useRouter()
     const [organization, setOrganization] = useState<string[]>([])
@@ -221,6 +226,14 @@ function ClusterSurveyReport({
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
+                onRow={(record) => {
+                    return {
+                        onClick: () => {
+                            setSurvey(record as LectuerType)
+                        },
+                        className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
+                    }
+                }}
                 columns={
                     choices?.length > 0
                         ? [
