@@ -49,7 +49,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
+    const idProfile = me?.sDM_NhanVienId || 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
     const { can } = useAbility()
     const [form] = Form.useForm<CommentType>()
 
@@ -439,47 +439,49 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                     item.analysisCriterions?.status ===
                                                         $Enums.EvaluationCriterionStatus
                                                             .APPROVED) ||
-                                                can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                                                    'DUYET'
-                                                ),
+                                                idProfile ===
+                                                    'e0bf913a-7b9c-40ac-9a52-266a4326e02f',
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
                                                         {
                                                             <>
-                                                                {role === 'BAN_TU_VAN' && (
-                                                                    <ApproveIcon
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                e?.stopPropagation()
-                                                                                handleApproveCriterionAnalysis(
-                                                                                    record.analysisCriterionId
-                                                                                )
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                    />
-                                                                )}
+                                                                {role === 'BAN_TU_VAN' &&
+                                                                    idProfile ===
+                                                                        '8bca0fb4-e233-4010-bb23-ed4cbe414726' && (
+                                                                        <ApproveIcon
+                                                                            popConfirm={{
+                                                                                onConfirm: (e) => {
+                                                                                    e?.stopPropagation()
+                                                                                    handleApproveCriterionAnalysis(
+                                                                                        record.analysisCriterionId
+                                                                                    )
+                                                                                },
+                                                                                onCancel: (e) => {
+                                                                                    e?.stopPropagation()
+                                                                                },
+                                                                            }}
+                                                                        />
+                                                                    )}
 
-                                                                {role === 'THU_KY' && (
-                                                                    <ApproveIcon
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                e?.stopPropagation()
-                                                                                handleApproveCriterionAnalysisFinal(
-                                                                                    record.analysisCriterionId,
-                                                                                    item.id
-                                                                                )
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                    />
-                                                                )}
+                                                                {role === 'THU_KY' &&
+                                                                    idProfile ===
+                                                                        '97edb89d-9803-45b9-ac83-e81125dd59c4' && (
+                                                                        <ApproveIcon
+                                                                            popConfirm={{
+                                                                                onConfirm: (e) => {
+                                                                                    e?.stopPropagation()
+                                                                                    handleApproveCriterionAnalysisFinal(
+                                                                                        record.analysisCriterionId,
+                                                                                        item.id
+                                                                                    )
+                                                                                },
+                                                                                onCancel: (e) => {
+                                                                                    e?.stopPropagation()
+                                                                                },
+                                                                            }}
+                                                                        />
+                                                                    )}
                                                             </>
                                                         }
 
