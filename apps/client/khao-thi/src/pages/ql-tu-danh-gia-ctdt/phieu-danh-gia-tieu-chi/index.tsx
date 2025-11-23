@@ -69,7 +69,13 @@ export default function CriteriaEvaluationPage() {
             })
         }
 
-        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'XEM')) {
+        if (
+            // can(
+            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+            //     'XEM_TAT_CA'
+            // )
+            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+        ) {
             tabs.push({
                 key: '3',
                 label: 'Danh sách phiếu đánh giá tiêu chí',
@@ -81,17 +87,19 @@ export default function CriteriaEvaluationPage() {
         const isSecretary =
             councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
             councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY) ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
+            // can(
+            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+            //     'XEM_TAT_CA'
+            // )
+            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
 
         const isCouncilMember =
             !!councilMember ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
+            // can(
+            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+            //     'XEM_TAT_CA'
+            // )
+            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
 
         if (isSecretary) {
             tabs.push({

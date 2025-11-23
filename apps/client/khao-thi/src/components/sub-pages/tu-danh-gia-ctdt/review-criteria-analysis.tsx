@@ -446,10 +446,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
-                                                        {can(
-                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                                                            'DUYET'
-                                                        ) && (
+                                                        {
                                                             <>
                                                                 {role === 'BAN_TU_VAN' && (
                                                                     <ApproveIcon
@@ -484,25 +481,20 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                                     />
                                                                 )}
                                                             </>
-                                                        )}
+                                                        }
 
-                                                        {can(
-                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                                                            'DUYET'
-                                                        ) && (
-                                                            <Tooltip title="Yêu cầu chỉnh sửa">
-                                                                <SquareX
-                                                                    size={16}
-                                                                    strokeWidth={1.5}
-                                                                    className={
-                                                                        'text-red-600 cursor-pointer'
-                                                                    }
-                                                                    onClick={() => {
-                                                                        toggleCommentRow(record.id)
-                                                                    }}
-                                                                />
-                                                            </Tooltip>
-                                                        )}
+                                                        <Tooltip title="Yêu cầu chỉnh sửa">
+                                                            <SquareX
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                className={
+                                                                    'text-red-600 cursor-pointer'
+                                                                }
+                                                                onClick={() => {
+                                                                    toggleCommentRow(record.id)
+                                                                }}
+                                                            />
+                                                        </Tooltip>
                                                     </div>
                                                 )
                                             },
