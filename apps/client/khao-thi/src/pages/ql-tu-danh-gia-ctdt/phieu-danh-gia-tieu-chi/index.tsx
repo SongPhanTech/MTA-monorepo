@@ -60,10 +60,7 @@ export default function CriteriaEvaluationPage() {
             },
         ]
 
-        if (
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM') ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'XEM')
-        ) {
+        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'THEM')) {
             tabs.push({
                 key: '2',
                 label: 'Phiếu đánh giá tiêu chí',
@@ -84,11 +81,17 @@ export default function CriteriaEvaluationPage() {
         const isSecretary =
             councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
             councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY) ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'XEM')
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
 
         const isCouncilMember =
             !!councilMember ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI, 'XEM')
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
 
         if (isSecretary) {
             tabs.push({

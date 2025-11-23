@@ -192,7 +192,7 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'Số lượng thành viên',
+                                title: 'SLTV',
                                 width: 50,
                                 align: 'center',
                                 render: (_, record) => {
