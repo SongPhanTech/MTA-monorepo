@@ -21,7 +21,6 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Empty, Form, message, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { SquareX } from 'lucide-react'
@@ -49,7 +48,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { can } = useAbility()
     const [form] = Form.useForm<CommentType>()
 

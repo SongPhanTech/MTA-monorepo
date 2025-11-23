@@ -51,7 +51,7 @@ export default function AssigmentOfAssessmentTab() {
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string

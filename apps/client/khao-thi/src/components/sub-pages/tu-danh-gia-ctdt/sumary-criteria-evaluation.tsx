@@ -20,7 +20,7 @@ export default function SumaryCriteriaEvaluationSubPage({
 }) {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [commentForm] = Form.useForm<{ crossReview: string }>()
     const [showComments, setShowComments] = useState(false)
