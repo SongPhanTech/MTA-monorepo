@@ -91,6 +91,7 @@ const ModalPrintStudentSubjectScore = () => {
     })
 
     const { data: session } = useSession()
+    // @ts-expect-error
     const profileName = session?.preferred_username || ''
     const { data } = useFindUniqueSubjectClass(
         {
@@ -570,7 +571,7 @@ const ModalPrintStudentSubjectScore = () => {
             @media print {
                 .page {
                     width: 210mm;
-                    min-height: 297mm; 
+                    min-height: 297mm;
                     page-break-after: auto;
                     background: white;
                     overflow: visible;

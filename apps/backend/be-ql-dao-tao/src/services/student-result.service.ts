@@ -386,15 +386,6 @@ const ThongTinTichLuy = async (
             ...MonHocYeuCau.flatMap((item) => item.subjects.map((mon) => mon.semester ?? 0))
         )
 
-        const rankingConvert = await prisma.academicRankingConvert.findMany({
-            where: {
-                trainingCourseId,
-                context: RankingContext.STUDYING,
-                deletedAt: null,
-                active: true,
-            },
-        })
-
         const rank =
             trainingCourse.baseScore === AcademicRankingBaseType.Base10
                 ? await phanLoaiDiemHe10(
@@ -489,9 +480,9 @@ const phanLoaiDiemHe10 = async (
     const rank = rankingConvert.find(
         (item) =>
             item.trainingCourseId === trainingCourseId &&
-            item.base4Max &&
+            item.base10Max &&
             item.base10Min &&
-            diemHe10 <= item.base4Max &&
+            diemHe10 <= item.base10Max &&
             diemHe10 >= item.base10Min
     )
 
@@ -844,7 +835,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
                     studentTrainingType:
                         conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
-                        rankId:thongTinTichLuy.rank?.id ?? null,
+                    rankId: thongTinTichLuy.rank?.id ?? null,
                     foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
                     isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
@@ -912,7 +903,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ
                     studentTrainingType:
                         conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
-                        rankId:thongTinTichLuy.rank?.id ?? null,
+                    rankId: thongTinTichLuy.rank?.id ?? null,
                     //NOTE: Chưa có thông tin này nên lấy thông tin cũ gán lại
                     foreignLangPass: existingResult?.foreignLangPass || true, // Đạt trình độ ngoại ngữ theo quy định
                     isClassMonitor: existingResult?.isClassMonitor || false, // Chức vụ học viên (hiện tại chưa có thông tin này)

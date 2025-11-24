@@ -966,7 +966,7 @@ const ModalTomTatLyLich = () => {
                     IV. Tóm tắt nhận xét
                 </div>
                 <p>
-                    <span className="pl-6 font-bold italic">+ Lý lịch:</span> 
+                    <span className="pl-6 font-bold italic">+ Lý lịch:</span>
                 </p>
                 <p>
                     <span className="pl-6 font-bold italic">+ Bản thân:</span>
@@ -976,8 +976,7 @@ const ModalTomTatLyLich = () => {
                 </p>
                 <p>
                     <span className="pl-6 font-bold italic">+ Hạn chế:</span>{' '}
-                    <span className="text-blue-500">
-                    </span>
+                    <span className="text-blue-500"></span>
                 </p>
                 <p>
                     <span className="pl-6 font-bold">+ Kết luận:</span>

@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi'
-import { AcademicRankingConvertScalarSchema} from '@workspace/db/zod/models'
+import { AcademicRankingConvertScalarSchema } from '@workspace/db/zod/models'
 
 export const ListScholarship = z.object({
     id: z.string().describe('ID của tiêu chí học bổng'),
