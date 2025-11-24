@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -43,6 +42,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -469,7 +469,7 @@ export default function TrainingProgramCatalog() {
                                         </Button>
                                         <Button onClick={handleModal} type="primary">
                                             <BookPlus />
-                                            Thêm CTĐT Khung
+                                            Thêm CTĐT
                                         </Button>
                                     </>
                                 )}

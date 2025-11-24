@@ -144,7 +144,7 @@ const DefaultLayout = ({
                     }}
                 >
                     <Header
-                        className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
+                        className={`flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
                     >
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}

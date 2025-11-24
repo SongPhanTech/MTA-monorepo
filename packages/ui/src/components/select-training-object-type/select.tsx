@@ -1,5 +1,5 @@
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
-import { Select, type SelectProps } from 'antd'
+import { Select, type SelectProps, Tooltip } from 'antd'
 import { useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
@@ -18,7 +18,9 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
 
     return (
         <div className="flex items-center gap-2 font-bold">
-            <p>ĐTĐT</p>
+            <Tooltip title="Đối tượng đào tạo">
+                <p>ĐTĐT</p>
+            </Tooltip>
             <Select
                 placeholder="Chọn đối tượng đào tạo"
                 options={doiTuongDaoTao.map((e) => ({

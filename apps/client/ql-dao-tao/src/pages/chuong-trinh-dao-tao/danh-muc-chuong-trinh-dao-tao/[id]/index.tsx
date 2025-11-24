@@ -915,7 +915,7 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
             breadcrumbList={[
                 { title: 'Chương trình đào tạo' },
                 {
-                    title: 'Danh mục CTĐT khung',
+                    title: 'Quản lý CTĐT',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
                 { title: 'Chi tiết CTĐT toàn khoá' },
