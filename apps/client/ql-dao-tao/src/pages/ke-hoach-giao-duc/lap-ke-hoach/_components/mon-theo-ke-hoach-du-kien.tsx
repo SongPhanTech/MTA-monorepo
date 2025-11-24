@@ -291,7 +291,7 @@ export default function MonTheoKeHoachDuKien() {
                                 },
                             },
                             {
-                                title: 'Kỳ học',
+                                title: 'HKDK',
                                 align: 'center',
                                 width: 80,
                                 render: (__, record) => {

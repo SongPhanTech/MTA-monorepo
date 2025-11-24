@@ -41,7 +41,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
         : [
               {
                   key: '1',
-                  label: 'Môn theo kế hoạch giảng dạy',
+                  label: 'Môn dự kiến giảng dạy',
                   content: <MonTheoKeHoachDuKien />,
               },
               {

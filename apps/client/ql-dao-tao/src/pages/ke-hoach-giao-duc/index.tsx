@@ -41,7 +41,7 @@ export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
             : []),
         {
             key: 'lap-ke-hoach',
-            label: 'Lập kế hoạch',
+            label: 'Lập kế hoạch giảng dạy học kỳ',
             content: <LapKeHoach hocLai={hocLai} />,
         },
         {
