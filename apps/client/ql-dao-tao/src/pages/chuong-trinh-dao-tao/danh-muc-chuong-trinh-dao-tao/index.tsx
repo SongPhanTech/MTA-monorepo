@@ -469,7 +469,7 @@ export default function TrainingProgramCatalog() {
                                         </Button>
                                         <Button onClick={handleModal} type="primary">
                                             <BookPlus />
-                                            Thêm chương trình
+                                            Thêm CTĐT Khung
                                         </Button>
                                     </>
                                 )}

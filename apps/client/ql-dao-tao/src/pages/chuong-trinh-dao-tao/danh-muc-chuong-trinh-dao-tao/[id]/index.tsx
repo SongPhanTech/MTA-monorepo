@@ -659,7 +659,7 @@ export default function TrainingProgramSubjects() {
                                 title: 'HKDK',
                                 dataIndex: 'semester',
                                 width: 80,
-                                type: 'order',
+                                type: 'select',
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
