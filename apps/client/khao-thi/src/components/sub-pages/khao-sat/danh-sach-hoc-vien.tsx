@@ -4,13 +4,13 @@ import ExportStudentInSurvey from '@components/modal/export-list-student-in-surv
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
+import { useSession } from '@workspace/auth/react'
 import {
     useFindManyFixedClass,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Flex, Row, Skeleton, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { Eye } from 'lucide-react'
@@ -28,6 +28,8 @@ function DanhSachHocVien({
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+      const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         code: '',
@@ -402,10 +404,13 @@ function DanhSachHocVien({
                                             const result = checkStatus(record)
                                             return (
                                                 <Row className="justify-center gap-0">
-                                                    {can(
-                                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                                                        'XEM_TAT_CA'
-                                                    ) && (
+                                                    {
+                                                    // can(
+                                                    //     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                                    //     'XEM_TAT_CA'
+                                                    // ) 
+                                                    profileId==='e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    && (
                                                         <Tooltip
                                                             title="Xem khảo sát"
                                                             placement="top"
