@@ -239,6 +239,12 @@ export default function EvaluationCouncilTab() {
                                         },
                                     },
                                     {
+                                        title: 'Số điện thoại',
+                                        width: 100,
+                                        render: (__, record) =>
+                                            record?.lecturer?.userProfile?.phoneNumber,
+                                    },
+                                    {
                                         title: 'Đơn vị',
                                         dataIndex: 'period',
                                         width: 200,
