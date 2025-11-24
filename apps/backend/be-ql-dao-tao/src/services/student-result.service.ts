@@ -4,6 +4,7 @@ import {
     type AcademicActionRuleSet,
     AcademicRankingBaseType,
     type AcademicWarningRule,
+    AcademicRankingConvert,
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
@@ -12,6 +13,7 @@ import {
     SemesterType,
     type StudentAcademicDecision,
     type StudentSemesterResult,
+    RankingContext,
     StudentStatus,
     StudentTrainingType,
 } from '@workspace/db'
@@ -92,18 +94,27 @@ const ThongTinTichLuy = async (
 ) => {
     try {
         // Học kỳ bắt đầu của sinh viên (căn cứ theo khoá)
-        const hocKyBatDau = await prisma.trainingCourse.findFirst({
+        const trainingCourse = await prisma.trainingCourse.findFirst({
             where: {
                 id: trainingCourseId,
                 deletedAt: null,
                 active: true,
             },
-            select: {
-                semesterStartId: true,
+            include: {
+                academicRankingConvert: {
+                    where: {
+                        context: RankingContext.STUDYING,
+                        deletedAt: null,
+                        active: true,
+                    },
+                    orderBy: {
+                        rankOrder: 'asc',
+                    },
+                },
             },
         })
 
-        if (!hocKyBatDau?.semesterStartId) {
+        if (!trainingCourse?.semesterStartId) {
             console.error('Không tìm thấy học kỳ bắt đầu cho khoá học:', trainingCourseId)
             throw new Error('Không tìm thấy học kỳ bắt đầu cho khoá học.')
         }
@@ -111,7 +122,7 @@ const ThongTinTichLuy = async (
         // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
         const startSemester = await prisma.semester.findUnique({
             where: {
-                id: hocKyBatDau?.semesterStartId,
+                id: trainingCourse?.semesterStartId,
                 deletedAt: null,
                 active: true,
             },
@@ -374,11 +385,35 @@ const ThongTinTichLuy = async (
             0,
             ...MonHocYeuCau.flatMap((item) => item.subjects.map((mon) => mon.semester ?? 0))
         )
+
+        const rankingConvert = await prisma.academicRankingConvert.findMany({
+            where: {
+                trainingCourseId,
+                context: RankingContext.STUDYING,
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        const rank =
+            trainingCourse.baseScore === AcademicRankingBaseType.Base10
+                ? await phanLoaiDiemHe10(
+                      diemTrungBinh10,
+                      trainingCourseId,
+                      trainingCourse.academicRankingConvert
+                  )
+                : await phanLoaiDiemHe4(
+                      diemTrungBinh4,
+                      trainingCourseId,
+                      trainingCourse.academicRankingConvert
+                  )
+
         return {
             kyDangHoc: kyDangHoc,
             kyCuoi: kyDangHoc === maxSemester,
             diemTrungBinh4TichLuy: diemTrungBinh4,
             diemTrungBinh10TichLuy: diemTrungBinh10,
+            rank,
             tongTinChiDaTichLuy: TongTinChiTichLuy, // Số tín chỉ đã tích lũy
             tongTinChiYeuCauDenThoiDiemHienTai: TongTinChiYeuCau,
             tongTinChiMoTrongKy: TongTinChiMoTrongKy,
@@ -391,6 +426,7 @@ const ThongTinTichLuy = async (
             kyCuoi: false,
             diemTrungBinh4TichLuy: 0,
             diemTrungBinh10TichLuy: 0,
+            rank: null,
             tongTinChiDaTichLuy: 0,
             tongTinChiYeuCauDenThoiDiemHienTai: 0,
             tongTinChiMoTrongKy: 0,
@@ -431,48 +467,35 @@ const layGiaTriDiem4 = (
 const phanLoaiDiemHe4 = async (
     diemHe4: number,
     trainingCourseId: string,
-    scoreConvert: ScoreConvertItem[] = []
-): Promise<string> => {
-    try {
-        if (!scoreConvert?.length || typeof diemHe4 !== 'number' || Number.isNaN(diemHe4)) {
-            console.error('Invalid inputs:', { diemHe4, scoreConvert })
-            return ''
-        }
+    rankingConvert: AcademicRankingConvert[] = []
+) => {
+    const rank = rankingConvert.find(
+        (item) =>
+            item.trainingCourseId === trainingCourseId &&
+            item.base4Max &&
+            item.base4Min &&
+            diemHe4 <= item.base4Max &&
+            diemHe4 >= item.base4Min
+    )
 
-        // Tìm phân loại nhỏ hơn hoặc bằng gần nhất với diemHe4
-        const sorted = scoreConvert
-            .filter((item) => item.trainingCourseId === trainingCourseId && item.base4 <= diemHe4)
-            .sort((a, b) => b.base4 - a.base4)
-        const diemHe4Obj = sorted[0]
-
-        return diemHe4Obj ? diemHe4Obj.classification : ''
-    } catch (error) {
-        console.error('Error in phanLoaiDiemHe4:', error)
-        return ''
-    }
+    return rank
 }
 
 const phanLoaiDiemHe10 = async (
     diemHe10: number,
     trainingCourseId: string,
-    scoreConvert: ScoreConvertItem[] = []
-): Promise<string> => {
-    try {
-        if (!scoreConvert?.length || typeof diemHe10 !== 'number' || Number.isNaN(diemHe10)) {
-            console.error('Invalid inputs:', { diemHe10, scoreConvert })
-            return ''
-        }
-        const phanLoai = scoreConvert.find(
-            (item) =>
-                item.trainingCourseId === trainingCourseId &&
-                diemHe10 >= item.base10Min &&
-                diemHe10 <= item.base10Max
-        )
-        return phanLoai ? phanLoai.classification : ''
-    } catch (error) {
-        console.error('Error in phanLoaiDiemHe10:', error)
-        return ''
-    }
+    rankingConvert: AcademicRankingConvert[] = []
+) => {
+    const rank = rankingConvert.find(
+        (item) =>
+            item.trainingCourseId === trainingCourseId &&
+            item.base4Max &&
+            item.base10Min &&
+            diemHe10 <= item.base4Max &&
+            diemHe10 >= item.base10Min
+    )
+
+    return rank
 }
 const ThongTinDiemHocKy = async (
     studentId: string,
@@ -819,7 +842,9 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-                    studentTrainingType: StudentTrainingType.GOOD,
+                    studentTrainingType:
+                        conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
+                        rankId:thongTinTichLuy.rank?.id ?? null,
                     foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
                     isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
@@ -876,7 +901,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-                    studentTrainingType: StudentTrainingType.GOOD, // xếp loại rèn luyện
 
                     //TODO: Chưa biết xác định thi lại ntn
                     retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
@@ -886,7 +910,9 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ
-
+                    studentTrainingType:
+                        conductScore?.studentTrainingType ?? StudentTrainingType.GOOD,
+                        rankId:thongTinTichLuy.rank?.id ?? null,
                     //NOTE: Chưa có thông tin này nên lấy thông tin cũ gán lại
                     foreignLangPass: existingResult?.foreignLangPass || true, // Đạt trình độ ngoại ngữ theo quy định
                     isClassMonitor: existingResult?.isClassMonitor || false, // Chức vụ học viên (hiện tại chưa có thông tin này)
@@ -972,22 +998,14 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const listTrainingCourseId = DsHocVien.map(
             (item) => item.student.fixedClass?.trainingCourse?.id || ''
         )
-        const scoreConvert = await prisma.scoreConvert.findMany({
+        const rankingConvert = await prisma.academicRankingConvert.findMany({
             where: {
                 trainingCourseId: {
                     in: listTrainingCourseId,
                 },
+                context: RankingContext.STUDYING,
                 deletedAt: null,
                 active: true,
-            },
-            select: {
-                trainingCourseId: true,
-                letter: true,
-                base10Min: true,
-                base10Max: true,
-                base4: true,
-                classification: true,
-                pass: true,
             },
         })
 
@@ -1000,17 +1018,17 @@ export const listStudentResultInfo = async (semesterId: string) => {
                 const baseScore =
                     item.student.fixedClass?.trainingCourse?.baseScore ||
                     AcademicRankingBaseType.Base10 // Mặc định là 10 nếu không có thông tin
-                const xepLoaiHocTap =
+                const rank =
                     baseScore === AcademicRankingBaseType.Base10
                         ? await phanLoaiDiemHe10(
                               item.gpaBase10.toNumber(),
                               trainingCourseId,
-                              scoreConvert
+                              rankingConvert
                           )
                         : await phanLoaiDiemHe4(
                               item.gpaBase4.toNumber(),
                               trainingCourseId,
-                              scoreConvert
+                              rankingConvert
                           )
                 return {
                     stt: 0,
@@ -1042,7 +1060,6 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     diemMonTotNghiepNhoNhat: item.lowestGraduationScore ?? 0,
                     diemTrungBinh4: item.gpaBase4.toNumber() || 0,
                     diemTrungBinh10: item.gpaBase10.toNumber() || 0,
-                    xepLoaiHocTap: xepLoaiHocTap || 'Chưa có dữ liệu',
                     soTinChiTichLuy: item.accumulatedCredits || 0,
                     soTinChiYeuCau: item.totalCreditsByCurriculum || 0,
                     soTinChiMoTrongKy: item.totalCredits || 0,
@@ -1068,7 +1085,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     ghiChu: '', // Ghi chú,
                     diemThuong: item.isClassMonitor || item.isUnionLeader ? 0.1 : 0, // Điểm thưởng
                     userProfile: userProfile, // Thông tin người dùng
-
+                    rank,
                     // Add missing properties with default values or calculated from item if possible
                     noTinChiTrongKy: 0,
                     tongSoTinChiNo: 0,
@@ -1077,7 +1094,6 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     soTinChiDatTichLuy: 0,
                     soTinChiKhongDatTichLuy: 0,
                     xepLoaiHocTapTichLuy: '',
-                    xepLoaiRenLuyenTichLuy: '',
                     // Add missing required properties for StudentInfoCheck
                     namDangHoc: item.studyYear || 0,
                     mucCanhCaoHocTap: item.student.academicWarningLevel || 0,
