@@ -105,7 +105,7 @@ const DefaultLayout = ({
                         <div className="mr-2 font-bold">Học kỳ</div>
                         <TreeSelectSemester />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <Breadcrumb className="text-sm" items={listBreadcrumb} />
+                        <Breadcrumb className="text-xs" items={listBreadcrumb} />
                     </div>
                     <HeaderApp />
                 </Header>

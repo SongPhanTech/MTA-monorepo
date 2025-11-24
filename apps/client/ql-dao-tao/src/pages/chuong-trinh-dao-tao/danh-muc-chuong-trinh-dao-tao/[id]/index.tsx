@@ -616,8 +616,6 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
@@ -659,19 +657,8 @@ export default function TrainingProgramSubjects() {
                                 title: 'HKDK',
                                 dataIndex: 'semester',
                                 width: 80,
-                                type: 'select',
+                                type: 'input',
                                 align: 'center',
-                                distinctFilters: [
-                                    'credit',
-                                    'period',
-                                    'numberOfTheory',
-                                    'numberOfPractical',
-                                    'numberOfSelfStudy',
-                                    'numberOfPractice',
-                                    'numberOfReview',
-                                    'numberOfExam',
-                                    'numberOfOther',
-                                ],
                             },
                             {
                                 title: 'Số tiết TKB',
@@ -719,6 +706,7 @@ export default function TrainingProgramSubjects() {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
                                 type: 'order',
+                                width: 80,
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -842,7 +830,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
@@ -853,12 +841,12 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                    'SUA'
-                                ),
+                                // hidden: !canSome(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                //     'SUA'
+                                // ),
                                 render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
