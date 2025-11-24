@@ -1,4 +1,3 @@
-import { jwtDecode } from 'jwt-decode'
 import type { Session } from '..'
 
 const auth = async ({
@@ -33,11 +32,13 @@ const auth = async ({
     }
 
     const isAuthenticated = await response.json()
+    console.log('isAuthenticated', isAuthenticated)
     if (!isAuthenticated) {
         throw new Error('User is not authenticated')
     }
     return {
-        ...(jwtDecode(xToken) as Session),
+        // ...(jwtDecode(xToken) as Session),
+        ...isAuthenticated,
         access_token: xToken,
     }
 }

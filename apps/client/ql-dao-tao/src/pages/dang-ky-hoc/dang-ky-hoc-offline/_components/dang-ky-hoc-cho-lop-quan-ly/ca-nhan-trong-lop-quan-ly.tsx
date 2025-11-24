@@ -466,12 +466,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                             align: 'center',
                             dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
                             width: 80,
+                            render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
                         },
                         {
                             title: 'Điểm',
                             align: 'center',
                             width: 50,
-                            render: (_, record) => record.subjectClassStudent[0]?.finalScore || '-',
+                            dataIndex: ['subjectClassStudent', 0, 'finalScore'],
+                            render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
                         },
                         {
                             title: 'Cải thiện',

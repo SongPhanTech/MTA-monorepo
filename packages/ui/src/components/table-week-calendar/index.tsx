@@ -1365,7 +1365,7 @@ export function TableWeekCalendar({
                                     if (!record.event) {
                                         return '-'
                                     }
-                                    return record.event.attendeesProfile.length
+                                    return record?.event?.attendeesProfile?.length
                                         ? `${record.event.attendeesProfile.length} học viên`
                                         : '-'
                                 },

@@ -966,45 +966,21 @@ const ModalTomTatLyLich = () => {
                     IV. Tóm tắt nhận xét
                 </div>
                 <p>
-                    <span className="pl-6 font-bold italic">+ Lý lịch:</span> Lai lịch Chính trị gia
-                    đình hai bên nội, ngoại trogn sạch, rõ ràng. Qua các thời kỳ cách mạng gia đình
-                    không có ai làm gì cho đế quốc phong kiến, luôn chấp hành tất mọi đường lối chủ
-                    trương của Đảng, chính sách và pháp luật Nhà nước.
+                    <span className="pl-6 font-bold italic">+ Lý lịch:</span> 
                 </p>
                 <p>
-                    <span className="pl-6 font-bold italic">+ Bản thân:</span> Nhập ngũ tháng
-                    9/2014, được đào tọa qua Trường Sĩ Quan Pháo Binh. Đã qua giữ chức Trung đội
-                    trưởng, từ tháng 1/2021 giữ chức Phó Đại đội trưởng Đại đội 1, Tiểu đoàn 15, Sư
-                    đoàn, Quân khu 1, luôn nhận và hoàn thành tột mọi nhiệm vụ được giao.
+                    <span className="pl-6 font-bold italic">+ Bản thân:</span>
                 </p>
                 <p>
-                    <span className="pl-6 font-bold italic">+ Điểm mạnh:</span> Lập trường tư tưởng
-                    kiện đị vững vàng, an tâm công tác xác định tốt nhiệm vụ, sẵn sáng nhận và hoàn
-                    thành tốt mọi nhiệm vụ được giao.
+                    <span className="pl-6 font-bold italic">+ Điểm mạnh:</span>
                 </p>
-                <span className="pl-6">
-                    Phẩm chất đạo đức tốt, lối sống trong sạch, lành mạnh, trung thực. Tích cực xây
-                    dịng mối đoàn kết nội bộ tốt trong đơn vị, giải quyết hài hòa các mối quan hệ.
-                </span>
-                <span className="pl-6">
-                    Có năng lục, trình độ huấn luyện, quản lý, chỉ huy khá, phương pháp tác phong
-                    công tác phù hợp. Gương mẫu trong thực hiện nhiệm vụ. Trên cương vị Phó Đại đội
-                    trưởng cùng với ban chỉ huy tổ chức và duy trì hiệu quả công tác huấn luyện,
-                    SSCĐ cao, công tác hậu cần kĩ thuật. Bản thân hoàn thành tốt nhiệm vụ.
-                </span>
-                <span className="pl-6">
-                    Chấp hành nghiêm pháp luật Nhà nước, kỷ luật Quân đội, quy định của đơn vị.
-                </span>
                 <p>
                     <span className="pl-6 font-bold italic">+ Hạn chế:</span>{' '}
                     <span className="text-blue-500">
-                        Việc kiểm tra, đôn đốc Trung đội thực hiện nhiệm vụ có thời điểm chưa sâu
-                        sát, tỉ mỉ.
                     </span>
                 </p>
                 <p>
-                    <span className="pl-6 font-bold">+ Kết luận:</span> Phẩm chất tốt, năng lực công
-                    tác khá, hoàn thành tốt chức trách, nhiệm vụ.
+                    <span className="pl-6 font-bold">+ Kết luận:</span>
                 </p>
                 <p>
                     <span className="pl-6 font-bold">+ HSD:</span> 1a

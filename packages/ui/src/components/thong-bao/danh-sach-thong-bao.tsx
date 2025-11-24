@@ -4,7 +4,11 @@ import { Alert, Space } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function DanhSachThongBao() {
-    const { data = [] } = useFindManyNotification()
+    const { data = [] } = useFindManyNotification({
+        where: {
+            active: true,
+        },
+    })
     const { onOpen } = useDisclosure<string>({
         tag: 'ViewNotificationModal',
     })
