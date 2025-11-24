@@ -26,6 +26,11 @@ const EVALUATION_CRITERION_STATUS_OPTIONS = [
     { value: $Enums.EvaluationCriterionStatus.COMPLETED, label: 'Hoàn thành' },
 ]
 
+const DEADLINE_OPTIONS = [
+    { value: 'overdue', label: 'Quá hạn' },
+    { value: 'near', label: 'Sắp quá hạn' },
+]
+
 const SUBJECT_OBJECT = [
     {
         value: $Enums.SurveyObject.MILITARY_STUDENT,
@@ -155,4 +160,5 @@ export {
     getStatusConfig,
     EVALUATION_PERIOD_STATUS_LABELS,
     EVALUATION_CRITERION_STATUS_OPTIONS,
+    DEADLINE_OPTIONS,
 }

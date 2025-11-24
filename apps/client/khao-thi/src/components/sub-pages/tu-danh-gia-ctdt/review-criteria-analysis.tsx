@@ -4,7 +4,7 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
-import { getStatusEvaluation } from '@constants/constants'
+import { DEADLINE_OPTIONS, getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { ReviewDataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/review-criteria-analysis'
@@ -21,6 +21,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Empty, Form, message, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { SquareX } from 'lucide-react'
@@ -48,14 +49,9 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
     const { can } = useAbility()
     const [form] = Form.useForm<CommentType>()
-
-    const DEADLINE_OPTIONS = [
-        { value: 'overdue', label: 'Quá hạn' },
-        { value: 'near', label: 'Sắp quá hạn' },
-    ]
 
     const filteredCriteria = data?.criteria?.filter((item) => {
         if (!item.analysisCriterions) return false
@@ -438,12 +434,17 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                     item.analysisCriterions?.status ===
                                                         $Enums.EvaluationCriterionStatus
                                                             .APPROVED) ||
-                                                idProfile ===
-                                                    'e0bf913a-7b9c-40ac-9a52-266a4326e02f',
+                                                !can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                    'DUYET'
+                                                ),
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
-                                                        {
+                                                        {can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            'DUYET'
+                                                        ) && (
                                                             <>
                                                                 {role === 'BAN_TU_VAN' &&
                                                                     idProfile ===
@@ -482,20 +483,25 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                                         />
                                                                     )}
                                                             </>
-                                                        }
+                                                        )}
 
-                                                        <Tooltip title="Yêu cầu chỉnh sửa">
-                                                            <SquareX
-                                                                size={16}
-                                                                strokeWidth={1.5}
-                                                                className={
-                                                                    'text-red-600 cursor-pointer'
-                                                                }
-                                                                onClick={() => {
-                                                                    toggleCommentRow(record.id)
-                                                                }}
-                                                            />
-                                                        </Tooltip>
+                                                        {can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            'DUYET'
+                                                        ) && (
+                                                            <Tooltip title="Yêu cầu chỉnh sửa">
+                                                                <SquareX
+                                                                    size={16}
+                                                                    strokeWidth={1.5}
+                                                                    className={
+                                                                        'text-red-600 cursor-pointer'
+                                                                    }
+                                                                    onClick={() => {
+                                                                        toggleCommentRow(record.id)
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        )}
                                                     </div>
                                                 )
                                             },
