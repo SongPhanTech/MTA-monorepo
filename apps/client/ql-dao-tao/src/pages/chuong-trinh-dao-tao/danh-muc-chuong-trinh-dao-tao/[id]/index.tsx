@@ -463,7 +463,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <div className="flex gap-2">
                         <p className="flex gap-2 items-center">
-                            <p className="w-4 h-4 bg-red-100" /> Môn bắt buộc
+                            <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
                         </p>
                         <p className="flex gap-2 items-center">
                             <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
@@ -487,7 +487,7 @@ export default function TrainingProgramSubjects() {
                                 className: cn(
                                     !subject.useForFinalScore && 'bg-orange-300',
                                     subject.type === $Enums.SubjectRequirementType.Mandatory &&
-                                        'bg-red-100',
+                                        'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100'
                                 ),
