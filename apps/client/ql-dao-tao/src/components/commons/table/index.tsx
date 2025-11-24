@@ -67,7 +67,7 @@ type TableProps<T = AnyObject> = {
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
-    maxHeight?: number
+    maxHeight?: number | string
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 

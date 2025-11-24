@@ -473,6 +473,8 @@ export default function TrainingProgramSubjects() {
                         </p>
                     </div>
                     <TableCollapse
+                        scrollable
+                        maxHeight={'calc(100vh - 305px)'}
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
                             `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
@@ -504,8 +506,14 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 3,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.credit, 0),
+                                render: (_, record) => (
+                                    <p className="text-center">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.credit,
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
