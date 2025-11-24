@@ -129,7 +129,15 @@ export default function CriteriaEvaluationPage() {
         }
 
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember, can])
+    }, [
+        selectedEvaluationPeriodId,
+        councilMember,
+        can, // can(
+        //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        //     'XEM_TAT_CA'
+        // )
+        idProfile,
+    ])
 
     return (
         <Row gutter={[12, 0]}>

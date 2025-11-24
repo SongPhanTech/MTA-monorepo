@@ -147,10 +147,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const handleEvaluationForm = async () => {
         try {
             const dataSubmit = form.getFieldsValue()
+
             if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) {
                 message.warning('Không có dữ liệu để nộp')
                 return
             }
+            showSpinner()
 
             const listSqlTransaction = dataSubmit.criteria.map(
                 (
@@ -189,9 +191,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -208,7 +213,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 })),
             })
         }
-    }, [data, form])
+    }, [])
 
     const statusConfig = getStatusConfig(
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
