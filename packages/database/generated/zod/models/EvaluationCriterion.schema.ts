@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { EvaluationStatus } from '../../zenstack/models';
 import { EvaluationStatusSchema } from '../enums/EvaluationStatus.schema';
 const baseSchema = z.object({

@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const EvaluationStatusSchema = z.enum(["LOCK", "PENDING", "SUBMITTED", "REVISION", "APPROVED", "COMPLETED"])

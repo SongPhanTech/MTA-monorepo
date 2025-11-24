@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SurveyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "lectureId", "subjectClassId", "surveyTopicId", "clusterSurveyId"])

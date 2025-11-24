@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const GraduationSessionStatusSchema = z.enum(["PLANNING", "OPEN_FOR_APPLICATION", "IN_REVIEW", "COMPLETED", "CLOSED"])

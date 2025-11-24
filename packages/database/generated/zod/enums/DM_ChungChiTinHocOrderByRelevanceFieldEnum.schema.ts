@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const DM_ChungChiTinHocOrderByRelevanceFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sNguonCap", "sNoiDung", "sGiaTri", "sDoiTuong"])

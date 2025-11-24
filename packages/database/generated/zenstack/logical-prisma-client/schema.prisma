@@ -3403,6 +3403,7 @@ model ClassRegisterSession {
   endDate           DateTime
   semester          Semester                     @relation(fields: [semesterId], references: [id])
   semesterId        String
+  /// học phí/tín chỉ
   tuitionPerCredit  Float                        @default(0)
   creditLimit       ClassRegisterSessionCredit[]
   trainingCourses   TrainingCourse[]
@@ -4230,6 +4231,8 @@ model StudentSemesterResult {
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType
+  rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
+  rankId                   String?
   lowestFinalScore         Float
   lowestGraduationScore    Float?
   totalCredits             Int
@@ -4279,6 +4282,8 @@ model StudentYearResult {
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType
+  rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
+  rankId                   String?
   totalCredits             Int
   failedCredits            Int
   isClassMonitor           Boolean
@@ -4782,6 +4787,7 @@ model ThesisProject {
   technologies       String?                     @db.Text()
   thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
+  language           String?                     @db.Text()
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId     String?
   thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
@@ -6391,6 +6397,8 @@ model AcademicRankingConvert {
   graduationDecision           GraduationDecision[]
   studentGraduationApplication StudentGraduationApplication[]
   applicationDowngraded        ApplicationDowngraded[]
+  studentSemesterResult        StudentSemesterResult[]
+  studentYearResult            StudentYearResult[]
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")

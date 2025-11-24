@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ChienDauScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "cuongVi", "donVi", "diaDiem", "vaiTro", "doiTuong", "thoiGianBatDau", "thoiGianKetThuc", "userProfileId"])

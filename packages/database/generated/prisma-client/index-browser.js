@@ -2461,6 +2461,7 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   cumulativeGpaBase10: 'cumulativeGpaBase10',
   conductScore: 'conductScore',
   studentTrainingType: 'studentTrainingType',
+  rankId: 'rankId',
   lowestFinalScore: 'lowestFinalScore',
   lowestGraduationScore: 'lowestGraduationScore',
   totalCredits: 'totalCredits',
@@ -2502,6 +2503,7 @@ exports.Prisma.StudentYearResultScalarFieldEnum = {
   cumulativeGpaBase10: 'cumulativeGpaBase10',
   conductScore: 'conductScore',
   studentTrainingType: 'studentTrainingType',
+  rankId: 'rankId',
   totalCredits: 'totalCredits',
   failedCredits: 'failedCredits',
   isClassMonitor: 'isClassMonitor',
@@ -2822,6 +2824,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   technologies: 'technologies',
   thesisType: 'thesisType',
   status: 'status',
+  language: 'language',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',
@@ -5901,7 +5904,8 @@ exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
   description: 'description',
   code: 'code',
   studentId: 'studentId',
-  semesterId: 'semesterId'
+  semesterId: 'semesterId',
+  rankId: 'rankId'
 };
 
 exports.Prisma.StudentYearResultOrderByRelevanceFieldEnum = {
@@ -5909,7 +5913,8 @@ exports.Prisma.StudentYearResultOrderByRelevanceFieldEnum = {
   description: 'description',
   code: 'code',
   studentId: 'studentId',
-  schoolYearId: 'schoolYearId'
+  schoolYearId: 'schoolYearId',
+  rankId: 'rankId'
 };
 
 exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
@@ -6111,6 +6116,7 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   expectedResults: 'expectedResults',
   requirements: 'requirements',
   technologies: 'technologies',
+  language: 'language',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',

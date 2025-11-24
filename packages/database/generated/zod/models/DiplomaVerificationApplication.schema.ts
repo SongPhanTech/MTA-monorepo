@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { DiplomaVerificationStatus } from '../../zenstack/models';
 import { DiplomaVerificationStatusSchema } from '../enums/DiplomaVerificationStatus.schema';
 const baseSchema = z.object({

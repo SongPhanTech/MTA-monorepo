@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SemesterTypeSchema = z.enum(["FIRST", "FIRST_SUPPLEMENTARY", "SECOND", "SECOND_SUPPLEMENTARY", "SUMMER"])

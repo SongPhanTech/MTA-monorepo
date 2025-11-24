@@ -13437,6 +13437,20 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSemesterResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'rank',
                 }, lowestFinalScore: {
                     name: "lowestFinalScore",
                     type: "Float",
@@ -13597,6 +13611,20 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentYearResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'rank',
                 }, totalCredits: {
                     name: "totalCredits",
                     type: "Int",
@@ -15562,6 +15590,10 @@ const metadata: ModelMeta = {
                     name: "status",
                     type: "ThesisProjectStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, language: {
+                    name: "language",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -21468,6 +21500,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'from',
+                }, studentSemesterResult: {
+                    name: "studentSemesterResult",
+                    type: "StudentSemesterResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
+                }, studentYearResult: {
+                    name: "studentYearResult",
+                    type: "StudentYearResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
                 },
             }, uniqueConstraints: {
                 id: {

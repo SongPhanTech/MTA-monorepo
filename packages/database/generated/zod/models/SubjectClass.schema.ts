@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { SubjectClassType, SubjectClassStatus } from '../../zenstack/models';
 import { SubjectClassScheduleSchema } from '../enums/SubjectClassSchedule.schema';
 import { SubjectClassTypeSchema } from '../enums/SubjectClassType.schema';

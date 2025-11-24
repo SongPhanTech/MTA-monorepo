@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
-export const StudentSemesterResultScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "code", "studentId", "semesterId", "studyYear", "semesterIndexInCourse", "isLastSemester", "baseScore", "gpaBase4", "cumulativeGpaBase4", "gpaBase10", "cumulativeGpaBase10", "conductScore", "studentTrainingType", "lowestFinalScore", "lowestGraduationScore", "totalCredits", "registeredCredits", "retakingCredits", "passedCredits", "failedCredits", "accumulatedCredits", "totalCreditsByCurriculum", "totalFailedCredits", "foreignLangPass", "isClassMonitor", "isUnionLeader", "entryScore", "isImproving", "postponeWithReason", "academicWarningLevel", "disciplinaryWarningLevel", "suspended", "expelled"])
+export const StudentSemesterResultScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "code", "studentId", "semesterId", "studyYear", "semesterIndexInCourse", "isLastSemester", "baseScore", "gpaBase4", "cumulativeGpaBase4", "gpaBase10", "cumulativeGpaBase10", "conductScore", "studentTrainingType", "rankId", "lowestFinalScore", "lowestGraduationScore", "totalCredits", "registeredCredits", "retakingCredits", "passedCredits", "failedCredits", "accumulatedCredits", "totalCreditsByCurriculum", "totalFailedCredits", "foreignLangPass", "isClassMonitor", "isUnionLeader", "entryScore", "isImproving", "postponeWithReason", "academicWarningLevel", "disciplinaryWarningLevel", "suspended", "expelled"])

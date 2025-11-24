@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { SubjectRequirementType } from '../../zenstack/models';
 import { SubjectRequirementTypeSchema } from '../enums/SubjectRequirementType.schema';
 const baseSchema = z.object({

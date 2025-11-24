@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { NotificationType, NotificationPriority } from '../../zenstack/models';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { NotificationPrioritySchema } from '../enums/NotificationPriority.schema';

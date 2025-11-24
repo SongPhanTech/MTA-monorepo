@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const DocumentOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "title", "body", "classificationId", "uri", "fileType", "reason", "uploadedById", "approvedById"])

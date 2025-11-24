@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const StudentTrainingTypeSchema = z.enum(["EXCELLENT", "GOOD", "FAIR", "MEDIUM", "AVERAGE", "POOR", "VERY_POOR"])

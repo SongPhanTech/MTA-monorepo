@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SubjectClassScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "code", "name", "startDate", "endDate", "subjectId", "schedule", "maxStudent", "type", "status", "trainingObjectTypeId", "semesterId", "cancelled", "lecturerAssignmentDeadline", "sendLecturerAssignmentAt", "submitLecturerAssignmentAt", "approveLecturerAssignmentAt", "examDate", "examType", "examId", "scoreDeadLineStart", "scoreDeadline", "examScoreDeadline", "enteredScore", "enteredExamScore", "issuedScoreAt", "isLockScore", "isLockExamScore", "scoreSubmitted", "scoreChecked", "roomId", "trainingLocationId", "lecturerId", "extraLecturerId", "enterGradeLecturerId"])

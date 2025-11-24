@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SubjectClassHistoryOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "subjectClassId", "updatedById"])

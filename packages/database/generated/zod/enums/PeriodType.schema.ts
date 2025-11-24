@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const PeriodTypeSchema = z.enum(["THEORY", "PRACTICE", "LAB", "SEMINAR", "EXAM", "MAKEUP", "REVIEW", "CHECK", "WEEK"])

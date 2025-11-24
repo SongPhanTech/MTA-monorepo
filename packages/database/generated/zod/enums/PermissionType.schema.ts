@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const PermissionTypeSchema = z.enum(["CREATE", "READ", "UPDATE", "DELETE", "APPROVE", "DETAIL"])

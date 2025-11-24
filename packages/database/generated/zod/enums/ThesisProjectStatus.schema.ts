@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ThesisProjectStatusSchema = z.enum(["PROPOSED", "APPROVED_BY_DEPT", "ASSIGNED", "IN_PROGRESS", "DEFENSE_ELIGIBLE", "DEFENDED_PASSED", "DEFENDED_FAILED", "COMPLETED", "CANCELED"])

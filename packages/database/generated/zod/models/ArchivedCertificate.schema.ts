@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { ArchivedCertificateStatus } from '../../zenstack/models';
 import { ArchivedCertificateStatusSchema } from '../enums/ArchivedCertificateStatus.schema';
 const baseSchema = z.object({

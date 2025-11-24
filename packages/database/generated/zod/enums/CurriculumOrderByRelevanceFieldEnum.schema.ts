@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const CurriculumOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "englishName", "managementOrganizationId", "trainingMajorId", "trainingObjectTypeId", "information", "renderPath"])

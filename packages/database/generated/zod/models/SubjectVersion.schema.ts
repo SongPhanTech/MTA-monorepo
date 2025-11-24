@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { SubjectVersionType } from '../../zenstack/models';
 import { ExamTypeSchema } from '../enums/ExamType.schema';
 import { SubjectVersionTypeSchema } from '../enums/SubjectVersionType.schema';

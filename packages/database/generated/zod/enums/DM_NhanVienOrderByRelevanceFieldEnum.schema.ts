@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const DM_NhanVienOrderByRelevanceFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sCCCD", "sHoVaDem", "sTenDayDu", "sDM_QuocGiaId", "sDM_TinhId", "sDM_QuanHuyenId", "sDM_XaPhuongId", "sDiaChi", "sSDTDiDong", "sEmail", "sDM_DonViId", "sDM_ViTriCongViecId", "sQuanlyTrucTiepId", "sAvatarId", "groupId"])

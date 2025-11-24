@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
 import { CriteriaOperatorSchema } from '../enums/CriteriaOperator.schema';
 const baseSchema = z.object({

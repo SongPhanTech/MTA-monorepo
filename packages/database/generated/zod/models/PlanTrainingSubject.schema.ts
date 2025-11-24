@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { SubjectClassType } from '../../zenstack/models';
 import { SubjectClassTypeSchema } from '../enums/SubjectClassType.schema';
 const baseSchema = z.object({

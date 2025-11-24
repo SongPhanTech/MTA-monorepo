@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SurveySessionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "surveyId", "additionalSuggestion", "profileId", "studentId", "startedAt", "completedAt", "isCompleted", "surveyObjectTypeId"])
