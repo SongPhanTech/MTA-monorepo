@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import { DanhSachThongBao, ThongKeDonVi, LichCongTac, ThongKeTotNghiep } from '@workspace/ui'
+import { DanhSachThongBao, LichCongTac, ThongKeDonVi, ThongKeTotNghiep } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
 const { Title } = Typography
