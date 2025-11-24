@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { DecisionStatus } from '../../zenstack/models';
 import { AcademicActionTypeSchema } from '../enums/AcademicActionType.schema';
 import { DecisionStatusSchema } from '../enums/DecisionStatus.schema';

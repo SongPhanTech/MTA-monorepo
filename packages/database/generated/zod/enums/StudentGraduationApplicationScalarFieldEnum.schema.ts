@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const StudentGraduationApplicationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "studentId", "sessionId", "applicationDate", "status", "graduation", "gpa", "reason", "rankId", "trainingMajorId", "diplomaTypeId"])

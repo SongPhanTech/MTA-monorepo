@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
-export const StudentYearResultOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "code", "studentId", "schoolYearId"])
+export const StudentYearResultOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "code", "studentId", "schoolYearId", "rankId"])

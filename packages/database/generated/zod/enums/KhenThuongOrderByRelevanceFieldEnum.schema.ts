@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const KhenThuongOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "hinhThucKhenThuong", "capKhenThuong", "soQuyetDinh", "nguoiKy", "lyDo", "userProfileId"])

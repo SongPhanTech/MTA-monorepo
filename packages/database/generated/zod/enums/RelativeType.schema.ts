@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const RelativeTypeSchema = z.enum(["FATHER", "MOTHER", "OLDER_BROTHER", "OLDER_SISTER", "YOUNGER_BROTHER", "YOUNGER_SISTER", "MARRIER", "FATHER_IN_LOW", "MOTHER_IN_LOW", "SON", "DAUGHTER"])

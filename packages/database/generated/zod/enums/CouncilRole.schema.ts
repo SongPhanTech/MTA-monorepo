@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const CouncilRoleSchema = z.enum(["CHAIRMAN", "SECRETARY", "REVIEWER_1", "REVIEWER_2", "MEMBER"])

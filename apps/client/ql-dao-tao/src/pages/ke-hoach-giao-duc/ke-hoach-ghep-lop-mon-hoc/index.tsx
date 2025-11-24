@@ -11,17 +11,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Popconfirm,
-    Row,
-    Tooltip,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { PlusCircle, XCircleIcon } from 'lucide-react'
 import type React from 'react'

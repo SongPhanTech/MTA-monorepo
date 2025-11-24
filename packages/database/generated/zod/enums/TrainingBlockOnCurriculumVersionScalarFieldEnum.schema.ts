@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const TrainingBlockOnCurriculumVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "trainingBlockId", "curriculumVersionId", "curriculumId", "priority", "electiveCreditsRequired"])

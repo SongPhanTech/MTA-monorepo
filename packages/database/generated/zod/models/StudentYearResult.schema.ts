@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
 import { StudentTrainingTypeSchema } from '../enums/StudentTrainingType.schema';
 import { DecimalSchema } from '../common';
@@ -66,11 +66,13 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     student: z.record(z.string(), z.unknown()),
     schoolYear: z.record(z.string(), z.unknown()),
+    rank: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     studentId: z.string(),
     schoolYearId: z.string(),
+    rankId: z.string().nullish(),
 }
 );
 

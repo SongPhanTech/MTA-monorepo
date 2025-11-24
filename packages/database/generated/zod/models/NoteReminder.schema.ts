@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { ReminderRepeatType } from '../../zenstack/models';
 import { ReminderRepeatTypeSchema } from '../enums/ReminderRepeatType.schema';
 const baseSchema = z.object({

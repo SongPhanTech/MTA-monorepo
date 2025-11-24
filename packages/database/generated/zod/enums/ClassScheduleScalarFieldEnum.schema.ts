@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ClassScheduleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "subjectClassId", "periodType", "startPeriod", "endPeriod", "startTime", "endTime", "classDate", "roomId", "lecturerId", "extraLecturerId", "location", "notes", "isReplacement", "originalScheduleId", "cancelReason"])

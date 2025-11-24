@@ -171,6 +171,8 @@ model AcademicRankingConvert extends Base {
   graduationDecision           GraduationDecision[]
   studentGraduationApplication StudentGraduationApplication[]
   applicationDowngraded        ApplicationDowngraded[]
+  studentSemesterResult        StudentSemesterResult[]
+  studentYearResult            StudentYearResult[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")

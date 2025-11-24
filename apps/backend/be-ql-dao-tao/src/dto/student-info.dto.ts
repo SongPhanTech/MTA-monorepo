@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi'
+import { AcademicRankingConvertScalarSchema } from '@workspace/db/zod/models'
 
 export const ListScholarship = z.object({
     id: z.string().describe('ID của tiêu chí học bổng'),
@@ -110,8 +111,6 @@ export const StudentAcademicAction = z.object({
     tongSoTinChiNo: z.number().describe('Số tín chỉ nợ'),
     mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
     mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
-    xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
-
     userProfile: z.any().describe('Thông tin người dùng'),
 })
 export const StudentInfoCheck = z.object({
@@ -137,7 +136,6 @@ export const StudentInfoCheck = z.object({
     diemDauVao: z.number().describe('Điểm đầu vào'),
     diemTrungBinh4: z.number().describe('Điểm trung bình hệ 4'),
     diemTrungBinh10: z.number().describe('Điểm trung bình hệ 10'),
-    xepLoaiHocTap: z.string().describe('Xếp loại học tập'),
     soTinChiDangKy: z.number().describe('Số tín chỉ đăng ký trong học kỳ'),
     soTinChiTichLuy: z.number().describe('Số tín chỉ tích lũy'),
     soTinChiYeuCau: z.number().describe('Số tín chỉ yêu cầu theo CTDT'),

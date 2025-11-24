@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { CouncilProposalStatus } from '../../zenstack/models';
 import { CouncilProposalStatusSchema } from '../enums/CouncilProposalStatus.schema';
 const baseSchema = z.object({

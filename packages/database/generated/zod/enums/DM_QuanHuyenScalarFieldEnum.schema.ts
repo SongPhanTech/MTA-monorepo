@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const DM_QuanHuyenScalarFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "iSTT", "bActive", "bDeleted", "bSystem", "iDictionaryKey", "dNgayTao", "dNgaySua", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sDM_TinhId", "sDM_Tinh_Ma", "iDM_DonViHanhChinhId"])

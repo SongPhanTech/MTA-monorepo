@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const FeedbackOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "content", "userId"])

@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ResearchProjectOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "title", "summary", "objectives", "methodology", "expectedResults", "requirements", "supervisorId", "organizationId"])

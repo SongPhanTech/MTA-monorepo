@@ -328,7 +328,7 @@ export function useSuspenseCountStudentYearResult<TArgs extends Prisma.StudentYe
 }
 import type { AcademicRankingBaseType, StudentTrainingType } from '../zenstack/models';
 
-export function useCheckStudentYearResult<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; code?: string; studentId?: string; schoolYearId?: string; studyYear?: number; isLastStudyYear?: boolean; baseScore?: AcademicRankingBaseType; studentTrainingType?: StudentTrainingType; totalCredits?: number; failedCredits?: number; isClassMonitor?: boolean; isUnionLeader?: boolean; academicWarningLevel?: number; disciplinaryWarningLevel?: number; suspended?: boolean; expelled?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentYearResult<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; code?: string; studentId?: string; schoolYearId?: string; studyYear?: number; isLastStudyYear?: boolean; baseScore?: AcademicRankingBaseType; studentTrainingType?: StudentTrainingType; rankId?: string; totalCredits?: number; failedCredits?: number; isClassMonitor?: boolean; isUnionLeader?: boolean; academicWarningLevel?: number; disciplinaryWarningLevel?: number; suspended?: boolean; expelled?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentYearResult', `${endpoint}/studentYearResult/check`, args, options, fetch);
 }

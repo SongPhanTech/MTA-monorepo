@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { FixedClass, TrainingCourse } from '@workspace/db/client'
+import type { AcademicRankingConvert, FixedClass, TrainingCourse } from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyDM_DonVi,
@@ -124,9 +124,8 @@ const DiemTrungBinhKyHoc = () => {
             where,
             include: {
                 studentSemesterResult: {
-                    where: {
-                        semesterId,
-                    },
+                    where: { semesterId },
+                    include: { rank: true },
                 },
                 userProfile: true,
                 fixedClass: {
@@ -362,17 +361,25 @@ const DiemTrungBinhKyHoc = () => {
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
-                            // {
-                            //     title: 'Xếp loại rèn luyện',
-                            //     dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
-                            //     width: 140,
-                            //     align: 'center',
-                            //     render: (value) => (
-                            //         <Tag color={getStudentTrainingTypeColor(value)}>
-                            //             {getStudentTrainingTypeLabel(value)}
-                            //         </Tag>
-                            //     ),
-                            // },
+                            {
+                                title: 'Xếp loại học lực',
+                                dataIndex: ['studentSemesterResult', '0', 'rank'],
+                                width: 140,
+                                align: 'center',
+                                render: (rank?: AcademicRankingConvert) =>
+                                    rank?.classification || '-',
+                            },
+                            {
+                                title: 'Xếp loại rèn luyện',
+                                dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
+                                width: 140,
+                                align: 'center',
+                                render: (value) => (
+                                    <Tag color={getStudentTrainingTypeColor(value)}>
+                                        {getStudentTrainingTypeLabel(value)}
+                                    </Tag>
+                                ),
+                            },
                             {
                                 title: 'Điểm học phần thấp nhất',
                                 dataIndex: ['studentSemesterResult', '0', 'lowestFinalScore'],

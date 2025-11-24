@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const EvaluationPeriodStatusSchema = z.enum(["COUNCIL_ESTABLISHED", "ASSIGNMENT", "ANALYSIS_WRITING", "SECRETARY_REVIEW", "DIRECTOR_REVIEW", "EVALUATION_WRITING", "CROSS_REVIEW_ASSIGNMENT", "CROSS_REVIEW", "CONSOLIDATION", "COUNCIL_APPROVAL", "COMPLETED"])

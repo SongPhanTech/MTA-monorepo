@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SubjectVersionTypeSchema = z.enum(["Normal", "Internship", "Research", "Project", "Practice", "Graduation"])

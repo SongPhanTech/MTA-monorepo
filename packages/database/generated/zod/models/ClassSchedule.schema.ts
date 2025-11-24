@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { PeriodType } from '../../zenstack/models';
 import { PeriodTypeSchema } from '../enums/PeriodType.schema';
 const baseSchema = z.object({

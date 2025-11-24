@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const PlanTrainingDelayScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "trainingObjectTypeId"])

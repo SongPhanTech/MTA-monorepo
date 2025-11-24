@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ThesisSessionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "startDate", "endDate", "trainingObjectTypeId", "trainingCourseId", "decisionNumber", "decisionMaker", "decisionDate", "defenseDecisionNumber", "defenseDecisionMaker", "defenseDecisionDate", "chief"])

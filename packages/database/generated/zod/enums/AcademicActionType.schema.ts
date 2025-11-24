@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const AcademicActionTypeSchema = z.enum(["REPEAT_YEAR", "SUSPENSION", "EXPULSION"])

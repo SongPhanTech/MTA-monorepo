@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { ThesisType, ThesisProjectStatus } from '../../zenstack/models';
 import { ThesisTypeSchema } from '../enums/ThesisType.schema';
 import { ThesisProjectStatusSchema } from '../enums/ThesisProjectStatus.schema';
@@ -28,6 +28,7 @@ const baseSchema = z.object({
     technologies: z.string().nullish(),
     thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
+    language: z.string().nullish(),
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
@@ -56,6 +57,7 @@ const baseSchemaWithoutDefaults = z.object({
     technologies: z.string().nullish(),
     thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
+    language: z.string().nullish(),
     maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
@@ -135,6 +137,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     technologies: z.string().nullish(),
     thesisType: ThesisTypeSchema,
     status: ThesisProjectStatusSchema,
+    language: z.string().nullish(),
     maxStudents: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
