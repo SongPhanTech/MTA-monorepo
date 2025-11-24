@@ -288,7 +288,7 @@ function ClusterSurveyReport({
     }
 
     return (
-        <div >
+        <div>
             <Row gutter={[16, 4]}>
                 <Col span={24}>
                     {dataLevel?.status === 200 && (

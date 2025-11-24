@@ -18,7 +18,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { data: session } = useSession()
-        const profileId = session?.sDM_NhanVienId || ''
+    const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         fullname: undefined,
         studentCode: undefined,
@@ -248,7 +248,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 width: 80,
                                 render: (_, record) => (
                                     <Row className="justify-center gap-0">
-                                        {profileId==='e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
+                                        {profileId === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
                                             <Tooltip title="Xem khảo sát" placement="top">
                                                 <Eye
                                                     className="m-0"

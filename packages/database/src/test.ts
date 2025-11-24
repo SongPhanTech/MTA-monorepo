@@ -1,17 +1,14 @@
 import { PrismaClient } from '../generated/prisma-client'
+import dayjs from 'dayjs'
 
-const prisma = new PrismaClient()
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 
-await prisma.templateFile.createMany({
-    skipDuplicates: true,
-    data: [
-        {
-            name: 'slide tốt nghiệp',
-            code: 'SLIDE_TN',
-            path: 'https://minio.swantech.vn/mta/template/slide_TN.pptx',
-            fileType: 'DOWNLOAD',
-            extensions: 'xlsx',
-            numberField: 0,
-        },
-    ],
-})
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
+
+const date = dayjs('2025-01-01T17:00:00Z')
+
+console.log(date.format('DD/MM/YYYY'))
