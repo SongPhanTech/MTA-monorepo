@@ -28,7 +28,7 @@ function DanhSachHocVien({
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-      const { data: session } = useSession()
+    const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
@@ -405,36 +405,37 @@ function DanhSachHocVien({
                                             return (
                                                 <Row className="justify-center gap-0">
                                                     {
-                                                    // can(
-                                                    //     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                                                    //     'XEM_TAT_CA'
-                                                    // ) 
-                                                    profileId==='e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    && (
-                                                        <Tooltip
-                                                            title="Xem khảo sát"
-                                                            placement="top"
-                                                        >
-                                                            <Eye
-                                                                className={`m-0 ${!result ? 'opacity-[0.5] pointer-events-none !cursor-not-allowed' : ''}`}
-                                                                size={14}
-                                                                onClick={() => {
-                                                                    if (!!result) {
-                                                                        onOpen({
-                                                                            userId:
-                                                                                record?.student
-                                                                                    ?.userProfile
-                                                                                    ?.id || '',
-                                                                            surveyId:
-                                                                                result?.surveyId ||
-                                                                                '',
-                                                                            userName: `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`,
-                                                                        })
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </Tooltip>
-                                                    )}
+                                                        // can(
+                                                        //     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                                        //     'XEM_TAT_CA'
+                                                        // )
+                                                        profileId ===
+                                                            'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
+                                                            <Tooltip
+                                                                title="Xem khảo sát"
+                                                                placement="top"
+                                                            >
+                                                                <Eye
+                                                                    className={`m-0 ${!result ? 'opacity-[0.5] pointer-events-none !cursor-not-allowed' : ''}`}
+                                                                    size={14}
+                                                                    onClick={() => {
+                                                                        if (!!result) {
+                                                                            onOpen({
+                                                                                userId:
+                                                                                    record?.student
+                                                                                        ?.userProfile
+                                                                                        ?.id || '',
+                                                                                surveyId:
+                                                                                    result?.surveyId ||
+                                                                                    '',
+                                                                                userName: `${record?.student?.userProfile?.lastName || ''} ${record?.student?.userProfile?.firstName || ''}`,
+                                                                            })
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        )
+                                                    }
                                                 </Row>
                                             )
                                         },

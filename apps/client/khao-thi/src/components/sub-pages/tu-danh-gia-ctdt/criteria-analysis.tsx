@@ -3,7 +3,11 @@ import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { getStatusEvaluation, EVALUATION_CRITERION_STATUS_OPTIONS } from '@constants/constants'
+import {
+    getStatusEvaluation,
+    EVALUATION_CRITERION_STATUS_OPTIONS,
+    DEADLINE_OPTIONS,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
@@ -135,11 +139,6 @@ const CriteriaAnalysisSubPage = ({
             hideSpinner()
         }
     }
-
-    const DEADLINE_OPTIONS = [
-        { value: 'overdue', label: 'Quá hạn' },
-        { value: 'near', label: 'Sắp quá hạn' },
-    ]
 
     const filteredCriteria = data?.criteria?.filter((item) => {
         if (!item.analysisCriterions) return false

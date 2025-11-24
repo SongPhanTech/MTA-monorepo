@@ -120,7 +120,7 @@ app.openapi(certificateScore, async (c) => {
         const curriculumVersion =
             archived.student.curriculumVersion || archived.student.fixedClass?.curriculumVersion
 
-        const cert = certMap.get(archived.id)
+        const cert = certMap.get(archived.certificateId)
 
         if (!curriculumVersion || !cert) {
             return []
@@ -145,7 +145,7 @@ app.openapi(certificateScore, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.studentSubjectScore.createMany({
-            data: translateSubjectScore,
+            data: translateSubjectScore.map(({ archivedCertificateId, ...score }) => score),
         })
 
         await tx.archivedCertificateOnStudentSubjectScore.createMany({
@@ -229,6 +229,7 @@ app.openapi(awardScore, async (c) => {
         awards.map((award) => {
             const subjectVersions = award.subjects.flatMap((s) =>
                 s.subjectVersion.map((sv) => ({
+                    awardId: award.id,
                     subjectVersionId: sv.id,
                     bonusScore: award.bonusScore,
                 }))
@@ -238,7 +239,7 @@ app.openapi(awardScore, async (c) => {
         })
     )
 
-    const archivedCertificates = await prisma.archivedCertificate.findMany({
+    const archivedAwards = await prisma.archivedAward.findMany({
         where: {
             id: { in: archivedAwardIds },
             active: true,
@@ -262,6 +263,7 @@ app.openapi(awardScore, async (c) => {
                                     },
                                 },
                             },
+                            trainingCourse: true,
                         },
                     },
                 },
@@ -269,11 +271,12 @@ app.openapi(awardScore, async (c) => {
         },
     })
 
-    const bonusSubjectScore = archivedCertificates.flatMap((archived) => {
+    const bonusSubjectScores = archivedAwards.flatMap((archived) => {
         const curriculumVersion =
             archived.student.curriculumVersion || archived.student.fixedClass?.curriculumVersion
+        const scoreToPass = archived.student.fixedClass?.trainingCourse.scoreToPass || 0
 
-        const award = awardMap.get(archived.id)
+        const award = awardMap.get(archived.awardId)
 
         if (!curriculumVersion || !award) {
             return []
@@ -285,13 +288,74 @@ app.openapi(awardScore, async (c) => {
 
         const translateSubject = award
             .filter(({ subjectVersionId }) => curriculumSubjects.includes(subjectVersionId))
-            .map(({ subjectVersionId, bonusScore }) => ({
+            .map(({ awardId, subjectVersionId, bonusScore }) => ({
+                awardId,
+                archivedAwardId: archived.id,
                 studentId: archived.studentId,
                 subjectVersionId,
                 bonusScore,
+                scoreToPass,
             }))
 
         return translateSubject
+    })
+
+    const studentSubjectScores = await prisma.studentSubjectScore.findMany({
+        where: {
+            deletedAt: null,
+            OR: bonusSubjectScores.map(({ awardId, studentId, subjectVersionId, scoreToPass }) => ({
+                studentId,
+                subjectVersionId,
+                OR: [
+                    { finalScore: { gte: scoreToPass } },
+                    { manualFinalScore: { gte: scoreToPass } },
+                ],
+                awards: {
+                    none: { archivedAward: { awardId } },
+                },
+            })),
+        },
+    })
+
+    await prisma.$transaction(async (tx) => {
+        for (const s of studentSubjectScores) {
+            const bonusSubjectScore = bonusSubjectScores.find(
+                ({ studentId, subjectVersionId }) =>
+                    studentId === s.studentId && subjectVersionId === s.subjectVersionId
+            )
+
+            const bonusScore = bonusSubjectScore?.bonusScore || 0
+            await tx.studentSubjectScore.update({
+                where: { id: s.id },
+                data: {
+                    ...(s.finalScore ? { finalScore: s.finalScore.add(bonusScore) } : {}),
+                    ...(s.manualFinalScore
+                        ? { manualFinalScore: s.manualFinalScore + bonusScore }
+                        : {}),
+                },
+            })
+        }
+
+        const pairs = studentSubjectScores.map((s) => {
+            const bonusSubjectScore = bonusSubjectScores.find(
+                ({ studentId, subjectVersionId }) =>
+                    studentId === s.studentId && subjectVersionId === s.subjectVersionId
+            )
+
+            return {
+                studentSubjectScoreId: s.id,
+                archivedAwardId: bonusSubjectScore?.archivedAwardId as string,
+            }
+        })
+
+        await tx.archivedAwardOnStudentSubjectScore.createMany({
+            data: pairs,
+        })
+
+        await tx.archivedAward.updateMany({
+            where: { id: { in: archivedAwardIds } },
+            data: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+        })
     })
 
     return c.json({ success: true, message: 'Success' }, 200)

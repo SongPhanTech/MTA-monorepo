@@ -119,7 +119,6 @@ export default function EvaluationPeriod() {
             <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top">
-                        {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end" gap={8}>
                                 {can(
@@ -234,14 +233,6 @@ export default function EvaluationPeriod() {
                             },
                             {
                                 title: 'Trạng thái',
-                                // dataIndex: 'status',
-                                // type: 'select',
-                                // options: Object.entries(EVALUATION_PERIOD_STATUS_LABELS).map(
-                                //     ([value, { label }]) => ({
-                                //         value,
-                                //         label,
-                                //     })
-                                // ),
                                 align: 'center',
                                 width: 110,
                                 render: (_, record) => {
@@ -269,35 +260,6 @@ export default function EvaluationPeriod() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                    'XEM_CHI_TIET'
-                                                ) && (
-                                                    <Tooltip title={'Chi tiết'} placement="top">
-                                                        <EyeOutlined
-                                                            style={{ fontSize: '16px' }}
-                                                            onClick={(e) => {
-                                                                router.push(
-                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
-                                                                )
-                                                                e?.stopPropagation()
-                                                            }}
-                                                        />
-                                                    </Tooltip>
-                                                )}
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                    'DUYET'
-                                                ) && (
-                                                    <UserPlusIcon
-                                                        onClick={(e) => {
-                                                            router.push(
-                                                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}/phancong`
-                                                            )
-                                                            e?.stopPropagation()
-                                                        }}
-                                                    />
-                                                )} */}
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'SUA'

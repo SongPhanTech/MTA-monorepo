@@ -70,11 +70,10 @@ export default function CriteriaEvaluationPage() {
         }
 
         if (
-            // can(
-            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-            //     'XEM_TAT_CA'
-            // )
-            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
         ) {
             tabs.push({
                 key: '3',
@@ -87,19 +86,17 @@ export default function CriteriaEvaluationPage() {
         const isSecretary =
             councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
             councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY) ||
-            // can(
-            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-            //     'XEM_TAT_CA'
-            // )
-            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
 
         const isCouncilMember =
             !!councilMember ||
-            // can(
-            //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-            //     'XEM_TAT_CA'
-            // )
-            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
 
         if (isSecretary) {
             tabs.push({
@@ -129,15 +126,7 @@ export default function CriteriaEvaluationPage() {
         }
 
         return tabs
-    }, [
-        selectedEvaluationPeriodId,
-        councilMember,
-        can, // can(
-        //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-        //     'XEM_TAT_CA'
-        // )
-        idProfile,
-    ])
+    }, [selectedEvaluationPeriodId, councilMember, can])
 
     return (
         <Row gutter={[12, 0]}>

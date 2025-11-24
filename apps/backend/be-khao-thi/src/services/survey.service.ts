@@ -80,9 +80,9 @@ const AverageSchema = z.object({
 export const SurveyStatsSchema = z.object({
     surveyId: z.string(),
     lecture: z.string().optional().nullable(),
-    subjectClassId:z.string().optional().nullable(),
-    subjectClassName:z.string().optional().nullable(),
-    lectureId:z.string().optional().nullable(),
+    subjectClassId: z.string().optional().nullable(),
+    subjectClassName: z.string().optional().nullable(),
+    lectureId: z.string().optional().nullable(),
     questions: z.array(QuestionStatSchema),
     average: z.array(AverageSchema),
 })

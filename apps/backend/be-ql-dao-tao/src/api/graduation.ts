@@ -320,10 +320,9 @@ app.openapi(graduationCheck, async (c) => {
 
         for (const subjectScore of rawSubjectScores) {
             // actual final score
-            const scoreBase10 =
-                subjectScore.manualFinalScore || subjectScore.finalScore?.toNumber() || 0
+            const scoreBase10 = subjectScore.manualFinalScore || subjectScore.finalScore?.toNumber()
 
-            if (subjectScore.repeated && scoreBase10 < scoreToRetain) {
+            if (!scoreBase10 || (subjectScore.repeated && scoreBase10 < scoreToRetain)) {
                 continue
             }
 
