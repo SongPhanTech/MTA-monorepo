@@ -39,8 +39,8 @@ const auth = async ({
     return {
         // ...(jwtDecode(xToken) as Session),
         ...(({ accessToken, accessTokenWs, ...rest }) => rest)(isAuthenticated),
-        sDM_DonViId: isAuthenticated.userId,
-        sDM_NhanVienId: isAuthenticated.organizationId,
+        sDM_DonViId: isAuthenticated?.organizationId,
+        sDM_NhanVienId: isAuthenticated?.userId,
     } as Session
 }
 
