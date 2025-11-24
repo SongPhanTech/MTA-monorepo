@@ -38,9 +38,10 @@ const auth = async ({
     }
     return {
         // ...(jwtDecode(xToken) as Session),
-        ...isAuthenticated,
-        access_token: xToken,
-    }
+        ...(({ accessToken, accessTokenWs, ...rest }) => rest)(isAuthenticated),
+        sDM_DonViId: isAuthenticated.userId,
+        sDM_NhanVienId: isAuthenticated.organizationId,
+    } as Session
 }
 
 export { auth }
