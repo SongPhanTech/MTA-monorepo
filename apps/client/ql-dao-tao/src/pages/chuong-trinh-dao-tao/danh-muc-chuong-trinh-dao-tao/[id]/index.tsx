@@ -563,11 +563,11 @@ export default function TrainingProgramSubjects() {
                                 render: (_, record) => (
                                     <p className="font-bold">{record?.trainingBlock?.name}</p>
                                 ),
-                                colSpan: 2,
+                                colSpan: 3,
                             },
                             {
                                 render: (_, record) => (
-                                    <p className="text-center">
+                                    <p className="text-center font-bold">
                                         {record.subjects.reduce(
                                             (sum, s) => sum + s.subject.credit,
                                             0
@@ -583,59 +583,80 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.period,
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfReview ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfReview ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfExam ?? 0),
-                                        0
-                                    ),
-                                colSpan: 1,
-                            },
-                            {
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfExam ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {

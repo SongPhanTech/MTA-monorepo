@@ -13,20 +13,43 @@ await prisma.subjectVersionHistory.deleteMany({
   }
 })
 
+await prisma.planTrainingSubject.deleteMany({
+  where: {
+    subjectVersion: {
+      deletedAt: {
+        not: null,
+      },
+    },
+  }
+})
+
+await prisma.subjectClass.deleteMany({
+  where: {
+    subject: {
+      deletedAt: {
+        not: null,
+      },
+    },
+  }
+})
+
 await prisma.subjectVersion.deleteMany({
     where: {
-        trainingBlocks: {
-            none: {},
-        },
-        questionBanks: {
-            none: {},
-        },
-        subjectClass: {
-            none: {},
-        },
-        knowledgeBlocks: {
-            none: {},
-        },
+      deletedAt: {
+        not: null,
+      },
+      trainingBlocks: {
+          none: {},
+      },
+      questionBanks: {
+          none: {},
+      },
+      subjectClass: {
+          none: {},
+      },
+      knowledgeBlocks: {
+          none: {},
+      },
     },
 })
 
