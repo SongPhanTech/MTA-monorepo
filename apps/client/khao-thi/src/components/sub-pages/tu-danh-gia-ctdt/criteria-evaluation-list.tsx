@@ -10,6 +10,8 @@ import CommentList from '@components/commons/comment-list'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
+    opening: string
+    conclusion: string
 }
 
 export default function CriteriaEvaluationListSubPage({
@@ -23,6 +25,8 @@ export default function CriteriaEvaluationListSubPage({
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
+                opening: data?.opening || '',
+                conclusion: data?.conclusion || '',
                 criteria: data?.criteria?.map((item) => ({
                     ...item,
                     evaluationCriterion: {
@@ -59,6 +63,11 @@ export default function CriteriaEvaluationListSubPage({
     return (
         <div className="overflow-x-hidden">
             <Form form={form} layout="vertical" className="form-evidence">
+                {/* Phần mở đầu */}
+                <Form.Item label="Mở đầu" name="opening" required>
+                    <RichTextEditor id="opening" editable={false} />
+                </Form.Item>
+
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -222,6 +231,11 @@ export default function CriteriaEvaluationListSubPage({
                         </>
                     )}
                 </Form.List>
+
+                {/* Phần kết luận */}
+                <Form.Item label="Kết luận" name="conclusion" required>
+                    <RichTextEditor id="conclusion" editable={false} />
+                </Form.Item>
             </Form>
         </div>
     )

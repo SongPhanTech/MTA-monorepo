@@ -17,6 +17,8 @@ import CommentList from '@components/commons/comment-list'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
+    opening: string
+    conclusion: string
 }
 
 const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
@@ -37,6 +39,24 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
 
         let listSqlTransaction: any[] = []
 
+        // Cập nhật opening và conclusion cho StandardPeriod
+        if (data?.id) {
+            listSqlTransaction.push({
+                model: 'StandardPeriod',
+                operation: 'update',
+                data: {
+                    where: {
+                        id: data.id,
+                    },
+                    data: {
+                        opening: dataSubmit?.opening || '',
+                        conclusion: dataSubmit?.conclusion || '',
+                    },
+                },
+            })
+        }
+
+        // Cập nhật các tiêu chí
         if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
             listSqlTransaction = [
                 ...listSqlTransaction,
@@ -200,6 +220,8 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
+                opening: data?.opening || '',
+                conclusion: data?.conclusion || '',
                 criteria: data?.criteria?.map((item) => ({
                     ...item,
                     evaluationCriterion: {
@@ -301,14 +323,19 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
                     <CommentList
                         comments={
-                            data?.criteria?.[0]?.evaluationCriterion
-                                ?.evaluationCriterionComments || []
+                            data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments ||
+                            []
                         }
                     />
                 </div>
             )}
 
             <Form form={form} layout="vertical" className="form-evidence">
+                {/* Phần mở đầu */}
+                <Form.Item label="Mở đầu" name="opening" required>
+                    <RichTextEditor id="opening" editable={!isReadOnly} />
+                </Form.Item>
+
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -399,6 +426,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                         </>
                     )}
                 </Form.List>
+
+                {/* Phần kết luận */}
+                <Form.Item label="Kết luận" name="conclusion" required>
+                    <RichTextEditor id="conclusion" editable={!isReadOnly} />
+                </Form.Item>
             </Form>
         </div>
     )

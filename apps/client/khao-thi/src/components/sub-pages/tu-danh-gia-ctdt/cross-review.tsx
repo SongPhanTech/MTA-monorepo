@@ -1,5 +1,6 @@
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
+import CommentList from '@components/commons/comment-list'
 import { getStatusConfig } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { DataTabCrossReviewType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
@@ -19,6 +20,8 @@ import { useEffect, useState } from 'react'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
+    opening: string
+    conclusion: string
 }
 
 export default function CrossReviewSubPage({
@@ -242,6 +245,8 @@ export default function CrossReviewSubPage({
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
+                opening: data?.opening || '',
+                conclusion: data?.conclusion || '',
                 criteria: data?.criteria?.map((item) => ({
                     ...item,
                     evaluationCriterion: {
@@ -304,6 +309,11 @@ export default function CrossReviewSubPage({
             </div>
 
             <Form form={form} layout="vertical" className="form-evidence">
+                {/* Phần mở đầu */}
+                <Form.Item label="Mở đầu" name="opening">
+                    <RichTextEditor id="opening" editable={false} />
+                </Form.Item>
+
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -397,10 +407,23 @@ export default function CrossReviewSubPage({
                         </>
                     )}
                 </Form.List>
+
+                {/* Phần kết luận */}
+                <Form.Item label="Kết luận" name="conclusion">
+                    <RichTextEditor id="conclusion" editable={false} />
+                </Form.Item>
             </Form>
 
             {showComments && isCouncilMember && (
                 <Card>
+                    {firstEvaluationCriterion?.evaluationCriterionComments &&
+                        firstEvaluationCriterion.evaluationCriterionComments.length > 0 && (
+                            <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
+                                <CommentList
+                                    comments={firstEvaluationCriterion.evaluationCriterionComments}
+                                />
+                            </div>
+                        )}
                     <Form form={commentForm} layout="vertical">
                         <Form.Item
                             label="Gửi ý kiến phản biện"
