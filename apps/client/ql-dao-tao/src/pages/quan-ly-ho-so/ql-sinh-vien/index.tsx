@@ -27,7 +27,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_HO_SO_PERMISSION } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -319,16 +319,12 @@ export default function UserProfilePageDs() {
         try {
             showSpinner()
             await updateUserProfile({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
+            message.success('Xóa thành công')
         } catch (error) {
             console.log(error)
-
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -382,7 +378,7 @@ export default function UserProfilePageDs() {
                         </Col>
                         <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'NHAP_EXCEL') && (
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'NHAP_EXCEL') && (
                                     <>
                                         <Button
                                             type="primary"
@@ -398,7 +394,7 @@ export default function UserProfilePageDs() {
                                         <ExportTemplateStudent />
                                     </>
                                 )}
-                                {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') && (
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'THEM') && (
                                     <Button onClick={handleModal} type="primary">
                                         Thêm mới
                                     </Button>
@@ -608,7 +604,7 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip> */}
-                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'SUA') && (
+                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'SUA') && (
                                             <EditIcon
                                                 onClick={onOpenUpdate.bind(null, {
                                                     id: record.id,
@@ -616,7 +612,7 @@ export default function UserProfilePageDs() {
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
-                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'XOA') && (
+                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'XOA') && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(record.id),

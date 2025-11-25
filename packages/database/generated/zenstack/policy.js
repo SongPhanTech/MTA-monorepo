@@ -1617,13 +1617,13 @@ const policy = {
                 update: {},
             },
         },
-        trainingKPI: {
+        loadCategory: {
             modelLevel: {
-                read: { guard: TrainingKPI_read, },
-                create: { guard: TrainingKPI_create, inputChecker: TrainingKPI_create_input, },
-                update: { guard: TrainingKPI_update, },
-                postUpdate: { guard: TrainingKPI_postUpdate, },
-                delete: { guard: TrainingKPI_delete, }
+                read: { guard: LoadCategory_read, },
+                create: { guard: LoadCategory_create, inputChecker: LoadCategory_create_input, },
+                update: { guard: LoadCategory_update, },
+                postUpdate: { guard: LoadCategory_postUpdate, },
+                delete: { guard: LoadCategory_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3381,7 +3381,7 @@ const policy = {
         award: { hasValidation: false },
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
-        trainingKPI: { hasValidation: false },
+        loadCategory: { hasValidation: false },
         student: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
@@ -13136,12 +13136,12 @@ function $check_ScoreConvert_delete(input, context) {
     }
     return false;
 }
-function TrainingKPI_read(context, db) {
+function LoadCategory_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_TrainingKPI_read(input, context) {
+function $check_LoadCategory_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -13155,7 +13155,7 @@ function $check_TrainingKPI_read(input, context) {
     }
     return false;
 }
-function TrainingKPI_create(context, db) {
+function LoadCategory_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -13163,7 +13163,7 @@ function TrainingKPI_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_TrainingKPI_create(input, context) {
+function $check_LoadCategory_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -13171,12 +13171,12 @@ function $check_TrainingKPI_create(input, context) {
     }
     return false;
 }
-function TrainingKPI_create_input(input, context) {
+function LoadCategory_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function TrainingKPI_update(context, db) {
+function LoadCategory_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -13184,7 +13184,7 @@ function TrainingKPI_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_TrainingKPI_update(input, context) {
+function $check_LoadCategory_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -13192,13 +13192,13 @@ function $check_TrainingKPI_update(input, context) {
     }
     return false;
 }
-function TrainingKPI_postUpdate(context, db) {
+function LoadCategory_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_TrainingKPI_postUpdate(input, context) {
+function $check_LoadCategory_postUpdate(input, context) {
     return true;
 }
-function TrainingKPI_delete(context, db) {
+function LoadCategory_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -13206,7 +13206,7 @@ function TrainingKPI_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_TrainingKPI_delete(input, context) {
+function $check_LoadCategory_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

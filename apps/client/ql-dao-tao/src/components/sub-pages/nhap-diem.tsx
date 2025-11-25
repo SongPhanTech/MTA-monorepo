@@ -506,10 +506,7 @@ export default function NhapDiem({
     const disabledForm: boolean = useMemo(() => {
         if (score === 'CC/TX') {
             return !(
-                can(
-                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                    'NHAP_DIEM'
-                ) &&
+                can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX, 'NHAP_DIEM') &&
                 dataDetailSubjectClass?.scoreDeadLineStart &&
                 dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
                 dataDetailSubjectClass?.scoreDeadline &&
@@ -520,7 +517,7 @@ export default function NhapDiem({
             )
         }
         return !(
-            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, 'NHAP_DIEM') &&
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore
@@ -597,10 +594,14 @@ export default function NhapDiem({
             </Col>
             <Col span={16} className="flex justify-end">
                 <Flex gap={4}>
-                    {can(
-                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                    {(can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
                         'NHAP_EXCEL'
-                    ) && (
+                    ) ||
+                        can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                            'NHAP_EXCEL'
+                        )) && (
                         <>
                             <Button
                                 onClick={() => setImportModalVisible(true)}
@@ -623,10 +624,22 @@ export default function NhapDiem({
                             />
                         </>
                     )}
-                    {can(
-                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                    {(can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                         'XUAT_EXCEL'
-                    ) && (
+                    ) ||
+                        can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                            'XUAT_EXCEL'
+                        ) ||
+                        can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
+                            'XUAT_EXCEL'
+                        ) ||
+                        can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                            'XUAT_EXCEL'
+                        )) && (
                         <ExportScoreTemplate
                             selectedSubjectClass={selectedSubjectClassId}
                             dataTable={dataTable}
@@ -634,10 +647,18 @@ export default function NhapDiem({
                         />
                     )}
                     {score !== 'CC/TX' &&
-                        can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        (can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_DS_THI'
-                        ) && (
+                        ) ||
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                'IN_DS_THI'
+                            ) ||
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                                'IN_DS_THI'
+                            )) && (
                             <ExportTemplateExam
                                 dataClass={dataDetailSubjectClass}
                                 dataTable={dataTable}
@@ -647,10 +668,18 @@ export default function NhapDiem({
                             />
                         )}
                     {score !== 'CC/TX' &&
-                        can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        (can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_P13,
                             'IN_PHIEU_DIEM'
-                        ) && (
+                        ) ||
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                'IN_PHIEU_DIEM'
+                            ) ||
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI,
+                                'IN_PHIEU_DIEM'
+                            )) && (
                             <>
                                 <Button
                                     disabled={

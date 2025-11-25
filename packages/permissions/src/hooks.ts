@@ -67,8 +67,8 @@ const useAbility = () => {
                 return true
             const perm = ability.actionsFor(subject)
             if (perm.length === 0) return false
-
             const actions = combine(action)
+
             return (Number(perm[perm.length - 1]) & actions) === actions
         },
         canSome: (

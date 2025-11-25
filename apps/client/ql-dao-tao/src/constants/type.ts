@@ -31,9 +31,10 @@ export type FilterProps = {
     numberCreditsElective?: 'asc' | 'desc'
     organization?: string[]
     trainingCourses?: string[]
-    numberOfSemesters?: 'asc' | 'desc'
-    requiredCredits?: 'asc' | 'desc'
-    electiveCredits?: 'asc' | 'desc'
+    numberOfSemesters?: { lte?: number | null; gte?: number | null }
+    requiredCredits?: { lte?: number | null; gte?: number | null }
+    electiveCredits?: { lte?: number | null; gte?: number | null }
+    semesterCmp?: { lte?: number | null; gte?: number | null }
     trainingTime?: string[]
     trainingMajors?: string[]
     credit?: 'asc' | 'desc'
@@ -114,6 +115,13 @@ export type FilterProps = {
     endDate?: Date[]
     englishName?: string | ''
     creditCmp?: { lte?: number | null; gte?: number | null }
+    periodCmp?: { lte?: number | null; gte?: number | null }
+    numberOfTheoryCmp?: { lte?: number | null; gte?: number | null }
+    numberOfPracticalCmp?: { lte?: number | null; gte?: number | null }
+    numberOfSelfStudyCmp?: { lte?: number | null; gte?: number | null }
+    numberOfPracticeCmp?: { lte?: number | null; gte?: number | null }
+    numberOfReviewCmp?: { lte?: number | null; gte?: number | null }
+    numberOfExamCmp?: { lte?: number | null; gte?: number | null }
     attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
     midtermScoreCmp?: { lte?: number | null; gte?: number | null }
     examScoreCmp?: { lte?: number | null; gte?: number | null }

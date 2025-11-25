@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const TrainingKPIScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name"])
+export const LoadCategoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "unit", "standardHours", "category", "note", "isOverageCalculated"])

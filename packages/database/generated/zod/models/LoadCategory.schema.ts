@@ -15,6 +15,11 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    unit: z.string(),
+    standardHours: z.number(),
+    category: z.string(),
+    note: z.string().nullish(),
+    isOverageCalculated: z.boolean(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,33 +32,38 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    unit: z.string(),
+    standardHours: z.number(),
+    category: z.string(),
+    note: z.string().nullish(),
+    isOverageCalculated: z.boolean(),
 }
 ).strict();
 
 /**
- * `TrainingKPI` schema excluding foreign keys and relations.
+ * `LoadCategory` schema excluding foreign keys and relations.
  */
-export const TrainingKPIScalarSchema = baseSchema;
+export const LoadCategoryScalarSchema = baseSchema;
 
 
 /**
- * `TrainingKPI` schema including all fields (scalar, foreign key, and relations) and validations.
+ * `LoadCategory` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const TrainingKPISchema = TrainingKPIScalarSchema;
+export const LoadCategorySchema = LoadCategoryScalarSchema;
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingKPIPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const LoadCategoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
  * Schema used for validating Prisma update input. For internal use only.
  * @private
  */
-export const TrainingKPIPrismaUpdateSchema = z.object({
+export const LoadCategoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
     active: z.boolean(),
@@ -62,34 +72,39 @@ export const TrainingKPIPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    name: z.string()
+    name: z.string(),
+    unit: z.string(),
+    standardHours: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    category: z.string(),
+    note: z.string().nullish(),
+    isOverageCalculated: z.boolean()
 }).partial().passthrough();
 
 
 /**
- * `TrainingKPI` schema for create operations excluding foreign keys and relations.
+ * `LoadCategory` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingKPICreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const LoadCategoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
 /**
- * `TrainingKPI` schema for create operations including scalar fields, foreign key fields, and validations.
+ * `LoadCategory` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingKPICreateSchema = baseSchemaWithoutDefaults.partial({
+export const LoadCategoryCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
 });
 
 
 /**
- * `TrainingKPI` schema for update operations excluding foreign keys and relations.
+ * `LoadCategory` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingKPIUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const LoadCategoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
- * `TrainingKPI` schema for update operations including scalar fields, foreign key fields, and validations.
+ * `LoadCategory` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingKPIUpdateSchema = TrainingKPIUpdateScalarSchema;
+export const LoadCategoryUpdateSchema = LoadCategoryUpdateScalarSchema;
 

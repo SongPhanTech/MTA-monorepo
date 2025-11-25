@@ -128,7 +128,7 @@ export * from './CertificateOnSubject.schema';
 export * from './Award.schema';
 export * from './DiplomaType.schema';
 export * from './ScoreConvert.schema';
-export * from './TrainingKPI.schema';
+export * from './LoadCategory.schema';
 export * from './Student.schema';
 export * from './StudentSemesterResult.schema';
 export * from './StudentYearResult.schema';

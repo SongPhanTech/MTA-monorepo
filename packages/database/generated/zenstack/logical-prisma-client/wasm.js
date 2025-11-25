@@ -1794,6 +1794,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   yearApplication: 'yearApplication',
   isLock: 'isLock',
   curriculumId: 'curriculumId',
+  type: 'type',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
   trainingTypeId: 'trainingTypeId',
@@ -2290,7 +2291,6 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
-  curriculumId: 'curriculumId',
   priority: 'priority',
   electiveCreditsRequired: 'electiveCreditsRequired'
 };
@@ -2381,7 +2381,7 @@ exports.Prisma.ScoreConvertScalarFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
-exports.Prisma.TrainingKPIScalarFieldEnum = {
+exports.Prisma.LoadCategoryScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2390,7 +2390,12 @@ exports.Prisma.TrainingKPIScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  unit: 'unit',
+  standardHours: 'standardHours',
+  category: 'category',
+  note: 'note',
+  isOverageCalculated: 'isOverageCalculated'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -5806,8 +5811,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId',
-  curriculumId: 'curriculumId'
+  curriculumVersionId: 'curriculumVersionId'
 };
 
 exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
@@ -5864,12 +5868,15 @@ exports.Prisma.ScoreConvertOrderByRelevanceFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
-exports.Prisma.TrainingKPIOrderByRelevanceFieldEnum = {
+exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  unit: 'unit',
+  category: 'category',
+  note: 'note'
 };
 
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
@@ -7192,6 +7199,11 @@ exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
   Base4: 'Base4'
 };
 
+exports.CurriculumVersionType = exports.$Enums.CurriculumVersionType = {
+  FRAMEWORK: 'FRAMEWORK',
+  FULL_COURSE: 'FULL_COURSE'
+};
+
 exports.ExamType = exports.$Enums.ExamType = {
   OfflineWritten: 'OfflineWritten',
   Oral: 'Oral',
@@ -7678,7 +7690,7 @@ exports.Prisma.ModelName = {
   Award: 'Award',
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
-  TrainingKPI: 'TrainingKPI',
+  LoadCategory: 'LoadCategory',
   Student: 'Student',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',

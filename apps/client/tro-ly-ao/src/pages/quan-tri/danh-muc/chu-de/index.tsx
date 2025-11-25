@@ -126,7 +126,7 @@ function Page() {
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                         <Input
-                            placeholder="Tìm kiếm theo tên, mã định danh, mô tả..."
+                            placeholder="Tìm kiếm theo tên, mô tả..."
                             allowClear
                             value={filters.search}
                             onChange={(e) =>
@@ -144,7 +144,7 @@ function Page() {
                             style={{ width: 400 }}
                         />
                         <Select
-                            placeholder="Gợi ý"
+                            placeholder="Ghim"
                             allowClear
                             value={filters.isPinned}
                             onChange={(value) =>
@@ -155,8 +155,8 @@ function Page() {
                             }
                             style={{ width: 200 }}
                             options={[
-                                { label: 'Gợi ý', value: true },
-                                { label: 'Không gợi ý', value: false },
+                                { label: 'Đã ghim', value: true },
+                                { label: 'Chưa ghim', value: false },
                             ]}
                         />
                     </div>
@@ -184,16 +184,6 @@ function Page() {
                                 ),
                             },
                             {
-                                title: 'Mã định danh',
-                                dataIndex: 'type',
-                                width: 350,
-                                render: (value) => (
-                                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm">
-                                        {value}
-                                    </span>
-                                ),
-                            },
-                            {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
                                 width: 400,
@@ -203,7 +193,7 @@ function Page() {
                                         : value || 'Chưa có mô tả',
                             },
                             {
-                                title: 'Gợi ý',
+                                title: 'Ghim',
                                 dataIndex: 'isPinned',
                                 width: 80,
                                 align: 'center',

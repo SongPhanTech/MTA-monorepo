@@ -17,7 +17,7 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <DeleteOutlined className="text-red-600 cursor-pointer" {...props} />
+                <DeleteOutlined className="text-red-600 cursor-pointer text-lg" {...props} />
             </Popconfirm>
         </Tooltip>
     )

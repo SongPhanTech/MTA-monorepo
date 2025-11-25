@@ -124,6 +124,13 @@ enum SemesterType {
   @@schema("ql-dao-tao")
 }
 
+enum CurriculumVersionType {
+  FRAMEWORK
+  FULL_COURSE
+
+  @@schema("ql-dao-tao")
+}
+
 /// loại hình thi
 enum ExamType {
   OfflineWritten
@@ -2788,25 +2795,24 @@ model FixedClass {
 
 /// chương trình đào tạo
 model Curriculum {
-  id                       String                             @id() @default(cuid())
-  code                     String?                            @unique()
-  active                   Boolean                            @default(true)
-  description              String?                            @db.Text()
+  id                       String              @id() @default(cuid())
+  code                     String?             @unique()
+  active                   Boolean             @default(true)
+  description              String?             @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime                           @default(now())
-  updatedAt                DateTime                           @default(now()) @updatedAt()
-  createdBy                String?                            @db.Uuid()
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @default(now()) @updatedAt()
+  createdBy                String?             @db.Uuid()
   name                     String
   englishName              String?
-  managementOrganization   DM_DonVi                           @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String                             @db.Uuid()
-  trainingMajor            TrainingMajor                      @relation(fields: [trainingMajorId], references: [id])
+  managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String              @db.Uuid()
+  trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId          String
-  trainingObjectType       TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
   information              String?
   renderPath               String?
-  trainingBlocks           TrainingBlockOnCurriculumVersion[]
   documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
 
@@ -2834,6 +2840,7 @@ model CurriculumVersion {
   isLock                           Boolean                            @default(false)
   curriculum                       Curriculum                         @relation(fields: [curriculumId], references: [id])
   curriculumId                     String
+  type                             CurriculumVersionType              @default(FULL_COURSE)
   trainingObjectType               TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
@@ -3564,8 +3571,6 @@ model TrainingBlockOnCurriculumVersion {
   trainingBlockId         String
   curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String?
-  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
-  curriculumId            String?
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
@@ -3693,17 +3698,22 @@ model ScoreConvert {
   @@schema("ql-dao-tao")
 }
 
-/// Nội dung tính tải đào tạo
-model TrainingKPI {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String
+/// Danh mục tính tải đào tạo
+model LoadCategory {
+  id                  String    @id() @default(cuid())
+  code                String?   @unique()
+  active              Boolean   @default(true)
+  description         String?   @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now()) @updatedAt()
+  createdBy           String?   @db.Uuid()
+  name                String
+  unit                String
+  standardHours       Float
+  category            String
+  note                String?
+  isOverageCalculated Boolean
 
   @@schema("ql-dao-tao")
 }

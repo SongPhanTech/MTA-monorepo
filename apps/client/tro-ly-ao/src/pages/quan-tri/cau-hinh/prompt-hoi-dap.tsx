@@ -1,49 +1,68 @@
-import { EditOutlined, SearchOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
 import { Tag, Tooltip, Input } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useFindManyPrompt } from '@/../../../../packages/database/generated/hooks/prompt'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import type { PutPromptHoiDapInput } from '@/components/modal/put-prompt-hoi-dap'
+import { PutPromptHoiDap } from '@/components/modal'
 
-type PromptType = {
+const SYSTEM_PROMPTS = [
+    { code: 'rag', name: 'Hỏi đáp dựa trên RAG' },
+    { code: 'no-rag', name: 'Hỏi đáp thông thường' },
+] as const
+
+type PromptRecord = {
     id: string
     code: string
-    prompt: string
-    active: boolean
-    description: string
-    status: string
-    reason: string | null
-    createdAt: string
-    updatedAt: string
-    deletedAt: string | null
+    name: string
+    hasPrompt: boolean
+    prompt?: string
+    description?: string
 }
-
-type PromptFormType = { prompt: string }
 
 function Page() {
     const [searchText, setSearchText] = useState('')
 
-    const { onOpen: openPutPromptHoiDap } = useDisclosure<any>({
-        tag: 'PutPromptHoiDap',
+    const { onOpen: openPutPromptHoiDap } = useDisclosure<PutPromptHoiDapInput>({
+        tag: 'PutPromptHoiDapModal',
     })
 
-    const { data: prompts, isLoading } = useFindManyPrompt({
+    const { data: allPrompts = [], isLoading } = useFindManyPrompt({
         where: {
-            code: { in: ['rag', 'no-rag'] },
+            code: { in: SYSTEM_PROMPTS.map((p) => p.code) },
         },
-        orderBy: { createdAt: 'desc' },
     })
 
-    const filteredPrompts =
-        prompts?.filter(
-            (prompt) =>
-                prompt.description?.toLowerCase().includes(searchText.toLowerCase()) ||
-                prompt.prompt?.toLowerCase().includes(searchText.toLowerCase())
-        ) || []
+    const tableData = useMemo<PromptRecord[]>(() => {
+        return SYSTEM_PROMPTS.map((systemPrompt) => {
+            const prompt = allPrompts.find((p) => p.code === systemPrompt.code)
+            return {
+                id: systemPrompt.code,
+                code: systemPrompt.code,
+                name: systemPrompt.name,
+                hasPrompt: !!prompt,
+                prompt: prompt?.prompt ?? undefined,
+                description: (prompt as any)?.description ?? undefined,
+            }
+        })
+    }, [allPrompts])
 
-    const handleEdit = (record: PromptType) => {
-        openPutPromptHoiDap(record)
+    const filteredPrompts = useMemo(() => {
+        if (!searchText) return tableData
+        return tableData.filter(
+            (item) =>
+                item.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+                item.description?.toLowerCase().includes(searchText.toLowerCase())
+        )
+    }, [searchText, tableData])
+
+    const handleEdit = (record: PromptRecord) => {
+        openPutPromptHoiDap({
+            code: record.code,
+            name: record.name,
+        })
     }
 
     return (
@@ -68,7 +87,9 @@ function Page() {
                     </div>
                     <Table
                         rowKey="id"
+                        dataSource={filteredPrompts}
                         scroll={{ x: 800 }}
+                        pagination={false}
                         columns={[
                             {
                                 title: 'STT',
@@ -79,81 +100,44 @@ function Page() {
                             },
                             {
                                 title: 'Loại Prompt',
-                                dataIndex: 'code',
-                                width: 200,
-                                align: 'center',
-                                fixed: 'right',
-                                render: (code: string) => {
-                                    const tagMap = {
-                                        'no-rag': {
-                                            label: 'Hỏi đáp thông thường',
-                                            color: '#1890ff',
-                                        },
-                                        rag: { label: 'Hỏi đáp dựa trên RAG', color: '#52c41a' },
-                                    }
-                                    const tag = tagMap[code as keyof typeof tagMap] || {
-                                        label: code,
-                                        color: '#666',
-                                    }
-                                    return (
-                                        <Tag
-                                            style={{
-                                                backgroundColor: `${tag.color}15`,
-                                                color: tag.color,
-                                                border: `1px solid ${tag.color}30`,
-                                            }}
-                                            className="px-3 py-1 text-sm rounded-md"
-                                        >
-                                            {tag.label}
-                                        </Tag>
-                                    )
-                                },
+                                dataIndex: 'name',
+                                width: 250,
+                                fixed: 'left',
+                                render: (name: string) => <span className="text-sm">{name}</span>,
                             },
                             {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
-                                width: 300,
-                                render: (value: string) =>
-                                    value?.length > 80
-                                        ? `${value.slice(0, 80)}...`
-                                        : value || 'Chưa có mô tả',
-                            },
-                            {
-                                title: 'Nội dung Prompt',
-                                dataIndex: 'prompt',
                                 width: 400,
-                                render: (value: string) =>
-                                    value?.length > 100
-                                        ? `${value.slice(0, 100)}...`
-                                        : value || 'Chưa có nội dung',
-                            },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'active',
-                                width: 160,
-                                align: 'center',
-                                render: (active: boolean) => (
-                                    <Tag
-                                        style={{
-                                            backgroundColor: active ? '#f6ffed' : '#fff2f0',
-                                            color: active ? '#52c41a' : '#ff4d4f',
-                                            border: active
-                                                ? '1px solid #b7eb8f'
-                                                : '1px solid #ffb3b3',
-                                        }}
-                                        className="px-3 py-1 text-sm rounded-md"
-                                    >
-                                        {active ? 'Đang hoạt động' : 'Không hoạt động'}
-                                    </Tag>
+                                render: (value: string) => (
+                                    <span className="text-sm">
+                                        {value?.length > 80
+                                            ? `${value.slice(0, 80)}...`
+                                            : value || 'Chưa có mô tả'}
+                                    </span>
                                 ),
                             },
                             {
-                                title: 'Ngày tạo',
-                                dataIndex: 'createdAt',
-                                width: 100,
+                                title: 'Trạng thái',
+                                dataIndex: 'hasPrompt',
+                                width: 130,
                                 align: 'center',
-                                render: (date: string) =>
-                                    date ? new Date(date).toLocaleDateString('vi-VN') : '-',
+                                render: (hasPrompt: boolean) => {
+                                    return (
+                                        <Tag
+                                            style={{
+                                                backgroundColor: hasPrompt ? '#f6ffed' : '#fff2f0',
+                                                color: hasPrompt ? '#52c41a' : '#ff4d4f',
+                                                border: hasPrompt
+                                                    ? '1px solid #b7eb8f'
+                                                    : '1px solid #ffb3b3',
+                                            }}
+                                            className="px-3 py-1 text-sm rounded-md"
+                                        >
+                                            {hasPrompt ? 'Đã thiết lập' : 'Chưa thiết lập'}
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -171,12 +155,11 @@ function Page() {
                                 ),
                             },
                         ]}
-                        data={filteredPrompts}
                         loading={isLoading}
-                        pagination={false}
                     />
                 </div>
             </div>
+            <PutPromptHoiDap />
         </div>
     )
 }

@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { CurriculumVersionType } from '../../zenstack/models';
+import { CurriculumVersionTypeSchema } from '../enums/CurriculumVersionType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -21,6 +23,7 @@ const baseSchema = z.object({
     yearCreation: z.number().nullish(),
     yearApplication: z.number().nullish(),
     isLock: z.boolean().default(false),
+    type: CurriculumVersionTypeSchema,
     requiredCredits: z.number().nullish(),
     electiveCredits: z.number().nullish(),
     jobPosition: z.string().nullish(),
@@ -52,6 +55,7 @@ const baseSchemaWithoutDefaults = z.object({
     yearCreation: z.number().nullish(),
     yearApplication: z.number().nullish(),
     isLock: z.boolean(),
+    type: CurriculumVersionTypeSchema,
     requiredCredits: z.number().nullish(),
     electiveCredits: z.number().nullish(),
     jobPosition: z.string().nullish(),
@@ -132,6 +136,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
     yearCreation: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     yearApplication: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     isLock: z.boolean(),
+    type: CurriculumVersionTypeSchema,
     requiredCredits: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     electiveCredits: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     jobPosition: z.string().nullish(),
@@ -152,7 +157,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
  * `CurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
 export const CurriculumVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLock: true, type: true
 });
 
 

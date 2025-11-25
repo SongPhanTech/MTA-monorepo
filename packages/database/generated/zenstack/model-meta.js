@@ -9649,12 +9649,6 @@ const metadata = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
-                }, trainingBlocks: {
-                    name: "trainingBlocks",
-                    type: "TrainingBlockOnCurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'curriculum',
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -9773,6 +9767,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'curriculum',
+                }, type: {
+                    name: "type",
+                    type: "CurriculumVersionType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13039,21 +13037,6 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'trainingBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumId" },
-                }, curriculumId: {
-                    name: "curriculumId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculum',
                 }, priority: {
                     name: "priority",
                     type: "Int",
@@ -13537,8 +13520,8 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        trainingKPI: {
-            name: 'TrainingKPI', fields: {
+        loadCategory: {
+            name: 'LoadCategory', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -13575,10 +13558,26 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingKPI$createdBy,
+                    defaultValueProvider: $default$LoadCategory$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
+                }, unit: {
+                    name: "unit",
+                    type: "String",
+                }, standardHours: {
+                    name: "standardHours",
+                    type: "Float",
+                }, category: {
+                    name: "category",
+                    type: "String",
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, isOverageCalculated: {
+                    name: "isOverageCalculated",
+                    type: "Boolean",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -26032,7 +26031,7 @@ function $default$DiplomaType$createdBy(user) {
 function $default$ScoreConvert$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
-function $default$TrainingKPI$createdBy(user) {
+function $default$LoadCategory$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$Student$createdBy(user) {

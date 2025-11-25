@@ -90,12 +90,12 @@ const DefaultLayout = ({
             >
                 <Header
                     className={
-                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full px-2 h-fit'
+                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full px-2 h-fit border-b-primary border-b'
                     }
                 >
                     <div className="flex items-center">
                         <div className="flex items-center justify-center text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-10 h-8" />
+                            <Image src={logo_mta} alt="logo MTA" className="w-10 h-8" />
                             <span className="text-base font-bold color text-primary">
                                 Quản lý đào tạo
                             </span>
