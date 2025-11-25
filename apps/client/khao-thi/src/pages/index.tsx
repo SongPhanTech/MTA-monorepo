@@ -3,7 +3,6 @@ import { useMenuList } from '@hooks/menu-list'
 import { useSession } from '@workspace/auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import DashboardLayout from '@layouts/dashboard-layout'
 
 const IndexPage = () => {
     const menus = useMenuList()
@@ -24,7 +23,3 @@ const IndexPage = () => {
     return <Loading />
 }
 export default IndexPage
-
-IndexPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DashboardLayout>{page}</DashboardLayout>
-}
