@@ -223,9 +223,6 @@ model TrainingBlockOnCurriculumVersion extends Base {
   curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String?
 
-  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
-  curriculumId            String?
-
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)

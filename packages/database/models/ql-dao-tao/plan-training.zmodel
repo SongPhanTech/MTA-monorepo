@@ -492,12 +492,17 @@ model Curriculum extends Base {
   information              String?   //Thông tin
   renderPath               String? // Đường dẫn tài liệu kết xuất
 
-  trainingBlocks           TrainingBlockOnCurriculumVersion[]
   documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
 
   @@schema("ql-dao-tao")
 }
+
+enum CurriculumVersionType {
+  FRAMEWORK //CTĐT khung
+  FULL_COURSE // CTĐT Toàn khoá
+  @@schema("ql-dao-tao")
+} 
 
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion extends Base {
@@ -512,7 +517,7 @@ model CurriculumVersion extends Base {
   isLock                           Boolean                            @default(false) // khoá phiên bản chương trình đào tạo
   curriculum                       Curriculum                         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
   curriculumId                     String
-
+  type                             CurriculumVersionType              @default(FULL_COURSE) // Loại chương trình đào tạo
   trainingObjectType               TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId             String
   trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id]) // Bậc đào tạo

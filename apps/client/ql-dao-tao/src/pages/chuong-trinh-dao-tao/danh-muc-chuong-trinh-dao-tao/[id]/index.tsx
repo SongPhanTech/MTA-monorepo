@@ -520,6 +520,9 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 1,
                             },
                             {
+                                colSpan: 1,
+                            },
+                            {
                                 render: (_, record) =>
                                     record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
                                 colSpan: 1,
@@ -630,9 +633,13 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'ĐVPT',
+                                title: (
+                                    <Tooltip title="Đơn vị phụ trách">
+                                        <span>ĐVPT</span>
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'organization',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
@@ -662,8 +669,22 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'HKDK',
+                                title: (
+                                    <Tooltip title="Học kỳ dự kiến">
+                                        <span>HKDK</span>
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'semester',
+                                width: 80,
+                                type: 'input',
+                                align: 'center',
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Học kỳ giảng dạy">
+                                        <span>HKGD</span>
+                                    </Tooltip>
+                                ),
                                 width: 80,
                                 type: 'input',
                                 align: 'center',

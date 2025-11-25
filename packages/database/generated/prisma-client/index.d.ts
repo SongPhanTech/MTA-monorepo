@@ -1386,6 +1386,14 @@ export const SemesterType: {
 export type SemesterType = (typeof SemesterType)[keyof typeof SemesterType]
 
 
+export const CurriculumVersionType: {
+  FRAMEWORK: 'FRAMEWORK',
+  FULL_COURSE: 'FULL_COURSE'
+};
+
+export type CurriculumVersionType = (typeof CurriculumVersionType)[keyof typeof CurriculumVersionType]
+
+
 export const ExamType: {
   OfflineWritten: 'OfflineWritten',
   Oral: 'Oral',
@@ -1939,6 +1947,10 @@ export const ArchivedCertificateStatus: typeof $Enums.ArchivedCertificateStatus
 export type SemesterType = $Enums.SemesterType
 
 export const SemesterType: typeof $Enums.SemesterType
+
+export type CurriculumVersionType = $Enums.CurriculumVersionType
+
+export const CurriculumVersionType: typeof $Enums.CurriculumVersionType
 
 export type ExamType = $Enums.ExamType
 
@@ -26828,13 +26840,11 @@ export namespace Prisma {
    */
 
   export type CurriculumCountOutputType = {
-    trainingBlocks: number
     documentFiles: number
     curriculumVersion: number
   }
 
   export type CurriculumCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    trainingBlocks?: boolean | CurriculumCountOutputTypeCountTrainingBlocksArgs
     documentFiles?: boolean | CurriculumCountOutputTypeCountDocumentFilesArgs
     curriculumVersion?: boolean | CurriculumCountOutputTypeCountCurriculumVersionArgs
   }
@@ -26848,13 +26858,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the CurriculumCountOutputType
      */
     select?: CurriculumCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * CurriculumCountOutputType without action
-   */
-  export type CurriculumCountOutputTypeCountTrainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TrainingBlockOnCurriculumVersionWhereInput
   }
 
   /**
@@ -144387,7 +144390,6 @@ export namespace Prisma {
     managementOrganization?: boolean | DM_DonViDefaultArgs<ExtArgs>
     trainingMajor?: boolean | TrainingMajorDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingBlocks?: boolean | Curriculum$trainingBlocksArgs<ExtArgs>
     documentFiles?: boolean | Curriculum$documentFilesArgs<ExtArgs>
     curriculumVersion?: boolean | Curriculum$curriculumVersionArgs<ExtArgs>
     _count?: boolean | CurriculumCountOutputTypeDefaultArgs<ExtArgs>
@@ -144458,7 +144460,6 @@ export namespace Prisma {
     managementOrganization?: boolean | DM_DonViDefaultArgs<ExtArgs>
     trainingMajor?: boolean | TrainingMajorDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingBlocks?: boolean | Curriculum$trainingBlocksArgs<ExtArgs>
     documentFiles?: boolean | Curriculum$documentFilesArgs<ExtArgs>
     curriculumVersion?: boolean | Curriculum$curriculumVersionArgs<ExtArgs>
     _count?: boolean | CurriculumCountOutputTypeDefaultArgs<ExtArgs>
@@ -144480,7 +144481,6 @@ export namespace Prisma {
       managementOrganization: Prisma.$DM_DonViPayload<ExtArgs>
       trainingMajor: Prisma.$TrainingMajorPayload<ExtArgs>
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
-      trainingBlocks: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>[]
       documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
       curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs>[]
     }
@@ -144897,7 +144897,6 @@ export namespace Prisma {
     managementOrganization<T extends DM_DonViDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonViDefaultArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingMajor<T extends TrainingMajorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingMajorDefaultArgs<ExtArgs>>): Prisma__TrainingMajorClient<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingBlocks<T extends Curriculum$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, Curriculum$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documentFiles<T extends Curriculum$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, Curriculum$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     curriculumVersion<T extends Curriculum$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, Curriculum$curriculumVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -145340,30 +145339,6 @@ export namespace Prisma {
   }
 
   /**
-   * Curriculum.trainingBlocks
-   */
-  export type Curriculum$trainingBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TrainingBlockOnCurriculumVersion
-     */
-    select?: TrainingBlockOnCurriculumVersionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the TrainingBlockOnCurriculumVersion
-     */
-    omit?: TrainingBlockOnCurriculumVersionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TrainingBlockOnCurriculumVersionInclude<ExtArgs> | null
-    where?: TrainingBlockOnCurriculumVersionWhereInput
-    orderBy?: TrainingBlockOnCurriculumVersionOrderByWithRelationInput | TrainingBlockOnCurriculumVersionOrderByWithRelationInput[]
-    cursor?: TrainingBlockOnCurriculumVersionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TrainingBlockOnCurriculumVersionScalarFieldEnum | TrainingBlockOnCurriculumVersionScalarFieldEnum[]
-  }
-
-  /**
    * Curriculum.documentFiles
    */
   export type Curriculum$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -145476,6 +145451,7 @@ export namespace Prisma {
     yearApplication: number | null
     isLock: boolean | null
     curriculumId: string | null
+    type: $Enums.CurriculumVersionType | null
     trainingObjectTypeId: string | null
     trainingLevelId: string | null
     trainingTypeId: string | null
@@ -145514,6 +145490,7 @@ export namespace Prisma {
     yearApplication: number | null
     isLock: boolean | null
     curriculumId: string | null
+    type: $Enums.CurriculumVersionType | null
     trainingObjectTypeId: string | null
     trainingLevelId: string | null
     trainingTypeId: string | null
@@ -145552,6 +145529,7 @@ export namespace Prisma {
     yearApplication: number
     isLock: number
     curriculumId: number
+    type: number
     trainingObjectTypeId: number
     trainingLevelId: number
     trainingTypeId: number
@@ -145608,6 +145586,7 @@ export namespace Prisma {
     yearApplication?: true
     isLock?: true
     curriculumId?: true
+    type?: true
     trainingObjectTypeId?: true
     trainingLevelId?: true
     trainingTypeId?: true
@@ -145646,6 +145625,7 @@ export namespace Prisma {
     yearApplication?: true
     isLock?: true
     curriculumId?: true
+    type?: true
     trainingObjectTypeId?: true
     trainingLevelId?: true
     trainingTypeId?: true
@@ -145684,6 +145664,7 @@ export namespace Prisma {
     yearApplication?: true
     isLock?: true
     curriculumId?: true
+    type?: true
     trainingObjectTypeId?: true
     trainingLevelId?: true
     trainingTypeId?: true
@@ -145809,6 +145790,7 @@ export namespace Prisma {
     yearApplication: number | null
     isLock: boolean
     curriculumId: string
+    type: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -145866,6 +145848,7 @@ export namespace Prisma {
     yearApplication?: boolean
     isLock?: boolean
     curriculumId?: boolean
+    type?: boolean
     trainingObjectTypeId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
@@ -145917,6 +145900,7 @@ export namespace Prisma {
     yearApplication?: boolean
     isLock?: boolean
     curriculumId?: boolean
+    type?: boolean
     trainingObjectTypeId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
@@ -145962,6 +145946,7 @@ export namespace Prisma {
     yearApplication?: boolean
     isLock?: boolean
     curriculumId?: boolean
+    type?: boolean
     trainingObjectTypeId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
@@ -146007,6 +145992,7 @@ export namespace Prisma {
     yearApplication?: boolean
     isLock?: boolean
     curriculumId?: boolean
+    type?: boolean
     trainingObjectTypeId?: boolean
     trainingLevelId?: boolean
     trainingTypeId?: boolean
@@ -146027,7 +146013,7 @@ export namespace Prisma {
     renderPath?: boolean
   }
 
-  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
+  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
   export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
@@ -146096,6 +146082,7 @@ export namespace Prisma {
       yearApplication: number | null
       isLock: boolean
       curriculumId: string
+      type: $Enums.CurriculumVersionType
       trainingObjectTypeId: string
       trainingLevelId: string
       trainingTypeId: string
@@ -146566,6 +146553,7 @@ export namespace Prisma {
     readonly yearApplication: FieldRef<"CurriculumVersion", 'Int'>
     readonly isLock: FieldRef<"CurriculumVersion", 'Boolean'>
     readonly curriculumId: FieldRef<"CurriculumVersion", 'String'>
+    readonly type: FieldRef<"CurriculumVersion", 'CurriculumVersionType'>
     readonly trainingObjectTypeId: FieldRef<"CurriculumVersion", 'String'>
     readonly trainingLevelId: FieldRef<"CurriculumVersion", 'String'>
     readonly trainingTypeId: FieldRef<"CurriculumVersion", 'String'>
@@ -182221,7 +182209,6 @@ export namespace Prisma {
     createdBy: string | null
     trainingBlockId: string | null
     curriculumVersionId: string | null
-    curriculumId: string | null
     priority: number | null
     electiveCreditsRequired: number | null
   }
@@ -182237,7 +182224,6 @@ export namespace Prisma {
     createdBy: string | null
     trainingBlockId: string | null
     curriculumVersionId: string | null
-    curriculumId: string | null
     priority: number | null
     electiveCreditsRequired: number | null
   }
@@ -182253,7 +182239,6 @@ export namespace Prisma {
     createdBy: number
     trainingBlockId: number
     curriculumVersionId: number
-    curriculumId: number
     priority: number
     electiveCreditsRequired: number
     _all: number
@@ -182281,7 +182266,6 @@ export namespace Prisma {
     createdBy?: true
     trainingBlockId?: true
     curriculumVersionId?: true
-    curriculumId?: true
     priority?: true
     electiveCreditsRequired?: true
   }
@@ -182297,7 +182281,6 @@ export namespace Prisma {
     createdBy?: true
     trainingBlockId?: true
     curriculumVersionId?: true
-    curriculumId?: true
     priority?: true
     electiveCreditsRequired?: true
   }
@@ -182313,7 +182296,6 @@ export namespace Prisma {
     createdBy?: true
     trainingBlockId?: true
     curriculumVersionId?: true
-    curriculumId?: true
     priority?: true
     electiveCreditsRequired?: true
     _all?: true
@@ -182416,7 +182398,6 @@ export namespace Prisma {
     createdBy: string | null
     trainingBlockId: string
     curriculumVersionId: string | null
-    curriculumId: string | null
     priority: number
     electiveCreditsRequired: number
     _count: TrainingBlockOnCurriculumVersionCountAggregateOutputType | null
@@ -182451,12 +182432,10 @@ export namespace Prisma {
     createdBy?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
-    curriculumId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
     subjects?: boolean | TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>
     _count?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
@@ -182472,12 +182451,10 @@ export namespace Prisma {
     createdBy?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
-    curriculumId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
 
   export type TrainingBlockOnCurriculumVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -182491,12 +182468,10 @@ export namespace Prisma {
     createdBy?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
-    curriculumId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
 
   export type TrainingBlockOnCurriculumVersionSelectScalar = {
@@ -182510,28 +182485,24 @@ export namespace Prisma {
     createdBy?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
-    curriculumId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
   }
 
-  export type TrainingBlockOnCurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingBlockId" | "curriculumVersionId" | "curriculumId" | "priority" | "electiveCreditsRequired", ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
+  export type TrainingBlockOnCurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "trainingBlockId" | "curriculumVersionId" | "priority" | "electiveCreditsRequired", ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
   export type TrainingBlockOnCurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
     subjects?: boolean | TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>
     _count?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingBlockOnCurriculumVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
   }
   export type TrainingBlockOnCurriculumVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>
-    curriculum?: boolean | TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>
   }
 
   export type $TrainingBlockOnCurriculumVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -182539,7 +182510,6 @@ export namespace Prisma {
     objects: {
       trainingBlock: Prisma.$TrainingBlockPayload<ExtArgs>
       curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs> | null
-      curriculum: Prisma.$CurriculumPayload<ExtArgs> | null
       subjects: Prisma.$TrainingBlockSubjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -182553,7 +182523,6 @@ export namespace Prisma {
       createdBy: string | null
       trainingBlockId: string
       curriculumVersionId: string | null
-      curriculumId: string | null
       /**
        * ưu tiên sắp xếp
        */
@@ -182955,7 +182924,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     trainingBlock<T extends TrainingBlockDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockDefaultArgs<ExtArgs>>): Prisma__TrainingBlockClient<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     curriculumVersion<T extends TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$curriculumVersionArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    curriculum<T extends TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs>>): Prisma__CurriculumClient<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subjects<T extends TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -182996,7 +182964,6 @@ export namespace Prisma {
     readonly createdBy: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
     readonly trainingBlockId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
     readonly curriculumVersionId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
-    readonly curriculumId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
     readonly priority: FieldRef<"TrainingBlockOnCurriculumVersion", 'Int'>
     readonly electiveCreditsRequired: FieldRef<"TrainingBlockOnCurriculumVersion", 'Int'>
   }
@@ -183411,25 +183378,6 @@ export namespace Prisma {
      */
     include?: CurriculumVersionInclude<ExtArgs> | null
     where?: CurriculumVersionWhereInput
-  }
-
-  /**
-   * TrainingBlockOnCurriculumVersion.curriculum
-   */
-  export type TrainingBlockOnCurriculumVersion$curriculumArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Curriculum
-     */
-    select?: CurriculumSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Curriculum
-     */
-    omit?: CurriculumOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CurriculumInclude<ExtArgs> | null
-    where?: CurriculumWhereInput
   }
 
   /**
@@ -347386,6 +347334,7 @@ export namespace Prisma {
     yearApplication: 'yearApplication',
     isLock: 'isLock',
     curriculumId: 'curriculumId',
+    type: 'type',
     trainingObjectTypeId: 'trainingObjectTypeId',
     trainingLevelId: 'trainingLevelId',
     trainingTypeId: 'trainingTypeId',
@@ -347966,7 +347915,6 @@ export namespace Prisma {
     createdBy: 'createdBy',
     trainingBlockId: 'trainingBlockId',
     curriculumVersionId: 'curriculumVersionId',
-    curriculumId: 'curriculumId',
     priority: 'priority',
     electiveCreditsRequired: 'electiveCreditsRequired'
   };
@@ -352252,8 +352200,7 @@ export namespace Prisma {
     description: 'description',
     createdBy: 'createdBy',
     trainingBlockId: 'trainingBlockId',
-    curriculumVersionId: 'curriculumVersionId',
-    curriculumId: 'curriculumId'
+    curriculumVersionId: 'curriculumVersionId'
   };
 
   export type TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = (typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum]
@@ -354192,6 +354139,20 @@ export namespace Prisma {
    * Reference to a field of type 'AcademicRankingBaseType[]'
    */
   export type ListEnumAcademicRankingBaseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AcademicRankingBaseType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CurriculumVersionType'
+   */
+  export type EnumCurriculumVersionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CurriculumVersionType'>
+    
+
+
+  /**
+   * Reference to a field of type 'CurriculumVersionType[]'
+   */
+  export type ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CurriculumVersionType[]'>
     
 
 
@@ -365196,7 +365157,6 @@ export namespace Prisma {
     managementOrganization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
     trainingMajor?: XOR<TrainingMajorScalarRelationFilter, TrainingMajorWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingBlocks?: TrainingBlockOnCurriculumVersionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     curriculumVersion?: CurriculumVersionListRelationFilter
   }
@@ -365220,7 +365180,6 @@ export namespace Prisma {
     managementOrganization?: DM_DonViOrderByWithRelationInput
     trainingMajor?: TrainingMajorOrderByWithRelationInput
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput
     documentFiles?: DocumentFileOrderByRelationAggregateInput
     curriculumVersion?: CurriculumVersionOrderByRelationAggregateInput
     _relevance?: CurriculumOrderByRelevanceInput
@@ -365248,7 +365207,6 @@ export namespace Prisma {
     managementOrganization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
     trainingMajor?: XOR<TrainingMajorScalarRelationFilter, TrainingMajorWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingBlocks?: TrainingBlockOnCurriculumVersionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
     curriculumVersion?: CurriculumVersionListRelationFilter
   }, "id" | "code">
@@ -365316,6 +365274,7 @@ export namespace Prisma {
     yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
     isLock?: BoolFilter<"CurriculumVersion"> | boolean
     curriculumId?: StringFilter<"CurriculumVersion"> | string
+    type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
     trainingLevelId?: StringFilter<"CurriculumVersion"> | string
     trainingTypeId?: StringFilter<"CurriculumVersion"> | string
@@ -365366,6 +365325,7 @@ export namespace Prisma {
     yearApplication?: SortOrderInput | SortOrder
     isLock?: SortOrder
     curriculumId?: SortOrder
+    type?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
@@ -365420,6 +365380,7 @@ export namespace Prisma {
     yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
     isLock?: BoolFilter<"CurriculumVersion"> | boolean
     curriculumId?: StringFilter<"CurriculumVersion"> | string
+    type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
     trainingLevelId?: StringFilter<"CurriculumVersion"> | string
     trainingTypeId?: StringFilter<"CurriculumVersion"> | string
@@ -365470,6 +365431,7 @@ export namespace Prisma {
     yearApplication?: SortOrderInput | SortOrder
     isLock?: SortOrder
     curriculumId?: SortOrder
+    type?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
@@ -365516,6 +365478,7 @@ export namespace Prisma {
     yearApplication?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
     isLock?: BoolWithAggregatesFilter<"CurriculumVersion"> | boolean
     curriculumId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
+    type?: EnumCurriculumVersionTypeWithAggregatesFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
     trainingLevelId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
     trainingTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
@@ -368627,12 +368590,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    curriculumId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     trainingBlock?: XOR<TrainingBlockScalarRelationFilter, TrainingBlockWhereInput>
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
-    curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     subjects?: TrainingBlockSubjectListRelationFilter
   }
 
@@ -368647,12 +368608,10 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
-    curriculumId?: SortOrderInput | SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
     trainingBlock?: TrainingBlockOrderByWithRelationInput
     curriculumVersion?: CurriculumVersionOrderByWithRelationInput
-    curriculum?: CurriculumOrderByWithRelationInput
     subjects?: TrainingBlockSubjectOrderByRelationAggregateInput
     _relevance?: TrainingBlockOnCurriculumVersionOrderByRelevanceInput
   }
@@ -368672,12 +368631,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    curriculumId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     trainingBlock?: XOR<TrainingBlockScalarRelationFilter, TrainingBlockWhereInput>
     curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
-    curriculum?: XOR<CurriculumNullableScalarRelationFilter, CurriculumWhereInput> | null
     subjects?: TrainingBlockSubjectListRelationFilter
   }, "id" | "code" | "trainingBlockId_curriculumVersionId">
 
@@ -368692,7 +368649,6 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrderInput | SortOrder
-    curriculumId?: SortOrderInput | SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
     _count?: TrainingBlockOnCurriculumVersionCountOrderByAggregateInput
@@ -368716,7 +368672,6 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     trainingBlockId?: StringWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringNullableWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    curriculumId?: StringNullableWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | number
   }
@@ -394319,7 +394274,6 @@ export namespace Prisma {
     managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
     trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
   }
@@ -394340,7 +394294,6 @@ export namespace Prisma {
     trainingObjectTypeId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
   }
@@ -394361,7 +394314,6 @@ export namespace Prisma {
     managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
     trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
   }
@@ -394382,7 +394334,6 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
@@ -394454,6 +394405,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -394499,6 +394451,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -394540,6 +394493,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -394585,6 +394539,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -394628,6 +394583,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -394664,6 +394620,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -394697,6 +394654,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -398240,7 +398198,6 @@ export namespace Prisma {
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
-    curriculum?: CurriculumCreateNestedOneWithoutTrainingBlocksInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -398255,7 +398212,6 @@ export namespace Prisma {
     createdBy?: string | null
     trainingBlockId: string
     curriculumVersionId?: string | null
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
@@ -398274,7 +398230,6 @@ export namespace Prisma {
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutTrainingBlocksNestedInput
-    curriculum?: CurriculumUpdateOneWithoutTrainingBlocksNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -398289,7 +398244,6 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
@@ -398306,7 +398260,6 @@ export namespace Prisma {
     createdBy?: string | null
     trainingBlockId: string
     curriculumVersionId?: string | null
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -398335,7 +398288,6 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -421528,16 +421480,6 @@ export namespace Prisma {
     isNot?: TrainingMajorWhereInput
   }
 
-  export type TrainingBlockOnCurriculumVersionListRelationFilter = {
-    every?: TrainingBlockOnCurriculumVersionWhereInput
-    some?: TrainingBlockOnCurriculumVersionWhereInput
-    none?: TrainingBlockOnCurriculumVersionWhereInput
-  }
-
-  export type TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type CurriculumOrderByRelevanceInput = {
     fields: CurriculumOrderByRelevanceFieldEnum | CurriculumOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -421598,6 +421540,13 @@ export namespace Prisma {
     renderPath?: SortOrder
   }
 
+  export type EnumCurriculumVersionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CurriculumVersionType | EnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel> | $Enums.CurriculumVersionType
+  }
+
   export type CurriculumScalarRelationFilter = {
     is?: CurriculumWhereInput
     isNot?: CurriculumWhereInput
@@ -421621,6 +421570,16 @@ export namespace Prisma {
   export type DiplomaTypeScalarRelationFilter = {
     is?: DiplomaTypeWhereInput
     isNot?: DiplomaTypeWhereInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionListRelationFilter = {
+    every?: TrainingBlockOnCurriculumVersionWhereInput
+    some?: TrainingBlockOnCurriculumVersionWhereInput
+    none?: TrainingBlockOnCurriculumVersionWhereInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type CurriculumVersionOrderByRelevanceInput = {
@@ -421647,6 +421606,7 @@ export namespace Prisma {
     yearApplication?: SortOrder
     isLock?: SortOrder
     curriculumId?: SortOrder
+    type?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
@@ -421693,6 +421653,7 @@ export namespace Prisma {
     yearApplication?: SortOrder
     isLock?: SortOrder
     curriculumId?: SortOrder
+    type?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
@@ -421731,6 +421692,7 @@ export namespace Prisma {
     yearApplication?: SortOrder
     isLock?: SortOrder
     curriculumId?: SortOrder
+    type?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingLevelId?: SortOrder
     trainingTypeId?: SortOrder
@@ -421757,6 +421719,16 @@ export namespace Prisma {
     yearApplication?: SortOrder
     requiredCredits?: SortOrder
     electiveCredits?: SortOrder
+  }
+
+  export type EnumCurriculumVersionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CurriculumVersionType | EnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCurriculumVersionTypeWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumVersionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel>
+    _max?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel>
   }
 
   export type CertificateOnSubjectListRelationFilter = {
@@ -423946,11 +423918,6 @@ export namespace Prisma {
     isNot?: TrainingBlockWhereInput
   }
 
-  export type CurriculumNullableScalarRelationFilter = {
-    is?: CurriculumWhereInput | null
-    isNot?: CurriculumWhereInput | null
-  }
-
   export type TrainingBlockOnCurriculumVersionOrderByRelevanceInput = {
     fields: TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum | TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -423973,7 +423940,6 @@ export namespace Prisma {
     createdBy?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
-    curriculumId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -423994,7 +423960,6 @@ export namespace Prisma {
     createdBy?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
-    curriculumId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -424010,7 +423975,6 @@ export namespace Prisma {
     createdBy?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
-    curriculumId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -425203,6 +425167,11 @@ export namespace Prisma {
   export type ArchivedAwardNullableScalarRelationFilter = {
     is?: ArchivedAwardWhereInput | null
     isNot?: ArchivedAwardWhereInput | null
+  }
+
+  export type CurriculumNullableScalarRelationFilter = {
+    is?: CurriculumWhereInput | null
+    isNot?: CurriculumWhereInput | null
   }
 
   export type SubjectVersionNullableScalarRelationFilter = {
@@ -442475,13 +442444,6 @@ export namespace Prisma {
     connect?: TrainingObjectTypeWhereUniqueInput
   }
 
-  export type TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput = {
-    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput> | TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput[]
-    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput[]
-    createMany?: TrainingBlockOnCurriculumVersionCreateManyCurriculumInputEnvelope
-    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-  }
-
   export type DocumentFileCreateNestedManyWithoutCurriculumInput = {
     create?: XOR<DocumentFileCreateWithoutCurriculumInput, DocumentFileUncheckedCreateWithoutCurriculumInput> | DocumentFileCreateWithoutCurriculumInput[] | DocumentFileUncheckedCreateWithoutCurriculumInput[]
     connectOrCreate?: DocumentFileCreateOrConnectWithoutCurriculumInput | DocumentFileCreateOrConnectWithoutCurriculumInput[]
@@ -442494,13 +442456,6 @@ export namespace Prisma {
     connectOrCreate?: CurriculumVersionCreateOrConnectWithoutCurriculumInput | CurriculumVersionCreateOrConnectWithoutCurriculumInput[]
     createMany?: CurriculumVersionCreateManyCurriculumInputEnvelope
     connect?: CurriculumVersionWhereUniqueInput | CurriculumVersionWhereUniqueInput[]
-  }
-
-  export type TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput = {
-    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput> | TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput[]
-    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput[]
-    createMany?: TrainingBlockOnCurriculumVersionCreateManyCurriculumInputEnvelope
-    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
   }
 
   export type DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput = {
@@ -442541,20 +442496,6 @@ export namespace Prisma {
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutCurriculumInput, TrainingObjectTypeUpdateWithoutCurriculumInput>, TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput>
   }
 
-  export type TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput = {
-    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput> | TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput[]
-    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput[]
-    upsert?: TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput[]
-    createMany?: TrainingBlockOnCurriculumVersionCreateManyCurriculumInputEnvelope
-    set?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    disconnect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    delete?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    update?: TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput[]
-    updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumInput[]
-    deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
-  }
-
   export type DocumentFileUpdateManyWithoutCurriculumNestedInput = {
     create?: XOR<DocumentFileCreateWithoutCurriculumInput, DocumentFileUncheckedCreateWithoutCurriculumInput> | DocumentFileCreateWithoutCurriculumInput[] | DocumentFileUncheckedCreateWithoutCurriculumInput[]
     connectOrCreate?: DocumentFileCreateOrConnectWithoutCurriculumInput | DocumentFileCreateOrConnectWithoutCurriculumInput[]
@@ -442581,20 +442522,6 @@ export namespace Prisma {
     update?: CurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput | CurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput[]
     updateMany?: CurriculumVersionUpdateManyWithWhereWithoutCurriculumInput | CurriculumVersionUpdateManyWithWhereWithoutCurriculumInput[]
     deleteMany?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
-  }
-
-  export type TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput = {
-    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput> | TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput[]
-    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput[]
-    upsert?: TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput[]
-    createMany?: TrainingBlockOnCurriculumVersionCreateManyCurriculumInputEnvelope
-    set?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    disconnect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    delete?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
-    update?: TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput[]
-    updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumInput[]
-    deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
   }
 
   export type DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput = {
@@ -442735,6 +442662,10 @@ export namespace Prisma {
     connectOrCreate?: StudentCreateOrConnectWithoutCurriculumVersionParallelInput | StudentCreateOrConnectWithoutCurriculumVersionParallelInput[]
     createMany?: StudentCreateManyCurriculumVersionParallelInputEnvelope
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type EnumCurriculumVersionTypeFieldUpdateOperationsInput = {
+    set?: $Enums.CurriculumVersionType
   }
 
   export type TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput = {
@@ -446839,12 +446770,6 @@ export namespace Prisma {
     connect?: CurriculumVersionWhereUniqueInput
   }
 
-  export type CurriculumCreateNestedOneWithoutTrainingBlocksInput = {
-    create?: XOR<CurriculumCreateWithoutTrainingBlocksInput, CurriculumUncheckedCreateWithoutTrainingBlocksInput>
-    connectOrCreate?: CurriculumCreateOrConnectWithoutTrainingBlocksInput
-    connect?: CurriculumWhereUniqueInput
-  }
-
   export type TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput = {
     create?: XOR<TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput, TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput> | TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput[] | TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput[]
     connectOrCreate?: TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput | TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput[]
@@ -446875,16 +446800,6 @@ export namespace Prisma {
     delete?: CurriculumVersionWhereInput | boolean
     connect?: CurriculumVersionWhereUniqueInput
     update?: XOR<XOR<CurriculumVersionUpdateToOneWithWhereWithoutTrainingBlocksInput, CurriculumVersionUpdateWithoutTrainingBlocksInput>, CurriculumVersionUncheckedUpdateWithoutTrainingBlocksInput>
-  }
-
-  export type CurriculumUpdateOneWithoutTrainingBlocksNestedInput = {
-    create?: XOR<CurriculumCreateWithoutTrainingBlocksInput, CurriculumUncheckedCreateWithoutTrainingBlocksInput>
-    connectOrCreate?: CurriculumCreateOrConnectWithoutTrainingBlocksInput
-    upsert?: CurriculumUpsertWithoutTrainingBlocksInput
-    disconnect?: CurriculumWhereInput | boolean
-    delete?: CurriculumWhereInput | boolean
-    connect?: CurriculumWhereUniqueInput
-    update?: XOR<XOR<CurriculumUpdateToOneWithWhereWithoutTrainingBlocksInput, CurriculumUpdateWithoutTrainingBlocksInput>, CurriculumUncheckedUpdateWithoutTrainingBlocksInput>
   }
 
   export type TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput = {
@@ -458598,6 +458513,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAcademicRankingBaseTypeFilter<$PrismaModel>
     _max?: NestedEnumAcademicRankingBaseTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCurriculumVersionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CurriculumVersionType | EnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel> | $Enums.CurriculumVersionType
+  }
+
+  export type NestedEnumCurriculumVersionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CurriculumVersionType | EnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CurriculumVersionType[] | ListEnumCurriculumVersionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCurriculumVersionTypeWithAggregatesFilter<$PrismaModel> | $Enums.CurriculumVersionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel>
+    _max?: NestedEnumCurriculumVersionTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumExamTypeFilter<$PrismaModel = never> = {
@@ -492896,7 +492828,6 @@ export namespace Prisma {
     renderPath?: string | null
     trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
   }
@@ -492916,7 +492847,6 @@ export namespace Prisma {
     trainingObjectTypeId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
   }
@@ -510210,6 +510140,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -510253,6 +510184,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -510341,6 +510273,7 @@ export namespace Prisma {
     yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
     isLock?: BoolFilter<"CurriculumVersion"> | boolean
     curriculumId?: StringFilter<"CurriculumVersion"> | string
+    type?: EnumCurriculumVersionTypeFilter<"CurriculumVersion"> | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
     trainingLevelId?: StringFilter<"CurriculumVersion"> | string
     trainingTypeId?: StringFilter<"CurriculumVersion"> | string
@@ -512617,6 +512550,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -512661,6 +512595,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -513618,6 +513553,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513662,6 +513598,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -513963,48 +513900,6 @@ export namespace Prisma {
     create: XOR<TrainingObjectTypeCreateWithoutCurriculumInput, TrainingObjectTypeUncheckedCreateWithoutCurriculumInput>
   }
 
-  export type TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    priority?: number
-    electiveCreditsRequired?: number
-    trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
-    curriculumVersion?: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
-    subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
-  }
-
-  export type TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    trainingBlockId: string
-    curriculumVersionId?: string | null
-    priority?: number
-    electiveCreditsRequired?: number
-    subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
-  }
-
-  export type TrainingBlockOnCurriculumVersionCreateOrConnectWithoutCurriculumInput = {
-    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
-    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput>
-  }
-
-  export type TrainingBlockOnCurriculumVersionCreateManyCurriculumInputEnvelope = {
-    data: TrainingBlockOnCurriculumVersionCreateManyCurriculumInput | TrainingBlockOnCurriculumVersionCreateManyCurriculumInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DocumentFileCreateWithoutCurriculumInput = {
     id?: string
     code?: string | null
@@ -514097,6 +513992,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -514140,6 +514036,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -514390,41 +514287,6 @@ export namespace Prisma {
     thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
-  export type TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput = {
-    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
-    update: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutCurriculumInput>
-    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutCurriculumInput>
-  }
-
-  export type TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutCurriculumInput = {
-    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
-    data: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutCurriculumInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutCurriculumInput>
-  }
-
-  export type TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumInput = {
-    where: TrainingBlockOnCurriculumVersionScalarWhereInput
-    data: XOR<TrainingBlockOnCurriculumVersionUpdateManyMutationInput, TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumInput>
-  }
-
-  export type TrainingBlockOnCurriculumVersionScalarWhereInput = {
-    AND?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
-    OR?: TrainingBlockOnCurriculumVersionScalarWhereInput[]
-    NOT?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
-    id?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
-    code?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    active?: BoolFilter<"TrainingBlockOnCurriculumVersion"> | boolean
-    description?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    deletedAt?: DateTimeNullableFilter<"TrainingBlockOnCurriculumVersion"> | Date | string | null
-    createdAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
-    updatedAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
-    createdBy?: UuidNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
-    curriculumVersionId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    curriculumId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
-    priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
-    electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
-  }
-
   export type DocumentFileUpsertWithWhereUniqueWithoutCurriculumInput = {
     where: DocumentFileWhereUniqueInput
     update: XOR<DocumentFileUpdateWithoutCurriculumInput, DocumentFileUncheckedUpdateWithoutCurriculumInput>
@@ -514504,7 +514366,6 @@ export namespace Prisma {
     managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
     trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
   }
 
@@ -514524,7 +514385,6 @@ export namespace Prisma {
     trainingObjectTypeId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
   }
 
@@ -514806,7 +514666,6 @@ export namespace Prisma {
     priority?: number
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
-    curriculum?: CurriculumCreateNestedOneWithoutTrainingBlocksInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -514820,7 +514679,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     trainingBlockId: string
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
@@ -515268,7 +515126,6 @@ export namespace Prisma {
     managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
     trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
   }
 
@@ -515288,7 +515145,6 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
   }
 
@@ -515537,6 +515393,24 @@ export namespace Prisma {
   export type TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutCurriculumVersionInput = {
     where: TrainingBlockOnCurriculumVersionScalarWhereInput
     data: XOR<TrainingBlockOnCurriculumVersionUpdateManyMutationInput, TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionScalarWhereInput = {
+    AND?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
+    OR?: TrainingBlockOnCurriculumVersionScalarWhereInput[]
+    NOT?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
+    id?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
+    code?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
+    active?: BoolFilter<"TrainingBlockOnCurriculumVersion"> | boolean
+    description?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingBlockOnCurriculumVersion"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
+    createdBy?: UuidNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
+    trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
+    curriculumVersionId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
+    priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
+    electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
   }
 
   export type FixedClassUpsertWithWhereUniqueWithoutCurriculumVersionInput = {
@@ -519416,7 +519290,6 @@ export namespace Prisma {
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
-    curriculum?: CurriculumCreateNestedOneWithoutTrainingBlocksInput
   }
 
   export type TrainingBlockOnCurriculumVersionUncheckedCreateWithoutSubjectsInput = {
@@ -519430,7 +519303,6 @@ export namespace Prisma {
     createdBy?: string | null
     trainingBlockId: string
     curriculumVersionId?: string | null
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -519583,7 +519455,6 @@ export namespace Prisma {
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneWithoutTrainingBlocksNestedInput
-    curriculum?: CurriculumUpdateOneWithoutTrainingBlocksNestedInput
   }
 
   export type TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutSubjectsInput = {
@@ -519597,7 +519468,6 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -525344,7 +525214,6 @@ export namespace Prisma {
     renderPath?: string | null
     managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
     trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
   }
@@ -525364,7 +525233,6 @@ export namespace Prisma {
     trainingMajorId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
   }
@@ -525395,6 +525263,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -525439,6 +525308,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingLevelId: string
     trainingTypeId: string
     trainingTimeId: string
@@ -526653,6 +526523,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -526697,6 +526568,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTimeId: string
@@ -526763,6 +526635,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -526807,6 +526680,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingTypeId: string
     trainingTimeId: string
@@ -529382,7 +529256,6 @@ export namespace Prisma {
     renderPath?: string | null
     managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
   }
@@ -529402,7 +529275,6 @@ export namespace Prisma {
     trainingObjectTypeId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
   }
@@ -530412,7 +530284,6 @@ export namespace Prisma {
     priority?: number
     electiveCreditsRequired?: number
     curriculumVersion?: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
-    curriculum?: CurriculumCreateNestedOneWithoutTrainingBlocksInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -530426,7 +530297,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     curriculumVersionId?: string | null
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
@@ -530583,6 +530453,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -530627,6 +530498,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -530654,51 +530526,6 @@ export namespace Prisma {
   export type CurriculumVersionCreateOrConnectWithoutTrainingBlocksInput = {
     where: CurriculumVersionWhereUniqueInput
     create: XOR<CurriculumVersionCreateWithoutTrainingBlocksInput, CurriculumVersionUncheckedCreateWithoutTrainingBlocksInput>
-  }
-
-  export type CurriculumCreateWithoutTrainingBlocksInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    name: string
-    englishName?: string | null
-    information?: string | null
-    renderPath?: string | null
-    managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
-    trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
-    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    documentFiles?: DocumentFileCreateNestedManyWithoutCurriculumInput
-    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
-  }
-
-  export type CurriculumUncheckedCreateWithoutTrainingBlocksInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    name: string
-    englishName?: string | null
-    managementOrganizationId: string
-    trainingMajorId: string
-    trainingObjectTypeId: string
-    information?: string | null
-    renderPath?: string | null
-    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumInput
-    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
-  }
-
-  export type CurriculumCreateOrConnectWithoutTrainingBlocksInput = {
-    where: CurriculumWhereUniqueInput
-    create: XOR<CurriculumCreateWithoutTrainingBlocksInput, CurriculumUncheckedCreateWithoutTrainingBlocksInput>
   }
 
   export type TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput = {
@@ -530811,6 +530638,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530855,6 +530683,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -530877,57 +530706,6 @@ export namespace Prisma {
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     students?: StudentUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     studentCurriculumVersionParallel?: StudentUncheckedUpdateManyWithoutCurriculumVersionParallelNestedInput
-  }
-
-  export type CurriculumUpsertWithoutTrainingBlocksInput = {
-    update: XOR<CurriculumUpdateWithoutTrainingBlocksInput, CurriculumUncheckedUpdateWithoutTrainingBlocksInput>
-    create: XOR<CurriculumCreateWithoutTrainingBlocksInput, CurriculumUncheckedCreateWithoutTrainingBlocksInput>
-    where?: CurriculumWhereInput
-  }
-
-  export type CurriculumUpdateToOneWithWhereWithoutTrainingBlocksInput = {
-    where?: CurriculumWhereInput
-    data: XOR<CurriculumUpdateWithoutTrainingBlocksInput, CurriculumUncheckedUpdateWithoutTrainingBlocksInput>
-  }
-
-  export type CurriculumUpdateWithoutTrainingBlocksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    englishName?: NullableStringFieldUpdateOperationsInput | string | null
-    information?: NullableStringFieldUpdateOperationsInput | string | null
-    renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
-    curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
-  }
-
-  export type CurriculumUncheckedUpdateWithoutTrainingBlocksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    englishName?: NullableStringFieldUpdateOperationsInput | string | null
-    managementOrganizationId?: StringFieldUpdateOperationsInput | string
-    trainingMajorId?: StringFieldUpdateOperationsInput | string
-    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    information?: NullableStringFieldUpdateOperationsInput | string | null
-    renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
-    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
 
   export type TrainingBlockSubjectUpsertWithWhereUniqueWithoutTrainingBlockOnCurriculumVersionInput = {
@@ -530962,6 +530740,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -531006,6 +530785,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -531502,6 +531282,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -531546,6 +531327,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -532728,6 +532510,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -532772,6 +532555,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -532817,6 +532601,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -532861,6 +532646,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -534665,6 +534451,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534709,6 +534496,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -534760,6 +534548,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534804,6 +534593,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -537028,7 +536818,6 @@ export namespace Prisma {
     managementOrganization: DM_DonViCreateNestedOneWithoutCurriculumInput
     trainingMajor: TrainingMajorCreateNestedOneWithoutCurriculumInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionCreateNestedManyWithoutCurriculumInput
   }
 
@@ -537048,7 +536837,6 @@ export namespace Prisma {
     trainingObjectTypeId: string
     information?: string | null
     renderPath?: string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
     curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutCurriculumInput
   }
 
@@ -537073,6 +536861,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     requiredCredits?: number | null
     electiveCredits?: number | null
     jobPosition?: string | null
@@ -537117,6 +536906,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -538106,7 +537896,6 @@ export namespace Prisma {
     managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
     trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
   }
 
@@ -538126,7 +537915,6 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
 
@@ -538157,6 +537945,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538201,6 +537990,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -585184,7 +584974,6 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
   }
@@ -585204,7 +584993,6 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
@@ -602196,6 +601984,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -602367,6 +602156,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602410,6 +602200,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -602452,6 +602243,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -603953,21 +603745,6 @@ export namespace Prisma {
     subjectVersionId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type TrainingBlockOnCurriculumVersionCreateManyCurriculumInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    trainingBlockId: string
-    curriculumVersionId?: string | null
-    priority?: number
-    electiveCreditsRequired?: number
-  }
-
   export type DocumentFileCreateManyCurriculumInput = {
     id?: string
     code?: string | null
@@ -604018,6 +603795,7 @@ export namespace Prisma {
     yearCreation?: number | null
     yearApplication?: number | null
     isLock?: boolean
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -604036,53 +603814,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-  }
-
-  export type TrainingBlockOnCurriculumVersionUpdateWithoutCurriculumInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    priority?: IntFieldUpdateOperationsInput | number
-    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
-    trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
-    curriculumVersion?: CurriculumVersionUpdateOneWithoutTrainingBlocksNestedInput
-    subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
-  }
-
-  export type TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutCurriculumInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlockId?: StringFieldUpdateOperationsInput | string
-    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    priority?: IntFieldUpdateOperationsInput | number
-    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
-    subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
-  }
-
-  export type TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlockId?: StringFieldUpdateOperationsInput | string
-    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    priority?: IntFieldUpdateOperationsInput | number
-    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
 
   export type DocumentFileUpdateWithoutCurriculumInput = {
@@ -604200,6 +603931,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -604243,6 +603975,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -604285,6 +604018,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -604348,7 +604082,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     trainingBlockId: string
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -604579,7 +604312,6 @@ export namespace Prisma {
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
-    curriculum?: CurriculumUpdateOneWithoutTrainingBlocksNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -604593,7 +604325,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlockId?: StringFieldUpdateOperationsInput | string
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
@@ -604609,7 +604340,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlockId?: StringFieldUpdateOperationsInput | string
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -608854,6 +608584,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingLevelId: string
     trainingTypeId: string
     trainingTimeId: string
@@ -609245,7 +608976,6 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
     trainingMajor?: TrainingMajorUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
   }
@@ -609265,7 +608995,6 @@ export namespace Prisma {
     trainingMajorId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
@@ -609303,6 +609032,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -609347,6 +609077,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -609389,6 +609120,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -610394,6 +610126,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTimeId: string
@@ -610429,6 +610162,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610473,6 +610207,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -610515,6 +610250,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -610552,6 +610288,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingTypeId: string
     trainingTimeId: string
@@ -610601,6 +610338,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -610645,6 +610383,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -610687,6 +610426,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
     trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -612518,7 +612258,6 @@ export namespace Prisma {
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneRequiredWithoutCurriculumNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumNestedInput
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUpdateManyWithoutCurriculumNestedInput
   }
@@ -612538,7 +612277,6 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     information?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumNestedInput
     curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutCurriculumNestedInput
   }
@@ -612865,7 +612603,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     curriculumVersionId?: string | null
-    curriculumId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -612925,7 +612662,6 @@ export namespace Prisma {
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     curriculumVersion?: CurriculumVersionUpdateOneWithoutTrainingBlocksNestedInput
-    curriculum?: CurriculumUpdateOneWithoutTrainingBlocksNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -612939,7 +612675,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
@@ -612955,7 +612690,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -613042,6 +612776,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -613077,6 +612812,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613121,6 +612857,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -613163,6 +612900,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -613441,6 +613179,7 @@ export namespace Prisma {
     yearApplication?: number | null
     isLock?: boolean
     curriculumId: string
+    type?: $Enums.CurriculumVersionType
     trainingObjectTypeId: string
     trainingLevelId: string
     trainingTypeId: string
@@ -613518,6 +613257,7 @@ export namespace Prisma {
     yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
     electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
     jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -613562,6 +613302,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string
@@ -613604,6 +613345,7 @@ export namespace Prisma {
     yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
     isLock?: BoolFieldUpdateOperationsInput | boolean
     curriculumId?: StringFieldUpdateOperationsInput | string
+    type?: EnumCurriculumVersionTypeFieldUpdateOperationsInput | $Enums.CurriculumVersionType
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingLevelId?: StringFieldUpdateOperationsInput | string
     trainingTypeId?: StringFieldUpdateOperationsInput | string

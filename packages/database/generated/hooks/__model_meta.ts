@@ -9199,12 +9199,6 @@ const metadata: ModelMeta = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
-                }, trainingBlocks: {
-                    name: "trainingBlocks",
-                    type: "TrainingBlockOnCurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'curriculum',
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -9318,6 +9312,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'curriculum',
+                }, type: {
+                    name: "type",
+                    type: "CurriculumVersionType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -12412,20 +12410,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'trainingBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumId" },
-                }, curriculumId: {
-                    name: "curriculumId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculum',
                 }, priority: {
                     name: "priority",
                     type: "Int",

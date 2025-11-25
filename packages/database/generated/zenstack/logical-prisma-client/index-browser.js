@@ -1794,6 +1794,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   yearApplication: 'yearApplication',
   isLock: 'isLock',
   curriculumId: 'curriculumId',
+  type: 'type',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
   trainingTypeId: 'trainingTypeId',
@@ -2290,7 +2291,6 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
-  curriculumId: 'curriculumId',
   priority: 'priority',
   electiveCreditsRequired: 'electiveCreditsRequired'
 };
@@ -5811,8 +5811,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId',
-  curriculumId: 'curriculumId'
+  curriculumVersionId: 'curriculumVersionId'
 };
 
 exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
@@ -7198,6 +7197,11 @@ exports.SemesterType = exports.$Enums.SemesterType = {
 exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
   Base10: 'Base10',
   Base4: 'Base4'
+};
+
+exports.CurriculumVersionType = exports.$Enums.CurriculumVersionType = {
+  FRAMEWORK: 'FRAMEWORK',
+  FULL_COURSE: 'FULL_COURSE'
 };
 
 exports.ExamType = exports.$Enums.ExamType = {

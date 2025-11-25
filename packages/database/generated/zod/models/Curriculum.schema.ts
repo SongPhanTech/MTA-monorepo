@@ -39,7 +39,6 @@ const relationSchema = z.object({
     managementOrganization: z.record(z.string(), z.unknown()),
     trainingMajor: z.record(z.string(), z.unknown()),
     trainingObjectType: z.record(z.string(), z.unknown()),
-    trainingBlocks: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
 }
