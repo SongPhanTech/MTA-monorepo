@@ -13540,8 +13540,8 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
-        trainingKPI: {
-            name: 'TrainingKPI', fields: {
+        loadCategory: {
+            name: 'LoadCategory', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -13578,10 +13578,26 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingKPI$createdBy,
+                    defaultValueProvider: $default$LoadCategory$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
+                }, unit: {
+                    name: "unit",
+                    type: "String",
+                }, standardHours: {
+                    name: "standardHours",
+                    type: "Float",
+                }, category: {
+                    name: "category",
+                    type: "String",
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, isOverageCalculated: {
+                    name: "isOverageCalculated",
+                    type: "Boolean",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -26131,7 +26147,7 @@ function $default$ScoreConvert$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$TrainingKPI$createdBy(user: any): unknown {
+function $default$LoadCategory$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -2545,13 +2545,13 @@ const policy: PolicyDef = {
             },
 
         },
-        trainingKPI: {
+        loadCategory: {
             modelLevel: {
-                read: { guard: TrainingKPI_read, },
-                create: { guard: TrainingKPI_create, inputChecker: TrainingKPI_create_input, },
-                update: { guard: TrainingKPI_update, },
-                postUpdate: { guard: TrainingKPI_postUpdate, },
-                delete: { guard: TrainingKPI_delete, }
+                read: { guard: LoadCategory_read, },
+                create: { guard: LoadCategory_create, inputChecker: LoadCategory_create_input, },
+                update: { guard: LoadCategory_update, },
+                postUpdate: { guard: LoadCategory_postUpdate, },
+                delete: { guard: LoadCategory_delete, }
             },
             fieldLevel: {
                 read:
@@ -5191,7 +5191,7 @@ const policy: PolicyDef = {
         award: { hasValidation: false },
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
-        trainingKPI: { hasValidation: false },
+        loadCategory: { hasValidation: false },
         student: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
@@ -13360,12 +13360,12 @@ function $check_ScoreConvert_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingKPI_read(context: QueryContext, db: CrudContract): any {
+function LoadCategory_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingKPI_read(input: any, context: QueryContext): any {
+function $check_LoadCategory_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13376,49 +13376,49 @@ function $check_TrainingKPI_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingKPI_create(context: QueryContext, db: CrudContract): any {
+function LoadCategory_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_create(input: any, context: QueryContext): any {
+function $check_LoadCategory_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingKPI_create_input(input: any, context: QueryContext): boolean {
+function LoadCategory_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingKPI_update(context: QueryContext, db: CrudContract): any {
+function LoadCategory_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_update(input: any, context: QueryContext): any {
+function $check_LoadCategory_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingKPI_postUpdate(context: QueryContext, db: CrudContract): any {
+function LoadCategory_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingKPI_postUpdate(input: any, context: QueryContext): any {
+function $check_LoadCategory_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingKPI_delete(context: QueryContext, db: CrudContract): any {
+function LoadCategory_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_delete(input: any, context: QueryContext): any {
+function $check_LoadCategory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

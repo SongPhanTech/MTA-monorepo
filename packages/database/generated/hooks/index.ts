@@ -128,7 +128,7 @@ export * from './certificate-on-subject';
 export * from './award';
 export * from './diploma-type';
 export * from './score-convert';
-export * from './training-kpi';
+export * from './load-category';
 export * from './student';
 export * from './student-semester-result';
 export * from './student-year-result';

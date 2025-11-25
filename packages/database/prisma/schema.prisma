@@ -3693,17 +3693,22 @@ model ScoreConvert {
   @@schema("ql-dao-tao")
 }
 
-/// Nội dung tính tải đào tạo
-model TrainingKPI {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String
+/// Danh mục tính tải đào tạo
+model LoadCategory {
+  id                  String    @id() @default(cuid())
+  code                String?   @unique()
+  active              Boolean   @default(true)
+  description         String?   @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now()) @updatedAt()
+  createdBy           String?   @db.Uuid()
+  name                String
+  unit                String
+  standardHours       Float
+  category            String
+  note                String?
+  isOverageCalculated Boolean
 
   @@schema("ql-dao-tao")
 }

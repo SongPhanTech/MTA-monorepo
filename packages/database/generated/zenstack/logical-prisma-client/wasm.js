@@ -2381,7 +2381,7 @@ exports.Prisma.ScoreConvertScalarFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
-exports.Prisma.TrainingKPIScalarFieldEnum = {
+exports.Prisma.LoadCategoryScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2390,7 +2390,12 @@ exports.Prisma.TrainingKPIScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  unit: 'unit',
+  standardHours: 'standardHours',
+  category: 'category',
+  note: 'note',
+  isOverageCalculated: 'isOverageCalculated'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -5864,12 +5869,15 @@ exports.Prisma.ScoreConvertOrderByRelevanceFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
-exports.Prisma.TrainingKPIOrderByRelevanceFieldEnum = {
+exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  unit: 'unit',
+  category: 'category',
+  note: 'note'
 };
 
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
@@ -7678,7 +7686,7 @@ exports.Prisma.ModelName = {
   Award: 'Award',
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
-  TrainingKPI: 'TrainingKPI',
+  LoadCategory: 'LoadCategory',
   Student: 'Student',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
