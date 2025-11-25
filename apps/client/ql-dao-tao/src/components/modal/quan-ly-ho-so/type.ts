@@ -21,7 +21,7 @@ import type {
     StaffType,
     Student,
     TrainingCourse,
-    UserProfile
+    UserProfile,
 } from '@workspace/db/client'
 import type { UploadFile, UploadProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'

@@ -378,7 +378,10 @@ export default function UserProfilePageDs() {
                         </Col>
                         <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'NHAP_EXCEL') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    'NHAP_EXCEL'
+                                ) && (
                                     <>
                                         <Button
                                             type="primary"
@@ -394,7 +397,10 @@ export default function UserProfilePageDs() {
                                         <ExportTemplateStudent />
                                     </>
                                 )}
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'THEM') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    'THEM'
+                                ) && (
                                     <Button onClick={handleModal} type="primary">
                                         Thêm mới
                                     </Button>
@@ -604,7 +610,10 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip> */}
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'SUA') && (
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            'SUA'
+                                        ) && (
                                             <EditIcon
                                                 onClick={onOpenUpdate.bind(null, {
                                                     id: record.id,
@@ -612,7 +621,10 @@ export default function UserProfilePageDs() {
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                         )}
-                                        {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, 'XOA') && (
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            'XOA'
+                                        ) && (
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(record.id),
