@@ -90,7 +90,7 @@ const DefaultLayout = ({
             >
                 <Header
                     className={
-                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full px-2 h-fit'
+                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full px-2 h-fit border-b-primary border-b'
                     }
                 >
                     <div className="flex items-center">

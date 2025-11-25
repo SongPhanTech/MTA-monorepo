@@ -15,9 +15,7 @@ import {
     CalendarRange,
     ClipboardCheck,
     FileCheck2,
-    Flag,
     FolderOpen,
-    GitCompare,
     GraduationCap,
     House,
     Landmark,
@@ -139,53 +137,26 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
-                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
+                id: 'ke-hoach-giang-day',
                 label: 'Kế hoạch giảng dạy',
                 icon: CalendarRange,
                 path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
-            },
-            {
-                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI,
-                label: 'Kế hoạch học lại',
-                path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI,
-                icon: CalendarRange,
-                // children: [
-                //     {
-                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
-                //         label: 'Thống kê nợ',
-                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
-                //         description: 'Thống kê nợ',
-                //     },
-                //     {
-                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                //         label: 'Lập kế hoạch',
-                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
-                //         description: 'Lập kế hoạch',
-                //     },
-                //     {
-                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                //         label: 'Mở lớp môn học',
-                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                //         description: 'Kế hoạch mở lớp học lại',
-                //     },
-                //     {
-                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                //         label: 'Đăng ký học lại',
-                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_DANG_KY_HOC,
-                //         description: 'Đăng ký học lại',
-                //     },
-                //     {
-                //         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                //         label: 'Phân công giảng dạy',
-                //         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
-                //         description: 'Phân công giảng dạy',
-                //     },
-                // ],
+                children: [
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
+                        label: 'Kế hoạch giảng dạy dự kiến',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI,
+                        label: 'Kế hoạch học lại',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI,
+                    },
+                ],
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                 label: 'Phân công giảng dạy',
-                icon: CalendarRange,
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
             },
             {
@@ -347,42 +318,36 @@ const NAVIGATION: NavigationType = {
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
                                 label: 'Khu vực đào tạo',
-                                icon: TeamOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
                                 description: 'Danh mục khu vực đào tạo',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_THOI_GIAN_DAO_TAO,
                                 label: 'Thời gian đào tạo',
-                                icon: TeamOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_THOI_GIAN_DAO_TAO,
                                 description: 'Danh mục thời gian đào tạo',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_HINH_THUC_HUAN_LUYEN,
                                 label: 'Hình thức huấn luyện',
-                                icon: TeamOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
                                 description: 'Danh mục hình thức huấn luyện',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN,
                                 label: 'Mốc huấn luyện',
-                                icon: Flag,
                                 path: ROUTER_PATH.QL_DAO_TAO.MOC_HUAN_LUYEN,
                                 description: 'Thông tin năm học, kỳ học',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DOI_TUONG_DAO_TAO,
                                 label: 'Đối tượng đào tạo',
-                                icon: PieChartOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DOI_TUONG_DAO_TAO,
                                 description: 'Đối tượng đào tạo',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOAI_HINH_DAO_TAO,
                                 label: 'Loại hình đào tạo',
-                                icon: PieChartOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOAI_HINH_DAO_TAO,
                                 description: 'Loại hình đào tạo',
                             },
@@ -395,9 +360,14 @@ const NAVIGATION: NavigationType = {
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NGON_NGU_DAO_TAO,
                                 label: 'Ngôn ngữ đào tạo',
-                                icon: BookOpenCheck,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NGON_NGU_DAO_TAO,
                                 description: 'Ngôn ngữ đào tạo',
+                            },
+                            {
+                                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NOI_DUNG_TINH_TAI,
+                                label: 'Nội dung tính tải',
+                                path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NOI_DUNG_TINH_TAI,
+                                description: 'Nội dung tính tải',
                             },
                         ],
                     },
@@ -414,21 +384,18 @@ const NAVIGATION: NavigationType = {
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                                 label: 'Bảng chuyển đổi điểm',
-                                icon: GitCompare,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                                 description: 'Bảng chuyển đổi điểm',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
                                 label: 'Xếp loại học lực',
-                                icon: BookOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_HOC_LUC,
                                 description: 'Xếp loại học lực',
                             },
                             {
                                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
                                 label: 'Xếp loại tốt nghiệp',
-                                icon: BookOutlined,
                                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_TOT_NGHIEP,
                                 description: 'Xếp loại tốt nghiệp',
                             },
@@ -581,10 +548,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-                        label: 'Danh sách giảng viên',
+                        label: 'QL giảng viên',
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-                        description: 'Danh sách giảng viên',
+                        description: 'QL giảng viên',
                     },
                 ],
             },
@@ -855,12 +822,13 @@ const NAVIGATION: NavigationType = {
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]', '')]
 export {
-    KHAO_THI_PERMISSION,
     DANG_KY_HOC_PERMISSION,
+    KHAO_THI_PERMISSION,
+    PUBLIC_ROUTER,
     QL_DAO_TAO_PERMISSION,
-    TRO_LY_AO_PERMISSION,
     QL_HO_SO_PERMISSION,
+    ROUTER_PATH,
+    TRO_LY_AO_PERMISSION,
 }
-export { ROUTER_PATH, PUBLIC_ROUTER }
 export type { MenuItem, NavigationType }
 export default NAVIGATION
