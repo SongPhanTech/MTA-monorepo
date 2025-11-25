@@ -2,6 +2,7 @@ import AppSwitcherModal from './app-switcher-modal'
 import ChonTaiLieu from './chon-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import PutPromptHoiDap from './put-prompt-hoi-dap'
+import PutPromptChucNang from './put-prompt-chuc-nang'
 import PheDuyetCauHoiThuongGap from './phe-duyet-cau-hoi-thuong-gap'
 import PheDuyetTaiLieu from './phe-duyet-tai-lieu'
 import PreviewTaiLieu from './preview-tai-lieu'
@@ -23,4 +24,5 @@ export {
     PheDuyetCauHoiThuongGap,
     PreviewTaiLieu,
     PutPromptHoiDap,
+    PutPromptChucNang,
 }

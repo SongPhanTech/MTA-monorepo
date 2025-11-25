@@ -1,6 +1,6 @@
 import { cancelOCRTask, fetchOCR, pollOCRResult, stopOCRPolling } from '@/api/ocr'
 import { useTopics } from '@/hooks/useTopics'
-import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, InboxOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
 import DocumentSidebar from '@components/commons/document-sidebar'
 import FormItem from '@components/commons/form-item'
@@ -14,7 +14,7 @@ import {
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, Input, message, Modal, Progress, Tag } from 'antd'
+import { Col, Form, Input, message, Modal, Progress, Tag, Tooltip } from 'antd'
 import axios from 'axios'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -627,11 +627,18 @@ const ThemTaiLieu = () => {
                         <FormItem
                             form={form}
                             name={'topicIds'}
-                            label="Loại tài liệu"
+                            label={
+                                <span className="flex items-center gap-2">
+                                    Loại tài liệu
+                                    <Tooltip title="Hệ thống sẽ kiểm tra độ tương đồng giữa các tài liệu cùng loại để tránh trùng lặp nội dung">
+                                        <QuestionCircleOutlined className="text-gray-400 cursor-help" />
+                                    </Tooltip>
+                                </span>
+                            }
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng chọn ít nhất một loại tài liệu',
+                                    message: 'Vui lòng chọn loại tài liệu',
                                 },
                             ]}
                         >
