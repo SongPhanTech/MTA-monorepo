@@ -1,193 +1,194 @@
 import { EditOutlined } from '@ant-design/icons'
-import FormItem from '@components/commons/form-item'
+import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums } from '@workspace/db'
-import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from '@workspace/db/hooks'
-import { Input as AntdInput, Button, Col, Form, Input, message, Row } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import { useTopics } from '@/hooks/useTopics'
+import { useFindManyPrompt } from '@workspace/db/hooks'
+import { Input, Tag, Tooltip } from 'antd'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import type { PutPromptChucNangInput } from '@/components/modal/put-prompt-chuc-nang'
+import { PutPromptChucNang } from '@/components/modal'
 
-type PromptFormType = {
-    prompt: string
-}
+const SYSTEM_PROMPTS = [
+    {
+        type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
+        name: 'Dịch từ các ngôn ngữ khác sang tiếng Việt',
+    },
+    {
+        type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
+        name: 'Phát hiện và sửa lỗi văn bản',
+    },
+    {
+        type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
+        name: 'Tóm tắt văn bản trích xuất',
+    },
+    {
+        type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
+        name: 'Tóm tắt văn bản trừu tượng',
+    },
+] as const
 
-type PromptQuestionAnswerType = {
-    topicId: string
+type PromptRecord = {
+    id: string
     topicType: string
-    label: string
-}
-
-const PromptQuestionAnswer = ({
-    label,
-    topicId,
-    topicType,
-    hideEditButton,
-}: PromptQuestionAnswerType & { hideEditButton?: boolean }) => {
-    const [form] = Form.useForm<PromptFormType>()
-    const [isEditing, setIsEditing] = useState(false)
-    const [initialPrompt, setInitialPrompt] = useState('')
-    const [currentPrompt, setCurrentPrompt] = useState('')
-    const previewRef = useRef<HTMLDivElement>(null)
-    const [previewHeight, setPreviewHeight] = useState<number>(80)
-
-    const { data: promptData } = useFindFirstPrompt({
-        where: {
-            topicId: topicId,
-        },
-    })
-
-    useEffect(() => {
-        if (promptData) {
-            const promptText = promptData.prompt ?? ''
-            form.setFieldsValue({ prompt: promptText })
-            setInitialPrompt(promptText)
-            setCurrentPrompt(promptText)
-        }
-    }, [promptData, form])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        if (previewRef.current) {
-            const height = previewRef.current.getBoundingClientRect().height
-            if (height > 0) setPreviewHeight(height)
-        }
-    }, [currentPrompt])
-
-    const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
-    const { mutateAsync: createPrompt } = useCreateManyPrompt()
-
-    const onFinish = async (values: PromptFormType) => {
-        try {
-            if (!promptData) {
-                await createPrompt({
-                    data: {
-                        prompt: values.prompt,
-                        topicId: topicId,
-                        status: $Enums.DocumentStatus.APPROVE,
-                    },
-                })
-            } else {
-                await updatePrompt({
-                    where: {
-                        topicId: topicId,
-                    },
-                    data: {
-                        prompt: values.prompt,
-                        status: $Enums.DocumentStatus.APPROVE,
-                    },
-                })
-            }
-            message.success('Cập nhật thành công')
-            setInitialPrompt(values.prompt)
-            setCurrentPrompt(values.prompt)
-            setIsEditing(false)
-        } catch (error) {
-            console.error('Error updating prompt:', error)
-            message.error('Cập nhật thất bại, vui lòng thử lại sau')
-        }
-    }
-
-    const handleCancel = () => {
-        form.setFieldsValue({ prompt: initialPrompt })
-        setCurrentPrompt(initialPrompt)
-        setIsEditing(false)
-    }
-
-    return (
-        <Form layout="vertical" onFinish={onFinish} form={form}>
-            <div className="flex items-center justify-between mb-0">
-                <p className="text-lg font-semibold text-primary mb-0">{label}</p>
-                {!hideEditButton &&
-                    (isEditing ? (
-                        <div className="flex gap-1">
-                            <Button size="small" onClick={handleCancel}>
-                                Huỷ
-                            </Button>
-                            <Button size="small" type="primary" htmlType="submit">
-                                Lưu
-                            </Button>
-                        </div>
-                    ) : (
-                        <Button
-                            type="primary"
-                            size="small"
-                            icon={<EditOutlined />}
-                            onClick={() => {
-                                if (previewRef.current) {
-                                    const height = previewRef.current.getBoundingClientRect().height
-                                    if (height > 0) setPreviewHeight(height)
-                                }
-                                setIsEditing(true)
-                            }}
-                        >
-                            Sửa
-                        </Button>
-                    ))}
-            </div>
-            {isEditing ? (
-                <FormItem name="prompt" form={form}>
-                    <Input.TextArea
-                        autoSize={{ minRows: 4, maxRows: 10 }}
-                        onChange={(e) => setCurrentPrompt(e.target.value)}
-                        value={currentPrompt}
-                        style={{ minHeight: previewHeight }}
-                    />
-                </FormItem>
-            ) : (
-                <div
-                    ref={previewRef}
-                    className="border border-primary rounded-md p-2 bg-gray-50 whitespace-pre-line"
-                >
-                    {currentPrompt || <span className="text-gray-400">Chưa có nội dung</span>}
-                </div>
-            )}
-        </Form>
-    )
+    topicName: string
+    topicId?: string
+    hasPrompt: boolean
+    prompt?: string
+    description?: string
 }
 
 function Page() {
-    const { topicOptions, topics, isSystemTopic } = useTopics()
-    const [searchKeyword, setSearchKeyword] = useState('')
+    const [searchText, setSearchText] = useState('')
+    const [tableParams, setTableParams] = useState({
+        pagination: { current: 1, pageSize: 10, total: 4 },
+    })
 
-    const filteredList = topicOptions.filter((item) =>
-        item.name.toLowerCase().includes(searchKeyword.toLowerCase())
-    )
+    const { onOpen: openPutPromptModal } = useDisclosure<PutPromptChucNangInput>({
+        tag: 'PutPromptChucNangModal',
+    })
 
-    const sortedList = filteredList.sort((a, b) => a.name.localeCompare(b.name))
-    const systemTopics = sortedList.filter((item) => isSystemTopic(item.type))
+    const { data: allPrompts = [] } = useFindManyPrompt({
+        where: {
+            code: {
+                in: SYSTEM_PROMPTS.map((p) => p.type),
+            },
+        },
+    })
+
+    const tableData = useMemo<PromptRecord[]>(() => {
+        return SYSTEM_PROMPTS.map((systemPrompt) => {
+            const prompt = allPrompts.find((p) => (p as any).code === systemPrompt.type)
+
+            return {
+                id: systemPrompt.type,
+                topicType: systemPrompt.type,
+                topicName: systemPrompt.name,
+                topicId: undefined,
+                hasPrompt: !!prompt,
+                prompt: prompt?.prompt ?? undefined,
+                description: (prompt as any)?.description ?? undefined,
+            }
+        })
+    }, [allPrompts])
+
+    const filteredTableData = useMemo(() => {
+        if (!searchText) return tableData
+        return tableData.filter(
+            (item) =>
+                item.topicName?.toLowerCase().includes(searchText.toLowerCase()) ||
+                item.description?.toLowerCase().includes(searchText.toLowerCase())
+        )
+    }, [tableData, searchText])
+
+    const handleEdit = (record: PromptRecord) => {
+        openPutPromptModal({
+            topicId: undefined,
+            topicType: record.topicType,
+            topicName: record.topicName,
+        })
+    }
 
     return (
-        <div>
-            <span className="text-xl font-semibold text-gray-700">Prompt Chức năng</span>
-            <div className="my-3">
-                <AntdInput.Search
-                    placeholder="Tìm theo tên ..."
-                    allowClear
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                />
-            </div>
+        <div className="h-full">
+            <PutPromptChucNang />
+            <div className="flex gap-4 h-full overflow-hidden">
+                <div className="flex-1 overflow-auto pr-2">
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="text-xl font-semibold text-gray-700">
+                            Prompt Chức năng
+                        </span>
+                    </div>
 
-            <div className="mb-6">
-                <Row gutter={[16, 16]} className="bg-white rounded-md shadow-sm">
-                    {systemTopics.map((item) => {
-                        return (
-                            <Col span={24} key={item.id}>
-                                <PromptQuestionAnswer
-                                    topicId={item.id}
-                                    topicType={item.type}
-                                    label={item.name}
-                                />
-                            </Col>
-                        )
-                    })}
-                </Row>
-            </div>
+                    <div className="mb-4">
+                        <Input
+                            placeholder="Tìm kiếm theo tên chức năng hoặc mô tả..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            style={{ width: 400 }}
+                            allowClear
+                        />
+                    </div>
 
-            {sortedList.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                    Không tìm thấy prompt nào với từ khoá "{searchKeyword}"
+                    <Table
+                        rowKey="id"
+                        dataSource={filteredTableData}
+                        scroll={{ x: 900 }}
+                        pagination={{
+                            ...tableParams.pagination,
+                            onChange: (page, pageSize) => {
+                                setTableParams({
+                                    pagination: {
+                                        ...tableParams.pagination,
+                                        current: page,
+                                        pageSize,
+                                    },
+                                })
+                            },
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                dataIndex: 'index',
+                                width: 60,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Tên chức năng',
+                                dataIndex: 'topicName',
+                                width: 350,
+                                fixed: 'left',
+                                render: (value) => (
+                                    <span className="text-gray-900 text-sm">{value}</span>
+                                ),
+                            },
+                            {
+                                title: 'Mô tả',
+                                dataIndex: 'description',
+                                width: 400,
+                                render: (value) => (
+                                    <span className="text-sm">{value || 'Chưa có mô tả'}</span>
+                                ),
+                            },
+                            {
+                                title: 'Trạng thái',
+                                dataIndex: 'hasPrompt',
+                                width: 130,
+                                align: 'center',
+                                render: (hasPrompt: boolean) => (
+                                    <Tag
+                                        style={{
+                                            backgroundColor: hasPrompt ? '#f6ffed' : '#fff2f0',
+                                            color: hasPrompt ? '#52c41a' : '#ff4d4f',
+                                            border: hasPrompt
+                                                ? '1px solid #b7eb8f'
+                                                : '1px solid #ffb3b3',
+                                        }}
+                                        className="px-3 py-1 text-sm rounded-md"
+                                    >
+                                        {hasPrompt ? 'Đã thiết lập' : 'Chưa thiết lập'}
+                                    </Tag>
+                                ),
+                            },
+                            {
+                                title: 'Thao tác',
+                                key: 'action',
+                                width: 80,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, record) => (
+                                    <Tooltip title="Chỉnh sửa" placement="top">
+                                        <EditOutlined
+                                            className="text-blue-700 cursor-pointer text-lg hover:text-blue-500"
+                                            onClick={() => handleEdit(record)}
+                                        />
+                                    </Tooltip>
+                                ),
+                            },
+                        ]}
+                    />
                 </div>
-            )}
+            </div>
         </div>
     )
 }
