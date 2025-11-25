@@ -174,6 +174,7 @@ export default function EvaluationCouncilTab() {
                                 <Button
                                     type="primary"
                                     icon={<BookPlus size={16} />}
+                                    size="small"
                                     onClick={() => {
                                         onOpen({
                                             evaluationCouncilId: evaluationCouncil?.id,
