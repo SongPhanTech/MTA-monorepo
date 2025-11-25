@@ -4,6 +4,53 @@ import { prisma } from '..'
 
 const app = new OpenAPIHono({ strict: false })
 
+const getPublicSurveys = createRoute({
+    operationId: 'get-public-surveys',
+    path: '/get-public-surveys',
+    tags: ['Survey'],
+    summary: 'Danh sách đợt khảo sát công khai',
+    description: 'Danh sách đợt khảo sát công khai',
+    method: 'get',
+    responses: {
+        200: {
+            description: 'Get Survey result',
+            content: {
+                'application/json': {
+                    schema: z.array(models.SurveyScalarSchema).openapi('get-public-surveys-result'),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getPublicSurveys, async (c) => {
+    const surveys = await prisma.survey.findMany({
+        where: { deletedAt: null, active: true, isPublic: true },
+    })
+
+    return c.json(surveys, 200)
+})
+
 const getPublicSurvey = createRoute({
     operationId: 'get-public-survey',
     path: '/get-public-survey/{id}',

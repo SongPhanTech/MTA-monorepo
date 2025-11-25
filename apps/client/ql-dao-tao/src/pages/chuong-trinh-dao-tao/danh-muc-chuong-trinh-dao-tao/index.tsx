@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -43,6 +42,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -469,7 +469,7 @@ export default function TrainingProgramCatalog() {
                                         </Button>
                                         <Button onClick={handleModal} type="primary">
                                             <BookPlus />
-                                            Thêm chương trình
+                                            Thêm CTĐT
                                         </Button>
                                     </>
                                 )}
@@ -477,7 +477,6 @@ export default function TrainingProgramCatalog() {
                         </Col>
                     </Row>
                 </Col>
-
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
@@ -522,7 +521,7 @@ export default function TrainingProgramCatalog() {
                             return (
                                 <Tooltip title={tooltipContent} placement="top">
                                     <span className="truncate inline-block align-middle">
-                                        {displayText}
+                                        Khung: {displayText}
                                     </span>
                                 </Tooltip>
                             )
@@ -542,19 +541,18 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'code',
                                 align: 'center',
                                 fixed: 'left',
-                                width: 120,
+                                width: 150,
                                 type: 'input',
                             },
                             {
                                 title: 'Tên CTĐT toàn khoá',
                                 dataIndex: 'name',
-                                align: 'center',
                                 fixed: 'left',
-                                width: 250,
+                                width: 300,
                                 type: 'input',
                             },
                             {
-                                title: 'ĐTĐT',
+                                title: <Tooltip title="Đối tượng đào tạo">ĐTĐT</Tooltip>,
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
                                 width: 150,
@@ -576,7 +574,7 @@ export default function TrainingProgramCatalog() {
                                 title: 'Khoá',
                                 dataIndex: 'trainingCourses',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 type: 'select',
                                 options: trainingCourseData.map((i: TrainingCourse) => ({
                                     value: i.id,
@@ -600,9 +598,9 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: 'Tổng tín chỉ',
+                                title: <Tooltip title="Tổng số tín chỉ">TSTC</Tooltip>,
                                 align: 'center',
-                                width: 120,
+                                width: 90,
                                 render: ({ trainingBlocks = [] }) => {
                                     const totalCredit = trainingBlocks.reduce(
                                         (
@@ -636,34 +634,34 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: 'Số TCBB',
+                                title: <Tooltip title="Số tín chỉ bắt buộc">Số TCBB</Tooltip>,
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: ['electiveCredits', 'numberOfSemesters'],
-                                width: 100,
+                                width: 90,
                             },
                             {
-                                title: 'Số TCTC',
+                                title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
                                 type: 'order',
-                                width: 100,
+                                width: 90,
                                 distinctFilters: ['numberOfSemesters', 'requiredCredits'],
                             },
                             {
-                                title: 'Số kỳ học',
+                                title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: ['electiveCredits', 'requiredCredits'],
-                                width: 120,
+                                width: 90,
                             },
                             {
-                                title: 'Thời gian đào tạo',
+                                title: <Tooltip title="Thời gian đào tạo">TGĐT</Tooltip>,
                                 dataIndex: 'trainingTime',
                                 align: 'center',
-                                width: 170,
+                                width: 100,
                                 type: 'select',
                                 options: trainingTimeData.map((i: TrainingTime) => ({
                                     value: i.id,
@@ -672,18 +670,18 @@ export default function TrainingProgramCatalog() {
                                 render: (value: TrainingTime) => (value?.name ? value.name : ''),
                             },
                             {
-                                title: 'Năm khởi tạo',
+                                title: <Tooltip title="Năm khởi tạo">Năm KT</Tooltip>,
                                 dataIndex: 'createdAt',
                                 align: 'center',
-                                width: 120,
-                                render: (value) => dayjs(value).year(),
+                                width: 90,
+                                render: (value) => (value ? dayjs(value).year() : ''),
                             },
                             {
-                                title: 'Năm áp dụng',
+                                title: <Tooltip title="Năm áp dụng">Năm AD</Tooltip>,
                                 dataIndex: 'startDate',
                                 align: 'center',
-                                width: 120,
-                                render: (value) => dayjs(value).year(),
+                                width: 90,
+                                render: (value) => (value ? dayjs(value).year() : ''),
                             },
                             {
                                 title: 'Mô tả',
@@ -695,7 +693,7 @@ export default function TrainingProgramCatalog() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 140,
+                                width: 100,
                                 fixed: 'right',
                                 render: (_, record) => {
                                     return !record?.active ? (
@@ -710,13 +708,13 @@ export default function TrainingProgramCatalog() {
                                 width: 150,
                                 fixed: 'right',
                                 align: 'center',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                    'XEM_CHI_TIET',
-                                    'THEM',
-                                    'SUA',
-                                    'XOA'
-                                ),
+                                // hidden: !canSome(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                //     'XEM_CHI_TIET',
+                                //     'THEM',
+                                //     'SUA',
+                                //     'XOA'
+                                // ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         const isLocked = (record as CurriculumVersion)?.isLock

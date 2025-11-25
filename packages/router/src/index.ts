@@ -113,16 +113,16 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                        label: 'Danh mục CTĐT khung',
+                        label: 'Quản lý CTĐT',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                        description: 'Danh mục CTĐT khung',
+                        description: 'Quản lý CTĐT',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                        label: 'Khối kiến thức CTĐT khung',
+                        label: 'Khối kiến thức CTĐT',
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                        description: 'Khối kiến thức CTĐT khung',
+                        description: 'Khối kiến thức CTĐT',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
@@ -140,7 +140,7 @@ const NAVIGATION: NavigationType = {
             },
             {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
-                label: 'Kế hoạch đào tạo',
+                label: 'Kế hoạch giảng dạy',
                 icon: CalendarRange,
                 path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
             },

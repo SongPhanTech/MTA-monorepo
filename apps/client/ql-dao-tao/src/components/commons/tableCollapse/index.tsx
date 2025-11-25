@@ -240,6 +240,8 @@ const TableCollapse = <
                 //     x: 'max-content',
                 //     y: scrollable ? maxHeight : undefined,
                 // }}
+                scrollable={scrollable}
+                maxHeight={maxHeight}
                 bordered
                 data={dataWithKey}
                 pagination={pagination}

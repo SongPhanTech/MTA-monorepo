@@ -199,7 +199,7 @@ export default function MonTheoKeHoachDuKien() {
                                 type="primary"
                                 disabled={subjectSelected.length === 0}
                             >
-                                Đưa {subjectSelected.length || ''} môn vào KHDG
+                                Đưa {subjectSelected.length || ''} môn vào KHDK
                             </Button>
                         </Flex>
                     </Flex>
@@ -291,7 +291,7 @@ export default function MonTheoKeHoachDuKien() {
                                 },
                             },
                             {
-                                title: 'Kỳ học',
+                                title: 'HKDK',
                                 align: 'center',
                                 width: 80,
                                 render: (__, record) => {

@@ -105,12 +105,12 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
     useEffect(() => {
         if (currentView === Views.DAY || currentView === Views.WEEK) {
             setTimeout(() => {
-                const section = document.querySelector('#time-gutter-6')
-                section?.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'start',
-                    inline: 'nearest',
-                })
+                // const section = document.querySelector('#time-gutter-6')
+                // section?.scrollIntoView({
+                //     behavior: 'instant',
+                //     block: 'start',
+                //     inline: 'nearest',
+                // })
             }, 0)
         }
     }, [currentView])

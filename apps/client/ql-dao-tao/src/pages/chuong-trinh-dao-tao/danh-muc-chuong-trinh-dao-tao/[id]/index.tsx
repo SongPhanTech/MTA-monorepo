@@ -463,7 +463,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <div className="flex gap-2">
                         <p className="flex gap-2 items-center">
-                            <p className="w-4 h-4 bg-red-100" /> Môn bắt buộc
+                            <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
                         </p>
                         <p className="flex gap-2 items-center">
                             <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
@@ -473,6 +473,8 @@ export default function TrainingProgramSubjects() {
                         </p>
                     </div>
                     <TableCollapse
+                        scrollable
+                        maxHeight={'calc(100vh - 305px)'}
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
                             `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
@@ -487,7 +489,7 @@ export default function TrainingProgramSubjects() {
                                 className: cn(
                                     !subject.useForFinalScore && 'bg-orange-300',
                                     subject.type === $Enums.SubjectRequirementType.Mandatory &&
-                                        'bg-red-100',
+                                        'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100'
                                 ),
@@ -504,8 +506,14 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 3,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.credit, 0),
+                                render: (_, record) => (
+                                    <p className="text-center">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.credit,
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
@@ -616,8 +624,6 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
@@ -659,19 +665,8 @@ export default function TrainingProgramSubjects() {
                                 title: 'HKDK',
                                 dataIndex: 'semester',
                                 width: 80,
-                                type: 'order',
+                                type: 'input',
                                 align: 'center',
-                                distinctFilters: [
-                                    'credit',
-                                    'period',
-                                    'numberOfTheory',
-                                    'numberOfPractical',
-                                    'numberOfSelfStudy',
-                                    'numberOfPractice',
-                                    'numberOfReview',
-                                    'numberOfExam',
-                                    'numberOfOther',
-                                ],
                             },
                             {
                                 title: 'Số tiết TKB',
@@ -719,6 +714,7 @@ export default function TrainingProgramSubjects() {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
                                 type: 'order',
+                                width: 80,
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -842,7 +838,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
@@ -853,12 +849,12 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                    'SUA'
-                                ),
+                                // hidden: !canSome(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                //     'SUA'
+                                // ),
                                 render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
@@ -927,7 +923,7 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
             breadcrumbList={[
                 { title: 'Chương trình đào tạo' },
                 {
-                    title: 'Danh mục CTĐT khung',
+                    title: 'Quản lý CTĐT',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
                 { title: 'Chi tiết CTĐT toàn khoá' },

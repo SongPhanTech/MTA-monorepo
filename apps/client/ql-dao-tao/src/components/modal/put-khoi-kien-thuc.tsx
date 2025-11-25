@@ -303,11 +303,10 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             className="min-w-[800px] w-[1000px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="trainingBlockIds" label="Khối kiến thức" required>
+                <FormItem form={form} name="trainingBlockIds" label="Chọn khối kiến thức" required>
                     <TreeSelect
                         treeData={treeData}
                         multiple
-                        allowClear
                         treeCheckable={true} // Cho phép checkbox để chọn
                         // treeCheckStrictly
                         showCheckedStrategy="SHOW_ALL"

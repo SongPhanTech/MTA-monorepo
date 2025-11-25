@@ -6,7 +6,7 @@ import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Breadcrumb, Divider, Layout, theme } from 'antd'
+import { Breadcrumb, Divider, Layout, Tooltip, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -38,7 +38,7 @@ const DefaultLayout = ({
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
             ? [
-                  ...breadcrumb.map((i: { title: string; href?: string }) => {
+                  ...breadcrumb.slice(-2).map((i: { title: string; href?: string }) => {
                       if (i?.href) {
                           return {
                               title: <Link href={i.href}>{i.title}</Link>,
@@ -51,7 +51,7 @@ const DefaultLayout = ({
               ]
             : breadcrumbList
               ? [
-                    ...breadcrumbList.map((i: { title: string; href?: string }) => {
+                    ...breadcrumbList.slice(-2).map((i: { title: string; href?: string }) => {
                         if (i?.href) {
                             return {
                                 title: <Link href={i.href}>{i.title}</Link>,
@@ -64,6 +64,7 @@ const DefaultLayout = ({
                 ]
               : []
     }, [breadcrumb, breadcrumbList])
+
     const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
@@ -102,10 +103,12 @@ const DefaultLayout = ({
                         <Divider type="vertical" className="bg-primary h-[30px]" />
                         <SelectTrainingObjectType />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <div className="mr-2 font-bold">Học kỳ</div>
+                        <Tooltip title="Học kỳ">
+                            <div className="mr-2 font-bold">HK</div>
+                        </Tooltip>
                         <TreeSelectSemester />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <Breadcrumb className="text-base font-semibold" items={listBreadcrumb} />
+                        <Breadcrumb className="text-xs" items={listBreadcrumb} />
                     </div>
                     <HeaderApp />
                 </Header>
