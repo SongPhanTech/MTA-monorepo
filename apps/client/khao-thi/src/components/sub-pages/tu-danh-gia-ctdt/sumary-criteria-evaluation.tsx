@@ -6,11 +6,10 @@ import { useEffect, useState } from 'react'
 import { $Enums } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSession } from '@workspace/auth/react'
-import { useStore } from '@tanstack/react-store'
-import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
-import { useUpdateEvaluationCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 
 export type PutRequirementCriterion = {
+    opening?: string
+    conclusion?: string
     criteria: Record<string, any>
 }
 export default function SumaryCriteriaEvaluationSubPage({
@@ -21,14 +20,10 @@ export default function SumaryCriteriaEvaluationSubPage({
     const [form] = Form.useForm<PutRequirementCriterion>()
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
-    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const [commentForm] = Form.useForm<{ crossReview: string }>()
     const [showComments, setShowComments] = useState(false)
 
     const { hideSpinner, showSpinner } = useSpinner()
-
-    const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
-    const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
 
     const handleSendCrossReview = async () => {
         try {
@@ -102,6 +97,8 @@ export default function SumaryCriteriaEvaluationSubPage({
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
+                opening: data?.opening || '',
+                conclusion: data?.conclusion || '',
                 criteria: data?.criteria
                     ?.filter((item) => item.evaluationCriterion)
                     ?.map((item) => ({
@@ -149,6 +146,11 @@ export default function SumaryCriteriaEvaluationSubPage({
             </div>
 
             <Form form={form} layout="vertical" className="form-evidence">
+                {/* Phần mở đầu */}
+                <Form.Item label="Mở đầu" name="opening">
+                    <RichTextEditor id="opening" editable={false} />
+                </Form.Item>
+
                 <Form.List name="criteria">
                     {(fields) => (
                         <>
@@ -242,6 +244,11 @@ export default function SumaryCriteriaEvaluationSubPage({
                         </>
                     )}
                 </Form.List>
+
+                {/* Phần kết luận */}
+                <Form.Item label="Kết luận" name="conclusion">
+                    <RichTextEditor id="conclusion" editable={false} />
+                </Form.Item>
             </Form>
             {showComments && (
                 <Card>
