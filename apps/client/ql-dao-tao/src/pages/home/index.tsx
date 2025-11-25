@@ -1,10 +1,14 @@
 import DefaultLayout from '@layouts/default-layout'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { DanhSachThongBao, LichCongTac, ThongKeDonVi, ThongKeTotNghiep } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
 const { Title } = Typography
 
 function Page() {
+    const { can } = useAbility()
+
     return (
         <div>
             <Row gutter={[8, 8]}>
@@ -14,7 +18,12 @@ function Page() {
                             <Title level={4}>Thời khoá biểu</Title>
                         </div>
                         <div className="flex-1 p-2">
-                            <LichCongTac />
+                            <LichCongTac
+                                onlyMySchedule={can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CC_TX,
+                                    'XEM'
+                                )}
+                            />
                         </div>
                     </div>
                 </Col>
