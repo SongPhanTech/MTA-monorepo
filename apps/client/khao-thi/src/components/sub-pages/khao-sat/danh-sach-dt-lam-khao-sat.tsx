@@ -246,9 +246,10 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Thao tác',
                                 align: 'center',
                                 width: 80,
+                                hidden:profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-0">
-                                        {profileId === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
+                                        {profileId === '266369db-fbaa-453e-b5fc-147ed06f959d' && (
                                             <Tooltip title="Xem khảo sát" placement="top">
                                                 <Eye
                                                     className="m-0"
