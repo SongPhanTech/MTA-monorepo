@@ -24,19 +24,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Popconfirm,
-    Row,
-    Tag,
-    Tooltip,
-    Typography,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
 import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
 import type React from 'react'
@@ -191,13 +179,14 @@ export default function SubjectList() {
                 ],
                 include: {
                     subjectClass: {
-                        where: {
-                            active: true,
-                            deletedAt: null,
-                        },
-                        select: {
-                            id: true,
-                        },
+                        where: { deletedAt: null },
+                        select: { id: true },
+                        take: 1,
+                    },
+                    trainingBlocks: {
+                        where: { deletedAt: null },
+                        select: { id: true },
+                        take: 1,
                     },
                 },
             },
@@ -479,7 +468,7 @@ export default function SubjectList() {
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'credit',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -496,7 +485,7 @@ export default function SubjectList() {
                             {
                                 title: 'Số tiết',
                                 dataIndex: 'period',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -643,25 +632,25 @@ export default function SubjectList() {
                                 ],
                                 render: (_, record) => (record.subjectClass?.length ? '✅' : ''),
                             },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'active',
-                                align: 'center',
-                                fixed: 'right',
-                                width: 150,
-                                options: [
-                                    { label: 'Đang đào tạo', value: true },
-                                    { label: 'Ngừng đào tạo', value: false },
-                                ],
-                                type: 'select',
-                                render: (record) => {
-                                    return !record ? (
-                                        <Tag color="error">Không hoạt động</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang hoạt động</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     dataIndex: 'active',
+                            //     align: 'center',
+                            //     fixed: 'right',
+                            //     width: 150,
+                            //     options: [
+                            //         { label: 'Đang đào tạo', value: true },
+                            //         { label: 'Ngừng đào tạo', value: false },
+                            //     ],
+                            //     type: 'select',
+                            //     render: (record) => {
+                            //         return !record ? (
+                            //             <Tag color="error">Không hoạt động</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,
@@ -674,7 +663,12 @@ export default function SubjectList() {
                                     'XOA'
                                 ),
                                 render: (_, record) => {
-                                    const { id: subjectVersionId, subjectId, subjectClass } = record
+                                    const {
+                                        id: subjectVersionId,
+                                        subjectId,
+                                        subjectClass,
+                                        trainingBlocks,
+                                    } = record
                                     if (isLocked) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -719,7 +713,10 @@ export default function SubjectList() {
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
-                                                    disabled={subjectClass?.length > 0}
+                                                    disabled={
+                                                        subjectClass?.length > 0 ||
+                                                        trainingBlocks?.length > 0
+                                                    }
                                                     popConfirm={{
                                                         onConfirm: () => handleDelete(record),
                                                     }}
@@ -802,6 +799,7 @@ export default function SubjectList() {
                                         'XOA'
                                     ) && (
                                         <DeleteIcon
+                                            disabled={!!record.subjectVersion.length}
                                             popConfirm={{
                                                 onConfirm: () => {
                                                     handleDeleteSubject(record.id)

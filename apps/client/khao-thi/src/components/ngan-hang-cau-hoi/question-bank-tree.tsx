@@ -176,7 +176,7 @@ export function QuestionBankTree({
                                             {version.name}
                                         </span>
                                         <span className="text-gray-500 text-xs">
-                                            ({version.period} tiết, {version.credit} tín chỉ)
+                                            ({version.period}T, {version.credit}TC)
                                         </span>
                                         <Tooltip title="Thêm mới" placement="top">
                                             <BookPlus

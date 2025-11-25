@@ -69,8 +69,10 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                     label: (
                         <span>
                             {e.name}
-                            {semesterIdx && (
+                            {semesterIdx ? (
                                 <span className="text-gray-600 italic"> (HK{semesterIdx})</span>
+                            ) : (
+                                ''
                             )}
                         </span>
                     ),
