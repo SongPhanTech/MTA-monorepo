@@ -67,7 +67,7 @@ type TableProps<T = AnyObject> = {
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
-    maxHeight?: number
+    maxHeight?: number | string
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
@@ -875,7 +875,7 @@ const Table = <T extends AnyObject>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-2 custom-scrollbar"
+            className="mt-2"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({

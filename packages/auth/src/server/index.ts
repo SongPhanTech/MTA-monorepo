@@ -1,4 +1,3 @@
-import { jwtDecode } from 'jwt-decode'
 import type { Session } from '..'
 
 const auth = async ({
@@ -33,13 +32,16 @@ const auth = async ({
     }
 
     const isAuthenticated = await response.json()
+    console.log('isAuthenticated', isAuthenticated)
     if (!isAuthenticated) {
         throw new Error('User is not authenticated')
     }
     return {
-        ...(jwtDecode(xToken) as Session),
-        access_token: xToken,
-    }
+        // ...(jwtDecode(xToken) as Session),
+        ...(({ accessToken, accessTokenWs, ...rest }) => rest)(isAuthenticated),
+        sDM_DonViId: isAuthenticated?.organizationId,
+        sDM_NhanVienId: isAuthenticated?.userId,
+    } as Session
 }
 
 export { auth }

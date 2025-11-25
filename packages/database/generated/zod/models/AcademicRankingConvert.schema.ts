@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { AcademicRankingBaseType } from '../../zenstack/models';
 import { RankingContextSchema } from '../enums/RankingContext.schema';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
@@ -57,6 +57,8 @@ const relationSchema = z.object({
     graduationDecision: z.array(z.unknown()).optional(),
     studentGraduationApplication: z.array(z.unknown()).optional(),
     applicationDowngraded: z.array(z.unknown()).optional(),
+    studentSemesterResult: z.array(z.unknown()).optional(),
+    studentYearResult: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -67,7 +69,7 @@ const fkSchema = z.object({
 /**
 * Schema refinement function for applying `@@validate` rules.
 */
-export function refineAcademicRankingConvert<T, D extends z.ZodTypeDef>(schema: z.ZodType<T, D, T>) {
+export function refineAcademicRankingConvert<T>(schema: z.ZodType<T>) {
     return schema.refine((value: any) => (!(((value?.baseScore) !== undefined ? ((value?.baseScore == AcademicRankingBaseType.Base10)) : true) && ((value?.base10Min === null || value?.base10Min === undefined) || (value?.base10Max === null || value?.base10Max === undefined)))), { message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max", })
         .refine((value: any) => (!(((value?.baseScore) !== undefined ? ((value?.baseScore == AcademicRankingBaseType.Base4)) : true) && ((value?.base4Min === null || value?.base4Min === undefined) || (value?.base4Max === null || value?.base4Max === undefined)))), { message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max", });
 }

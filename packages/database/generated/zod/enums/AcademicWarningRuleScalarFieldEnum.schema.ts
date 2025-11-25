@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const AcademicWarningRuleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "field", "operator", "invert", "threshold", "tuple", "severity", "yearCondition", "semesterCondition", "trainingCourseId"])

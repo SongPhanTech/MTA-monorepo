@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const SubjectVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "isLocked", "name", "codeTkb", "examType", "type", "onePoint", "credit", "week", "period", "schedulePeriod", "numberOfTheory", "numberOfPractical", "numberOfSelfStudy", "numberOfPractice", "numberOfReview", "numberOfExam", "numberOfOther", "objectives", "learningOutcome", "structure", "guild", "academicResults", "materials", "rules", "managementOrganizationId", "subjectId", "trainingObjectTypeId", "subjectVersionCategoryId"])

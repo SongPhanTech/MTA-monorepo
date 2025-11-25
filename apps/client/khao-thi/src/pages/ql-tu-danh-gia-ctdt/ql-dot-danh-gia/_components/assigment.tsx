@@ -1,7 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
-import EditIcon from '@components/icons/edit'
 import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -51,7 +50,7 @@ export default function AssigmentOfAssessmentTab() {
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
 
     const { onOpen } = useDisclosure<{
         criterionPeriodId?: string
@@ -500,18 +499,6 @@ export default function AssigmentOfAssessmentTab() {
                                     return (
                                         <Flex justify="center" align="center" gap={8}>
                                             <UserPlusIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    e.preventDefault()
-                                                    onOpen({
-                                                        criterionPeriodId: record.id,
-                                                        refetch: refetch,
-                                                    })
-                                                }}
-                                            />
-
-                                            <EditIcon
-                                                className="text-blue-700 cursor-pointer"
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     e.preventDefault()

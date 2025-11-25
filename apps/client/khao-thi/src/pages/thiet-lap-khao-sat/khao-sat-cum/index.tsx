@@ -71,7 +71,14 @@ export default function ClussterSurveyPage() {
             key: '5',
             label: 'Báo cáo theo giảng viên',
             children: (
-                <LecturerSurveyReport selectedId={selectedId} lectureId={lecturer?.id || ''} sublectClass={sublectClass} setSublectClass={(value:any)=>{setSublectClass(value)}} />
+                <LecturerSurveyReport
+                    selectedId={selectedId}
+                    lectureId={lecturer?.id || ''}
+                    sublectClass={sublectClass}
+                    setSublectClass={(value: any) => {
+                        setSublectClass(value)
+                    }}
+                />
             ),
             disabled: !lecturer?.id,
         },

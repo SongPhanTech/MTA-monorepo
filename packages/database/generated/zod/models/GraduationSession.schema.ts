@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { GraduationSessionStatus } from '../../zenstack/models';
 import { GraduationSessionStatusSchema } from '../enums/GraduationSessionStatus.schema';
 const baseSchema = z.object({

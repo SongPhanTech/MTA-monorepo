@@ -7,19 +7,20 @@ import { useEffect } from 'react'
 
 const IndexPage: NextPage = () => {
     const menus = useMenuList()
-    const { status, goToLastPage } = useSession()
+    const { status } = useSession()
     const router = useRouter()
 
     useEffect(() => {
         console.log(status)
         if (status === 'authenticated') {
-            if (goToLastPage('hrm')) return
             const firstMenu = menus.flat()
+            console.log(firstMenu)
+            router.push('/quan-ly-ho-so')
             if (firstMenu.length > 0 && firstMenu[0].path) {
                 router.push(firstMenu[0].path)
             }
         }
-    }, [status, menus.flat, router.push, goToLastPage])
+    }, [status, menus, router.push])
     return <Loading />
 }
 export default IndexPage

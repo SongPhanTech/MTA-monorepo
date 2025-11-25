@@ -2,7 +2,7 @@ import TabDotKhaoSat from '@components/sub-pages/khao-sat'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import DanhSachDoiTuong from '@components/sub-pages/khao-sat/danh-sach-dt-lam-khao-sat'
 import DefaultLayout from '@layouts/default-layout'
-import { Survey } from '@workspace/db'
+import type { Survey } from '@workspace/db/client'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 

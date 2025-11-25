@@ -174,6 +174,7 @@ export default function EvaluationCouncilTab() {
                                 <Button
                                     type="primary"
                                     icon={<BookPlus size={16} />}
+                                    size="small"
                                     onClick={() => {
                                         onOpen({
                                             evaluationCouncilId: evaluationCouncil?.id,
@@ -237,6 +238,12 @@ export default function EvaluationCouncilTab() {
                                                 ? `${academicTitle} ${fullName}`
                                                 : fullName
                                         },
+                                    },
+                                    {
+                                        title: 'Số điện thoại',
+                                        width: 100,
+                                        render: (__, record) =>
+                                            record?.lecturer?.userProfile?.phoneNumber,
                                     },
                                     {
                                         title: 'Đơn vị',

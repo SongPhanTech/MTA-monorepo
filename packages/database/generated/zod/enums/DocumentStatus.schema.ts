@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const DocumentStatusSchema = z.enum(["PENDING", "APPROVE", "DENY"])

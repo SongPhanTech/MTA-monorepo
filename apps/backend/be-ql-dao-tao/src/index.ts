@@ -33,6 +33,14 @@ import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
 // import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
 
 import './otel'
 

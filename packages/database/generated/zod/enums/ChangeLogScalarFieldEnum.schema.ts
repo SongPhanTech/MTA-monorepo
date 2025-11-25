@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const ChangeLogScalarFieldEnumSchema = z.enum(["id", "tableName", "recordId", "operation", "changedAt", "oldData", "newData", "transactionId", "source", "userProfileId"])

@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 export const DecimalSchema = z.any().refine((val) => {
     if (typeof val === 'string' || typeof val === 'number') {
         return true;

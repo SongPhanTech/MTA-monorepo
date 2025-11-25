@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { StudentTrainingType, TrainingScoreStatus } from '../../zenstack/models';
 import { StudentTrainingTypeSchema } from '../enums/StudentTrainingType.schema';
 import { TrainingScoreStatusSchema } from '../enums/TrainingScoreStatus.schema';

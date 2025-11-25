@@ -372,7 +372,7 @@ const PutTieuChiMinhChungModal = () => {
                             path: file.path,
                             mimeType: file.mimeType,
                             size: file.size,
-                            userProfileId: dataUser?.sid || null,
+                            userProfileId: dataUser?.sDM_NhanVienId || null,
                         })),
                     },
                 },

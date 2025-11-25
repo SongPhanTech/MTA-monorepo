@@ -298,7 +298,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             }}
                         >
                             <Button disabled={!subjectSelected.length} type="primary" danger>
-                                Đưa môn ra khỏi KHDG
+                                Đưa môn ra khỏi KHDK
                             </Button>
                         </Popconfirm>
                     </Flex>

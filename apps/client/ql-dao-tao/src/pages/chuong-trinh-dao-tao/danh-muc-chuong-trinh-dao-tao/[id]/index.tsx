@@ -45,15 +45,7 @@ export default function TrainingProgramSubjects() {
         code: '',
         name: '',
         trainingMajors: undefined,
-        credit: undefined,
         semester: undefined,
-        period: undefined,
-        numberOfTheory: undefined,
-        numberOfPractical: undefined,
-        numberOfSelfStudy: undefined,
-        numberOfPractice: undefined,
-        numberOfReview: undefined,
-        numberOfExam: undefined,
         examType: undefined,
     })
 
@@ -179,7 +171,151 @@ export default function TrainingProgramSubjects() {
                             },
                             !!filters.examType
                         ),
+                        ...(filters.creditCmp
+                            ? {
+                                  credit: {
+                                      ...(filters.creditCmp.gte
+                                          ? {
+                                                gte: Number(filters.creditCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.creditCmp.lte
+                                          ? {
+                                                lte: Number(filters.creditCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.periodCmp
+                            ? {
+                                  period: {
+                                      ...(filters.periodCmp.gte
+                                          ? {
+                                                gte: Number(filters.periodCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.periodCmp.lte
+                                          ? {
+                                                lte: Number(filters.periodCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfTheoryCmp
+                            ? {
+                                  numberOfTheory: {
+                                      ...(filters.numberOfTheoryCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfTheoryCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfTheoryCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfTheoryCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfPracticalCmp
+                            ? {
+                                  numberOfPractical: {
+                                      ...(filters.numberOfPracticalCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfPracticalCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfPracticalCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfPracticalCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfSelfStudyCmp
+                            ? {
+                                  numberOfSelfStudy: {
+                                      ...(filters.numberOfSelfStudyCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfSelfStudyCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfSelfStudyCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfSelfStudyCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfPracticeCmp
+                            ? {
+                                  numberOfPractice: {
+                                      ...(filters.numberOfPracticeCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfPracticeCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfPracticeCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfPracticeCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfReviewCmp
+                            ? {
+                                  numberOfReview: {
+                                      ...(filters.numberOfReviewCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfReviewCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfReviewCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfReviewCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfExamCmp
+                            ? {
+                                  numberOfExam: {
+                                      ...(filters.numberOfExamCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfExamCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfExamCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfExamCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
                     },
+                    ...(filters.semesterCmp
+                        ? {
+                              semester: {
+                                  ...(filters.semesterCmp.gte
+                                      ? {
+                                            gte: Number(filters.semesterCmp.gte),
+                                        }
+                                      : {}),
+                                  ...(filters.semesterCmp.lte
+                                      ? {
+                                            lte: Number(filters.semesterCmp.lte),
+                                        }
+                                      : {}),
+                              },
+                          }
+                        : {}),
                 },
                 include: {
                     subject: {
@@ -192,91 +328,6 @@ export default function TrainingProgramSubjects() {
                         },
                     },
                 },
-                orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    credit: filters.credit,
-                                },
-                            },
-                        ],
-                        !!filters.credit
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    period: filters.period,
-                                },
-                            },
-                        ],
-                        !!filters.period
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfTheory: filters.numberOfTheory,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfTheory
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfSelfStudy: filters.numberOfSelfStudy,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfSelfStudy
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfPractical: filters.numberOfPractical,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfPractical
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfPractice: filters.numberOfPractice,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfPractice
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfReview: filters.numberOfReview,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfReview
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfExam: filters.numberOfExam,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfExam
-                    ),
-                    {
-                        semester: filters.semester ? filters.semester : 'asc',
-                    },
-                ],
             },
             trainingBlock: true,
         },
@@ -463,7 +514,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <div className="flex gap-2">
                         <p className="flex gap-2 items-center">
-                            <p className="w-4 h-4 bg-red-100" /> Môn bắt buộc
+                            <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
                         </p>
                         <p className="flex gap-2 items-center">
                             <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
@@ -473,6 +524,8 @@ export default function TrainingProgramSubjects() {
                         </p>
                     </div>
                     <TableCollapse
+                        scrollable
+                        maxHeight={'calc(100vh - 305px)'}
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
                             `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
@@ -487,7 +540,7 @@ export default function TrainingProgramSubjects() {
                                 className: cn(
                                     !subject.useForFinalScore && 'bg-orange-300',
                                     subject.type === $Enums.SubjectRequirementType.Mandatory &&
-                                        'bg-red-100',
+                                        'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100'
                                 ),
@@ -504,8 +557,17 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 3,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.credit, 0),
+                                render: (_, record) => (
+                                    <p className="text-center">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.credit,
+                                            0
+                                        )}
+                                    </p>
+                                ),
+                                colSpan: 1,
+                            },
+                            {
                                 colSpan: 1,
                             },
                             {
@@ -616,17 +678,19 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
                             },
                             {
-                                title: 'ĐVPT',
+                                title: (
+                                    <Tooltip title="Đơn vị phụ trách">
+                                        <span>ĐVPT</span>
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'organization',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
@@ -636,9 +700,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Số TC',
-                                dataIndex: 'credit',
+                                dataIndex: 'creditCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
                                 distinctFilters: [
                                     'semester',
@@ -656,29 +720,33 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'HKDK',
-                                dataIndex: 'semester',
+                                title: (
+                                    <Tooltip title="Học kỳ dự kiến">
+                                        <span>HKDK</span>
+                                    </Tooltip>
+                                ),
+                                dataIndex: 'semesterCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
-                                distinctFilters: [
-                                    'credit',
-                                    'period',
-                                    'numberOfTheory',
-                                    'numberOfPractical',
-                                    'numberOfSelfStudy',
-                                    'numberOfPractice',
-                                    'numberOfReview',
-                                    'numberOfExam',
-                                    'numberOfOther',
-                                ],
+                                render: (__, record) => record?.semester,
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Học kỳ giảng dạy">
+                                        <span>HKGD</span>
+                                    </Tooltip>
+                                ),
+                                width: 80,
+                                type: 'cmp',
+                                align: 'center',
                             },
                             {
                                 title: 'Số tiết TKB',
-                                dataIndex: 'period',
+                                dataIndex: 'periodCmp',
                                 width: 120,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -696,9 +764,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'LT',
-                                dataIndex: 'numberOfTheory',
+                                dataIndex: 'numberOfTheoryCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -717,8 +785,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'BT',
-                                dataIndex: 'numberOfPractical',
-                                type: 'order',
+                                dataIndex: 'numberOfPracticalCmp',
+                                type: 'cmp',
+                                width: 80,
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -737,10 +806,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'ThL',
-                                dataIndex: 'numberOfSelfStudy',
+                                dataIndex: 'numberOfSelfStudyCmp',
                                 width: 80,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -758,10 +827,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'TN, TH',
-                                dataIndex: 'numberOfPractice',
+                                dataIndex: 'numberOfPracticeCmp',
                                 width: 90,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -779,10 +848,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Ôn',
-                                dataIndex: 'numberOfReview',
+                                dataIndex: 'numberOfReviewCmp',
                                 width: 60,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -800,10 +869,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'KT, Thi',
-                                dataIndex: 'numberOfExam',
+                                dataIndex: 'numberOfExamCmp',
                                 width: 90,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -842,7 +911,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Ngừng đào tạo</Tag>
@@ -853,12 +922,12 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                                    'SUA'
-                                ),
+                                // hidden: !canSome(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                //     'SUA'
+                                // ),
                                 render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
@@ -927,7 +996,7 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
             breadcrumbList={[
                 { title: 'Chương trình đào tạo' },
                 {
-                    title: 'Danh mục CTĐT khung',
+                    title: 'Quản lý CTĐT',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
                 { title: 'Chi tiết CTĐT toàn khoá' },

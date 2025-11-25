@@ -9199,12 +9199,6 @@ const metadata: ModelMeta = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
-                }, trainingBlocks: {
-                    name: "trainingBlocks",
-                    type: "TrainingBlockOnCurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'curriculum',
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -9318,6 +9312,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'curriculum',
+                }, type: {
+                    name: "type",
+                    type: "CurriculumVersionType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -12412,20 +12410,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'trainingBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumId" },
-                }, curriculumId: {
-                    name: "curriculumId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculum',
                 }, priority: {
                     name: "priority",
                     type: "Int",
@@ -12885,8 +12869,8 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        trainingKPI: {
-            name: 'TrainingKPI', fields: {
+        loadCategory: {
+            name: 'LoadCategory', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -12921,10 +12905,26 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingKPI$createdBy,
+                    defaultValueProvider: $default$LoadCategory$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
+                }, unit: {
+                    name: "unit",
+                    type: "String",
+                }, standardHours: {
+                    name: "standardHours",
+                    type: "Float",
+                }, category: {
+                    name: "category",
+                    type: "String",
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
+                }, isOverageCalculated: {
+                    name: "isOverageCalculated",
+                    type: "Boolean",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -13437,6 +13437,20 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSemesterResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'rank',
                 }, lowestFinalScore: {
                     name: "lowestFinalScore",
                     type: "Float",
@@ -13597,6 +13611,20 @@ const metadata: ModelMeta = {
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentYearResult',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'rank',
                 }, totalCredits: {
                     name: "totalCredits",
                     type: "Int",
@@ -15562,6 +15590,10 @@ const metadata: ModelMeta = {
                     name: "status",
                     type: "ThesisProjectStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, language: {
+                    name: "language",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -21468,6 +21500,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'from',
+                }, studentSemesterResult: {
+                    name: "studentSemesterResult",
+                    type: "StudentSemesterResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
+                }, studentYearResult: {
+                    name: "studentYearResult",
+                    type: "StudentYearResult",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24739,7 +24783,7 @@ function $default$ScoreConvert$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$TrainingKPI$createdBy(user: any): unknown {
+function $default$LoadCategory$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -1,7 +1,7 @@
 import DefaultLayout from '@layouts/default-layout'
 import { useFindFirstPlanTrainingDelay } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Row, Tabs } from 'antd'
+import { Col, Row, Tabs, Tooltip } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import MonCham from './_components/mon-cham'
@@ -12,7 +12,7 @@ import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
 
 interface TabItem {
     key: string
-    label: string
+    label: string | React.ReactNode
     content: React.ReactNode
 }
 
@@ -41,7 +41,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
         : [
               {
                   key: '1',
-                  label: 'Môn theo kế hoạch giảng dạy',
+                  label: <Tooltip title="Môn theo học kỳ dự kiến">Môn theo HKDK</Tooltip>,
                   content: <MonTheoKeHoachDuKien />,
               },
               {
@@ -59,7 +59,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const rightTabsMap: TabItem[] = [
         {
             key: '1',
-            label: 'Môn học đã lập kế hoạch',
+            label: 'Môn học dự kiến giảng dạy',
             content: <MonDaLapKeHoach hocLai={hocLai} />,
         },
     ]

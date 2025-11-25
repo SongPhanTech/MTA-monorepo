@@ -1,10 +1,11 @@
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
+import CommentList from '@components/commons/comment-list'
 import DatePicker from '@components/commons/date-picker'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
-import { getStatusEvaluation } from '@constants/constants'
+import { DEADLINE_OPTIONS, getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { ReviewDataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/review-criteria-analysis'
@@ -21,7 +22,8 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
-import { Button, Empty, Form, message, Tag, Tooltip } from 'antd'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { SquareX } from 'lucide-react'
 import { useState } from 'react'
@@ -51,11 +53,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { can } = useAbility()
     const [form] = Form.useForm<CommentType>()
-
-    const DEADLINE_OPTIONS = [
-        { value: 'overdue', label: 'Quá hạn' },
-        { value: 'near', label: 'Sắp quá hạn' },
-    ]
 
     const filteredCriteria = data?.criteria?.filter((item) => {
         if (!item.analysisCriterions) return false
@@ -267,6 +264,90 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
         }
     }
 
+    const handleSubmitedAll = async () => {
+        try {
+            showSpinner()
+
+            if (!filteredCriteria || filteredCriteria.length === 0) {
+                message.warning('Không có tiêu chí nào để phê duyệt')
+                return
+            }
+
+            const approvableCriteria = filteredCriteria.filter((item) => {
+                const status = item.analysisCriterions?.status
+
+                if (role === 'BAN_TU_VAN') {
+                    return (
+                        status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                        status !== $Enums.EvaluationCriterionStatus.COMPLETED
+                    )
+                }
+
+                if (role === 'THU_KY') {
+                    return status === $Enums.EvaluationCriterionStatus.APPROVED
+                }
+
+                return false
+            })
+
+            if (approvableCriteria.length === 0) {
+                message.warning('Không có tiêu chí nào đủ điều kiện để phê duyệt')
+                return
+            }
+
+            if (role === 'BAN_TU_VAN') {
+                await Promise.all(
+                    approvableCriteria
+                        .filter((item) => item.analysisCriterions?.id)
+                        .map((item) =>
+                            updateAnalysisCriterion({
+                                where: {
+                                    id: item.analysisCriterions?.id as string,
+                                },
+                                data: {
+                                    status: $Enums.EvaluationCriterionStatus.APPROVED,
+                                },
+                            })
+                        )
+                )
+            } else if (role === 'THU_KY') {
+                await Promise.all(
+                    approvableCriteria
+                        .filter((item) => item.analysisCriterions?.id)
+                        .map((item) =>
+                            Promise.all([
+                                updateAnalysisCriterion({
+                                    where: {
+                                        id: item.analysisCriterions?.id as string,
+                                    },
+                                    data: {
+                                        status: $Enums.EvaluationCriterionStatus.COMPLETED,
+                                    },
+                                }),
+                                updateEvaluationCriterion({
+                                    where: {
+                                        criterionPeriodId: item.id,
+                                    },
+                                    data: {
+                                        status: $Enums.EvaluationStatus.PENDING,
+                                    },
+                                }),
+                            ])
+                        )
+                )
+            }
+
+            await handleCheckAndChangeStatus()
+
+            message.success(`Phê duyệt thành công ${approvableCriteria.length} tiêu chí`)
+        } catch (error) {
+            message.error('Phê duyệt tiêu chí thất bại. Vui lòng thử lại.')
+            console.error('Error approving all criteria:', error)
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto p-4">
             <div className="flex items-center justify-between mb-3">
@@ -274,14 +355,33 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                     <span className="font-bold">Tiêu chuẩn {idx}: </span>
                     <span>{data?.name}</span>
                 </div>
-                <Select
-                    allowClear
-                    placeholder="Lọc theo hạn"
-                    style={{ width: 150 }}
-                    options={DEADLINE_OPTIONS}
-                    value={deadlineFilter}
-                    onChange={(value) => setDeadlineFilter(value)}
-                />
+                <div className="flex gap-2">
+                    <Select
+                        allowClear
+                        placeholder="Lọc theo hạn"
+                        style={{ width: 150, height: 27 }}
+                        options={DEADLINE_OPTIONS}
+                        value={deadlineFilter}
+                        onChange={(value) => setDeadlineFilter(value)}
+                    />
+                    {can(
+                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                        'DUYET'
+                    ) && (
+                        <Popconfirm
+                            title="Xác nhận phê duyệt tất cả tiêu chí?"
+                            description="Bạn có chắc chắn muốn phê duyệt tất cả tiêu chí này?"
+                            onConfirm={handleSubmitedAll}
+                            okText="Đồng ý"
+                            cancelText="Hủy"
+                            placement="topRight"
+                        >
+                            <Button type="primary" size="small">
+                                Phê duyệt tất cả
+                            </Button>
+                        </Popconfirm>
+                    )}
+                </div>
             </div>
             {!filteredCriteria || filteredCriteria.length === 0 ? (
                 <div className="flex items-center justify-center h-[calc(100%-50px)]">
@@ -438,64 +538,74 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                     item.analysisCriterions?.status ===
                                                         $Enums.EvaluationCriterionStatus
                                                             .APPROVED) ||
-                                                idProfile ===
-                                                    'e0bf913a-7b9c-40ac-9a52-266a4326e02f',
+                                                (role === 'THU_KY' &&
+                                                    item.analysisCriterions?.status !==
+                                                        $Enums.EvaluationCriterionStatus
+                                                            .APPROVED) ||
+                                                !can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                    'DUYET'
+                                                ),
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
-                                                        {
+                                                        {can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            'DUYET'
+                                                        ) && (
                                                             <>
-                                                                {role === 'BAN_TU_VAN' &&
-                                                                    idProfile ===
-                                                                        '8bca0fb4-e233-4010-bb23-ed4cbe414726' && (
-                                                                        <ApproveIcon
-                                                                            popConfirm={{
-                                                                                onConfirm: (e) => {
-                                                                                    e?.stopPropagation()
-                                                                                    handleApproveCriterionAnalysis(
-                                                                                        record.analysisCriterionId
-                                                                                    )
-                                                                                },
-                                                                                onCancel: (e) => {
-                                                                                    e?.stopPropagation()
-                                                                                },
-                                                                            }}
-                                                                        />
-                                                                    )}
+                                                                {role === 'BAN_TU_VAN' && (
+                                                                    <ApproveIcon
+                                                                        popConfirm={{
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleApproveCriterionAnalysis(
+                                                                                    record.analysisCriterionId
+                                                                                )
+                                                                            },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                        }}
+                                                                    />
+                                                                )}
 
-                                                                {role === 'THU_KY' &&
-                                                                    idProfile ===
-                                                                        '97edb89d-9803-45b9-ac83-e81125dd59c4' && (
-                                                                        <ApproveIcon
-                                                                            popConfirm={{
-                                                                                onConfirm: (e) => {
-                                                                                    e?.stopPropagation()
-                                                                                    handleApproveCriterionAnalysisFinal(
-                                                                                        record.analysisCriterionId,
-                                                                                        item.id
-                                                                                    )
-                                                                                },
-                                                                                onCancel: (e) => {
-                                                                                    e?.stopPropagation()
-                                                                                },
-                                                                            }}
-                                                                        />
-                                                                    )}
+                                                                {role === 'THU_KY' && (
+                                                                    <ApproveIcon
+                                                                        popConfirm={{
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleApproveCriterionAnalysisFinal(
+                                                                                    record.analysisCriterionId,
+                                                                                    item.id
+                                                                                )
+                                                                            },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                        }}
+                                                                    />
+                                                                )}
                                                             </>
-                                                        }
+                                                        )}
 
-                                                        <Tooltip title="Yêu cầu chỉnh sửa">
-                                                            <SquareX
-                                                                size={16}
-                                                                strokeWidth={1.5}
-                                                                className={
-                                                                    'text-red-600 cursor-pointer'
-                                                                }
-                                                                onClick={() => {
-                                                                    toggleCommentRow(record.id)
-                                                                }}
-                                                            />
-                                                        </Tooltip>
+                                                        {can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            'DUYET'
+                                                        ) && (
+                                                            <Tooltip title="Yêu cầu chỉnh sửa">
+                                                                <SquareX
+                                                                    size={16}
+                                                                    strokeWidth={1.5}
+                                                                    className={
+                                                                        'text-red-600 cursor-pointer'
+                                                                    }
+                                                                    onClick={() => {
+                                                                        toggleCommentRow(record.id)
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        )}
                                                     </div>
                                                 )
                                             },
@@ -510,71 +620,81 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             const isOverdue =
                                                 deadline && dayjs(deadline).diff(dayjs(), 'day') < 0
 
+                                            const previousComments =
+                                                record?.evaluationCriterionComment || []
+
                                             return (
-                                                <Form form={form} layout="vertical">
-                                                    <Form.Item
-                                                        label="Yêu cầu chỉnh sửa"
-                                                        name={['comment', record.id, 'content']}
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message:
-                                                                    'Vui lòng nhập yêu cầu chỉnh sửa',
-                                                            },
-                                                        ]}
-                                                    >
-                                                        <RichTextEditor />
-                                                    </Form.Item>
-                                                    {isOverdue && (
+                                                <div className="space-y-4">
+                                                    {previousComments.length > 0 && (
+                                                        <CommentList comments={previousComments} />
+                                                    )}
+
+                                                    <Form form={form} layout="vertical">
                                                         <Form.Item
-                                                            label="Gia hạn mới"
-                                                            name={[
-                                                                'comment',
-                                                                record.id,
-                                                                'newDeadline',
-                                                            ]}
+                                                            label="Yêu cầu chỉnh sửa"
+                                                            name={['comment', record.id, 'content']}
                                                             rules={[
                                                                 {
                                                                     required: true,
                                                                     message:
-                                                                        'Vui lòng chọn ngày gia hạn mới',
+                                                                        'Vui lòng nhập yêu cầu chỉnh sửa',
                                                                 },
                                                             ]}
                                                         >
-                                                            <DatePicker
-                                                                format="DD/MM/YYYY"
-                                                                placeholder="Chọn ngày gia hạn"
-                                                                disabledDate={(current) =>
-                                                                    current &&
-                                                                    current < dayjs().startOf('day')
-                                                                }
-                                                                className="w-full"
-                                                            />
+                                                            <RichTextEditor />
                                                         </Form.Item>
-                                                    )}
-                                                    <div className="flex justify-end gap-2 mt-2">
-                                                        <Button
-                                                            onClick={() => {
-                                                                form.resetFields()
-                                                                toggleCommentRow(record.id)
-                                                            }}
-                                                        >
-                                                            Hủy
-                                                        </Button>
-                                                        <Button
-                                                            type="primary"
-                                                            onClick={() =>
-                                                                handleRejectCriterionAnalysis(
-                                                                    record.analysisCriterionId,
+                                                        {isOverdue && (
+                                                            <Form.Item
+                                                                label="Gia hạn mới"
+                                                                name={[
+                                                                    'comment',
                                                                     record.id,
-                                                                    !!isOverdue
-                                                                )
-                                                            }
-                                                        >
-                                                            Gửi yêu cầu
-                                                        </Button>
-                                                    </div>
-                                                </Form>
+                                                                    'newDeadline',
+                                                                ]}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message:
+                                                                            'Vui lòng chọn ngày gia hạn mới',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <DatePicker
+                                                                    format="DD/MM/YYYY"
+                                                                    placeholder="Chọn ngày gia hạn"
+                                                                    disabledDate={(current) =>
+                                                                        current &&
+                                                                        current <
+                                                                            dayjs().startOf('day')
+                                                                    }
+                                                                    className="w-full"
+                                                                />
+                                                            </Form.Item>
+                                                        )}
+                                                        <div className="flex justify-end gap-2 mt-2">
+                                                            <Button
+                                                                onClick={() => {
+                                                                    form.resetFields()
+                                                                    toggleCommentRow(record.id)
+                                                                }}
+                                                            >
+                                                                Hủy
+                                                            </Button>
+                                                            <Button
+                                                                type="primary"
+                                                                onClick={() =>
+                                                                    handleRejectCriterionAnalysis(
+                                                                        record.analysisCriterionId,
+                                                                        record.id,
+                                                                        !!isOverdue
+                                                                    )
+                                                                }
+                                                            >
+                                                                Gửi yêu cầu
+                                                            </Button>
+                                                        </div>
+                                                    </Form>
+                                                </div>
                                             )
                                         },
                                         rowExpandable: (record) =>

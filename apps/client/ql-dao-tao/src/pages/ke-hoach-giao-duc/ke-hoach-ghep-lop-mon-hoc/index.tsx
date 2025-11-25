@@ -11,18 +11,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import {
-    Button,
-    Col,
-    Flex,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Popconfirm,
-    Row,
-    Tooltip,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { PlusCircle, XCircleIcon } from 'lucide-react'
 import type React from 'react'
@@ -789,68 +778,6 @@ export default function KeHoachGhepLopMonHoc() {
                                     dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
                                     width: 150,
                                     align: 'center',
-                                },
-                                {
-                                    title: 'Số SV tối đa / LMH',
-                                    width: 150,
-                                    align: 'center',
-                                    render: (_, record, idx) => (
-                                        <>
-                                            <Form.Item
-                                                name={[
-                                                    'subjectVersions',
-                                                    record?.subjectVersionId,
-                                                    'maxStudent',
-                                                ]}
-                                                required
-                                                className={'m-0'}
-                                            >
-                                                <InputNumber
-                                                    step={0}
-                                                    id={`svmax-${record?.subjectVersionId}`}
-                                                    controls={false}
-                                                    onKeyDown={(e) => {
-                                                        if (
-                                                            e.key === 'ArrowUp' ||
-                                                            e.key === 'ArrowDown'
-                                                        ) {
-                                                            e.preventDefault()
-                                                            e.stopPropagation()
-                                                            if (!data) return
-                                                            const nextId =
-                                                                data[
-                                                                    idx +
-                                                                        (e.key === 'ArrowUp'
-                                                                            ? -1
-                                                                            : 1)
-                                                                ]?.subjectVersionId
-                                                            document
-                                                                .getElementById(`svmax-${nextId}`)
-                                                                ?.focus()
-                                                            return
-                                                            // Handle the logic for ArrowUp key press
-                                                        }
-
-                                                        const allowedKeys = [
-                                                            'Backspace',
-                                                            'Delete',
-                                                            'ArrowLeft',
-                                                            'ArrowRight',
-                                                            'Tab',
-                                                            'Meta',
-                                                            'Control',
-                                                        ]
-                                                        if (
-                                                            !/[0-9]/.test(e.key) &&
-                                                            !allowedKeys.includes(e.key)
-                                                        ) {
-                                                            e.preventDefault()
-                                                        }
-                                                    }}
-                                                />
-                                            </Form.Item>
-                                        </>
-                                    ),
                                 },
                             ]}
                             pagination={{

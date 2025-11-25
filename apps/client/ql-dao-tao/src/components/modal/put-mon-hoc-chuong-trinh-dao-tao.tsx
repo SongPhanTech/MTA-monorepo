@@ -24,6 +24,7 @@ import { buildOrgTree } from '@lib/utils'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
@@ -39,6 +40,7 @@ interface FilterProps {
 const PutTrainingBlockSubject = () => {
     const [form] = Form.useForm<PutTrainingBlockSubject>()
     const { options: subjectRequirementTypeOptions } = useSubjectRequirementTypeOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
         tag: 'PutTrainingBlockSubject',
         onClose: form.resetFields,
@@ -71,6 +73,7 @@ const PutTrainingBlockSubject = () => {
                       managementOrganizationId: filters.managementOrganizationId,
                   }
                 : {}),
+            trainingObjectTypeId,
         },
     })
 

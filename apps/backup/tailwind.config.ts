@@ -17,7 +17,7 @@ export default {
                     'error-content': '#ffffff',
                 },
                 dark: {
-                    ...daisyuiThemes.dracula,
+                    ...daisyuiThemes.light,
                     primary: '#2be7c8',
                 },
             },

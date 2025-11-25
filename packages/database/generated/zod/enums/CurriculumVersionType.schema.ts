@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
-export const TrainingKPIOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])
+export const CurriculumVersionTypeSchema = z.enum(["FRAMEWORK", "FULL_COURSE"])

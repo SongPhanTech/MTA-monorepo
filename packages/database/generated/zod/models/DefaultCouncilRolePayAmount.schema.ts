@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { CouncilRoleSchema } from '../enums/CouncilRole.schema';
 import { DecimalSchema } from '../common';
 import { Decimal } from 'decimal.js';

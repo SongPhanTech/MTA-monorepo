@@ -223,9 +223,6 @@ model TrainingBlockOnCurriculumVersion extends Base {
   curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String?
 
-  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
-  curriculumId            String?
-
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
@@ -400,9 +397,48 @@ enum AcademicRankingBaseType {
   @@schema("ql-dao-tao")
 }
 
-/// Nội dung tính tải đào tạo
-// TODO: add relations
-model TrainingKPI extends Base {
-  name String
+/// Danh mục tính tải đào tạo
+model LoadCategory extends Base {
+  name                String
+  
+  // Đơn vị tính (ví dụ: 1 Tiết, 1 Ngày, 1 Bài, 1 Lớp)
+  unit                String 
+  
+  // Giá trị quy đổi ra Giờ Chuẩn
+  standardHours       Float 
+  
+  // Phân loại chính (Ví dụ: Đào tạo Đại học, Đào tạo Sau đại học, Xây dựng CSVC)
+  category            String
+  
+  // Ghi chú nếu có điều kiện đặc biệt (Ví dụ: Ban ngày, Ban đêm, Hoạt động có đánh dấu *)
+  note                String?
+  
+  // Cờ xác định công việc có tính vào tổng giờ chuẩn để xét vượt định mức hay không (dấu *)
+  isOverageCalculated Boolean
+  
+  // Mối quan hệ: Tải thực tế (Chi tiết công việc) sẽ tham chiếu đến danh mục này
+  // teachingLoadEntries TeachingLoadEntry[]
+
   @@schema("ql-dao-tao")
 }
+
+// model SCTLoadCategory extends Base {
+//   name           String
+  
+//   // Đơn vị tính (ví dụ: 1 Bài, 1 ĐT, 1 SK, 1 Trang)
+//   unit           String 
+  
+//   // Giá trị quy đổi ra Giờ Hành chính
+//   adminHours     Float 
+  
+//   // Phân loại chính (Ví dụ: Bài báo, Đề tài NCKH, Biên soạn Sách, Sáng kiến, Dịch vụ KHCN)
+//   category       String
+  
+//   // Ghi chú nếu có điều kiện đặc biệt (Ví dụ: Tiếng Việt/Tiếng Anh, Tác giả đầu/Tác giả liên hệ)
+//   note           String?
+  
+//   // Mối quan hệ: Tải thực tế (Chi tiết công việc) sẽ tham chiếu đến danh mục này
+//   sctLoadEntries SCTLoadEntry[]
+
+// @@schema("ql-dao-tao")
+// }

@@ -2,11 +2,11 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import ExportObjectInSurvey from '@components/modal/export-list-object-in-survey'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useSession } from '@workspace/auth/react'
 import { Survey } from '@workspace/db'
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useGetSurveyObjects } from '@workspace/libs/api/exam'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Row, Tag, Tooltip } from 'antd'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -17,6 +17,8 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         fullname: undefined,
         studentCode: undefined,
@@ -246,10 +248,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 width: 80,
                                 render: (_, record) => (
                                     <Row className="justify-center gap-0">
-                                        {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
-                                            'XEM_TAT_CA'
-                                        ) && (
+                                        {profileId === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
                                             <Tooltip title="Xem khảo sát" placement="top">
                                                 <Eye
                                                     className="m-0"

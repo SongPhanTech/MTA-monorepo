@@ -204,21 +204,21 @@ const convertApiToCalendarEventReactBigCalendar = (
     })
 }
 
-const getWeekBounds = (weekOffset: number) => {
-    const today = new Date()
-    const currentDay = today.getDay()
-    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay
+// const getWeekBounds = (weekOffset: number) => {
+//     const today = new Date()
+//     const currentDay = today.getDay()
+//     const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay
 
-    const monday = new Date(today)
-    monday.setDate(today.getDate() + mondayOffset + weekOffset * 7)
-    monday.setHours(0, 0, 0, 0)
+//     const monday = new Date(today)
+//     monday.setDate(today.getDate() + mondayOffset + weekOffset * 7)
+//     monday.setHours(0, 0, 0, 0)
 
-    const sunday = new Date(monday)
-    sunday.setDate(monday.getDate() + 6)
-    sunday.setHours(23, 59, 59, 999)
+//     const sunday = new Date(monday)
+//     sunday.setDate(monday.getDate() + 6)
+//     sunday.setHours(23, 59, 59, 999)
 
-    return { weekStart: monday, weekEnd: sunday }
-}
+//     return { weekStart: monday, weekEnd: sunday }
+// }
 
 const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
     return profiles?.map((profile: UserProfile) => ({
@@ -255,48 +255,40 @@ export function LichCongTac({
 
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
-            OR: [
-                ...(onlyMySchedule
-                    ? [
-                          {
-                              subjectClass: {
-                                  subjectClassStudent: {
-                                      some: {
-                                          student: {
-                                              userProfileId: profileIdLogin,
-                                          },
+            ...(onlyMySchedule
+                ? [
+                      {
+                          subjectClass: {
+                              subjectClassStudent: {
+                                  some: {
+                                      student: {
+                                          userProfileId: profileIdLogin,
                                       },
                                   },
                               },
                           },
-                          {
-                              lecturer: {
+                      },
+                      {
+                          lecturer: {
+                              userProfileId: profileIdLogin,
+                          },
+                      },
+                      {
+                          subjectClass: {
+                              mainLecturer: {
                                   userProfileId: profileIdLogin,
                               },
                           },
-                          {
-                              subjectClass: {
-                                  mainLecturer: {
-                                      userProfileId: profileIdLogin,
-                                  },
+                      },
+                      {
+                          subjectClass: {
+                              extraLecturer: {
+                                  userProfileId: profileIdLogin,
                               },
                           },
-                          {
-                              subjectClass: {
-                                  extraLecturer: {
-                                      userProfileId: profileIdLogin,
-                                  },
-                              },
-                          },
-                      ]
-                    : []),
-                {
-                    periodType: 'WEEK',
-                },
-                {
-                    periodType: 'CHECK',
-                },
-            ],
+                      },
+                  ]
+                : []),
             periodType: {
                 in: selectedColors
                     .map((color) => {

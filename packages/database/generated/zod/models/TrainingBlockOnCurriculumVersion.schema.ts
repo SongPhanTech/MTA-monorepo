@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -34,14 +34,12 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     trainingBlock: z.record(z.string(), z.unknown()),
     curriculumVersion: z.record(z.string(), z.unknown()).optional(),
-    curriculum: z.record(z.string(), z.unknown()).optional(),
     subjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingBlockId: z.string(),
     curriculumVersionId: z.string().nullish(),
-    curriculumId: z.string().nullish(),
 }
 );
 

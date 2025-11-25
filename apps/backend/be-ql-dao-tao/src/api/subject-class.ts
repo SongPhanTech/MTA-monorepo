@@ -22,7 +22,7 @@ const openSubjectClass = createRoute({
             trainingMajorId: z.string().optional(),
             search: z.string().optional(),
             trainingObjectTypeId: z.string(),
-            nextSemester: z.string().default('false'),
+            nextSemester: z.coerce.boolean().default(false),
             fixedClassId: z.string().optional(),
         }),
     },
@@ -335,8 +335,6 @@ app.openapi(openSubjectClass, async (c) => {
         fixedClassId,
     } = c.req.valid('query')
 
-    const nextSemesterBool = nextSemester === 'true'
-
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
         include: {
@@ -360,7 +358,7 @@ app.openapi(openSubjectClass, async (c) => {
               ? 2
               : 0
     let semesterYear = semester?.schoolYear.startDate.getFullYear()
-    if (nextSemesterBool) {
+    if (nextSemester) {
         if (semesterType === 1) {
             semesterType = 2
         } else if (semesterType === 2) {
@@ -530,7 +528,6 @@ app.openapi(openSubjectClass, async (c) => {
                  management_organization_id,
                  management_organization_code,
                  management_organization_name
-
     `
     const data = res
         .map((e) => e.data)

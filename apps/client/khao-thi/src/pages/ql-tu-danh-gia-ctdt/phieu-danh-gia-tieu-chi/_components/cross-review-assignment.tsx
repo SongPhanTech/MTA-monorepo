@@ -4,7 +4,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { useSession } from '@workspace/auth/react'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindManyEvaluationCouncilMember,
@@ -13,6 +12,7 @@ import {
     useUpsertEvaluationCriterion,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
@@ -64,15 +64,10 @@ export default function CrossReviewAssignment() {
     const { showSpinner, hideSpinner } = useSpinner()
     const { can } = useAbility()
 
-    const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
-
-    // const canApprove = can(
-    //     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-    //     'DUYET'
-    // )
-
-    const canApprove = idProfile === '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const canApprove = can(
+        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        'DUYET'
+    )
 
     const { onOpen } = useDisclosure<PutPhanCongHangLoatCrossModalInput>({
         tag: 'PutPhanCongHangLoatCrossModal',

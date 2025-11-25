@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { FeedbackStatusSchema } from '../enums/FeedbackStatus.schema';
 import { SatisfactionSchema } from '../enums/Satisfaction.schema';
 const baseSchema = z.object({

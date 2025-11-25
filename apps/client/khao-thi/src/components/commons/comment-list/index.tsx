@@ -1,18 +1,18 @@
 import { formatDate } from '@lib/utils'
-import type { EvaluationCriterionComment, UserProfile } from '@workspace/db'
+import type { EvaluationCriterionComment } from '@workspace/db'
 import { Clock, MessageSquare } from 'lucide-react'
 
 interface CommentListProps {
     comments: (EvaluationCriterionComment & {
-        reviewer: UserProfile
+        reviewer?: { fullname?: string | null } | null
     })[]
 }
 
 const CommentList = ({ comments }: CommentListProps) => {
     if (!comments || comments.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-                <div className="relative mb-6">
+            <div className="flex flex-col items-center justify-center py-2 text-gray-400">
+                <div className="relative mb-2">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full blur-xl opacity-50" />
                     <div className="relative text-6xl">💬</div>
                 </div>
@@ -32,9 +32,7 @@ const CommentList = ({ comments }: CommentListProps) => {
                         <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                             <MessageSquare className="w-4 h-4 text-white" />
                         </div>
-                        <h3 className="font-semibold text-gray-900 text-sm">
-                            Phản hồi từ ban tư vấn
-                        </h3>
+                        <h3 className="font-semibold text-gray-900 text-sm">Phản hồi</h3>
                     </div>
                     <div className="bg-blue-50 border border-blue-200 px-3 py-1 rounded">
                         <span className="text-blue-600 font-semibold text-xs">
@@ -44,7 +42,7 @@ const CommentList = ({ comments }: CommentListProps) => {
                 </div>
             </div>
 
-            <div className="p-2 space-y-3 max-h-[400px] overflow-y-auto">
+            <div className="p-2 space-y-3 max-h-[300px] overflow-y-auto">
                 {comments.map((comment) => (
                     <div key={comment.id} className="bg-white rounded-lg border border-gray-200">
                         <div className="p-3">

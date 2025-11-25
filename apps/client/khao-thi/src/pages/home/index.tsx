@@ -9,7 +9,7 @@ const { Title } = Typography
 function Page() {
     return (
         <div>
-            <Row gutter={[8, 8]}>
+            {/*<Row gutter={[8, 8]}>
                 <Col xs={24} lg={18}>
                     <div className="bg-white rounded shadow h-96 flex flex-col">
                         <div className="p-4">
@@ -58,7 +58,6 @@ function Page() {
                                         Thống kê số lượng giảng viên theo đầu mối
                                     </Title>
                                 </div>
-                                <div className="flex-1"></div>
                             </div>
                         </Col>
                     </Row>
@@ -73,7 +72,7 @@ function Page() {
                         </div>
                     </div>
                 </Col>
-            </Row>
+            </Row>*/}
         </div>
     )
 }

@@ -1,12 +1,11 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import useSpinner from '@hooks/spinner'
-import { Button, Collapse, Form, message, Tag, Card, Avatar, Badge } from 'antd'
+import { Button, Collapse, Form, message, Tag, Badge } from 'antd'
 import { useEffect, useState } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
-import { ClockCircleOutlined, MessageOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
@@ -14,6 +13,7 @@ import { useStore } from '@tanstack/react-store'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
+import CommentList from '@components/commons/comment-list'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -147,10 +147,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     const handleEvaluationForm = async () => {
         try {
             const dataSubmit = form.getFieldsValue()
+
             if (!dataSubmit.criteria || dataSubmit.criteria.length === 0) {
                 message.warning('Không có dữ liệu để nộp')
                 return
             }
+            showSpinner()
 
             const listSqlTransaction = dataSubmit.criteria.map(
                 (
@@ -189,9 +191,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -208,7 +213,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                 })),
             })
         }
-    }, [data, form])
+    }, [])
 
     const statusConfig = getStatusConfig(
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
@@ -293,69 +298,14 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
             </div>
 
             {showComments && (
-                <Card
-                    title={
-                        <div className="flex items-center gap-2">
-                            <MessageOutlined />
-                            <span>Ý kiến phản biện</span>
-                            <span className="text-gray-400 font-normal text-sm ml-auto">
-                                {commentsCount} phản hồi
-                            </span>
-                        </div>
-                    }
-                    className="mb-3"
-                >
-                    <div className="max-h-72 overflow-y-auto">
-                        {data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments &&
-                        commentsCount > 0 ? (
-                            <div className="space-y-2">
-                                {data.criteria[0].evaluationCriterion.evaluationCriterionComments.map(
-                                    (comment: any, index: number) => (
-                                        <div
-                                            key={index}
-                                            className="flex gap-2 p-2 border border-gray-200 rounded-lg bg-gray-50"
-                                        >
-                                            <Avatar size={32} className="flex-shrink-0 bg-blue-500">
-                                                {comment.reviewer?.fullname
-                                                    ?.charAt(0)
-                                                    ?.toUpperCase() || 'U'}
-                                            </Avatar>
-                                            <div className="flex-1">
-                                                <div className="flex items-start justify-between mb-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-semibold text-sm">
-                                                            {comment.reviewer?.fullname ||
-                                                                'Người đánh giá'}
-                                                        </span>
-                                                        <div className="text-gray-400 text-xs flex items-center gap-1">
-                                                            <ClockCircleOutlined />
-                                                            {dayjs(comment.createdAt).format(
-                                                                'DD/MM/YYYY HH:mm'
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <span className="text-blue-500 text-sm font-medium">
-                                                        Đánh giá
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    className="text-gray-700 text-sm"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: comment.content,
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        ) : (
-                            <div className="text-gray-400 text-sm text-center py-6">
-                                Chưa có phản hồi nào
-                            </div>
-                        )}
-                    </div>
-                </Card>
+                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                    <CommentList
+                        comments={
+                            data?.criteria?.[0]?.evaluationCriterion
+                                ?.evaluationCriterionComments || []
+                        }
+                    />
+                </div>
             )}
 
             <Form form={form} layout="vertical" className="form-evidence">

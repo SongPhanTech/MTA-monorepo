@@ -38,7 +38,7 @@ export default {
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT": "/thiet-lap-khao-sat/dot-khao-sat",
     "THIET_LAP_KHAO_SAT_KHAO_SAT_CUM": "/thiet-lap-khao-sat/khao-sat-cum",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
-    "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/id"
+    "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
@@ -67,6 +67,7 @@ export default {
     "DANH_MUC_LOP_BIEN_CHE": "/danh-muc/lop-bien-che",
     "DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID": "/danh-muc/lop-bien-che/ket-qua-hoc-tap/[id]",
     "DANH_MUC_NGON_NGU_DAO_TAO": "/danh-muc/ngon-ngu-dao-tao",
+    "DANH_MUC_NOI_DUNG_TINH_TAI": "/danh-muc/noi-dung-tinh-tai",
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_CERTIFICATE": "/danh-muc/ql-diem-cong/components/certificate",
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_OLYMPIC_AWARD": "/danh-muc/ql-diem-cong/components/olympic-award",
     "DANH_MUC_QL_DIEM_CONG": "/danh-muc/ql-diem-cong",
@@ -111,6 +112,8 @@ export default {
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG": "/quan-ly-do-an/danh-muc-do-an/cau-hinh-hoi-dong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",
+    "QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN_KHOA": "/quan-ly-do-an/danh-muc-luan-van-khoa",
+    "QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN_P7": "/quan-ly-do-an/danh-muc-luan-van-p7",
     "QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN": "/quan-ly-do-an/danh-muc-luan-van",
     "QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA": "/quan-ly-do-an/danh-sach-chuyen-gia",
     "QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD": "/quan-ly-do-an/danh-sach-thanh-toan-gvhd",

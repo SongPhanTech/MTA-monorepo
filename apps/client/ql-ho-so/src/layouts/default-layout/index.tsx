@@ -124,10 +124,10 @@ const DefaultLayout = ({
         >
             <Layout style={{ minHeight: '100vh' }} hasSider>
                 <SiderDefaultLayout
-                    logo1={<Image src={logo_mta} alt="logo k01" className="size-10" />}
+                    logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
                     logo2={
                         <div className="flex items-center justify-center text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
+                            <Image src={logo_mta} alt="logo MTA" className="w-10 h-10 mr-3" />
                             <span className="text-base font-bold color text-[#212121]">
                                 Quản lý hồ sơ
                             </span>

@@ -149,6 +149,9 @@ model StudentSemesterResult extends BaseNoCode {
   conductScore             Float?   // Điểm rèn luyện trung bình của học kỳ
   studentTrainingType      StudentTrainingType // xếp loại rèn luyện
 
+  rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
+  rankId                   String?
+
   lowestFinalScore         Float    // Điểm học phần thấp nhất
   lowestGraduationScore    Float?
 
@@ -200,6 +203,9 @@ model StudentYearResult extends BaseNoCode {
 
   conductScore             Float?   // Điểm rèn luyện trung bình của năm
   studentTrainingType      StudentTrainingType // xếp loại rèn luyện
+
+  rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
+  rankId                   String?
 
   totalCredits             Int      // tổng số tín chỉ tích lũy
   failedCredits            Int      // tín chỉ nợ tích lũy

@@ -10,11 +10,21 @@ import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import { cn } from '@lib/utils'
 const { Title } = Typography
-function LecturerSurveyReport({ selectedId,lectureId,sublectClass, setSublectClass }: { selectedId: string,lectureId:string,sublectClass:any,setSublectClass:any }) {
+function LecturerSurveyReport({
+    selectedId,
+    lectureId,
+    sublectClass,
+    setSublectClass,
+}: {
+    selectedId: string
+    lectureId: string
+    sublectClass: any
+    setSublectClass: any
+}) {
     const router = useRouter()
 
-    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string,{
-       lectureId
+    const { data: dataLevel } = useGetClusterSurveyStatistics(selectedId as string, {
+        lectureId,
     })
 
     const dataBarchart = useMemo(() => {
@@ -96,12 +106,14 @@ function LecturerSurveyReport({ selectedId,lectureId,sublectClass, setSublectCla
     const renderTable = (dataTable: any, choices: any) => {
         return (
             <Table
-               onRow={(record) => {
+                onRow={(record) => {
                     return {
                         onClick: () => {
                             setSublectClass(record as any)
                         },
-                        className: cn(sublectClass?.surveyId === record.surveyId ? 'bg-orange-200' : ''),
+                        className: cn(
+                            sublectClass?.surveyId === record.surveyId ? 'bg-orange-200' : ''
+                        ),
                     }
                 }}
                 columns={

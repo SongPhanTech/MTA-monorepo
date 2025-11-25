@@ -118,9 +118,9 @@ const PutSurveyModal = () => {
     const { mutateAsync: createSurveyChoice } = useCreateSurveyChoice()
     const { mutateAsync: createMultiple } = useCreateClusterSurvey()
     const { data: surveyTopics = [] } = useFindManySurveyTopic({
-        where:{
-            type:input?.type==='multiple'?'CLUSTER':'SINGLE'
-        }
+        where: {
+            type: input?.type === 'multiple' ? 'CLUSTER' : 'SINGLE',
+        },
     })
     const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
 

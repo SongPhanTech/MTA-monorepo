@@ -4,6 +4,6 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 export const StudentStatusSchema = z.enum(["ENROLLED", "GRADUATED", "DEFERRED_STUDY", "SUSPENDED_STUDY", "WITHDRAWN", "TRANSFERRED", "PENDING_GRADUATION_REVIEW", "ACADEMIC_SUSPENSION", "REPEATED"])

@@ -1,12 +1,12 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
-import { Collapse, Form, Tag, Button, Badge, Card, Avatar } from 'antd'
+import { Collapse, Form, Tag, Button, Badge } from 'antd'
 import { useEffect, useState } from 'react'
 import { $Enums } from '@workspace/db/client'
 import dayjs from 'dayjs'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
-import { MessageOutlined, ClockCircleOutlined } from '@ant-design/icons'
+import CommentList from '@components/commons/comment-list'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -120,81 +120,14 @@ export default function CriteriaEvaluationListSubPage({
                                             </div>
 
                                             {showComments[lecturerId] && (
-                                                <Card
-                                                    title={
-                                                        <div className="flex items-center gap-2">
-                                                            <MessageOutlined />
-                                                            <span>Ý kiến phản biện</span>
-                                                            <span className="text-gray-400 font-normal text-sm ml-auto">
-                                                                {commentsCount} phản hồi
-                                                            </span>
-                                                        </div>
-                                                    }
-                                                    className="mb-3"
-                                                >
-                                                    <div className="max-h-72 overflow-y-auto">
-                                                        {group.criteria?.[0]?.evaluationCriterion
-                                                            ?.evaluationCriterionComments &&
-                                                        commentsCount > 0 ? (
-                                                            <div className="space-y-2">
-                                                                {group.criteria[0].evaluationCriterion.evaluationCriterionComments.map(
-                                                                    (
-                                                                        comment: any,
-                                                                        index: number
-                                                                    ) => (
-                                                                        <div
-                                                                            key={index}
-                                                                            className="flex gap-2 p-2 border border-gray-200 rounded-lg bg-gray-50"
-                                                                        >
-                                                                            <Avatar
-                                                                                size={32}
-                                                                                className="flex-shrink-0 bg-blue-500"
-                                                                            >
-                                                                                {comment.reviewer?.fullname
-                                                                                    ?.charAt(0)
-                                                                                    ?.toUpperCase() ||
-                                                                                    'U'}
-                                                                            </Avatar>
-                                                                            <div className="flex-1">
-                                                                                <div className="flex items-start justify-between mb-1">
-                                                                                    <div className="flex items-center gap-2">
-                                                                                        <span className="font-semibold text-sm">
-                                                                                            {comment
-                                                                                                .reviewer
-                                                                                                ?.fullname ||
-                                                                                                'Người đánh giá'}
-                                                                                        </span>
-                                                                                        <div className="text-gray-400 text-xs flex items-center gap-1">
-                                                                                            <ClockCircleOutlined />
-                                                                                            {dayjs(
-                                                                                                comment.createdAt
-                                                                                            ).format(
-                                                                                                'DD/MM/YYYY HH:mm'
-                                                                                            )}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <span className="text-blue-500 text-sm font-medium">
-                                                                                        Đánh giá
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div
-                                                                                    className="text-gray-700 text-sm"
-                                                                                    dangerouslySetInnerHTML={{
-                                                                                        __html: comment.content,
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        ) : (
-                                                            <div className="text-gray-400 text-sm text-center py-6">
-                                                                Chưa có phản hồi nào
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </Card>
+                                                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                                                    <CommentList
+                                                        comments={
+                                                            group.criteria?.[0]?.evaluationCriterion
+                                                                ?.evaluationCriterionComments || []
+                                                        }
+                                                    />
+                                                </div>
                                             )}
 
                                             {group.criteria.map((item: any) => {

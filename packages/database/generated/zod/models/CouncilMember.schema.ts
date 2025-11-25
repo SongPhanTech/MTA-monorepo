@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { CouncilRoleSchema } from '../enums/CouncilRole.schema';
 const baseSchema = z.object({
     id: z.string(),

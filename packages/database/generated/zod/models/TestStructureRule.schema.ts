@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { QuestionTypeSchema } from '../enums/QuestionType.schema';
 const baseSchema = z.object({
     id: z.string(),

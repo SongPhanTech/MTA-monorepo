@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { DecimalSchema } from '../common';
 import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
