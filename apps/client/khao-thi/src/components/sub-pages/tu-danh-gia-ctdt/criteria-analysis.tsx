@@ -140,6 +140,48 @@ const CriteriaAnalysisSubPage = ({
         }
     }
 
+    const handleSubmitAllCriteria = async () => {
+        try {
+            showSpinner()
+            // Lọc các tiêu chí có thể nộp (chưa nộp, chưa duyệt, chưa hoàn thành)
+            const criteriaToSubmit = filteredCriteria?.filter((item) => {
+                const status = item.analysisCriterions?.status
+                return (
+                    status !== $Enums.EvaluationCriterionStatus.SUBMITTED &&
+                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                    status !== $Enums.EvaluationCriterionStatus.COMPLETED
+                )
+            })
+
+            if (!criteriaToSubmit || criteriaToSubmit.length === 0) {
+                message.warning('Không có tiêu chí nào để nộp.')
+                return
+            }
+
+            await Promise.all(
+                criteriaToSubmit.map((item) =>
+                    updateCriterion({
+                        where: {
+                            id: item.analysisCriterions?.id,
+                        },
+                        data: {
+                            status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+                        },
+                    })
+                )
+            )
+
+            await checkAndUpdateStatusPeriodStatus()
+
+            message.success(`Nộp thành công ${criteriaToSubmit.length} tiêu chí.`)
+            refetch()
+        } catch (error) {
+            message.error('Nộp tiêu chí thất bại. Vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const filteredCriteria = data?.criteria?.filter((item) => {
         if (!item.analysisCriterions) return false
 
@@ -174,7 +216,7 @@ const CriteriaAnalysisSubPage = ({
                     <Select
                         allowClear
                         placeholder="Lọc theo trạng thái"
-                        style={{ width: 200 }}
+                        style={{ width: 200, height: 27 }}
                         options={EVALUATION_CRITERION_STATUS_OPTIONS}
                         value={statusFilter}
                         onChange={(value) => setStatusFilter(value)}
@@ -182,11 +224,29 @@ const CriteriaAnalysisSubPage = ({
                     <Select
                         allowClear
                         placeholder="Lọc theo hạn"
-                        style={{ width: 150 }}
+                        style={{ width: 150, height: 27 }}
                         options={DEADLINE_OPTIONS}
                         value={deadlineFilter}
                         onChange={(value) => setDeadlineFilter(value)}
                     />
+                    {userRole !== 'P13' &&
+                        can(
+                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                            'THEM'
+                        ) && (
+                            <Popconfirm
+                                title="Xác nhận nộp tất cả tiêu chí"
+                                description="Bạn chắc chắn muốn nộp tất cả tiêu chí này?"
+                                onConfirm={handleSubmitAllCriteria}
+                                okText="Đồng ý"
+                                cancelText="Hủy"
+                                placement="topRight"
+                            >
+                                <Button type="primary" size="small">
+                                    Nộp tất cả
+                                </Button>
+                            </Popconfirm>
+                        )}
                 </div>
             </div>
             {!filteredCriteria || filteredCriteria.length === 0 ? (

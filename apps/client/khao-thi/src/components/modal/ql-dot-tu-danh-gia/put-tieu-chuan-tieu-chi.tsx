@@ -6,7 +6,7 @@ import { createId, type EvaluationPeriod } from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
 import { useFindManyStandardCatalog, useFindManyStandardPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Col, Form, message, Tree } from 'antd'
+import { Button, Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -20,31 +20,18 @@ type TreeNode = {
     children?: TreeNode[]
 }
 
-const filterTree = (nodes: TreeNode[], checkedKeys: string[]): TreeNode[] => {
-    return nodes
+const filterTree = (nodes: TreeNode[], checkedKeys: string[]): TreeNode[] =>
+    nodes
         .map((node) => {
             const children = node.children ? filterTree(node.children, checkedKeys) : []
-            if (checkedKeys.includes(node.key) || children.length > 0) {
-                return {
-                    ...node,
-                    children: children.length > 0 ? children : [],
-                }
-            }
-            return null
+            return checkedKeys.includes(node.key) || children.length > 0
+                ? { ...node, children }
+                : null
         })
         .filter(Boolean) as TreeNode[]
-}
 
-const getAllKeys = (nodes: TreeNode[]) => {
-    let keys: string[] = []
-    for (const node of nodes) {
-        keys.push(node.key)
-        if (node.children) {
-            keys = keys.concat(getAllKeys(node.children))
-        }
-    }
-    return keys
-}
+const getAllKeys = (nodes: TreeNode[]): string[] =>
+    nodes.flatMap((node) => [node.key, ...(node.children ? getAllKeys(node.children) : [])])
 
 const PutTieuChuanTieuChi = () => {
     const {
@@ -149,7 +136,6 @@ const PutTieuChuanTieuChi = () => {
             existingStandards.forEach((standard) => {
                 const catalogStandard = dataCatalog?.find((s) => s.name === standard.name)
                 if (catalogStandard) {
-                    selectedKeys.push(catalogStandard.id)
                     standard.criteria.forEach((criterion) => {
                         const catalogCriterion = catalogStandard.criteria.find(
                             (c) => c.name === criterion.name
@@ -186,6 +172,18 @@ const PutTieuChuanTieuChi = () => {
         setCatalogSelected(filtered as TreeData)
     }
 
+    const handleSelectAll = () => {
+        const allKeys = getAllKeys(treeData)
+        setCheckedKeys(allKeys)
+        setCatalogSelected(treeData)
+    }
+
+    const handleDeselectAll = () => {
+        setCheckedKeys([])
+        const filtered = filterTree(treeData, [])
+        setCatalogSelected(filtered as TreeData)
+    }
+
     const onOk = async () => {
         const standards = catalogSelected.map((s, i1) => {
             const standardId = createId()
@@ -194,15 +192,13 @@ const PutTieuChuanTieuChi = () => {
                 const analysisCriterionId = createId()
                 const evaluationCriterionId = createId()
 
-                const requirements = c.children.map(({ name, questions }, i3) => {
-                    return {
-                        analysisCriterionId,
-                        id: createId(),
-                        order: i3 + 1,
-                        name: name,
-                        questions,
-                    }
-                })
+                const requirements = c.children.map(({ name, questions }, i3) => ({
+                    analysisCriterionId,
+                    id: createId(),
+                    order: i3 + 1,
+                    name,
+                    questions,
+                }))
                 return {
                     criterionPeriodId,
                     analysisCriterionId,
@@ -224,242 +220,160 @@ const PutTieuChuanTieuChi = () => {
 
         try {
             showSpinner()
-            if (id) {
-                const res = await sqlTransaction([
-                    {
-                        model: 'RequirementCriterion',
-                        operation: 'deleteMany',
+            // Tạo array operations chung cho createMany
+            const createOperations = [
+                {
+                    model: 'StandardPeriod' as const,
+                    operation: 'createMany' as const,
+                    data: {
+                        data: standards.map(({ criteria, ...standard }) => standard),
+                    },
+                },
+                {
+                    model: 'CriterionPeriod' as const,
+                    operation: 'createMany' as const,
+                    data: {
+                        data: standards.flatMap((standard) =>
+                            standard.criteria.map(
+                                ({
+                                    requirements,
+                                    analysisCriterionId,
+                                    evaluationCriterionId,
+                                    criterionPeriodId,
+                                    ...criterion
+                                }) => ({
+                                    id: criterionPeriodId,
+                                    evaluationStandardId: standard.id,
+                                    ...criterion,
+                                })
+                            )
+                        ),
+                    },
+                },
+                {
+                    model: 'AnalysisCriterion' as const,
+                    operation: 'createMany' as const,
+                    data: {
+                        data: standards.flatMap((standard) =>
+                            standard.criteria.map(({ analysisCriterionId, criterionPeriodId }) => ({
+                                id: analysisCriterionId,
+                                criterionPeriodId,
+                            }))
+                        ),
+                    },
+                },
+                {
+                    model: 'EvaluationCriterion' as const,
+                    operation: 'createMany' as const,
+                    data: {
+                        data: standards.flatMap((standard) =>
+                            standard.criteria.map(
+                                ({ evaluationCriterionId, criterionPeriodId }) => ({
+                                    id: evaluationCriterionId,
+                                    criterionPeriodId,
+                                })
+                            )
+                        ),
+                    },
+                },
+                {
+                    model: 'RequirementCriterion' as const,
+                    operation: 'createMany' as const,
+                    data: {
+                        data: standards.flatMap((standard) =>
+                            standard.criteria.flatMap(({ requirements }) => requirements)
+                        ),
+                    },
+                },
+                {
+                    model: 'EvaluationPeriod' as const,
+                    operation: 'update' as const,
+                    data: {
+                        where: {
+                            id: selectedEvaluationPeriodId,
+                        },
                         data: {
-                            where: {
-                                analysisCriterion: {
-                                    criterionPeriod: {
-                                        evaluationStandard: {
-                                            periodId: selectedEvaluationPeriodId,
-                                        },
-                                    },
-                                },
-                            },
+                            status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
                         },
                     },
-                    {
-                        model: 'AnalysisCriterion',
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                criterionPeriod: {
-                                    evaluationStandard: {
-                                        periodId: selectedEvaluationPeriodId,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'EvaluationCriterion',
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                criterionPeriod: {
-                                    evaluationStandard: {
-                                        periodId: selectedEvaluationPeriodId,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'CriterionPeriod',
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                evaluationStandard: {
-                                    periodId: selectedEvaluationPeriodId,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        model: 'StandardPeriod',
-                        operation: 'deleteMany',
-                        data: {
-                            where: {
-                                periodId: selectedEvaluationPeriodId,
-                            },
-                        },
-                    },
-                    {
-                        model: 'StandardPeriod',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.map(({ criteria, ...standard }) => standard),
-                        },
-                    },
-                    {
-                        model: 'CriterionPeriod',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({
-                                        requirements,
-                                        analysisCriterionId,
-                                        evaluationCriterionId,
-                                        criterionPeriodId,
-                                        ...criterion
-                                    }) => ({
-                                        id: criterionPeriodId,
-                                        evaluationStandardId: standard.id,
-                                        ...criterion,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'AnalysisCriterion' as const,
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({ analysisCriterionId, criterionPeriodId }) => ({
-                                        id: analysisCriterionId,
-                                        criterionPeriodId: criterionPeriodId,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'EvaluationCriterion' as const,
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({ evaluationCriterionId, criterionPeriodId }) => ({
-                                        id: evaluationCriterionId,
-                                        criterionPeriodId: criterionPeriodId,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'RequirementCriterion' as const,
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.flatMap(({ requirements }) => requirements)
-                            ),
-                        },
-                    },
-                    {
-                        model: 'EvaluationPeriod',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: selectedEvaluationPeriodId,
-                            },
-                            data: {
-                                status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
-                            },
-                        },
-                    },
-                ])
+                },
+            ]
+            // Nếu là update: thêm deleteMany operations vào đầu
+            const operations = id
+                ? [
+                      {
+                          model: 'RequirementCriterion' as const,
+                          operation: 'deleteMany' as const,
+                          data: {
+                              where: {
+                                  analysisCriterion: {
+                                      criterionPeriod: {
+                                          evaluationStandard: {
+                                              periodId: selectedEvaluationPeriodId,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                      {
+                          model: 'AnalysisCriterion' as const,
+                          operation: 'deleteMany' as const,
+                          data: {
+                              where: {
+                                  criterionPeriod: {
+                                      evaluationStandard: {
+                                          periodId: selectedEvaluationPeriodId,
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                      {
+                          model: 'EvaluationCriterion' as const,
+                          operation: 'deleteMany' as const,
+                          data: {
+                              where: {
+                                  criterionPeriod: {
+                                      evaluationStandard: {
+                                          periodId: selectedEvaluationPeriodId,
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                      {
+                          model: 'CriterionPeriod' as const,
+                          operation: 'deleteMany' as const,
+                          data: {
+                              where: {
+                                  evaluationStandard: {
+                                      periodId: selectedEvaluationPeriodId,
+                                  },
+                              },
+                          },
+                      },
+                      {
+                          model: 'StandardPeriod' as const,
+                          operation: 'deleteMany' as const,
+                          data: {
+                              where: {
+                                  periodId: selectedEvaluationPeriodId,
+                              },
+                          },
+                      },
+                      ...createOperations,
+                  ]
+                : createOperations
 
-                if (res.status !== 200) {
-                    message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-                    return
-                }
+            const res = await sqlTransaction(operations)
 
-                message.success('Cập nhật thành công')
-            } else {
-                const res = await sqlTransaction([
-                    {
-                        model: 'StandardPeriod',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.map(({ criteria, ...standard }) => standard),
-                        },
-                    },
-                    {
-                        model: 'CriterionPeriod',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({
-                                        requirements,
-                                        analysisCriterionId,
-                                        evaluationCriterionId,
-                                        criterionPeriodId,
-                                        ...criterion
-                                    }) => ({
-                                        id: criterionPeriodId,
-                                        evaluationStandardId: standard.id,
-                                        ...criterion,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'AnalysisCriterion',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({ analysisCriterionId, criterionPeriodId }) => ({
-                                        id: analysisCriterionId,
-                                        criterionPeriodId: criterionPeriodId,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'EvaluationCriterion',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.map(
-                                    ({ evaluationCriterionId, criterionPeriodId }) => ({
-                                        id: evaluationCriterionId,
-                                        criterionPeriodId: criterionPeriodId,
-                                    })
-                                )
-                            ),
-                        },
-                    },
-                    {
-                        model: 'RequirementCriterion',
-                        operation: 'createMany',
-                        data: {
-                            data: standards.flatMap((standard) =>
-                                standard.criteria.flatMap(({ requirements }) => requirements)
-                            ),
-                        },
-                    },
-                    {
-                        model: 'EvaluationPeriod',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: selectedEvaluationPeriodId,
-                            },
-                            data: {
-                                status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
-                            },
-                        },
-                    },
-                ])
-
-                if (res.status !== 200) {
-                    message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-                    return
-                }
-
-                message.success('Thêm mới thành công')
+            if (res.status !== 200) {
+                message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+                return
             }
+
+            message.success(id ? 'Cập nhật thành công' : 'Thêm mới thành công')
 
             if (refetch) {
                 refetch()
@@ -484,6 +398,14 @@ const PutTieuChuanTieuChi = () => {
         >
             <Col span={24}>
                 <Form.Item label="Tiêu chuẩn đánh giá của đợt" required>
+                    <div className="mb-2 flex gap-2">
+                        <Button type="link" onClick={handleSelectAll} className="p-0">
+                            Chọn tất cả
+                        </Button>
+                        <Button type="link" onClick={handleDeselectAll} className="p-0" danger>
+                            Bỏ chọn tất cả
+                        </Button>
+                    </div>
                     <Tree
                         checkable
                         checkedKeys={checkedKeys}
