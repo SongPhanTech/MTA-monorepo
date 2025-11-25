@@ -11,7 +11,7 @@ import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { getMinioUrl } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
@@ -54,9 +54,6 @@ export default function TrainingProgramCatalog() {
         trainingCourses: undefined,
         code: '',
         name: '',
-        numberOfSemesters: undefined,
-        requiredCredits: undefined,
-        electiveCredits: undefined,
         trainingTime: undefined,
         trainingMajorId: undefined,
         managementOrganizationId: undefined,
@@ -80,6 +77,54 @@ export default function TrainingProgramCatalog() {
             ...(filters.trainingTime && {
                 trainingTimeId: { in: filters.trainingTime },
             }),
+            ...(filters.requiredCredits
+                ? {
+                      requiredCredits: {
+                          ...(filters.requiredCredits.gte
+                              ? {
+                                    gte: Number(filters.requiredCredits.gte),
+                                }
+                              : {}),
+                          ...(filters.requiredCredits.lte
+                              ? {
+                                    lte: Number(filters.requiredCredits.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.electiveCredits
+                ? {
+                      electiveCredits: {
+                          ...(filters.electiveCredits.gte
+                              ? {
+                                    gte: Number(filters.electiveCredits.gte),
+                                }
+                              : {}),
+                          ...(filters.electiveCredits.lte
+                              ? {
+                                    lte: Number(filters.electiveCredits.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.numberOfSemesters
+                ? {
+                      numberOfSemesters: {
+                          ...(filters.numberOfSemesters.gte
+                              ? {
+                                    gte: Number(filters.numberOfSemesters.gte),
+                                }
+                              : {}),
+                          ...(filters.numberOfSemesters.lte
+                              ? {
+                                    lte: Number(filters.numberOfSemesters.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
         }
 
         return {
@@ -119,6 +164,9 @@ export default function TrainingProgramCatalog() {
         filters.code,
         filters.managementOrganizationId,
         filters.trainingMajorId,
+        filters.requiredCredits,
+        filters.electiveCredits,
+        filters.numberOfSemesters,
     ])
 
     const { data = [] } = useFindManyCurriculum({
@@ -182,30 +230,6 @@ export default function TrainingProgramCatalog() {
                     },
                 },
                 orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                numberOfSemesters: filters.numberOfSemesters,
-                            },
-                        ],
-                        !!filters.numberOfSemesters
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                requiredCredits: filters.requiredCredits,
-                            },
-                        ],
-                        !!filters.requiredCredits
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                electiveCredits: filters.electiveCredits,
-                            },
-                        ],
-                        !!filters.electiveCredits
-                    ),
                     {
                         name: 'asc',
                     },
@@ -255,6 +279,54 @@ export default function TrainingProgramCatalog() {
                 ? {
                       trainingTimeId: {
                           in: filters.trainingTime,
+                      },
+                  }
+                : {}),
+            ...(filters.requiredCredits
+                ? {
+                      requiredCredits: {
+                          ...(filters.requiredCredits.gte
+                              ? {
+                                    gte: Number(filters.requiredCredits.gte),
+                                }
+                              : {}),
+                          ...(filters.requiredCredits.lte
+                              ? {
+                                    lte: Number(filters.requiredCredits.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.electiveCredits
+                ? {
+                      electiveCredits: {
+                          ...(filters.electiveCredits.gte
+                              ? {
+                                    gte: Number(filters.electiveCredits.gte),
+                                }
+                              : {}),
+                          ...(filters.electiveCredits.lte
+                              ? {
+                                    lte: Number(filters.electiveCredits.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.numberOfSemesters
+                ? {
+                      numberOfSemesters: {
+                          ...(filters.numberOfSemesters.gte
+                              ? {
+                                    gte: Number(filters.numberOfSemesters.gte),
+                                }
+                              : {}),
+                          ...(filters.numberOfSemesters.lte
+                              ? {
+                                    lte: Number(filters.numberOfSemesters.lte),
+                                }
+                              : {}),
                       },
                   }
                 : {}),
@@ -637,7 +709,7 @@ export default function TrainingProgramCatalog() {
                                 title: <Tooltip title="Số tín chỉ bắt buộc">Số TCBB</Tooltip>,
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: ['electiveCredits', 'numberOfSemesters'],
                                 width: 90,
                             },
@@ -645,7 +717,7 @@ export default function TrainingProgramCatalog() {
                                 title: <Tooltip title="Số tín chỉ tự chọn">Số TCTC</Tooltip>,
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 width: 90,
                                 distinctFilters: ['numberOfSemesters', 'requiredCredits'],
                             },
@@ -653,7 +725,7 @@ export default function TrainingProgramCatalog() {
                                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: ['electiveCredits', 'requiredCredits'],
                                 width: 90,
                             },
