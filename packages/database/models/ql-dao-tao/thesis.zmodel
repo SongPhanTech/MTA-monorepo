@@ -75,6 +75,7 @@ model ThesisProject extends Base {
   thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
   language           String?                     @db.Text() // Ngôn ngữ 
+  type               String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
 
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId     String?
