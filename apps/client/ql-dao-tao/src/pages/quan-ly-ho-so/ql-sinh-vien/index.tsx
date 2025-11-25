@@ -319,16 +319,12 @@ export default function UserProfilePageDs() {
         try {
             showSpinner()
             await updateUserProfile({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
+                where: { id },
+                data: { deletedAt: new Date() },
             })
+            message.success('Xóa thành công')
         } catch (error) {
             console.log(error)
-
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
