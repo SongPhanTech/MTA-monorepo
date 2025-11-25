@@ -44,7 +44,6 @@ import {
   Row,
   Tag,
 } from "antd";
-import type React from "react";
 import { useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import TreeSelect from "@/components/commons/tree-select";
@@ -79,26 +78,7 @@ export default function PostgraduateProject({
   const { TextArea } = Input;
   // dùng cho spinner
   const { showSpinner, hideSpinner } = useSpinner();
-  // dùng cho custom table
-  // const useStyle = createStyles(({ css, token }) => {
-  //     const { antCls } = token
-  //     return {
-  //         customTable: css`
-  //     ${antCls}-table {
-  //       ${antCls}-table-container {
-  //         ${antCls}-table-body,
-  //         ${antCls}-table-content {
-  //           scrollbar-width: thin;
-  //           scrollbar-color: #eaeaea transparent;
-  //           scrollbar-gutter: stable;
-  //         }
-  //       }
-  //     }
-  //   `,
-  //     }
-  // })
-  // hàm xử lý lấy ra styles cho bảng
-  // const { styles } = useStyle()
+
   // state cho session đang chọn
   const [thesisSessionSelected, setThesisSessionSelected] = useState<any>(null);
   // state cho row keys đang chỉnh sửa
@@ -109,8 +89,7 @@ export default function PostgraduateProject({
   >({});
   // state cho current page
   const [currentPage, setCurrentPage] = useState(1);
-  // state cho selected row keys
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
   // state cho training course đang chọn
   const [trainingCourseSelected, setTrainingCourseSelected] = useState<
     string | null
@@ -129,13 +108,7 @@ export default function PostgraduateProject({
   const [needAllStudents, setNeedAllStudents] = useState<boolean>(false);
   // state cho has clicked fetch để check xem đã click vào button xem kết quả hay chưa
   const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false);
-  // hàm xử lý row selection để chọn sinh viên
-  // const rowSelection = {
-  //     selectedRowKeys,
-  //     onChange: (newSelectedRowKeys: React.Key[]) => {
-  //         setSelectedRowKeys(newSelectedRowKeys)
-  //     },
-  // }
+
   // state cho số lượng trang để phân trang
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
   // hàm xử lý batch save
@@ -1155,7 +1128,9 @@ export default function PostgraduateProject({
         summary: "",
         titleEN: "",
         maxStudents: 1,
-        description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
+        language: "Tiếng Việt",
+        type: "Luận văn",
+        // description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận văn",
         thesisSession: {
           connect: {
             id: thesisSessionSelected?.id ?? "",
@@ -1973,12 +1948,15 @@ export default function PostgraduateProject({
                         ? editingValues[record?.id]?.defenseDate
                         : record?.thesisRegistrations?.[0]?.thesisProject
                             ?.defenseDate || "";
-                    const dayjsValue = dayjs(currentValue);
+                    const dayjsValue = currentValue
+                      ? dayjs(currentValue)
+                      : null;
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <DatePicker
                           className="w-full"
-                          value={dayjsValue || ""}
+                          placeholder="Chọn ngày bảo vệ"
+                          value={dayjsValue || undefined}
                           onChange={(value) =>
                             handleEditChange(record?.id, "defenseDate", value)
                           }
@@ -2007,13 +1985,16 @@ export default function PostgraduateProject({
                         ? editingValues[record?.id]?.defenseSession
                         : record?.thesisRegistrations?.[0]?.thesisProject
                             ?.defenseSession?.startTime || "";
-                    const dayjsValue = dayjs(currentValue).format("HH:mm");
+                    const dayjsValue = currentValue
+                      ? dayjs(currentValue).format("HH:mm")
+                      : "";
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
-                          value={dayjsValue || ""}
+                          value={dayjsValue || undefined}
+                          placeholder="Chọn ca bảo vệ"
                           options={defenseSessionData?.map((item) => ({
                             label: item.startTime
                               ? dayjs(item.startTime).format("HH:mm")
@@ -2066,10 +2047,8 @@ export default function PostgraduateProject({
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.description
-                            ?.split("-")[0]
-                            .trim()
-                            .split(":")[1] || "";
+                        : record?.thesisRegistrations?.[0]?.thesisProject
+                            ?.language?.language || "";
                     return (
                       <div
                         onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
@@ -2087,10 +2066,10 @@ export default function PostgraduateProject({
                       </div>
                     );
                   }
-                  const data =
-                    record?.thesisRegistrations?.[0]?.thesisProject
-                      ?.description;
-                  return data ? data.split("-")[0].trim().split(":")[1] : "";
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.language ||
+                    ""
+                  );
                 },
               },
               {
@@ -2102,10 +2081,8 @@ export default function PostgraduateProject({
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
                         ? editingValues[record?.id]?.type
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.description
-                            ?.split("-")[1]
-                            .trim()
-                            .split(":")[1] || "";
+                        : record?.thesisRegistrations?.[0]?.thesisProject
+                            ?.type || "";
                     return (
                       <div
                         onClick={(e) => e.stopPropagation()} // <-- Thêm dòng này
@@ -2124,10 +2101,9 @@ export default function PostgraduateProject({
                       </div>
                     );
                   }
-                  const data =
-                    record?.thesisRegistrations?.[0]?.thesisProject
-                      ?.description;
-                  return data ? data.split("-")[1].trim().split(":")[1] : "";
+                  return (
+                    record?.thesisRegistrations?.[0]?.thesisProject?.type || ""
+                  );
                 },
               },
               {
@@ -2273,21 +2249,13 @@ export default function PostgraduateProject({
               },
             ]}
             data={students || []}
-            // rowSelection={rowSelection}
-            // onRow={(record) => ({
-            //     onClick: () => {
-            //         openModalCauHinhLuanVan({
-            //             thesisProjectId:
-            //                 record?.thesisRegistrations?.[0]?.thesisProject?.id,
-            //             thesisSessionId: thesisSessionSelected?.id || '',
-            //         })
-            //     },
-            // })}
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
               total: countStudent || 0,
               onChange: async (page, pageSize) => {
+                setEditingRowKeys([]);
+                setEditingValues({});
                 if (numberOfPages === pageSize) {
                   setCurrentPage(page);
                 } else {
