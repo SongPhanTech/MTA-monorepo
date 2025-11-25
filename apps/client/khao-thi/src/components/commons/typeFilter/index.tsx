@@ -24,6 +24,7 @@ export type FilterProps = {
     name?: string | ''
     code?: string | ''
     sort?: string
+    evidenceName?: string
     idCardNumber?: string
     phoneNumber?: string
     numberCreditsMajor?: 'asc' | 'desc'

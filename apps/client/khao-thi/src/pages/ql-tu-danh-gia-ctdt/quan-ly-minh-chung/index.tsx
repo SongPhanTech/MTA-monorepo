@@ -3,70 +3,40 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountEvidenceCategory,
     useDeleteEvidence,
     useDeleteEvidenceCategory,
     useFindManyEvidenceCategory,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, Input, message, Row, Tooltip } from 'antd'
-import { BookPlus, Search } from 'lucide-react'
-import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { BookPlus } from 'lucide-react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvidenceCategory() {
     const { can, canSome } = useAbility()
-    const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        name: '',
-        searchText: '',
+        evidenceName: '',
     })
-
-    const where = useMemo(
-        () => ({
-            ...(filters.searchText && {
-                name: {
-                    contains: filters.searchText,
-                    mode: 'insensitive' as const,
-                },
-            }),
-            ...(filters.name && {
-                evidences: {
-                    some: {
-                        name: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                },
-            }),
-        }),
-        [filters]
-    )
 
     const { data } = useFindManyEvidenceCategory({
-        where,
         include: {
-            evidences: true,
+            evidences: filters.evidenceName
+                ? {
+                      where: {
+                          name: {
+                              contains: filters.evidenceName,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                  }
+                : true,
         },
         orderBy: [{ name: 'desc' }],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const { data: count } = useCountEvidenceCategory({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
     })
 
     const { onOpen: onOpenPutEvidenceCategory } = useDisclosure<string>({
@@ -121,54 +91,24 @@ export default function EvidenceCategory() {
     return (
         <div>
             <Row gutter={[16, 0]}>
-                <Col span={24} className="mb-0">
-                    <Row gutter={[16, 16]} align="top">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={8}>
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            setFilters({
-                                                ...filters,
-                                                searchText: e.target.value,
-                                            })
-                                        }
-                                        className="py-0 h-8"
-                                        placeholder="Tìm kiếm"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Col>
-                            </Flex>
-                        </Col>
-                        {/* Thêm mới */}
-                        <Col span={12}>
-                            <Flex justify="end">
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => {
-                                            onOpenPutEvidenceCategory()
-                                        }}
-                                    >
-                                        <BookPlus />
-                                        Thêm mới nhóm
-                                    </Button>
-                                )}
-                            </Flex>
-                        </Col>
-                    </Row>
+                <Col span={24} className="mb-2">
+                    <Flex justify="end">
+                        {can(
+                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                            'THEM'
+                        ) && (
+                            <Button
+                                type="primary"
+                                size="small"
+                                onClick={() => {
+                                    onOpenPutEvidenceCategory()
+                                }}
+                            >
+                                <BookPlus />
+                                Thêm mới nhóm
+                            </Button>
+                        )}
+                    </Flex>
                 </Col>
 
                 <Col span={24}>
@@ -177,10 +117,11 @@ export default function EvidenceCategory() {
                         headerTitleKey="name"
                         childrenFieldName="evidences"
                         defaultExpandAll
+                        className="w-full"
+                        scroll={{ y: 'calc(100vh - 200px)', x: 'max-content' }}
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
-                            setCurrentPage(1)
                         }}
                         headerRight={(record) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
@@ -238,10 +179,11 @@ export default function EvidenceCategory() {
                         columns={[
                             {
                                 title: 'Tên minh chứng',
-                                dataIndex: 'name',
+                                dataIndex: 'evidenceName',
                                 width: 200,
                                 align: 'center',
                                 type: 'input',
+                                render: (__, record) => record?.name,
                             },
                             {
                                 title: 'Người thực hiện',
@@ -266,7 +208,6 @@ export default function EvidenceCategory() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                fixed: 'right',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                                     'SUA',
@@ -320,19 +261,7 @@ export default function EvidenceCategory() {
                             },
                         ]}
                         data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>
