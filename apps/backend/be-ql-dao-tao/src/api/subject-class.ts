@@ -390,6 +390,7 @@ app.openapi(openSubjectClass, async (c) => {
             },
         },
     })
+
     const subjectAlreadyInPlan =
         planTraining?.planTrainingSubjects?.map((e) => e.subjectVersionId) || []
 

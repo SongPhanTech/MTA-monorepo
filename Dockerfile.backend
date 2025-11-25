@@ -17,7 +17,7 @@ RUN turbo prune @backend/${PACKAGE} --docker
 FROM base AS builder
 WORKDIR /app
 COPY --from=pruner /app/out/json/ .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
 ENV NODE_OPTIONS="--max-old-space-size=6144"
