@@ -400,6 +400,7 @@ function DanhSachHocVien({
                                         title: 'Thao tác',
                                         align: 'center',
                                         width: 70,
+                                        hidden:profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
                                         render: (_, record) => {
                                             const result = checkStatus(record)
                                             return (
@@ -410,7 +411,7 @@ function DanhSachHocVien({
                                                         //     'XEM_TAT_CA'
                                                         // )
                                                         profileId ===
-                                                            'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
+                                                            '266369db-fbaa-453e-b5fc-147ed06f959d' && (
                                                             <Tooltip
                                                                 title="Xem khảo sát"
                                                                 placement="top"
