@@ -11,7 +11,6 @@ import type {
 import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
-import { useMemo } from 'react'
 
 export type DataTabEvaluationCriterionType = StandardPeriod & {
     criteria: (CriterionPeriod & {
@@ -127,18 +126,6 @@ export default function CriteriaEvaluationWrite() {
         }
     )
 
-    const dataTab = useMemo(() => {
-        if (data && data.standards.length > 0) {
-            return data.standards.map((standard: DataTabEvaluationCriterionType) => {
-                return {
-                    key: standard.id,
-                    label: `Tiêu chuẩn ${standard.order}`,
-                    children: <CriteriaEvaluationSubPage key={standard.id} data={standard} />,
-                }
-            })
-        }
-    }, [data])
-
     return (
         <div className="h-full">
             <Row gutter={[8, 0]}>
@@ -147,7 +134,20 @@ export default function CriteriaEvaluationWrite() {
                         <Tabs
                             className="h-[calc(100vh-200px)] overflow-y-auto"
                             tabPosition="left"
-                            items={dataTab}
+                            items={data.standards.map(
+                                (standard: DataTabEvaluationCriterionType) => {
+                                    return {
+                                        key: standard.id,
+                                        label: `Tiêu chuẩn ${standard.order}`,
+                                        children: (
+                                            <CriteriaEvaluationSubPage
+                                                key={standard.id}
+                                                data={standard}
+                                            />
+                                        ),
+                                    }
+                                }
+                            )}
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',

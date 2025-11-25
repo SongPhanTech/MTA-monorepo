@@ -97,9 +97,6 @@ export default function TextEditorMenuBar({
         tag: 'PinEvidenceToPeriod',
     })
 
-    // Ẩn toolbar nếu không editable
-    if (!editable) return null
-
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (!file) return
@@ -323,234 +320,238 @@ export default function TextEditorMenuBar({
             })
     }
 
-    if (!editor) return null
+    const groupedButtons: MenuButton[][] = editor
+        ? [
+              [
+                  {
+                      id: 'RiBold',
+                      icon: <RiBold className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleBold().run(),
+                      isActive: editor.isActive('bold'),
+                  },
+                  {
+                      id: 'BsTypeUnderline',
+                      icon: <BsTypeUnderline className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleUnderline().run(),
+                      isActive: editor.isActive('underline'),
+                  },
+                  {
+                      id: 'RiItalic',
+                      icon: <RiItalic className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleItalic().run(),
+                      isActive: editor.isActive('italic'),
+                      disabled: !editor.can().chain().focus().toggleItalic().run(),
+                  },
+                  {
+                      id: 'RiStrikethrough',
+                      icon: <RiStrikethrough className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleStrike().run(),
+                      isActive: editor.isActive('strike'),
+                      disabled: !editor.can().chain().focus().toggleStrike().run(),
+                  },
+              ],
+              [
+                  {
+                      id: 'RiMarkPenFill',
+                      icon: <RiMarkPenFill className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleHighlight().run(),
+                      isActive: editor.isActive('highlight'),
+                      disabled: !editor.can().chain().focus().toggleHighlight().run(),
+                  },
+                  {
+                      id: 'RiCodeSSlashLine',
+                      icon: <RiCodeSSlashLine className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleCode().run(),
+                      isActive: editor.isActive('code'),
+                      disabled: !editor.can().chain().focus().toggleCode().run(),
+                  },
+              ],
+              [
+                  {
+                      id: 'RiAlignLeft',
+                      icon: <RiAlignLeft className="size-5" />,
+                      onClick: () => editor.chain().focus().setTextAlign('left').run(),
+                      isActive: editor.isActive({ textAlign: 'left' }),
+                      disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+                  },
+                  {
+                      id: 'RiAlignJustify',
+                      icon: <RiAlignJustify className="size-5" />,
+                      onClick: () => editor.chain().focus().setTextAlign('center').run(),
+                      isActive: editor.isActive({ textAlign: 'center' }),
+                      disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+                  },
+                  {
+                      id: 'RiAlignRight',
+                      icon: <RiAlignRight className="size-5" />,
+                      onClick: () => editor.chain().focus().setTextAlign('right').run(),
+                      isActive: editor.isActive({ textAlign: 'right' }),
+                      disabled: !editor.can().chain().focus().unsetTextAlign().run(),
+                  },
+              ],
+              [
+                  {
+                      id: 'IoListOutline',
+                      icon: <IoListOutline className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleBulletList().run(),
+                      isActive: editor.isActive('bulletList'),
+                      disabled:
+                          !editor.isActive('bulletList') &&
+                          !editor.can().chain().focus().toggleBulletList().run(),
+                  },
+                  {
+                      id: 'RiListOrdered2',
+                      icon: <RiListOrdered2 className="size-5" />,
+                      onClick: () => editor.chain().focus().toggleOrderedList().run(),
+                      isActive: editor.isActive('orderedList'),
+                      disabled:
+                          !editor.isActive('orderedList') &&
+                          !editor.can().chain().focus().toggleOrderedList().run(),
+                  },
+                  {
+                      id: 'RiImage2Line',
+                      icon: (
+                          <>
+                              <RiImage2Line className="size-5" />
+                              <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleImageUpload}
+                                  className="hidden"
+                                  ref={fileInputRef}
+                              />
+                          </>
+                      ),
+                      onClick: () => fileInputRef.current?.click(),
+                      isActive: false,
+                      disabled: false,
+                  },
+              ],
+              [
+                  {
+                      id: 'RiFunctions',
+                      icon: <RiFunctions className="size-5" />,
+                      onClick: toggleMathFormula,
+                      isActive: editor.isActive('math'),
+                      disabled: false,
+                  },
+                  {
+                      id: 'RiMoneyDollarCircleLine',
+                      icon: <RiMoneyDollarCircleLine className="size-5" />,
+                      onClick: () => wrapSelectionWith('$', '$'),
+                      isActive: false,
+                      disabled: false,
+                      description: 'Math latex span',
+                  },
+                  {
+                      id: 'RiMoneyDollarBoxLine',
+                      icon: <RiMoneyDollarBoxLine className="size-5" />,
+                      onClick: () => wrapSelectionWith('$$', '$$'),
+                      isActive: false,
+                      disabled: false,
+                      description: 'Math latex div',
+                  },
+                  {
+                      id: 'RiAtLine',
+                      icon: <RiAtLine className="size-5" />,
+                      onClick: () => handleAddEvidence(),
+                      isActive: false,
+                      disabled: false,
+                      description: 'Thêm minh chứng',
+                  },
+              ],
+              [
+                  {
+                      id: 'insertTable',
+                      icon: <Table className="size-5" />,
+                      onClick: () => setTableModalVisible(true),
+                      isActive: editor.isActive('table'),
+                      disabled: false,
+                      description: 'Chèn bảng',
+                  },
+                  {
+                      id: 'addColumnBefore',
+                      icon: <Columns className="size-5" />,
+                      onClick: () => editor.chain().focus().addColumnBefore().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().addColumnBefore().run(),
+                      description: 'Thêm cột trước',
+                  },
+                  {
+                      id: 'addColumnAfter',
+                      icon: <Plus className="size-5" />,
+                      onClick: () => editor.chain().focus().addColumnAfter().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().addColumnAfter().run(),
+                      description: 'Thêm cột sau',
+                  },
+                  {
+                      id: 'deleteColumn',
+                      icon: <Trash2 className="size-5" />,
+                      onClick: () => editor.chain().focus().deleteColumn().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().deleteColumn().run(),
+                      description: 'Xóa cột',
+                  },
+                  {
+                      id: 'addRowBefore',
+                      icon: <Rows className="size-5" />,
+                      onClick: () => editor.chain().focus().addRowBefore().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().addRowBefore().run(),
+                      description: 'Thêm hàng trước',
+                  },
+                  {
+                      id: 'addRowAfter',
+                      icon: <Plus className="size-5" />,
+                      onClick: () => editor.chain().focus().addRowAfter().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().addRowAfter().run(),
+                      description: 'Thêm hàng sau',
+                  },
+                  {
+                      id: 'deleteRow',
+                      icon: <Trash2 className="size-5" />,
+                      onClick: () => editor.chain().focus().deleteRow().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().deleteRow().run(),
+                      description: 'Xóa hàng',
+                  },
+                  {
+                      id: 'mergeCells',
+                      icon: <Merge className="size-5" />,
+                      onClick: () => editor.chain().focus().mergeCells().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().mergeCells().run(),
+                      description: 'Gộp ô',
+                  },
+                  {
+                      id: 'splitCell',
+                      icon: <Split className="size-5" />,
+                      onClick: () => editor.chain().focus().splitCell().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().splitCell().run(),
+                      description: 'Tách ô',
+                  },
+                  {
+                      id: 'deleteTable',
+                      icon: <TableProperties className="size-5" />,
+                      onClick: () => editor.chain().focus().deleteTable().run(),
+                      isActive: false,
+                      disabled: !editor.can().chain().focus().deleteTable().run(),
+                      description: 'Xóa bảng',
+                  },
+              ],
+              // [
+              //     { icon: <AiOutlineUndo className="size-5" />, onClick: () => editor.chain().focus().undo().run(), isActive: false, disabled: !editor.can().chain().focus().undo().run() },
+              //     { icon: <AiOutlineRedo className="size-5" />, onClick: () => editor.chain().focus().redo().run(), isActive: false, disabled: !editor.can().chain().focus().redo().run() },
+              // ],
+          ]
+        : []
 
-    const groupedButtons: MenuButton[][] = [
-        [
-            {
-                id: 'RiBold',
-                icon: <RiBold className="size-5" />,
-                onClick: () => editor.chain().focus().toggleBold().run(),
-                isActive: editor.isActive('bold'),
-            },
-            {
-                id: 'BsTypeUnderline',
-                icon: <BsTypeUnderline className="size-5" />,
-                onClick: () => editor.chain().focus().toggleUnderline().run(),
-                isActive: editor.isActive('underline'),
-            },
-            {
-                id: 'RiItalic',
-                icon: <RiItalic className="size-5" />,
-                onClick: () => editor.chain().focus().toggleItalic().run(),
-                isActive: editor.isActive('italic'),
-                disabled: !editor.can().chain().focus().toggleItalic().run(),
-            },
-            {
-                id: 'RiStrikethrough',
-                icon: <RiStrikethrough className="size-5" />,
-                onClick: () => editor.chain().focus().toggleStrike().run(),
-                isActive: editor.isActive('strike'),
-                disabled: !editor.can().chain().focus().toggleStrike().run(),
-            },
-        ],
-        [
-            {
-                id: 'RiMarkPenFill',
-                icon: <RiMarkPenFill className="size-5" />,
-                onClick: () => editor.chain().focus().toggleHighlight().run(),
-                isActive: editor.isActive('highlight'),
-                disabled: !editor.can().chain().focus().toggleHighlight().run(),
-            },
-            {
-                id: 'RiCodeSSlashLine',
-                icon: <RiCodeSSlashLine className="size-5" />,
-                onClick: () => editor.chain().focus().toggleCode().run(),
-                isActive: editor.isActive('code'),
-                disabled: !editor.can().chain().focus().toggleCode().run(),
-            },
-        ],
-        [
-            {
-                id: 'RiAlignLeft',
-                icon: <RiAlignLeft className="size-5" />,
-                onClick: () => editor.chain().focus().setTextAlign('left').run(),
-                isActive: editor.isActive({ textAlign: 'left' }),
-                disabled: !editor.can().chain().focus().unsetTextAlign().run(),
-            },
-            {
-                id: 'RiAlignJustify',
-                icon: <RiAlignJustify className="size-5" />,
-                onClick: () => editor.chain().focus().setTextAlign('center').run(),
-                isActive: editor.isActive({ textAlign: 'center' }),
-                disabled: !editor.can().chain().focus().unsetTextAlign().run(),
-            },
-            {
-                id: 'RiAlignRight',
-                icon: <RiAlignRight className="size-5" />,
-                onClick: () => editor.chain().focus().setTextAlign('right').run(),
-                isActive: editor.isActive({ textAlign: 'right' }),
-                disabled: !editor.can().chain().focus().unsetTextAlign().run(),
-            },
-        ],
-        [
-            {
-                id: 'IoListOutline',
-                icon: <IoListOutline className="size-5" />,
-                onClick: () => editor.chain().focus().toggleBulletList().run(),
-                isActive: editor.isActive('bulletList'),
-                disabled:
-                    !editor.isActive('bulletList') &&
-                    !editor.can().chain().focus().toggleBulletList().run(),
-            },
-            {
-                id: 'RiListOrdered2',
-                icon: <RiListOrdered2 className="size-5" />,
-                onClick: () => editor.chain().focus().toggleOrderedList().run(),
-                isActive: editor.isActive('orderedList'),
-                disabled:
-                    !editor.isActive('orderedList') &&
-                    !editor.can().chain().focus().toggleOrderedList().run(),
-            },
-            {
-                id: 'RiImage2Line',
-                icon: (
-                    <>
-                        <RiImage2Line className="size-5" />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                            ref={fileInputRef}
-                        />
-                    </>
-                ),
-                onClick: () => fileInputRef.current?.click(),
-                isActive: false,
-                disabled: false,
-            },
-        ],
-        [
-            {
-                id: 'RiFunctions',
-                icon: <RiFunctions className="size-5" />,
-                onClick: toggleMathFormula,
-                isActive: editor.isActive('math'),
-                disabled: false,
-            },
-            {
-                id: 'RiMoneyDollarCircleLine',
-                icon: <RiMoneyDollarCircleLine className="size-5" />,
-                onClick: () => wrapSelectionWith('$', '$'),
-                isActive: false,
-                disabled: false,
-                description: 'Math latex span',
-            },
-            {
-                id: 'RiMoneyDollarBoxLine',
-                icon: <RiMoneyDollarBoxLine className="size-5" />,
-                onClick: () => wrapSelectionWith('$$', '$$'),
-                isActive: false,
-                disabled: false,
-                description: 'Math latex div',
-            },
-            {
-                id: 'RiAtLine',
-                icon: <RiAtLine className="size-5" />,
-                onClick: () => handleAddEvidence(),
-                isActive: false,
-                disabled: false,
-                description: 'Thêm minh chứng',
-            },
-        ],
-        [
-            {
-                id: 'insertTable',
-                icon: <Table className="size-5" />,
-                onClick: () => setTableModalVisible(true),
-                isActive: editor.isActive('table'),
-                disabled: false,
-                description: 'Chèn bảng',
-            },
-            {
-                id: 'addColumnBefore',
-                icon: <Columns className="size-5" />,
-                onClick: () => editor.chain().focus().addColumnBefore().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().addColumnBefore().run(),
-                description: 'Thêm cột trước',
-            },
-            {
-                id: 'addColumnAfter',
-                icon: <Plus className="size-5" />,
-                onClick: () => editor.chain().focus().addColumnAfter().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().addColumnAfter().run(),
-                description: 'Thêm cột sau',
-            },
-            {
-                id: 'deleteColumn',
-                icon: <Trash2 className="size-5" />,
-                onClick: () => editor.chain().focus().deleteColumn().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().deleteColumn().run(),
-                description: 'Xóa cột',
-            },
-            {
-                id: 'addRowBefore',
-                icon: <Rows className="size-5" />,
-                onClick: () => editor.chain().focus().addRowBefore().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().addRowBefore().run(),
-                description: 'Thêm hàng trước',
-            },
-            {
-                id: 'addRowAfter',
-                icon: <Plus className="size-5" />,
-                onClick: () => editor.chain().focus().addRowAfter().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().addRowAfter().run(),
-                description: 'Thêm hàng sau',
-            },
-            {
-                id: 'deleteRow',
-                icon: <Trash2 className="size-5" />,
-                onClick: () => editor.chain().focus().deleteRow().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().deleteRow().run(),
-                description: 'Xóa hàng',
-            },
-            {
-                id: 'mergeCells',
-                icon: <Merge className="size-5" />,
-                onClick: () => editor.chain().focus().mergeCells().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().mergeCells().run(),
-                description: 'Gộp ô',
-            },
-            {
-                id: 'splitCell',
-                icon: <Split className="size-5" />,
-                onClick: () => editor.chain().focus().splitCell().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().splitCell().run(),
-                description: 'Tách ô',
-            },
-            {
-                id: 'deleteTable',
-                icon: <TableProperties className="size-5" />,
-                onClick: () => editor.chain().focus().deleteTable().run(),
-                isActive: false,
-                disabled: !editor.can().chain().focus().deleteTable().run(),
-                description: 'Xóa bảng',
-            },
-        ],
-        // [
-        //     { icon: <AiOutlineUndo className="size-5" />, onClick: () => editor.chain().focus().undo().run(), isActive: false, disabled: !editor.can().chain().focus().undo().run() },
-        //     { icon: <AiOutlineRedo className="size-5" />, onClick: () => editor.chain().focus().redo().run(), isActive: false, disabled: !editor.can().chain().focus().redo().run() },
-        // ],
-    ]
+    if (!editor) return null
+    // Ẩn toolbar nếu không editable
+    if (!editable) return null
 
     return (
         <>
