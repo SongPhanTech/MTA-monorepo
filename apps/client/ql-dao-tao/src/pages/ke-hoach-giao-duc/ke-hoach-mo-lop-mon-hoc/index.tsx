@@ -397,29 +397,33 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                     if (resList.status !== 200) {
                                                         throw new Error('Lỗi khi lấy dữ liệu')
                                                     }
-                                                    const [
-                                                        _,
-                                                        listSubjectVersionIds,
-                                                        alreadySubjectIds,
-                                                    ] = resList.data as [
-                                                        null,
-                                                        Prisma.PlanTrainingGetPayload<{
-                                                            select: {
-                                                                planTrainingSubjects: {
-                                                                    select: {
-                                                                        subjectVersion: {
-                                                                            select: {
-                                                                                id: true
-                                                                                code: true
-                                                                                name: true
-                                                                            }
+
+                                                    const listSubjectVersionIds = (
+                                                        values.isOverride
+                                                            ? resList.data[1]
+                                                            : resList.data[0]
+                                                    ) as Prisma.PlanTrainingGetPayload<{
+                                                        select: {
+                                                            planTrainingSubjects: {
+                                                                select: {
+                                                                    subjectVersion: {
+                                                                        select: {
+                                                                            id: true
+                                                                            code: true
+                                                                            name: true
                                                                         }
                                                                     }
                                                                 }
                                                             }
-                                                        }>,
-                                                        Prisma.SubjectClassGetPayload<{}>[],
-                                                    ]
+                                                        }
+                                                    }>
+
+                                                    const alreadySubjectIds = (
+                                                        values.isOverride
+                                                            ? resList.data[2]
+                                                            : resList.data[1]
+                                                    ) as Prisma.SubjectClassGetPayload<{}>[]
+
                                                     const res = await sqlTransaction([
                                                         ...listSubjectVersionIds.planTrainingSubjects
                                                             .filter(

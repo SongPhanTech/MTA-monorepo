@@ -56,11 +56,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
             placeholder="Chọn khoá đào tạo"
             options={khoaDaoTao.map((e) => {
                 let semesterIdx = null
-                if (
-                    semester?.semesterType &&
-                    semester.schoolYear.startDate.getFullYear() >=
-                        e.semesterStart.schoolYear.startDate.getFullYear()
-                ) {
+                if (semester?.semesterType) {
                     const idx =
                         (semester.schoolYear.startDate.getFullYear() -
                             e.semesterStart.schoolYear.startDate.getFullYear()) *
@@ -70,7 +66,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                             ? 1
                             : 2)
 
-                    semesterIdx = idx <= 12 ? idx : null
+                    semesterIdx = idx > 0 && idx <= 12 ? idx : null
                 }
 
                 return {
