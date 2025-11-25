@@ -1,171 +1,153 @@
-import { Col, Form, Input, Modal, message, Switch, Select, Row } from 'antd'
+import { ReloadOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import { DEFAULT_PROMPTS } from '@constants/default-prompts'
+import useSpinner from '@hooks/spinner'
+import { $Enums } from '@workspace/db'
+import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from '@workspace/db/hooks'
+import { Button, Col, Form, Input, message, Tooltip } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import FormItem from '@components/commons/form-item'
-import { cn } from '@lib/utils'
-import {
-    useCreatePrompt,
-    useUpdatePrompt,
-    useUpdateManyPrompt,
-} from '@/../../../../packages/database/generated/hooks/prompt'
 
-type PromptFormType = {
-    code: string
+type PutPromptHoiDapFormType = {
     prompt: string
-    description: string
-    active: boolean
+    description?: string
 }
 
-const PutPromptHoiDap = () => {
-    const {
-        isOpen,
-        onClose,
-        input: promptData,
-    } = useDisclosure<any>({
-        tag: 'PutPromptHoiDap',
+export type PutPromptHoiDapInput = {
+    code: string
+    name: string
+}
+
+export default function PutPromptHoiDapModal() {
+    const [form] = Form.useForm<PutPromptHoiDapFormType>()
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { isOpen, onClose, input } = useDisclosure<PutPromptHoiDapInput>({
+        tag: 'PutPromptHoiDapModal',
+        onClose: form.resetFields,
     })
 
-    const { mutateAsync: createPrompt } = useCreatePrompt()
-    const { mutateAsync: updatePrompt } = useUpdatePrompt()
-    const { mutateAsync: updateManyPrompts } = useUpdateManyPrompt()
-
-    // Không cần fetch prompt data vì sẽ được truyền qua input
-    const [form] = Form.useForm<PromptFormType>()
+    const { data: promptData } = useFindFirstPrompt(
+        {
+            where: {
+                code: input?.code,
+            },
+        },
+        {
+            enabled: !!input?.code,
+        }
+    )
 
     useEffect(() => {
-        if (isOpen && promptData) {
-            form.setFieldsValue({
-                code: promptData.code || '',
-                prompt: promptData.prompt || '',
-                description: promptData.description || '',
-                active: promptData.active ?? true,
-            })
-        } else if (isOpen && !promptData) {
-            // Reset form for new prompt
-            form.resetFields()
-            form.setFieldsValue({
-                active: true,
-            })
+        if (isOpen) {
+            if (promptData) {
+                form.setFieldsValue({
+                    prompt: promptData.prompt ?? '',
+                    description: (promptData as any).description ?? '',
+                })
+            } else {
+                form.resetFields()
+            }
         }
     }, [isOpen, promptData, form])
 
-    const handleCancel = () => {
-        onClose()
-        form.resetFields()
+    const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
+    const { mutateAsync: createPrompt } = useCreateManyPrompt()
+
+    const handleSetDefault = () => {
+        if (!input?.code) return
+        const defaultPrompt = DEFAULT_PROMPTS[input.code]
+        if (defaultPrompt) {
+            form.setFieldsValue({
+                prompt: defaultPrompt,
+            })
+            message.success('Đã thiết lập prompt mặc định')
+        }
     }
 
-    const onFinish = async (values: PromptFormType) => {
-        try {
-            if (promptData?.id) {
-                // If activating this prompt, deactivate others with same code first
-                if (values.active && !promptData.active) {
-                    await updateManyPrompts({
-                        where: {
-                            code: values.code,
-                            id: { not: promptData.id },
-                        },
-                        data: { active: false },
-                    })
-                }
+    const onFinish = async (values: PutPromptHoiDapFormType) => {
+        if (!input) return
 
-                // Update existing prompt using ZenStack
-                await updatePrompt({
-                    where: { id: promptData.id },
+        try {
+            showSpinner()
+            if (!promptData) {
+                await createPrompt({
                     data: {
+                        code: input.code,
                         prompt: values.prompt,
                         description: values.description,
-                        active: values.active,
+                        status: $Enums.DocumentStatus.APPROVE,
                     },
                 })
             } else {
-                // If creating active prompt, deactivate others with same code first
-                if (values.active) {
-                    await updateManyPrompts({
-                        where: { code: values.code },
-                        data: { active: false },
-                    })
-                }
-
-                // Create new prompt using ZenStack
-                await createPrompt({
+                await updatePrompt({
+                    where: {
+                        code: input.code,
+                    },
                     data: {
-                        code: values.code,
                         prompt: values.prompt,
                         description: values.description,
-                        active: values.active,
-                        status: 'APPROVE' as any, // Default status
+                        status: $Enums.DocumentStatus.APPROVE,
                     },
                 })
             }
-            message.success(promptData?.id ? 'Cập nhật thành công' : 'Thêm mới thành công')
-            handleCancel()
+            message.success('Cập nhật prompt thành công')
+            await queryClient.invalidateQueries({ queryKey: ['Prompt'] })
+            onClose()
         } catch (error) {
-            console.error('Error saving prompt:', error)
-            message.error('Lưu thất bại, vui lòng thử lại sau')
+            console.error('Error updating prompt:', error)
+            message.error('Cập nhật prompt thất bại, vui lòng thử lại sau')
+        } finally {
+            hideSpinner()
         }
     }
 
     return (
-        <Modal
-            title={promptData?.id ? 'Chỉnh sửa Prompt' : 'Thêm mới Prompt'}
+        <PutFormModal
             open={isOpen}
-            className={cn('min-w-[50vw]')}
-            onCancel={handleCancel}
-            okText="Đồng ý"
-            cancelText="Hủy"
-            onOk={form.submit}
+            onCancel={onClose}
+            title={`Chỉnh sửa Prompt - ${input?.name ?? ''}`}
+            form={form}
+            onFinish={onFinish}
         >
-            <Form form={form} onFinish={onFinish} layout="vertical">
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="code"
-                            label="Loại Prompt"
-                            rules={[{ required: true, message: 'Vui lòng chọn loại prompt' }]}
-                        >
-                            <Select placeholder="Chọn loại prompt" disabled={!!promptData?.id}>
-                                <Select.Option value="rag">Hỏi đáp dựa trên RAG</Select.Option>
-                                <Select.Option value="no-rag">Hỏi đáp thông thường</Select.Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="active"
-                            label="Kích hoạt"
-                            valuePropName="checked"
-                        >
-                            <Switch />
-                        </FormItem>
-                    </Col>
-                </Row>
-
-                <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name="description"
-                        label="Mô tả"
-                        rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
-                    >
-                        <Input.TextArea placeholder="Nhập mô tả cho prompt" rows={2} />
-                    </FormItem>
-                </Col>
-
-                <Col span={24}>
-                    <FormItem
-                        form={form}
-                        name="prompt"
-                        label="Nội dung Prompt"
-                        rules={[{ required: true, message: 'Vui lòng nhập nội dung prompt' }]}
-                    >
-                        <Input.TextArea rows={8} placeholder="Nhập nội dung prompt..." />
-                    </FormItem>
-                </Col>
-            </Form>
-        </Modal>
+            <Col span={24}>
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Prompt</span>
+                    <Tooltip title="Thiết lập mặc định">
+                        <Button
+                            type="primary"
+                            size="small"
+                            icon={<ReloadOutlined />}
+                            onClick={handleSetDefault}
+                        />
+                    </Tooltip>
+                </div>
+                <FormItem
+                    name="prompt"
+                    form={form}
+                    rules={[{ required: true, message: 'Vui lòng nhập nội dung prompt' }]}
+                >
+                    <Input.TextArea
+                        placeholder="Nhập nội dung prompt"
+                        autoSize={{ minRows: 8, maxRows: 20 }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem
+                    label="Mô tả"
+                    name="description"
+                    form={form}
+                    rules={[{ required: false }]}
+                >
+                    <Input.TextArea
+                        placeholder="Nhập mô tả cho prompt"
+                        autoSize={{ minRows: 2, maxRows: 4 }}
+                    />
+                </FormItem>
+            </Col>
+        </PutFormModal>
     )
 }
-
-export default PutPromptHoiDap
