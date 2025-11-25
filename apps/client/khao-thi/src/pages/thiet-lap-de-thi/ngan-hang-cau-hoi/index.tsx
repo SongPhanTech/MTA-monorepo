@@ -9,8 +9,8 @@ import { BookPlus, Building2, BookOpen, FileText, Database } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { QuestionList } from './components/QuestionList'
-import { QuestionBankTree } from './components/QuestionBankTree'
+import { QuestionList } from '@components/ngan-hang-cau-hoi/question-list'
+import { QuestionBankTree } from '@components/ngan-hang-cau-hoi/question-bank-tree'
 
 export default function QuestionBank() {
     const { can } = useAbility()

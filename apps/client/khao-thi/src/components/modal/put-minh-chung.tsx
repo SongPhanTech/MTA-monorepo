@@ -55,7 +55,7 @@ const PutEvidence = () => {
                                         mimeType: file.mimeType,
                                         size: file.size,
                                         evidence: { connect: { id: input?.id } },
-                                        userProfileId: dataUser?.sid || null,
+                                        userProfileId: dataUser?.sDM_NhanVienId || null,
                                     },
                                     update: {
                                         name: file.name,
@@ -71,7 +71,7 @@ const PutEvidence = () => {
                                     path: file.path,
                                     mimeType: file.mimeType,
                                     size: file.size,
-                                    userProfileId: dataUser?.sid || null,
+                                    userProfileId: dataUser?.sDM_NhanVienId || null,
                                 })),
                             disconnect: document
                                 .filter(
@@ -96,7 +96,7 @@ const PutEvidence = () => {
                                 path: file.path,
                                 mimeType: file.mimeType,
                                 size: file.size,
-                                userProfileId: dataUser?.sid || null,
+                                userProfileId: dataUser?.sDM_NhanVienId || null,
                             })),
                         },
                     },

@@ -18,7 +18,7 @@ import {
     type TRO_LY_AO_PERMISSION,
 } from '@workspace/router'
 import { Space, Tooltip, Tree } from 'antd'
-import { BookPlus, Building2, BookOpen, FileText, Database } from 'lucide-react'
+import { BookOpen, BookPlus, Building2, Database, FileText } from 'lucide-react'
 import type React from 'react'
 import { useMemo } from 'react'
 

@@ -651,13 +651,13 @@ const NAVIGATION: NavigationType = {
     KHAO_THI: {
         label: 'Khảo thí',
         menus: [
-            // {
-            //     id: KHAO_THI_PERMISSION.KHAO_THI_HOME,
-            //     label: 'Trang chủ',
-            //     icon: House,
-            //     path: ROUTER_PATH.KHAO_THI.HOME,
-            //     description: 'Thông tin trang chủ',
-            // },
+            {
+                id: KHAO_THI_PERMISSION.KHAO_THI_HOME,
+                label: 'Trang chủ',
+                icon: House,
+                path: ROUTER_PATH.KHAO_THI.HOME,
+                description: 'Thông tin trang chủ',
+            },
             {
                 id: 'thiet-lap-de-thi',
                 label: 'Thiết lập đề thi',
