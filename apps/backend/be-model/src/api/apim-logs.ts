@@ -50,25 +50,29 @@ app.openapi(
     }),
     async (c) => {
         const { from, service, to } = c.req.valid('query')
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                data: Record<string, any>
-            }[]
-        >`SELECT data
+        try {
+            const res = await prismaApimLogs.$queryRaw<
+                {
+                    data: Record<string, any>
+                }[]
+            >`SELECT data
                 FROM apim_logs
                 WHERE data ->> 'service' = ${service}
                 AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
                 AND (data ->> 'flow' = 'RESPONSE_OUT' or data ->> 'flow' = 'REQUEST_OUT')
                 ORDER BY time DESC;`
-        return c.json(
-            res.map(
-                ({ data }) =>
-                    ({
-                        ...data,
-                    }) as any
-            ),
-            200
-        )
+            return c.json(
+                res.map(
+                    ({ data }) =>
+                        ({
+                            ...data,
+                        }) as any
+                ),
+                200
+            )
+        } catch (error) {
+            return c.json([], 200)
+        }
     }
 )
 
@@ -106,12 +110,13 @@ app.openapi(
     }),
     async (c) => {
         const { from, service, to } = c.req.valid('query')
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                api: string
-                total_requests: bigint
-            }[]
-        >`SELECT
+        try {
+            const res = await prismaApimLogs.$queryRaw<
+                {
+                    api: string
+                    total_requests: bigint
+                }[]
+            >`SELECT
             data->>'apiTo' AS api,
             COUNT(*) AS total_requests
         FROM apim_logs
@@ -120,13 +125,16 @@ app.openapi(
         GROUP BY data->>'apiTo'
         ORDER BY total_requests DESC;`
 
-        return c.json(
-            res.map(({ api, total_requests }) => ({
-                api,
-                total_requests: Number(total_requests),
-            })),
-            200
-        )
+            return c.json(
+                res.map(({ api, total_requests }) => ({
+                    api,
+                    total_requests: Number(total_requests),
+                })),
+                200
+            )
+        } catch (error) {
+            return c.json([], 200)
+        }
     }
 )
 
@@ -167,15 +175,16 @@ app.openapi(
     }),
     async (c) => {
         const { from, service, to } = c.req.valid('query')
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                api: string
-                avg_ms: bigint
-                min_ms: bigint
-                max_ms: bigint
-                p95_ms: bigint
-            }[]
-        >`
+        try {
+            const res = await prismaApimLogs.$queryRaw<
+                {
+                    api: string
+                    avg_ms: bigint
+                    min_ms: bigint
+                    max_ms: bigint
+                    p95_ms: bigint
+                }[]
+            >`
         WITH resp AS (SELECT req.data ->> 'apiTo'                              AS api,
                      EXTRACT(EPOCH FROM (resp.time - req.time)) * 1000 AS response_time_ms
               FROM apim_logs req
@@ -194,16 +203,19 @@ app.openapi(
         FROM resp
         GROUP BY api;`
 
-        return c.json(
-            res.map(({ api, avg_ms, min_ms, max_ms, p95_ms }) => ({
-                api,
-                avg_latency: Number(avg_ms),
-                min_latency: Number(min_ms),
-                max_latency: Number(max_ms),
-                p95_latency: Number(p95_ms),
-            })),
-            200
-        )
+            return c.json(
+                res.map(({ api, avg_ms, min_ms, max_ms, p95_ms }) => ({
+                    api,
+                    avg_latency: Number(avg_ms),
+                    min_latency: Number(min_ms),
+                    max_latency: Number(max_ms),
+                    p95_latency: Number(p95_ms),
+                })),
+                200
+            )
+        } catch (error) {
+            return c.json([], 200)
+        }
     }
 )
 
