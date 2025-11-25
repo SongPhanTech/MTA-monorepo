@@ -130,9 +130,9 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
-                        label: 'Quản lý môn học',
+                        label: 'QL ràng buộc môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
-                        description: 'Quản lý môn học',
+                        description: 'QL ràng buộc môn học',
                     },
                 ],
             },
