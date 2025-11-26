@@ -21,7 +21,13 @@ export type PutRequirementCriterion = {
     conclusion: string
 }
 
-const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
+const CriteriaEvaluationSubPage = ({
+    data,
+    onRefetch,
+}: {
+    data: DataTabEvaluationCriterionType
+    onRefetch?: () => void
+}) => {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showComments, setShowComments] = useState(false)
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
@@ -205,6 +211,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
             await checkAndUpdateEvaluationPeriodStatus()
 
             message.success('Nộp phiếu đánh giá tiêu chí thành công')
+
+            if (onRefetch) {
+                onRefetch()
+            }
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -261,8 +271,8 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
             <div className=" bg-white py-2 flex flex-row justify-between items-center gap-2">
                 <div className="flex flex-row gap-4 items-center text-xs">
                     <div className="flex items-center gap-1">
-                        <span className="text-gray-500">Người được giao</span>
-                        <span className="font-medium">
+                        <span className="text-sm text-gray-500">
+                            Người viết phiếu:{' '}
                             {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
                                 ?.fullname || 'Chưa phân công'}
                         </span>

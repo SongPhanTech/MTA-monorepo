@@ -8,7 +8,6 @@ import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import {
     createId,
-    type AnalysisFormEvidence,
     type Evidence,
     type EvidenceFile,
     type RequirementCriterion,
@@ -31,7 +30,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 const { TextArea } = Input
 
 type PutRequirementCriterion = RequirementCriterion & {
-    evidences: AnalysisFormEvidence[]
+    evidences: string[]
 }
 
 type DragItem = {
@@ -60,6 +59,7 @@ const PutTieuChiMinhChungModal = () => {
         id?: string
         analysisCriterionId?: string
         refetch?: () => void
+        count?: number
     }>({
         tag: 'PutTieuChiMinhChungModal',
         onClose: () => {
@@ -103,7 +103,7 @@ const PutTieuChiMinhChungModal = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                evidences: initialValue.evidences.map((evi) => evi.evidenceId) as any,
+                evidences: initialValue.evidences.map((evi) => evi.evidenceId),
             })
             setItems(
                 initialValue.evidences.map((evi) => ({
@@ -112,8 +112,10 @@ const PutTieuChiMinhChungModal = () => {
                     value: evi.evidenceId,
                 }))
             )
+        } else if (input?.count !== undefined) {
+            form.setFieldsValue({ order: input?.count + 1 })
         }
-    }, [initialValue, form])
+    }, [initialValue, form, input?.count])
 
     const onOk = async (output: PutRequirementCriterion) => {
         if (!output) return
@@ -478,7 +480,7 @@ const PutTieuChiMinhChungModal = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber className="w-full" placeholder="Thứ tự" />
+                    <InputNumber className="w-full" placeholder="Thứ tự" disabled={!input?.id} />
                 </FormItem>
             </Col>
             <Col span={24}>
