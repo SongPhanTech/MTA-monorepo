@@ -119,7 +119,7 @@ function Page() {
                             <Title level={4}>Thời khoá biểu</Title>
                         </div>
                         <div className="flex-1 p-2">
-                            <LichCongTac />
+                            <LichCongTac onlyMySchedule />
                         </div>
                     </div>
                 </Col>
