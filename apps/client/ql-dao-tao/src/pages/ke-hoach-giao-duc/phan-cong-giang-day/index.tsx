@@ -123,10 +123,7 @@ export default function PhanCongGiangDay({
     const { id: semesterId } = useSemesterStore()
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const canXemTatCa = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-        'XEM_TAT_CA'
-    )
+    const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, 'XEM_TAT_CA')
 
     const where = useMemo(
         () =>
@@ -1066,7 +1063,7 @@ export default function PhanCongGiangDay({
                                 )}
                                 {!khoaBoMon &&
                                     can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                                         'DUYET'
                                     ) && (
                                         <Popover
@@ -1542,7 +1539,7 @@ export default function PhanCongGiangDay({
                                 )}
                                 {!khoaBoMon &&
                                     can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                                         'NHAP_EXCEL'
                                     ) && (
                                         <Button
@@ -2225,7 +2222,7 @@ export default function PhanCongGiangDay({
                                     hidden:
                                         khoaBoMon ||
                                         !canSome(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                                             'SUA',
                                             'XOA'
                                         ),
@@ -2234,7 +2231,7 @@ export default function PhanCongGiangDay({
                                             return (
                                                 <Row className="justify-center gap-2">
                                                     {can(
-                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                                                         'SUA'
                                                     ) && (
                                                         <EditIcon
@@ -2246,7 +2243,7 @@ export default function PhanCongGiangDay({
                                                         />
                                                     )}
                                                     {can(
-                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                                                         'XOA'
                                                     ) && (
                                                         <DeleteIcon
