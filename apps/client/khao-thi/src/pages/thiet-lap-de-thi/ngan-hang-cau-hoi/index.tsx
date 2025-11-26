@@ -1,6 +1,6 @@
 import type { PutQuestionBankInput } from '@components/modal/put-ngan-hang-cau-hoi'
 import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
+import ExamLayout from '@layouts/default-layout/exam-layout'
 import { useFindManyDM_DonVi, useUpdateQuestionBank } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
@@ -139,5 +139,5 @@ export default function QuestionBank() {
 }
 
 QuestionBank.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <ExamLayout>{page}</ExamLayout>
 }

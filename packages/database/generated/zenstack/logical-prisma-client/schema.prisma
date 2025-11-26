@@ -4798,6 +4798,7 @@ model ThesisProject {
   thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
   language           String?                     @db.Text()
+  type               String?                     @db.Text()
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
   subjectClassId     String?
   thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])

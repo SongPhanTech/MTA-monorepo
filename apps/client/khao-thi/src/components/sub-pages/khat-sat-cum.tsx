@@ -5,10 +5,11 @@ import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { Survey } from '@workspace/db'
+import { SchoolYear, Semester, Survey } from '@workspace/db'
 import {
     useCountClusterSurvey,
     useFindManyClusterSurvey,
+    useFindManySchoolYear,
     useFindManySurveyTopic,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -36,7 +37,33 @@ function TabDotKhaoSatCum({
         surveyTopicId: undefined,
         startDate: undefined,
         endDate: undefined,
+        semesterIds: undefined,
     })
+    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
+
+    const converData = (data: (SchoolYear & { semesters: Semester[] })[] | undefined) => {
+        return (
+            data?.map((schoolYear) => ({
+                value: schoolYear.id,
+                label: schoolYear.name,
+                children:
+                    schoolYear?.semesters.map((semester) => ({
+                        value: semester.id,
+                        label: `${semester.name}`,
+                    })) || [],
+            })) || []
+        )
+    }
+
+    // Tạo treeData từ schoolYears và semesters
+    const treeData = converData(schoolYears)
     const router = useRouter()
     const where = useMemo(
         () => ({
@@ -48,6 +75,17 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
+                ...(filters.semesterIds&&{
+                    surveys: {
+                        some: {
+                            subjectClass: {
+                                    semesterId: {
+                                        in: filters.semesterIds,
+                                    },
+                            },
+                        },
+                    }
+                }),
             ...(filters.surveyObjectTypeId
                 ? {
                       surveyObjectType: {
@@ -95,6 +133,11 @@ function TabDotKhaoSatCum({
             surveys: {
                 include: {
                     surveySessions: true,
+                    subjectClass: {
+                        include: {
+                            semester: true,
+                        },
+                    },
                 },
             },
         },
@@ -260,6 +303,16 @@ function TabDotKhaoSatCum({
                                 })),
                                 render: (_, record) =>
                                     record?.surveyTopic ? record?.surveyTopic.name : '',
+                            },
+                            {
+                                title: 'Học kỳ',
+                                dataIndex: 'semesterIds',
+                                type: 'tree_select',
+                                width: 175,
+                                options: treeData,
+                                render: (__, record) => {
+                                    return record?.surveys[0]?.subjectClass?.semester?.name || ''
+                                },
                             },
                             {
                                 title: 'Công khai',

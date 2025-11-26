@@ -218168,6 +218168,7 @@ export namespace Prisma {
     thesisType: $Enums.ThesisType | null
     status: $Enums.ThesisProjectStatus | null
     language: string | null
+    type: string | null
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
@@ -218205,6 +218206,7 @@ export namespace Prisma {
     thesisType: $Enums.ThesisType | null
     status: $Enums.ThesisProjectStatus | null
     language: string | null
+    type: string | null
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
@@ -218242,6 +218244,7 @@ export namespace Prisma {
     thesisType: number
     status: number
     language: number
+    type: number
     subjectClassId: number
     thesisSessionId: number
     supervisorId: number
@@ -218289,6 +218292,7 @@ export namespace Prisma {
     thesisType?: true
     status?: true
     language?: true
+    type?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
@@ -218326,6 +218330,7 @@ export namespace Prisma {
     thesisType?: true
     status?: true
     language?: true
+    type?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
@@ -218363,6 +218368,7 @@ export namespace Prisma {
     thesisType?: true
     status?: true
     language?: true
+    type?: true
     subjectClassId?: true
     thesisSessionId?: true
     supervisorId?: true
@@ -218487,6 +218493,7 @@ export namespace Prisma {
     thesisType: $Enums.ThesisType
     status: $Enums.ThesisProjectStatus
     language: string | null
+    type: string | null
     subjectClassId: string | null
     thesisSessionId: string | null
     supervisorId: string | null
@@ -218543,6 +218550,7 @@ export namespace Prisma {
     thesisType?: boolean
     status?: boolean
     language?: boolean
+    type?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
@@ -218594,6 +218602,7 @@ export namespace Prisma {
     thesisType?: boolean
     status?: boolean
     language?: boolean
+    type?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
@@ -218639,6 +218648,7 @@ export namespace Prisma {
     thesisType?: boolean
     status?: boolean
     language?: boolean
+    type?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
@@ -218684,6 +218694,7 @@ export namespace Prisma {
     thesisType?: boolean
     status?: boolean
     language?: boolean
+    type?: boolean
     subjectClassId?: boolean
     thesisSessionId?: boolean
     supervisorId?: boolean
@@ -218700,7 +218711,7 @@ export namespace Prisma {
     projectEnd?: boolean
   }
 
-  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
+  export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>
   export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
     thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
@@ -218791,6 +218802,7 @@ export namespace Prisma {
       thesisType: $Enums.ThesisType
       status: $Enums.ThesisProjectStatus
       language: string | null
+      type: string | null
       subjectClassId: string | null
       thesisSessionId: string | null
       supervisorId: string | null
@@ -219264,6 +219276,7 @@ export namespace Prisma {
     readonly thesisType: FieldRef<"ThesisProject", 'ThesisType'>
     readonly status: FieldRef<"ThesisProject", 'ThesisProjectStatus'>
     readonly language: FieldRef<"ThesisProject", 'String'>
+    readonly type: FieldRef<"ThesisProject", 'String'>
     readonly subjectClassId: FieldRef<"ThesisProject", 'String'>
     readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>
     readonly supervisorId: FieldRef<"ThesisProject", 'String'>
@@ -348535,6 +348548,7 @@ export namespace Prisma {
     thesisType: 'thesisType',
     status: 'status',
     language: 'language',
+    type: 'type',
     subjectClassId: 'subjectClassId',
     thesisSessionId: 'thesisSessionId',
     supervisorId: 'supervisorId',
@@ -352594,6 +352608,7 @@ export namespace Prisma {
     requirements: 'requirements',
     technologies: 'technologies',
     language: 'language',
+    type: 'type',
     subjectClassId: 'subjectClassId',
     thesisSessionId: 'thesisSessionId',
     supervisorId: 'supervisorId',
@@ -372011,6 +372026,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
+    type?: StringNullableFilter<"ThesisProject"> | string | null
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -372061,6 +372077,7 @@ export namespace Prisma {
     thesisType?: SortOrder
     status?: SortOrder
     language?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorId?: SortOrderInput | SortOrder
@@ -372115,6 +372132,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
+    type?: StringNullableFilter<"ThesisProject"> | string | null
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -372165,6 +372183,7 @@ export namespace Prisma {
     thesisType?: SortOrder
     status?: SortOrder
     language?: SortOrderInput | SortOrder
+    type?: SortOrderInput | SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     thesisSessionId?: SortOrderInput | SortOrder
     supervisorId?: SortOrderInput | SortOrder
@@ -372210,6 +372229,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisType
     status?: EnumThesisProjectStatusWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+    type?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -402116,6 +402136,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -402158,6 +402179,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -402200,6 +402222,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -402242,6 +402265,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -402284,6 +402308,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -402321,6 +402346,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -402350,6 +402376,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -426542,6 +426569,7 @@ export namespace Prisma {
     thesisType?: SortOrder
     status?: SortOrder
     language?: SortOrder
+    type?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
@@ -426583,6 +426611,7 @@ export namespace Prisma {
     thesisType?: SortOrder
     status?: SortOrder
     language?: SortOrder
+    type?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
@@ -426620,6 +426649,7 @@ export namespace Prisma {
     thesisType?: SortOrder
     status?: SortOrder
     language?: SortOrder
+    type?: SortOrder
     subjectClassId?: SortOrder
     thesisSessionId?: SortOrder
     supervisorId?: SortOrder
@@ -493404,6 +493434,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -493445,6 +493476,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -493987,6 +494019,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFilter<"ThesisProject"> | $Enums.ThesisType
     status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
     language?: StringNullableFilter<"ThesisProject"> | string | null
+    type?: StringNullableFilter<"ThesisProject"> | string | null
     subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
     thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
     supervisorId?: StringNullableFilter<"ThesisProject"> | string | null
@@ -521375,6 +521408,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -521416,6 +521450,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
     coSupervisorId?: string | null
@@ -527945,6 +527980,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -527986,6 +528022,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -545536,6 +545573,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -545577,6 +545615,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     supervisorId?: string | null
     coSupervisorId?: string | null
@@ -547229,6 +547268,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -547270,6 +547310,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -547561,6 +547602,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -547602,6 +547644,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -548001,6 +548044,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -548042,6 +548086,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -548329,6 +548374,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -548370,6 +548416,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     coSupervisorId?: string | null
@@ -548421,6 +548468,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -548462,6 +548510,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -549050,6 +549099,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -549091,6 +549141,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -549164,6 +549215,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549205,6 +549257,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -549371,6 +549424,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -549412,6 +549466,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -549954,6 +550009,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -549995,6 +550051,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -550128,6 +550185,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -550169,6 +550227,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550226,6 +550285,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -550267,6 +550327,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -550400,6 +550461,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -550441,6 +550503,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550714,6 +550777,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     maxStudents?: number | null
     defenseDate?: Date | string | null
     registrationStart?: Date | string | null
@@ -550755,6 +550819,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -550879,6 +550944,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -550920,6 +550986,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584713,6 +584780,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -585650,6 +585718,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -585691,6 +585760,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585732,6 +585802,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -607194,6 +607265,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
     coSupervisorId?: string | null
@@ -607554,6 +607626,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -607595,6 +607668,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -607636,6 +607710,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611221,6 +611296,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -611592,6 +611668,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611633,6 +611710,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611674,6 +611752,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618338,6 +618417,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     supervisorId?: string | null
     coSupervisorId?: string | null
@@ -618374,6 +618454,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618415,6 +618496,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618456,6 +618538,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618696,6 +618779,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -618732,6 +618816,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618773,6 +618858,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618814,6 +618900,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -618850,6 +618937,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     coSupervisorId?: string | null
@@ -618886,6 +618974,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -619040,6 +619129,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619081,6 +619171,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619122,6 +619213,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619158,6 +619250,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619199,6 +619292,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619240,6 +619334,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619696,6 +619791,7 @@ export namespace Prisma {
     thesisType?: $Enums.ThesisType
     status?: $Enums.ThesisProjectStatus
     language?: string | null
+    type?: string | null
     subjectClassId?: string | null
     thesisSessionId?: string | null
     supervisorId?: string | null
@@ -619745,6 +619841,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
     defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619786,6 +619883,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -619827,6 +619925,7 @@ export namespace Prisma {
     thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
     status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
     language?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
