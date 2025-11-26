@@ -243,12 +243,21 @@ export default function AssigmentOfAssessmentTab() {
 
     const handleSave = async () => {
         try {
-            await form.validateFields()
+            const formData = form.getFieldsValue()
+            const listData = formData.list || {}
+
+            const validAssignments = Object.entries(listData).filter(
+                ([_, value]) => value?.lecturerId && value?.deadline
+            )
+
+            if (validAssignments.length === 0) {
+                message.error('Vui lòng phân công ít nhất một tiêu chí')
+                return
+            }
 
             showSpinner()
 
-            const formData = form.getFieldsValue()
-            const listData = Object.entries(formData.list || {})
+            const dataSubmit = Object.entries(formData.list || {})
                 .filter(([_, value]) => value?.lecturerId && value?.deadline)
                 .map(([key, value]) => {
                     return {
@@ -258,7 +267,7 @@ export default function AssigmentOfAssessmentTab() {
                     }
                 })
 
-            const operations: any[] = listData.flatMap((item) => [
+            const operations: any[] = dataSubmit.flatMap((item) => [
                 {
                     model: 'AnalysisCriterion',
                     operation: 'upsert',
