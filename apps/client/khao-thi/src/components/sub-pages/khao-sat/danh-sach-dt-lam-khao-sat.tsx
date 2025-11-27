@@ -246,7 +246,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                                 title: 'Thao tác',
                                 align: 'center',
                                 width: 80,
-                                hidden:profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
+                                hidden: profileId !== '266369db-fbaa-453e-b5fc-147ed06f959d',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-0">
                                         {profileId === '266369db-fbaa-453e-b5fc-147ed06f959d' && (

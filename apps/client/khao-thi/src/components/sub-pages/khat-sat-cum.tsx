@@ -75,17 +75,17 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-                ...(filters.semesterIds&&{
-                    surveys: {
-                        some: {
-                            subjectClass: {
-                                    semesterId: {
-                                        in: filters.semesterIds,
-                                    },
+            ...(filters.semesterIds && {
+                surveys: {
+                    some: {
+                        subjectClass: {
+                            semesterId: {
+                                in: filters.semesterIds,
                             },
                         },
-                    }
-                }),
+                    },
+                },
+            }),
             ...(filters.surveyObjectTypeId
                 ? {
                       surveyObjectType: {

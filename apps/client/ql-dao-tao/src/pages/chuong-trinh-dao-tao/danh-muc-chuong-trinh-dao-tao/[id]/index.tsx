@@ -35,6 +35,7 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
+import ViewIcon from '@components/icons/view'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -364,6 +365,22 @@ export default function TrainingProgramSubjects() {
         },
     })
 
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+        isLocked?: boolean
+    }>({
+        tag: 'PutVersionSubjectModal',
+    })
+
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string,
+        isLocked: boolean
+    ) => {
+        onOpenSubjectVersion({ subjectId, subjectVersionId, isLocked })
+    }
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: deleteTrainingBlockOnCurriculumVersion } =
@@ -508,7 +525,7 @@ export default function TrainingProgramSubjects() {
                                             type="primary"
                                         >
                                             <BookPlus />
-                                            Cập nhật
+                                            Sửa KKT
                                         </Button>
                                     </Tooltip>
                                 )}
@@ -949,7 +966,7 @@ export default function TrainingProgramSubjects() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 // hidden: !canSome(
                                 //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
@@ -959,6 +976,24 @@ export default function TrainingProgramSubjects() {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                    'XEM'
+                                                ) && (
+                                                    <ViewIcon
+                                                        onClick={() =>
+                                                            handleModalSubjectVersion(
+                                                                record.subjectId,
+                                                                record.subjectId,
+                                                                !can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                                    'SUA'
+                                                                )
+                                                            )
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
