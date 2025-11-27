@@ -12,7 +12,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import {
     $Enums,
@@ -316,6 +316,28 @@ export default function PhanCongGiangDay({
     )
     const orgId = window.contextData?.organizationId
 
+    const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
+        {
+            select: { Id: true },
+            where: {
+                bActive: true,
+            },
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
+
+    const orgIds = buildOrgFlat(
+        dmDonViIds.map((e) => ({
+            Id: e.Id,
+            sTen: null,
+            sParentId: null,
+            sMa: null,
+        })),
+        orgId || '0'
+    ).map((org) => org.value)
+
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
             include: {
@@ -418,7 +440,11 @@ export default function PhanCongGiangDay({
                         },
                     },
                 },
-                Id: !khoaBoMon ? undefined : orgId,
+                Id: !khoaBoMon
+                    ? undefined
+                    : {
+                          in: orgIds,
+                      },
                 // sParentId: !khoaBoMon ? undefined : orgId,
             },
         },
