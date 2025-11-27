@@ -206,7 +206,7 @@ export const getLecturerSurveyStats = async (
     // survey: Survey & {subjectClass?:SubjectClass |null, lecture?: (Lecturer & { userProfile: UserProfile | null }) | null },
     questions: SurveyQuestion[],
     choices: SurveyChoice[],
-    clusterSurveyId:string
+    clusterSurveyId: string
 ) => {
     const questionIds = questions.map((q) => q.id)
 
@@ -250,7 +250,7 @@ export const getOrganizationsSurveyStats = async (
     orga: DM_DonVi,
     questions: SurveyQuestion[],
     choices: SurveyChoice[],
-    clusterSurveyId:string
+    clusterSurveyId: string
 ) => {
     const questionIds = questions.map((q) => q.id)
 
@@ -259,8 +259,8 @@ export const getOrganizationsSurveyStats = async (
         where: {
             surveySession: {
                 survey: {
-                    lecture:{
-                        organizationId: orga.Id
+                    lecture: {
+                        organizationId: orga.Id,
                     },
                     clusterSurveyId,
                 },

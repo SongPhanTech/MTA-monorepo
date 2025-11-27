@@ -159,7 +159,6 @@ const ExamLayout = ({
                                 <p>Học kỳ</p>
                                 <TreeSelectSemester />
                             </div>
-
                         </div>
                         <HeaderApp />
                     </Header>

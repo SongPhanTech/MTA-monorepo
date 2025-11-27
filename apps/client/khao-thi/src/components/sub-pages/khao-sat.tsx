@@ -336,7 +336,7 @@ function TabDotKhaoSat({
                                         surveyQuestion,
                                         surveyObjectType,
                                         surveySessions,
-                                        endDate
+                                        endDate,
                                     }
                                 ) => (
                                     <Row className="justify-end gap-2">
