@@ -108,7 +108,16 @@ export default function PostgraduateProject({
   const [needAllStudents, setNeedAllStudents] = useState<boolean>(false);
   // state cho has clicked fetch để check xem đã click vào button xem kết quả hay chưa
   const [hasClickedFetch, setHasClickedFetch] = useState<boolean>(false);
-
+  // state cho selected row keys để chọn hàng đang chỉnh sửa
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // hàm xử lý chọn hàng đang chỉnh sửa
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+    // type: 'checkbox' là mặc định, nếu muốn radio thì dùng 'radio'
+  };
   // state cho số lượng trang để phân trang
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
   // hàm xử lý batch save
@@ -117,12 +126,15 @@ export default function PostgraduateProject({
       message.info("Không có hàng nào đang ở chế độ chỉnh sửa để lưu.");
       return;
     }
+    if (selectedRowKeys.length === 0) {
+      message.info("Vui lòng chọn ít nhất một sinh viên để lưu.");
+      return;
+    }
 
     showSpinner();
     try {
-      const updatePromises = editingRowKeys.map(async (studentId) => {
-        const rowData = editingValues[studentId];
-        console.log(rowData);
+      const updatePromises = selectedRowKeys.map(async (studentId) => {
+        const rowData = editingValues[studentId.toString()];
 
         const studentRecord = students?.find((s) => s.id === studentId);
         const thesisProjectId =
@@ -183,6 +195,7 @@ export default function PostgraduateProject({
             id: thesisProjectId,
           },
         });
+        console.log("rowdata", rowData);
       });
 
       await Promise.all(updatePromises.filter((p) => p !== undefined)); // Chờ tất cả promise hoàn thành
@@ -1380,7 +1393,6 @@ export default function PostgraduateProject({
                       if (!hasClickedFetch) {
                         setHasClickedFetch(true);
                       }
-                      console.log("allStudentsInClasses", students);
                     }}
                   >
                     Xem kết quả
@@ -1626,7 +1638,7 @@ export default function PostgraduateProject({
                     "";
                   if (
                     editingRowKeys.includes(record?.id) &&
-                    isManage &&
+                    (isManage || role === "P7") &&
                     status === ThesisProjectStatus.PROPOSED
                   ) {
                     const currentValue =
@@ -1667,7 +1679,7 @@ export default function PostgraduateProject({
                     "";
                   if (
                     editingRowKeys.includes(record?.id) &&
-                    isManage &&
+                    (isManage || role === "P7") &&
                     status === ThesisProjectStatus.PROPOSED
                   ) {
                     const currentValue =
@@ -1985,9 +1997,7 @@ export default function PostgraduateProject({
                         ? editingValues[record?.id]?.defenseSession
                         : record?.thesisRegistrations?.[0]?.thesisProject
                             ?.defenseSession?.startTime || "";
-                    const dayjsValue = currentValue
-                      ? dayjs(currentValue).format("HH:mm")
-                      : "";
+                    const dayjsValue = currentValue;
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2249,6 +2259,7 @@ export default function PostgraduateProject({
               },
             ]}
             data={students || []}
+            rowSelection={rowSelection}
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
