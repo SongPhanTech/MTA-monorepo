@@ -13,7 +13,6 @@ export type SubjectResult = {
     type: $Enums.SubjectRequirementType
     subjectVersionType: $Enums.SubjectVersionType
     examType: $Enums.ExamType
-    useForFinalScore: boolean
     graduation: boolean
     numberOfTheory?: number
     numberOfPractical?: number
@@ -21,6 +20,8 @@ export type SubjectResult = {
     numberOfPractice?: number
     numberOfReview?: number
     numberOfExam?: number
+    onePoint?: boolean
+    useForFinalScore?: boolean
 }
 
 export interface ParseSubjectResult {
@@ -74,7 +75,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         knowledgeBlock: 'B', // Khối kiến thức
         name: 'C', // Tên học phần
         required: 'D', // Bắt buộc
-        conditional: 'E', // HP điều kiện (không tính điểm tích luỹ)
+        useForFinalScore: 'E', // HP điều kiện (không tính điểm tích luỹ)
         subjectVersionType: 'F', // Loại học phần
         code: 'G', // Mã học phần
         orgCode: 'H', // Khoa, Viện phụ trách
@@ -90,7 +91,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         exam: 'R', // KT, Thi
         semester: 'S', // Học kỳ dự kiến
         examType: 'T', // Hình thức thi
-        note: 'U', // Mối đầu điểm
+        onePoint: 'U', // Một đầu điểm
     } as const
 
     const startRow = 1 // Dòng bắt đầu đọc dữ liệu (bỏ qua header)
@@ -121,6 +122,24 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         if (!trimmed) return undefined
         const parsed = Number.parseFloat(trimmed)
         return !Number.isNaN(parsed) ? parsed : undefined
+    }
+
+    // Parse boolean từ 1/0
+    const parseBooleanField = (value: string | null | undefined): boolean | undefined => {
+        const trimmed = value?.trim()
+        if (!trimmed) return undefined
+        if (trimmed === '1') return true
+        if (trimmed === '0') return false
+        return undefined
+    }
+
+    // Parse boolean đảo ngược: 0 -> true, 1 -> false
+    const parseInverseBooleanField = (value: string | null | undefined): boolean | undefined => {
+        const trimmed = value?.trim()
+        if (!trimmed) return undefined
+        if (trimmed === '0') return true
+        if (trimmed === '1') return false
+        return undefined
     }
 
     for (const row of rows) {
@@ -241,6 +260,10 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         const numberOfPractice = parseIntField(row[cols.experiment])
         const numberOfReview = parseIntField(row[cols.review])
         const numberOfExam = parseIntField(row[cols.exam])
+        // Parse onePoint từ 1/0 (1 = true, 0 = false)
+        const onePoint = parseBooleanField(row[cols.onePoint])
+        // Parse useForFinalScore từ 0/1 đảo ngược (0 = true, 1 = false)
+        const useForFinalScore = parseInverseBooleanField(row[cols.useForFinalScore])
 
         // Lấy mã học phần và mã khoa/viện
         const code = row[cols.code]?.trim() || undefined
@@ -259,13 +282,14 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             type,
             subjectVersionType,
             examType,
-            useForFinalScore: type !== $Enums.SubjectRequirementType.Optional,
+            useForFinalScore,
             numberOfTheory,
             numberOfPractical,
             numberOfSelfStudy,
             numberOfPractice,
             numberOfReview,
             numberOfExam,
+            onePoint,
             graduation: false, // TODO: add this
         })
     }
