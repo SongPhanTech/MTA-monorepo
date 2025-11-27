@@ -29,7 +29,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Divider, Flex, message, Row, Tooltip } from 'antd'
-import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
+import { BookPlus, CopyPlus, Download, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -346,9 +346,6 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-    //     orderBy: { name: 'asc' },
-    // })
 
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         curriculumVersionId: string
@@ -451,8 +448,8 @@ export default function TrainingProgramSubjects() {
                                             href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"
                                         >
-                                            <FileDown />
-                                            Tải file mẫu excel
+                                            <Download />
+                                            Mẫu nhập CTĐT
                                         </Button>
                                         <Button
                                             onClick={() => setImportModalVisible(true)}

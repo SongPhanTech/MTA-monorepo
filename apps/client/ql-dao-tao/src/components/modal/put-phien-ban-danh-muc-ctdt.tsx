@@ -49,7 +49,7 @@ type CurriculumVersionInput = {
     versionId: string
 }
 
-type ModalPreviewUploadInput = {
+export type ModalPreviewUploadInput = {
     previewData: SubjectResult[]
     errorData: any[]
 }
@@ -58,7 +58,6 @@ const PutCurriculumVersion = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    // Import Excel states
     const [importFileName, setImportFileName] = useState<string>('')
     const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
     const [importFile, setImportFile] = useState<File | null>(null)
@@ -111,9 +110,6 @@ const PutCurriculumVersion = () => {
                 previewData: subjects,
                 errorData: errors,
             })
-            // const reader = new FileReader()
-            // reader.onload = async (e) => {}
-            // reader.readAsArrayBuffer(file)
         }
         fileInput.click()
     }
@@ -201,6 +197,24 @@ const PutCurriculumVersion = () => {
                         id: input?.versionId,
                     },
                 })
+
+                if (
+                    filteredSubjects.length > 0 &&
+                    input?.versionId &&
+                    output.trainingObjectTypeId &&
+                    importFile
+                ) {
+                    const res = await importPhienBanCTDTSubject({
+                        curriculumVersionId: input.versionId,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        file: importFile,
+                        createNewSubjects: false,
+                    })
+                    if (res.status !== 200) {
+                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
+                    }
+                }
+
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
