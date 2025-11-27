@@ -157,7 +157,7 @@ export const buildOrgFlat = (
             label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
             value: item.Id,
         })
-        result = result.concat(buildOrgFlat(list, item.Id))
+        result = [...result, ...buildOrgFlat(list, item.Id)]
     })
     return result
 }

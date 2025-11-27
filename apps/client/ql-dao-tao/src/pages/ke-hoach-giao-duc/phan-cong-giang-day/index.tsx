@@ -315,7 +315,6 @@ export default function PhanCongGiangDay({
         [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
     const orgId = window.contextData?.organizationId
-
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
@@ -328,15 +327,18 @@ export default function PhanCongGiangDay({
         }
     )
 
-    const orgIds = buildOrgFlat(
-        dmDonViIds.map((e) => ({
-            Id: e.Id,
-            sTen: null,
-            sParentId: null,
-            sMa: null,
-        })),
-        orgId || '0'
-    ).map((org) => org.value)
+    const orgIds = [
+        ...buildOrgFlat(
+            dmDonViIds.map((e) => ({
+                Id: e.Id,
+                sTen: null,
+                sParentId: null,
+                sMa: null,
+            })),
+            orgId || '0'
+        ).map((org) => org.value),
+        orgId,
+    ]
 
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
