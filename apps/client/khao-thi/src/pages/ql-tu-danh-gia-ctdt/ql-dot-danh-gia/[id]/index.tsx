@@ -72,6 +72,19 @@ export default function EvaluationPeriodPage() {
                         order: 'asc',
                     },
                 },
+                council:{
+                    include: {
+                        members: {
+                            include: {
+                                lecturer:{
+                                    include: {
+                                        userProfile: true
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
             },
         },
         { refetchOnWindowFocus: false, enabled: !!id }
