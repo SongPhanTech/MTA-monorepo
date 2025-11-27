@@ -418,7 +418,8 @@ export default function PhanCongGiangDay({
                         },
                     },
                 },
-                sParentId: !khoaBoMon ? undefined : orgId,
+                Id: !khoaBoMon ? undefined : orgId,
+                // sParentId: !khoaBoMon ? undefined : orgId,
             },
         },
         {
@@ -708,10 +709,6 @@ export default function PhanCongGiangDay({
         tag: 'ModalNhapTKB',
     })
 
-    const { onOpen } = useDisclosure<string>({
-        tag: 'PutOpenSubjectClassModal',
-    })
-
     const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
         tag: 'PutOneSubjectClassModal',
     })
@@ -746,10 +743,6 @@ export default function PhanCongGiangDay({
         }
         return []
     }, [dmDonViData])
-
-    const handleModal = () => {
-        onOpen()
-    }
 
     const resetForm = useCallback(() => {
         form.setFieldsValue({
