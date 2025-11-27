@@ -8,7 +8,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Panel } = Collapse
 
-// Map ExamType sang tiếng Việt
 const mapExamType = (examType: $Enums.ExamType): string => {
     const examTypeMap: Partial<Record<$Enums.ExamType, string>> = {
         OfflineWritten: 'Thi viết',
@@ -27,10 +26,9 @@ const mapSubjectRequirementType = (type: $Enums.SubjectRequirementType): string 
     return typeMap[type] || type
 }
 
-// Map SubjectVersionType sang tiếng Việt
 const mapSubjectVersionType = (type: $Enums.SubjectVersionType): string => {
     const typeMap: Partial<Record<$Enums.SubjectVersionType, string>> = {
-        Normal: 'Bình thường',
+        Normal: 'Thường',
         Internship: 'Thực tập',
         Research: 'Chuyên đề nghiên cứu',
         Project: 'Luận văn/đề án',
@@ -75,19 +73,16 @@ const ModalPreviewUpload = () => {
             const nameExists = existingSubjectNames.has(subject.name?.toLowerCase())
 
             if (codeExists) {
-                // Nếu mã học phần đã tồn tại, đánh dấu là duplicate (sẽ chỉ connect)
                 filtered.push({
                     ...subject,
                     status: 'duplicate',
                 })
             } else if (nameExists) {
-                // Nếu tên môn học đã có nhưng mã chưa có, tạo phiên bản mới
                 filtered.push({
                     ...subject,
                     status: 'new-version',
                 })
             } else {
-                // Hoàn toàn mới
                 filtered.push({
                     ...subject,
                     status: 'new',
@@ -100,6 +95,7 @@ const ModalPreviewUpload = () => {
             duplicateErrors: duplicates,
         }
     }, [rawPreviewData, existingSubjects, existingSubjectVersions])
+
     const allErrors = [...errorData, ...duplicateErrors]
 
     const handleConfirmImport = () => {
@@ -136,7 +132,6 @@ const ModalPreviewUpload = () => {
             ]}
         >
             <div className="h-[85vh] overflow-auto">
-                {/* Error list */}
                 {allErrors?.length > 0 && (
                     <Collapse defaultActiveKey={['1']} className="mb-4">
                         <Panel
@@ -182,7 +177,6 @@ const ModalPreviewUpload = () => {
                     </Collapse>
                 )}
 
-                {/* Preview table */}
                 <Table
                     columns={[
                         {
@@ -235,10 +229,15 @@ const ModalPreviewUpload = () => {
                         },
                         {
                             title: 'HP điều kiện',
-                            dataIndex: 'prerequisite',
-                            key: 'prerequisite',
+                            dataIndex: 'useForFinalScore',
+                            key: 'useForFinalScore',
                             align: 'center',
                             width: 170,
+                            render: (value: boolean | undefined) => {
+                                if (value === true) return '0'
+                                if (value === false) return '1'
+                                return ''
+                            },
                         },
                         {
                             title: 'Loại học phần',
@@ -340,10 +339,15 @@ const ModalPreviewUpload = () => {
                         },
                         {
                             title: 'Một đầu điểm',
-                            dataIndex: '',
+                            dataIndex: 'onePoint',
                             key: 'gradePoints',
                             align: 'center',
                             width: 170,
+                            render: (value: boolean | undefined) => {
+                                if (value === true) return '1'
+                                if (value === false) return '0'
+                                return ''
+                            },
                         },
                     ]}
                     data={filteredData}

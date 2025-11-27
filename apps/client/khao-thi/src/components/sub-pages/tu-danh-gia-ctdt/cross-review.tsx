@@ -14,9 +14,10 @@ import {
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Collapse, Form, message, Card, Tag } from 'antd'
+import { Button, Collapse, Form, message, Card, Tag, Badge } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import type { userRoleProps } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -27,9 +28,11 @@ export type PutRequirementCriterion = {
 export default function CrossReviewSubPage({
     data,
     onRefetch,
+    role,
 }: {
     data: DataTabCrossReviewType
     onRefetch: () => void
+    role: userRoleProps
 }) {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [commentForm] = Form.useForm<{ crossReview: string }>()
@@ -74,6 +77,7 @@ export default function CrossReviewSubPage({
     const handleSendCrossReview = async () => {
         try {
             const values = await commentForm.validateFields()
+
             if (!values.crossReview) {
                 message.error('Vui lòng nhập ý kiến phản biện')
                 return
@@ -270,6 +274,7 @@ export default function CrossReviewSubPage({
     const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
     const status = firstEvaluationCriterion?.status
     const statusConfig = getStatusConfig(status || $Enums.EvaluationStatus.LOCK)
+    const commentsCount = firstEvaluationCriterion?.evaluationCriterionComments?.length || 0
 
     return (
         <div className="overflow-x-hidden">
@@ -289,7 +294,19 @@ export default function CrossReviewSubPage({
                     )}
                     <Tag color={statusConfig.color}>{statusConfig.text}</Tag>
                 </div>
-                {isCouncilMember &&
+                {role === 'P13' ? (
+                    <Badge count={commentsCount} showZero offset={[-5, 5]} className="mr-2 mt-1">
+                        <Button
+                            type="primary"
+                            className="bg-yellow-400"
+                            size="small"
+                            onClick={() => setShowComments(!showComments)}
+                        >
+                            Xem đánh giá
+                        </Button>
+                    </Badge>
+                ) : (
+                    isCouncilMember &&
                     status !== $Enums.EvaluationStatus.APPROVED &&
                     status !== $Enums.EvaluationStatus.COMPLETED && (
                         <div className="flex gap-2">
@@ -305,7 +322,8 @@ export default function CrossReviewSubPage({
                                 Phê duyệt
                             </Button>
                         </div>
-                    )}
+                    )
+                )}
             </div>
 
             <Form form={form} layout="vertical" className="form-evidence">
@@ -414,7 +432,7 @@ export default function CrossReviewSubPage({
                 </Form.Item>
             </Form>
 
-            {showComments && isCouncilMember && (
+            {showComments && (
                 <Card>
                     {firstEvaluationCriterion?.evaluationCriterionComments &&
                         firstEvaluationCriterion.evaluationCriterionComments.length > 0 && (
@@ -424,34 +442,38 @@ export default function CrossReviewSubPage({
                                 />
                             </div>
                         )}
-                    <Form form={commentForm} layout="vertical">
-                        <Form.Item
-                            label="Gửi ý kiến phản biện"
-                            name="crossReview"
-                            rules={[{ required: true, message: 'Vui lòng nhập ý kiến phản biện' }]}
-                        >
-                            <RichTextEditor editable={isCouncilMember} />
-                        </Form.Item>
-                        <div className="flex justify-end gap-2">
-                            <Button
-                                onClick={() => {
-                                    commentForm.resetFields()
-                                    setShowComments(false)
-                                }}
+                    {role !== 'P13' && isCouncilMember && (
+                        <Form form={commentForm} layout="vertical">
+                            <Form.Item
+                                label="Gửi ý kiến phản biện"
+                                name="crossReview"
+                                rules={[
+                                    { required: true, message: 'Vui lòng nhập ý kiến phản biện' },
+                                ]}
                             >
-                                Hủy
-                            </Button>
-                            <Button
-                                type="primary"
-                                onClick={() => {
-                                    handleSendCrossReview()
-                                    setShowComments(false)
-                                }}
-                            >
-                                Gửi ý kiến
-                            </Button>
-                        </div>
-                    </Form>
+                                <RichTextEditor editable={isCouncilMember} />
+                            </Form.Item>
+                            <div className="flex justify-end gap-2">
+                                <Button
+                                    onClick={() => {
+                                        commentForm.resetFields()
+                                        setShowComments(false)
+                                    }}
+                                >
+                                    Hủy
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    onClick={() => {
+                                        handleSendCrossReview()
+                                        setShowComments(false)
+                                    }}
+                                >
+                                    Gửi ý kiến
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
                 </Card>
             )}
         </div>

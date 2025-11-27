@@ -46,6 +46,7 @@ const CriteriaAnalysisSubPage = ({
         id?: string
         analysisCriterionId?: string
         refetch?: () => void
+        count?: number
     }>({
         tag: 'PutTieuChiMinhChungModal',
     })
@@ -336,9 +337,7 @@ const CriteriaAnalysisSubPage = ({
                                                 status !==
                                                     $Enums.EvaluationCriterionStatus.COMPLETED &&
                                                 status !==
-                                                    $Enums.EvaluationCriterionStatus.SUBMITTED &&
-                                                status !==
-                                                    $Enums.EvaluationCriterionStatus.REVISION && (
+                                                    $Enums.EvaluationCriterionStatus.SUBMITTED && (
                                                     <Button
                                                         type="primary"
                                                         size="small"
@@ -347,6 +346,10 @@ const CriteriaAnalysisSubPage = ({
                                                                 analysisCriterionId:
                                                                     item.analysisCriterions?.id,
                                                                 refetch: refetch,
+                                                                count:
+                                                                    item.analysisCriterions
+                                                                        ?.requirementCriterions
+                                                                        ?.length || 0,
                                                             })
                                                         }
                                                     >
@@ -464,6 +467,9 @@ const CriteriaAnalysisSubPage = ({
                                                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                                                             'SUA'
                                                         ) &&
+                                                            status !==
+                                                                $Enums.EvaluationCriterionStatus
+                                                                    .SUBMITTED &&
                                                             status !==
                                                                 $Enums.EvaluationCriterionStatus
                                                                     .APPROVED &&

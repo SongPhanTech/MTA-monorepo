@@ -116,17 +116,26 @@ app.openapi(importCurriculumVersion, async (c) => {
             subjectId: subjectMap.get(name) as string,
             semester,
             type,
-            useForFinalScore,
+            useForFinalScore: useForFinalScore as boolean,
             graduation,
         })
     )
 
     await prisma.$transaction(
         async (tx) => {
+            await tx.trainingBlockSubject.deleteMany({
+                where: {
+                    trainingBlockOnCurriculumVersion: {
+                        curriculumVersionId,
+                    },
+                },
+            })
+
             await tx.trainingBlockOnCurriculumVersion.deleteMany({
                 where: { curriculumVersionId },
             })
-            const d = await tx.trainingBlockOnCurriculumVersion.createMany({
+
+            await tx.trainingBlockOnCurriculumVersion.createMany({
                 data: trainingBlockOnCurriculumVersion,
             })
 
