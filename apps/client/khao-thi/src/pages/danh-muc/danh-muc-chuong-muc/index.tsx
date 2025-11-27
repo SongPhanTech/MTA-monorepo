@@ -5,7 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import DefaultLayout from '@layouts/default-layout'
+import ExamLayout from '@layouts/default-layout/exam-layout'
 import {
     useCountSubjectVersion,
     useFindManySubjectVersion,
@@ -384,5 +384,5 @@ export default function KnowledgeBlock() {
 }
 
 KnowledgeBlock.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <ExamLayout>{page}</ExamLayout>
 }

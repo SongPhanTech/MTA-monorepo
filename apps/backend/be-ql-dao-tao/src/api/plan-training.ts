@@ -266,8 +266,12 @@ const importFileGiaoVienCoGioGiay = async (
                 const dsTietHoc = String(tietHoc)
                     .trim()
                     .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
-                const tuTietHoc = dsTietHoc ? Number(dsTietHoc[1]) : null
-                const denTietHoc = dsTietHoc ? Number(dsTietHoc[2]) : null
+                const tuTietHoc = dsTietHoc
+                    ? Number(dsTietHoc[1]) + (caHoc === 'Sáng' ? 0 : caHoc === 'Chiều' ? 6 : 12)
+                    : null
+                const denTietHoc = dsTietHoc
+                    ? Number(dsTietHoc[2]) + (caHoc === 'Sáng' ? 0 : caHoc === 'Chiều' ? 6 : 12)
+                    : null
                 const scheduleInfo = {
                     ngayHoc: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                     tietHoc: tietHoc

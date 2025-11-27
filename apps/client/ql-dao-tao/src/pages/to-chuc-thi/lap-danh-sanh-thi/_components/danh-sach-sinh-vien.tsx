@@ -668,17 +668,38 @@ export default function DanhSachSinhVien() {
                                 render: (_, record) => record?.studentSubjectScore?.examScore || '',
                             },
                             {
-                                title: 'Lý do cấm thi',
-                                render: (_, record) => {
-                                    return record.examBannedReason
-                                },
-                            },
-                            {
                                 title: 'Cấm thi',
                                 align: 'center',
                                 width: 80,
                                 render: (_, record) => {
-                                    return <Checkbox checked={record.examBanned} />
+                                    return (
+                                        <Checkbox
+                                            checked={record?.studentSubjectScore?.examBanned}
+                                        />
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Lý do cấm thi',
+                                render: (_, record) => {
+                                    return record?.studentSubjectScore?.examBannedReason
+                                },
+                            },
+                            {
+                                title: 'Hoãn thi',
+                                align: 'center',
+                                width: 80,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="w-full mb-0"
+                                            name={['list', record.id, 'examPostponed']}
+                                            label=""
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox />
+                                        </Form.Item>
+                                    )
                                 },
                             },
                             {
@@ -703,23 +724,6 @@ export default function DanhSachSinhVien() {
                                                     disabled={!examPostponed}
                                                 />
                                             )}
-                                        </Form.Item>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Hoãn thi',
-                                align: 'center',
-                                width: 80,
-                                render: (_, record) => {
-                                    return (
-                                        <Form.Item
-                                            className="w-full mb-0"
-                                            name={['list', record.id, 'examPostponed']}
-                                            label=""
-                                            valuePropName="checked"
-                                        >
-                                            <Checkbox />
                                         </Form.Item>
                                     )
                                 },

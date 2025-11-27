@@ -10,6 +10,8 @@ import CommentList from '@components/commons/comment-list'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
+    opening: string
+    conclusion: string
 }
 
 export default function CriteriaEvaluationListSubPage({
@@ -23,6 +25,8 @@ export default function CriteriaEvaluationListSubPage({
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
+                opening: data?.opening || '',
+                conclusion: data?.conclusion || '',
                 criteria: data?.criteria?.map((item) => ({
                     ...item,
                     evaluationCriterion: {
@@ -59,77 +63,82 @@ export default function CriteriaEvaluationListSubPage({
     return (
         <div className="overflow-x-hidden">
             <Form form={form} layout="vertical" className="form-evidence">
+                {/* Phần thông tin người được giao */}
+                {Object.entries(groupedCriteria || {}).map(([lecturerId, group]: [string, any]) => {
+                    const statusConfig = getStatusConfig(
+                        group.status || $Enums.EvaluationStatus.LOCK
+                    )
+                    const deadline = group.deadline
+                    const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
+
+                    const commentsCount =
+                        group.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments
+                            ?.length || 0
+
+                    return (
+                        <div key={lecturerId}>
+                            <div className="flex items-center gap-2 mb-2 flex-wrap justify-between">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-sm text-gray-600">
+                                        Người viết phiếu:{' '}
+                                        {group.lecturer?.userProfile?.fullname || 'Chưa phân công'}
+                                    </span>
+                                    {deadline && deadlineStatus && (
+                                        <Tag color={deadlineStatus.color}>
+                                            Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
+                                            {deadlineStatus.text && ` (${deadlineStatus.text})`}
+                                        </Tag>
+                                    )}
+                                    <Tag color={statusConfig.color}>{statusConfig.text}</Tag>
+                                </div>
+                                <Badge
+                                    count={commentsCount}
+                                    showZero
+                                    offset={[-5, 5]}
+                                    className="mr-2 mt-1"
+                                >
+                                    <Button
+                                        type="primary"
+                                        className="bg-yellow-400"
+                                        size="small"
+                                        onClick={() =>
+                                            setShowComments((prev) => ({
+                                                ...prev,
+                                                [lecturerId]: !prev[lecturerId],
+                                            }))
+                                        }
+                                    >
+                                        Xem đánh giá
+                                    </Button>
+                                </Badge>
+                            </div>
+
+                            {showComments[lecturerId] && (
+                                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                                    <CommentList
+                                        comments={
+                                            group.criteria?.[0]?.evaluationCriterion
+                                                ?.evaluationCriterionComments || []
+                                        }
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    )
+                })}
+
+                {/* Phần mở đầu */}
+                <Form.Item label="Mở đầu" name="opening" required>
+                    <RichTextEditor id="opening" editable={false} />
+                </Form.Item>
+
                 <Form.List name="criteria">
-                    {(fields) => (
+                    {() => (
                         <>
                             {Object.entries(groupedCriteria || {}).map(
                                 ([lecturerId, group]: [string, any]) => {
-                                    const statusConfig = getStatusConfig(
-                                        group.status || $Enums.EvaluationStatus.LOCK
-                                    )
-                                    const deadline = group.deadline
-                                    const deadlineStatus = deadline
-                                        ? getDeadlineStatus(deadline)
-                                        : null
-
-                                    const commentsCount =
-                                        group.criteria?.[0]?.evaluationCriterion
-                                            ?.evaluationCriterionComments?.length || 0
-
                                     return (
                                         <div key={lecturerId} className="mb-8">
-                                            <div className="flex items-center gap-2 mb-3 flex-wrap justify-between">
-                                                <div className="flex items-center gap-2 flex-wrap">
-                                                    <span className="text-sm text-gray-600">
-                                                        Người được giao:{' '}
-                                                        {group.lecturer?.userProfile?.fullname ||
-                                                            'Chưa phân công'}
-                                                    </span>
-                                                    {deadline && deadlineStatus && (
-                                                        <Tag color={deadlineStatus.color}>
-                                                            Hạn:{' '}
-                                                            {dayjs(deadline).format('DD/MM/YYYY')}
-                                                            {deadlineStatus.text &&
-                                                                ` (${deadlineStatus.text})`}
-                                                        </Tag>
-                                                    )}
-                                                    <Tag color={statusConfig.color}>
-                                                        {statusConfig.text}
-                                                    </Tag>
-                                                </div>
-                                                <Badge
-                                                    count={commentsCount}
-                                                    showZero
-                                                    offset={[-5, 5]}
-                                                    className="mr-2 mt-1"
-                                                >
-                                                    <Button
-                                                        type="primary"
-                                                        className="bg-yellow-400"
-                                                        size="small"
-                                                        onClick={() =>
-                                                            setShowComments((prev) => ({
-                                                                ...prev,
-                                                                [lecturerId]: !prev[lecturerId],
-                                                            }))
-                                                        }
-                                                    >
-                                                        Xem đánh giá
-                                                    </Button>
-                                                </Badge>
-                                            </div>
-
-                                            {showComments[lecturerId] && (
-                                                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                                                    <CommentList
-                                                        comments={
-                                                            group.criteria?.[0]?.evaluationCriterion
-                                                                ?.evaluationCriterionComments || []
-                                                        }
-                                                    />
-                                                </div>
-                                            )}
-
                                             {group.criteria.map((item: any) => {
                                                 const originalIndex = item.originalIndex
                                                 return (
@@ -222,6 +231,11 @@ export default function CriteriaEvaluationListSubPage({
                         </>
                     )}
                 </Form.List>
+
+                {/* Phần kết luận */}
+                <Form.Item label="Kết luận" name="conclusion" required>
+                    <RichTextEditor id="conclusion" editable={false} />
+                </Form.Item>
             </Form>
         </div>
     )

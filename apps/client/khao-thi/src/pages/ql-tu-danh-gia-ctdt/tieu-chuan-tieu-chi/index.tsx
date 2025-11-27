@@ -16,8 +16,8 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
-import { BookPlus, Search } from 'lucide-react'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -166,55 +166,23 @@ export default function StandardCatalog() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={10}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    searchText: e.target.value,
-                                                })
-                                            }
-                                            className="py-0 h-8"
-                                            placeholder="Tìm kiếm tiêu chuẩn đánh giá CTĐT"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
-                        </Col>
-                        {/* Thêm mới */}
-                        <Col span={12}>
-                            <Flex justify="end">
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => {
-                                            onOpenPutStandardCatalog({ id: '', count: count || 0 })
-                                        }}
-                                    >
-                                        <BookPlus />
-                                        Thêm mới
-                                    </Button>
-                                )}
-                            </Flex>
-                        </Col>
-                    </Row>
+                    <Flex justify="end">
+                        {can(
+                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                            'THEM'
+                        ) && (
+                            <Button
+                                type="primary"
+                                size="small"
+                                onClick={() => {
+                                    onOpenPutStandardCatalog({ id: '', count: count || 0 })
+                                }}
+                            >
+                                <BookPlus />
+                                Thêm mới
+                            </Button>
+                        )}
+                    </Flex>
                 </Col>
 
                 <Col span={24}>
@@ -223,6 +191,8 @@ export default function StandardCatalog() {
                         headerTitleKey={({ order, name }) =>
                             `${[order, name].filter(Boolean).join(' - ')}`
                         }
+                        className="w-full mt-2"
+                        scroll={{ y: 'calc(100vh - 220px)', x: 'max-content' }}
                         childrenFieldName="criteria"
                         defaultExpandAll
                         filters={filters}
@@ -309,26 +279,10 @@ export default function StandardCatalog() {
                                 type: 'input',
                                 width: 400,
                             },
-                            // {
-                            //     title: 'Thang điểm',
-                            //     dataIndex: 'scoreScalesId',
-                            //     align: 'center',
-                            //     type: 'select',
-                            //     width: 200,
-                            //     options: scoreScales?.map(({ id, name, passFrom }) => ({
-                            //         value: id,
-                            //         label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
-                            //     })),
-                            //     render: (_, record) =>
-                            //         record?.scoreScale?.passFrom
-                            //             ? `${record?.scoreScale?.name} (${record?.scoreScale?.passFrom} điểm để qua)`
-                            //             : record?.scoreScale?.name,
-                            // },
                             {
                                 title: 'Thao tác',
                                 align: 'center',
                                 width: 80,
-                                fixed: 'right',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                                     'SUA',

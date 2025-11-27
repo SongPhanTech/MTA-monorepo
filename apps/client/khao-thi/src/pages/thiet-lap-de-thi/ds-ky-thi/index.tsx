@@ -1,4 +1,4 @@
-import DefaultLayout from '@layouts/default-layout'
+import ExamLayout from '@layouts/default-layout/exam-layout'
 import { Segmented, Tabs } from 'antd'
 import { useState } from 'react'
 import Exam from './components/ky-thi'
@@ -45,5 +45,5 @@ function Page() {
 export default Page
 
 Page.getLayout = function getLayout(page: React.ReactNode) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <ExamLayout>{page}</ExamLayout>
 }

@@ -28,7 +28,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -63,7 +63,16 @@ export default function TrainingProgramSubjects() {
                     include: {
                         subjects: {
                             include: {
-                                subject: true,
+                                subject: {
+                                    include: {
+                                        planTrainingSubject: {
+                                            take: 1,
+                                        },
+                                        subjectClass: {
+                                            take: 1,
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -558,7 +567,7 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 render: (_, record) => (
-                                    <p className="text-center">
+                                    <p className="text-center font-bold">
                                         {record.subjects.reduce(
                                             (sum, s) => sum + s.subject.credit,
                                             0
@@ -574,59 +583,80 @@ export default function TrainingProgramSubjects() {
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.period,
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfReview ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfReview ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfExam ?? 0),
-                                        0
-                                    ),
-                                colSpan: 1,
-                            },
-                            {
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfExam ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
@@ -908,18 +938,18 @@ export default function TrainingProgramSubjects() {
                             //         return <Checkbox checked={!!value} />
                             //     },
                             // },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 100,
-                                render: (record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Ngừng đào tạo</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang hoạt động</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     render: (record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Ngừng đào tạo</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 80,

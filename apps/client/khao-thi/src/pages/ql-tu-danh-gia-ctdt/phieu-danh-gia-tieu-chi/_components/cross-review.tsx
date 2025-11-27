@@ -1,4 +1,5 @@
 import CrossReviewSubPage from '@components/sub-pages/tu-danh-gia-ctdt/cross-review'
+import type { userRoleProps } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -27,9 +28,9 @@ export type DataTabCrossReviewType = StandardPeriod & {
     })[]
 }
 
-export default function CrossReview() {
+export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: userRoleProps }) {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
+    const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(
@@ -134,12 +135,17 @@ export default function CrossReview() {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
                     children: (
-                        <CrossReviewSubPage key={standard.id} data={standard} onRefetch={refetch} />
+                        <CrossReviewSubPage
+                            key={standard.id}
+                            data={standard}
+                            onRefetch={refetch}
+                            role={userRole}
+                        />
                     ),
                 }
             })
         }
-    }, [data, refetch])
+    }, [data, refetch, userRole])
 
     return (
         <div className="h-full">

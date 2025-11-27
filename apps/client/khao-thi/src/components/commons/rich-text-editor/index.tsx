@@ -162,7 +162,7 @@ export function RichTextEditor({
         editorProps: {
             attributes: {
                 class: cn(
-                    'min-h-[150px] cursor-text rounded-b-md border p-2 ring-offset-background focus-within:outline-none focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0.2 ',
+                    'min-h-[150px] cursor-text rounded-b-md p-2 ring-offset-background focus-within:outline-none focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0.2 ',
                     className
                 ),
             },
@@ -329,7 +329,7 @@ export function RichTextEditor({
     }, [value, editor])
 
     return (
-        <div>
+        <div className="border rounded-md">
             <TextEditorMenuBar editor={editor} id={id} editable={editable} />
             <EditorContent editor={editor} {...editorProps} />
         </div>

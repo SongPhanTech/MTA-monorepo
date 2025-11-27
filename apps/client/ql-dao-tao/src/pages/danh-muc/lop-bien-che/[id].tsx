@@ -1855,7 +1855,9 @@ export default function StudentFixedClassPage() {
                                                 key: 'CTTK-ngan-han',
                                                 onClick: async () => {
                                                     const res = await loadFile(
-                                                        getMinioUrl('/lms/templates/chuong-trinh-dao-tao/CTTK-ngan-han.docx')
+                                                        getMinioUrl(
+                                                            '/lms/templates/chuong-trinh-dao-tao/CTTK-ngan-han.docx'
+                                                        )
                                                     )
                                                     const doc = new Docxtemplater(res, {
                                                         linebreaks: true,
@@ -1951,7 +1953,9 @@ export default function StudentFixedClassPage() {
                                                 key: 'KHTK-ding-huong-nghien-cuu',
                                                 onClick: async () => {
                                                     const res = await loadFile(
-                                                       getMinioUrl('/lms/templates/chuong-trinh-dao-tao/KHTK-ding-huong-nghien-cuu.docx')
+                                                        getMinioUrl(
+                                                            '/lms/templates/chuong-trinh-dao-tao/KHTK-ding-huong-nghien-cuu.docx'
+                                                        )
                                                     )
                                                     const doc = new Docxtemplater(res, {
                                                         linebreaks: true,

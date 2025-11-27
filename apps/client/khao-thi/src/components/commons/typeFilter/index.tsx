@@ -24,6 +24,7 @@ export type FilterProps = {
     name?: string | ''
     code?: string | ''
     sort?: string
+    evidenceName?: string
     idCardNumber?: string
     phoneNumber?: string
     numberCreditsMajor?: 'asc' | 'desc'
@@ -143,6 +144,7 @@ export type FilterProps = {
     fixedClassIds?: string[]
     isStudent?: GetSurveyObjectsIsStudent
     subjectClassName?: string
+    semesterIds?: string[]
 }
 
 export type ColumnTypeProps = ColumnsType & {

@@ -107,6 +107,7 @@ export default function EvaluationPeriodTabPage() {
                     activeKey={activeKey}
                     onChange={(key) => setActiveKey(key)}
                     items={tabItems}
+                    tabBarGutter={10}
                 />
             </Col>
         </Row>

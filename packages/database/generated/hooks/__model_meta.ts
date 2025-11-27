@@ -15594,6 +15594,10 @@ const metadata: ModelMeta = {
                     name: "language",
                     type: "String",
                     isOptional: true,
+                }, type: {
+                    name: "type",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",

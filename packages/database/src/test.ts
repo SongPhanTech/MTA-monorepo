@@ -1,14 +1,14 @@
 import { PrismaClient } from '../generated/prisma-client'
-import dayjs from 'dayjs'
 
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
+const prisma = new PrismaClient()
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
+const subjects = await prisma.subject.findMany({
+    where: { subjectVersion: { some: { name: { contains: 'tra', mode: 'insensitive' } } } },
+})
 
-dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
-
-const date = dayjs('2025-01-01T17:00:00Z')
-
-console.log(date.format('DD/MM/YYYY'))
+console.log(subjects.map((subject) => subject.managementOrganization))
+console.log(
+    JSON.stringify({
+        where: { subjectVersion: { some: {} } },
+    })
+)

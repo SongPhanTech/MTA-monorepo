@@ -160,9 +160,8 @@ const PutTieuChuanTieuChi = () => {
             const filtered = filterTree(treeData, selectedKeys)
             setCatalogSelected(filtered as TreeData)
         } else if (!id) {
-            setCatalogSelected(treeData)
-            const allKeys = getAllKeys(treeData)
-            setCheckedKeys(allKeys)
+            setCatalogSelected([])
+            setCheckedKeys([])
         }
     }, [treeData, id, existingStandards, dataCatalog])
 

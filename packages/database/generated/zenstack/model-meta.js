@@ -16411,6 +16411,11 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Text", "args": [] }],
+                }, type: {
+                    name: "type",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
