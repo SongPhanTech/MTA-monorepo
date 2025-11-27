@@ -1,4 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
+import { BookCheckIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -26,8 +27,9 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { useRouter } from 'next/router'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -36,6 +38,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
+    const router = useRouter()
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -610,6 +613,18 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip> */}
+                                        <BookCheckIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                router.push(
+                                                    ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
+                                                        '[id]',
+                                                        record.id
+                                                    )
+                                                )
+                                            }}
+                                            size={16}
+                                        />
                                         {can(
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
                                             'SUA'

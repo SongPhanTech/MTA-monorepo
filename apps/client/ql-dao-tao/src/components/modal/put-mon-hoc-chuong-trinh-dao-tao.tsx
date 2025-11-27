@@ -12,6 +12,7 @@ import {
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
     useFindManyTrainingBlockOnCurriculumVersion,
+    useFindUniqueTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
@@ -21,10 +22,10 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { buildOrgTree } from '@lib/utils'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
@@ -66,6 +67,16 @@ const PutTrainingBlockSubject = () => {
         { enabled: !!input?.curriculumVersionId }
     )
 
+    const { data: trainingBlockOnCurriculum } = useFindUniqueTrainingBlockOnCurriculumVersion(
+        {
+            where: { id: input?.trainingBlockOnCurriculumVersionId },
+            include: { trainingBlock: true },
+        },
+        {
+            enabled: !!input?.trainingBlockOnCurriculumVersionId,
+        }
+    )
+
     const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion({
         where: {
             ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
@@ -104,7 +115,7 @@ const PutTrainingBlockSubject = () => {
             showSpinner()
             const payload = {
                 subjectId: output.subjectId,
-                trainingBlockOnCurriculumVersionId: input.trainingBlockOnCurriculumVersionId,
+                trainingBlockOnCurriculumVersionId: output.trainingBlockOnCurriculumVersionId,
                 semester: output?.semester,
                 type: output?.type,
                 useForFinalScore: output?.useForFinalScore,
@@ -184,6 +195,9 @@ const PutTrainingBlockSubject = () => {
         >
             {!input?.trainingBlockSubjectId && (
                 <Col span={24}>
+                    <p className="mb-4 font-medium">
+                        KKT: {trainingBlockOnCurriculum?.trainingBlock.name}
+                    </p>
                     <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                         <TreeSelect
                             placeholder="Chọn đơn vị quản lý"
