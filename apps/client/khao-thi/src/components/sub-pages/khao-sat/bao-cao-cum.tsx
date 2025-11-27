@@ -3,10 +3,9 @@ import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useMemo} from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
-import TreeSelect from '@components/commons/tree-select'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { buildOrgTree, cn } from '@lib/utils'
 import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
@@ -16,20 +15,21 @@ function ClusterSurveyReport({
     surveyName,
     surveyId,
     setSurvey,
+    organizationSelected
 }: {
     selectedId: string
     surveyName: string
     surveyId: string
     setSurvey: (value: LectuerType) => void
+    organizationSelected: string
 }) {
     const router = useRouter()
-    const [organization, setOrganization] = useState<string[]>([])
 
     const { data: dataLevel } = useGetLectureSurveyStatistics(
         selectedId as string,
-        organization?.length > 0
+        organizationSelected
             ? {
-                  organizations: organization.join(','),
+                  organizations: organizationSelected,
               }
             : {}
     )
@@ -296,7 +296,7 @@ function ClusterSurveyReport({
                             <div className="px-4 py-2 flex justify-between">
                                 <Title level={4}>Thống kê theo giảng viên</Title>
                                 <Flex justify="end">
-                                    <TreeSelect
+                                    {/* <TreeSelect
                                         multiple
                                         maxTagCount="responsive"
                                         allowClear
@@ -309,7 +309,7 @@ function ClusterSurveyReport({
                                         onChange={(value) => {
                                             setOrganization(value)
                                         }}
-                                    />
+                                    /> */}
                                     <Button
                                         size="small"
                                         type="primary"
