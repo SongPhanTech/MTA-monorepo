@@ -2,54 +2,53 @@ import { PrismaClient } from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-
 await prisma.subjectVersionHistory.deleteMany({
-  where: {
-    subjectVersion: {
-      deletedAt: {
-        not: null,
-      },
+    where: {
+        subjectVersion: {
+            deletedAt: {
+                not: null,
+            },
+        },
     },
-  }
 })
 
 await prisma.planTrainingSubject.deleteMany({
-  where: {
-    subjectVersion: {
-      deletedAt: {
-        not: null,
-      },
+    where: {
+        subjectVersion: {
+            deletedAt: {
+                not: null,
+            },
+        },
     },
-  }
 })
 
 await prisma.subjectClass.deleteMany({
-  where: {
-    subject: {
-      deletedAt: {
-        not: null,
-      },
+    where: {
+        subject: {
+            deletedAt: {
+                not: null,
+            },
+        },
     },
-  }
 })
 
 await prisma.subjectVersion.deleteMany({
     where: {
-      deletedAt: {
-        not: null,
-      },
-      trainingBlocks: {
-          none: {},
-      },
-      questionBanks: {
-          none: {},
-      },
-      subjectClass: {
-          none: {},
-      },
-      knowledgeBlocks: {
-          none: {},
-      },
+        deletedAt: {
+            not: null,
+        },
+        trainingBlocks: {
+            none: {},
+        },
+        questionBanks: {
+            none: {},
+        },
+        subjectClass: {
+            none: {},
+        },
+        knowledgeBlocks: {
+            none: {},
+        },
     },
 })
 
@@ -64,23 +63,22 @@ await prisma.subject.deleteMany({
     },
 })
 
-
 await prisma.curriculumVersion.deleteMany({
     where: {
         OR: [
-          {
-            deletedAt: {
-                not: null,
+            {
+                deletedAt: {
+                    not: null,
+                },
             },
-          },
-          {
-            curriculum: {
-              deletedAt: {
-                not: null,
-              },
-            }
-          }
-        ]
+            {
+                curriculum: {
+                    deletedAt: {
+                        not: null,
+                    },
+                },
+            },
+        ],
     },
 })
 

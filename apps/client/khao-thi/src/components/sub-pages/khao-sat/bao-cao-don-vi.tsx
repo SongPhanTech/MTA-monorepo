@@ -1,4 +1,4 @@
-import { useGetLectureSurveyStatistics } from '@workspace/libs/api/exam'
+import { useGetOrganizationSurveyStatistics } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
@@ -9,23 +9,22 @@ import Table from '@components/commons/table'
 import TreeSelect from '@components/commons/tree-select'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { buildOrgTree, cn } from '@lib/utils'
-import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 const { Title } = Typography
 function OrganizationSurveyReport({
     selectedId,
     surveyName,
-    surveyId,
-    setSurvey,
+    organizationSelected,
+    setOrganizationSelected,
 }: {
     selectedId: string
     surveyName: string
-    surveyId: string
-    setSurvey: (value: LectuerType) => void
+    organizationSelected: string
+    setOrganizationSelected: (value: string) => void
 }) {
     const router = useRouter()
     const [organization, setOrganization] = useState<string[]>([])
 
-    const { data: dataLevel } = useGetLectureSurveyStatistics(
+    const { data: dataLevel } = useGetOrganizationSurveyStatistics(
         selectedId as string,
         organization?.length > 0
             ? {
@@ -78,7 +77,7 @@ function OrganizationSurveyReport({
             yAxis: {
                 type: 'category',
                 data: dataLevel?.data?.data.map(
-                    (i) => `${i?.lecture?.code || ''} - ${i?.lecture?.userProfile?.fullname || ''}`
+                    (i) => `${i?.organization?.sMa || ''} - ${i?.organization?.sTen || ''}`
                 ),
             },
             series: choices,
@@ -91,7 +90,7 @@ function OrganizationSurveyReport({
                 return
             }
             const workbook = new ExcelJS.Workbook()
-            const worksheet = workbook.addWorksheet('Báo cáo khảo sát theo giảng viên')
+            const worksheet = workbook.addWorksheet('Báo cáo khảo sát theo đơn vị')
 
             // Thiết lập style
             const golbalFontStyle = {
@@ -171,7 +170,7 @@ function OrganizationSurveyReport({
 
             // Thêm tiêu đề bảng
             const headerRow = worksheet.getRow(7)
-            headerRow.values = ['STT', 'Đối tượng', ...choices.map((i: any) => i?.description)]
+            headerRow.values = ['STT', 'Đợn vị quản lý', ...choices.map((i: any) => i?.description)]
             headerRow.eachCell((cell: any) => {
                 cell.style = tableHeaderStyle
             })
@@ -192,7 +191,7 @@ function OrganizationSurveyReport({
                     const headerRowValue: any = worksheet.getRow(8 + index)
                     headerRowValue.values = [
                         index + 1,
-                        `${i?.lecture?.code || ''} - ${i?.lecture?.userProfile?.fullname || ''}`,
+                        `${i?.organization?.sMa || ''} - ${i?.organization?.sTen || ''}`,
                         // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                         ...i?.average.map((t: any) => t?.totalCount),
                     ]
@@ -229,9 +228,9 @@ function OrganizationSurveyReport({
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            setSurvey(record as LectuerType)
+                            setOrganizationSelected(record?.organization?.Id as string)
                         },
-                        className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
+                        className: cn(organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''),
                     }
                 }}
                 columns={
@@ -245,10 +244,10 @@ function OrganizationSurveyReport({
                                   render: (_, __, index) => index + 1,
                               },
                               {
-                                  title: 'Đối tượng',
+                                  title: 'Đơn vị quản lý',
                                   align: 'center',
                                   render: (_, record) => {
-                                      return `${record?.lecture?.code || ''} - ${record?.lecture?.userProfile?.fullname || ''}`
+                                      return `${record?.organization?.sMa || ''} - ${record?.organization?.sTen || ''}`
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -294,7 +293,7 @@ function OrganizationSurveyReport({
                     {dataLevel?.status === 200 && (
                         <div className="bg-white h-full flex flex-col">
                             <div className="px-4 py-2 flex justify-between">
-                                <Title level={4}>Thống kê theo giảng viên</Title>
+                                <Title level={4}>Thống kê theo đơn vị</Title>
                                 <Flex justify="end">
                                     <TreeSelect
                                         multiple
@@ -339,7 +338,6 @@ function OrganizationSurveyReport({
                                                 dataLevel?.data?.choices
                                             )}
                                     </div>
-                                    // <BarChart className="h-full" dataMap={dataBarchart} />
                                 ) : (
                                     <Empty />
                                 )}

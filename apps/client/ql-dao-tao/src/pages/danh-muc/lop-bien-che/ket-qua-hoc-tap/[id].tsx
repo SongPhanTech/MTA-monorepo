@@ -19,7 +19,8 @@ import {
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
-import { ROUTER_PATH } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -51,6 +52,7 @@ export interface IHocKi {
 }
 export default function StudentScoreClassPage() {
     const router = useRouter()
+    const { can, canSome } = useAbility()
     const studentId = router.query.id as string
     const [semesterId, setSemesterId] = useState<string>()
     const [filters, setFilters] = useState<FilterProps>({
@@ -584,12 +586,17 @@ export default function StudentScoreClassPage() {
                         {/* Hàng chứa các button */}
                         <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenModalNhapDiem(studentId)}
-                                >
-                                    Nhập điểm thủ công
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenModalNhapDiem(studentId)}
+                                    >
+                                        Nhập điểm thủ công
+                                    </Button>
+                                )}
                                 <Button
                                     type="primary"
                                     onClick={() =>
@@ -631,9 +638,31 @@ export default function StudentScoreClassPage() {
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
-                        headerTitleKey={({ code, name, schoolYear }) =>
-                            `${[code, name, schoolYear?.name].filter(Boolean).join(' - ')}`
-                        }
+                        headerTitleKey={({ code, name, schoolYear }) => (
+                            <p className="font-bold text-base">
+                                {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                            </p>
+                        )}
+                        headerColumn={[
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, { code, name, schoolYear }) => (
+                                    <p className="font-bold text-base">
+                                        {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                                    </p>
+                                ),
+                                colSpan: 15,
+                            },
+                            // {
+                            //     render: (_, { code, name, schoolYear }) => (
+                            //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
+                            //         <Button>Chi tiết</Button>
+                            //     ),
+                            //     colSpan: 1,
+                            // },
+                        ]}
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)

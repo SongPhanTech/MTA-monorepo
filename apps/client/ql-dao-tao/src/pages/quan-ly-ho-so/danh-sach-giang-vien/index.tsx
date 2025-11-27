@@ -6,7 +6,7 @@ import ImportLecturerModal from '@components/modal/import-excel-lecturer'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import type { UserProfile } from '@workspace/db/client'
 import {
     useCountLecturer,
@@ -48,6 +48,36 @@ export default function UserProfilePageLecture() {
         lecturerType: undefined,
         idCardNumber: undefined,
     })
+
+    const canXemTatCa = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+        'XEM_TAT_CA'
+    )
+    const orgId = window.contextData?.organizationId
+    const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
+        {
+            select: { Id: true },
+            where: {
+                bActive: true,
+            },
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
+
+    const orgIds = [
+        ...buildOrgFlat(
+            dmDonViIds.map((e) => ({
+                Id: e.Id,
+                sTen: null,
+                sParentId: null,
+                sMa: null,
+            })),
+            orgId || '0'
+        ).map((org) => org.value),
+        orgId,
+    ]
 
     const where = useMemo(
         () => ({
@@ -165,6 +195,14 @@ export default function UserProfilePageLecture() {
                       },
                   }
                 : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(!canXemTatCa ? { organizationId: { in: orgIds } } : {}),
         }),
         [filters]
     )
@@ -203,7 +241,7 @@ export default function UserProfilePageLecture() {
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    const treeData = buildOrgTree(manageOrgData)
+    const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId || '0')
     const { onOpen: onOpenModalAdd } = useDisclosure({
         tag: 'PutUserProfileLectureModal',
     })

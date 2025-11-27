@@ -147,6 +147,21 @@ export function buildOrgTree(
         }))
 }
 
+export const buildOrgFlat = (
+    list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
+    parentId = '0'
+): OrgTreeItem[] => {
+    let result: OrgTreeItem[] = []
+    list.filter((item) => (item.sParentId || '0') === parentId).forEach((item) => {
+        result.push({
+            label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
+            value: item.Id,
+        })
+        result = [...result, ...buildOrgFlat(list, item.Id)]
+    })
+    return result
+}
+
 export const validateExamScore = (score?: number | null) => {
     if (score === null || score === undefined) {
         return Promise.resolve()

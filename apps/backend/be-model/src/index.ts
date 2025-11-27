@@ -13,12 +13,12 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import { proxy } from 'hono/proxy'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import AuthApp from './api/auth'
-import MinIOApp from './api/minio'
 import ApimLogsApp from './api/apim-logs'
-import WSO2AmApp from './api/wso2am'
+import AuthApp from './api/auth'
 import ExcelImportExportApp from './api/excel-import-export'
+import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
+import WSO2AmApp from './api/wso2am'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
 
@@ -244,11 +244,12 @@ app.onError((err, c) => {
 
 showRoutes(app, { verbose: true })
 
-export default {
+Bun.serve({
+    idleTimeout: 60,
     fetch: app.fetch,
     hostname: '0.0.0.0',
     port: process.env.PORT || 3000,
-}
+})
 
 process.on('SIGINT', () => {
     process.exit()

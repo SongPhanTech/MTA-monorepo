@@ -1,105 +1,48 @@
+import { buildOrgTree } from '@lib/utils'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
-import { useMemo, useState } from 'react'
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Define props for our custom component
-interface CustomTreeSelectProps {
-    placeholder?: string
-    style?: React.CSSProperties
-    dropdownStyle?: React.CSSProperties
-    defaultValue: string | undefined
-    onChange?: (value: string) => void
-    onPopupScroll?: TreeSelectProps['onPopupScroll']
-}
+type TreeSelectDepartmentProps = {
+    rootId?: string
+} & TreeSelectProps
 
-const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
-    placeholder = 'Chọn bộ môn',
+const TreeSelectDepartment: React.FC<TreeSelectDepartmentProps> = ({
+    placeholder = 'Chọn đơn vị',
     style = { width: '100%' },
-    dropdownStyle = { maxHeight: 400, overflow: 'auto' },
-    defaultValue,
-    onChange,
-    onPopupScroll,
+    dropdownStyle = { maxHeight: 400, overflow: 'auto', width: 600 },
+    rootId,
+    ...rest
 }) => {
-    const [value, setValue] = useState<string | undefined>(defaultValue)
-
-    // Lấy thông tin SchoolYear
-    const { data: organizationDataKhoa = [] } = useFindManyDM_DonVi({
-        include: {
-            // children: true,
-        },
-        // TODO: fetch Khoa only
+    const { data: organizationData = [] } = useFindManyDM_DonVi({
         where: {
-            // type: {
-            //     code: 'KHOA',
-            // },
+            bActive: true,
         },
-    })
-    const { data: organizationDataBoMon = [] } = useFindManyDM_DonVi({
-        // include: {
-        //     type: true,
-        // },
-        // where: {
-        //     type: {
-        //         code: 'BOMON',
-        //     },
-        // },
     })
     // Tạo treeData từ schoolYears và semesters
-    const treeData: TreeNodeType[] = useMemo(() => {
-        const khoaList = organizationDataKhoa || []
-        const boMonList = organizationDataBoMon || []
-        return khoaList.map((khoa) => ({
-            value: `khoa-${khoa.Id}`,
-            title: khoa.sTen,
-            selectable: false, // Make the node unselectable without changing its color
-            children: boMonList
-                .filter((boMon) => boMon.sParentId === khoa.Id)
-                .map((boMon) => ({
-                    value: boMon.Id,
-                    title: boMon.sTen,
-                })),
-        }))
-    }, [organizationDataKhoa, organizationDataBoMon])
-
-    const handleChange = (newValue: string) => {
-        setValue(newValue)
-        if (onChange) {
-            onChange(newValue)
-        }
-    }
-
-    const handlePopupScroll: TreeSelectProps['onPopupScroll'] = (e) => {
-        if (onPopupScroll) {
-            onPopupScroll(e)
-        }
-    }
+    const treeData = buildOrgTree(organizationData, rootId)
 
     // Hàm lọc tùy chỉnh cho tìm kiếm
     const filterTreeNode = (input: string, treeNode: any) => {
-        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+        return treeNode?.label?.toLowerCase()?.includes(input?.toLowerCase())
     }
 
     return (
         <TreeSelectAnt
-            // treeCheckable
+            treeCheckable
             showSearch
             style={style}
-            value={value}
             dropdownStyle={dropdownStyle}
             placeholder={placeholder}
             allowClear
-            treeDefaultExpandAll
-            onChange={handleChange}
             treeData={treeData}
-            onPopupScroll={handlePopupScroll}
+            maxTagCount={1}
+            showCheckedStrategy="SHOW_ALL"
             filterTreeNode={filterTreeNode}
             treeNodeFilterProp="title"
-            // loading={
-            //     semesterLoading
-            // }
+            {...rest}
         />
     )
 }

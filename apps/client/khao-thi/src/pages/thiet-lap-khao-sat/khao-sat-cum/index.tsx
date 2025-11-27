@@ -8,6 +8,7 @@ import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
+import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
 
 export type LectuerType = Lecturer & {
     survey: Survey[]
@@ -18,6 +19,7 @@ export default function ClussterSurveyPage() {
     const [selectedId, setSelectedId] = useState('')
     const [lecturer, setLecturer] = useState<LectuerType | null>(null)
     const [sublectClass, setSublectClass] = useState<any>(null)
+    const [organizationSelected, setOrganizationSelected] = useState<string>('')
     const items = [
         {
             key: '1',
@@ -54,7 +56,24 @@ export default function ClussterSurveyPage() {
         },
         {
             key: '4',
-            label: 'Báo cáo khảo sát',
+            label: 'Báo cáo theo đơn vị',
+            children: (
+                <OrganizationSurveyReport
+                    selectedId={selectedId}
+                    surveyName=""
+                    organizationSelected={organizationSelected}
+                    setOrganizationSelected={(value) => {
+                        console.log(value);
+                        
+                        setOrganizationSelected(value)
+                    }}
+                />
+            ),
+            disabled: !selectedId,
+        },
+             {
+            key: '7',
+            label: 'Báo cáo theo giảng viên',
             children: (
                 <ClusterSurveyReport
                     selectedId={selectedId}
@@ -63,13 +82,14 @@ export default function ClussterSurveyPage() {
                     setSurvey={(value) => {
                         setLecturer(value)
                     }}
+                    organizationSelected={organizationSelected}
                 />
             ),
-            disabled: !selectedId,
+            disabled: !organizationSelected,
         },
         {
             key: '5',
-            label: 'Báo cáo theo giảng viên',
+            label: 'Báo cáo theo lớp môn học',
             children: (
                 <LecturerSurveyReport
                     selectedId={selectedId}
@@ -84,7 +104,7 @@ export default function ClussterSurveyPage() {
         },
         {
             key: '6',
-            label: 'Báo cáo theo lớp môn học',
+            label: 'Báo cáo chi tiết',
             children: <SurveyReport selectedId={sublectClass?.surveyId || ''} />,
             disabled: !sublectClass?.surveyId,
         },
