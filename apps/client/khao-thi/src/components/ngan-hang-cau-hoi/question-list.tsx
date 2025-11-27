@@ -1,4 +1,4 @@
-import { EllipsisOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FileWordOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
@@ -6,13 +6,11 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { WordImportModal } from '@components/sub-pages'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import { type Question, QuestionType } from '@workspace/db'
 import {
-    useCountQuestion,
     useCreateManyQuestion,
     useFindManyDifficulty,
     useFindManyKnowledgeBlock,
@@ -20,7 +18,7 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
-import { Button, Col, Dropdown, Flex, Menu, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,8 +30,6 @@ interface QuestionListProps {
 
 export function QuestionList({ questionBankId }: QuestionListProps) {
     const { showSpinner, hideSpinner } = useSpinner()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
@@ -125,8 +121,6 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
                 difficulty: true,
                 multipleChoiceOptions: true,
             },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
             orderBy: [
                 ...emptyObjectIf(
                     [
@@ -139,16 +133,6 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
                 { point: 'asc' },
                 { createdAt: 'desc' },
             ],
-        },
-        queryOptions
-    )
-
-    const { data: count } = useCountQuestion(
-        {
-            where: {
-                ...where,
-                deletedAt: null,
-            },
         },
         queryOptions
     )
@@ -231,43 +215,32 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
         }
     }
 
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Nhập dữ liệu bằng word',
-            onClick: () => setImportModalVisible(true),
-        },
-        {
-            key: 'update',
-            label: 'Tải file mẫu',
-            onClick: handleDownloadTemplate,
-        },
-    ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={12}>
-                            <Flex justify="end" gap={4}>
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button
-                                        className="text-primary border-primary mr-2 min-w-[32px]"
-                                        icon={<EllipsisOutlined />}
-                                    />
-                                </Dropdown>
+                            <Flex justify="end" gap={8}>
+                                <Button
+                                    size="small"
+                                    icon={<DownloadOutlined />}
+                                    onClick={handleDownloadTemplate}
+                                    type="primary"
+                                >
+                                    Tải file mẫu
+                                </Button>
+                                <Button
+                                    size="small"
+                                    icon={<FileWordOutlined />}
+                                    onClick={() => setImportModalVisible(true)}
+                                    type="primary"
+                                >
+                                    Nhập dữ liệu bằng word
+                                </Button>
                                 <Button
                                     type="primary"
+                                    size="small"
                                     onClick={() =>
                                         onOpenPutQuestion({
                                             id: '',
@@ -290,15 +263,14 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
-                            setCurrentPage(1)
                         }}
+                        scroll={{ y: 'calc(100vh - 260px)' }}
                         columns={[
                             {
                                 title: 'STT',
                                 width: 40,
                                 align: 'center',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Nội dung câu hỏi',
@@ -427,22 +399,11 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
                             },
                         ]}
                         data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>
+
             <WordImportModal
                 visible={importModalVisible}
                 onCancel={() => setImportModalVisible(false)}
