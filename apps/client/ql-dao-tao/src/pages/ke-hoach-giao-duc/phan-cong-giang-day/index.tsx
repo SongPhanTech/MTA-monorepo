@@ -124,7 +124,7 @@ export default function PhanCongGiangDay({
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, 'XEM_TAT_CA')
-
+    const orgId = window.contextData?.organizationId
     const where = useMemo(
         () =>
             ({
@@ -314,7 +314,7 @@ export default function PhanCongGiangDay({
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
-    const orgId = window.contextData?.organizationId
+
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
