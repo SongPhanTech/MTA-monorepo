@@ -1,11 +1,11 @@
 import Table from '@components/commons/table'
-import { diemPhongThiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
 import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { validateExamScore } from '@lib/utils'
+import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 
 export default function NhapDiemPhach() {
     const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()

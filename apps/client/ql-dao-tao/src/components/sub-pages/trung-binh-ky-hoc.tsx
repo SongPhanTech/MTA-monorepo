@@ -5,7 +5,6 @@ import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseTyp
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import type { AcademicRankingConvert, FixedClass, TrainingCourse } from '@workspace/db/client'
 import {
@@ -24,10 +23,6 @@ import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
 dayjs.locale('vi')
-
-interface DiemTrungBinhKyHocProps {
-    semesterId: string
-}
 
 const DiemTrungBinhKyHoc = () => {
     const { id: semesterId } = useSemesterStore()
@@ -167,7 +162,6 @@ const DiemTrungBinhKyHoc = () => {
         orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
-            semesterStartId: semesterId,
         },
     })
 
@@ -607,6 +601,3 @@ const DiemTrungBinhKyHoc = () => {
 }
 
 export default DiemTrungBinhKyHoc
-DiemTrungBinhKyHoc.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
-}

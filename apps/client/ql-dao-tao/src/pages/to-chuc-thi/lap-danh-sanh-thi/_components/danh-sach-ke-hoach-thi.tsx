@@ -694,7 +694,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 render: (__, record) => {
                                     return record.subjectClass?.[0]?.enteredExamScore ? (
@@ -711,9 +711,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 80,
                                 render: (_, record) => {
-                                    const isLockScore = record.subjectClass
-                                        ?.map?.((sc: SubjectClass) => sc.isLockScore)
-                                        .filter(Boolean)
                                     return (
                                         <Checkbox
                                             indeterminate={
@@ -748,20 +745,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <Checkbox
                                             indeterminate={
-                                                !record?.examRoom?.every?.(
+                                                !record?.examRooms?.every?.(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList.every(
                                                             (el) => el.createdExamCode
                                                         )
                                                 ) &&
-                                                record?.examRoom?.some(
+                                                record?.examRooms?.some(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList?.some(
                                                             (el) => el.createdExamCode
                                                         )
                                                 )
                                             }
-                                            checked={record?.examRoom?.every?.(
+                                            checked={record?.examRooms?.every?.(
                                                 (sc: { examList: ExamList[] }) =>
                                                     sc.examList.every((el) => el.createdExamCode)
                                             )}
@@ -777,16 +774,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <Checkbox
                                             indeterminate={
-                                                !record?.examRoom?.every?.(
+                                                !record?.examRooms?.every?.(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList.every((el) => el.lockExamCode)
                                                 ) &&
-                                                record?.examRoom?.some(
+                                                record?.examRooms?.some(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList?.some((el) => el.lockExamCode)
                                                 )
                                             }
-                                            checked={record?.examRoom?.every?.(
+                                            checked={record?.examRooms?.every?.(
                                                 (sc: { examList: ExamList[] }) =>
                                                     sc.examList.every((el) => el.lockExamCode)
                                             )}

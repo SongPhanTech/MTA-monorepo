@@ -749,9 +749,9 @@ export default function StudentScoreClassPage() {
                                         .join(', '),
                             },
                             {
-                                title: 'Điểm tương đương',
+                                title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
                                 align: 'center',
-                                width: 150,
+                                width: 80,
                                 render: (__, { id, subjectClassStudent }) => {
                                     const arr: { finalScore: number }[] =
                                         subjectClassStudent?.[0]?.certificates.map(
@@ -771,7 +771,7 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
                                 align: 'center',
                                 dataIndex: 'creditCmp',
                                 type: 'cmp',

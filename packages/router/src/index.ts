@@ -202,6 +202,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Điểm lớp môn học (P13)',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DANH_PHACH,
+                        label: 'Đánh phách',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DANH_PHACH,
+                        description: 'Đánh phách',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
                         label: 'Nhập điểm theo phách',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
@@ -220,10 +226,10 @@ const NAVIGATION: NavigationType = {
                         description: 'Nhập điểm thi',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
-                        label: 'Trung bình học kỳ',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
-                        description: 'Điểm trung bình học kỳ',
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_TONG_KET_KY_HOC,
+                        label: 'Tổng kết học kỳ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_TONG_KET_KY_HOC,
+                        description: 'Tổng kết học kỳ',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,

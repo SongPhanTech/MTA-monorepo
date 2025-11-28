@@ -71,6 +71,13 @@ app.openapi(genExamListCode, async (c) => {
         include: {
             examPapers: {
                 include: { studentSubjectScore: true },
+                where: {
+                    studentSubjectScore: {
+                        suspended: false,
+                        examBanned: false,
+                        examPostponed: false,
+                    },
+                },
             },
         },
     })
@@ -122,7 +129,7 @@ app.openapi(genExamListCode, async (c) => {
             `
         await tx.examList.update({
             where: { id: examListId },
-            data: { lockExamCode: true },
+            data: { lockExamCode: true, createdExamCode: true },
         })
     })
 

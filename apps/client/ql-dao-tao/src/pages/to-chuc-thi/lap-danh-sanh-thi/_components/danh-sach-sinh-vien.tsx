@@ -497,7 +497,7 @@ export default function DanhSachSinhVien() {
                     .flatMap((e) => e.examPapers)
                     .reduce(
                         (acc, cur) => {
-                            acc[cur.id] = {
+                            acc[cur.studentSubjectScoreId] = {
                                 examPostponed: cur?.studentSubjectScore?.examPostponed ?? false,
                                 examPostponedReason:
                                     cur?.studentSubjectScore?.examPostponedReason ?? undefined,
@@ -705,10 +705,10 @@ export default function DanhSachSinhVien() {
                             {
                                 title: 'Lý do hoãn thi',
                                 render: (_, record) => {
-                                    const examPostponed = listForm[record.id]?.examPostponed
+                                    const examPostponed = listForm[record.studentSubjectScoreId]?.examPostponed
                                     return (
                                         <Form.Item
-                                            name={['list', record.id, 'examPostponedReason']}
+                                            name={['list', record.studentSubjectScoreId, 'examPostponedReason']}
                                             className="m-0"
                                         >
                                             {!examPostponed ? (
