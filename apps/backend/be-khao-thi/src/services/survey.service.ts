@@ -1,4 +1,5 @@
 import type {
+    DM_DonVi,
     Lecturer,
     PrismaClient,
     SubjectClass,
@@ -91,6 +92,11 @@ export const LecturerSurveyStatsSchema = z.object({
     lecture: models.LecturerScalarSchema.extend({
         userProfile: models.UserProfileScalarSchema.nullish(),
     }),
+    average: z.array(AverageLecturerSchema),
+})
+
+export const OrgazationsSurveyStatsSchema = z.object({
+    organization: models.DM_DonViScalarSchema,
     average: z.array(AverageLecturerSchema),
 })
 
@@ -199,7 +205,8 @@ export const getLecturerSurveyStats = async (
     lecture: Lecturer & { userProfile: UserProfile | null },
     // survey: Survey & {subjectClass?:SubjectClass |null, lecture?: (Lecturer & { userProfile: UserProfile | null }) | null },
     questions: SurveyQuestion[],
-    choices: SurveyChoice[]
+    choices: SurveyChoice[],
+    clusterSurveyId: string
 ) => {
     const questionIds = questions.map((q) => q.id)
 
@@ -209,7 +216,7 @@ export const getLecturerSurveyStats = async (
             surveySession: {
                 survey: {
                     lectureId: lecture?.id,
-                    clusterSurveyId: 'cmi4d204w000dmk01xib67tkc',
+                    clusterSurveyId,
                 },
             },
             surveyQuestionId: { in: questionIds },
@@ -235,6 +242,52 @@ export const getLecturerSurveyStats = async (
 
     return {
         lecture: lecture,
+        average,
+    }
+}
+export const getOrganizationsSurveyStats = async (
+    prisma: PrismaClient,
+    orga: DM_DonVi,
+    questions: SurveyQuestion[],
+    choices: SurveyChoice[],
+    clusterSurveyId: string
+) => {
+    const questionIds = questions.map((q) => q.id)
+
+    const answerCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyChoiceId'],
+        where: {
+            surveySession: {
+                survey: {
+                    lecture: {
+                        organizationId: orga.Id,
+                    },
+                    clusterSurveyId,
+                },
+            },
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
+        },
+        _count: { surveyChoiceId: true },
+    })
+
+    const answerCountMap = answerCounts.reduce(
+        (acc, curr) => {
+            if (curr.surveyChoiceId) {
+                const key = curr.surveyChoiceId
+                acc[key] = curr._count.surveyChoiceId
+            }
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const average = choices.map((i) => {
+        return { ...i, totalCount: answerCountMap[i.id] || 0 }
+    })
+
+    return {
+        organization: orga,
         average,
     }
 }

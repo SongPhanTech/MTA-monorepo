@@ -897,6 +897,8 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
                 onSelectSlot={handleSelectSlot}
                 onDoubleClickEvent={handleDoubleClickEvent}
                 dayLayoutAlgorithm="overlap"
+                scrollToTime={new Date(new Date().setHours(6, 0, 0, 0))}
+                enableAutoScroll
                 components={{
                     event: EventComponent,
                     toolbar: () => null, // Disable default toolbar
@@ -910,17 +912,13 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
                         header: MonthHeaderComponent,
                         dateHeader: MonthDateCellComponent,
                     },
-
-                    timeGutterHeader: () => <span className="w-[60px] text-center">Lịch tuần</span>, // Disable time gutter header
+                    timeGutterHeader: () => <span className="w-[40px] text-center">Lịch tuần</span>, // Disable time gutter header
                     timeGutterWrapper: (e: any) => {
                         return (
                             <span
-                                className={cn(
-                                    e.children.props.className,
-                                    'text-center min-w-[76px]'
-                                )}
+                                className={cn(e.children.props.className, 'text-center w-[40px]')}
                             >
-                                {e.children.props.children.map((child: any) => (
+                                {e.children.props.children.map((child: any, idx: number) => (
                                     <span key={child.key} id={`time-gutter-${child.key}`}>
                                         {child}
                                     </span>

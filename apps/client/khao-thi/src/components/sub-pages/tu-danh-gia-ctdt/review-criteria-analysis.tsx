@@ -72,6 +72,31 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
         return true
     })
 
+    const shouldShowApproveAllButton = () => {
+        if (
+            !can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                'DUYET'
+            )
+        ) {
+            return false
+        }
+
+        return filteredCriteria?.some((item) => {
+            const status = item.analysisCriterions?.status
+            if (role === 'BAN_TU_VAN') {
+                return (
+                    status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+                    status !== $Enums.EvaluationCriterionStatus.COMPLETED
+                )
+            }
+            if (role === 'THU_KY') {
+                return status === $Enums.EvaluationCriterionStatus.APPROVED
+            }
+            return false
+        })
+    }
+
     const toggleCommentRow = (recordId: string) => {
         setExpandedRowKeys((prev) =>
             prev.includes(recordId) ? prev.filter((id) => id !== recordId) : [...prev, recordId]
@@ -364,10 +389,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                         value={deadlineFilter}
                         onChange={(value) => setDeadlineFilter(value)}
                     />
-                    {can(
-                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                        'DUYET'
-                    ) && (
+                    {shouldShowApproveAllButton() && (
                         <Popconfirm
                             title="Xác nhận phê duyệt tất cả tiêu chí?"
                             description="Bạn có chắc chắn muốn phê duyệt tất cả tiêu chí này?"

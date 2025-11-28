@@ -12,7 +12,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
+import { buildOrgFlat, buildOrgTree } from '@lib/utils'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import {
     $Enums,
@@ -124,7 +124,7 @@ export default function PhanCongGiangDay({
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, 'XEM_TAT_CA')
-
+    const orgId = window.contextData?.organizationId
     const where = useMemo(
         () =>
             ({
@@ -314,7 +314,31 @@ export default function PhanCongGiangDay({
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
-    const orgId = window.contextData?.organizationId
+
+    const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
+        {
+            select: { Id: true },
+            where: {
+                bActive: true,
+            },
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    )
+
+    const orgIds = [
+        ...buildOrgFlat(
+            dmDonViIds.map((e) => ({
+                Id: e.Id,
+                sTen: null,
+                sParentId: null,
+                sMa: null,
+            })),
+            orgId || '0'
+        ).map((org) => org.value),
+        orgId,
+    ]
 
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
@@ -418,7 +442,12 @@ export default function PhanCongGiangDay({
                         },
                     },
                 },
-                sParentId: !khoaBoMon ? undefined : orgId,
+                Id: !khoaBoMon
+                    ? undefined
+                    : {
+                          in: orgIds,
+                      },
+                // sParentId: !khoaBoMon ? undefined : orgId,
             },
         },
         {
@@ -708,10 +737,6 @@ export default function PhanCongGiangDay({
         tag: 'ModalNhapTKB',
     })
 
-    const { onOpen } = useDisclosure<string>({
-        tag: 'PutOpenSubjectClassModal',
-    })
-
     const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
         tag: 'PutOneSubjectClassModal',
     })
@@ -746,10 +771,6 @@ export default function PhanCongGiangDay({
         }
         return []
     }, [dmDonViData])
-
-    const handleModal = () => {
-        onOpen()
-    }
 
     const resetForm = useCallback(() => {
         form.setFieldsValue({

@@ -307,12 +307,12 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     <TreeSelect
                         treeData={treeData}
                         multiple
-                        treeCheckable={true} // Cho phép checkbox để chọn
+                        treeCheckable={true}
                         // treeCheckStrictly
                         showCheckedStrategy="SHOW_ALL"
                         placeholder="Chọn khối kiến thức"
-                        maxTagCount={'responsive'}
-                        treeDefaultExpandAll // Mặc định mở rộng tất cả các node
+                        // maxTagCount={'responsive'} // overflow hidden
+                        treeDefaultExpandAll
                         onChange={handleOnChange}
                         style={{ width: '100%' }}
                     />
@@ -326,16 +326,14 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     <Col span={24}>
                         <DndProvider backend={HTML5Backend}>
                             <div className=" mt-6">
-                                {items
-                                    .filter((e) => !!e.isParent)
-                                    .map((item: Item, index: number) => (
-                                        <DraggableItem
-                                            key={item.value}
-                                            item={item}
-                                            index={index}
-                                            moveItem={moveItem}
-                                        />
-                                    ))}
+                                {items.map((item: Item, index: number) => (
+                                    <DraggableItem
+                                        key={item.value}
+                                        item={item}
+                                        index={index}
+                                        moveItem={moveItem}
+                                    />
+                                ))}
                             </div>
                         </DndProvider>
                     </Col>

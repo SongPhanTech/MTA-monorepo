@@ -29,12 +29,13 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Divider, Flex, message, Row, Tooltip } from 'antd'
-import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
+import { BookPlus, CopyPlus, Download, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
+import ViewIcon from '@components/icons/view'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -346,9 +347,6 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-    //     orderBy: { name: 'asc' },
-    // })
 
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         curriculumVersionId: string
@@ -366,6 +364,22 @@ export default function TrainingProgramSubjects() {
             refetch()
         },
     })
+
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+        isLocked?: boolean
+    }>({
+        tag: 'PutVersionSubjectModal',
+    })
+
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string,
+        isLocked: boolean
+    ) => {
+        onOpenSubjectVersion({ subjectId, subjectVersionId, isLocked })
+    }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -451,8 +465,8 @@ export default function TrainingProgramSubjects() {
                                             href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"
                                         >
-                                            <FileDown />
-                                            Tải file mẫu excel
+                                            <Download />
+                                            Mẫu nhập CTĐT
                                         </Button>
                                         <Button
                                             onClick={() => setImportModalVisible(true)}
@@ -511,7 +525,7 @@ export default function TrainingProgramSubjects() {
                                             type="primary"
                                         >
                                             <BookPlus />
-                                            Cập nhật
+                                            Sửa KKT
                                         </Button>
                                     </Tooltip>
                                 )}
@@ -952,7 +966,7 @@ export default function TrainingProgramSubjects() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 // hidden: !canSome(
                                 //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
@@ -962,6 +976,24 @@ export default function TrainingProgramSubjects() {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                    'XEM'
+                                                ) && (
+                                                    <ViewIcon
+                                                        onClick={() =>
+                                                            handleModalSubjectVersion(
+                                                                record.subjectId,
+                                                                record.subjectId,
+                                                                !can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                                    'SUA'
+                                                                )
+                                                            )
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({

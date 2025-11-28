@@ -15,7 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio, Row, Switch } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
@@ -72,9 +72,15 @@ const PutVersionSubjectModal = () => {
                 prerequisiteSubject: true,
                 coRequisiteSubject: true,
                 documentFiles: true,
+                studentSubjectScore: { take: 1 },
             },
         },
         { enabled: !!subjectVersionId }
+    )
+
+    const isScored = useMemo(
+        () => !!subjectVersion?.studentSubjectScore.length,
+        [subjectVersion?.studentSubjectScore.length]
     )
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -454,7 +460,7 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="examType" label="Hình thức thi iii" required>
+                    <FormItem form={form} name="examType" label="Hình thức thi" required>
                         <Select
                             placeholder="Chọn hình thức thi"
                             options={options?.map((item) => ({
@@ -542,6 +548,7 @@ const PutVersionSubjectModal = () => {
                     <FormItem form={form} name="credit" label="Số tín chỉ" required>
                         <InputNumber
                             min={0}
+                            disabled={isScored}
                             type="number"
                             placeholder="Số tín chỉ"
                             className="w-full"

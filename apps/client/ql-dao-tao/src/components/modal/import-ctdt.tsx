@@ -1,6 +1,7 @@
 import { CloseOutlined } from '@ant-design/icons'
 import useSpinner from '@hooks/spinner'
-import { importPhienBanCTDT } from '@workspace/libs/api/training'
+import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Collapse, Modal, message, Space, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -21,6 +22,7 @@ const ImportCurriculumVersionModal = ({
     const [disabledButton, setDisabledButton] = useState<boolean>(true)
     const router = useRouter()
     const id = router.query.id as string
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [fileName, setFileName] = useState<string>('')
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,8 +67,16 @@ const ImportCurriculumVersionModal = ({
         showSpinner()
 
         try {
-            if (!file) return
-            const res = await importPhienBanCTDT(id, { file: file, timeout: 30 })
+            if (!file || !trainingObjectTypeId) return
+
+            // const res = await importPhienBanCTDT(id, { file: file, timeout: 30 })
+            const res = await importPhienBanCTDTSubject({
+                curriculumVersionId: id,
+                trainingObjectTypeId,
+                file: file,
+                createNewSubjects: true,
+            })
+
             if (res?.status === 200) {
                 message.success(
                     res?.data?.message ||

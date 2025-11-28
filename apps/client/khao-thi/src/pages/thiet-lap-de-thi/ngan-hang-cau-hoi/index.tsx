@@ -86,7 +86,11 @@ export default function QuestionBank() {
                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                             'THEM'
                         ) && (
-                            <Button onClick={() => onOpenPutQuestionBank()} type="primary">
+                            <Button
+                                onClick={() => onOpenPutQuestionBank()}
+                                type="primary"
+                                size="small"
+                            >
                                 <BookPlus />
                                 Thêm mới
                             </Button>
@@ -128,11 +132,24 @@ export default function QuestionBank() {
                     />
                 </Col>
 
-                {selectedQuestionBankId && (
-                    <Col span={18}>
+                <Col span={18}>
+                    {selectedQuestionBankId ? (
                         <QuestionList questionBankId={selectedQuestionBankId} />
-                    </Col>
-                )}
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-[60vh] bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                                <Database className="w-12 h-12 text-green-600" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                                Chọn ngân hàng câu hỏi
+                            </h3>
+                            <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
+                                Vui lòng chọn một ngân hàng câu hỏi từ cây dữ liệu bên trái để xem
+                                và quản lý câu hỏi
+                            </p>
+                        </div>
+                    )}
+                </Col>
             </Row>
         </div>
     )

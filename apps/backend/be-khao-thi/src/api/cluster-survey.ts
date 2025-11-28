@@ -5,8 +5,10 @@ import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import {
     getLecturerSurveyStats,
+    getOrganizationsSurveyStats,
     getSurveyStats,
     LecturerSurveyStatsSchema,
+    OrgazationsSurveyStatsSchema,
     SurveyStatsSchema,
 } from '../services/survey.service'
 
@@ -400,7 +402,170 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
                 prisma,
                 lecture,
                 cluster?.surveyQuestion,
-                cluster.surveyChoice
+                cluster.surveyChoice,
+                id
+            )
+        })
+    )
+    const data = {
+        choices: cluster.surveyChoice,
+        choicesAnswer: cluster.surveyChoice.map((c) => c.answer),
+        data: statsRaw,
+    }
+
+    return c.json(data, 200)
+})
+
+const getOrganizationSurveyStatistics = createRoute({
+    operationId: 'get-organization-survey-statistics',
+    path: '/{id}/organization-statistics',
+    method: 'get',
+    tags: ['ClusterSurvey'],
+    summary: 'Thống kê theo đơn vị',
+    request: {
+        params: z.object({ id: z.string() }),
+        query: z.object({
+            organizations: z.string().optional(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Get thành công',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        data: z.array(OrgazationsSurveyStatsSchema),
+                        choices: z.array(models.SurveyChoiceSchema),
+                        choicesAnswer: z.array(z.string()),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getOrganizationSurveyStatistics, async (c) => {
+    const { id } = c.req.valid('param')
+    const { organizations, ...q } = c.req.valid('query')
+    const cluster = await prisma.clusterSurvey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: {
+                    type: 'SINGLE_CHOICE',
+                },
+            },
+            surveyChoice: { orderBy: { answer: 'asc' } },
+            surveys: {
+                include: {
+                    subjectClass: true,
+                    lecture: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+    if (!cluster) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+    const organization = await prisma.dM_DonVi.findMany({
+        where: {
+            ...(organizations && {
+                Id: {
+                    in: organizations.split(','),
+                },
+            }),
+            lecturers: {
+                some: {
+                    survey: {
+                        some: {
+                            clusterSurveyId: id,
+                        },
+                    },
+                },
+            },
+        },
+        include: {
+            lecturers: {
+                where: {
+                    survey: {
+                        some: {
+                            clusterSurveyId: id,
+                            surveySessions: {
+                                some: {},
+                            },
+                        },
+                    },
+                },
+                include: {
+                    userProfile: true,
+                    survey: {
+                        where: {
+                            clusterSurveyId: id,
+                            surveySessions: {
+                                some: {},
+                            },
+                        },
+                        include: {
+                            surveySessions: {
+                                where: {
+                                    survey: {
+                                        clusterSurveyId: id,
+                                    },
+                                },
+                                include: {
+                                    survey: true,
+                                },
+                            },
+                            subjectClass: true,
+                            clusterSurvey: {
+                                include: {
+                                    surveyQuestion: {
+                                        where: {
+                                            type: 'SINGLE_CHOICE',
+                                        },
+                                    },
+                                    surveyChoice: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    if (!organization) {
+        return c.json({ message: 'Không tìm thấy giảng viên' }, 404)
+    }
+
+    const statsRaw = await Promise.all(
+        organization.map(async (orga) => {
+            return getOrganizationsSurveyStats(
+                prisma,
+                orga,
+                cluster?.surveyQuestion,
+                cluster.surveyChoice,
+                id
             )
         })
     )
