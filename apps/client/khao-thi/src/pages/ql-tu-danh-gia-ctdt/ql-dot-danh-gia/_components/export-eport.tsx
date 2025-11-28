@@ -301,8 +301,8 @@ export default function ExportReport({ id }: { id: string }) {
                 }
             }
         }
-        
-        console.log(map,'map');
+
+        console.log(map, 'map')
         return map
     }
     const exportToWord = async () => {
@@ -467,7 +467,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.strengths || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.strengths || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -486,7 +489,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.weakness || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.weakness || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -505,7 +511,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.actionPlan || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.actionPlan || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -543,7 +552,10 @@ export default function ExportReport({ id }: { id: string }) {
                         )
                         children.push(
                             ...(await htmlToParagraphs(
-                                processHtmlContent(standard?.evaluationCriterion?.conclusion || '', evidenceTags)
+                                processHtmlContent(
+                                    standard?.evaluationCriterion?.conclusion || '',
+                                    evidenceTags
+                                )
                             ))
                         )
 

@@ -3,7 +3,7 @@ import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
-import { useMemo} from 'react'
+import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
@@ -15,7 +15,7 @@ function ClusterSurveyReport({
     surveyName,
     surveyId,
     setSurvey,
-    organizationSelected
+    organizationSelected,
 }: {
     selectedId: string
     surveyName: string

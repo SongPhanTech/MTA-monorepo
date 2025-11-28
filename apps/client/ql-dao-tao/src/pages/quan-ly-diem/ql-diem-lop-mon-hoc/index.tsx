@@ -1,4 +1,3 @@
-import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
 import NhapDiem from '@components/sub-pages/nhap-diem'
 import DefaultLayout from '@layouts/default-layout'
@@ -8,6 +7,7 @@ import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/
 import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
@@ -248,9 +248,11 @@ export default function QuanLyDiemLopMonHoc({
                         })
                     }}
                 >
-                    <div className="flex items-center mb-2 w-full">
-                        <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
+                    <div className="flex flex-row items-center gap-2 mb-2 w-full">
+                        <div className="min-w-[120px]">Hạn nhập điểm</div>
                         <div className="w-full">{reasonDate()}</div>
+                        <div className="min-w-[120px]">Khoá điểm quá trình</div>
+                        <Checkbox disabled checked={data?.isLockScore} />
                     </div>
                     <div className="flex items-center mb-2 w-full h-6">
                         <div className="flex items-center mr-9 ">

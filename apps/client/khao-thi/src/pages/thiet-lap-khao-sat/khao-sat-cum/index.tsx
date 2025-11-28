@@ -63,15 +63,15 @@ export default function ClussterSurveyPage() {
                     surveyName=""
                     organizationSelected={organizationSelected}
                     setOrganizationSelected={(value) => {
-                        console.log(value);
-                        
+                        console.log(value)
+
                         setOrganizationSelected(value)
                     }}
                 />
             ),
             disabled: !selectedId,
         },
-             {
+        {
             key: '7',
             label: 'Báo cáo theo giảng viên',
             children: (
