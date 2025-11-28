@@ -22,7 +22,11 @@ const openSubjectClass = createRoute({
             trainingMajorId: z.string().optional(),
             search: z.string().optional(),
             trainingObjectTypeId: z.string(),
-            nextSemester: z.coerce.boolean().default(false),
+            nextSemester: z
+                .number({
+                    coerce: true,
+                })
+                .default(0),
             fixedClassId: z.string().optional(),
         }),
     },
@@ -334,6 +338,7 @@ app.openapi(openSubjectClass, async (c) => {
         nextSemester,
         fixedClassId,
     } = c.req.valid('query')
+    console.log('nextSemester', nextSemester, typeof nextSemester)
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },

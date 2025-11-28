@@ -50,7 +50,7 @@ export default function MonKySau() {
             trainingCourseId: trainingCourseId || '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            nextSemester: true,
+            nextSemester: 1,
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
     )

@@ -41,7 +41,7 @@ export default function MonTheoKeHoachDuKien() {
             trainingCourseId: trainingCourseId ?? '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            nextSemester: false,
+            nextSemester: 0,
             fixedClassId: fixedClassId,
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
