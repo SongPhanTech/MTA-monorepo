@@ -198,6 +198,7 @@ app.openapi(saveExamScore, async (c) => {
             id: true,
             studentSubjectScore: {
                 select: {
+                    id: true,
                     certificates: {
                         select: {
                             archivedCertificate: {
@@ -240,6 +241,33 @@ app.openapi(saveExamScore, async (c) => {
         },
     })
 
+    const subjectClasses = await prisma.subjectClass.findMany({
+        where: {
+            subjectClassStudent: {
+                some: {
+                    student: {
+                        id: {
+                            in: examPapers.map((p) => p.studentSubjectScore.id),
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    const lockedClasses = subjectClasses.filter((cls) => {
+        // const now = new Date()
+        // return !cls.examScoreDeadline || cls.examScoreDeadline <= now || cls.isLockExamScore
+        return  cls.isLockExamScore
+    })
+
+    if (lockedClasses.length) {
+        return c.json(
+            { message: `Lớp đã khoá điểm thi: ${lockedClasses.map((cls) => cls.code).join(', ')}` },
+            400
+        )
+    }
+
     const defaultCoef = {
         coef_1: 0.1,
         coef_2: 0.3,
@@ -255,35 +283,68 @@ app.openapi(saveExamScore, async (c) => {
             { ...p.studentSubjectScore, examScore }
         )
 
-        return {
-            examPaperId: p.id,
-            examScore,
-            finalScore,
-        }
+        return { examPaperId: p.id, examScore, finalScore }
     })
 
-    await prisma.$executeRawUnsafe(`
-        UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
-        SET
-            "examScore" = data."examScore",
-            "finalScore" = data."finalScore",
-            "updatedAt" = NOW()
-        FROM (
-            VALUES
-            ${updates
-                .map(
-                    (u) => `(
-                        '${u.examPaperId}',
-                        ${u.examScore === null ? 'NULL::double precision' : u.examScore},
-                        ${u.finalScore === null ? 'NULL::double precision' : u.finalScore}
-                    )`
+    await prisma.$transaction(async (tx) => {
+        await tx.$executeRawUnsafe(`
+          UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
+          SET
+              "examScore" = data."examScore",
+              "finalScore" = data."finalScore",
+              "updatedAt" = NOW()
+          FROM (
+              VALUES
+              ${updates
+                  .map(
+                      (u) => `(
+                          '${u.examPaperId}',
+                          ${u.examScore === null ? 'NULL::double precision' : u.examScore},
+                          ${u.finalScore === null ? 'NULL::double precision' : u.finalScore}
+                      )`
+                  )
+                  .join(',\n')}
+          ) AS data("examPaperId", "examScore", "finalScore")
+          JOIN "khao-thi"."ExamPaper" AS es
+              ON es."id" = data."examPaperId"
+          WHERE sss."id" = es."studentSubjectScoreId";
+          `)
+
+        const subjectClasses = await prisma.subjectClass.findMany({
+            where: {
+                subjectClassStudent: {
+                    some: {
+                        student: {
+                            id: {
+                                in: examPapers.map((p) => p.studentSubjectScore.id),
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                subjectClassStudent: true,
+            },
+        })
+
+        for (const cls of subjectClasses) {
+            const enteredExamScore = cls.subjectClassStudent.every((s) => {
+                return (
+                    s.examScore ||
+                    s.examBanned ||
+                    s.examPostponed ||
+                    s.exempted ||
+                    s.withdrew ||
+                    s.suspended
                 )
-                .join(',\n')}
-        ) AS data("examPaperId", "examScore", "finalScore")
-        JOIN "khao-thi"."ExamPaper" AS es
-            ON es."id" = data."examPaperId"
-        WHERE sss."id" = es."studentSubjectScoreId";
-        `)
+            })
+
+            await tx.subjectClass.update({
+                where: { id: cls.id },
+                data: { enteredExamScore },
+            })
+        }
+    })
 
     return c.json({ success: true, message: 'Success' }, 200)
 })

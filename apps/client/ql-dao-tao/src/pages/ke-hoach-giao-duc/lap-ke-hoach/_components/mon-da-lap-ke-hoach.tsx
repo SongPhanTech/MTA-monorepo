@@ -184,7 +184,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             }
                             type="default"
                         >
-                            Khởi tạo môn
+                            Bổ sung môn
                         </Button>
                         <Button
                             type="primary"
