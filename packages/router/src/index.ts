@@ -140,7 +140,6 @@ const NAVIGATION: NavigationType = {
                 id: 'ke-hoach-giang-day',
                 label: 'Kế hoạch giảng dạy',
                 icon: CalendarRange,
-                path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
