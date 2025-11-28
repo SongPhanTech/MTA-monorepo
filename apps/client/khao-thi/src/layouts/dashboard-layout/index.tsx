@@ -2,6 +2,7 @@ import logo_mta from '@assets/images/khaothi.svg'
 import HeaderApp from '@components/header'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
+import { useSession } from '@workspace/auth/react'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { Layout, theme } from 'antd'
@@ -13,6 +14,7 @@ const { Header, Content } = Layout
 
 const DashboardLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     const menus = useMenuList()
+    const { status } = useSession();
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
