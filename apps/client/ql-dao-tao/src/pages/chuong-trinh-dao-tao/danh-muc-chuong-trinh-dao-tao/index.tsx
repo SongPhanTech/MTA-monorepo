@@ -451,9 +451,10 @@ export default function TrainingProgramCatalog() {
             )
         ) {
             router.push(
-                `${
-                    ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
-                }/${record.id}`
+                ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID.replace(
+                    '[id]',
+                    record.id || ''
+                )
             )
         }
     }
