@@ -201,7 +201,7 @@ export default function PostgraduateProject({
       await Promise.all(updatePromises.filter((p) => p !== undefined)); // Chờ tất cả promise hoàn thành
 
       message.success(
-        `Lưu thành công ${editingRowKeys.length} hàng đã chỉnh sửa.`
+        `Lưu thành công ${selectedRowKeys.length} hàng đã chỉnh sửa.`
       );
     } catch (error) {
       message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại");
@@ -211,6 +211,7 @@ export default function PostgraduateProject({
       if (refetchCount) await refetchCount();
     }
     // Reset trạng thái chỉnh sửa
+    setSelectedRowKeys([]);
     setEditingRowKeys([]);
     setEditingValues({});
   };
