@@ -3,7 +3,7 @@ import PostgraduateProject, { type PostgraduateProjectProps } from '../danh-muc-
 
 export default function PostgraduateProjectP7() {
     const data: PostgraduateProjectProps = {
-        isManage: false,
+        isManage: true,
         role: 'P7',
     }
     return <PostgraduateProject {...data} />
