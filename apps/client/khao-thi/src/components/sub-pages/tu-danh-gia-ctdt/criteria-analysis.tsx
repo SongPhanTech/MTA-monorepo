@@ -30,11 +30,13 @@ const CriteriaAnalysisSubPage = ({
     userRole,
     idx,
     refetch,
+    handleViewAll,
 }: {
     data: DataTabType
     userRole: 'P13' | 'GV'
     idx: number
     refetch: () => void
+    handleViewAll: () => void
 }) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
     const [statusFilter, setStatusFilter] = useState<$Enums.EvaluationCriterionStatus | null>(null)
@@ -248,6 +250,14 @@ const CriteriaAnalysisSubPage = ({
                                 </Button>
                             </Popconfirm>
                         )}
+                    {can(
+                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                        'XEM_TAT_CA'
+                    ) && (
+                        <Button type="primary" size="small" onClick={handleViewAll}>
+                            Xuất file
+                        </Button>
+                    )}
                 </div>
             </div>
             {!filteredCriteria || filteredCriteria.length === 0 ? (
