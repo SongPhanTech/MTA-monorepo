@@ -138,6 +138,7 @@ const PutVersionSubjectModal = () => {
                 name: output.name.trim(),
                 description: output.description,
                 active: output.active,
+                onePoint: output.onePoint,
                 examType: output.examType,
                 numberOfPractical: output.numberOfPractical,
                 numberOfExam: output.numberOfExam,
@@ -338,7 +339,7 @@ const PutVersionSubjectModal = () => {
                     data: updateData,
                     where: { id: subjectVersionId },
                 })
-                if (changes.length > 0) {
+                if (changes.length > 0 && window?.contextData?.userId) {
                     const historyContent = changes.join('<br />')
                     const historyData = {
                         content: historyContent,
@@ -540,7 +541,7 @@ const PutVersionSubjectModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="onePoint" label=" ">
+                    <FormItem form={form} name="onePoint" label="Một đầu điểm">
                         <Switch checkedChildren="1 đầu điểm" unCheckedChildren="3 đầu điểm" />
                     </FormItem>
                 </Col>

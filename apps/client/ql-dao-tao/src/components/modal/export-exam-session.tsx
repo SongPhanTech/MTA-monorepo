@@ -289,8 +289,8 @@ const ExportPhach = ({
                         'DD/MM/YYYY'
                     )}` || '',
                     i?.studentSubjectScore?.student?.fixedClass?.name || '',
-                    i.studentSubjectScore?.attendanceScore || '',
-                    i.studentSubjectScore?.midtermScore || '',
+                    i.studentSubjectScore?.attendanceScore ?? '',
+                    i.studentSubjectScore?.midtermScore ?? '',
                     i.examCode || '',
                 ]
                 headerRowValue.eachCell((cell: any) => {

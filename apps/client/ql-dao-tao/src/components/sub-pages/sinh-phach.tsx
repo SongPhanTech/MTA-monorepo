@@ -212,20 +212,20 @@ export default function SinhPhach() {
                                 width: 70,
                                 align: 'center',
                                 render: (_, record) =>
-                                    record?.studentSubjectScore?.attendanceScore || '',
+                                    record?.studentSubjectScore?.attendanceScore ?? '',
                             },
                             {
                                 title: 'Điểm TX',
                                 align: 'center',
                                 width: 70,
                                 render: (_, record) =>
-                                    record?.studentSubjectScore?.midtermScore || '',
+                                    record?.studentSubjectScore?.midtermScore ?? '',
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => record?.studentSubjectScore?.examScore || '',
+                                render: (_, record) => record?.studentSubjectScore?.examScore ?? '',
                             },
                             {
                                 title: 'Phách',

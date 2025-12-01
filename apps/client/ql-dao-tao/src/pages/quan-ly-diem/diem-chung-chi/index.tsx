@@ -303,7 +303,7 @@ export default function ArchivedCertificate() {
                             type: 'input',
                             width: 100,
                             render: (__, record) => {
-                                return record?.score || ''
+                                return record?.score ?? ''
                             },
                         },
                         {
@@ -313,7 +313,7 @@ export default function ArchivedCertificate() {
                             type: 'input',
                             width: 140,
                             render: (__, record) => {
-                                return record?.finalScore || ''
+                                return record?.finalScore ?? ''
                             },
                         },
                         {

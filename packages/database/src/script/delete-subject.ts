@@ -34,9 +34,9 @@ await prisma.subjectClass.deleteMany({
 
 await prisma.subjectVersion.deleteMany({
     where: {
-        deletedAt: {
-            not: null,
-        },
+        // deletedAt: {
+        //     not: null,
+        // },
         trainingBlocks: {
             none: {},
         },

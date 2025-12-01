@@ -675,7 +675,7 @@ export default function PhanCongGiangDay({
                     },
                 },
             })
-            message.success('Gửi PCGD thành công')
+            message.success('Đã từ chối PCGD')
             debouncedRefetch()
             formBaoDay.resetFields()
         } catch (error: any) {
@@ -702,7 +702,7 @@ export default function PhanCongGiangDay({
                     },
                 },
             })
-            message.success('Gửi PCGD thành công')
+            message.success('Duyệt PCGD thành công')
             debouncedRefetch()
             formBaoDay.resetFields()
         } catch (error: any) {

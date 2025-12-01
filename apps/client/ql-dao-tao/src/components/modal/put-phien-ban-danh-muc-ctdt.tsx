@@ -308,7 +308,7 @@ const PutCurriculumVersion = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            maskClosable={true}
+            // maskClosable={true}
             title={input?.versionId ? 'Sửa CTĐT toàn khoá' : 'Thêm CTĐT toàn khoá'}
             className="w-[60vw]"
             style={{ top: 20 }}

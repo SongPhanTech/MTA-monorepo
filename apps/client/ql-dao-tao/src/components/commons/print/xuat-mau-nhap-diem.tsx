@@ -229,9 +229,9 @@ const ExportScoreTemplate = ({
                     ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                     : '',
                 record.student?.fixedClass?.name || '',
-                record.attendanceScore || '',
-                record.midtermScore || '',
-                record.examScore || '',
+                record.attendanceScore ?? '',
+                record.midtermScore ?? '',
+                record.examScore ?? '',
             ]
 
             row.eachCell((cell: ExcelJS.Cell) => {

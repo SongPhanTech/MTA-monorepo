@@ -197,7 +197,7 @@ export default function UserProfilePageDs() {
         [filters, trainingObjectTypeId]
     )
 
-    const { data = [] } = useFindManyStudent({
+    const { data = [], refetch } = useFindManyStudent({
         where,
         include: {
             userProfile: {
@@ -244,11 +244,7 @@ export default function UserProfilePageDs() {
             },
             curriculumVersionParallel: true,
         },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
+        orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -395,7 +391,10 @@ export default function UserProfilePageDs() {
                                         </Button>
                                         <ImportStudentModal
                                             visible={importModalVisible}
-                                            onCancel={() => setImportModalVisible(false)}
+                                            onCancel={() => {
+                                                setImportModalVisible(false)
+                                                refetch()
+                                            }}
                                         />
                                         <ExportTemplateStudent />
                                     </>

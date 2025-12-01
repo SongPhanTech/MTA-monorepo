@@ -5,6 +5,7 @@ import { importLecturer } from '@workspace/libs/api/training'
 import { parseSheetLecturer } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 
 const { Panel } = Collapse
 interface ImportStudentModalProps {
@@ -13,7 +14,7 @@ interface ImportStudentModalProps {
     onCancel: () => void
 }
 
-const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => {
+const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModalProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])
@@ -67,6 +68,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
             const res = await importLecturer({ file: file, timeout: 30 })
             if (res?.status === 200) {
                 message.success(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thành công')
+                onSuccess()
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
             }
@@ -228,6 +230,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
                         key: 'dateOfBirth',
                         align: 'center',
                         width: 150,
+                        render: (value?: Date) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
                     },
                     {
                         title: 'Giới tính',
@@ -238,42 +241,40 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
                     },
                     {
                         title: 'Kiểu giáo viên',
-                        dataIndex: 'type',
+                        dataIndex: 'lecturerType',
                         key: 'type',
                         align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Học hàm',
-                        dataIndex: 'academic',
+                        dataIndex: 'degreeRankType',
                         key: 'academic',
                         align: 'center',
                         width: 100,
                     },
                     {
                         title: 'Học vị',
-                        dataIndex: 'degree',
+                        dataIndex: 'degreeType',
                         key: 'degree',
+                        align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Khoa',
-                        dataIndex: 'admissionBlock',
-                        key: 'admissionBlock',
+                        dataIndex: 'facultyOrganization',
                         align: 'center',
                         width: 150,
                     },
                     {
                         title: 'Bộ môn',
-                        dataIndex: 'admissionScore',
-                        key: 'admissionScore',
+                        dataIndex: 'departmentOrganization',
                         align: 'center',
                         width: 100,
                     },
                     {
                         title: 'Địa chỉ',
-                        dataIndex: 'adress',
-                        key: 'adress',
+                        dataIndex: 'currentAddress',
                         align: 'center',
                         width: 150,
                     },
@@ -294,8 +295,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
 
                     {
                         title: 'CCCD/CMND',
-                        dataIndex: 'idNumberCard',
-                        key: 'idNumberCard',
+                        dataIndex: 'idCardNumber',
                         align: 'center',
                         width: 150,
                     },

@@ -241,9 +241,17 @@ export default function NhapDiem({
 
     const enteredScore = useMemo(
         () =>
-            dataTable.every(({ id }) => {
+            dataTable.every(({ id, attendanceScore, midtermScore }) => {
                 const f = listForm?.[id]
                 return (
+                    (attendanceScore !== undefined &&
+                        attendanceScore !== null &&
+                        attendanceScore <= 1 &&
+                        !f?.examBanned) ||
+                    (midtermScore !== undefined &&
+                        midtermScore !== null &&
+                        midtermScore <= 1 &&
+                        !f?.examBanned) ||
                     (f?.examBanned && f?.examBannedReason) ||
                     (f?.attendanceScore && f?.midtermScore)
                 )
@@ -308,10 +316,7 @@ export default function NhapDiem({
 
             const listChange = Object.entries(listForm)
                 .map(([key, value]) => {
-                    return {
-                        id: key,
-                        ...value,
-                    }
+                    return { id: key, ...value }
                 })
                 .filter((e) => e.isChanged)
 
@@ -717,25 +722,6 @@ export default function NhapDiem({
                     onValuesChange={(changedValues) => {
                         const changedId = Object.keys(changedValues.list || {})?.[0]
                         if (changedId) {
-                            const basicScore =
-                                changedValues.list[changedId]?.attendanceScore ??
-                                changedValues.list[changedId]?.midtermScore ??
-                                listForm[changedId]?.attendanceScore ??
-                                listForm[changedId]?.midtermScore
-                            const numberScore = basicScore ?? Number(basicScore)
-                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
-                            // TODO: fix not work if directly uncheck exam banned
-                            const isExamBanned =
-                                !!changedValues.list[changedId]?.examBannedReason ||
-                                !!listForm[changedId]?.examBannedReason ||
-                                (numberScore !== null &&
-                                    scoreToTakeExam !== null &&
-                                    scoreToTakeExam !== undefined &&
-                                    numberScore < scoreToTakeExam)
-
-                            const dataForCalc = dataTable.find((i) => i.id === changedId)
-
-                            // Session: Subject onePoint
                             const examScore =
                                 changedValues.list[changedId]?.examScore ??
                                 listForm[changedId].examScore ??
@@ -748,6 +734,22 @@ export default function NhapDiem({
                                 ? examScore
                                 : (changedValues.list[changedId]?.midtermScore ??
                                   listForm[changedId].midtermScore)
+
+                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
+                            // TODO: fix not work if directly uncheck exam banned
+                            const isExamBanned =
+                                !!changedValues.list[changedId]?.examBannedReason ||
+                                !!listForm[changedId]?.examBannedReason ||
+                                (attendanceScore !== null &&
+                                    scoreToTakeExam !== null &&
+                                    scoreToTakeExam !== undefined &&
+                                    attendanceScore < scoreToTakeExam) ||
+                                (midtermScore !== null &&
+                                    scoreToTakeExam !== null &&
+                                    scoreToTakeExam !== undefined &&
+                                    midtermScore < scoreToTakeExam)
+
+                            const dataForCalc = dataTable.find((i) => i.id === changedId)
 
                             const finalScore = calcFinalScore(
                                 {
@@ -863,7 +865,7 @@ export default function NhapDiem({
                                 type: 'order',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'THI') {
-                                        return record.attendanceScore || ''
+                                        return record.attendanceScore ?? ''
                                     }
                                     return (
                                         <Form.Item
@@ -905,7 +907,7 @@ export default function NhapDiem({
                                 type: 'order',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'THI') {
-                                        return record.midtermScore || ''
+                                        return record.midtermScore ?? ''
                                     }
                                     return (
                                         <Form.Item
@@ -949,7 +951,7 @@ export default function NhapDiem({
                                 align: 'center',
                                 render: (_, record) => {
                                     if (role !== 'GV' || score === 'CC/TX' || !!record.examBanned) {
-                                        return record.examScore || ''
+                                        return record.examScore ?? ''
                                     }
                                     return (
                                         <Form.Item
