@@ -108,12 +108,14 @@ export default function CrossReviewP13({ userRole = 'REVIEWER' }: { userRole: us
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
                     children: (
-                        <CrossReviewSubPage
-                            key={standard.id}
-                            data={standard}
-                            onRefetch={refetch}
-                            role={userRole}
-                        />
+                        <div className="h-[calc(100vh-200px)] overflow-y-auto">
+                            <CrossReviewSubPage
+                                key={standard.id}
+                                data={standard}
+                                onRefetch={refetch}
+                                role={userRole}
+                            />
+                        </div>
                     ),
                 }
             })
@@ -126,7 +128,7 @@ export default function CrossReviewP13({ userRole = 'REVIEWER' }: { userRole: us
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            className="h-[calc(100vh-200px)]"
                             tabPosition="left"
                             items={dataTab}
                             tabBarStyle={{

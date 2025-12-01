@@ -132,7 +132,7 @@ export default function CriteriaEvaluationWrite() {
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            className="h-[calc(100vh-200px)]"
                             tabPosition="left"
                             items={data.standards.map(
                                 (standard: DataTabEvaluationCriterionType) => {
