@@ -12,9 +12,9 @@ const openSubjectClass = createRoute({
     operationId: 'openSubjectClass',
     path: '/open-subject-class',
     method: 'get',
-    description: 'Lấy danh sách lớp môn học đã mở',
+    description: 'Lấy danh sách môn dự kiến giảng dạy',
     tags: ['SubjectClass'],
-    summary: 'Lấy danh sách lớp môn học đã mở',
+    summary: 'Lấy danh sách môn dự kiến giảng dạy',
     request: {
         query: z.object({
             semesterId: z.string(),
@@ -54,12 +54,9 @@ const openSubjectClassRetake = createRoute({
     summary: 'Lấy danh sách môn học có hssv nợ',
     request: {
         query: PaginationQuerySchema.extend({
-            trainingCourseId: z
-                .string()
-                .openapi('trainingCourseId', {
-                    description: 'ID ngành đào tạo',
-                })
-                .optional(),
+            trainingCourseId: z.string().openapi('trainingCourseId', {
+                description: 'ID khóa đào tạo',
+            }),
             trainingMajorId: z
                 .string()
                 .openapi('trainingMajorId', {
@@ -338,7 +335,6 @@ app.openapi(openSubjectClass, async (c) => {
         nextSemester,
         fixedClassId,
     } = c.req.valid('query')
-    console.log('nextSemester', nextSemester, typeof nextSemester)
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -373,9 +369,10 @@ app.openapi(openSubjectClass, async (c) => {
     }
     const planTraining = await prisma.planTraining.upsert({
         where: {
-            trainingObjectTypeId_semesterId: {
+            trainingObjectTypeId_semesterId_trainingCourseId: {
                 trainingObjectTypeId,
                 semesterId,
+                trainingCourseId,
             },
         },
         update: {},
@@ -387,7 +384,7 @@ app.openapi(openSubjectClass, async (c) => {
             id: true,
             planTrainingSubjects: {
                 select: {
-                    subjectVersionId: true,
+                    trainingBlockSubjectId: true,
                 },
                 where: {
                     subjectClassType: $Enums.SubjectClassType.NORMAL,
@@ -397,7 +394,7 @@ app.openapi(openSubjectClass, async (c) => {
     })
 
     const subjectAlreadyInPlan =
-        planTraining?.planTrainingSubjects?.map((e) => e.subjectVersionId) || []
+        planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
 
     const res = await prisma.$queryRaw<
         {
@@ -451,7 +448,7 @@ app.openapi(openSubjectClass, async (c) => {
                        AND fc."active" = TRUE
                        AND sv."deletedAt" IS NULL
                        AND sv."active" = TRUE
-                       AND sv.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
+                       AND tbs.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
                      GROUP BY sv.code,
                               tbs.semester,
                               fc."startYear",
@@ -578,9 +575,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
 
     const planTraining = await prisma.planTraining.upsert({
         where: {
-            trainingObjectTypeId_semesterId: {
+            trainingObjectTypeId_semesterId_trainingCourseId: {
                 trainingObjectTypeId,
                 semesterId,
+                trainingCourseId,
             },
         },
         update: {},
@@ -591,8 +589,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
         select: {
             id: true,
             planTrainingSubjects: {
-                select: {
-                    subjectVersionId: true,
+              select: {
+                    trainingBlockSubjectId: true,
                 },
                 where: {
                     subjectClassType: $Enums.SubjectClassType.RETAKE,
@@ -601,7 +599,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
         },
     })
     const subjectAlreadyInPlan =
-        planTraining?.planTrainingSubjects?.map((e) => e.subjectVersionId) || []
+        planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
     const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                                sv.code,
@@ -646,7 +644,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
+          and TBS.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -709,7 +707,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.subjectVersionId}'`).join(',') : '0'})
+          and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )

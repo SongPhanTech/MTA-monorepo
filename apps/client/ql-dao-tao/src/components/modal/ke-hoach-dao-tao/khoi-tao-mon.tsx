@@ -12,14 +12,14 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, message } from 'antd'
 import type { DataNode } from 'antd/es/tree'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { Trash2Icon } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { $Enums, PlanTraining } from '@workspace/db/client'
+import { $Enums, type PlanTraining } from '@workspace/db/client'
 
 export type KhoiTaoMonFormType = {
     managementOrganizationIds: string[]
@@ -36,6 +36,7 @@ const KhoiTaoMon = () => {
     })
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
     const managementOrganizationIds = Form.useWatch('managementOrganizationIds', form) || []
     const subjectVersionIds = Form.useWatch('subjectVersionIds', form) || {}
 
@@ -51,15 +52,17 @@ const KhoiTaoMon = () => {
                     operation: 'upsert',
                     data: {
                         where: {
-                            trainingObjectTypeId_semesterId: {
+                            trainingObjectTypeId_semesterId_trainingCourseId: {
                                 trainingObjectTypeId,
                                 semesterId,
+                                trainingCourseId,
                             },
                         },
                         update: {},
                         create: {
                             trainingObjectTypeId,
                             semesterId,
+                            trainingCourseId,
                         },
                         select: {
                             id: true,
@@ -132,15 +135,19 @@ const KhoiTaoMon = () => {
         where: {
             subjectVersion: {
                 none: {
-                    planTrainingSubject: {
+                    trainingBlocks: {
                         some: {
-                            planTraining: {
-                                trainingObjectTypeId,
-                                semesterId,
+                            planTrainingSubjects: {
+                                some: {
+                                    planTraining: {
+                                        trainingObjectTypeId,
+                                        semesterId,
+                                    },
+                                    subjectClassType: input?.hocLai
+                                        ? $Enums.SubjectClassType.RETAKE
+                                        : $Enums.SubjectClassType.NORMAL,
+                                },
                             },
-                            subjectClassType: input?.hocLai
-                                ? $Enums.SubjectClassType.RETAKE
-                                : $Enums.SubjectClassType.NORMAL,
                         },
                     },
                 },

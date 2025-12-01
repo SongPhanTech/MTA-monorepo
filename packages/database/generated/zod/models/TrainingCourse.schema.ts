@@ -92,6 +92,7 @@ const relationSchema = z.object({
     classRegisterSession: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     thesisSession: z.array(z.unknown()).optional(),
+    planTrainings: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

@@ -11,7 +11,7 @@ import {
 } from '@workspace/db/hooks'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -32,6 +32,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
     const searchText = Form.useWatch('searchText', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
     const { data: semesterData } = useFindUniqueSemester(
         {
             where: { id: semesterId },
@@ -53,49 +54,64 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
             where: {
                 semesterId: semesterId as string,
                 trainingObjectTypeId,
+                trainingCourseId,
             },
             include: {
                 planTrainingSubjects: {
                     take: numberOfPages,
                     skip: (currentPage - 1) * numberOfPages,
                     include: {
-                        fixedClasses: {
+                        trainingBlockSubject: {
                             include: {
-                                _count: {
-                                    select: {
-                                        students: {
-                                            where: {
-                                                active: true,
-                                                status: 'ENROLLED',
+                                subject: {
+                                    include: {
+                                        managementOrganization: {
+                                            select: {
+                                                sMa: true,
                                             },
                                         },
                                     },
                                 },
-                            },
-                            orderBy: {
-                                code: 'asc',
-                            },
-                        },
-                        subjectVersion: {
-                            include: {
-                                managementOrganization: {
-                                    select: {
-                                        sMa: true,
+                                trainingBlockOnCurriculumVersion: {
+                                    include: {
+                                        curriculumVersion: {
+                                            include: {
+                                                fixedClasses: {
+                                                    include: {
+                                                        _count: {
+                                                            select: {
+                                                                students: {
+                                                                    where: {
+                                                                        active: true,
+                                                                        status: 'ENROLLED',
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    orderBy: {
+                                                        code: 'asc',
+                                                    },
+                                                },
+                                            },
+                                        },
                                     },
                                 },
                             },
                         },
                     },
                     where: {
-                        subjectVersion: {
-                            ...(searchText
-                                ? {
-                                      name: {
-                                          contains: searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
+                        trainingBlockSubject: {
+                            subject: {
+                                ...(searchText
+                                    ? {
+                                          name: {
+                                              contains: searchText,
+                                              mode: 'insensitive',
+                                          },
+                                      }
+                                    : {}),
+                            },
                         },
                         subjectClassType: hocLai
                             ? $Enums.SubjectClassType.RETAKE
@@ -201,71 +217,86 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                                 nam_hoc: semesterData?.schoolYear?.name ?? '',
                                             },
                                             tableStartCell: { row: 7, col: 1 },
-                                            rows: planTraining?.planTrainingSubjects.flatMap(
-                                                (item, index) =>
-                                                    item.fixedClasses.map((fc, idx) => {
-                                                        const rowSpan =
-                                                            idx === 0 ? item.fixedClasses.length : 1
-                                                        return {
-                                                            cells: [
-                                                                {
-                                                                    value: index + 1,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersion
-                                                                        ?.code,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersion
-                                                                        ?.name,
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersion
-                                                                        ?.credit,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: `${fc.code}`,
-                                                                    align: 'center',
-                                                                },
-                                                                {
-                                                                    value: `${fc._count.students ?? 0}`,
-                                                                    align: 'center',
-                                                                },
-                                                                {
-                                                                    value: '',
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.fixedClasses.reduce(
-                                                                        (sum, fc) =>
-                                                                            sum +
-                                                                            (fc._count?.students ??
-                                                                                0),
-                                                                        0
-                                                                    ),
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value:
-                                                                        item.subjectVersion
-                                                                            .managementOrganization
-                                                                            ?.sMa ?? '',
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                            ],
-                                                        }
-                                                    })
-                                            ),
+                                            rows:
+                                                planTraining?.planTrainingSubjects.flatMap(
+                                                    (item, index) =>
+                                                        item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
+                                                            (fc, idx, arr) => {
+                                                                const rowSpan =
+                                                                    idx === 0 ? arr.length : 1
+                                                                return {
+                                                                    cells: [
+                                                                        {
+                                                                            value: index + 1,
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value:
+                                                                                item
+                                                                                    .trainingBlockSubject
+                                                                                    .subject
+                                                                                    ?.code ?? '',
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value:
+                                                                                item
+                                                                                    .trainingBlockSubject
+                                                                                    .subject
+                                                                                    ?.name ?? '',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value:
+                                                                                item
+                                                                                    .trainingBlockSubject
+                                                                                    .subject
+                                                                                    ?.credit ?? '',
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value: `${fc.code}`,
+                                                                            align: 'center',
+                                                                        },
+                                                                        {
+                                                                            value: `${fc._count.students ?? 0}`,
+                                                                            align: 'center',
+                                                                        },
+                                                                        {
+                                                                            value: '',
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value: item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion.curriculumVersion?.fixedClasses?.reduce?.(
+                                                                                (sum, fc) =>
+                                                                                    sum +
+                                                                                    (fc._count
+                                                                                        ?.students ??
+                                                                                        0),
+                                                                                0
+                                                                            ) ?? 0,
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                        {
+                                                                            value:
+                                                                                item
+                                                                                    ?.trainingBlockSubject
+                                                                                    ?.subject
+                                                                                    ?.managementOrganization
+                                                                                    ?.sMa ?? '',
+                                                                            align: 'center',
+                                                                            rowSpan,
+                                                                        },
+                                                                    ],
+                                                                }
+                                                            }
+                                                        )
+                                                ) ?? [],
                                         },
                                     ],
                                     fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
@@ -281,7 +312,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     showSpinner()
                                     await deleteManyPlanTrainingSubject({
                                         where: {
-                                            subjectVersionId: { in: subjectSelected },
+                                            trainingBlockSubjectId: { in: subjectSelected },
                                             subjectClassType: hocLai
                                                 ? $Enums.SubjectClassType.RETAKE
                                                 : $Enums.SubjectClassType.NORMAL,
@@ -305,7 +336,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                 </Col>
                 <Form.Item hidden name="subjectSelected" />
                 <Table
-                    rowKey="subjectVersionId"
+                    rowKey="trainingBlockSubjectId"
                     id="fixed-class"
                     rowSelection={{
                         selectedRowKeys: subjectSelected,

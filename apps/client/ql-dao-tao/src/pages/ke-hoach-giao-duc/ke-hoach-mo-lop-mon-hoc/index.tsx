@@ -61,22 +61,34 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                     ? {
                           planTrainingSubjects: {
                               some: {
-                                  subjectVersion: {
-                                      OR: [
-                                          {
-                                              name: { contains: searchText, mode: 'insensitive' },
-                                          },
-                                          {
-                                              code: { contains: searchText, mode: 'insensitive' },
-                                          },
-                                      ],
-                                  },
-                                  fixedClasses: {
-                                      some: {
-                                          trainingCourseId,
+                                  trainingBlockSubject: {
+                                      subject: {
+                                          OR: [
+                                              {
+                                                  name: {
+                                                      contains: searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                              {
+                                                  code: {
+                                                      contains: searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              },
+                                          ],
+                                      },
+                                      trainingBlockOnCurriculumVersion: {
                                           curriculumVersion: {
-                                              curriculum: {
-                                                  trainingMajorId,
+                                              fixedClasses: {
+                                                  some: {
+                                                      trainingCourseId,
+                                                      curriculumVersion: {
+                                                          curriculum: {
+                                                              trainingMajorId,
+                                                          },
+                                                      },
+                                                  },
                                               },
                                           },
                                       },
@@ -109,68 +121,82 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                       },
                                   },
                               }),
-                        subjectVersion: {
-                            OR: [
-                                {
-                                    name: { contains: searchText, mode: 'insensitive' },
-                                },
-                                {
-                                    code: { contains: searchText, mode: 'insensitive' },
-                                },
-                            ],
+                        trainingBlockSubject: {
+                            subject: {
+                                OR: [
+                                    {
+                                        name: { contains: searchText, mode: 'insensitive' },
+                                    },
+                                    {
+                                        code: { contains: searchText, mode: 'insensitive' },
+                                    },
+                                ],
+                            },
                         },
                     },
                     include: {
-                        subjectVersion: {
+                        trainingBlockSubject: {
                             include: {
-                                subjectClass: {
-                                    where: {
-                                        semesterId: semesterId as string,
-                                        trainingObjectTypeId: trainingObjectTypeId || '',
-                                    },
-                                    orderBy: { code: 'asc' },
+                                subject: {
                                     include: {
-                                        fixedClasses: {
-                                            select: {
-                                                id: true,
-                                                code: true,
-                                                _count: {
+                                        subjectClass: {
+                                            where: {
+                                                semesterId: semesterId as string,
+                                                trainingObjectTypeId: trainingObjectTypeId || '',
+                                            },
+                                            orderBy: { code: 'asc' },
+                                            include: {
+                                                fixedClasses: {
                                                     select: {
-                                                        students: {
-                                                            where: {
-                                                                deletedAt: null,
-                                                                active: true,
-                                                                status: 'ENROLLED',
+                                                        id: true,
+                                                        code: true,
+                                                        _count: {
+                                                            select: {
+                                                                students: {
+                                                                    where: {
+                                                                        deletedAt: null,
+                                                                        active: true,
+                                                                        status: 'ENROLLED',
+                                                                    },
+                                                                },
                                                             },
                                                         },
                                                     },
                                                 },
                                             },
                                         },
+                                        managementOrganization: {
+                                            select: {
+                                                sMa: true,
+                                            },
+                                        },
                                     },
                                 },
-                                managementOrganization: {
-                                    select: {
-                                        sMa: true,
-                                    },
-                                },
-                            },
-                        },
-                        fixedClasses: {
-                            include: {
-                                _count: {
-                                    select: {
-                                        students: {
-                                            where: {
-                                                deletedAt: null,
-                                                active: true,
-                                                status: 'ENROLLED',
+                                trainingBlockOnCurriculumVersion: {
+                                    include: {
+                                        curriculumVersion: {
+                                            include: {
+                                                fixedClasses: {
+                                                    include: {
+                                                        _count: {
+                                                            select: {
+                                                                students: {
+                                                                    where: {
+                                                                        deletedAt: null,
+                                                                        active: true,
+                                                                        status: 'ENROLLED',
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    orderBy: { code: 'asc' },
+                                                },
                                             },
                                         },
                                     },
                                 },
                             },
-                            orderBy: { code: 'asc' },
                         },
                     },
                     take: numberOfPages,
@@ -197,15 +223,17 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                               },
                                           },
                                       }),
-                                subjectVersion: {
-                                    OR: [
-                                        {
-                                            name: { contains: searchText, mode: 'insensitive' },
-                                        },
-                                        {
-                                            code: { contains: searchText, mode: 'insensitive' },
-                                        },
-                                    ],
+                                trainingBlockSubject: {
+                                    subject: {
+                                        OR: [
+                                            {
+                                                name: { contains: searchText, mode: 'insensitive' },
+                                            },
+                                            {
+                                                code: { contains: searchText, mode: 'insensitive' },
+                                            },
+                                        ],
+                                    },
                                 },
                             },
                         },
@@ -233,14 +261,14 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                     if (!acc) {
                         return {}
                     }
-                    acc[cur.subjectVersionId] = {
-                        count: cur.subjectVersion.subjectClass.length ?? 0,
-                        name: cur.subjectVersion?.name,
-                        code: cur.subjectVersion?.code,
+                    acc[cur.trainingBlockSubject.subjectId] = {
+                        count: cur.trainingBlockSubject.subject.subjectClass.length ?? 0,
+                        name: cur.trainingBlockSubject.subject?.name,
+                        code: cur.trainingBlockSubject.subject?.code,
                         maxStudent:
                             cur.studentCount ??
-                            cur.subjectVersion.subjectClass?.[0]?.maxStudent ??
-                            cur.fixedClasses.reduce(
+                            cur.trainingBlockSubject.subject.subjectClass?.[0]?.maxStudent ??
+                            cur.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses.reduce(
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
                             ),
@@ -340,6 +368,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                 where: {
                                                                     semesterId,
                                                                     trainingObjectTypeId,
+                                                                    trainingCourseId,
                                                                     planTrainingSubjects: {
                                                                         some: {
                                                                             subjectClassType: hocLai
@@ -406,11 +435,15 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                         select: {
                                                             planTrainingSubjects: {
                                                                 select: {
-                                                                    subjectVersion: {
+                                                                    trainingBlockSubject: {
                                                                         select: {
-                                                                            id: true
-                                                                            code: true
-                                                                            name: true
+                                                                            subject: {
+                                                                                select: {
+                                                                                    id: true
+                                                                                    code: true
+                                                                                    name: true
+                                                                                }
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -431,7 +464,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                     !alreadySubjectIds.some(
                                                                         (asc) =>
                                                                             asc.subjectId ===
-                                                                            pts.subjectVersion.id
+                                                                            pts?.trainingBlockSubject?.subject?.id
                                                                     )
                                                             )
                                                             .flatMap((e) =>
@@ -452,16 +485,16 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                                           .SubjectClassType
                                                                                           .NORMAL,
                                                                                 subjectId:
-                                                                                    e.subjectVersion
-                                                                                        .id,
-                                                                                code: `${e.subjectVersion.code} ${String(idx + 1)}`,
+                                                                                    e.trainingBlockSubject.subject.id,
+                                                                                code: `${e.trainingBlockSubject.subject.code} ${String(idx + 1)}`,
                                                                                 name: e
-                                                                                    .subjectVersion
+                                                                                    .trainingBlockSubject.subject
                                                                                     .name,
                                                                                 maxStudent:
                                                                                     subjectVersions[
                                                                                         e
-                                                                                            .subjectVersion
+                                                                                            .trainingBlockSubject
+                                                                                            .subject
                                                                                             .id
                                                                                     ]?.maxStudent ||
                                                                                     0,
@@ -737,7 +770,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                         (e.key === 'ArrowUp'
                                                                             ? -1
                                                                             : 1)
-                                                                ]?.subjectVersionId
+                                                                ]?.trainingBlockSubject?.subject?.id
                                                             document
                                                                 .getElementById(
                                                                     `subjectClassCount-${nextId}`
@@ -801,7 +834,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                         (e.key === 'ArrowUp'
                                                                             ? -1
                                                                             : 1)
-                                                                ]?.subjectVersionId
+                                                                ]?.trainingBlockSubject?.subject?.id
                                                             document
                                                                 .getElementById(`svmax-${nextId}`)
                                                                 ?.focus()

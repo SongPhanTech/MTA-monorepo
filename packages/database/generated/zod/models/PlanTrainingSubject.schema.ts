@@ -31,13 +31,12 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     planTraining: z.record(z.string(), z.unknown()),
-    subjectVersion: z.record(z.string(), z.unknown()),
-    fixedClasses: z.array(z.unknown()).optional(),
+    trainingBlockSubject: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
     planTrainingId: z.string(),
-    subjectVersionId: z.string(),
+    trainingBlockSubjectId: z.string(),
 }
 );
 

@@ -73,8 +73,6 @@ export * from './dm-quan-huyen';
 export * from './dm-xa-phuong';
 export * from './dm-xa-phuong-new';
 export * from './dm-vi-tri-cong-viec';
-export * from './plan-training-delay';
-export * from './plan-training-delay-subject';
 export * from './plan-training';
 export * from './plan-training-subject';
 export * from './student-score-convert';
