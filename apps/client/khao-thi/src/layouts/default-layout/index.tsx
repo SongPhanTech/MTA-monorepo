@@ -34,7 +34,7 @@ const DefaultLayout = ({
     unLayout?: boolean
 }) => {
     const menus = useMenuList()
-    const { status } = useSession();
+    const { status } = useSession()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)

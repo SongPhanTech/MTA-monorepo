@@ -258,7 +258,7 @@ app.openapi(saveExamScore, async (c) => {
     const lockedClasses = subjectClasses.filter((cls) => {
         // const now = new Date()
         // return !cls.examScoreDeadline || cls.examScoreDeadline <= now || cls.isLockExamScore
-        return  cls.isLockExamScore
+        return cls.isLockExamScore
     })
 
     if (lockedClasses.length) {

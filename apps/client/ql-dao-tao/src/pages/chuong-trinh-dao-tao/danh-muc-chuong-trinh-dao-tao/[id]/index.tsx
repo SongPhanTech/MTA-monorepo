@@ -66,9 +66,9 @@ export default function TrainingProgramSubjects() {
                             include: {
                                 subject: {
                                     include: {
-                                        planTrainingSubject: {
-                                            take: 1,
-                                        },
+                                        // planTrainingSubject: {
+                                        //     take: 1,
+                                        // },
                                         subjectClass: {
                                             take: 1,
                                         },

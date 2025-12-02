@@ -251,6 +251,7 @@ export default function StudentFixedClassPage() {
             userProfile: {
                 include: {
                     rank: true,
+                    gender: true,
                 },
             },
             trainingObjectType: {
@@ -2375,19 +2376,11 @@ export default function StudentFixedClassPage() {
                                 width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                // options: [
-                                //     { label: 'Nam', value: 'Male' },
-                                //     { label: 'Nữ', value: 'Female' },
-                                // ],
                                 options: genderData.map((i) => ({
                                     label: i.sTen,
                                     value: i.Id,
                                 })),
-
-                                render: (__, record) =>
-                                    record?.userProfile?.gender
-                                        ? record?.userProfile?.gender?.sTen
-                                        : '',
+                                render: (__, record) => record?.userProfile?.gender?.sTen,
                             },
                             {
                                 title: 'SĐT',
@@ -2406,10 +2399,10 @@ export default function StudentFixedClassPage() {
                                 width: 120,
                                 dataIndex: 'rank',
                                 type: 'input',
-                                render: (__, record) =>
-                                    record.userProfile?.rank?.sTen
-                                        ? record.userProfile?.rank?.sTen
-                                        : '',
+                                render: (__, record) => {
+                                    console.log(record.userProfile?.rank?.sTen)
+                                    return record.userProfile?.rank?.sTen
+                                },
                             },
                             {
                                 title: 'Ngành',

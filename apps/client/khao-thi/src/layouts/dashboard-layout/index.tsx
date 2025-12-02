@@ -14,7 +14,7 @@ const { Header, Content } = Layout
 
 const DashboardLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     const menus = useMenuList()
-    const { status } = useSession();
+    const { status } = useSession()
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })

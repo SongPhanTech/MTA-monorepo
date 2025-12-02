@@ -26,7 +26,7 @@ const KhaoSatPrivateLayout = ({
     unLayout?: boolean
 }) => {
     const router = useRouter()
-    const { status } = useSession();
+    const { status } = useSession()
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
             key: CONFIG_KEY.USER_SESSION_TIMEOUT,

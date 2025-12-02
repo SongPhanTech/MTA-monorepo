@@ -1,6 +1,5 @@
 import { TableOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
 import ExportTemplateLecturer from '@components/modal/export-template-lecturer'
 import ImportLecturerModal from '@components/modal/import-excel-lecturer'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -11,6 +10,8 @@ import type { UserProfile } from '@workspace/db/client'
 import {
     useCountLecturer,
     useFindManyDM_DonVi,
+    useFindManyDM_HocHam,
+    useFindManyDM_HocVi,
     useFindManyLecturer,
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
@@ -204,7 +205,7 @@ export default function UserProfilePageLecture() {
                 : {}),
             ...(!canXemTatCa ? { organizationId: { in: orgIds } } : {}),
         }),
-        [filters]
+        [filters, canXemTatCa]
     )
 
     const { data = [], refetch } = useFindManyLecturer({
@@ -239,6 +240,8 @@ export default function UserProfilePageLecture() {
         },
     })
 
+    const { data: academicRankTypes = [] } = useFindManyDM_HocHam()
+    const { data: academicDegreeTypes = [] } = useFindManyDM_HocVi()
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId || '0')
@@ -319,7 +322,7 @@ export default function UserProfilePageLecture() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -329,7 +332,7 @@ export default function UserProfilePageLecture() {
                                 title: 'Mã giảng viên',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 type: 'input',
                             },
                             {
@@ -351,13 +354,12 @@ export default function UserProfilePageLecture() {
                                         ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                                 align: 'center',
-                                width: 120,
+                                width: 100,
                                 dataIndex: 'dateOfBirth',
                             },
                             {
                                 title: 'CCCD/CMND',
-                                render: (__, record) =>
-                                    record.userProfile ? `${record.userProfile.idCardNumber}` : '',
+                                render: (__, record) => record.userProfile?.idCardNumber,
                                 align: 'center',
                                 width: 120,
                                 dataIndex: 'idCardNumber',
@@ -365,9 +367,9 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'SĐT',
-                                render: (__, record) => record.userProfile?.phoneNumber || '',
+                                render: (__, record) => record.userProfile?.phoneNumber,
                                 align: 'center',
-                                width: 120,
+                                width: 100,
                                 dataIndex: 'phoneNumber',
                             },
                             {
@@ -379,9 +381,32 @@ export default function UserProfilePageLecture() {
                                 type: 'tree_select',
                                 options: treeData,
                             },
-
                             {
-                                title: 'Loại giảng viên',
+                                title: 'Học hàm',
+                                dataIndex: 'academicRankType',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => record.userProfile?.academicRankType?.sTen,
+                                type: 'select',
+                                options: academicRankTypes.map((type) => ({
+                                    label: type.sTen,
+                                    value: type.Id,
+                                })),
+                            },
+                            {
+                                title: 'Học vị',
+                                dataIndex: 'academicDegreeType',
+                                align: 'center',
+                                width: 120,
+                                render: (_, record) => record.userProfile?.academicDegreeType?.sTen,
+                                type: 'select',
+                                options: academicDegreeTypes.map((type) => ({
+                                    label: type.sTen,
+                                    value: type.Id,
+                                })),
+                            },
+                            {
+                                title: 'Loại GV',
                                 align: 'center',
                                 options: lecturerTypeData.map((type) => ({
                                     label: type.name,
@@ -389,64 +414,64 @@ export default function UserProfilePageLecture() {
                                 })),
                                 dataIndex: 'lecturerType',
                                 type: 'select',
-                                width: 170,
+                                width: 120,
                                 render: (__, record) => record?.lecturerType?.name || '',
                             },
 
-                            {
-                                title: 'Lớp giảng dạy',
-                                dataIndex: 'mainSubjectClasses',
-                                align: 'center',
-                                width: 250,
-                                render: (__, record: any) => {
-                                    return record?.mainSubjectClasses.length ? (
-                                        <TextTruncate
-                                            arr={record?.mainSubjectClasses.map((i: any) => {
-                                                return { key: i?.id, label: i?.name }
-                                            })}
-                                            key="mainSubjectClasses"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Lớp trợ giảng',
-                                dataIndex: 'extraSubjectClasses',
-                                align: 'center',
-                                width: 200,
-                                render: (__, record) => {
-                                    return record?.extraSubjectClasses.length ? (
-                                        <TextTruncate
-                                            arr={record?.extraSubjectClasses.map((i: any) => {
-                                                return { key: i?.id, label: i?.name }
-                                            })}
-                                            key="extraSubjectClasses"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Lớp được quản lý',
-                                dataIndex: 'manageFixedClass',
-                                align: 'center',
-                                width: 200,
-                                render: (__, record) => {
-                                    return record?.manageFixedClass.length ? (
-                                        <TextTruncate
-                                            arr={record?.manageFixedClass.map((i: any) => {
-                                                return { key: i?.id, label: i?.name }
-                                            })}
-                                            key="manageFixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Lớp giảng dạy',
+                            //     dataIndex: 'mainSubjectClasses',
+                            //     align: 'center',
+                            //     width: 200,
+                            //     render: (__, record: any) => {
+                            //         return record?.mainSubjectClasses.length ? (
+                            //             <TextTruncate
+                            //                 arr={record?.mainSubjectClasses.map((i: any) => {
+                            //                     return { key: i?.id, label: i?.name }
+                            //                 })}
+                            //                 key="mainSubjectClasses"
+                            //             />
+                            //         ) : (
+                            //             ''
+                            //         )
+                            //     },
+                            // },
+                            // {
+                            //     title: 'Lớp trợ giảng',
+                            //     dataIndex: 'extraSubjectClasses',
+                            //     align: 'center',
+                            //     width: 200,
+                            //     render: (__, record) => {
+                            //         return record?.extraSubjectClasses.length ? (
+                            //             <TextTruncate
+                            //                 arr={record?.extraSubjectClasses.map((i: any) => {
+                            //                     return { key: i?.id, label: i?.name }
+                            //                 })}
+                            //                 key="extraSubjectClasses"
+                            //             />
+                            //         ) : (
+                            //             ''
+                            //         )
+                            //     },
+                            // },
+                            // {
+                            //     title: 'Lớp được quản lý',
+                            //     dataIndex: 'manageFixedClass',
+                            //     align: 'center',
+                            //     width: 200,
+                            //     render: (__, record) => {
+                            //         return record?.manageFixedClass.length ? (
+                            //             <TextTruncate
+                            //                 arr={record?.manageFixedClass.map((i: any) => {
+                            //                     return { key: i?.id, label: i?.name }
+                            //                 })}
+                            //                 key="manageFixedClass"
+                            //             />
+                            //         ) : (
+                            //             ''
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

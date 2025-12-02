@@ -33,7 +33,7 @@ const CreateLayout = ({
     unLayout?: boolean
 }) => {
     const router = useRouter()
-    const { status } = useSession();
+    const { status } = useSession()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)
     const [collapsed, setCollapsed] = useState(() => {

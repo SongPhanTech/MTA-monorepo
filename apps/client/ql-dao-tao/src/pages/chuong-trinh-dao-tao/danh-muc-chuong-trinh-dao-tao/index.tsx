@@ -20,7 +20,7 @@ import type {
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingMajor,
-    TrainingTime
+    TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculumVersion,
