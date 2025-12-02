@@ -39,14 +39,14 @@ export default function MonCoHVSVChuaDat() {
     const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId as string,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId as string,
             semesterId: semesterId as string,
             limit: numberOfPages,
             page: currentPage,
         },
-        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
@@ -65,14 +65,14 @@ export default function MonCoHVSVChuaDat() {
                             trainingObjectTypeId_semesterId_trainingCourseId: {
                                 trainingObjectTypeId,
                                 semesterId,
-                                trainingCourseId
+                                trainingCourseId,
                             },
                         },
                         update: {},
                         create: {
                             trainingObjectTypeId,
                             semesterId,
-                            trainingCourseId
+                            trainingCourseId,
                         },
                         select: {
                             id: true,
