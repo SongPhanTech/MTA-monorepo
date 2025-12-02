@@ -170,7 +170,6 @@ export default function StudentScoreClassPage() {
                     },
                 ],
             }
-            //@ts-expect-error
             const monHocRows: TableRow[] =
                 hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                     cells: [
