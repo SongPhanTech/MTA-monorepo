@@ -5,7 +5,7 @@ import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_com
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
 import CrossReviewP13 from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
-import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
+// import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -126,14 +126,14 @@ export default function CriteriaEvaluationPage() {
             })
         }
 
-        if (isSecretary) {
-            tabs.push({
-                key: '6',
-                label: 'Tổng hợp phiếu đánh giá',
-                children: <SumaryOfCriteriaEvaluation />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
+        // if (isSecretary) {
+        //     tabs.push({
+        //         key: '6',
+        //         label: 'Tổng hợp phiếu đánh giá',
+        //         children: <SumaryOfCriteriaEvaluation />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
 
         return tabs
     }, [selectedEvaluationPeriodId, councilMember, can])

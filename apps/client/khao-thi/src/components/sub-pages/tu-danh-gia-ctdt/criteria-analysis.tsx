@@ -208,6 +208,14 @@ const CriteriaAnalysisSubPage = ({
         return true
     })
 
+    const hasSubmittableCriteria = filteredCriteria?.some((item) => {
+        const status = item.analysisCriterions?.status
+        return (
+            status !== $Enums.EvaluationCriterionStatus.APPROVED &&
+            status !== $Enums.EvaluationCriterionStatus.COMPLETED
+        )
+    })
+
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto p-4">
             <div className="flex items-center justify-between mb-3">
@@ -236,7 +244,8 @@ const CriteriaAnalysisSubPage = ({
                         can(
                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                             'THEM'
-                        ) && (
+                        ) &&
+                        hasSubmittableCriteria && (
                             <Popconfirm
                                 title="Xác nhận nộp tất cả tiêu chí"
                                 description="Bạn chắc chắn muốn nộp tất cả tiêu chí này?"
