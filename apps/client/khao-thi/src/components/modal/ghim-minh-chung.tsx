@@ -1,8 +1,9 @@
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { useFindManyEvidence } from '@workspace/db/hooks'
 import type { ItemProps } from '@workspace/libs/utils'
-import { Col, Form, message, Select } from 'antd'
+import { Col, Form, message } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvidenceType = {
@@ -27,8 +28,6 @@ const PinEvidenceToPeriod = () => {
             showSpinner()
 
             if (input?.id) {
-                console.log(items)
-
                 input.changeValue(items)
             }
             onClose()
@@ -42,7 +41,49 @@ const PinEvidenceToPeriod = () => {
             hideSpinner()
         }
     }
-    const { data: listEvidence } = useFindManyEvidence()
+    const { data: listEvidence } = useFindManyEvidence({
+        where: {
+                analysisFormEvidence :{
+                    some:{
+                    requirementCriterion:{
+                        analysisCriterion:{
+                            criterionPeriod:{
+                                evaluationStandard:{
+                                    periodId:'s4ekrtol3huj0nd5x94tc0pw'
+                                }
+                            }
+                        }
+                    }
+                    }
+
+                }
+              
+           
+        },
+        include: {
+            analysisFormEvidence:{
+                include: {
+                    requirementCriterion:{
+                        include: {
+                            analysisCriterion: {
+                                include: {
+                                    criterionPeriod: {
+                                        include: {
+                                            evaluationStandard: {
+                                                include: {
+                                                    period: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
 
     return (
         <PutFormModal

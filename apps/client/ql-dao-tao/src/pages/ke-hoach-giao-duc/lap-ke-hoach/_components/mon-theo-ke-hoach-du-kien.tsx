@@ -41,7 +41,7 @@ export default function MonTheoKeHoachDuKien() {
             trainingCourseId: trainingCourseId ?? '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            nextSemester: false,
+            nextSemester: 0,
             fixedClassId: fixedClassId,
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
@@ -108,15 +108,17 @@ export default function MonTheoKeHoachDuKien() {
                     operation: 'upsert',
                     data: {
                         where: {
-                            trainingObjectTypeId_semesterId: {
+                            trainingObjectTypeId_semesterId_trainingCourseId: {
                                 trainingObjectTypeId,
                                 semesterId,
+                                trainingCourseId
                             },
                         },
                         update: {},
                         create: {
                             trainingObjectTypeId,
                             semesterId,
+                            trainingCourseId
                         },
                         select: {
                             id: true,

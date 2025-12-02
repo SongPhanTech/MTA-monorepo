@@ -116,7 +116,7 @@ app.openapi(importCurriculumVersion, async (c) => {
             subjectId: subjectMap.get(name) as string,
             semester,
             type,
-            useForFinalScore: useForFinalScore as boolean,
+            useForFinalScore,
             graduation,
         })
     )

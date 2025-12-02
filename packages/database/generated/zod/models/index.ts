@@ -73,8 +73,6 @@ export * from './DM_QuanHuyen.schema';
 export * from './DM_XaPhuong.schema';
 export * from './DM_XaPhuong_New.schema';
 export * from './DM_ViTriCongViec.schema';
-export * from './PlanTrainingDelay.schema';
-export * from './PlanTrainingDelaySubject.schema';
 export * from './PlanTraining.schema';
 export * from './PlanTrainingSubject.schema';
 export * from './StudentScoreConvert.schema';

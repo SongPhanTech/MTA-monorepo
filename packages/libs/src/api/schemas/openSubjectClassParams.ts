@@ -14,6 +14,6 @@ export type OpenSubjectClassParams = {
     /**
      * @nullable
      */
-    nextSemester?: boolean | null
+    nextSemester?: number | null
     fixedClassId?: string
 }

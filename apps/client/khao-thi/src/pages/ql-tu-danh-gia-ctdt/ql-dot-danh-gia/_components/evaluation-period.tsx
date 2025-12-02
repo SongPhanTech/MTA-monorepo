@@ -16,7 +16,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus} from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-eport'
@@ -260,13 +260,11 @@ export default function EvaluationPeriod() {
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
-                                            <Row className="justify-center gap-2">
+                                            <Row className="justify-center items-center gap-2">
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                                                    'XEM_CHI_TIET'
-                                                ) && (
-                                                  <ExportReport id={record?.id}/>
-                                                )}
+                                                    'XUAT_EXCEL'
+                                                ) && <ExportReport id={record?.id} />}
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'SUA'

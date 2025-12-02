@@ -7491,135 +7491,6 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
-        planTrainingDelay: {
-            name: 'PlanTrainingDelay', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'planTrainingDelay',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, planTrainingDelaySubjects: {
-                    name: "planTrainingDelaySubjects",
-                    type: "PlanTrainingDelaySubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'planTrainingDelay',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
-        planTrainingDelaySubject: {
-            name: 'PlanTrainingDelaySubject', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Text", "args": [] }],
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, planTrainingDelay: {
-                    name: "planTrainingDelay",
-                    type: "PlanTrainingDelay",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'planTrainingDelaySubjects',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "planTrainingDelayId" },
-                }, planTrainingDelayId: {
-                    name: "planTrainingDelayId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'planTrainingDelay',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'planTrainingDelaySubject',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, fixedClasses: {
-                    name: "fixedClasses",
-                    type: "FixedClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'planTrainingDelaySubject',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, planTrainingDelayId_subjectVersionId: {
-                    name: "planTrainingDelayId_subjectVersionId",
-                    fields: ["planTrainingDelayId", "subjectVersionId"]
-                },
-            },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
-        },
         planTraining: {
             name: 'PlanTraining', fields: {
                 id: {
@@ -7674,6 +7545,21 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semester',
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainings',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
                 }, planTrainingSubjects: {
                     name: "planTrainingSubjects",
                     type: "PlanTrainingSubject",
@@ -7685,12 +7571,12 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, trainingObjectTypeId_semesterId: {
-                    name: "trainingObjectTypeId_semesterId",
-                    fields: ["trainingObjectTypeId", "semesterId"]
+                }, trainingObjectTypeId_semesterId_trainingCourseId: {
+                    name: "trainingObjectTypeId_semesterId_trainingCourseId",
+                    fields: ["trainingObjectTypeId", "semesterId", "trainingCourseId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         planTrainingSubject: {
             name: 'PlanTrainingSubject', fields: {
@@ -7733,26 +7619,19 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'planTraining',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'planTrainingSubject',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
+                }, trainingBlockSubjectId: {
+                    name: "trainingBlockSubjectId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, fixedClasses: {
-                    name: "fixedClasses",
-                    type: "FixedClass",
+                    relationField: 'trainingBlockSubject',
+                }, trainingBlockSubject: {
+                    name: "trainingBlockSubject",
+                    type: "TrainingBlockSubject",
                     isDataModel: true,
-                    isArray: true,
-                    backLink: 'planTrainingSubject',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainingSubjects',
                     isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingBlockSubjectId" },
                 }, studentCount: {
                     name: "studentCount",
                     type: "Int",
@@ -9261,6 +9140,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, planTrainings: {
+                    name: "planTrainings",
+                    type: "PlanTraining",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9516,20 +9401,6 @@ const metadata = {
                 }, surveyObjectTypes: {
                     name: "surveyObjectTypes",
                     type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'fixedClasses',
-                    isRelationOwner: true,
-                }, planTrainingSubject: {
-                    name: "planTrainingSubject",
-                    type: "PlanTrainingSubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'fixedClasses',
-                    isRelationOwner: true,
-                }, planTrainingDelaySubject: {
-                    name: "planTrainingDelaySubject",
-                    type: "PlanTrainingDelaySubject",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'fixedClasses',
@@ -10363,18 +10234,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
-                }, planTrainingDelaySubject: {
-                    name: "planTrainingDelaySubject",
-                    type: "PlanTrainingDelaySubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'subjectVersion',
-                }, planTrainingSubject: {
-                    name: "planTrainingSubject",
-                    type: "PlanTrainingSubject",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'subjectVersion',
                 }, subjectVersionHistory: {
                     name: "subjectVersionHistory",
                     type: "SubjectVersionHistory",
@@ -10703,6 +10562,12 @@ const metadata = {
                 }, graduation: {
                     name: "graduation",
                     type: "Boolean",
+                }, planTrainingSubjects: {
+                    name: "planTrainingSubjects",
+                    type: "PlanTrainingSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingBlockSubject',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -11835,12 +11700,6 @@ const metadata = {
                 }, planTraining: {
                     name: "planTraining",
                     type: "PlanTraining",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, planTrainingDelay: {
-                    name: "planTrainingDelay",
-                    type: "PlanTrainingDelay",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',

@@ -185,6 +185,7 @@ export default function DanhSachSinhVien() {
                     }
                 }
             }>
+
             const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
             const examNonRoomId = createId()
             const examListNonRoomId = createId()
@@ -428,7 +429,7 @@ export default function DanhSachSinhVien() {
                     })),
             ])
             if (res.status !== 200) {
-                throw new Error('Lấy điểm thất bại')
+                throw new Error('Phân phòng thất bại')
             }
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'ExamPaper'],
@@ -439,7 +440,7 @@ export default function DanhSachSinhVien() {
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'Exam'],
             })
-            message.success('Lấy điểm thành công')
+            message.success('Phân phòng thi thành công')
         } catch (error: any) {
             message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
         } finally {
@@ -497,7 +498,7 @@ export default function DanhSachSinhVien() {
                     .flatMap((e) => e.examPapers)
                     .reduce(
                         (acc, cur) => {
-                            acc[cur.id] = {
+                            acc[cur.studentSubjectScoreId] = {
                                 examPostponed: cur?.studentSubjectScore?.examPostponed ?? false,
                                 examPostponedReason:
                                     cur?.studentSubjectScore?.examPostponedReason ?? undefined,
@@ -651,21 +652,19 @@ export default function DanhSachSinhVien() {
                                 title: 'Điểm CC',
                                 width: 70,
                                 align: 'center',
-                                render: (_, record) =>
-                                    record?.studentSubjectScore?.attendanceScore || '',
+                                render: (_, record) => record?.studentSubjectScore?.attendanceScore,
                             },
                             {
                                 title: 'Điểm TX',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) =>
-                                    record?.studentSubjectScore?.midtermScore || '',
+                                render: (_, record) => record?.studentSubjectScore?.midtermScore,
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => record?.studentSubjectScore?.examScore || '',
+                                render: (_, record) => record?.studentSubjectScore?.examScore,
                             },
                             {
                                 title: 'Cấm thi',
@@ -705,10 +704,15 @@ export default function DanhSachSinhVien() {
                             {
                                 title: 'Lý do hoãn thi',
                                 render: (_, record) => {
-                                    const examPostponed = listForm[record.id]?.examPostponed
+                                    const examPostponed =
+                                        listForm[record.studentSubjectScoreId]?.examPostponed
                                     return (
                                         <Form.Item
-                                            name={['list', record.id, 'examPostponedReason']}
+                                            name={[
+                                                'list',
+                                                record.studentSubjectScoreId,
+                                                'examPostponedReason',
+                                            ]}
                                             className="m-0"
                                         >
                                             {!examPostponed ? (

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
+import { useSession } from '@workspace/auth/react'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -25,7 +26,7 @@ const KhaoSatPrivateLayout = ({
     unLayout?: boolean
 }) => {
     const router = useRouter()
-
+    const { status } = useSession();
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
             key: CONFIG_KEY.USER_SESSION_TIMEOUT,

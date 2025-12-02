@@ -1,6 +1,4 @@
 import DefaultLayout from '@layouts/default-layout'
-import { useFindFirstPlanTrainingDelay } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs, Tooltip } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
@@ -18,17 +16,6 @@ interface TabItem {
 
 export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: countDelay } = useFindFirstPlanTrainingDelay({
-        where: { trainingObjectTypeId, deletedAt: null },
-        select: {
-            _count: {
-                select: {
-                    planTrainingDelaySubjects: true,
-                },
-            },
-        },
-    })
 
     const leftTabs: TabItem[] = hocLai
         ? [
@@ -46,7 +33,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               },
               {
                   key: '2',
-                  label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
+                  label: 'Môn học chậm tiến độ',
                   content: <MonCham />,
               },
               {

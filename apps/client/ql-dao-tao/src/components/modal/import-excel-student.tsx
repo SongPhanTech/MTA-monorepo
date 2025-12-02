@@ -78,6 +78,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             const res = await importStudent({ file: file, timeout: 30 })
             if (res?.status === 200) {
                 message.success(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thành công')
+                onCancel()
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thất bại')
             }

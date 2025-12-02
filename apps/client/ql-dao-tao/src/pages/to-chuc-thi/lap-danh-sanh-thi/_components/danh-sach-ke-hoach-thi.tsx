@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import { ExamList, type SubjectClass } from '@workspace/db/client'
+import type { ExamList, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
@@ -30,7 +30,7 @@ import {
 } from 'antd'
 import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { keHoachThiStore } from '..'
 
 interface Props {
@@ -73,8 +73,9 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const listChanges = Form.useWatch('list', form)
     const [formButton] = Form.useForm<ButtonFormType>()
 
-    const { data: exams = [], refetch: refetchExams } = useFindManyExam({
-        where: {
+    const where = useMemo(
+        () => ({
+            deletedAt: null,
             subjectClass: {
                 some: {
                     trainingObjectTypeId,
@@ -82,7 +83,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     ...(filters.searchText && {
                         name: {
                             contains: filters.searchText,
-                            mode: 'insensitive',
+                            mode: 'insensitive' as const,
                         },
                     }),
                     ...(filters.examType &&
@@ -95,7 +96,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         }),
                 },
             },
-        },
+        }),
+        [filters.examType, filters.searchText, semesterId, trainingObjectTypeId]
+    )
+
+    const { data: exams = [], refetch: refetchExams } = useFindManyExam({
+        where,
         include: {
             subjectClass: {
                 include: {
@@ -151,29 +157,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountExam({
-        where: {
-            subjectClass: {
-                some: {
-                    trainingObjectTypeId,
-                    semesterId,
-                    ...(filters.searchText && {
-                        name: {
-                            contains: filters.searchText,
-                            mode: 'insensitive',
-                        },
-                    }),
-                    ...(filters.examType &&
-                        filters.examType.length > 0 && {
-                            subject: {
-                                examType: {
-                                    in: filters.examType,
-                                },
-                            },
-                        }),
-                },
-            },
-        },
+    const { data: count, refetch: refetchCount } = useCountExam({
+        where,
     })
 
     const { data: rooms = [] } = useFindManyRoom({
@@ -384,9 +369,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     return
                 }
                 message.success('Tạo kế hoạch thi thành công')
-                refetchExams()
                 formButton.resetFields()
                 setOpen(false)
+                refetchExams()
+                refetchCount()
             }
         } catch (error: any) {
             message.error(error?.message || 'Tạo kế hoạch thi thất bại')
@@ -694,7 +680,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 render: (__, record) => {
                                     return record.subjectClass?.[0]?.enteredExamScore ? (
@@ -711,9 +697,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 80,
                                 render: (_, record) => {
-                                    const isLockScore = record.subjectClass
-                                        ?.map?.((sc: SubjectClass) => sc.isLockScore)
-                                        .filter(Boolean)
                                     return (
                                         <Checkbox
                                             indeterminate={
@@ -748,20 +731,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <Checkbox
                                             indeterminate={
-                                                !record?.examRoom?.every?.(
+                                                !record?.examRooms?.every?.(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList.every(
                                                             (el) => el.createdExamCode
                                                         )
                                                 ) &&
-                                                record?.examRoom?.some(
+                                                record?.examRooms?.some(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList?.some(
                                                             (el) => el.createdExamCode
                                                         )
                                                 )
                                             }
-                                            checked={record?.examRoom?.every?.(
+                                            checked={record?.examRooms?.every?.(
                                                 (sc: { examList: ExamList[] }) =>
                                                     sc.examList.every((el) => el.createdExamCode)
                                             )}
@@ -777,16 +760,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return (
                                         <Checkbox
                                             indeterminate={
-                                                !record?.examRoom?.every?.(
+                                                !record?.examRooms?.every?.(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList.every((el) => el.lockExamCode)
                                                 ) &&
-                                                record?.examRoom?.some(
+                                                record?.examRooms?.some(
                                                     (er: { examList: ExamList[] }) =>
                                                         er.examList?.some((el) => el.lockExamCode)
                                                 )
                                             }
-                                            checked={record?.examRoom?.every?.(
+                                            checked={record?.examRooms?.every?.(
                                                 (sc: { examList: ExamList[] }) =>
                                                     sc.examList.every((el) => el.lockExamCode)
                                             )}

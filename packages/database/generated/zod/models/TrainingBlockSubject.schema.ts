@@ -40,6 +40,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     subject: z.record(z.string(), z.unknown()),
     trainingBlockOnCurriculumVersion: z.record(z.string(), z.unknown()),
+    planTrainingSubjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

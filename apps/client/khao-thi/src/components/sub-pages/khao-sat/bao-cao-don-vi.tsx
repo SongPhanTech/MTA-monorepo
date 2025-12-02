@@ -230,7 +230,9 @@ function OrganizationSurveyReport({
                         onClick: () => {
                             setOrganizationSelected(record?.organization?.Id as string)
                         },
-                        className: cn(organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''),
+                        className: cn(
+                            organizationSelected === record?.organization.Id ? 'bg-orange-200' : ''
+                        ),
                     }
                 }}
                 columns={

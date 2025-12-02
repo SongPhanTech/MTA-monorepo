@@ -37,6 +37,8 @@ import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
+import { Download } from 'lucide-react'
+import { getMinioUrl } from '@workspace/constant'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -306,7 +308,7 @@ const PutCurriculumVersion = () => {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            maskClosable={true}
+            // maskClosable={true}
             title={input?.versionId ? 'Sửa CTĐT toàn khoá' : 'Thêm CTĐT toàn khoá'}
             className="w-[60vw]"
             style={{ top: 20 }}
@@ -424,6 +426,7 @@ const PutCurriculumVersion = () => {
                                             required
                                         >
                                             <Select
+                                                disabled
                                                 placeholder="Chọn đối tượng đào tạo"
                                                 options={trainingObjectTypeData.map(
                                                     (i: TrainingObjectType) => ({
@@ -569,6 +572,15 @@ const PutCurriculumVersion = () => {
                                             name="file"
                                         >
                                             <div className="flex items-center gap-3">
+                                                <Button
+                                                    href={getMinioUrl(
+                                                        'mta/template/MAU-NHAP_CTDT.xlsx'
+                                                    )}
+                                                    type="dashed"
+                                                >
+                                                    <Download />
+                                                    Mẫu nhập CTĐT
+                                                </Button>
                                                 <Button type="primary" onClick={handleFileSelect}>
                                                     Chọn file Excel
                                                 </Button>

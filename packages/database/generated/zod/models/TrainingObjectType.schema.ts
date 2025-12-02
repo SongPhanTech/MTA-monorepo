@@ -46,7 +46,6 @@ const relationSchema = z.object({
     graduationSession: z.array(z.unknown()).optional(),
     subjectVersion: z.array(z.unknown()).optional(),
     planTraining: z.array(z.unknown()).optional(),
-    planTrainingDelay: z.array(z.unknown()).optional(),
     thesisSession: z.array(z.unknown()).optional(),
 }
 );

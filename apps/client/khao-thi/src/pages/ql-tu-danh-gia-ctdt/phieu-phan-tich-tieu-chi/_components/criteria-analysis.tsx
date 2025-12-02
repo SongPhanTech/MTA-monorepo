@@ -14,8 +14,25 @@ import type {
 } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
-import { useMemo } from 'react'
-
+import {
+    AlignmentType,
+    Document,
+    HeadingLevel,
+    Packer,
+    Paragraph,
+    Table,
+    TableCell,
+    TableOfContents,
+    TableRow,
+    TextRun,
+    WidthType,
+    BorderStyle,
+    VerticalAlign,
+} from 'docx'
+import { useMemo, useCallback } from 'react'
+import { saveAs } from 'file-saver'
+import dayjs from 'dayjs'
+import { getStatusEvaluation } from '@constants/constants'
 export type DataTabType = StandardPeriod & {
     criteria: (CriterionPeriod & {
         analysisCriterions?:
@@ -143,6 +160,234 @@ export default function CriteriaAnalysisWrite() {
         }
     )
 
+    const exportDanhyeuCau = useCallback((dataTable: any) => {
+        // ==== Tạo header bảng ====
+        const headerRow1 = new TableRow({
+            children: [
+                new TableCell({
+                    rowSpan: 2,
+                    children: [new Paragraph('STT')],
+                    verticalAlign: VerticalAlign.CENTER,
+                }),
+                new TableCell({
+                    columnSpan: 2,
+                    children: [new Paragraph('Phân tích tiêu chí')],
+                    verticalAlign: VerticalAlign.CENTER,
+                }),
+                new TableCell({
+                    columnSpan: 3,
+                    children: [new Paragraph('Thông tin minh chứng')],
+                    verticalAlign: VerticalAlign.CENTER,
+                }),
+                new TableCell({
+                    rowSpan: 2,
+                    children: [new Paragraph('Thao tác')],
+                    verticalAlign: VerticalAlign.CENTER,
+                }),
+            ],
+        })
+
+        const headerRow2 = new TableRow({
+            children: [
+                // 2 cột nhỏ trong "Phân tích tiêu chí"
+                new TableCell({
+                    children: [new Paragraph('Các yêu cầu')],
+                }),
+                new TableCell({
+                    children: [new Paragraph('Các câu hỏi đặt ra')],
+                }),
+
+                // 3 cột nhỏ trong "Thông tin minh chứng"
+                new TableCell({
+                    children: [new Paragraph('Tên minh chứng')],
+                }),
+                new TableCell({
+                    children: [new Paragraph('Nơi thu thập')],
+                }),
+                new TableCell({
+                    children: [new Paragraph('Phương pháp thu thập')],
+                }),
+            ],
+        })
+
+        // ==== Tạo các dòng dữ liệu ====
+        const dataRows = dataTable.map(
+            (item: any, index: number) =>
+                new TableRow({
+                    children: [
+                        new TableCell({ children: [new Paragraph(`${index + 1}`)] }),
+                        new TableCell({
+                            children: [new Paragraph(`${item?.name || ''}`)],
+                        }),
+                        new TableCell({
+                            children: item?.questions.map((t: string) => new Paragraph(`${t}`)),
+                        }),
+                        new TableCell({
+                            children: item?.evidences.map(
+                                (t: any) => new Paragraph(`${t?.evidence?.name || ''}`)
+                            ),
+                        }),
+
+                        new TableCell({
+                            children: [new Paragraph(`${item?.evidencePlaces || ''}`)],
+                        }),
+                        new TableCell({
+                            children: [new Paragraph(`${item?.collectionMethod || ''}`)],
+                        }),
+                    ],
+                })
+        )
+
+        // ==== Tạo bảng ====
+        const table = new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            borders: {
+                top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                right: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+            },
+            rows: [headerRow1, headerRow2, ...dataRows],
+        })
+
+        return table
+    }, [])
+
+    const handleViewAll = useCallback(
+        async (dataExport: StandardPeriod[]) => {
+            try {
+                if (!dataExport) return
+                const sections = await Promise.all([
+                    ...dataExport.map(async (standard: any, idx: number) => {
+                        const children: any = []
+
+                        // Tiêu chuẩn
+                        children.push(
+                            new Paragraph({
+                                indent: { firstLine: 720 },
+                                alignment: AlignmentType.JUSTIFIED,
+                                heading: HeadingLevel.HEADING_1,
+                                children: [
+                                    new TextRun({
+                                        text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
+                                        bold: true,
+                                        size: 28,
+                                        color: '000000',
+                                    }),
+                                ],
+                            })
+                        )
+
+                        // Tiêu chí
+                        for (const [cIdx, criterion] of standard.criteria.entries()) {
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    heading: HeadingLevel.HEADING_2,
+                                    children: [
+                                        new TextRun({
+                                            text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Người thực hiện ${
+                                                criterion?.analysisCriterions?.lecturer?.userProfile
+                                                    ?.fullname || ''
+                                            }`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Hạn ${criterion?.analysisCriterions?.deadline ? dayjs(criterion?.analysisCriterions?.deadline).format('DD/MM/YYYY') : ''}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Trạng thái: ${criterion?.analysisCriterions?.status ? getStatusEvaluation(criterion?.analysisCriterions?.status)?.label : ''}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                exportDanhyeuCau(
+                                    criterion?.analysisCriterions?.requirementCriterions
+                                )
+                            )
+                        }
+
+                        return { children }
+                    }),
+                ])
+                const doc = new Document({
+                    sections: [
+                        {
+                            children: [
+                                new Paragraph({
+                                    heading: HeadingLevel.HEADING_1,
+                                    children: [
+                                        new TextRun({
+                                            text: 'Mục lục',
+                                            size: 28,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                }),
+                                new TableOfContents('Mục lục', {
+                                    hyperlink: true,
+                                    headingStyleRange: '1-5',
+                                }),
+                            ],
+                        },
+                        ...sections,
+                    ],
+                })
+
+                const blob = await Packer.toBlob(doc)
+                saveAs(blob, `bao_cao_dot_danh_gia_${data?.name}.docx`)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        [data, exportDanhyeuCau]
+    )
+
     const dataTab = useMemo(() => {
         if (data) {
             return data.standards.map((standard) => {
@@ -156,12 +401,13 @@ export default function CriteriaAnalysisWrite() {
                             idx={standard.order}
                             userRole="GV"
                             refetch={refetch}
+                            handleViewAll={() => handleViewAll(data?.standards || [])}
                         />
                     ),
                 }
             })
         }
-    }, [data, refetch])
+    }, [data, refetch, handleViewAll])
 
     return (
         <div className="h-full">
@@ -169,7 +415,7 @@ export default function CriteriaAnalysisWrite() {
                 <Col span={24}>
                     {data && data.standards.length > 0 ? (
                         <Tabs
-                            className="h-[calc(100vh-200px)] overflow-y-auto"
+                            className="h-[calc(100vh-200px)]"
                             tabPosition="left"
                             items={dataTab}
                             tabBarStyle={{

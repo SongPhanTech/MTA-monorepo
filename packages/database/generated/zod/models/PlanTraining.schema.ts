@@ -26,12 +26,14 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
     semester: z.record(z.string(), z.unknown()),
+    trainingCourse: z.record(z.string(), z.unknown()).optional(),
     planTrainingSubjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
     semesterId: z.string(),
+    trainingCourseId: z.string().nullish(),
 }
 );
 

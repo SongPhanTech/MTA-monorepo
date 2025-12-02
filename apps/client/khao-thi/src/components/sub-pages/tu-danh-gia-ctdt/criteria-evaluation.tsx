@@ -226,7 +226,6 @@ const CriteriaEvaluationSubPage = ({
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <run once>
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -245,7 +244,7 @@ const CriteriaEvaluationSubPage = ({
                 })),
             })
         }
-    }, [])
+    }, [data, form])
 
     const statusConfig = getStatusConfig(
         data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
@@ -266,182 +265,188 @@ const CriteriaEvaluationSubPage = ({
     const deadline = data?.criteria?.[0]?.evaluationCriterion?.deadline
     const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
 
-    return (
-        <div className="overflow-x-hidden">
-            <div className=" bg-white py-2 flex flex-row justify-between items-center gap-2">
-                <div className="flex flex-row gap-4 items-center text-xs">
-                    <div className="flex items-center gap-1">
-                        <span className="text-sm text-gray-500">
-                            Người viết phiếu:{' '}
-                            {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
-                                ?.fullname || 'Chưa phân công'}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        {deadline && deadlineStatus && deadlineStatus.text && (
-                            <Tag color={deadlineStatus.color}>
-                                Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
-                                {deadlineStatus.text && ` (${deadlineStatus.text})`}
-                            </Tag>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Tag color={statusConfig.color} className="text-xs">
-                            {statusConfig.text}
-                        </Tag>
-                    </div>
+    const headerSection = (
+        <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
+            <div className="flex flex-row gap-4 items-center text-xs">
+                <div className="flex items-center gap-1">
+                    <span className="text-sm text-gray-500">
+                        Người viết phiếu:{' '}
+                        {data?.criteria?.[0]?.evaluationCriterion?.lecturer?.userProfile
+                            ?.fullname || 'Chưa phân công'}
+                    </span>
                 </div>
-
-                <div className="flex gap-2 mr-2">
-                    <Badge count={commentsCount} showZero offset={[-5, 5]}>
-                        <Button
-                            type="primary"
-                            className="bg-yellow-400"
-                            size="small"
-                            onClick={() => setShowComments(!showComments)}
-                        >
-                            Xem đánh giá
-                        </Button>
-                    </Badge>
-                    {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
-                        currentStatus !== $Enums.EvaluationStatus.APPROVED &&
-                        currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
-                            <>
-                                <Button
-                                    type="primary"
-                                    className="bg-blue-500"
-                                    size="small"
-                                    onClick={handleEvaluationForm}
-                                    disabled={!canEdit}
-                                >
-                                    Nộp phiếu đánh giá
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    onClick={handleSubmit}
-                                    disabled={!canEdit}
-                                >
-                                    Lưu đánh giá
-                                </Button>
-                            </>
-                        )}
+                <div className="flex items-center gap-1">
+                    {deadline && deadlineStatus && deadlineStatus.text && (
+                        <Tag color={deadlineStatus.color}>
+                            Hạn: {dayjs(deadline).format('DD/MM/YYYY')}
+                            {deadlineStatus.text && ` (${deadlineStatus.text})`}
+                        </Tag>
+                    )}
+                </div>
+                <div className="flex items-center gap-1">
+                    <span className="text-sm text-gray-500">Trạng thái:</span>
+                    <Tag color={statusConfig.color} className="text-xs">
+                        {statusConfig.text}
+                    </Tag>
                 </div>
             </div>
 
-            {showComments && (
-                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                    <CommentList
-                        comments={
-                            data?.criteria?.[0]?.evaluationCriterion?.evaluationCriterionComments ||
-                            []
-                        }
-                    />
-                </div>
-            )}
-
-            <Form form={form} layout="vertical" className="form-evidence">
-                {/* Phần mở đầu */}
-                <Form.Item label="Mở đầu" name="opening" required>
-                    <RichTextEditor id="opening" editable={!isReadOnly} />
-                </Form.Item>
-
-                <Form.List name="criteria">
-                    {(fields) => (
+            <div className="flex gap-2 mr-2">
+                <Badge count={commentsCount} showZero offset={[-5, 5]}>
+                    <Button
+                        type="primary"
+                        className="bg-yellow-400"
+                        size="small"
+                        onClick={() => setShowComments(!showComments)}
+                    >
+                        Xem đánh giá
+                    </Button>
+                </Badge>
+                {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
+                    currentStatus !== $Enums.EvaluationStatus.APPROVED &&
+                    currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
                         <>
-                            {fields.map(({ key, name }, idx: number) => {
-                                const item = data.criteria[name]
-                                return (
-                                    <div key={key} style={{ marginBottom: 24 }}>
-                                        <Collapse
-                                            items={[
-                                                {
-                                                    label: (
-                                                        <div>
-                                                            <span className="font-bold">
-                                                                Tiêu chí {idx + 1}:{' '}
-                                                            </span>
-                                                            {item?.name}
-                                                        </div>
-                                                    ),
-                                                    key: item.id,
-                                                    children: (
-                                                        <>
-                                                            <Form.Item
-                                                                label="1. Mô tả hiện trạng"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'currentSituation',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={!isReadOnly}
-                                                                />
-                                                            </Form.Item>
-
-                                                            <Form.Item
-                                                                label="2. Điểm mạnh"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'strengths',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={!isReadOnly}
-                                                                />
-                                                            </Form.Item>
-
-                                                            <Form.Item
-                                                                label="3. Điểm tồn tại"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'weakness',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={!isReadOnly}
-                                                                />
-                                                            </Form.Item>
-
-                                                            <Form.Item
-                                                                label="4. Kế hoạch hành động"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'actionPlan',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={!isReadOnly}
-                                                                />
-                                                            </Form.Item>
-                                                        </>
-                                                    ),
-                                                },
-                                            ]}
-                                            bordered={true}
-                                            expandIconPosition="end"
-                                            className="bg-transparent mb-6"
-                                        />
-                                    </div>
-                                )
-                            })}
+                            <Button
+                                type="primary"
+                                className="bg-blue-500"
+                                size="small"
+                                onClick={handleEvaluationForm}
+                                disabled={!canEdit}
+                            >
+                                Nộp phiếu đánh giá
+                            </Button>
+                            <Button
+                                type="primary"
+                                size="small"
+                                onClick={handleSubmit}
+                                disabled={!canEdit}
+                            >
+                                Lưu đánh giá
+                            </Button>
                         </>
                     )}
-                </Form.List>
+            </div>
+        </div>
+    )
 
-                {/* Phần kết luận */}
-                <Form.Item label="Kết luận" name="conclusion" required>
-                    <RichTextEditor id="conclusion" editable={!isReadOnly} />
-                </Form.Item>
-            </Form>
+    return (
+        <div className="flex flex-col h-[calc(100vh-200px)]">
+            {headerSection}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
+                {showComments && (
+                    <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                        <CommentList
+                            comments={
+                                data?.criteria?.[0]?.evaluationCriterion
+                                    ?.evaluationCriterionComments || []
+                            }
+                        />
+                    </div>
+                )}
+
+                <Form form={form} layout="vertical" className="form-evidence">
+                    {/* Phần mở đầu */}
+                    <Form.Item label="Mở đầu" name="opening" required>
+                        <RichTextEditor id="opening" editable={!isReadOnly} />
+                    </Form.Item>
+
+                    <Form.List name="criteria">
+                        {(fields) => (
+                            <>
+                                {fields.map(({ key, name }, idx: number) => {
+                                    const item = data.criteria[name]
+                                    return (
+                                        <div key={key} style={{ marginBottom: 24 }}>
+                                            <Collapse
+                                                items={[
+                                                    {
+                                                        label: (
+                                                            <div>
+                                                                <span className="font-bold">
+                                                                    Tiêu chí {idx + 1}:{' '}
+                                                                </span>
+                                                                {item?.name}
+                                                            </div>
+                                                        ),
+                                                        key: item.id,
+                                                        children: (
+                                                            <>
+                                                                <Form.Item
+                                                                    label="1. Mô tả hiện trạng"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'currentSituation',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={!isReadOnly}
+                                                                    />
+                                                                </Form.Item>
+
+                                                                <Form.Item
+                                                                    label="2. Điểm mạnh"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'strengths',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={!isReadOnly}
+                                                                    />
+                                                                </Form.Item>
+
+                                                                <Form.Item
+                                                                    label="3. Điểm tồn tại"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'weakness',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={!isReadOnly}
+                                                                    />
+                                                                </Form.Item>
+
+                                                                <Form.Item
+                                                                    label="4. Kế hoạch hành động"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'actionPlan',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={!isReadOnly}
+                                                                    />
+                                                                </Form.Item>
+                                                            </>
+                                                        ),
+                                                    },
+                                                ]}
+                                                bordered={true}
+                                                expandIconPosition="end"
+                                                className="bg-transparent mb-6"
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </>
+                        )}
+                    </Form.List>
+
+                    {/* Phần kết luận */}
+                    <Form.Item label="Kết luận" name="conclusion" required>
+                        <RichTextEditor id="conclusion" editable={!isReadOnly} />
+                    </Form.Item>
+                </Form>
+            </div>
         </div>
     )
 }

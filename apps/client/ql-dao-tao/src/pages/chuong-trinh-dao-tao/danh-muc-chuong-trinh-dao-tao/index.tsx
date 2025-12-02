@@ -1,3 +1,4 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -19,8 +20,7 @@ import type {
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingMajor,
-    TrainingObjectType,
-    TrainingTime,
+    TrainingTime
 } from '@workspace/db/client'
 import {
     useCountCurriculumVersion,
@@ -42,7 +42,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -451,9 +450,10 @@ export default function TrainingProgramCatalog() {
             )
         ) {
             router.push(
-                `${
-                    ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
-                }/${record.id}`
+                ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID.replace(
+                    '[id]',
+                    record.id || ''
+                )
             )
         }
     }
@@ -623,25 +623,25 @@ export default function TrainingProgramCatalog() {
                                 width: 300,
                                 type: 'input',
                             },
-                            {
-                                title: <Tooltip title="Đối tượng đào tạo">ĐTĐT</Tooltip>,
-                                dataIndex: 'trainingObjectTypes',
-                                align: 'center',
-                                width: 150,
-                                // type: 'select',
-                                // options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                                //     value: i.id,
-                                //     label: i.name,
-                                // })),
-                                render: (
-                                    __,
-                                    record: { trainingObjectType?: TrainingObjectType }
-                                ) => {
-                                    return record.trainingObjectType
-                                        ? record.trainingObjectType.name
-                                        : ''
-                                },
-                            },
+                            // {
+                            //     title: <Tooltip title="Đối tượng đào tạo">ĐTĐT</Tooltip>,
+                            //     dataIndex: 'trainingObjectTypes',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     // type: 'select',
+                            //     // options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                            //     //     value: i.id,
+                            //     //     label: i.name,
+                            //     // })),
+                            //     render: (
+                            //         __,
+                            //         record: { trainingObjectType?: TrainingObjectType }
+                            //     ) => {
+                            //         return record.trainingObjectType
+                            //             ? record.trainingObjectType.name
+                            //             : ''
+                            //     },
+                            // },
                             {
                                 title: 'Khoá',
                                 dataIndex: 'trainingCourses',

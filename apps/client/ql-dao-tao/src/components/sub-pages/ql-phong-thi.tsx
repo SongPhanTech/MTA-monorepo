@@ -1,11 +1,10 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
-import { diemPhongThiStore, kythiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { diemPhongThiStore, kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { Prisma } from '@workspace/db/client'
@@ -203,15 +202,6 @@ export default function PhongThi() {
                                             record?.examRoom?.exam?.subjectClass?.[0]?.examType
                                         ) || ''
                                     )
-                                },
-                            },
-                            {
-                                title: 'Môn học',
-                                width: 150,
-                                type: 'input',
-                                align: 'center',
-                                render: (_, record) => {
-                                    return record?.examRoom?.exam?.subjectVersion?.name || ''
                                 },
                             },
                             {

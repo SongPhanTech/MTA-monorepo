@@ -577,7 +577,18 @@ export default function TrainingProgramSubjects() {
                                 render: (_, record) => (
                                     <p className="font-bold">{record?.trainingBlock?.name}</p>
                                 ),
-                                colSpan: 3,
+                                colSpan: 2,
+                            },
+                            {
+                                render: (_, record) => (
+                                    <p className="text-center font-bold">
+                                        {record?.electiveCreditsRequired}
+                                    </p>
+                                ),
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
                             },
                             {
                                 render: (_, record) => (
@@ -726,6 +737,15 @@ export default function TrainingProgramSubjects() {
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Số tín chỉ tự chọn">
+                                        <span>TCTC</span>
+                                    </Tooltip>
+                                ),
+                                width: 100,
+                                align: 'center',
                             },
                             {
                                 title: (

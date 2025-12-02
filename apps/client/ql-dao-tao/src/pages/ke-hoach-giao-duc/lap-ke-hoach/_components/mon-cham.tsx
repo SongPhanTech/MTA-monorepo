@@ -4,11 +4,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { $Enums, type PlanTraining } from '@workspace/db/client'
-import {
-    useFindFirstPlanTrainingDelay,
-    useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -36,71 +32,13 @@ export default function MonCham() {
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const { data: planTrainingDelayData } = useFindFirstPlanTrainingDelay(
-        {
-            where: {
-                trainingObjectTypeId,
-            },
-            include: {
-                planTrainingDelaySubjects: {
-                    include: {
-                        subjectVersion: {
-                            include: {
-                                managementOrganization: {
-                                    select: { sMa: true },
-                                },
-                            },
-                        },
-                        fixedClasses: {
-                            include: {
-                                _count: {
-                                    select: {
-                                        students: {
-                                            where: {
-                                                active: true,
-                                                status: 'ENROLLED',
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    where: {
-                        subjectVersion: {
-                            ...(searchText && searchText !== ''
-                                ? {
-                                      name: {
-                                          contains: searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
-                            ...(trainingCourseId
-                                ? {
-                                      trainingCourseId,
-                                  }
-                                : {}),
-                            ...(trainingMajorId
-                                ? {
-                                      trainingMajorId,
-                                  }
-                                : {}),
-                        },
-                    },
-                    take: numberOfPages,
-                    skip: (currentPage - 1) * numberOfPages,
-                },
-                _count: {
-                    select: { planTrainingDelaySubjects: true },
-                },
-            },
+    const planTrainingDelayData = {
+        id: '',
+        planTrainingDelaySubjects: [] as any[],
+        _count: {
+            planTrainingDelaySubjects: 0, // Total count of subjects
         },
-        {
-            enabled: !!trainingObjectTypeId,
-        }
-    )
-
+    }
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
@@ -134,15 +72,17 @@ export default function MonCham() {
                     operation: 'upsert',
                     data: {
                         where: {
-                            trainingObjectTypeId_semesterId: {
+                            trainingObjectTypeId_semesterId_trainingCourseId: {
                                 trainingObjectTypeId,
                                 semesterId,
+                                trainingCourseId,
                             },
                         },
                         update: {},
                         create: {
                             trainingObjectTypeId,
                             semesterId,
+                            trainingCourseId,
                         },
                         select: {
                             id: true,

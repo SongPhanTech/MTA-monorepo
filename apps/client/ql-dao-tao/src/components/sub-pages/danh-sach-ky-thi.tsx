@@ -5,14 +5,13 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn, formatDate } from '@lib/utils'
-import { diemPhongThiStore, kythiStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { diemPhongThiStore, kythiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
-import { useSession } from '@workspace/auth/react'
-import type { Prisma } from '@workspace/db/client'
+import type { ExamList, Prisma, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Input, Row } from 'antd'
+import { Checkbox, Col, Flex, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -24,7 +23,6 @@ export default function KyThi() {
 
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: session } = useSession()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         searchText: '',
@@ -60,6 +58,23 @@ export default function KyThi() {
             _count: {
                 select: {
                     examRooms: true,
+                },
+            },
+            examRooms: {
+                select: {
+                    roomId: true,
+                    capacity: true,
+                    examList: {
+                        select: {
+                            createdExamCode: true,
+                            lockExamCode: true,
+                        },
+                    },
+                },
+                where: {
+                    roomId: {
+                        not: null,
+                    },
                 },
             },
         },
@@ -143,7 +158,7 @@ export default function KyThi() {
                             {
                                 title: 'Mã MH',
                                 dataIndex: 'code',
-                                width: 150,
+                                width: 80,
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => record?.subjectVersion?.code || '',
@@ -154,11 +169,15 @@ export default function KyThi() {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record?.subjectVersion?.name || '',
+                                render: (_, record) => (
+                                    <p className="text-left">
+                                        {record?.subjectVersion?.name || ''}
+                                    </p>
+                                ),
                             },
                             {
                                 title: 'Hình thức thi',
-                                width: 150,
+                                width: 80,
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => {
@@ -184,6 +203,105 @@ export default function KyThi() {
                                         />
                                     ) : (
                                         ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái NĐ',
+                                width: 100,
+                                align: 'center',
+                                render: (__, record) => {
+                                    return record.subjectClass?.[0]?.enteredExamScore ? (
+                                        'Đã nhập điểm thi'
+                                    ) : record.subjectClass?.[0]?.enteredScore ? (
+                                        'Đã nhập điểm TX,CC'
+                                    ) : (
+                                        <div className="text-red-500">Chưa nhập điểm</div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa nhập ĐQT',
+                                align: 'center',
+                                width: 80,
+                                render: (_, record) => {
+                                    return (
+                                        <Checkbox
+                                            indeterminate={
+                                                !record?.subjectClass?.every?.(
+                                                    (sc: SubjectClass) => sc.isLockScore
+                                                ) &&
+                                                record?.subjectClass.some(
+                                                    (sc: SubjectClass) => sc.isLockScore
+                                                )
+                                            }
+                                            checked={record?.subjectClass.every(
+                                                (sc: SubjectClass) => sc.isLockScore
+                                            )}
+                                        />
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa DTS',
+                                align: 'center',
+                                width: 50,
+                                render: (_, record) => {
+                                    const lockExamSessions = record.lockExamSessions
+                                    return <Checkbox checked={lockExamSessions} />
+                                },
+                            },
+                            {
+                                title: 'Đánh phách',
+                                align: 'center',
+                                width: 60,
+                                render: (_, record) => {
+                                    return (
+                                        <Checkbox
+                                            indeterminate={
+                                                !record?.examRooms?.every?.(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.every(
+                                                            (el) => el.createdExamCode
+                                                        )
+                                                ) &&
+                                                record?.examRooms?.some(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList?.some(
+                                                            (el) => el.createdExamCode
+                                                        )
+                                                )
+                                            }
+                                            checked={record?.examRooms?.every?.(
+                                                (sc: { examList: ExamList[] }) =>
+                                                    sc.examList.every((el) => el.createdExamCode)
+                                            )}
+                                        />
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa phách',
+                                align: 'center',
+                                width: 60,
+                                render: (_, record) => {
+                                    return (
+                                        <Checkbox
+                                            indeterminate={
+                                                !record?.examRooms?.every?.(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList.every((el) => el.lockExamCode)
+                                                ) &&
+                                                record?.examRooms?.some(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList?.some((el) => el.lockExamCode)
+                                                )
+                                            }
+                                            checked={record?.examRooms?.every?.(
+                                                (sc: { examList: ExamList[] }) =>
+                                                    sc.examList.every((el) => el.lockExamCode)
+                                            )}
+                                        />
                                     )
                                 },
                             },

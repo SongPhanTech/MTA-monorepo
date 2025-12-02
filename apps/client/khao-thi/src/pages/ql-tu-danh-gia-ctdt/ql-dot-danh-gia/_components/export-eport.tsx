@@ -1,4 +1,3 @@
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { message, Tooltip } from 'antd'
 import { FileDown } from 'lucide-react'
 import {
@@ -15,11 +14,12 @@ import {
     WidthType,
     BorderStyle,
     VerticalAlign,
-    IImageOptions,
+    type IImageOptions,
     ImageRun,
 } from 'docx'
 import { saveAs } from 'file-saver'
-import { $Enums } from '@workspace/db'
+import type { $Enums } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
 export default function ExportReport({ id }: { id: string }) {
     const role = {
         CHAIRMAN: 'Chủ tịch hội đồng',
@@ -57,8 +57,6 @@ export default function ExportReport({ id }: { id: string }) {
     }
 
     const exportDanhSachHoiDong = (dataTable: any) => {
-        console.log('dataTable', dataTable)
-
         const title = new Paragraph({
             alignment: AlignmentType.CENTER,
             children: [
@@ -120,6 +118,86 @@ export default function ExportReport({ id }: { id: string }) {
                                 (t: $Enums.EvaluationMemberRole) =>
                                     new Paragraph(`${role[t as $Enums.EvaluationMemberRole]}`)
                             ),
+                        }),
+                        new TableCell({ children: [new Paragraph('')] }),
+                    ],
+                })
+        )
+
+        // ==== Tạo bảng ====
+        const table = new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            borders: {
+                top: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                right: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+            },
+            rows: [headerRow, ...dataRows],
+        })
+
+        return [title, new Paragraph(''), table]
+    }
+    const exportDanhSachMinhchung = (dataTable: any) => {
+        const title = new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+                new TextRun({
+                    text: 'BẢNG DANH MỤC MINH CHỨNG',
+                    bold: true,
+                }),
+            ],
+        })
+
+        // ==== Tạo header bảng ====
+        const headerRow = new TableRow({
+            children: [
+                new TableCell({
+                    width: { size: 5, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('TT')],
+                }),
+                new TableCell({
+                    width: { size: 30, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('Mã mới')],
+                }),
+                new TableCell({
+                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('Tên minh chứng')],
+                }),
+                new TableCell({
+                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('Số, ngày ban hành')],
+                }),
+                new TableCell({
+                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('Nơi ban hành')],
+                }),
+                new TableCell({
+                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph('Ghi chú')],
+                }),
+            ],
+        })
+
+        // ==== Tạo các dòng dữ liệu ====
+        const dataRows = dataTable.map(
+            (item: any, index: number) =>
+                new TableRow({
+                    children: [
+                        new TableCell({ children: [new Paragraph(`${index + 1}`)] }),
+                        new TableCell({
+                            children: [new Paragraph(`PM.${item?.tag || ''}`)],
+                        }),
+                        new TableCell({
+                            children: [new Paragraph(`${item?.evidence?.name || ''}`)],
+                        }),
+                        new TableCell({
+                            children: [new Paragraph(`${item?.evidence?.information || ''}`)],
+                        }),
+                        new TableCell({
+                            children: [new Paragraph(`${item?.evidence?.issuer || ''}`)],
                         }),
                         new TableCell({ children: [new Paragraph('')] }),
                     ],
@@ -286,24 +364,62 @@ export default function ExportReport({ id }: { id: string }) {
 
     const CalcevidenceTags = (dataMap: any) => {
         const map = new Map<string, string>()
-        for (const [o1, standard] of (dataMap || []).entries()) {
-            for (const [o2, criteria] of (standard?.criteria || []).entries()) {
-                let evidenceCount = 0
-                for (const requirementCriterions of criteria?.requirementCriterions || []) {
-                    for (const evidences of requirementCriterions?.evidences || []) {
+        const result: any = []
+        // 1) Kiểm tra dataMap có phải array không
+        if (!Array.isArray(dataMap)) {
+            console.warn('❌ dataMap không phải array:', dataMap)
+            return map
+        }
+
+        for (const [o1, standard] of dataMap.entries()) {
+            const criteriaList = standard?.criteria
+            if (!Array.isArray(criteriaList)) {
+                console.warn('❌ standard.criteria không phải array:', criteriaList)
+                continue
+            }
+
+            for (const [o2, criteria] of criteriaList.entries()) {
+                const analysis = criteria?.analysisCriterions
+
+                // analysisCriterions có thể là object → không loop được
+                if (!analysis || typeof analysis !== 'object') {
+                    console.warn('❌ criteria.analysisCriterions không hợp lệ:', analysis)
+                    continue
+                }
+
+                const reqList = analysis.requirementCriterions
+
+                if (!Array.isArray(reqList)) {
+                    console.warn('❌ analysis.requirementCriterions không phải array:', reqList)
+                    continue
+                }
+
+                for (const req of reqList) {
+                    let evidenceCount = 0
+
+                    const evidencesList = req?.evidences
+
+                    if (!Array.isArray(evidencesList)) {
+                        console.warn('❌ req.evidences không phải array:', evidencesList)
+                        continue
+                    }
+
+                    for (const evidences of evidencesList) {
                         if (map.has(evidences.evidenceId)) continue
+
                         evidenceCount++
+
                         const tag = [o1 + 1, o2 + 1, evidenceCount]
                             .map((t) => t.toString().padStart(2, '0'))
                             .join('.')
-                        map.set(evidences.evidenceId, `[KM.${tag}]`)
+                        result.push({ ...evidences, tag })
+                        map.set(evidences.evidenceId, `[PM.${tag}]`)
                     }
                 }
             }
         }
-        
-        console.log(map,'map');
-        return map
+
+        return { evidenceTags: map, result }
     }
     const exportToWord = async () => {
         try {
@@ -322,7 +438,11 @@ export default function ExportReport({ id }: { id: string }) {
                                                 include: {
                                                     requirementCriterions: {
                                                         include: {
-                                                            evidences: true,
+                                                            evidences: {
+                                                                include: {
+                                                                    evidence: true,
+                                                                },
+                                                            },
                                                         },
                                                     },
                                                 },
@@ -330,6 +450,9 @@ export default function ExportReport({ id }: { id: string }) {
                                             evaluationCriterion: true,
                                         },
                                     },
+                                },
+                                orderBy: {
+                                    order: 'asc',
                                 },
                             },
                             council: {
@@ -359,18 +482,16 @@ export default function ExportReport({ id }: { id: string }) {
             if (res?.status === 200) {
                 const data: any = res?.data[0]
                 if (!data) return
+                const { evidenceTags, result }: any = CalcevidenceTags(data?.standards)
 
                 const listMembers = await Promise.all([
                     {
                         children: exportDanhSachHoiDong(data?.council?.members),
                     },
                 ])
-
-                const evidenceTags = CalcevidenceTags(data?.standards)
-
-                const sections = await Promise.all(
-                    data.standards.map(async (standard: any, idx: number) => {
-                        const children: Array<Paragraph | Table> = []
+                const sections = await Promise.all([
+                    ...data.standards.map(async (standard: any, idx: number) => {
+                        const children: any = []
 
                         // Tiêu chuẩn
                         children.push(
@@ -467,7 +588,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.strengths || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.strengths || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -486,7 +610,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.weakness || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.weakness || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -505,7 +632,10 @@ export default function ExportReport({ id }: { id: string }) {
                             )
                             children.push(
                                 ...(await htmlToParagraphs(
-                                    processHtmlContent(criterion?.evaluationCriterion?.actionPlan || '', evidenceTags)
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.actionPlan || '',
+                                        evidenceTags
+                                    )
                                 ))
                             )
 
@@ -543,13 +673,20 @@ export default function ExportReport({ id }: { id: string }) {
                         )
                         children.push(
                             ...(await htmlToParagraphs(
-                                processHtmlContent(standard?.evaluationCriterion?.conclusion || '', evidenceTags)
+                                processHtmlContent(
+                                    standard?.evaluationCriterion?.conclusion || '',
+                                    evidenceTags
+                                )
                             ))
                         )
 
                         return { children }
-                    })
-                )
+                    }),
+                    {
+                        children: exportDanhSachMinhchung(result),
+                    },
+                ])
+
                 const doc = new Document({
                     sections: [
                         ...listMembers,
@@ -584,8 +721,11 @@ export default function ExportReport({ id }: { id: string }) {
         }
     }
     return (
-        <Tooltip>
+        <Tooltip title="Xuất báo cáo" placement="top">
             <FileDown
+                size={17}
+                strokeWidth={1.5}
+                className="text-base text-green-600"
                 onClick={(e) => {
                     exportToWord()
                 }}

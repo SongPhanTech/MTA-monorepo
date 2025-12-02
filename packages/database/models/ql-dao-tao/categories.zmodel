@@ -42,7 +42,6 @@ model TrainingObjectType extends Base {
   graduationSession    GraduationSession[]
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
-  planTrainingDelay    PlanTrainingDelay[]
   thesisSession        ThesisSession[]
 
   @@schema("ql-dao-tao")

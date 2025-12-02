@@ -1438,27 +1438,6 @@ exports.Prisma.DM_ViTriCongViecScalarFieldEnum = {
   sDM_NhomViTriId: 'sDM_NhomViTriId'
 };
 
-exports.Prisma.PlanTrainingDelayScalarFieldEnum = {
-  id: 'id',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.PlanTrainingDelaySubjectScalarFieldEnum = {
-  id: 'id',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  planTrainingDelayId: 'planTrainingDelayId',
-  subjectVersionId: 'subjectVersionId'
-};
-
 exports.Prisma.PlanTrainingScalarFieldEnum = {
   id: 'id',
   active: 'active',
@@ -1467,7 +1446,8 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
+  semesterId: 'semesterId',
+  trainingCourseId: 'trainingCourseId'
 };
 
 exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
@@ -1478,7 +1458,7 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   planTrainingId: 'planTrainingId',
-  subjectVersionId: 'subjectVersionId',
+  trainingBlockSubjectId: 'trainingBlockSubjectId',
   studentCount: 'studentCount',
   subjectClassType: 'subjectClassType'
 };
@@ -5309,31 +5289,19 @@ exports.Prisma.DM_ViTriCongViecOrderByRelevanceFieldEnum = {
   sDM_NhomViTriId: 'sDM_NhomViTriId'
 };
 
-exports.Prisma.PlanTrainingDelayOrderByRelevanceFieldEnum = {
-  id: 'id',
-  description: 'description',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.PlanTrainingDelaySubjectOrderByRelevanceFieldEnum = {
-  id: 'id',
-  description: 'description',
-  planTrainingDelayId: 'planTrainingDelayId',
-  subjectVersionId: 'subjectVersionId'
-};
-
 exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
+  semesterId: 'semesterId',
+  trainingCourseId: 'trainingCourseId'
 };
 
 exports.Prisma.PlanTrainingSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   planTrainingId: 'planTrainingId',
-  subjectVersionId: 'subjectVersionId'
+  trainingBlockSubjectId: 'trainingBlockSubjectId'
 };
 
 exports.Prisma.StudentScoreConvertOrderByRelevanceFieldEnum = {
@@ -7637,8 +7605,6 @@ exports.Prisma.ModelName = {
   DM_XaPhuong: 'DM_XaPhuong',
   DM_XaPhuong_New: 'DM_XaPhuong_New',
   DM_ViTriCongViec: 'DM_ViTriCongViec',
-  PlanTrainingDelay: 'PlanTrainingDelay',
-  PlanTrainingDelaySubject: 'PlanTrainingDelaySubject',
   PlanTraining: 'PlanTraining',
   PlanTrainingSubject: 'PlanTrainingSubject',
   StudentScoreConvert: 'StudentScoreConvert',

@@ -14,6 +14,7 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
+import { useSession } from '@workspace/auth/react'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -33,6 +34,7 @@ const ExamLayout = ({
     unLayout?: boolean
 }) => {
     const menus = useMenuList()
+    const { status } = useSession();
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)

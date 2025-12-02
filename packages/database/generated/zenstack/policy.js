@@ -902,32 +902,6 @@ const policy = {
                 update: {},
             },
         },
-        planTrainingDelay: {
-            modelLevel: {
-                read: { guard: PlanTrainingDelay_read, },
-                create: { guard: PlanTrainingDelay_create, inputChecker: PlanTrainingDelay_create_input, },
-                update: { guard: PlanTrainingDelay_update, },
-                postUpdate: { guard: PlanTrainingDelay_postUpdate, },
-                delete: { guard: PlanTrainingDelay_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        planTrainingDelaySubject: {
-            modelLevel: {
-                read: { guard: PlanTrainingDelaySubject_read, },
-                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
-                update: { guard: PlanTrainingDelaySubject_update, },
-                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
-                delete: { guard: PlanTrainingDelaySubject_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         planTraining: {
             modelLevel: {
                 read: { guard: PlanTraining_read, },
@@ -3326,8 +3300,6 @@ const policy = {
         dM_XaPhuong: { hasValidation: false },
         dM_XaPhuong_New: { hasValidation: false },
         dM_ViTriCongViec: { hasValidation: false },
-        planTrainingDelay: { hasValidation: false },
-        planTrainingDelaySubject: { hasValidation: false },
         planTraining: { hasValidation: false },
         planTrainingSubject: { hasValidation: false },
         studentScoreConvert: { hasValidation: false },
@@ -8839,162 +8811,6 @@ function DM_ViTriCongViec_delete(context, db) {
     return { OR: [] };
 }
 function $check_DM_ViTriCongViec_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelay_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_PlanTrainingDelay_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelay_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelay_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelay_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function PlanTrainingDelay_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelay_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelay_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_PlanTrainingDelay_postUpdate(input, context) {
-    return true;
-}
-function PlanTrainingDelay_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelay_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelaySubject_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_PlanTrainingDelaySubject_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelaySubject_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelaySubject_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelaySubject_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function PlanTrainingDelaySubject_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelaySubject_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function PlanTrainingDelaySubject_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_PlanTrainingDelaySubject_postUpdate(input, context) {
-    return true;
-}
-function PlanTrainingDelaySubject_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_PlanTrainingDelaySubject_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
