@@ -80,12 +80,12 @@ export default function ThongKeNo() {
     const { data: res } = useOpenSubjectClassRetake(
         {
             search: searchText || undefined,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId as string,
             trainingMajorId,
             semesterId: semesterId as string,
             trainingObjectTypeId: trainingObjectTypeId as string,
         },
-        { query: { enabled: !!trainingObjectTypeId && !!semesterId } }
+        { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
     )
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
