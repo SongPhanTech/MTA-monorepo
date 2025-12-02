@@ -37,16 +37,6 @@ export default function DangKyHocChoLopQuanLy() {
                 : {}),
             semesterId,
             trainingObjectTypeId,
-            subject: {
-                planTrainingSubject: {
-                    some: {
-                        planTraining: {
-                            semesterId,
-                            trainingObjectTypeId,
-                        },
-                    },
-                },
-            },
             cancelled: false,
             active: true,
             status: 'OFFICIAL',
@@ -106,16 +96,6 @@ export default function DangKyHocChoLopQuanLy() {
                 : {}),
             semesterId,
             trainingObjectTypeId,
-            subject: {
-                planTrainingSubject: {
-                    some: {
-                        planTraining: {
-                            semesterId,
-                            trainingObjectTypeId,
-                        },
-                    },
-                },
-            },
             cancelled: false,
             active: true,
             status: 'OFFICIAL',

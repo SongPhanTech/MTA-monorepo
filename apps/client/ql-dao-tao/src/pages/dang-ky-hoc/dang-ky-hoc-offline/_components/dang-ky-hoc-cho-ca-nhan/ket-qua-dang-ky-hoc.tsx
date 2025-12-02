@@ -137,16 +137,6 @@ export default function KetQuaDangKyHoc() {
                     : {}),
                 semesterId,
                 trainingObjectTypeId,
-                subject: {
-                    planTrainingSubject: {
-                        some: {
-                            planTraining: {
-                                semesterId,
-                                trainingObjectTypeId,
-                            },
-                        },
-                    },
-                },
                 subjectClassStudent: {
                     some: {
                         studentId: studentId as string,

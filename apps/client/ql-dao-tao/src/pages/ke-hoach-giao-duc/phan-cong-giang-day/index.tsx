@@ -262,19 +262,6 @@ export default function PhanCongGiangDay({
                               },
                           }
                         : {}),
-                    trainingBlocks: {
-                        some: {
-                            planTrainingSubjects: {
-                                some: {
-                                    planTraining: {
-                                        semesterId,
-                                        trainingObjectTypeId,
-                                        trainingCourseId,
-                                    },
-                                },
-                            },
-                        },
-                    },
                 },
                 deletedAt: null,
                 active: true,

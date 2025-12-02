@@ -119,24 +119,23 @@ export default function LopQuanLyDaGhep() {
 
     const { data: countFixedClassAll = 0 } = useCountFixedClass({
         where: {
-            planTrainingSubject: {
-                some: {
-                    planTraining: {
-                        semesterId: semesterId as string,
-                        trainingObjectTypeId: trainingObjectTypeId as string,
-                    },
-                    subjectVersion: {
-                        subjectClass: {
+            name: {
+                contains: filters.searchText || undefined,
+                mode: 'insensitive',
+            },
+            curriculumVersion: {
+                trainingBlocks: {
+                    some: {
+                        subjects: {
                             some: {
-                                id: subjectClassId as string,
+                                subjectId: selectedSubjectClass?.subjectId,
                             },
                         },
                     },
                 },
             },
-            name: {
-                contains: filters.searchText || undefined,
-                mode: 'insensitive',
+            trainingCourse: {
+                trainingObjectTypeId,
             },
         },
     })
