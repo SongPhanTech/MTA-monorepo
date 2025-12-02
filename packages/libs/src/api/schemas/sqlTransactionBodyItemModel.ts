@@ -79,8 +79,6 @@ export const SqlTransactionBodyItemModel = {
     DM_XaPhuong: 'DM_XaPhuong',
     DM_XaPhuong_New: 'DM_XaPhuong_New',
     DM_ViTriCongViec: 'DM_ViTriCongViec',
-    PlanTrainingDelay: 'PlanTrainingDelay',
-    PlanTrainingDelaySubject: 'PlanTrainingDelaySubject',
     PlanTraining: 'PlanTraining',
     PlanTrainingSubject: 'PlanTrainingSubject',
     StudentScoreConvert: 'StudentScoreConvert',

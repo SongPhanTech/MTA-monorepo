@@ -13,6 +13,7 @@ export const OpenSubjectClass = z
         subjectVersionCredit: z.number(),
         fixedClass: z.array(
             z.object({
+                trainingBlockSubjectId: z.string(),
                 fixedClassId: z.string(),
                 fixedClassName: z.string(),
                 fixedClassCount: z.number(),

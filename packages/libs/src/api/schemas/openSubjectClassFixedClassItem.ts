@@ -6,6 +6,7 @@
  */
 
 export type OpenSubjectClassFixedClassItem = {
+    trainingBlockSubjectId: string
     fixedClassId: string
     fixedClassName: string
     fixedClassCount: number

@@ -244,7 +244,8 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
         { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false }
     )
 
-    const data = useMemo(() => res?.planTrainingSubjects, [res])
+    const data = useMemo(() => res?.planTrainingSubjects ?? [], [res])
+    console.log('data', data)
 
     useEffect(() => {
         if (data) {
@@ -464,7 +465,9 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                     !alreadySubjectIds.some(
                                                                         (asc) =>
                                                                             asc.subjectId ===
-                                                                            pts?.trainingBlockSubject?.subject?.id
+                                                                            pts
+                                                                                ?.trainingBlockSubject
+                                                                                ?.subject?.id
                                                                     )
                                                             )
                                                             .flatMap((e) =>
@@ -485,11 +488,13 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                                           .SubjectClassType
                                                                                           .NORMAL,
                                                                                 subjectId:
-                                                                                    e.trainingBlockSubject.subject.id,
+                                                                                    e
+                                                                                        .trainingBlockSubject
+                                                                                        .subject.id,
                                                                                 code: `${e.trainingBlockSubject.subject.code} ${String(idx + 1)}`,
                                                                                 name: e
-                                                                                    .trainingBlockSubject.subject
-                                                                                    .name,
+                                                                                    .trainingBlockSubject
+                                                                                    .subject.name,
                                                                                 maxStudent:
                                                                                     subjectVersions[
                                                                                         e
@@ -635,14 +640,14 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                     <Form.Item name="subjectVersions" hidden />
                     <Col span={24}>
                         <Table
-                            rowKey="subjectVersionId"
+                            rowKey="trainingBlockSubjectId"
                             data={data}
                             onRow={(record) => {
                                 return {
                                     className: cn(
-                                        subjectVersions?.[record.subjectVersionId]?.count === 0 &&
-                                            'bg-red-100',
-                                        subjectVersions?.[record.subjectVersionId]?.isEdit &&
+                                        subjectVersions?.[record.trainingBlockSubjectId]?.count ===
+                                            0 && 'bg-red-100',
+                                        subjectVersions?.[record.trainingBlockSubjectId]?.isEdit &&
                                             'bg-yellow-100'
                                     ),
                                 }

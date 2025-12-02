@@ -20,7 +20,7 @@ export type OpenSubjectClassRetakeParams = {
      * @nullable
      */
     limit?: number | null
-    trainingCourseId?: TrainingCourseId
+    trainingCourseId: TrainingCourseId
     trainingMajorId?: TrainingMajorId
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId

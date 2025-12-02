@@ -14,7 +14,7 @@ import {
     useTrainingMajorStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Skeleton } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo } from 'react'
 
@@ -34,7 +34,11 @@ export default function MonTheoKeHoachDuKien() {
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { id: trainingMajorId } = useTrainingMajorStore()
     const { id: fixedClassId } = useFixedClassStore()
-    const { data: subjects, refetch } = useOpenSubjectClass(
+    const {
+        data: subjects,
+        refetch,
+        isFetching,
+    } = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
             search: searchText,
@@ -53,16 +57,15 @@ export default function MonTheoKeHoachDuKien() {
             Omit<OpenSubjectClass, 'fixedClass'> &
                 OpenSubjectClass['fixedClass'][number] & {
                     rowSpan: number
-                    groupKey: string
+                    index: number
                 }
         > = []
         subjects?.data?.data
-            .map((subjectVersion, idx) => ({
+            .map((subjectVersion) => ({
                 id: subjectVersion.subjectVersionId,
                 ...subjectVersion,
-                index: idx + 1,
             }))
-            .forEach((subject) => {
+            .forEach((subject, idx) => {
                 const { fixedClass, ...subjectInfo } = subject
                 const length = fixedClass?.length || 0
                 fixedClass.forEach((cls, index) => {
@@ -70,10 +73,7 @@ export default function MonTheoKeHoachDuKien() {
                         ...subjectInfo,
                         ...cls,
                         rowSpan: index === 0 ? length : 0,
-                        groupKey:
-                            index === 0
-                                ? subject.subjectVersionId
-                                : `${subject.subjectVersionId}-${cls.fixedClassId}`,
+                        index: idx + index + 1,
                     })
                 })
             })
@@ -96,12 +96,6 @@ export default function MonTheoKeHoachDuKien() {
         try {
             if (!semesterId || !trainingObjectTypeId || subjects?.status !== 200) return
             showSpinner()
-            const subject = subjects?.data?.data
-                .map((subjectVersion) => ({
-                    id: subjectVersion.subjectVersionId,
-                    ...subjectVersion,
-                }))
-                .filter((subject) => subjectSelected.includes(subject.subjectVersionId))
             const planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -111,21 +105,18 @@ export default function MonTheoKeHoachDuKien() {
                             trainingObjectTypeId_semesterId_trainingCourseId: {
                                 trainingObjectTypeId,
                                 semesterId,
-                                trainingCourseId
+                                trainingCourseId,
                             },
                         },
                         update: {},
                         create: {
                             trainingObjectTypeId,
                             semesterId,
-                            trainingCourseId
+                            trainingCourseId,
                         },
                         select: {
                             id: true,
                             planTrainingSubjects: {
-                                select: {
-                                    subjectVersionId: true,
-                                },
                                 where: {
                                     subjectClassType: $Enums.SubjectClassType.RETAKE,
                                 },
@@ -151,15 +142,12 @@ export default function MonTheoKeHoachDuKien() {
                         where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
-                                create: subject.map((subject) => ({
-                                    subjectVersionId: subject.subjectVersionId,
-                                    fixedClasses: {
-                                        connect: subject.fixedClass.map((fc) => ({
-                                            id: fc.fixedClassId,
-                                        })),
-                                    },
-                                    subjectClassType: $Enums.SubjectClassType.NORMAL,
-                                })),
+                                create: [...new Set(subjectSelected)].map(
+                                    (trainingBlockSubjectId) => ({
+                                        trainingBlockSubjectId: trainingBlockSubjectId,
+                                        subjectClassType: $Enums.SubjectClassType.NORMAL,
+                                    })
+                                ),
                             },
                         },
                     },
@@ -208,115 +196,117 @@ export default function MonTheoKeHoachDuKien() {
                 </Col>
                 <Col span={24}>
                     <Form.Item hidden name="subjectSelected" />
-                    <Table
-                        className="mt-0"
-                        rowKey="groupKey"
-                        data={data}
-                        rowSelection={{
-                            type: 'checkbox',
-                            checkStrictly: true,
-                            selectedRowKeys: subjectSelected,
-                            onChange: (selectedRowKeys) => {
-                                form.setFieldValue('subjectSelected', selectedRowKeys)
-                            },
-                            getCheckboxProps: (record) => ({
-                                disabled: record.rowSpan === 0,
-                            }),
-                            onCell: (record) => ({ rowSpan: record.rowSpan }),
-                            columnWidth: 15,
-                        }}
-                        onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    const isSelected = subjectSelected.includes(
-                                        record.subjectVersionId
-                                    )
-                                    if (isSelected) {
-                                        form.setFieldValue(
-                                            'subjectSelected',
-                                            subjectSelected.filter(
-                                                (id) => id !== record.subjectVersionId
-                                            )
+                    {isFetching ? (
+                        <Skeleton />
+                    ) : (
+                        <Table
+                            className="mt-0"
+                            rowKey="trainingBlockSubjectId"
+                            data={data}
+                            scrollable
+                            maxHeight={'calc(100vh - 390px)'}
+                            rowSelection={{
+                                type: 'checkbox',
+                                checkStrictly: true,
+                                selectedRowKeys: subjectSelected,
+                                onChange: (selectedRowKeys) => {
+                                    form.setFieldValue('subjectSelected', selectedRowKeys)
+                                },
+                            }}
+                            onRow={(record) => {
+                                return {
+                                    onClick: () => {
+                                        const isSelected = subjectSelected.includes(
+                                            record.trainingBlockSubjectId
                                         )
-                                    } else {
-                                        form.setFieldValue('subjectSelected', [
-                                            ...subjectSelected,
-                                            record.subjectVersionId,
-                                        ])
-                                    }
+                                        if (isSelected) {
+                                            form.setFieldValue(
+                                                'subjectSelected',
+                                                subjectSelected.filter(
+                                                    (id) => id !== record.trainingBlockSubjectId
+                                                )
+                                            )
+                                        } else {
+                                            form.setFieldValue('subjectSelected', [
+                                                ...subjectSelected,
+                                                record.trainingBlockSubjectId,
+                                            ])
+                                        }
+                                    },
+                                }
+                            }}
+                            columns={[
+                                {
+                                    title: 'TT',
+                                    width: 35,
+                                    // dataIndex: 'index',
+                                    align: 'center',
+                                    render: (_, __, index) => {
+                                        return index + 1
+                                    },
                                 },
-                            }
-                        }}
-                        columns={[
-                            {
-                                title: 'TT',
-                                width: 35,
-                                dataIndex: 'index',
-                                align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
-                            },
-                            {
-                                title: 'Mã MH',
-                                dataIndex: 'subjectVersionCode',
-                                align: 'center',
-                                width: 100,
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
-                            },
-                            {
-                                title: 'Tên môn học',
-                                dataIndex: 'subjectVersionName',
-                                align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
-                                render: (__, record) => {
-                                    return (
-                                        <div className="text-left">
-                                            {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                                ''}
-                                        </div>
-                                    )
+                                {
+                                    title: 'Mã MH',
+                                    dataIndex: 'subjectVersionCode',
+                                    align: 'center',
+                                    width: 80,
+                                    onCell: (record) => ({ rowSpan: record.rowSpan }),
                                 },
-                            },
-                            {
-                                title: 'Lớp quản lý',
-                                align: 'center',
-                                width: 120,
-                                render: (__, record) => {
-                                    return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                {
+                                    title: 'Tên môn học',
+                                    dataIndex: 'subjectVersionName',
+                                    align: 'center',
+                                    onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                    render: (__, record) => {
+                                        return (
+                                            <div className="text-left">
+                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                                    ''}
+                                            </div>
+                                        )
+                                    },
                                 },
-                            },
-                            {
-                                title: 'CTĐT',
-                                align: 'center',
-                                width: 180,
-                                render: (__, record) => {
-                                    return `${record?.curriculumVersionName}`
+                                {
+                                    title: 'Lớp quản lý',
+                                    align: 'center',
+                                    width: 120,
+                                    render: (__, record) => {
+                                        return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                    },
                                 },
-                            },
-                            {
-                                title: 'HKDK',
-                                align: 'center',
-                                width: 80,
-                                render: (__, record) => {
-                                    return `Kỳ ${record?.fixedClassSemester}`
+                                {
+                                    title: 'CTĐT',
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return `${record?.curriculumVersionName}`
+                                    },
                                 },
-                            },
-                            {
-                                title: 'Tổng SV',
-                                dataIndex: 'countStudent',
-                                width: 80,
-                                align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
-                            },
-                            {
-                                title: 'Đơn vị phụ trách',
-                                dataIndex: 'managementOrganizationCode',
-                                width: 150,
-                                align: 'center',
-                                onCell: (record) => ({ rowSpan: record.rowSpan }),
-                            },
-                        ]}
-                        pagination={false}
-                    />
+                                {
+                                    title: 'HKDK',
+                                    align: 'center',
+                                    width: 80,
+                                    render: (__, record) => {
+                                        return `Kỳ ${record?.fixedClassSemester}`
+                                    },
+                                },
+                                {
+                                    title: 'Tổng SV',
+                                    dataIndex: 'countStudent',
+                                    width: 80,
+                                    align: 'center',
+                                    onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                },
+                                {
+                                    title: 'Đơn vị phụ trách',
+                                    dataIndex: 'managementOrganizationCode',
+                                    width: 150,
+                                    align: 'center',
+                                    onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                },
+                            ]}
+                            pagination={false}
+                        />
+                    )}
                 </Col>
             </Row>
         </Form>

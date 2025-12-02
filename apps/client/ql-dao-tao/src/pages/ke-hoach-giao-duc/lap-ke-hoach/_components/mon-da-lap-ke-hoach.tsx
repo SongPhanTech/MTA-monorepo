@@ -271,14 +271,15 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                                                             rowSpan,
                                                                         },
                                                                         {
-                                                                            value: item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion.curriculumVersion?.fixedClasses?.reduce?.(
-                                                                                (sum, fc) =>
-                                                                                    sum +
-                                                                                    (fc._count
-                                                                                        ?.students ??
-                                                                                        0),
-                                                                                0
-                                                                            ) ?? 0,
+                                                                            value:
+                                                                                item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion.curriculumVersion?.fixedClasses?.reduce?.(
+                                                                                    (sum, fc) =>
+                                                                                        sum +
+                                                                                        (fc._count
+                                                                                            ?.students ??
+                                                                                            0),
+                                                                                    0
+                                                                                ) ?? 0,
                                                                             align: 'center',
                                                                             rowSpan,
                                                                         },
@@ -296,7 +297,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                                                 }
                                                             }
                                                         )
-                                                ) ?? [],
+                                                ) ?? ([] as any[]),
                                         },
                                     ],
                                     fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
@@ -337,30 +338,34 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                 <Form.Item hidden name="subjectSelected" />
                 <Table
                     rowKey="trainingBlockSubjectId"
-                    id="fixed-class"
+                    scrollable
+                    maxHeight={'calc(100vh - 390px)'}
                     rowSelection={{
                         selectedRowKeys: subjectSelected,
                         onChange: (selectedRowKeys) => {
                             form.setFieldValue('subjectSelected', selectedRowKeys)
                         },
                         type: 'checkbox',
-                        columnWidth: 20,
+                        checkStrictly: true,
+                        columnWidth: 15,
                     }}
                     onRow={(record) => {
                         return {
                             onClick: () => {
-                                const isSelected = subjectSelected.includes(record.subjectVersionId)
+                                const isSelected = subjectSelected.includes(
+                                    record.trainingBlockSubjectId
+                                )
                                 if (isSelected) {
                                     form.setFieldValue(
                                         'subjectSelected',
                                         subjectSelected.filter(
-                                            (id) => id !== record.subjectVersionId
+                                            (id) => id !== record.trainingBlockSubjectId
                                         )
                                     )
                                 } else {
                                     form.setFieldValue('subjectSelected', [
                                         ...subjectSelected,
-                                        record.subjectVersionId,
+                                        record.trainingBlockSubjectId,
                                     ])
                                 }
                             },
@@ -369,44 +374,31 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                     data={planTraining?.planTrainingSubjects ?? []}
                     columns={[
                         {
-                            title: 'STT',
+                            title: 'TT',
                             width: 35,
                             align: 'center',
-                            fixed: 'left',
                             render: (_, __, index) =>
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
                             title: 'Mã MH',
-                            dataIndex: ['subjectVersion', 'code'],
                             align: 'center',
                             width: 80,
+                            render: (_, record) => record?.trainingBlockSubject?.subject?.code,
                         },
                         {
                             title: 'Tên môn',
-                            dataIndex: ['subjectVersion', 'name'],
                             width: 120,
                             align: 'center',
-                            render: (text, record) => (
+                            render: (_, record) => (
                                 <div className="text-left">
-                                    {text} ({record.subjectVersion.credit})
+                                    {record?.trainingBlockSubject?.subject?.name} (
+                                    {record?.trainingBlockSubject?.subject?.credit})
                                 </div>
                             ),
                         },
                     ]}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: planTraining?._count.planTrainingSubjects ?? 0,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
+                    pagination={false}
                 />
             </Row>
         </Form>

@@ -423,6 +423,7 @@ app.openapi(openSubjectClass, async (c) => {
                             dv."sTen"                      as management_organization_name,
                             dv."sMa"                       as management_organization_code,
                             tc."trainingObjectTypeId"      as training_object_type_id,
+                            tbs.id                         as training_block_subject_id,
                             COUNT(fc.id)                   as fixed_class_count
                      FROM "ql-dao-tao"."SubjectVersion" sv
                               JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
@@ -462,7 +463,7 @@ app.openapi(openSubjectClass, async (c) => {
                               tc."trainingObjectTypeId",
                               dv."sTen",
                               dv."sMa",
-                              schy."startDate")
+                              schy."startDate",tbs.id)
         SELECT json_build_object(
                        'subjectVersionCode',
                        subject_version_code,
@@ -481,6 +482,8 @@ app.openapi(openSubjectClass, async (c) => {
                        'fixedClass',
                        json_agg(
                                json_build_object(
+                                       'trainingBlockSubjectId',
+                                        training_block_subject_id,
                                        'fixedClassId',
                                        fixed_class_id,
                                        'fixedClassCode',
@@ -534,22 +537,13 @@ app.openapi(openSubjectClass, async (c) => {
     `
     const data = res
         .map((e) => e.data)
-        .filter((item) =>
-            item.fixedClass.some((fc) => (fixedClassId ? fc.fixedClassId === fixedClassId : true))
-        )
         .map((item) => ({
             ...item,
-            fixedClass: item.fixedClass.filter(
-                (value, index, self) =>
-                    index === self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
-                    !!value.fixedClassId
+            fixedClass: item.fixedClass.filter((fc) =>
+                fixedClassId ? fc.fixedClassId === fixedClassId : true
             ),
             countStudent: item.fixedClass
-                .filter(
-                    (value, index, self) =>
-                        index === self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
-                        !!value.fixedClassId
-                )
+                .filter((fc) => (fixedClassId ? fc.fixedClassId === fixedClassId : true))
                 .reduce((acc, curr) => acc + curr.fixedClassCount, 0),
         }))
 
@@ -589,7 +583,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
         select: {
             id: true,
             planTrainingSubjects: {
-              select: {
+                select: {
                     trainingBlockSubjectId: true,
                 },
                 where: {

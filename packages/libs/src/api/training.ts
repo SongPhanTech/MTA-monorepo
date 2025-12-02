@@ -948,8 +948,8 @@ export function useFixedClassStudentCount<
 }
 
 /**
- * Lấy danh sách lớp môn học đã mở
- * @summary Lấy danh sách lớp môn học đã mở
+ * Lấy danh sách môn dự kiến giảng dạy
+ * @summary Lấy danh sách môn dự kiến giảng dạy
  */
 export type openSubjectClassResponse200 = {
     data: ListOfOpenSubjectClass
@@ -1087,7 +1087,7 @@ export function useOpenSubjectClass<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Lấy danh sách lớp môn học đã mở
+ * @summary Lấy danh sách môn dự kiến giảng dạy
  */
 
 export function useOpenSubjectClass<
