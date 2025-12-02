@@ -5,7 +5,7 @@ import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_com
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
 import CrossReviewP13 from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
-import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
+// import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -76,20 +76,12 @@ export default function CriteriaEvaluationPage() {
                 'XEM_TAT_CA'
             )
         ) {
-            tabs.push(
-                {
-                    key: '3',
-                    label: 'Danh sách phiếu đánh giá tiêu chí',
-                    children: <CriteriaEvaluationList />,
-                    disabled: !selectedEvaluationPeriodId,
-                },
-                {
-                    key: '7',
-                    label: 'Xem phản biện',
-                    children: <CrossReviewP13 userRole="P13" />,
-                    disabled: !selectedEvaluationPeriodId,
-                }
-            )
+            tabs.push({
+                key: '3',
+                label: 'Danh sách phiếu đánh giá tiêu chí',
+                children: <CriteriaEvaluationList />,
+                disabled: !selectedEvaluationPeriodId,
+            })
         }
 
         const isSecretary =
@@ -120,14 +112,28 @@ export default function CriteriaEvaluationPage() {
             })
         }
 
-        if (isSecretary) {
+        if (
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
+        ) {
             tabs.push({
-                key: '6',
-                label: 'Tổng hợp phiếu đánh giá',
-                children: <SumaryOfCriteriaEvaluation />,
+                key: '7',
+                label: 'Xem phản biện',
+                children: <CrossReviewP13 userRole="P13" />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
+
+        // if (isSecretary) {
+        //     tabs.push({
+        //         key: '6',
+        //         label: 'Tổng hợp phiếu đánh giá',
+        //         children: <SumaryOfCriteriaEvaluation />,
+        //         disabled: !selectedEvaluationPeriodId,
+        //     })
+        // }
 
         return tabs
     }, [selectedEvaluationPeriodId, councilMember, can])

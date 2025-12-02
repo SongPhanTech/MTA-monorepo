@@ -480,7 +480,7 @@ const PutTieuChiMinhChungModal = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber className="w-full" placeholder="Thứ tự" disabled={!input?.id} />
+                    <InputNumber className="w-full" placeholder="Thứ tự" disabled={true} />
                 </FormItem>
             </Col>
             <Col span={24}>

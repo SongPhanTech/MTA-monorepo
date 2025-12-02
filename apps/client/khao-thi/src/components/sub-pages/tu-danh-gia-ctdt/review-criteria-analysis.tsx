@@ -4,6 +4,7 @@ import DatePicker from '@components/commons/date-picker'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import ApproveIcon from '@components/icons/approve'
 import { DEADLINE_OPTIONS, getStatusEvaluation } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
@@ -170,13 +171,38 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
         }
     }
 
+    const handleApproveCriterionAnalysis = async (analysisCriterionId: string) => {
+        try {
+            showSpinner()
+            await updateAnalysisCriterion({
+                where: {
+                    id: analysisCriterionId,
+                },
+                data: {
+                    status: $Enums.EvaluationCriterionStatus.APPROVED,
+                },
+            })
+
+            await handleCheckAndChangeStatus()
+
+            message.success('Phê duyệt tiêu chí thành công')
+        } catch (error) {
+            message.error('Phê duyệt tiêu chí thất bại, vui lòng thử lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const handleRejectCriterionAnalysis = async (
         analysisCriterionId: string,
         requirementCriterionId: string,
         isOverdue: boolean
     ) => {
         try {
-            const values = await form.validateFields()
+            const values = await form.validateFields([
+                ['comment', requirementCriterionId, 'content'],
+                ['comment', requirementCriterionId, 'newDeadline'],
+            ])
             if (!values) return
             showSpinner()
 
@@ -219,11 +245,49 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                 },
             })
 
-            form.resetFields()
+            form.resetFields([
+                ['comment', requirementCriterionId, 'content'],
+                ['comment', requirementCriterionId, 'newDeadline'],
+            ])
             toggleCommentRow(requirementCriterionId)
             message.success('Gửi yêu cầu chỉnh sửa tiêu chí thành công')
         } catch (error) {
+            console.log(error)
             message.error('Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleApproveCriterionAnalysisFinal = async (
+        analysisCriterionId: string,
+        criterionPeriodId: string
+    ) => {
+        try {
+            showSpinner()
+            await updateAnalysisCriterion({
+                where: {
+                    id: analysisCriterionId,
+                },
+                data: {
+                    status: $Enums.EvaluationCriterionStatus.COMPLETED,
+                },
+            })
+
+            await handleCheckAndChangeStatus()
+
+            await updateEvaluationCriterion({
+                where: {
+                    criterionPeriodId: criterionPeriodId,
+                },
+                data: {
+                    status: $Enums.EvaluationStatus.PENDING,
+                },
+            })
+
+            message.success('Phê duyệt tiêu chí thành công')
+        } catch (error) {
+            message.error('Phê duyệt tiêu chí thất bại, vui lòng thử lại')
         } finally {
             hideSpinner()
         }
@@ -491,7 +555,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                         },
                                         {
                                             title: 'Thao tác',
-                                            width: 50,
+                                            width: 100,
                                             align: 'center',
                                             hidden:
                                                 item.analysisCriterions?.status ===
@@ -511,6 +575,46 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                             render: (__, record) => {
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
+                                                        {can(
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            'DUYET'
+                                                        ) && (
+                                                            <>
+                                                                {role === 'BAN_TU_VAN' && (
+                                                                    <ApproveIcon
+                                                                        popConfirm={{
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleApproveCriterionAnalysis(
+                                                                                    record.analysisCriterionId
+                                                                                )
+                                                                            },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                        }}
+                                                                    />
+                                                                )}
+
+                                                                {role === 'THU_KY' && (
+                                                                    <ApproveIcon
+                                                                        popConfirm={{
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleApproveCriterionAnalysisFinal(
+                                                                                    record.analysisCriterionId,
+                                                                                    item.id
+                                                                                )
+                                                                            },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                            </>
+                                                        )}
+
                                                         {can(
                                                             KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                                                             'DUYET'
@@ -596,7 +700,10 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                         <div className="flex justify-end gap-2 mt-2">
                                                             <Button
                                                                 onClick={() => {
-                                                                    form.resetFields()
+                                                                    form.resetFields([
+                                                                        ['comment', record.id, 'content'],
+                                                                        ['comment', record.id, 'newDeadline'],
+                                                                    ])
                                                                     toggleCommentRow(record.id)
                                                                 }}
                                                             >
