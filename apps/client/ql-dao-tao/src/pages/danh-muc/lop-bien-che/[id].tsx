@@ -819,7 +819,6 @@ export default function StudentFixedClassPage() {
                             },
                         ],
                     }
-                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                             cells: [
@@ -1191,7 +1190,6 @@ export default function StudentFixedClassPage() {
                             },
                         ],
                     }
-                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                             cells: [
@@ -1553,7 +1551,6 @@ export default function StudentFixedClassPage() {
             let globalCounter = 1
             const allSheetOptions = result.map((sampleStudentData) => {
                 const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
-                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc) => ({
                             cells: [
