@@ -120,28 +120,14 @@ export default function MonCham() {
                         where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
-                                create: subject.map((subject) => ({
-                                    subjectVersionId: subject.subjectVersionId,
-                                    fixedClasses: {
-                                        connect: subject.fixedClasses.map((fc) => ({
-                                            id: fc.id,
-                                        })),
-                                    },
-                                })),
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            planTrainingDelaySubjects: {
-                                deleteMany: subjectDelaySelected.map((id) => ({
-                                    subjectVersionId: id,
-                                })),
+                                // create: subject.map((subject) => ({
+                                //     subjectVersionId: subject.subjectVersionId,
+                                //     fixedClasses: {
+                                //         connect: subject.fixedClasses.map((fc) => ({
+                                //             id: fc.id,
+                                //         })),
+                                //     },
+                                // })),
                             },
                         },
                     },
