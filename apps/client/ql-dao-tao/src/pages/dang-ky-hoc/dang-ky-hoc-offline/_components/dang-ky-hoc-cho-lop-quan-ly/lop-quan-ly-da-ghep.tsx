@@ -55,15 +55,9 @@ export default function LopQuanLyDaGhep() {
                     contains: filters.searchText || undefined,
                     mode: 'insensitive',
                 },
-                curriculumVersion: {
-                    trainingBlocks: {
-                        some: {
-                            subjects: {
-                                some: {
-                                    subjectId: selectedSubjectClass?.subjectId,
-                                },
-                            },
-                        },
+                subjectClasses: {
+                    some: {
+                        id: subjectClassId,
                     },
                 },
                 trainingCourse: {
@@ -123,15 +117,9 @@ export default function LopQuanLyDaGhep() {
                 contains: filters.searchText || undefined,
                 mode: 'insensitive',
             },
-            curriculumVersion: {
-                trainingBlocks: {
-                    some: {
-                        subjects: {
-                            some: {
-                                subjectId: selectedSubjectClass?.subjectId,
-                            },
-                        },
-                    },
+            subjectClasses: {
+                some: {
+                    id: subjectClassId,
                 },
             },
             trainingCourse: {

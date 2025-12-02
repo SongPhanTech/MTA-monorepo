@@ -299,9 +299,9 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                             subjectClassStudent: {
                                 deleteMany: {},
                             },
-                            fixedClasses: {
-                                set: fixedClassesIds.map((id) => ({ id })),
-                            },
+                            // fixedClasses: {
+                            //     set: fixedClassesIds.map((id) => ({ id })),
+                            // },
                         },
                     },
                 },

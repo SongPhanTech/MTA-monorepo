@@ -15,7 +15,7 @@ import { Col, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { Key, useCallback, useState } from 'react'
+import { type Key, useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -69,6 +69,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
                                 active: true,
                                 cancelled: false,
                                 status: 'OFFICIAL',
+                                semesterId,
                             },
                         },
                     },
@@ -114,11 +115,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
                       },
                   }
                 : {}),
-            ...(semesterId
-                ? {
-                      semesterId,
-                  }
-                : {}),
+            semesterId,
             trainingObjectTypeId,
             fixedClasses: {
                 some: {
@@ -126,6 +123,9 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
                 },
             },
             status: 'OFFICIAL',
+            active: true,
+            cancelled: false,
+            deletedAt: null,
         },
         include: {
             mainLecturer: {
