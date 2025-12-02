@@ -1,13 +1,10 @@
-import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import { useFindUniqueSemester } from '@workspace/db/hooks'
 import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
-import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -25,23 +22,9 @@ export default function MonKySau() {
     const searchText = Form.useWatch('searchText', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const { id: trainingCourseId } = useTrainingCourseStore()
-    const { data: semesterData } = useFindUniqueSemester(
-        {
-            where: { id: semesterId },
-            select: {
-                id: true,
-                name: true,
-                schoolYear: {
-                    select: { id: true, name: true },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId,
-        }
-    )
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useOpenSubjectClass(
+    const { data: res } = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
             search: searchText,
@@ -85,15 +68,6 @@ export default function MonKySau() {
             })
         return result
     }, [res])
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
-        }, 500),
-        []
-    )
 
     return (
         <div>
