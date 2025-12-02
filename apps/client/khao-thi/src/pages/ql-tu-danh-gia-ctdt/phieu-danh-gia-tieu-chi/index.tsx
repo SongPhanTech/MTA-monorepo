@@ -76,20 +76,12 @@ export default function CriteriaEvaluationPage() {
                 'XEM_TAT_CA'
             )
         ) {
-            tabs.push(
-                {
-                    key: '3',
-                    label: 'Danh sách phiếu đánh giá tiêu chí',
-                    children: <CriteriaEvaluationList />,
-                    disabled: !selectedEvaluationPeriodId,
-                },
-                {
-                    key: '7',
-                    label: 'Xem phản biện',
-                    children: <CrossReviewP13 userRole="P13" />,
-                    disabled: !selectedEvaluationPeriodId,
-                }
-            )
+            tabs.push({
+                key: '3',
+                label: 'Danh sách phiếu đánh giá tiêu chí',
+                children: <CriteriaEvaluationList />,
+                disabled: !selectedEvaluationPeriodId,
+            })
         }
 
         const isSecretary =
@@ -116,6 +108,20 @@ export default function CriteriaEvaluationPage() {
                 key: '5',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                'XEM_TAT_CA'
+            )
+        ) {
+            tabs.push({
+                key: '7',
+                label: 'Xem phản biện',
+                children: <CrossReviewP13 userRole="P13" />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
