@@ -6,16 +6,16 @@ import DefaultLayout from '@layouts/default-layout'
 import { createId } from '@workspace/db'
 import type { FixedClass } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
-import { useFindFirstPlanTraining, useFindManyTrainingLocation } from '@workspace/db/hooks'
+import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Skeleton, Tooltip } from 'antd'
 import _ from 'lodash'
 import { PlusCircle, XCircleIcon } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { DndProvider, type DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -65,10 +65,15 @@ const SubjectClassDropItem: React.FC<{
             drop: () => ({
                 item,
             }),
-            collect: (monitor) => ({
-                isOver: monitor.isOver(),
-                canDrop: monitor.canDrop(),
-            }),
+            collect: (monitor) => {
+                return {
+                    isOver: monitor.isOver(),
+                    canDrop: monitor.canDrop(),
+                }
+            },
+            canDrop(item: any) {
+                return !!item?.subjectVersionId && item.subjectVersionId === subjectVersionId
+            },
         }),
         []
     )
@@ -111,7 +116,7 @@ const SubjectClassDropItem: React.FC<{
     return (
         <div
             ref={ref}
-            className="border border-dashed border-gray-400 rounded p-2 bg-white select-none h-fit relative"
+            className="border border-dashed border-gray-400 rounded p-1 bg-white select-none h-fit relative"
             style={{
                 opacity: canDrop && isOver ? 0.4 : 1,
             }}
@@ -124,16 +129,13 @@ const SubjectClassDropItem: React.FC<{
                 />
             </Tooltip>
             {item.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId.count || 0), 0)})
-            <div className="grid grid-cols-3 gap-1">
+            <div className="gap-1 w-fit">
                 {!!fixedClass?.length &&
                     fixedClass.map((fcId) => (
                         <div
                             onClick={() => onRemoveFixedClass(fcId.id)}
-                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none"
+                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none hover:opacity-40"
                             key={fcId.id}
-                            style={{
-                                height: (fcId.count || 0) * 1 + 30,
-                            }}
                         >
                             {fcId.code} ({fcId.count})
                         </div>
@@ -155,6 +157,9 @@ const FixedClassDragItem: React.FC<{
     const [{ opacity }, drag] = useDrag(
         () => ({
             type: 'fixedClass',
+            item: {
+                subjectVersionId,
+            },
             end(_, monitor) {
                 const dropResult = monitor.getDropResult() as any
                 if (!dropResult) return
@@ -203,7 +208,7 @@ const FixedClassDragItem: React.FC<{
                 e.preventDefault()
             }}
             className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
-            style={{ opacity, height: (item?._count?.students ?? 0) * 1 + 30 }}
+            style={{ opacity }}
         >
             {item.code} ({item._count?.students})
         </div>
@@ -223,76 +228,60 @@ export default function KeHoachGhepLopMonHoc() {
     const subjectVersions = Form.useWatch('subjectVersions', form) || {}
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useFindFirstPlanTraining(
+    const { data, refetch, isFetching } = useFindManySubjectVersion(
         {
             where: {
-                semesterId: semesterId as string,
-                trainingObjectTypeId: trainingObjectTypeId || '',
+                trainingBlocks: {
+                    some: {
+                        planTrainingSubjects: {
+                            some: {
+                                planTraining: {
+                                    semesterId,
+                                    trainingObjectTypeId,
+                                    trainingCourseId,
+                                },
+                                subjectClassType: $Enums.SubjectClassType.NORMAL,
+                            },
+                        },
+                    },
+                },
                 ...(searchText
                     ? {
-                          planTrainingSubjects: {
-                              some: {
-                                  subjectVersion: {
-                                      OR: [
-                                          {
-                                              name: { contains: searchText, mode: 'insensitive' },
-                                          },
-                                          {
-                                              code: { contains: searchText, mode: 'insensitive' },
-                                          },
-                                      ],
-                                  },
-                                  fixedClasses: {
-                                      some: {
-                                          trainingCourseId,
-                                          curriculumVersion: {
-                                              curriculum: {
-                                                  trainingMajorId,
-                                              },
-                                          },
-                                      },
-                                  },
-                                  subjectClassType: $Enums.SubjectClassType.NORMAL,
+                          OR: [
+                              {
+                                  name: { contains: searchText, mode: 'insensitive' },
                               },
-                          },
+                              {
+                                  code: { contains: searchText, mode: 'insensitive' },
+                              },
+                          ],
                       }
                     : {}),
             },
             include: {
-                planTrainingSubjects: {
+                trainingBlocks: {
                     where: {
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
-                        fixedClasses: {
+                        planTrainingSubjects: {
                             some: {
-                                trainingCourseId,
-                                curriculumVersion: {
-                                    curriculum: {
-                                        trainingMajorId,
-                                    },
+                                planTraining: {
+                                    semesterId,
+                                    trainingObjectTypeId,
+                                    trainingCourseId,
                                 },
+                                subjectClassType: $Enums.SubjectClassType.NORMAL,
                             },
                         },
-                        subjectVersion: {
-                            OR: [
-                                {
-                                    name: { contains: searchText, mode: 'insensitive' },
-                                },
-                                {
-                                    code: { contains: searchText, mode: 'insensitive' },
-                                },
-                            ],
-                        },
                     },
-                    include: {
-                        subjectVersion: {
-                            include: {
-                                subjectClass: {
-                                    where: {
-                                        semesterId: semesterId as string,
-                                        trainingObjectTypeId: trainingObjectTypeId || '',
-                                    },
-                                    orderBy: { code: 'asc' },
-                                    include: {
+                    select: {
+                        planTrainingSubjects: {
+                            select: {
+                                studentCount: true,
+                            },
+                        },
+                        trainingBlockOnCurriculumVersion: {
+                            select: {
+                                curriculumVersion: {
+                                    select: {
                                         fixedClasses: {
                                             select: {
                                                 id: true,
@@ -312,15 +301,24 @@ export default function KeHoachGhepLopMonHoc() {
                                         },
                                     },
                                 },
-                                managementOrganization: {
-                                    select: {
-                                        sMa: true,
-                                    },
-                                },
                             },
                         },
+                    },
+                },
+                subjectClass: {
+                    where: {
+                        semesterId,
+                        trainingObjectTypeId,
+                    },
+                    select: {
+                        id: true,
+                        code: true,
+                        maxStudent: true,
+                        createdAt: true,
                         fixedClasses: {
-                            include: {
+                            select: {
+                                id: true,
+                                code: true,
                                 _count: {
                                     select: {
                                         students: {
@@ -333,47 +331,20 @@ export default function KeHoachGhepLopMonHoc() {
                                     },
                                 },
                             },
-                            orderBy: { code: 'asc' },
                         },
                     },
-                    take: numberOfPages,
-                    skip: (currentPage - 1) * numberOfPages,
                 },
-                _count: {
+                managementOrganization: {
                     select: {
-                        planTrainingSubjects: {
-                            where: {
-                                subjectClassType: $Enums.SubjectClassType.NORMAL,
-                                fixedClasses: {
-                                    some: {
-                                        trainingCourseId,
-                                        curriculumVersion: {
-                                            curriculum: {
-                                                trainingMajorId,
-                                            },
-                                        },
-                                    },
-                                },
-                                subjectVersion: {
-                                    OR: [
-                                        {
-                                            name: { contains: searchText, mode: 'insensitive' },
-                                        },
-                                        {
-                                            code: { contains: searchText, mode: 'insensitive' },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
+                        sMa: true,
                     },
                 },
             },
         },
-        { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false }
+        {
+            refetchOnWindowFocus: false,
+        }
     )
-
-    const data = useMemo(() => res?.planTrainingSubjects, [res])
 
     useEffect(() => {
         if (data) {
@@ -390,19 +361,19 @@ export default function KeHoachGhepLopMonHoc() {
                     if (!acc) {
                         return {}
                     }
-                    acc[cur.subjectVersionId] = {
-                        count: cur.subjectVersion.subjectClass.length ?? 0,
-                        name: cur.subjectVersion?.name,
-                        code: cur.subjectVersion?.code,
+                    acc[cur.id] = {
+                        count: cur.subjectClass.length ?? 0,
+                        name: cur?.name,
+                        code: cur?.code,
                         maxStudent:
-                            cur.studentCount ??
-                            cur.subjectVersion.subjectClass?.[0]?.maxStudent ??
-                            cur.fixedClasses.reduce(
+                            cur.subjectClass?.[0]?.maxStudent ??
+                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
+                            cur.trainingBlocks[0].trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce?.(
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
                             ),
-                        examType: cur.subjectVersion?.examType,
-                        subjectClasses: cur.subjectVersion.subjectClass.reduce(
+                        examType: cur?.examType,
+                        subjectClasses: cur.subjectClass.reduce(
                             (subAcc, subCur) => {
                                 if (!subAcc) {
                                     return {}
@@ -438,16 +409,11 @@ export default function KeHoachGhepLopMonHoc() {
         _.debounce(() => {
             refetch()
             queryClient.invalidateQueries({
-                queryKey: ['zenstack', 'DM_DonVi'],
+                queryKey: ['zenstack', 'Subject'],
             })
         }, 500),
         []
     )
-
-    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
-        orderBy: { name: 'asc' },
-        where: { deletedAt: null, active: true },
-    })
 
     const { hideSpinner, showSpinner } = useSpinner()
 
@@ -658,142 +624,139 @@ export default function KeHoachGhepLopMonHoc() {
                     </Row>
                     <Form.Item name="subjectVersions" hidden />
                     <Col span={24}>
-                        <Table
-                            rowKey="subjectVersionId"
-                            data={data}
-                            onRow={(record) => {
-                                return {
-                                    className: cn(
-                                        Object.keys(
-                                            subjectVersions?.[record.subjectVersionId]
-                                                ?.subjectClasses || {}
-                                        ).length === 0 && 'bg-red-100',
-                                        subjectVersions?.[record.subjectVersionId]?.isEdit &&
-                                            'bg-yellow-100'
-                                    ),
-                                }
-                            }}
-                            columns={[
-                                {
-                                    title: 'TT',
-                                    width: 35,
-                                    align: 'center',
-                                    render: (_, __, index) =>
-                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                },
-                                {
-                                    title: 'Mã MH',
-                                    dataIndex: ['subjectVersion', 'code'],
-                                    align: 'center',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Tên môn học',
-                                    dataIndex: ['subjectVersion', 'name'],
-                                    align: 'center',
-                                    render: (_, record) => {
-                                        return (
-                                            <div className="text-left">
-                                                {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
-                                                    ''}
-                                            </div>
-                                        )
+                        {isFetching ? (
+                            <Skeleton />
+                        ) : (
+                            <Table
+                                rowKey="subjectVersionId"
+                                data={data}
+                                scrollable
+                                maxHeight={'calc(100vh - 380px)'}
+                                onRow={(record) => {
+                                    return {
+                                        className: cn(
+                                            Object.keys(
+                                                subjectVersions?.[record.id]?.subjectClasses || {}
+                                            ).length === 0 && 'bg-red-100',
+                                            subjectVersions?.[record.id]?.isEdit && 'bg-yellow-100'
+                                        ),
+                                    }
+                                }}
+                                columns={[
+                                    {
+                                        title: 'TT',
+                                        width: 35,
+                                        align: 'center',
+                                        render: (_, __, index) =>
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                     },
-                                },
-                                {
-                                    title: 'Ghép lớp',
-                                    align: 'center',
-                                    render: (_, record) => {
-                                        return (
-                                            <DndProvider backend={HTML5Backend}>
-                                                <div className="flex flex-col items-center justify-center m-2">
-                                                    <div className="flex h-fit gap-4 items-center">
-                                                        {subjectVersions?.[record.subjectVersionId]
-                                                            ?.subjectClasses &&
-                                                            Object.entries(
-                                                                subjectVersions?.[
-                                                                    record.subjectVersionId
-                                                                ]?.subjectClasses || {}
-                                                            ).map(
-                                                                ([
-                                                                    subjectClassId,
-                                                                    subjectClass,
-                                                                ]) => (
-                                                                    <SubjectClassDropItem
-                                                                        subjectVersionId={
-                                                                            record.subjectVersionId
-                                                                        }
-                                                                        item={subjectClass}
-                                                                        key={subjectClassId}
+                                    {
+                                        title: 'Mã MH',
+                                        align: 'center',
+                                        width: 100,
+                                        render: (_, record) => record?.code,
+                                    },
+                                    {
+                                        title: 'Tên môn học',
+                                        align: 'center',
+                                        width: 300,
+                                        render: (_, record) => {
+                                            return (
+                                                <div className="text-left">
+                                                    {`${record?.name} (${record?.credit})` || ''}
+                                                </div>
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Ghép lớp',
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            return (
+                                                <DndProvider backend={HTML5Backend}>
+                                                    <div className="flex flex-col items-center justify-center m-2">
+                                                        <div className="flex h-fit gap-4 items-center">
+                                                            {subjectVersions?.[record.id]
+                                                                ?.subjectClasses &&
+                                                                Object.entries(
+                                                                    subjectVersions?.[record.id]
+                                                                        ?.subjectClasses || {}
+                                                                ).map(
+                                                                    ([
+                                                                        subjectClassId,
+                                                                        subjectClass,
+                                                                    ]) => (
+                                                                        <SubjectClassDropItem
+                                                                            subjectVersionId={
+                                                                                record.id
+                                                                            }
+                                                                            item={subjectClass}
+                                                                            key={subjectClassId}
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            <Tooltip
+                                                                title="Thêm lớp MH"
+                                                                className="select-none cursor-pointer"
+                                                            >
+                                                                <PlusCircle
+                                                                    onClick={() =>
+                                                                        onAddSubjectClass(record.id)
+                                                                    }
+                                                                    size={16}
+                                                                />
+                                                            </Tooltip>
+                                                        </div>
+                                                        <div className="flex h-fit">
+                                                            {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
+                                                                (e: FixedClass) => (
+                                                                    <FixedClassDragItem
+                                                                        subjectVersionId={record.id}
+                                                                        item={e}
+                                                                        key={e.id}
                                                                     />
                                                                 )
                                                             )}
-                                                        <Tooltip
-                                                            title="Thêm lớp MH"
-                                                            className="select-none cursor-pointer"
-                                                        >
-                                                            <PlusCircle
-                                                                onClick={() =>
-                                                                    onAddSubjectClass(
-                                                                        record.subjectVersionId
-                                                                    )
-                                                                }
-                                                                size={16}
-                                                            />
-                                                        </Tooltip>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex h-fit">
-                                                        {record?.fixedClasses.map(
-                                                            (e: FixedClass) => (
-                                                                <FixedClassDragItem
-                                                                    subjectVersionId={
-                                                                        record.subjectVersionId
-                                                                    }
-                                                                    item={e}
-                                                                    key={e.id}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </DndProvider>
-                                        )
+                                                </DndProvider>
+                                            )
+                                        },
                                     },
-                                },
-                                {
-                                    title: 'Tổng SV',
-                                    width: 80,
-                                    align: 'center',
-                                    render: (_, record) =>
-                                        record?.studentCount ||
-                                        record?.fixedClasses?.reduce(
-                                            (sum: number, fc: any) =>
-                                                sum + (fc._count?.students ?? 0),
-                                            0
-                                        ) ||
-                                        0,
-                                },
-                                {
-                                    title: 'Đơn vị phụ trách',
-                                    dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
-                                    width: 150,
-                                    align: 'center',
-                                },
-                            ]}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: res?._count?.planTrainingSubjects ?? 0,
-                                onChange: (page, pageSize) => {
-                                    if (numberOfPages === pageSize) {
-                                        setCurrentPage(page)
-                                    } else {
-                                        setCurrentPage(1)
-                                        setNumberOfPages(pageSize)
-                                    }
-                                },
-                            }}
-                        />
+                                    {
+                                        title: 'Tổng SV',
+                                        width: 80,
+                                        align: 'center',
+                                        render: (_, record) =>
+                                            record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
+                                                (sum: number, fc: any) =>
+                                                    sum + (fc._count?.students ?? 0),
+                                                0
+                                            ) || 0,
+                                    },
+                                    {
+                                        title: 'Đơn vị phụ trách',
+                                        width: 150,
+                                        align: 'center',
+                                        render: (_, record) =>
+                                            record?.managementOrganization?.sMa || '',
+                                    },
+                                ]}
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: numberOfPages,
+                                    // total: res?._count?.planTrainingSubjects ?? 0,
+                                    onChange: (page, pageSize) => {
+                                        if (numberOfPages === pageSize) {
+                                            setCurrentPage(page)
+                                        } else {
+                                            setCurrentPage(1)
+                                            setNumberOfPages(pageSize)
+                                        }
+                                    },
+                                }}
+                            />
+                        )}
                     </Col>
                 </Form>
             </Row>

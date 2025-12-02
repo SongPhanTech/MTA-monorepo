@@ -48,6 +48,7 @@ import { useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import TreeSelect from "@/components/commons/tree-select";
 import { SquarePen } from "lucide-react";
+import DefaultLayout from "@layouts/default-layout";
 
 // import { getMinioUrl } from '@workspace/constant'
 
@@ -2281,4 +2282,7 @@ export default function PostgraduateProject({
       </Row>
     </div>
   );
+}
+PostgraduateProject.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
 }

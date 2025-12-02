@@ -6,7 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { $Enums, Prisma } from '@workspace/db/client'
-import { useFindFirstPlanTraining } from '@workspace/db/hooks'
+import { useFindManySubjectVersion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -14,7 +14,7 @@ import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popover, Row, Switch } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 type OpenSubjectClassForm = {
     searchText?: string
@@ -52,224 +52,128 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
     const subjectVersions = Form.useWatch('subjectVersions', form) || {}
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useFindFirstPlanTraining(
-        {
-            where: {
-                semesterId: semesterId as string,
-                trainingObjectTypeId: trainingObjectTypeId || '',
-                ...(searchText
-                    ? {
-                          planTrainingSubjects: {
-                              some: {
-                                  trainingBlockSubject: {
-                                      subject: {
-                                          OR: [
-                                              {
-                                                  name: {
-                                                      contains: searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                              {
-                                                  code: {
-                                                      contains: searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                          ],
-                                      },
-                                      trainingBlockOnCurriculumVersion: {
-                                          curriculumVersion: {
-                                              fixedClasses: {
-                                                  some: {
-                                                      trainingCourseId,
-                                                      curriculumVersion: {
-                                                          curriculum: {
-                                                              trainingMajorId,
-                                                          },
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  },
-                                  subjectClassType: hocLai
-                                      ? $Enums.SubjectClassType.RETAKE
-                                      : $Enums.SubjectClassType.NORMAL,
-                              },
-                          },
-                      }
-                    : {}),
-            },
-            include: {
-                planTrainingSubjects: {
-                    where: {
-                        subjectClassType: hocLai
-                            ? $Enums.SubjectClassType.RETAKE
-                            : $Enums.SubjectClassType.NORMAL,
-                        ...(hocLai
-                            ? {}
-                            : {
-                                  fixedClasses: {
-                                      some: {
-                                          trainingCourseId,
-                                          curriculumVersion: {
-                                              curriculum: {
-                                                  trainingMajorId,
-                                              },
-                                          },
-                                      },
-                                  },
-                              }),
-                        trainingBlockSubject: {
-                            subject: {
-                                OR: [
-                                    {
-                                        name: { contains: searchText, mode: 'insensitive' },
-                                    },
-                                    {
-                                        code: { contains: searchText, mode: 'insensitive' },
-                                    },
-                                ],
+    const { data: subjects, refetch } = useFindManySubjectVersion({
+        where: {
+            trainingBlocks: {
+                some: {
+                    planTrainingSubjects: {
+                        some: {
+                            planTraining: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                trainingCourseId,
                             },
+                            subjectClassType: hocLai
+                                ? $Enums.SubjectClassType.RETAKE
+                                : $Enums.SubjectClassType.NORMAL,
                         },
                     },
-                    include: {
-                        trainingBlockSubject: {
-                            include: {
-                                subject: {
-                                    include: {
-                                        subjectClass: {
-                                            where: {
-                                                semesterId: semesterId as string,
-                                                trainingObjectTypeId: trainingObjectTypeId || '',
-                                            },
-                                            orderBy: { code: 'asc' },
-                                            include: {
-                                                fixedClasses: {
-                                                    select: {
-                                                        id: true,
-                                                        code: true,
-                                                        _count: {
-                                                            select: {
-                                                                students: {
-                                                                    where: {
-                                                                        deletedAt: null,
-                                                                        active: true,
-                                                                        status: 'ENROLLED',
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        managementOrganization: {
-                                            select: {
-                                                sMa: true,
-                                            },
-                                        },
-                                    },
-                                },
-                                trainingBlockOnCurriculumVersion: {
-                                    include: {
-                                        curriculumVersion: {
-                                            include: {
-                                                fixedClasses: {
-                                                    include: {
-                                                        _count: {
-                                                            select: {
-                                                                students: {
-                                                                    where: {
-                                                                        deletedAt: null,
-                                                                        active: true,
-                                                                        status: 'ENROLLED',
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                    orderBy: { code: 'asc' },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    take: numberOfPages,
-                    skip: (currentPage - 1) * numberOfPages,
                 },
-                _count: {
-                    select: {
-                        planTrainingSubjects: {
-                            where: {
-                                subjectClassType: hocLai
-                                    ? $Enums.SubjectClassType.RETAKE
-                                    : $Enums.SubjectClassType.NORMAL,
-                                ...(hocLai
-                                    ? {}
-                                    : {
-                                          fixedClasses: {
-                                              some: {
-                                                  trainingCourseId,
-                                                  curriculumVersion: {
-                                                      curriculum: {
-                                                          trainingMajorId,
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      }),
-                                trainingBlockSubject: {
-                                    subject: {
-                                        OR: [
-                                            {
-                                                name: { contains: searchText, mode: 'insensitive' },
+            },
+            ...(searchText
+                ? {
+                      OR: [
+                          {
+                              name: { contains: searchText, mode: 'insensitive' },
+                          },
+                          {
+                              code: { contains: searchText, mode: 'insensitive' },
+                          },
+                      ],
+                  }
+                : {}),
+        },
+        include: {
+            trainingBlocks: {
+                where: {
+                    planTrainingSubjects: {
+                        some: {
+                            planTraining: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                trainingCourseId,
+                            },
+                            subjectClassType: hocLai
+                                ? $Enums.SubjectClassType.RETAKE
+                                : $Enums.SubjectClassType.NORMAL,
+                        },
+                    },
+                },
+                select: {
+                    planTrainingSubjects: {
+                        select: {
+                            studentCount: true,
+                        },
+                    },
+                    trainingBlockOnCurriculumVersion: {
+                        select: {
+                            curriculumVersion: {
+                                select: {
+                                    fixedClasses: {
+                                        select: {
+                                            id: true,
+                                            code: true,
+                                            _count: {
+                                                select: {
+                                                    students: {
+                                                        where: {
+                                                            deletedAt: null,
+                                                            active: true,
+                                                            status: 'ENROLLED',
+                                                        },
+                                                    },
+                                                },
                                             },
-                                            {
-                                                code: { contains: searchText, mode: 'insensitive' },
-                                            },
-                                        ],
+                                        },
                                     },
                                 },
                             },
                         },
                     },
+                },
+            },
+            subjectClass: {
+                where: {
+                    semesterId,
+                    trainingObjectTypeId,
+                },
+                select: {
+                    id: true,
+                    code: true,
+                    maxStudent: true,
+                },
+            },
+            managementOrganization: {
+                select: {
+                    sMa: true,
                 },
             },
         },
-        { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false }
-    )
-
-    const data = useMemo(() => res?.planTrainingSubjects ?? [], [res])
-    console.log('data', data)
+    })
 
     useEffect(() => {
-        if (data) {
+        if (subjects) {
             resetData()
         }
-    }, [data])
+    }, [subjects])
 
     const resetData = () => {
-        if (!data) return
+        if (!subjects) return
         form.setFieldValue(
             'subjectVersions',
-            data.reduce(
+            subjects.reduce(
                 (acc, cur) => {
                     if (!acc) {
                         return {}
                     }
-                    acc[cur.trainingBlockSubject.subjectId] = {
-                        count: cur.trainingBlockSubject.subject.subjectClass.length ?? 0,
-                        name: cur.trainingBlockSubject.subject?.name,
-                        code: cur.trainingBlockSubject.subject?.code,
+                    acc[cur.id] = {
+                        count: cur.subjectClass.length ?? 0,
+                        name: cur.name,
+                        code: cur?.code,
                         maxStudent:
-                            cur.studentCount ??
-                            cur.trainingBlockSubject.subject.subjectClass?.[0]?.maxStudent ??
-                            cur.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses.reduce(
+                            cur.subjectClass?.[0]?.maxStudent ??
+                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
+                            cur.trainingBlocks[0].trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce?.(
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
                             ),
@@ -640,15 +544,13 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                     <Form.Item name="subjectVersions" hidden />
                     <Col span={24}>
                         <Table
-                            rowKey="trainingBlockSubjectId"
-                            data={data}
+                            rowKey="id"
+                            data={subjects}
                             onRow={(record) => {
                                 return {
                                     className: cn(
-                                        subjectVersions?.[record.trainingBlockSubjectId]?.count ===
-                                            0 && 'bg-red-100',
-                                        subjectVersions?.[record.trainingBlockSubjectId]?.isEdit &&
-                                            'bg-yellow-100'
+                                        subjectVersions?.[record.id]?.count === 0 && 'bg-red-100',
+                                        subjectVersions?.[record.id]?.isEdit && 'bg-yellow-100'
                                     ),
                                 }
                             }}
@@ -662,64 +564,64 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 },
                                 {
                                     title: 'Mã MH',
-                                    dataIndex: ['subjectVersion', 'code'],
                                     align: 'center',
                                     width: 100,
+                                    render: (_, record) => {
+                                        return record?.code || ''
+                                    },
                                 },
                                 {
                                     title: 'Tên môn học',
-                                    dataIndex: ['subjectVersion', 'name'],
                                     align: 'center',
                                     render: (_, record) => {
                                         return (
                                             <div className="text-left">
-                                                {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
-                                                    ''}
+                                                {`${record?.name} (${record?.credit})` || ''}
                                             </div>
                                         )
                                     },
                                 },
-                                {
-                                    title: 'Danh sách lớp MH',
-                                    dataIndex: 'subjectClass',
-                                    align: 'center',
-                                    hidden: hocLai,
-                                    render: (__, record) => {
-                                        return record?.subjectVersion?.subjectClass?.length ? (
-                                            <TextTruncate
-                                                arr={record?.subjectVersion?.subjectClass.map(
-                                                    (i: any) => {
-                                                        return {
-                                                            key: i?.id,
-                                                            label: `${i?.code}`,
-                                                        }
-                                                    }
-                                                )}
-                                                key="subjectClass"
-                                            />
-                                        ) : (
-                                            ''
-                                        )
-                                    },
-                                },
+                                // {
+                                //     title: 'Danh sách lớp MH',
+                                //     dataIndex: 'subjectClass',
+                                //     align: 'center',
+                                //     hidden: hocLai,
+                                //     render: (__, record) => {
+                                //         return record.trainingBlocks?.subjectClass?.length ? (
+                                //             <TextTruncate
+                                //                 arr={record?.subjectVersion?.subjectClass.map(
+                                //                     (i: any) => {
+                                //                         return {
+                                //                             key: i?.id,
+                                //                             label: `${i?.code}`,
+                                //                         }
+                                //                     }
+                                //                 )}
+                                //                 key="subjectClass"
+                                //             />
+                                //         ) : (
+                                //             ''
+                                //         )
+                                //     },
+                                // },
                                 {
                                     title: 'Danh sách lớp quản lý',
                                     dataIndex: 'fixedClass',
                                     align: 'center',
                                     hidden: hocLai,
                                     render: (__, record) => {
-                                        return record?.fixedClasses?.length ? (
+                                        return (
                                             <TextTruncate
-                                                arr={record?.fixedClasses.map((i: any) => {
-                                                    return {
-                                                        key: i?.id,
-                                                        label: `${i?.code} (${i?._count?.students || 0})`,
+                                                arr={record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses.map(
+                                                    (i: any) => {
+                                                        return {
+                                                            key: i?.id,
+                                                            label: `${i?.code} (${i?._count?.students || 0})`,
+                                                        }
                                                     }
-                                                })}
+                                                )}
                                                 key="fixedClass"
                                             />
-                                        ) : (
-                                            ''
                                         )
                                     },
                                 },
@@ -728,19 +630,18 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     width: 80,
                                     align: 'center',
                                     render: (_, record) =>
-                                        record?.studentCount ||
-                                        record?.fixedClasses?.reduce(
+                                        record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
                                             (sum: number, fc: any) =>
                                                 sum + (fc._count?.students ?? 0),
                                             0
-                                        ) ||
-                                        0,
+                                        ) || 0,
                                 },
                                 {
                                     title: 'Đơn vị phụ trách',
-                                    dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
                                     width: 150,
                                     align: 'center',
+                                    render: (_, record) =>
+                                        record?.managementOrganization?.sMa || '',
                                 },
                                 {
                                     title: 'Số LMH',
@@ -749,17 +650,13 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     render: (_, record, idx) => (
                                         <>
                                             <Form.Item
-                                                name={[
-                                                    'subjectVersions',
-                                                    record?.subjectVersionId,
-                                                    'count',
-                                                ]}
+                                                name={['subjectVersions', record?.id, 'count']}
                                                 className={'m-0'}
                                                 required
                                             >
                                                 <InputNumber
                                                     step={0}
-                                                    id={`subjectClassCount-${record?.subjectVersionId}`}
+                                                    id={`subjectClassCount-${record?.id}`}
                                                     controls={false}
                                                     onKeyDown={(e) => {
                                                         if (
@@ -768,14 +665,14 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                         ) {
                                                             e.preventDefault()
                                                             e.stopPropagation()
-                                                            if (!data) return
+                                                            if (!subjects) return
                                                             const nextId =
-                                                                data[
+                                                                subjects[
                                                                     idx +
                                                                         (e.key === 'ArrowUp'
                                                                             ? -1
                                                                             : 1)
-                                                                ]?.trainingBlockSubject?.subject?.id
+                                                                ]?.id
                                                             document
                                                                 .getElementById(
                                                                     `subjectClassCount-${nextId}`
@@ -813,17 +710,13 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     render: (_, record, idx) => (
                                         <>
                                             <Form.Item
-                                                name={[
-                                                    'subjectVersions',
-                                                    record?.subjectVersionId,
-                                                    'maxStudent',
-                                                ]}
+                                                name={['subjectVersions', record?.id, 'maxStudent']}
                                                 required
                                                 className={'m-0'}
                                             >
                                                 <InputNumber
                                                     step={0}
-                                                    id={`svmax-${record?.subjectVersionId}`}
+                                                    id={`svmax-${record?.id}`}
                                                     controls={false}
                                                     onKeyDown={(e) => {
                                                         if (
@@ -832,14 +725,14 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                         ) {
                                                             e.preventDefault()
                                                             e.stopPropagation()
-                                                            if (!data) return
+                                                            if (!subjects) return
                                                             const nextId =
-                                                                data[
+                                                                subjects[
                                                                     idx +
                                                                         (e.key === 'ArrowUp'
                                                                             ? -1
                                                                             : 1)
-                                                                ]?.trainingBlockSubject?.subject?.id
+                                                                ]?.id
                                                             document
                                                                 .getElementById(`svmax-${nextId}`)
                                                                 ?.focus()
@@ -872,7 +765,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: res?._count?.planTrainingSubjects ?? 0,
+                                // total: res?._count?.planTrainingSubjects ?? 0,
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)
