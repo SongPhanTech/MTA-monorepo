@@ -163,7 +163,11 @@ export default function MonCham() {
                             <Form.Item className="mb-0" name="searchText">
                                 <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
-                            <Button onClick={onSubmit} type="primary">
+                            <Button
+                                onClick={onSubmit}
+                                type="primary"
+                                disabled={!subjectDelaySelected.length}
+                            >
                                 Thêm vào kế hoạch
                             </Button>
                         </Flex>

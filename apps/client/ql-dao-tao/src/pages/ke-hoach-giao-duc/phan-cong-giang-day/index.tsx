@@ -1633,7 +1633,8 @@ export default function PhanCongGiangDay({
                                         !!recordSubjectClass?.approveLecturerAssignmentAt &&
                                             'bg-green-200',
                                         subjectClassForm?.[record.id]?.isEdit && 'bg-yellow-100',
-                                        subjectClassForm?.[record.id]?.cancelled && 'bg-red-200'
+                                        subjectClassForm?.[record.id]?.cancelled && 'bg-red-200',
+                                        (record as any)?.$type === 'parent' && 'bg-white'
                                     ),
                                 }
                             }}
@@ -2150,7 +2151,11 @@ export default function PhanCongGiangDay({
                                               width: 80,
                                               align: 'center' as const,
                                               render: (_: any, record: SubjectClass) => {
+                                                  if (record.cancelled) {
+                                                      return null
+                                                  }
                                                   const id = record?.id
+
                                                   if (id) {
                                                       return (
                                                           <Row className="justify-center gap-2">
