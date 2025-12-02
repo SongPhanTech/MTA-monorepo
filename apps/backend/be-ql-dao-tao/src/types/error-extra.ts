@@ -1,6 +1,10 @@
+type Master = {
+    entityName: string
+    fields: string[]
+}
 export type ErrorExtra = {
     code: string
-    data: string[] | null
+    data: string[] | { Master: Master[] } | null
     message: string | null
     resultType: 0
     index: null

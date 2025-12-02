@@ -11,8 +11,8 @@ const IndexPage = () => {
     const router = useRouter()
 
     useEffect(() => {
-        console.log(router);
-        router.push(router?.asPath!=='/'?router?.asPath:'/home')
+        console.log(router)
+        router.push(router?.asPath !== '/' ? router?.asPath : '/home')
         // const firstMenu = menus.flat()
         // if (firstMenu.length > 0 && firstMenu[0].path) {
         //         router.push(firstMenu[0].path)

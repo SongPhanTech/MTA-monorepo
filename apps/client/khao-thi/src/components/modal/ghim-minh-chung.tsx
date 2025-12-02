@@ -43,27 +43,24 @@ const PinEvidenceToPeriod = () => {
     }
     const { data: listEvidence } = useFindManyEvidence({
         where: {
-                analysisFormEvidence :{
-                    some:{
-                    requirementCriterion:{
-                        analysisCriterion:{
-                            criterionPeriod:{
-                                evaluationStandard:{
-                                    periodId:'s4ekrtol3huj0nd5x94tc0pw'
-                                }
-                            }
-                        }
-                    }
-                    }
-
-                }
-              
-           
+            analysisFormEvidence: {
+                some: {
+                    requirementCriterion: {
+                        analysisCriterion: {
+                            criterionPeriod: {
+                                evaluationStandard: {
+                                    periodId: 's4ekrtol3huj0nd5x94tc0pw',
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         },
         include: {
-            analysisFormEvidence:{
+            analysisFormEvidence: {
                 include: {
-                    requirementCriterion:{
+                    requirementCriterion: {
                         include: {
                             analysisCriterion: {
                                 include: {
@@ -71,18 +68,18 @@ const PinEvidenceToPeriod = () => {
                                         include: {
                                             evaluationStandard: {
                                                 include: {
-                                                    period: true
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                                                    period: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     })
 
     return (

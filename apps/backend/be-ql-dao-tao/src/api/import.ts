@@ -158,7 +158,7 @@ app.openapi(importLecturer, async (c) => {
                 }
             )
 
-            console.log('[LSB update User]:', res.status, res.data)
+            console.log('[LSB update User]:', res.status, res.data, res.data.extra.data)
             if (res.status === 200) {
                 await prisma.lecturer.update({
                     where: { id: existing.id },
@@ -202,7 +202,7 @@ app.openapi(importLecturer, async (c) => {
                 }
             )
 
-            console.log('[LSB create User]:', res.status, res.data)
+            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
             if (res.status === 200) {
                 await prisma.lecturer.create({
                     data: {

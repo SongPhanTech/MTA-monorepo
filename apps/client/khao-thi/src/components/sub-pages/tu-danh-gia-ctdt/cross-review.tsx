@@ -339,157 +339,162 @@ export default function CrossReviewSubPage({
 
             <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
                 <Form form={form} layout="vertical" className="form-evidence">
-                {/* Phần mở đầu */}
-                <Form.Item label="Mở đầu" name="opening">
-                    <RichTextEditor id="opening" editable={false} />
-                </Form.Item>
+                    {/* Phần mở đầu */}
+                    <Form.Item label="Mở đầu" name="opening">
+                        <RichTextEditor id="opening" editable={false} />
+                    </Form.Item>
 
-                <Form.List name="criteria">
-                    {(fields) => (
-                        <>
-                            {fields.map(({ key, name }, idx: number) => {
-                                const item = data.criteria[name]
-                                return (
-                                    <div key={key} style={{ marginBottom: 24 }}>
-                                        <Collapse
-                                            items={[
-                                                {
-                                                    label: (
-                                                        <div>
-                                                            <span className="font-bold">
-                                                                Tiêu chí {idx + 1}:{' '}
-                                                            </span>
-                                                            {item?.name}
-                                                        </div>
-                                                    ),
-                                                    key: item.id,
-                                                    children: (
-                                                        <>
-                                                            <Form.Item
-                                                                label="1. Mô tả hiện trạng"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'currentSituation',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={false}
-                                                                />
-                                                            </Form.Item>
+                    <Form.List name="criteria">
+                        {(fields) => (
+                            <>
+                                {fields.map(({ key, name }, idx: number) => {
+                                    const item = data.criteria[name]
+                                    return (
+                                        <div key={key} style={{ marginBottom: 24 }}>
+                                            <Collapse
+                                                items={[
+                                                    {
+                                                        label: (
+                                                            <div>
+                                                                <span className="font-bold">
+                                                                    Tiêu chí {idx + 1}:{' '}
+                                                                </span>
+                                                                {item?.name}
+                                                            </div>
+                                                        ),
+                                                        key: item.id,
+                                                        children: (
+                                                            <>
+                                                                <Form.Item
+                                                                    label="1. Mô tả hiện trạng"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'currentSituation',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={false}
+                                                                    />
+                                                                </Form.Item>
 
-                                                            <Form.Item
-                                                                label="2. Điểm mạnh"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'strengths',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={false}
-                                                                />
-                                                            </Form.Item>
+                                                                <Form.Item
+                                                                    label="2. Điểm mạnh"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'strengths',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={false}
+                                                                    />
+                                                                </Form.Item>
 
-                                                            <Form.Item
-                                                                label="3. Điểm tồn tại"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'weakness',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={false}
-                                                                />
-                                                            </Form.Item>
+                                                                <Form.Item
+                                                                    label="3. Điểm tồn tại"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'weakness',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={false}
+                                                                    />
+                                                                </Form.Item>
 
-                                                            <Form.Item
-                                                                label="4. Kế hoạch hành động"
-                                                                name={[
-                                                                    name,
-                                                                    'evaluationCriterion',
-                                                                    'actionPlan',
-                                                                ]}
-                                                            >
-                                                                <RichTextEditor
-                                                                    id={item.id}
-                                                                    editable={false}
-                                                                />
-                                                            </Form.Item>
-                                                            {/* <div className="mb-3 font-bold">
+                                                                <Form.Item
+                                                                    label="4. Kế hoạch hành động"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'actionPlan',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={false}
+                                                                    />
+                                                                </Form.Item>
+                                                                {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
                                                             </div> */}
-                                                        </>
-                                                    ),
-                                                },
-                                            ]}
-                                            bordered={true}
-                                            expandIconPosition="end"
-                                            className="bg-transparent mb-6"
+                                                            </>
+                                                        ),
+                                                    },
+                                                ]}
+                                                bordered={true}
+                                                expandIconPosition="end"
+                                                className="bg-transparent mb-6"
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </>
+                        )}
+                    </Form.List>
+
+                    {/* Phần kết luận */}
+                    <Form.Item label="Kết luận" name="conclusion">
+                        <RichTextEditor id="conclusion" editable={false} />
+                    </Form.Item>
+                </Form>
+
+                {showComments && (
+                    <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
+                        <Card>
+                            {firstEvaluationCriterion?.evaluationCriterionComments &&
+                                firstEvaluationCriterion.evaluationCriterionComments.length > 0 && (
+                                    <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
+                                        <CommentList
+                                            comments={
+                                                firstEvaluationCriterion.evaluationCriterionComments
+                                            }
                                         />
                                     </div>
-                                )
-                            })}
-                        </>
-                    )}
-                </Form.List>
-
-                {/* Phần kết luận */}
-                <Form.Item label="Kết luận" name="conclusion">
-                    <RichTextEditor id="conclusion" editable={false} />
-                </Form.Item>
-            </Form>
-
-            {showComments && (
-                <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
-                    <Card>
-                        {firstEvaluationCriterion?.evaluationCriterionComments &&
-                            firstEvaluationCriterion.evaluationCriterionComments.length > 0 && (
-                                <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
-                                    <CommentList
-                                        comments={firstEvaluationCriterion.evaluationCriterionComments}
-                                    />
-                                </div>
+                                )}
+                            {role !== 'P13' && isCouncilMember && (
+                                <Form form={commentForm} layout="vertical">
+                                    <Form.Item
+                                        label="Gửi ý kiến phản biện"
+                                        name="crossReview"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập ý kiến phản biện',
+                                            },
+                                        ]}
+                                    >
+                                        <RichTextEditor editable={isCouncilMember} />
+                                    </Form.Item>
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            onClick={() => {
+                                                commentForm.resetFields()
+                                                setShowComments(false)
+                                            }}
+                                        >
+                                            Hủy
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                handleSendCrossReview()
+                                                setShowComments(false)
+                                            }}
+                                        >
+                                            Gửi ý kiến
+                                        </Button>
+                                    </div>
+                                </Form>
                             )}
-                        {role !== 'P13' && isCouncilMember && (
-                            <Form form={commentForm} layout="vertical">
-                                <Form.Item
-                                    label="Gửi ý kiến phản biện"
-                                    name="crossReview"
-                                    rules={[
-                                        { required: true, message: 'Vui lòng nhập ý kiến phản biện' },
-                                    ]}
-                                >
-                                    <RichTextEditor editable={isCouncilMember} />
-                                </Form.Item>
-                                <div className="flex justify-end gap-2">
-                                    <Button
-                                        onClick={() => {
-                                            commentForm.resetFields()
-                                            setShowComments(false)
-                                        }}
-                                    >
-                                        Hủy
-                                    </Button>
-                                    <Button
-                                        type="primary"
-                                        onClick={() => {
-                                            handleSendCrossReview()
-                                            setShowComments(false)
-                                        }}
-                                    >
-                                        Gửi ý kiến
-                                    </Button>
-                                </div>
-                            </Form>
-                        )}
-                    </Card>
-                </div>
-            )}
+                        </Card>
+                    </div>
+                )}
             </div>
         </div>
     )
