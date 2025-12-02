@@ -1,14 +1,13 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import { $Enums } from '@workspace/db/client'
-import { useFindFirstPlanTraining, useFindUniqueSemester } from '@workspace/db/hooks'
+import { useFindUniqueSemester } from '@workspace/db/hooks'
 import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -25,7 +24,6 @@ export default function MonKySau() {
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
-    const subjectSelected = Form.useWatch('subjectSelected', form) || []
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { data: semesterData } = useFindUniqueSemester(
         {
@@ -53,28 +51,6 @@ export default function MonKySau() {
             nextSemester: 1,
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
-    )
-
-    const { data: planTrainingData } = useFindFirstPlanTraining(
-        {
-            where: {
-                semesterId: semesterId as string,
-                trainingObjectTypeId,
-            },
-            select: {
-                planTrainingSubjects: {
-                    select: {
-                        subjectVersionId: true,
-                    },
-                    where: {
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId && !!trainingObjectTypeId,
-        }
     )
 
     const data = useMemo(() => {
@@ -110,15 +86,6 @@ export default function MonKySau() {
         return result
     }, [res])
 
-    useEffect(() => {
-        if (planTrainingData) {
-            form.setFieldValue(
-                'subjectSelected',
-                planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
-            )
-        }
-    }, [planTrainingData, form])
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -144,28 +111,28 @@ export default function MonKySau() {
                     <Table
                         className="mt-0"
                         data={data}
-                        onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    const isSelected = subjectSelected.includes(
-                                        record.subjectVersionId
-                                    )
-                                    if (isSelected) {
-                                        form.setFieldValue(
-                                            'subjectSelected',
-                                            subjectSelected.filter(
-                                                (id) => id !== record.subjectVersionId
-                                            )
-                                        )
-                                    } else {
-                                        form.setFieldValue('subjectSelected', [
-                                            ...subjectSelected,
-                                            record.subjectVersionId,
-                                        ])
-                                    }
-                                },
-                            }
-                        }}
+                        // onRow={(record) => {
+                        //     return {
+                        //         onClick: () => {
+                        //             const isSelected = subjectSelected.includes(
+                        //                 record.subjectVersionId
+                        //             )
+                        //             if (isSelected) {
+                        //                 form.setFieldValue(
+                        //                     'subjectSelected',
+                        //                     subjectSelected.filter(
+                        //                         (id) => id !== record.subjectVersionId
+                        //                     )
+                        //                 )
+                        //             } else {
+                        //                 form.setFieldValue('subjectSelected', [
+                        //                     ...subjectSelected,
+                        //                     record.subjectVersionId,
+                        //                 ])
+                        //             }
+                        //         },
+                        //     }
+                        // }}
                         columns={[
                             {
                                 title: 'TT',
