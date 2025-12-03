@@ -92,13 +92,19 @@ export default function EvaluationPeriodTabPage() {
             isVicePersident ||
             can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
         ) {
+            tabs.push({
+                key: '4',
+                label: 'Phân công giảng viên',
+                children: <AssigmentOfAssessmentTab />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (
+            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f' ||
+            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM_CHI_TIET')
+        ) {
             tabs.push(
-                {
-                    key: '4',
-                    label: 'Phân công giảng viên',
-                    children: <AssigmentOfAssessmentTab />,
-                    disabled: !selectedEvaluationPeriodId,
-                },
                 {
                     key: '5',
                     label: 'Danh sách phiếu phân tích tiêu chí',
@@ -119,9 +125,8 @@ export default function EvaluationPeriodTabPage() {
                 }
             )
         }
-
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember, can])
+    }, [selectedEvaluationPeriodId, councilMember, can, idProfile])
 
     return (
         <Row gutter={[12, 0]}>
