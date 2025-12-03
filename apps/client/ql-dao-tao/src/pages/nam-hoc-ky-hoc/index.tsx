@@ -17,7 +17,7 @@ import {
     useUpdateSemester,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -284,14 +284,6 @@ function YearAndSemester() {
                     setFilters={(value) => {
                         setFilters(value)
                         setCurrentPage(1)
-                    }}
-                    onRowClick={({ id }) => {
-                        if (
-                            id &&
-                            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, 'XEM_CHI_TIET')
-                        ) {
-                            router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
-                        }
                     }}
                     columns={[
                         {
