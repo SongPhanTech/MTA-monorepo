@@ -1,29 +1,30 @@
-import CriteriaAnalysisSubPage from '@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis'
+import CriteriaAnalysisPeriodSubPage from '@components/sub-pages/ql-dot-danh-gia/criteria-analysis-period'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { StandardPeriod } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
     AlignmentType,
+    Document,
     HeadingLevel,
     Packer,
     Paragraph,
-    TextRun,
-    Document,
+    Table,
+    TableCell,
     TableOfContents,
     TableRow,
-    TableCell,
-    VerticalAlign,
+    TextRun,
     WidthType,
     BorderStyle,
-    Table,
+    VerticalAlign,
 } from 'docx'
-import { saveAs } from 'file-saver'
+import type { StandardPeriod } from '@workspace/db/client'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import { getStatusEvaluation } from '@constants/constants'
-export default function CriteriaAnalysisList() {
+
+export default function CriteriaAnalysisPeriodList() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(
@@ -85,7 +86,8 @@ export default function CriteriaAnalysisList() {
         }
     )
 
-    const exportDoc = (dataTable: any) => {
+    const exportDanhyeuCau = useCallback((dataTable: any) => {
+        // ==== Tạo header bảng ====
         const headerRow1 = new TableRow({
             children: [
                 new TableCell({
@@ -101,6 +103,11 @@ export default function CriteriaAnalysisList() {
                 new TableCell({
                     columnSpan: 3,
                     children: [new Paragraph('Thông tin minh chứng')],
+                    verticalAlign: VerticalAlign.CENTER,
+                }),
+                new TableCell({
+                    rowSpan: 2,
+                    children: [new Paragraph('Thao tác')],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
             ],
@@ -129,7 +136,7 @@ export default function CriteriaAnalysisList() {
             ],
         })
 
-        // ========= Dòng dữ liệu =========
+        // ==== Tạo các dòng dữ liệu ====
         const dataRows = dataTable.map(
             (item: any, index: number) =>
                 new TableRow({
@@ -139,13 +146,14 @@ export default function CriteriaAnalysisList() {
                             children: [new Paragraph(`${item?.name || ''}`)],
                         }),
                         new TableCell({
-                            children: item?.questions?.map((t: any) => new Paragraph(`${t || ''}`)),
+                            children: item?.questions.map((t: string) => new Paragraph(`${t}`)),
                         }),
                         new TableCell({
-                            children: item?.evidences?.map(
+                            children: item?.evidences.map(
                                 (t: any) => new Paragraph(`${t?.evidence?.name || ''}`)
                             ),
                         }),
+
                         new TableCell({
                             children: [new Paragraph(`${item?.evidencePlaces || ''}`)],
                         }),
@@ -156,6 +164,7 @@ export default function CriteriaAnalysisList() {
                 })
         )
 
+        // ==== Tạo bảng ====
         const table = new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             borders: {
@@ -170,127 +179,140 @@ export default function CriteriaAnalysisList() {
         })
 
         return table
-    }
+    }, [])
 
-    const handleViewAll = async (dataExport: StandardPeriod[]) => {
-        try {
-            if (dataExport.length === 0) return
-            const sections = await Promise.all(
-                dataExport.map(async (standard: any, idx: number) => {
-                    const children: any = []
-                    children.push(
-                        new Paragraph({
-                            indent: { firstLine: 720 },
-                            alignment: AlignmentType.JUSTIFIED,
-                            heading: HeadingLevel.HEADING_1,
-                            children: [
-                                new TextRun({
-                                    text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
-                                    bold: true,
-                                    size: 28,
-                                    color: '000000',
-                                }),
-                            ],
-                        })
-                    )
-                    const listCriteria = standard?.criteria?.length ? standard?.criteria : []
-                    // Tiêu chí
-                    for (const [cIdx, criterion] of (listCriteria || []).entries()) {
+    const handleViewAll = useCallback(
+        async (dataExport: StandardPeriod[]) => {
+            try {
+                if (!dataExport) return
+                const sections = await Promise.all([
+                    ...dataExport.map(async (standard: any, idx: number) => {
+                        const children: any = []
+
+                        // Tiêu chuẩn
                         children.push(
                             new Paragraph({
                                 indent: { firstLine: 720 },
                                 alignment: AlignmentType.JUSTIFIED,
-                                heading: HeadingLevel.HEADING_2,
-                                children: [
-                                    new TextRun({
-                                        text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
-                                        size: 28,
-                                        italics: true,
-                                        color: '000000',
-                                    }),
-                                ],
-                            })
-                        )
-                        children.push(
-                            new Paragraph({
-                                indent: { firstLine: 720 },
-                                alignment: AlignmentType.JUSTIFIED,
-                                children: [
-                                    new TextRun({
-                                        text: `Người thực hiện: ${criterion?.analysisCriterions?.lecturer?.userProfile?.fullname || ''}`,
-                                        italics: true,
-                                        size: 28,
-                                    }),
-                                ],
-                            })
-                        )
-                        children.push(
-                            new Paragraph({
-                                indent: { firstLine: 720 },
-                                alignment: AlignmentType.JUSTIFIED,
-                                children: [
-                                    new TextRun({
-                                        text: `Hạn: ${dayjs(criterion.createdAt).format('DD/MM/YYYY')}`,
-                                        italics: true,
-                                        size: 28,
-                                    }),
-                                ],
-                            })
-                        )
-                        children.push(
-                            new Paragraph({
-                                indent: { firstLine: 720 },
-                                alignment: AlignmentType.JUSTIFIED,
-                                children: [
-                                    new TextRun({
-                                        text: `Trạng thái: ${
-                                            getStatusEvaluation(
-                                                criterion?.analysisCriterions?.status
-                                            )?.label
-                                        }`,
-                                        italics: true,
-                                        size: 28,
-                                    }),
-                                ],
-                            })
-                        )
-                        children.push(
-                            exportDoc(criterion?.analysisCriterions?.requirementCriterions || [])
-                        )
-                    }
-                    return { children }
-                })
-            )
-            const doc = new Document({
-                sections: [
-                    {
-                        children: [
-                            new Paragraph({
                                 heading: HeadingLevel.HEADING_1,
                                 children: [
                                     new TextRun({
-                                        text: 'Mục lục',
+                                        text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
+                                        bold: true,
                                         size: 28,
                                         color: '000000',
                                     }),
                                 ],
-                            }),
-                            new TableOfContents('Mục lục', {
-                                hyperlink: true,
-                                headingStyleRange: '1-5',
-                            }),
-                        ],
-                    },
-                    ...sections,
-                ],
-            })
+                            })
+                        )
 
-            const blob = await Packer.toBlob(doc)
-            saveAs(blob, `Phieu_phan_tich_tieu_chi_${data?.name}.docx`)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+                        // Tiêu chí
+                        for (const [cIdx, criterion] of standard.criteria.entries()) {
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    heading: HeadingLevel.HEADING_2,
+                                    children: [
+                                        new TextRun({
+                                            text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Người thực hiện ${
+                                                criterion?.analysisCriterions?.lecturer?.userProfile
+                                                    ?.fullname || ''
+                                            }`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Hạn ${criterion?.analysisCriterions?.deadline ? dayjs(criterion?.analysisCriterions?.deadline).format('DD/MM/YYYY') : ''}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: `Trạng thái: ${criterion?.analysisCriterions?.status ? getStatusEvaluation(criterion?.analysisCriterions?.status)?.label : ''}`,
+                                            size: 28,
+                                            italics: true,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                })
+                            )
+
+                            children.push(
+                                exportDanhyeuCau(
+                                    criterion?.analysisCriterions?.requirementCriterions
+                                )
+                            )
+                        }
+
+                        return { children }
+                    }),
+                ])
+                const doc = new Document({
+                    sections: [
+                        {
+                            children: [
+                                new Paragraph({
+                                    heading: HeadingLevel.HEADING_1,
+                                    children: [
+                                        new TextRun({
+                                            text: 'Mục lục',
+                                            size: 28,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                }),
+                                new TableOfContents('Mục lục', {
+                                    hyperlink: true,
+                                    headingStyleRange: '1-5',
+                                }),
+                            ],
+                        },
+                        ...sections,
+                    ],
+                })
+
+                const blob = await Packer.toBlob(doc)
+                saveAs(blob, `bao_cao_dot_danh_gia_${data?.name}.docx`)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        [data, exportDanhyeuCau]
+    )
 
     const dataTab = useMemo(() => {
         if (data) {
@@ -299,19 +321,18 @@ export default function CriteriaAnalysisList() {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
                     children: (
-                        <CriteriaAnalysisSubPage
+                        <CriteriaAnalysisPeriodSubPage
                             key={standard.id}
                             data={standard}
                             idx={standard.order}
-                            userRole="P13"
                             refetch={refetch}
-                            handleViewAll={() => handleViewAll(data.standards)}
+                            handleViewAll={() => handleViewAll(data?.standards || [])}
                         />
                     ),
                 }
             })
         }
-    }, [data, refetch])
+    }, [data, refetch, handleViewAll])
 
     return (
         <div className="h-full">

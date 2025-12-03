@@ -1,4 +1,4 @@
-import CrossReviewSubPage from '@components/sub-pages/tu-danh-gia-ctdt/cross-review'
+import CrossReviewPeriodSubPage from '@components/sub-pages/ql-dot-danh-gia/cross-review-period'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import type {
@@ -12,7 +12,7 @@ import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
-export type DataTabCrossReviewType = StandardPeriod & {
+export type DataTabCrossReviewPeriodType = StandardPeriod & {
     criteria: (CriterionPeriod & {
         evaluationCriterion?:
             | (EvaluationCriterion & {
@@ -20,18 +20,19 @@ export type DataTabCrossReviewType = StandardPeriod & {
                       reviewer?: { fullname?: string | null }
                   })[]
                   lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  reviewer?: {
+                      lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  } | null
                   deadlineReview?: Date | null
               })
             | null
     })[]
 }
 
-export type userRoleProps = 'P13' | 'REVIEWER'
-
-export default function CrossReviewP13({ userRole = 'REVIEWER' }: { userRole: userRoleProps }) {
+export default function CrossReviewPeriod() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-    const { data, refetch } = useFindUniqueEvaluationPeriod(
+    const { data } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
@@ -70,6 +71,19 @@ export default function CrossReviewP13({ userRole = 'REVIEWER' }: { userRole: us
                                                 },
                                             },
                                         },
+                                        reviewer: {
+                                            include: {
+                                                lecturer: {
+                                                    include: {
+                                                        userProfile: {
+                                                            select: {
+                                                                fullname: true,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
                                         evaluationCriterionComments: {
                                             include: {
                                                 reviewer: {
@@ -103,24 +117,19 @@ export default function CrossReviewP13({ userRole = 'REVIEWER' }: { userRole: us
 
     const dataTab = useMemo(() => {
         if (data && data.standards.length > 0) {
-            return data.standards.map((standard: DataTabCrossReviewType) => {
+            return data.standards.map((standard: DataTabCrossReviewPeriodType) => {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
                     children: (
                         <div className="h-[calc(100vh-200px)] overflow-y-auto">
-                            <CrossReviewSubPage
-                                key={standard.id}
-                                data={standard}
-                                onRefetch={refetch}
-                                role={userRole}
-                            />
+                            <CrossReviewPeriodSubPage key={standard.id} data={standard} />
                         </div>
                     ),
                 }
             })
         }
-    }, [data, refetch, userRole])
+    }, [data])
 
     return (
         <div className="h-full">

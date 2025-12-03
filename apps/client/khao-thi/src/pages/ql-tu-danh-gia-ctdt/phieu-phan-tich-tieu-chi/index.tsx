@@ -9,7 +9,6 @@ import ReviewCriteriaAnalysis from './_components/review-criteria-analysis'
 import { useSession } from '@workspace/auth/react'
 import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { $Enums } from '@workspace/db/client'
-import CriteriaAnalysisList from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis-list'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 
@@ -65,20 +64,6 @@ export default function CriteriaAnalysisPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
-
-        if (
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
-            tabs.push({
-                key: '3',
-                label: 'Danh sách phiếu phân tích tiêu chí',
-                children: <CriteriaAnalysisList />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }
