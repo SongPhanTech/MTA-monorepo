@@ -17,7 +17,6 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Collapse, Form, message, Card, Tag, Badge } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import type { userRoleProps } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -32,7 +31,7 @@ export default function CrossReviewSubPage({
 }: {
     data: DataTabCrossReviewType
     onRefetch: () => void
-    role: userRoleProps
+    role: 'P13' | 'REVIEWER'
 }) {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [commentForm] = Form.useForm<{ crossReview: string }>()

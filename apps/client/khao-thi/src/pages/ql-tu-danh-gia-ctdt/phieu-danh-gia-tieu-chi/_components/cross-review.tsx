@@ -1,5 +1,4 @@
 import CrossReviewSubPage from '@components/sub-pages/tu-danh-gia-ctdt/cross-review'
-import type { userRoleProps } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
@@ -31,7 +30,7 @@ export type DataTabCrossReviewType = StandardPeriod & {
     })[]
 }
 
-export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: userRoleProps }) {
+export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: 'P13' | 'REVIEWER' }) {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
