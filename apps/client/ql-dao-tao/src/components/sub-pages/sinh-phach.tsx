@@ -185,6 +185,7 @@ export default function SinhPhach() {
                         <Button
                             type="primary"
                             className="bg-orange-500"
+                            disabled={examList?.lockExamCode}
                             onClick={handleSaveExamSuspended}
                         >
                             Lưu đình chỉ thi
