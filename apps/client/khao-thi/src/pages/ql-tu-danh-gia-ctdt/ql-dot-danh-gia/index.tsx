@@ -92,13 +92,16 @@ export default function EvaluationPeriodTabPage() {
             isVicePersident ||
             can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
         ) {
+            tabs.push({
+                key: '4',
+                label: 'Phân công giảng viên',
+                children: <AssigmentOfAssessmentTab />,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (idProfile === '0dbb92be-c919-4799-bf9d-a9a3b4189145') {
             tabs.push(
-                {
-                    key: '4',
-                    label: 'Phân công giảng viên',
-                    children: <AssigmentOfAssessmentTab />,
-                    disabled: !selectedEvaluationPeriodId,
-                },
                 {
                     key: '5',
                     label: 'Danh sách phiếu phân tích tiêu chí',
@@ -119,7 +122,6 @@ export default function EvaluationPeriodTabPage() {
                 }
             )
         }
-
         return tabs
     }, [selectedEvaluationPeriodId, councilMember, can])
 
