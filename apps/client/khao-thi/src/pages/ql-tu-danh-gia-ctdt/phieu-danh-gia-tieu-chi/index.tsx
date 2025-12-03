@@ -1,9 +1,7 @@
 import DefaultLayout from '@layouts/default-layout'
 import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
-import CriteriaEvaluationList from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation-list'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-assignment'
-import CrossReviewP13 from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/cross-review-p13'
 import EvaluationPeriodCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/evaluation-period'
 // import SumaryOfCriteriaEvaluation from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/sumary-criteria-evaluation'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
@@ -70,20 +68,6 @@ export default function CriteriaEvaluationPage() {
             })
         }
 
-        if (
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
-            tabs.push({
-                key: '3',
-                label: 'Danh sách phiếu đánh giá tiêu chí',
-                children: <CriteriaEvaluationList />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
-
         const isSecretary =
             councilMember?.role.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY) ||
             councilMember?.role.includes($Enums.EvaluationMemberRole.SECRETARY) ||
@@ -108,20 +92,6 @@ export default function CriteriaEvaluationPage() {
                 key: '5',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
-
-        if (
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
-            tabs.push({
-                key: '7',
-                label: 'Xem phản biện',
-                children: <CrossReviewP13 userRole="P13" />,
                 disabled: !selectedEvaluationPeriodId,
             })
         }

@@ -22,6 +22,9 @@ export type DataTabCrossReviewType = StandardPeriod & {
                       reviewer?: { fullname?: string | null }
                   })[]
                   lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  reviewer?: {
+                      lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  } | null
                   deadlineReview?: Date | null
               })
             | null

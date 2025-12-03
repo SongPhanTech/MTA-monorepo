@@ -11,6 +11,9 @@ import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@wor
 import { $Enums } from '@workspace/db/client'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
+import CriteriaAnalysisPeriodList from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/criteria-analysis'
+import CriteriaEvaluationPeriodList from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/criteria-evaluation'
+import CrossReviewPeriod from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/cross-review'
 
 export type EvaluationPeriodStoreState = {
     selectedEvaluationPeriodId?: string
@@ -89,12 +92,32 @@ export default function EvaluationPeriodTabPage() {
             isVicePersident ||
             can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM')
         ) {
-            tabs.push({
-                key: '4',
-                label: 'Phân công giảng viên',
-                children: <AssigmentOfAssessmentTab />,
-                disabled: !selectedEvaluationPeriodId,
-            })
+            tabs.push(
+                {
+                    key: '4',
+                    label: 'Phân công giảng viên',
+                    children: <AssigmentOfAssessmentTab />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '5',
+                    label: 'Danh sách phiếu phân tích tiêu chí',
+                    children: <CriteriaAnalysisPeriodList />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '6',
+                    label: 'Danh sách phiếu đánh giá tiêu chí',
+                    children: <CriteriaEvaluationPeriodList />,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '7',
+                    label: 'Xem phản biện',
+                    children: <CrossReviewPeriod />,
+                    disabled: !selectedEvaluationPeriodId,
+                }
+            )
         }
 
         return tabs

@@ -5,7 +5,7 @@ import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
 
-export default function CriteriaEvaluationList() {
+export default function CriteriaEvaluationPeriodList() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data } = useFindUniqueEvaluationPeriod(
