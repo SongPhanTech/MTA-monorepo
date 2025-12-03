@@ -113,8 +113,7 @@ const KhoiTaoMon = () => {
                 queryKey: ['/api/subject-class/open-subject-class-retake'],
             })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingSubject'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
             message.success('Thêm mới thành công')
             onClose()
         } catch (error: any) {

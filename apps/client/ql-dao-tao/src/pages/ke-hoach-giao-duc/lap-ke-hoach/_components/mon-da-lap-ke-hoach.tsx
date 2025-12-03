@@ -150,7 +150,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
         _.debounce(() => {
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'PlanTrainingSubject'],
             })

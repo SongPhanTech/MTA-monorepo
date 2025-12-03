@@ -411,6 +411,9 @@ export default function KeHoachGhepLopMonHoc() {
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'Subject'],
             })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
         }, 500),
         []
     )

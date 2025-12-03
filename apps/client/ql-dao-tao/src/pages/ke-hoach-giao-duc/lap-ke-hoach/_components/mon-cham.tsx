@@ -41,7 +41,7 @@ export default function MonCham() {
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
-            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
         }, 500),
         []
     )

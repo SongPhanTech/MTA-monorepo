@@ -79,7 +79,7 @@ const PutFixedClassModal = () => {
             },
         })
 
-    const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
+    const { data: curriculumData = [] } = useFindManyCurriculum({
         where: {
             curriculumVersion: {
                 some: {

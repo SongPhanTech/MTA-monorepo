@@ -192,6 +192,12 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'DM_DonVi'],
             })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectVersion'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
         }, 500),
         []
     )
@@ -289,11 +295,15 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                 select: {
                                                                     planTrainingSubjects: {
                                                                         select: {
-                                                                            subjectVersion: {
+                                                                            trainingBlockSubject: {
                                                                                 select: {
-                                                                                    id: true,
-                                                                                    code: true,
-                                                                                    name: true,
+                                                                                    subject: {
+                                                                                        select: {
+                                                                                            id: true,
+                                                                                            code: true,
+                                                                                            name: true,
+                                                                                        },
+                                                                                    },
                                                                                 },
                                                                             },
                                                                         },
