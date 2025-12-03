@@ -7,6 +7,7 @@ interface RoomSelectorProps {
     value?: Array<{ roomId: string; quantity: number }>
     onChange?: (value: Array<{ roomId: string; quantity: number }>) => void
     rooms: Array<{ id: string; capacity: number; name: string }>
+    disabled?: boolean
 }
 
 interface RoomTableData {
@@ -17,7 +18,7 @@ interface RoomTableData {
     isSelected: boolean
 }
 
-const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
+const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorProps) => {
     const [visible, setVisible] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -150,13 +151,14 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
         <Popover
             content={content}
             trigger="click"
-            open={visible}
+            open={visible && !disabled}
             onOpenChange={setVisible}
             placement="bottomLeft"
         >
             <Row>
                 <Col span={20}>
                     <Select
+                        disabled={disabled}
                         mode="multiple"
                         value={value.map((v) => v.roomId)}
                         options={rooms.map((room) => ({

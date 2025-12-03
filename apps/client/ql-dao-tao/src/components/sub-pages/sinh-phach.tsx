@@ -4,12 +4,15 @@ import { examSuspendedReason } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { diemPhongThiStore } from '@pages/quan-ly-diem/nhap-diem-theo-phach'
 import { useStore } from '@tanstack/react-store'
-import { useFindUniqueExamList, useUpdateExamList } from '@workspace/db/hooks'
+import {
+    useFindUniqueExamList,
+    useUpdateExamList,
+    useUpdateManySubjectClass,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
+import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas'
 import { useGenExamListCode } from '@workspace/libs/api/training'
 import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from 'antd'
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 interface StudentExamFormType {
     list: Record<
@@ -23,7 +26,6 @@ interface StudentExamFormType {
 }
 
 export default function SinhPhach() {
-    const router = useRouter()
     const { selectedExamListId } = useStore(diemPhongThiStore)
     const [form] = Form.useForm<StudentExamFormType>()
 
@@ -74,6 +76,7 @@ export default function SinhPhach() {
     }
     const { mutateAsync: genCode } = useGenExamListCode()
     const { mutateAsync: updateExamList } = useUpdateExamList()
+    const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
     const handleGenCode = async () => {
         const res = await genCode({
             data: { examListId: selectedExamListId ?? '' },
@@ -153,6 +156,24 @@ export default function SinhPhach() {
                                 await updateExamList({
                                     where: { id: selectedExamListId ?? '' },
                                     data: { lockExamCode: e.target.checked },
+                                })
+                                await updateManySubjectClass({
+                                    where: {
+                                        exam: {
+                                            examRooms: {
+                                                some: {
+                                                    examList: {
+                                                        some: {
+                                                            id: selectedExamListId ?? '',
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                    data: {
+                                        isLockExamScore: e.target.checked,
+                                    },
                                 })
                             } catch (error) {}
                         }}

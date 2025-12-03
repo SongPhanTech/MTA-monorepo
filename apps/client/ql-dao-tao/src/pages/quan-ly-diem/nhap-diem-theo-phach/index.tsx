@@ -1,4 +1,3 @@
-import FormItem from '@components/commons/form-item'
 import KyThi from '@components/sub-pages/danh-sach-ky-thi'
 import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
 import PhongThi from '@components/sub-pages/ql-phong-thi'
@@ -6,8 +5,11 @@ import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
-import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
+import {
+    useFindFirstSubjectClass,
+    useUpdateSubjectClass
+} from '@workspace/db/hooks'
+import { Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -43,10 +45,10 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
     const [activeKey, setActiveKey] = useState('1')
     const { examId } = useStore(kythiStore)
     const { selectedExamListId } = useStore(diemPhongThiStore)
-    const { data } = useFindUniqueSubjectClass(
+    const { data } = useFindFirstSubjectClass(
         {
             where: {
-                id: '',
+                examId: examId,
             },
             include: {
                 mainLecturer: {
@@ -76,7 +78,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
             },
         },
         {
-            enabled: !!selectedExamListId,
+            enabled: !!examId,
             refetchOnWindowFocus: false,
         }
     )
@@ -157,7 +159,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
     }, [data, form])
     return (
         <Row gutter={[16, 4]}>
-            <Col span={12}>
+            <Col span={24}>
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Môn học:</div>
                     <div className="w-[300px]">
@@ -208,7 +210,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                     </div>
                 </div>
             </Col>
-            <Col span={12}>
+            <Col span={0}>
                 <Form
                     form={form}
                     layout="vertical"
@@ -221,11 +223,11 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                         })
                     }}
                 >
-                    <div className="flex items-center mb-2 w-full">
+                    {/* <div className="flex items-center mb-2 w-full">
                         <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
                         <div className="w-full">{reasonDate()}</div>
-                    </div>
-                    <div className="flex items-center mb-2 w-full h-6">
+                    </div> */}
+                    {/* <div className="flex items-center mb-2 w-full h-6">
                         <div className="flex items-center mr-9 ">
                             <FormItem
                                 form={form}
@@ -251,8 +253,8 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                                 <Input size="small" className="pointer-events-none" />
                             </div>
                         </div>
-                    </div>
-                    <div className="flex items-center mb-2 w-full h-6">
+                    </div> */}
+                    {/* <div className="flex items-center mb-2 w-full h-6">
                         <div className="flex items-center w-full">
                             <FormItem
                                 form={form}
@@ -268,7 +270,7 @@ export default function DiemTheoPhach({ type = 'NHAP_DIEM_THEO_PHACH' }: DiemThe
                                 <Input size="small" className="pointer-events-none" />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </Form>
             </Col>
             <Col span={24}>

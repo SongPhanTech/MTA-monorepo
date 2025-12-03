@@ -133,8 +133,17 @@ export default function DanhSachSinhVien() {
                 },
             },
             lockExamSessions: true,
+            examRooms: {
+                include: {
+                    examList: true,
+                },
+            },
         },
     })
+
+    const isCreateExamCode = examData?.examRooms?.some((er) =>
+        er.examList?.some((el) => el.createdExamCode)
+    )
 
     const { mutateAsync: updateExamData } = useUpdateExam()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -518,12 +527,17 @@ export default function DanhSachSinhVien() {
                 <Row gutter={16} align="middle">
                     <Col span={24}>
                         <Flex justify="end" align="center" gap={12}>
-                            <Button type="primary" onClick={handleLayDiemCCTX}>
+                            <Button
+                                type="primary"
+                                disabled={examData?.lockExamSessions || isCreateExamCode}
+                                onClick={handleLayDiemCCTX}
+                            >
                                 1. Lấy điểm SV
                             </Button>
                             <Button
                                 type="primary"
                                 className="bg-orange-500"
+                                disabled={examData?.lockExamSessions || isCreateExamCode}
                                 onClick={handleSaveExamDecision}
                             >
                                 Lưu hoãn thi
@@ -552,12 +566,20 @@ export default function DanhSachSinhVien() {
                                         })
                                     } catch (error) {}
                                 }}
-                                disabled={examData?.lockExamSessions}
+                                disabled={examData?.lockExamSessions || isCreateExamCode}
                                 checked={examData?.subjectClass.every((sc) => sc.isLockScore)}
                             >
                                 Khóa nhập ĐQT
                             </Checkbox>
+                            <Button
+                                type="primary"
+                                disabled={isCreateExamCode}
+                                onClick={handlePhanPhongThi}
+                            >
+                                2. Phân phòng thi
+                            </Button>
                             <Checkbox
+                                disabled={isCreateExamCode}
                                 onChange={async (e) => {
                                     try {
                                         await updateExamData({
@@ -584,9 +606,6 @@ export default function DanhSachSinhVien() {
                             >
                                 Khóa danh sách thi
                             </Checkbox>
-                            <Button type="primary" onClick={handlePhanPhongThi}>
-                                2. Phân phòng thi
-                            </Button>
                             <Button type="dashed">Xuất DS thi</Button>
                         </Flex>
                     </Col>
@@ -641,7 +660,7 @@ export default function DanhSachSinhVien() {
                             },
                             {
                                 title: 'Tên lớp',
-                                width: 280,
+                                width: 300,
                                 render: (_, record) =>
                                     `${record?.studentSubjectScore?.student?.fixedClass?.name || ''}-${
                                         record?.studentSubjectScore?.student?.fixedClass
@@ -692,11 +711,19 @@ export default function DanhSachSinhVien() {
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
-                                            name={['list', record.id, 'examPostponed']}
+                                            name={[
+                                                'list',
+                                                record.studentSubjectScoreId,
+                                                'examPostponed',
+                                            ]}
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox />
+                                            <Checkbox
+                                                disabled={
+                                                    examData?.lockExamSessions || isCreateExamCode
+                                                }
+                                            />
                                         </Form.Item>
                                     )
                                 },
@@ -725,7 +752,11 @@ export default function DanhSachSinhVien() {
                                                         value: s,
                                                     }))}
                                                     styles={{ popup: { root: { width: 'fit' } } }}
-                                                    disabled={!examPostponed}
+                                                    disabled={
+                                                        !examPostponed ||
+                                                        examData?.lockExamSessions ||
+                                                        isCreateExamCode
+                                                    }
                                                 />
                                             )}
                                         </Form.Item>
@@ -738,10 +769,18 @@ export default function DanhSachSinhVien() {
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
-                                            name={['list', record.id, 'description']}
+                                            name={[
+                                                'list',
+                                                record.studentSubjectScoreId,
+                                                'description',
+                                            ]}
                                             label=""
                                         >
-                                            <Input placeholder="Nhập ghi chú" />
+                                            <Input
+                                                disabled={
+                                                    examData?.lockExamSessions || isCreateExamCode
+                                                }
+                                            />
                                         </Form.Item>
                                     )
                                 },

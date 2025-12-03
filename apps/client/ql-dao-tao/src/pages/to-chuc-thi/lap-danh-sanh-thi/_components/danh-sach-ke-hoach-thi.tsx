@@ -32,6 +32,7 @@ import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { keHoachThiStore } from '..'
+import { useStore } from '@tanstack/react-store'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -62,6 +63,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [selectedSubjectId, setSelectedSubjectId] = useState<string>()
 
+    const { selectedExamId } = useStore(keHoachThiStore)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         examType: undefined,
@@ -581,12 +583,13 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             //     )
                             // },
                             className: cn(
+                                selectedExamId === record.id && 'bg-orange-100',
                                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
                                     selectedSubjectId !== undefined &&
                                     'bg-gray-400',
                                 listChanges?.[record.id]?.isChanged && 'bg-yellow-100'
                             ),
-                            onDoubleClick: (e) => {
+                            onClick: (e) => {
                                 const target = e.target as HTMLElement
                                 if (
                                     target.closest('.ant-select') ||
@@ -600,7 +603,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 keHoachThiStore.setState({
                                     selectedExamId: record?.id,
                                 })
-                                setActiveKey?.('2')
+                                // setActiveKey?.('2')
                             },
                         })}
                         data={exams}
@@ -794,6 +797,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                                 name={['list', record.id, 'rooms']}
                                             >
                                                 <RoomSelector
+                                                    disabled={record?.examRooms?.some(
+                                                        (er: { examList: ExamList[] }) =>
+                                                            er.examList?.some(
+                                                                (el) => el.lockExamCode
+                                                            )
+                                                    )}
                                                     rooms={rooms.map((room) => ({
                                                         id: room.id,
                                                         capacity: room.examCapacity ?? 0,
@@ -816,6 +825,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                             name={['list', record.id, 'session']}
                                         >
                                             <InputNumber
+                                                disabled={record?.examRooms?.some(
+                                                    (er: { examList: ExamList[] }) =>
+                                                        er.examList?.some((el) => el.lockExamCode)
+                                                )}
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                 }}

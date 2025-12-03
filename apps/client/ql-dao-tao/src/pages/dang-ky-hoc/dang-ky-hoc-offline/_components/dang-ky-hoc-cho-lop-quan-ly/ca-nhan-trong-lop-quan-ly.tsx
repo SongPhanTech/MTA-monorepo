@@ -401,6 +401,8 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 <Table
                     rowKey="id"
                     className="mt-2"
+                    scrollable
+                    maxHeight={'calc(100vh - 380px)'}
                     data={students}
                     onRow={(record) => ({
                         onClick: () => {
@@ -444,36 +446,60 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                         },
                         {
                             title: 'Tên',
-                            dataIndex: ['userProfile', 'fullname'],
                             align: 'center',
                             width: 200,
-                            render: (text: string) => <p className="text-left">{text}</p>,
+                            render: (_, record) => (
+                                <p className="text-left">{record?.userProfile?.fullname}</p>
+                            ),
                         },
                         {
                             title: 'Lớp',
                             align: 'center',
                             width: 80,
-                            dataIndex: ['fixedClass', 'code'],
+                            render: (_, record) => <p>{record?.fixedClass?.code}</p>,
                         },
                         {
                             title: 'Khoá',
                             align: 'center',
                             width: 80,
-                            dataIndex: ['fixedClass', 'trainingCourse', 'name'],
+                            // dataIndex: ['fixedClass', 'trainingCourse', 'name'],
+                            render: (_, record) => (
+                                <p>{record?.fixedClass?.trainingCourse?.name}</p>
+                            ),
                         },
                         {
                             title: 'GPA tích luỹ',
                             align: 'center',
-                            dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
+                            // dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
                             width: 80,
-                            render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
+                            render: (_, record) =>
+                                record?.studentSemesterResult.length > 0 ? (
+                                    <span>
+                                        {Number(
+                                            record.studentSemesterResult[0]?.cumulativeGpaBase10
+                                        ).toFixedSmart(2)}
+                                    </span>
+                                ) : (
+                                    <span>-</span>
+                                ),
+                            // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
                         },
                         {
                             title: 'Điểm',
                             align: 'center',
                             width: 50,
-                            dataIndex: ['subjectClassStudent', 0, 'finalScore'],
-                            render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
+                            // dataIndex: ['subjectClassStudent', 0, 'finalScore'],
+                            // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
+                            render: (_, record) =>
+                                record?.subjectClassStudent.length > 0 ? (
+                                    <span>
+                                        {Number(
+                                            record.subjectClassStudent[0]?.finalScore
+                                        ).toFixedSmart(2)}
+                                    </span>
+                                ) : (
+                                    <span>-</span>
+                                ),
                         },
                         {
                             title: 'Cải thiện',
