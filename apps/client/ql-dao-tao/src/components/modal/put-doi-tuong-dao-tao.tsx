@@ -139,7 +139,7 @@ const PutTrainingObjectTypeModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo" required>
+                <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo">
                     <Select
                         placeholder="Chọn bậc đào tạo"
                         options={trainingLevels?.map((item) => ({
