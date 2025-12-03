@@ -177,7 +177,7 @@ export default function PutPhanCongHangLoatCrossModal() {
             </Col>
             <Col span={24}>
                 <h3>Các tiêu chí đã chọn</h3>
-                <Tree defaultExpandAll treeData={treeData} selectable={false} />
+                <Tree treeData={treeData} selectable={false} />
             </Col>
         </PutFormModal>
     )

@@ -123,6 +123,7 @@ export default function CriteriaEvaluationWrite() {
         },
         {
             enabled: !!idProfile && !!selectedEvaluationPeriodId,
+            refetchOnWindowFocus: false,
         }
     )
 
