@@ -347,6 +347,7 @@ const PutOneSubjectClassModal = () => {
                         id: true,
                         code: true,
                         name: true,
+                        examDate: true,
                     },
                 },
                 roomId: true,
@@ -496,7 +497,7 @@ const PutOneSubjectClassModal = () => {
                                 </FormItem>
                             </Col>
                             <Col span={6}>
-                                <FormItem form={form} name="roomId" label="Chọn phòng học">
+                                <FormItem form={form} name="roomId" label="Phòng học">
                                     <TreeSelect
                                         treeData={buildingData.map((e) => ({
                                             label: e.name,
@@ -938,9 +939,23 @@ const PutOneSubjectClassModal = () => {
                                                 className={cn(
                                                     input?.schedules?.some((date) =>
                                                         dayjs(record.classDate).isSame(date, 'day')
-                                                    ) && 'text-primary font-semibold'
+                                                    ) && 'text-primary font-semibold',
+                                                    record.subjectClass?.examDate &&
+                                                        dayjs(record.classDate).isSame(
+                                                            record.subjectClass.examDate,
+                                                            'day'
+                                                        )
+                                                        ? 'text-red-600'
+                                                        : ''
                                                 )}
                                             >
+                                                {record.subjectClass?.examDate &&
+                                                dayjs(record.classDate).isSame(
+                                                    record.subjectClass.examDate,
+                                                    'day'
+                                                )
+                                                    ? 'Ngày thi:'
+                                                    : ''}{' '}
                                                 {dayjs(record.classDate)
                                                     .format('dddd DD/MM/YYYY')
                                                     .titleCase()}
