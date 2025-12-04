@@ -668,7 +668,10 @@ export default function PhanCongGiangDay({
         tag: 'ModalNhapTKB',
     })
 
-    const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
+    const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+    }>({
         tag: 'PutOneSubjectClassModal',
     })
 
@@ -2170,7 +2173,10 @@ export default function PhanCongGiangDay({
                                                                   <EditIcon
                                                                       onClick={onOpenEditSubjectClass.bind(
                                                                           null,
-                                                                          id
+                                                                          {
+                                                                              id,
+                                                                              mode: 'edit',
+                                                                          }
                                                                       )}
                                                                       className="text-sm text-blue-700 cursor-pointer"
                                                                   />

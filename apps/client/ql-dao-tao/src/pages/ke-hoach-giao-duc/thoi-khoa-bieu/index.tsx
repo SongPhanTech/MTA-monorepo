@@ -2,7 +2,7 @@ import TreeSelectDepartment from '@components/commons/department-select/TreeSele
 import FormItem from '@components/commons/form-item'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -11,18 +11,10 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, formatDate } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClass } from '@workspace/db/client'
-import {
-    useCountDM_DonVi,
-    useDeleteSubjectClass,
-    useFindManyDM_DonVi
-} from '@workspace/db/hooks'
+import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import {
-    dayjs,
-    useSemesterStore,
-    useTrainingObjectTypeStore
-} from '@workspace/ui'
+import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Affix, Col, Divider, Flex, Form, message, Row } from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
@@ -428,7 +420,10 @@ export default function ThoiKhoaBieu({
         }
     }
 
-    const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
+    const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+    }>({
         tag: 'PutOneSubjectClassModal',
     })
 
@@ -723,7 +718,7 @@ export default function ThoiKhoaBieu({
                                     ? [
                                           {
                                               title: 'Thao tác',
-                                              width: 80,
+                                              width: 120,
                                               align: 'center' as const,
                                               render: (_: any, record: SubjectClass) => {
                                                   if (record.cancelled) {
@@ -736,12 +731,15 @@ export default function ThoiKhoaBieu({
                                                           <Row className="justify-center gap-2">
                                                               {can(
                                                                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
-                                                                  'SUA'
+                                                                  'XEM_CHI_TIET'
                                                               ) && (
-                                                                  <EditIcon
+                                                                  <ViewIcon
                                                                       onClick={onOpenEditSubjectClass.bind(
                                                                           null,
-                                                                          id
+                                                                          {
+                                                                              id,
+                                                                              mode: 'view',
+                                                                          }
                                                                       )}
                                                                       className="text-sm text-blue-700 cursor-pointer"
                                                                   />

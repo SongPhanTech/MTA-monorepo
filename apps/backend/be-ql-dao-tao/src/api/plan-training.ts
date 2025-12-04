@@ -381,7 +381,9 @@ const importFileGiaoVienCoGioGiay = async (
                             lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
                             extraLecturerId:
                                 subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+                            startDate: subjectClass.ngayBatDau ?? existSubjectClass.startDate,
                             endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
+                            examDate: subjectClass.ngayThi ?? existSubjectClass.examDate,
                             fixedClasses: {
                                 set: subjectClass.lopNienChe.map((e) => ({
                                     id: e,
@@ -504,8 +506,9 @@ const importFileGiaoVienCoGioGiay = async (
                             name: tenMon ? tenMon.trim() : '',
                             schedule: subjectClass.caHoc,
                             maxStudent: subjectClass.quanSo,
-                            startDate: subjectClass.ngayBatDau ?? new Date(),
-                            examDate: subjectClass.ngayThi ?? new Date(),
+                            startDate: subjectClass.ngayBatDau ?? null,
+                            endDate: subjectClass.ngayKetThuc ?? null,
+                            examDate: subjectClass.ngayThi ?? null,
                             semesterId,
                             lecturerId: subjectClass.gvChinh,
                             extraLecturerId: subjectClass.gvPhu,

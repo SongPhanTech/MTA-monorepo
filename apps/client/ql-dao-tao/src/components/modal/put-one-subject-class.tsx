@@ -37,11 +37,10 @@ const PutOneSubjectClassModal = () => {
     const [form] = Form.useForm<PutOneSubjectClassType>()
 
     const times = Form.useWatch('times', form) ?? []
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+    }>({
         tag: 'PutOneSubjectClassModal',
         onClose: form.resetFields,
     })
@@ -59,7 +58,7 @@ const PutOneSubjectClassModal = () => {
             showSpinner()
             await updateSubjectClass({
                 data: { subjectClassTimes: { deleteMany: {} } },
-                where: { id },
+                where: { id: input?.id },
             })
             await updateSubjectClass({
                 data: {
@@ -87,7 +86,7 @@ const PutOneSubjectClassModal = () => {
                     },
                 },
                 where: {
-                    id,
+                    id: input?.id,
                 },
             })
             // refetch() lại danh sách level
@@ -148,7 +147,7 @@ const PutOneSubjectClassModal = () => {
 
     const { data: subjectClassData } = useFindUniqueSubjectClass(
         {
-            where: { id },
+            where: { id: input?.id },
             include: {
                 room: {
                     include: {
@@ -163,7 +162,7 @@ const PutOneSubjectClassModal = () => {
             },
         },
         {
-            enabled: !!id,
+            enabled: !!input?.id,
         }
     )
 
@@ -210,8 +209,23 @@ const PutOneSubjectClassModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Cập nhật lớp môn học' : 'Mở lớp môn học'}
+            title={
+                input?.mode === 'view'
+                    ? 'Xem lớp môn học'
+                    : input?.id
+                      ? 'Cập nhật lớp môn học'
+                      : 'Mở lớp môn học'
+            }
             className="w-[85vw]"
+            formProps={{
+                disabled: input?.mode === 'view',
+            }}
+            okButtonProps={{
+                hidden: input?.mode === 'view',
+            }}
+            cancelButtonProps={{
+                hidden: input?.mode === 'view',
+            }}
         >
             <Col span={6}>
                 <FormItem form={form} name="semesterId" label="Học kỳ" required>

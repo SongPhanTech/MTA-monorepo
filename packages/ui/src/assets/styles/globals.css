@@ -103,3 +103,11 @@ select {
 .ant-picker-disabled > .ant-picker-input > input {
     color: #000 !important;
 }
+
+.ant-input-number-disabled .ant-input-number-input {
+    color: #000 !important;
+}
+
+.ant-input-disabled {
+    color: #000 !important;
+}
