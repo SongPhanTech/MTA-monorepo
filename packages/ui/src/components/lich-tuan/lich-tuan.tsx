@@ -256,39 +256,41 @@ export function LichCongTac({
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
             ...(onlyMySchedule
-                ? [
-                      {
-                          subjectClass: {
-                              subjectClassStudent: {
-                                  some: {
-                                      student: {
-                                          userProfileId: profileIdLogin,
+                ? {
+                      OR: [
+                          {
+                              subjectClass: {
+                                  subjectClassStudent: {
+                                      some: {
+                                          student: {
+                                              userProfileId: profileIdLogin,
+                                          },
                                       },
                                   },
                               },
                           },
-                      },
-                      {
-                          lecturer: {
-                              userProfileId: profileIdLogin,
-                          },
-                      },
-                      {
-                          subjectClass: {
-                              mainLecturer: {
+                          {
+                              lecturer: {
                                   userProfileId: profileIdLogin,
                               },
                           },
-                      },
-                      {
-                          subjectClass: {
-                              extraLecturer: {
-                                  userProfileId: profileIdLogin,
+                          {
+                              subjectClass: {
+                                  mainLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
                               },
                           },
-                      },
-                  ]
-                : []),
+                          {
+                              subjectClass: {
+                                  extraLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
             periodType: {
                 in: selectedColors
                     .map((color) => {
