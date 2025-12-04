@@ -253,7 +253,12 @@ const importFileGiaoVienCoGioGiay = async (
                     phongHoc: null as string | null,
                     ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                     ngayKetThuc: null as Date | null,
-                    ngayThi: null as Date | null,
+                    ngayThi:
+                        hinhThucHoc === 'Thi'
+                            ? ngayHoc
+                                ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate()
+                                : null
+                            : null,
                     caHoc:
                         caHoc === 'Sáng'
                             ? $Enums.SubjectClassSchedule.MORNING
