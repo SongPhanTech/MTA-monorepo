@@ -7783,7 +7783,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
+      "value": "/home/quang/DATA/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -7792,7 +7792,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "debian-openssl-3.0.x",
         "native": true
       },
       {
@@ -7821,12 +7821,11 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/logical-1764608776897.prisma",
+    "sourceFilePath": "/home/quang/DATA/MTA-monorepo/packages/database/logical-1764765592174.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../..",
   "clientVersion": "6.10.1",

@@ -701,8 +701,16 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                                                             <Button
                                                                 onClick={() => {
                                                                     form.resetFields([
-                                                                        ['comment', record.id, 'content'],
-                                                                        ['comment', record.id, 'newDeadline'],
+                                                                        [
+                                                                            'comment',
+                                                                            record.id,
+                                                                            'content',
+                                                                        ],
+                                                                        [
+                                                                            'comment',
+                                                                            record.id,
+                                                                            'newDeadline',
+                                                                        ],
                                                                     ])
                                                                     toggleCommentRow(record.id)
                                                                 }}

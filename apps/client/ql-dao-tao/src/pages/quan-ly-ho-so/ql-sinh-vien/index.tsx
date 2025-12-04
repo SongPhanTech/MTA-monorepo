@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { BookCheckIcon } from 'lucide-react'
+import { BookCheckIcon, EyeIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -31,7 +31,7 @@ import { useRouter } from 'next/router'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -306,6 +306,9 @@ export default function UserProfilePageDs() {
         tag: 'PutStudentModal',
     })
 
+    const { onOpen: onOpenDetail } = useDisclosure({
+        tag: 'ModalChiTietSinhVien',
+    })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
@@ -594,11 +597,21 @@ export default function UserProfilePageDs() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 130,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Xem chi tiết" placement="top">
+                                            <EyeIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpenDetail(record.id)
+                                                }}
+                                                size={16}
+                                                className="text-green-600 cursor-pointer"
+                                            />
+                                        </Tooltip>
                                         {/* <Tooltip title="Phụ lục văn bằng" placement="top">
                                             <BookCheckIcon
                                                 onClick={(e) => {
@@ -612,18 +625,21 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip> */}
-                                        <BookCheckIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                router.push(
-                                                    ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
-                                                        '[id]',
-                                                        record.id
+                                        <Tooltip title="Kết quả học tập" placement="top">
+                                            <BookCheckIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    router.push(
+                                                        ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
+                                                            '[id]',
+                                                            record.id
+                                                        )
                                                     )
-                                                )
-                                            }}
-                                            size={16}
-                                        />
+                                                }}
+                                                size={16}
+                                                className="cursor-pointer"
+                                            />
+                                        </Tooltip>
                                         {can(
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
                                             'SUA'

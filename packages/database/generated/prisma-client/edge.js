@@ -7783,7 +7783,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/home/quang/DATA/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -7792,7 +7792,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "debian-openssl-3.0.x",
         "native": true
       },
       {
@@ -7821,12 +7821,11 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/home/quang/DATA/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.10.1",
@@ -7835,6 +7834,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

@@ -17,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { exportLecturerProfile } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
@@ -26,6 +26,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import ModalChiTietGiangVien from '@components/modal/modal-chi-tiet-giang-vien'
 
 dayjs.locale('vi')
 
@@ -248,6 +249,9 @@ export default function UserProfilePageLecture() {
     const { onOpen: onOpenModalAdd } = useDisclosure({
         tag: 'PutUserProfileLectureModal',
     })
+    const { onOpen: onOpenModalChiTiet } = useDisclosure<string>({
+        tag: 'ModalChiTietGiangVien',
+    })
 
     const handleModal = () => {
         onOpenModalAdd()
@@ -265,7 +269,7 @@ export default function UserProfilePageLecture() {
 
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
-            router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${record.id}`)
+            onOpenModalChiTiet(record.id)
         }
     }
 
@@ -491,11 +495,7 @@ export default function UserProfilePageLecture() {
                                                 ) && (
                                                     <Tooltip title="Xem chi tiết" placement="top">
                                                         <Eye
-                                                            onClick={() => {
-                                                                router.push(
-                                                                    `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${id}`
-                                                                )
-                                                            }}
+                                                            onClick={() => handleRowClick({ id })}
                                                             size={16}
                                                             strokeWidth={1.5}
                                                             className="text-base cursor-pointer"
@@ -527,6 +527,7 @@ export default function UserProfilePageLecture() {
                     />
                 </Col>
             </Row>
+            <ModalChiTietGiangVien />
         </div>
     )
 }

@@ -101,7 +101,9 @@ import PutDeadlineScoreModal from './set-deadline-score'
 import PutThesisSession from './put-dot-xet-luan-van'
 import ModalCauHinhLuanVan from './modal-cau-hinh-luan-van'
 import PutNoiDungTinhTaiModal from './put-noi-dung-tinh-tai'
+import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
 export {
+    ModalChiTietSinhVien,
     PutNoiDungTinhTaiModal,
     XemTaiLieu,
     PutLichVaSuKienModal,

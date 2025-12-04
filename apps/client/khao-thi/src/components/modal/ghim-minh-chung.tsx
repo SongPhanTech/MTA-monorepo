@@ -16,7 +16,7 @@ const PinEvidenceToPeriod = () => {
     const [form] = Form.useForm<PutEvidenceType>()
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
-        changeValue: (value: { value: string; label: string }) => void,
+        changeValue: (value: { value: string; label: string }) => void
     }>({
         tag: 'PinEvidenceToPeriod',
         onClose: form.resetFields,
@@ -52,7 +52,7 @@ const PinEvidenceToPeriod = () => {
                         analysisCriterion: {
                             criterionPeriod: {
                                 evaluationStandard: {
-                                    periodId:selectedEvaluationPeriodId,
+                                    periodId: selectedEvaluationPeriodId,
                                 },
                             },
                         },
