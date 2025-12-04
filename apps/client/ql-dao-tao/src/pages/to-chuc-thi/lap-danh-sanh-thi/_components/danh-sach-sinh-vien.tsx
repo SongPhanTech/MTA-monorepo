@@ -76,6 +76,7 @@ export default function DanhSachSinhVien() {
                                                         name: true,
                                                     },
                                                 },
+                                                code: true,
                                             },
                                         },
                                     },
@@ -659,13 +660,11 @@ export default function DanhSachSinhVien() {
                                 },
                             },
                             {
-                                title: 'Tên lớp',
-                                width: 300,
+                                title: 'Lớp',
+                                width: 100,
+                                align: 'center',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.fixedClass?.name || ''}-${
-                                        record?.studentSubjectScore?.student?.fixedClass
-                                            ?.trainingCourse?.name || ''
-                                    }`,
+                                    `${record?.studentSubjectScore?.student?.fixedClass?.code || ''}`
                             },
                             {
                                 title: 'Điểm CC',
