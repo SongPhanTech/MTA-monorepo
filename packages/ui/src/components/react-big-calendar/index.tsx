@@ -50,6 +50,7 @@ export interface CustomCalendarEvent extends Event {
     host?: string
     attendees?: string
     allDay?: boolean
+    subjectClassId?: string
 }
 
 interface ReactBigCalendarCustomProps {

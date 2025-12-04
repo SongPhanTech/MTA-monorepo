@@ -261,7 +261,6 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-
             <Col span={6}>
                 <FormItem form={form} name="schedule" label="Kíp học">
                     <Select
