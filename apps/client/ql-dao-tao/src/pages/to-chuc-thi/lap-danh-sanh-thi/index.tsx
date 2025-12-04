@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import { Store } from '@tanstack/react-store'
+import { Store, useStore } from '@tanstack/react-store'
 import { Col, Row, Tabs } from 'antd'
 import { useMemo, useState } from 'react'
 import DanhSachKeHoachThi from './_components/danh-sach-ke-hoach-thi'
@@ -15,6 +15,7 @@ export const keHoachThiStore = new Store<keHoachThiStoreState>({
 
 export default function LapDanhSachThiPage() {
     const [activeKey, setActiveKey] = useState('1')
+    const { selectedExamId } = useStore(keHoachThiStore)
 
     const tabItems = useMemo(() => {
         return [
@@ -27,9 +28,10 @@ export default function LapDanhSachThiPage() {
                 key: '2',
                 label: 'Danh sách sinh viên',
                 children: <DanhSachSinhVien />,
+                disabled: !selectedExamId,
             },
         ]
-    }, [])
+    }, [selectedExamId])
 
     return (
         <Row gutter={[12, 0]} className="bg-white">

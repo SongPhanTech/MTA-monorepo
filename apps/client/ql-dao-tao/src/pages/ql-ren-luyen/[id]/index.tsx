@@ -17,6 +17,8 @@ import {
     useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Divider, Flex, message, Popover, Row, Select, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -26,6 +28,7 @@ import LopBienCheItem from './lop-bien-che'
 
 export default function SubjectClassScore() {
     const router = useRouter()
+    const { can, canSome } = useAbility()
     const id = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(50)
@@ -247,118 +250,137 @@ export default function SubjectClassScore() {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
-                                <Popover
-                                    content={
-                                        <div className="max-w-56">
-                                            <Col span={24} className="text-right mt-4">
-                                                <Button
-                                                    type="primary"
-                                                    onClick={(value) => {
-                                                        handleApproveAll()
-                                                        setOpenApprove(false)
-                                                    }}
-                                                >
-                                                    Xác nhận
-                                                </Button>
-                                            </Col>
-                                        </div>
-                                    }
-                                    title="Phê duyệt toàn bộ"
-                                    trigger="click"
-                                    placement="bottomRight"
-                                    open={openApprove}
-                                    onOpenChange={setOpenApprove}
-                                >
-                                    <Button
-                                        type="primary"
-                                        disabled={
-                                            !mergedData.some((s) => s.scoreStatus === 'PENDING')
-                                        }
-                                    >
-                                        Phê duyệt
-                                    </Button>
-                                </Popover>
-                                <Popover
-                                    content={
-                                        <div className="max-w-56">
-                                            <Select
-                                                style={{ width: '100%' }}
-                                                value={defaultTrainingType}
-                                                onChange={(value) => {
-                                                    setDefaultTrainingType(value)
-                                                }}
-                                                options={studentTrainingTypeOptions.map((opt) => ({
-                                                    label: <Tag color={opt.color}>{opt.label}</Tag>,
-                                                    value: opt.value,
-                                                }))}
-                                                tagRender={(props) => (
-                                                    <Tag
-                                                        color={getStudentTrainingTypeColor(
-                                                            props.value
-                                                        )}
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'DUYET') && (
+                                    <Popover
+                                        content={
+                                            <div className="max-w-56">
+                                                <Col span={24} className="text-right mt-4">
+                                                    <Button
+                                                        type="primary"
+                                                        onClick={(value) => {
+                                                            handleApproveAll()
+                                                            setOpenApprove(false)
+                                                        }}
                                                     >
-                                                        {props.label}
-                                                    </Tag>
-                                                )}
-                                            />
-                                            <Col span={24} className="text-right mt-4">
-                                                <Button
-                                                    type="primary"
-                                                    disabled={!defaultTrainingType}
-                                                    onClick={(value) => {
-                                                        if (!defaultTrainingType) return
-                                                        setEditableData((prev) => {
-                                                            return new Map(
-                                                                mergedData
-                                                                    .filter(
-                                                                        (s) =>
-                                                                            !prev.has(s.id) ||
-                                                                            !s.studentTrainingType
-                                                                    )
-                                                                    .map((s) => [
-                                                                        s.id,
-                                                                        {
-                                                                            ...s,
-                                                                            studentId: s.id,
-                                                                            scoreId:
-                                                                                s.scoreId ||
-                                                                                undefined,
-                                                                            score: undefined,
-                                                                            studentTrainingType:
-                                                                                defaultTrainingType,
-                                                                        },
-                                                                    ])
-                                                            )
-                                                        })
-                                                        setOpenRank(false)
-                                                    }}
-                                                >
-                                                    Xác nhận
-                                                </Button>
-                                            </Col>
-                                        </div>
-                                    }
-                                    title="Đặt xếp loại mặc định"
-                                    trigger="click"
-                                    placement="bottomRight"
-                                    open={openRank}
-                                    onOpenChange={setOpenRank}
-                                >
-                                    <Button
-                                        type="primary"
-                                        disabled={!mergedData.some((s) => !s.studentTrainingType)}
+                                                        Xác nhận
+                                                    </Button>
+                                                </Col>
+                                            </div>
+                                        }
+                                        title="Phê duyệt toàn bộ"
+                                        trigger="click"
+                                        placement="bottomRight"
+                                        open={openApprove}
+                                        onOpenChange={setOpenApprove}
                                     >
-                                        Xếp loại mặc định
-                                    </Button>
-                                </Popover>
-                                <Button
-                                    type="primary"
-                                    disabled={!selectedFixedClass || editableData.size === 0}
-                                    onClick={handleSave}
-                                >
-                                    <Save stroke="white" />
-                                    Lưu
-                                </Button>
+                                        <Button
+                                            type="primary"
+                                            disabled={
+                                                !mergedData.some((s) => s.scoreStatus === 'PENDING')
+                                            }
+                                        >
+                                            Phê duyệt
+                                        </Button>
+                                    </Popover>
+                                )}
+
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'SUA') && (
+                                    <>
+                                        <Popover
+                                            content={
+                                                <div className="max-w-56">
+                                                    <Select
+                                                        style={{ width: '100%' }}
+                                                        value={defaultTrainingType}
+                                                        onChange={(value) => {
+                                                            setDefaultTrainingType(value)
+                                                        }}
+                                                        options={studentTrainingTypeOptions.map(
+                                                            (opt) => ({
+                                                                label: (
+                                                                    <Tag color={opt.color}>
+                                                                        {opt.label}
+                                                                    </Tag>
+                                                                ),
+                                                                value: opt.value,
+                                                            })
+                                                        )}
+                                                        tagRender={(props) => (
+                                                            <Tag
+                                                                color={getStudentTrainingTypeColor(
+                                                                    props.value
+                                                                )}
+                                                            >
+                                                                {props.label}
+                                                            </Tag>
+                                                        )}
+                                                    />
+                                                    <Col span={24} className="text-right mt-4">
+                                                        <Button
+                                                            type="primary"
+                                                            disabled={!defaultTrainingType}
+                                                            onClick={(value) => {
+                                                                if (!defaultTrainingType) return
+                                                                setEditableData((prev) => {
+                                                                    return new Map(
+                                                                        mergedData
+                                                                            .filter(
+                                                                                (s) =>
+                                                                                    !prev.has(
+                                                                                        s.id
+                                                                                    ) ||
+                                                                                    !s.studentTrainingType
+                                                                            )
+                                                                            .map((s) => [
+                                                                                s.id,
+                                                                                {
+                                                                                    ...s,
+                                                                                    studentId: s.id,
+                                                                                    scoreId:
+                                                                                        s.scoreId ||
+                                                                                        undefined,
+                                                                                    score: undefined,
+                                                                                    studentTrainingType:
+                                                                                        defaultTrainingType,
+                                                                                },
+                                                                            ])
+                                                                    )
+                                                                })
+                                                                setOpenRank(false)
+                                                            }}
+                                                        >
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Col>
+                                                </div>
+                                            }
+                                            title="Đặt xếp loại mặc định"
+                                            trigger="click"
+                                            placement="bottomRight"
+                                            open={openRank}
+                                            onOpenChange={setOpenRank}
+                                        >
+                                            <Button
+                                                type="primary"
+                                                disabled={
+                                                    !mergedData.some((s) => !s.studentTrainingType)
+                                                }
+                                            >
+                                                Xếp loại mặc định
+                                            </Button>
+                                        </Popover>
+                                        <Button
+                                            type="primary"
+                                            disabled={
+                                                !selectedFixedClass || editableData.size === 0
+                                            }
+                                            onClick={handleSave}
+                                        >
+                                            <Save stroke="white" />
+                                            Lưu
+                                        </Button>
+                                    </>
+                                )}
                             </Flex>
                         </Col>
                         <Col span={24}>
@@ -427,7 +449,11 @@ export default function SubjectClassScore() {
                                         width: 250,
                                         align: 'center',
                                         render: (_, record) => {
-                                            return record.scoreStatus === 'APPROVED' ? (
+                                            return record.scoreStatus === 'APPROVED' ||
+                                                can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                    'SUA'
+                                                ) ? (
                                                 <Tag
                                                     color={getStudentTrainingTypeColor(
                                                         record.studentTrainingType
@@ -507,12 +533,10 @@ export default function SubjectClassScore() {
                                         dataIndex: 'action',
                                         width: 100,
                                         align: 'center',
-                                        // hidden: !canSome(
-                                        //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
-                                        //     'XEM_CHI_TIET',
-                                        //     'SUA',
-                                        //     'XOA'
-                                        // ),
+                                        hidden: !canSome(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                            'DUYET'
+                                        ),
                                         render: (text, record) => (
                                             <Row className="justify-center gap-2">
                                                 <ApproveIcon
