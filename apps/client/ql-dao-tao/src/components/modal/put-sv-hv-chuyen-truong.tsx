@@ -9,23 +9,23 @@ import type {
     SubjectVersion,
 } from '@workspace/db/client'
 import {
+    useCreateManyStudentSubjectScore,
     useCreateStudentScoreConvert,
+    useFindManyStudent,
     useFindUniqueStudent,
     useFindUniqueStudentScoreConvert,
-    useFindManyStudent,
-    useCreateManyStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, InputNumber, Button, Select, Row, Table } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Row, Select, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import DocumentPaths from '@components/commons/documentPaths'
-import { Trash2 } from 'lucide-react'
 import { PlusOutlined } from '@ant-design/icons'
-import type { TableColumnsType } from 'antd'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import DocumentPaths from '@components/commons/documentPaths'
 import { $Enums } from '@workspace/db/client'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import type { TableColumnsType } from 'antd'
+import { Trash2 } from 'lucide-react'
 
 const ScoreConvertStatus = $Enums.ScoreConvertStatus
 type ScoreConvertStatus = $Enums.ScoreConvertStatus
@@ -465,18 +465,16 @@ const PutStudentScoreConvertModal = () => {
                                                     max={10}
                                                     step={0.1}
                                                     style={{ width: '100%' }}
-                                                    readOnly
-                                                    variant="borderless"
-                                                    // disabled={
-                                                    //     isViewMode ||
-                                                    //     originalStatusRef.current[
-                                                    //         form.getFieldValue([
-                                                    //             'subjectScoreConvert',
-                                                    //             record.name,
-                                                    //             'id',
-                                                    //         ])
-                                                    //     ] === ScoreConvertStatus.APPROVED
-                                                    // }
+                                                    readOnly={
+                                                        isViewMode ||
+                                                        originalStatusRef.current[
+                                                            form.getFieldValue([
+                                                                'subjectScoreConvert',
+                                                                record.name,
+                                                                'id',
+                                                            ])
+                                                        ] === ScoreConvertStatus.APPROVED
+                                                    }
                                                 />
                                             </FormItem>
                                             {!isEdit && (
