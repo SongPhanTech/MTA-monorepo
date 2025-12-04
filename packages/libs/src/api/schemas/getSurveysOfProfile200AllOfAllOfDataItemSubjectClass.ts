@@ -4,11 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassSchedule'
-import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus'
 import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassType'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassStatus'
+import type { GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType } from './getSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType'
 
 /**
  * @nullable

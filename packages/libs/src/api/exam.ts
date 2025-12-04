@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,8 +19,7 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { customExamFetch } from './custom-instance'
+
 import type {
     CreateClusterSurvey200,
     CreateClusterSurvey400,
@@ -78,6 +77,7 @@ import type {
     ValidateUserSurveyParams,
 } from './schemas'
 
+import { customExamFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -118,7 +118,7 @@ export type getPublicSurveysResponse =
     | getPublicSurveysResponseError
 
 export const getGetPublicSurveysUrl = () => {
-    return '/api/survey/get-public-surveys'
+    return `/api/survey/get-public-surveys`
 }
 
 export const getPublicSurveys = async (
@@ -131,7 +131,7 @@ export const getPublicSurveys = async (
 }
 
 export const getGetPublicSurveysQueryKey = () => {
-    return ['/api/survey/get-public-surveys'] as const
+    return [`/api/survey/get-public-surveys`] as const
 }
 
 export const getGetPublicSurveysQueryOptions = <
@@ -426,7 +426,7 @@ export type savePublicSurveyResponse =
     | savePublicSurveyResponseError
 
 export const getSavePublicSurveyUrl = () => {
-    return '/api/survey/save-public-survey'
+    return `/api/survey/save-public-survey`
 }
 
 export const savePublicSurvey = async (
@@ -557,7 +557,7 @@ export const getValidateUserSurveyUrl = (params: ValidateUserSurveyParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/survey/validate-user-survey?${stringifiedParams}`
-        : '/api/survey/validate-user-survey'
+        : `/api/survey/validate-user-survey`
 }
 
 export const validateUserSurvey = async (
@@ -571,7 +571,7 @@ export const validateUserSurvey = async (
 }
 
 export const getValidateUserSurveyQueryKey = (params?: ValidateUserSurveyParams) => {
-    return ['/api/survey/validate-user-survey', ...(params ? [params] : [])] as const
+    return [`/api/survey/validate-user-survey`, ...(params ? [params] : [])] as const
 }
 
 export const getValidateUserSurveyQueryOptions = <
@@ -717,7 +717,7 @@ export type genExamBankResponseError = (genExamBankResponse400 | genExamBankResp
 export type genExamBankResponse = genExamBankResponseSuccess | genExamBankResponseError
 
 export const getGenExamBankUrl = () => {
-    return '/api/exam/random-exam-question-by-rule'
+    return `/api/exam/random-exam-question-by-rule`
 }
 
 export const genExamBank = async (
@@ -831,7 +831,7 @@ export type exportReportSurveyResponse =
     | exportReportSurveyResponseError
 
 export const getExportReportSurveyUrl = () => {
-    return '/api/survey/export-report-survey'
+    return `/api/survey/export-report-survey`
 }
 
 export const exportReportSurvey = async (
@@ -951,7 +951,7 @@ export type exportReportSurveyOrganizationalResponse =
     | exportReportSurveyOrganizationalResponseError
 
 export const getExportReportSurveyOrganizationalUrl = () => {
-    return '/api/survey/export-report-survey-organizational'
+    return `/api/survey/export-report-survey-organizational`
 }
 
 export const exportReportSurveyOrganizational = async (
@@ -1243,7 +1243,7 @@ export const getGetSurveyObjectsUrl = (params: GetSurveyObjectsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/survey/objects?${stringifiedParams}`
-        : '/api/survey/objects'
+        : `/api/survey/objects`
 }
 
 export const getSurveyObjects = async (
@@ -1257,7 +1257,7 @@ export const getSurveyObjects = async (
 }
 
 export const getGetSurveyObjectsQueryKey = (params?: GetSurveyObjectsParams) => {
-    return ['/api/survey/objects', ...(params ? [params] : [])] as const
+    return [`/api/survey/objects`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSurveyObjectsQueryOptions = <
@@ -1418,7 +1418,7 @@ export const getGetSurveyObjectCountUrl = (params: GetSurveyObjectCountParams) =
 
     return stringifiedParams.length > 0
         ? `/api/survey/objects/count?${stringifiedParams}`
-        : '/api/survey/objects/count'
+        : `/api/survey/objects/count`
 }
 
 export const getSurveyObjectCount = async (
@@ -1432,7 +1432,7 @@ export const getSurveyObjectCount = async (
 }
 
 export const getGetSurveyObjectCountQueryKey = (params?: GetSurveyObjectCountParams) => {
-    return ['/api/survey/objects/count', ...(params ? [params] : [])] as const
+    return [`/api/survey/objects/count`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSurveyObjectCountQueryOptions = <
@@ -1938,7 +1938,7 @@ export type createClusterSurveyResponse =
     | createClusterSurveyResponseError
 
 export const getCreateClusterSurveyUrl = () => {
-    return '/api/cluster-survey/cluster-survey'
+    return `/api/cluster-survey/cluster-survey`
 }
 
 export const createClusterSurvey = async (

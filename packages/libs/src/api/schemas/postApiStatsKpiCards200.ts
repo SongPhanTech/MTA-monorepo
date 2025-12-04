@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsKpiCards200DataItem } from './postApiStatsKpiCards200DataItem'
 import type { PostApiStatsKpiCards200Summary } from './postApiStatsKpiCards200Summary'
+import type { PostApiStatsKpiCards200DataItem } from './postApiStatsKpiCards200DataItem'
 
 export type PostApiStatsKpiCards200 = {
     summary: PostApiStatsKpiCards200Summary

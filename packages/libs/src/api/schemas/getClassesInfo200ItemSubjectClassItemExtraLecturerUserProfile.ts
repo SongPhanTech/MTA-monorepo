@@ -4,10 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicDegreeType } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicDegreeType'
-import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicRankType } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicRankType'
 import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileLevel } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileLevel'
+import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicRankType } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicRankType'
+import type { GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicDegreeType } from './getClassesInfo200ItemSubjectClassItemExtraLecturerUserProfileAcademicDegreeType'
 
 export type GetClassesInfo200ItemSubjectClassItemExtraLecturerUserProfile = {
     /** @nullable */

@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GraduationCheckResultDowngradedFromBaseScore } from './graduationCheckResultDowngradedFromBaseScore'
 import type { GraduationCheckResultDowngradedFromContext } from './graduationCheckResultDowngradedFromContext'
+import type { GraduationCheckResultDowngradedFromBaseScore } from './graduationCheckResultDowngradedFromBaseScore'
 
 export type GraduationCheckResultDowngradedFrom = {
     id: string

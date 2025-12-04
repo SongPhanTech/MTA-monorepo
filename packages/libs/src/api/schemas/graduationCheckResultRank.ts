@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GraduationCheckResultRankBaseScore } from './graduationCheckResultRankBaseScore'
 import type { GraduationCheckResultRankContext } from './graduationCheckResultRankContext'
+import type { GraduationCheckResultRankBaseScore } from './graduationCheckResultRankBaseScore'
 
 /**
  * @nullable

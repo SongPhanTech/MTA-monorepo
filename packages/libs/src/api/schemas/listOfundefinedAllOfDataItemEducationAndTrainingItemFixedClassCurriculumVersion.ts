@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum'
 import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionType'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurriculumVersionCurriculum'
 
 /**
  * @nullable

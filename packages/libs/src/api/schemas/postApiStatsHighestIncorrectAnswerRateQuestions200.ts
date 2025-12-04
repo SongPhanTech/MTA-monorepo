@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsHighestIncorrectAnswerRateQuestions200DataItem } from './postApiStatsHighestIncorrectAnswerRateQuestions200DataItem'
 import type { PostApiStatsHighestIncorrectAnswerRateQuestions200Summary } from './postApiStatsHighestIncorrectAnswerRateQuestions200Summary'
+import type { PostApiStatsHighestIncorrectAnswerRateQuestions200DataItem } from './postApiStatsHighestIncorrectAnswerRateQuestions200DataItem'
 
 export type PostApiStatsHighestIncorrectAnswerRateQuestions200 = {
     summary: PostApiStatsHighestIncorrectAnswerRateQuestions200Summary

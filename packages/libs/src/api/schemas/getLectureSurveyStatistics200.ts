@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetLectureSurveyStatistics200ChoicesItem } from './getLectureSurveyStatistics200ChoicesItem'
 import type { GetLectureSurveyStatistics200DataItem } from './getLectureSurveyStatistics200DataItem'
+import type { GetLectureSurveyStatistics200ChoicesItem } from './getLectureSurveyStatistics200ChoicesItem'
 
 export type GetLectureSurveyStatistics200 = {
     data: GetLectureSurveyStatistics200DataItem[]

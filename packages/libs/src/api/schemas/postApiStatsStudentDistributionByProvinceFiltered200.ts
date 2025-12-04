@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsStudentDistributionByProvinceFiltered200DataItem } from './postApiStatsStudentDistributionByProvinceFiltered200DataItem'
 import type { PostApiStatsStudentDistributionByProvinceFiltered200Summary } from './postApiStatsStudentDistributionByProvinceFiltered200Summary'
+import type { PostApiStatsStudentDistributionByProvinceFiltered200DataItem } from './postApiStatsStudentDistributionByProvinceFiltered200DataItem'
 
 export type PostApiStatsStudentDistributionByProvinceFiltered200 = {
     summary: PostApiStatsStudentDistributionByProvinceFiltered200Summary
