@@ -494,6 +494,7 @@ export default function CreateUserPage() {
                         lastName: values.lastName.trim(),
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
+                        bLaGiangVien,
                         bLaCanBoNhanVien: !!(
                             bLaGiangVien === true || values?.bLaCanBoNhanVien === true
                         ),

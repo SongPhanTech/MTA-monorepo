@@ -169,6 +169,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   bLaNguoiDung: 'bLaNguoiDung',
+  bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
   bLaHocVien: 'bLaHocVien',
   groupId: 'groupId',
@@ -1051,7 +1052,10 @@ exports.Prisma.DM_DonViScalarFieldEnum = {
   sParentId: 'sParentId',
   sTruongDonVi: 'sTruongDonVi',
   sChucNangNhiemVu: 'sChucNangNhiemVu',
-  sDiaChi: 'sDiaChi'
+  sDiaChi: 'sDiaChi',
+  iNhomDonVi: 'iNhomDonVi',
+  iCapDonVi: 'iCapDonVi',
+  iLoaiDonVi: 'iLoaiDonVi'
 };
 
 exports.Prisma.DM_DonViHanhChinhScalarFieldEnum = {
@@ -1203,6 +1207,7 @@ exports.Prisma.DM_NhanVienScalarFieldEnum = {
   sHoVaDem: 'sHoVaDem',
   sTenDayDu: 'sTenDayDu',
   dNgaySinh: 'dNgaySinh',
+  bLaGiangVien: 'bLaGiangVien',
   iGioiTinh: 'iGioiTinh',
   sDM_QuocGiaId: 'sDM_QuocGiaId',
   sDM_TinhId: 'sDM_TinhId',

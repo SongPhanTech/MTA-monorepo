@@ -678,6 +678,7 @@ model UserProfile {
   updatedAt                     DateTime                     @default(now()) @updatedAt()
   createdBy                     String?                      @default("") @db.Uuid()
   bLaNguoiDung                  Boolean?
+  bLaGiangVien                  Boolean?
   bLaCanBoNhanVien              Boolean?
   bLaHocVien                    Boolean?
   group                         Group?                       @relation(fields: [groupId], references: [id])
@@ -1962,6 +1963,12 @@ model DM_DonVi {
   sTruongDonVi         String?            @db.Uuid()
   sChucNangNhiemVu     String?
   sDiaChi              String?
+  /// 0: Cơ quan chức năng; 1: Khoa/Viện/Trung tâm;2: Hệ, tiểu đoàn
+  iNhomDonVi           Int?
+  /// 0:Học viện / Nhà trường (Cấp 1);1: Khối (Cấp 2);2:Phòng / Ban / Khoa / Viện (Cấp 3);3:Bộ môn / Phòng TN / Đại đội (Cấp 4); 4:Tổ / Nhóm / Lớp (Cấp 5)
+  iCapDonVi            Int?
+  /// 0: Phòng;1: Ban; 2: Trung tâm; 3: Văn phòng; 4: Tổ công tác; 5: Khoa; 6: Viện, 7: Bộ môn; 8: Phòng thí nghiệm; 9: Xưởng thực hành; 10: Hệ; 11: Tiểu đoàn; 12: Đại đội: 13: Trung đội; 14: Lớp/Chi đoàn
+  iLoaiDonVi           Int?
   lecturers            Lecturer[]
   lecturerHistory      LecturerHistory[]
   staffs               Staff[]
@@ -2176,6 +2183,7 @@ model DM_NhanVien {
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
+  bLaGiangVien        Boolean?
   iGioiTinh           Int?
   sDM_QuocGiaId       String?    @db.Uuid()
   sDM_TinhId          String?    @db.Uuid()

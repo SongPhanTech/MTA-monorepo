@@ -98,6 +98,15 @@ model DM_DonVi extends CoreBase {
   sChucNangNhiemVu     String?
   sDiaChi              String?
 
+  /// 0: Cơ quan chức năng; 1: Khoa/Viện/Trung tâm;2: Hệ, tiểu đoàn
+  iNhomDonVi           Int?
+
+  /// 0:Học viện / Nhà trường (Cấp 1);1: Khối (Cấp 2);2:Phòng / Ban / Khoa / Viện (Cấp 3);3:Bộ môn / Phòng TN / Đại đội (Cấp 4); 4:Tổ / Nhóm / Lớp (Cấp 5)
+  iCapDonVi            Int?
+
+  /// 0: Phòng;1: Ban; 2: Trung tâm; 3: Văn phòng; 4: Tổ công tác; 5: Khoa; 6: Viện, 7: Bộ môn; 8: Phòng thí nghiệm; 9: Xưởng thực hành; 10: Hệ; 11: Tiểu đoàn; 12: Đại đội: 13: Trung đội; 14: Lớp/Chi đoàn
+  iLoaiDonVi           Int?
+
   lecturers            Lecturer[]
   lecturerHistory      LecturerHistory[]
   staffs               Staff[]
@@ -162,28 +171,30 @@ model DM_GioiTinh extends CoreBase {
   @@schema("mta")
 }
 
+// DEPRECATED: Use UserProfile instead
 model DM_NhanVien extends CoreBase {
   sCCCD               String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
+  bLaGiangVien        Boolean?
   iGioiTinh           Int?
-  sDM_QuocGiaId       String?        @db.Uuid
-  sDM_TinhId          String?        @db.Uuid
-  sDM_QuanHuyenId     String?        @db.Uuid
-  sDM_XaPhuongId      String?        @db.Uuid
+  sDM_QuocGiaId       String?    @db.Uuid
+  sDM_TinhId          String?    @db.Uuid
+  sDM_QuanHuyenId     String?    @db.Uuid
+  sDM_XaPhuongId      String?    @db.Uuid
   sDiaChi             String?
   sSDTDiDong          String?
   sEmail              String?
   bLaNguoiDung        Boolean?
   bLaCanBoNhanVien    Boolean?
   bLaHocVien          Boolean?
-  sDM_DonViId         String?        @db.Uuid
-  sDM_ViTriCongViecId String?        @db.Uuid
-  sQuanlyTrucTiepId   String?        @db.Uuid
+  sDM_DonViId         String?    @db.Uuid
+  sDM_ViTriCongViecId String?    @db.Uuid
+  sQuanlyTrucTiepId   String?    @db.Uuid
   sAvatarId           String?
 
-  group               Group?         @relation(fields: [groupId], references: [id])
+  group               Group?     @relation(fields: [groupId], references: [id])
   groupId             String?
 
   feedback            Feedback[]
