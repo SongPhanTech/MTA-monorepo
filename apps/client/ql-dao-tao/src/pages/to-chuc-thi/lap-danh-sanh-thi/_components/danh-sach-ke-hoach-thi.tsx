@@ -603,7 +603,22 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 keHoachThiStore.setState({
                                     selectedExamId: record?.id,
                                 })
-                                // setActiveKey?.('2')
+                            },
+                            onDoubleClick: (e) => {
+                                const target = e.target as HTMLElement
+                                if (
+                                    target.closest('.ant-select') ||
+                                    target.closest('.ant-popover') ||
+                                    target.closest('.ant-input') ||
+                                    target.closest('.ant-table-row-selection')
+                                ) {
+                                    e.stopPropagation()
+                                    return
+                                }
+                                keHoachThiStore.setState({
+                                    selectedExamId: record?.id,
+                                })
+                                setActiveKey?.('2')
                             },
                         })}
                         data={exams}

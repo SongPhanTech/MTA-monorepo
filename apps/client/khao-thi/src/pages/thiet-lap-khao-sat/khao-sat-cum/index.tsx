@@ -1,4 +1,4 @@
-import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
+// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 import DetailSurveyPage from '@components/sub-pages/khao-sat/danh-sach-giang-vien'
 import DanhSachHocVien from '@components/sub-pages/khao-sat/danh-sach-hoc-vien'
 import TabDotKhaoSatCum from '@components/sub-pages/khat-sat-cum'
@@ -8,7 +8,7 @@ import { Lecturer, Survey } from '@workspace/db'
 import { Col, Row, Tabs } from 'antd'
 import { useState } from 'react'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
-import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
+// import OrganizationSurveyReport from '@components/sub-pages/khao-sat/bao-cao-don-vi'
 
 export type LectuerType = Lecturer & {
     survey: Survey[]
@@ -54,39 +54,37 @@ export default function ClussterSurveyPage() {
             children: <DanhSachHocVien lecturer={lecturer} selectedId={selectedId} />,
             disabled: !lecturer?.id,
         },
-        {
-            key: '4',
-            label: 'Báo cáo theo đơn vị',
-            children: (
-                <OrganizationSurveyReport
-                    selectedId={selectedId}
-                    surveyName=""
-                    organizationSelected={organizationSelected}
-                    setOrganizationSelected={(value) => {
-                        console.log(value)
-
-                        setOrganizationSelected(value)
-                    }}
-                />
-            ),
-            disabled: !selectedId,
-        },
-        {
-            key: '7',
-            label: 'Báo cáo theo giảng viên',
-            children: (
-                <ClusterSurveyReport
-                    selectedId={selectedId}
-                    surveyName=""
-                    surveyId={lecturer?.id || ''}
-                    setSurvey={(value) => {
-                        setLecturer(value)
-                    }}
-                    organizationSelected={organizationSelected}
-                />
-            ),
-            disabled: !organizationSelected,
-        },
+        // {
+        //     key: '4',
+        //     label: 'Báo cáo theo đơn vị',
+        //     children: (
+        //         <OrganizationSurveyReport
+        //             selectedId={selectedId}
+        //             surveyName=""
+        //             organizationSelected={organizationSelected}
+        //             setOrganizationSelected={(value) => {
+        //                 setOrganizationSelected(value)
+        //             }}
+        //         />
+        //     ),
+        //     disabled: !selectedId,
+        // },
+        // {
+        //     key: '7',
+        //     label: 'Báo cáo theo giảng viên',
+        //     children: (
+        //         <ClusterSurveyReport
+        //             selectedId={selectedId}
+        //             surveyName=""
+        //             surveyId={lecturer?.id || ''}
+        //             setSurvey={(value) => {
+        //                 setLecturer(value)
+        //             }}
+        //             organizationSelected={organizationSelected}
+        //         />
+        //     ),
+        //     disabled: !organizationSelected,
+        // },
         {
             key: '5',
             label: 'Báo cáo theo lớp môn học',

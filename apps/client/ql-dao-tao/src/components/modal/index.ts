@@ -72,7 +72,6 @@ import PutStudentModal from './put-sinh-vien'
 import PutStudentThesisRegistration from './put-sinh-vien-dang-ky-da'
 import PutStatusQLTraCuuVanBang from './put-status-ql-tra-cuu-van-bang'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
-import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutPaymentRecord from './put-thanh-toan'
 import PutPaymentRecordDetail from './put-thanh-toan-detail'
 import PutSupervisorPaymentRecord from './put-thanh-toan-gvhd'
@@ -128,7 +127,6 @@ export {
     PutTrainingBlock,
     PutCurriculumVersion,
     PutVersionSubjectModal,
-    PutOpenSubjectClassModal,
     PutCurriculum,
     PutTrainingBlockOnCurriculumVersion,
     PutTrainingBlockSubject,

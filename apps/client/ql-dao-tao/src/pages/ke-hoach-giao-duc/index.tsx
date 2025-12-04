@@ -1,4 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
+import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc'
+import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
 import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import {
     SelectTrainingCourse,
@@ -13,8 +15,7 @@ import { useState } from 'react'
 import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
-import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
-import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc'
+import ThoiKhoaBieu from './thoi-khoa-bieu'
 
 interface TabItem {
     key: string
@@ -62,6 +63,11 @@ export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
             key: 'phan-cong-giang-day',
             label: 'Phân công giảng dạy',
             content: <PhanCongGiangDay hocLai={hocLai} />,
+        },
+        {
+            key: 'thoi-khoa-bieu',
+            label: 'Thời khóa biểu',
+            content: <ThoiKhoaBieu hocLai={hocLai} />,
         },
     ]
 

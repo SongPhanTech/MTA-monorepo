@@ -27,6 +27,9 @@ const baseSchema = z.object({
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
     sDiaChi: z.string().nullish(),
+    iNhomDonVi: z.number().nullish(),
+    iCapDonVi: z.number().nullish(),
+    iLoaiDonVi: z.number().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -51,6 +54,9 @@ const baseSchemaWithoutDefaults = z.object({
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
     sDiaChi: z.string().nullish(),
+    iNhomDonVi: z.number().nullish(),
+    iCapDonVi: z.number().nullish(),
+    iLoaiDonVi: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -116,7 +122,10 @@ export const DM_DonViPrismaUpdateSchema = z.object({
     sParentId: z.string().uuid().nullish(),
     sTruongDonVi: z.string().uuid().nullish(),
     sChucNangNhiemVu: z.string().nullish(),
-    sDiaChi: z.string().nullish()
+    sDiaChi: z.string().nullish(),
+    iNhomDonVi: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    iCapDonVi: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    iLoaiDonVi: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 

@@ -89,13 +89,6 @@ function App({ Component, pageProps }: AppProps) {
                     onLoaderFinished={onRouteDone}
                 />
                 <Head>
-                    <link
-                        rel="stylesheet"
-                        href={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.css`}
-                    />
-                    <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />
-                </Head>
-                <Head>
                     <title>Học viện kỹ thuật quân sự</title>
                 </Head>
                 <ConfigProvider theme={lightThemeCustom}>

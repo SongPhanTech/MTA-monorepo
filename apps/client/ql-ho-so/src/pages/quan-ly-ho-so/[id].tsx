@@ -422,6 +422,8 @@ export default function UpdateUserPage() {
                 sAvatarId: form.getFieldValue('avatar'),
                 bLaHocVien: values.bLaHocVien || false,
                 bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
+                bLaGiangVien: values.bLaGiangVien || false,
+                bLaNguoiDung: values.bLaNguoiDung || false,
             }).catch((error) => {
                 console.log(error)
             })
@@ -514,9 +516,9 @@ export default function UpdateUserPage() {
                             lastName: values.lastName.trim(),
                             firstName: values.firstName.trim(),
                             bLaHocVien: values.bLaHocVien,
-                            bLaCanBoNhanVien: !!(
-                                bLaGiangVien === true || values?.bLaCanBoNhanVien === true
-                            ),
+                            bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
+                            bLaGiangVien:  values?.bLaGiangVien,
+                            bLaNguoiDung:  values?.bLaNguoiDung,
                             fullname:
                                 `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                             dateOfBirth: values.dateOfBirth
@@ -1073,6 +1075,8 @@ export default function UpdateUserPage() {
             form.setFieldsValue({
                 ...userData,
                 bLaHocVien: !!userData.bLaHocVien,
+                bLaCanBoNhanVien: !!userData.bLaCanBoNhanVien,
+                bLaGiangVien: !!userData.bLaGiangVien,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
                 idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
                 idCardExpirationDate: userData.idCardExpirationDate
@@ -1083,8 +1087,6 @@ export default function UpdateUserPage() {
                 CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
-                bLaCanBoNhanVien: !!userData.staffs,
-                bLaGiangVien: !!userData.lecturer,
                 staffPositionId: userData.staffs?.staffPositionId,
                 staffTypeId: userData.staffs?.staffTypeId,
                 lecturerTypeId: userData.lecturer?.lecturerTypeId,

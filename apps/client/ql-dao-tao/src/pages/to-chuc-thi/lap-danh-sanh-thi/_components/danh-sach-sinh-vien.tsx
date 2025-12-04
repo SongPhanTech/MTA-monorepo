@@ -76,6 +76,7 @@ export default function DanhSachSinhVien() {
                                                         name: true,
                                                     },
                                                 },
+                                                code: true,
                                             },
                                         },
                                     },
@@ -112,9 +113,9 @@ export default function DanhSachSinhVien() {
                 },
             },
             orderBy: {
-                examRoomId: {
+                start: {
                     nulls: 'first',
-                    sort: 'desc',
+                    sort: 'asc',
                 },
             },
         },
@@ -122,9 +123,7 @@ export default function DanhSachSinhVien() {
     )
 
     const { data: examData } = useFindUniqueExam({
-        where: {
-            id: selectedExamId,
-        },
+        where: { id: selectedExamId },
         select: {
             subjectClass: {
                 select: {
@@ -137,11 +136,19 @@ export default function DanhSachSinhVien() {
                 include: {
                     examList: true,
                 },
+                orderBy: {
+                    room: {
+                        name: 'asc',
+                    },
+                },
             },
         },
     })
 
-    const isCreateExamCode = examData?.examRooms?.some((er) =>
+    const isAssignedExamRoom = data.some((el) => el.examRoom?.room && el.examPapers.length > 0)
+
+    /// đã đánh phách
+    const isCreatedExamCode = examData?.examRooms?.some((er) =>
         er.examList?.some((el) => el.createdExamCode)
     )
 
@@ -167,29 +174,18 @@ export default function DanhSachSinhVien() {
                                     subjectClassStudent: true,
                                 },
                             },
-                            examRooms: {
-                                include: {
-                                    examList: true,
-                                },
-                            },
                         },
                     },
                 },
             ])
             if (resExam.status !== 200 || !resExam.data) {
-                throw new Error('Lấy kế hoạch thi thất bại')
+                throw new Error('Lấy điểm thất bại, vui lòng thử lại')
             }
             const exam = resExam.data[0] as Prisma.ExamGetPayload<{
                 select: {
                     subjectClass: {
                         select: {
                             subjectClassStudent: true
-                        }
-                    }
-                    examRooms: {
-                        select: {
-                            capacity: true
-                            examList: true
                         }
                     }
                 }
@@ -308,6 +304,11 @@ export default function DanhSachSinhVien() {
                                 include: {
                                     examList: true,
                                 },
+                                orderBy: {
+                                    room: {
+                                        name: 'asc',
+                                    },
+                                },
                             },
                         },
                     },
@@ -332,21 +333,38 @@ export default function DanhSachSinhVien() {
                 }
             }>
             const allStudentSubjectScores = exam.subjectClass.flatMap((e) => e.subjectClassStudent)
+            type StudentSubjectScore = (typeof allStudentSubjectScores)[number]
+
+            const filteredStudentSubjectScores = allStudentSubjectScores.filter(
+                (score) => !score.examBanned && !score.examPostponed
+            )
+            const skippedStudentSubjectScores = allStudentSubjectScores.filter(
+                (score) => score.examBanned || score.examPostponed
+            )
+
             const allExamLists = exam.examRooms.flatMap((er) =>
                 er.examList.map((el) => ({
                     ...el,
                     capacity: er.capacity,
-                    studentSubjectScores: [] as typeof allStudentSubjectScores,
+                    studentSubjectScores: [] as StudentSubjectScore[],
                 }))
             )
-            for (const el of allExamLists) {
-                const capacity = el.capacity || 0
-                for (let i = 0; i < capacity; i++) {
-                    const studentSubjectScore = allStudentSubjectScores.shift()
-                    if (!studentSubjectScore) {
-                        break
+
+            let idx = 0
+            loop: for (const el of allExamLists) {
+                for (let i = 0; i < el.capacity; i++) {
+                    const s = filteredStudentSubjectScores[idx]
+                    idx++
+
+                    if (!s) {
+                        break loop
                     }
-                    el.studentSubjectScores.push(studentSubjectScore)
+
+                    if (s.examBanned || s.examPostponed) {
+                        continue
+                    }
+
+                    el.studentSubjectScores.push(s)
                 }
             }
             const examNonRoomId = createId()
@@ -409,7 +427,7 @@ export default function DanhSachSinhVien() {
                         },
                     },
                 },
-                ...allStudentSubjectScores.map((studentSubjectScore) => ({
+                ...skippedStudentSubjectScores.map((studentSubjectScore) => ({
                     model: 'ExamPaper' as const,
                     operation: 'create',
                     data: {
@@ -451,6 +469,7 @@ export default function DanhSachSinhVien() {
             })
             message.success('Phân phòng thi thành công')
         } catch (error: any) {
+            console.error(error)
             message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
         } finally {
             hideSpinner()
@@ -529,18 +548,18 @@ export default function DanhSachSinhVien() {
                         <Flex justify="end" align="center" gap={12}>
                             <Button
                                 type="primary"
-                                disabled={examData?.lockExamSessions || isCreateExamCode}
+                                disabled={examData?.lockExamSessions || isCreatedExamCode}
                                 onClick={handleLayDiemCCTX}
                             >
-                                1. Lấy điểm SV
+                                0. Lấy điểm SV
                             </Button>
                             <Button
                                 type="primary"
                                 className="bg-orange-500"
-                                disabled={examData?.lockExamSessions || isCreateExamCode}
+                                disabled={examData?.lockExamSessions || isCreatedExamCode}
                                 onClick={handleSaveExamDecision}
                             >
-                                Lưu hoãn thi
+                                1. Lưu hoãn thi
                             </Button>
                             <Checkbox
                                 indeterminate={
@@ -566,20 +585,23 @@ export default function DanhSachSinhVien() {
                                         })
                                     } catch (error) {}
                                 }}
-                                disabled={examData?.lockExamSessions || isCreateExamCode}
+                                disabled={examData?.lockExamSessions || isCreatedExamCode}
                                 checked={examData?.subjectClass.every((sc) => sc.isLockScore)}
                             >
-                                Khóa nhập ĐQT
+                                2. Khóa nhập ĐQT
                             </Checkbox>
                             <Button
                                 type="primary"
-                                disabled={isCreateExamCode}
+                                disabled={examData?.lockExamSessions || isCreatedExamCode}
                                 onClick={handlePhanPhongThi}
                             >
-                                2. Phân phòng thi
+                                3. Phân phòng thi
                             </Button>
                             <Checkbox
-                                disabled={isCreateExamCode}
+                                disabled={
+                                    examData?.subjectClass.some((sc) => !sc.isLockScore) ||
+                                    isCreatedExamCode
+                                }
                                 onChange={async (e) => {
                                     try {
                                         await updateExamData({
@@ -604,7 +626,7 @@ export default function DanhSachSinhVien() {
                                 }}
                                 checked={examData?.lockExamSessions}
                             >
-                                Khóa danh sách thi
+                                4. Khóa DS thi
                             </Checkbox>
                             <Button type="dashed">Xuất DS thi</Button>
                         </Flex>
@@ -659,13 +681,11 @@ export default function DanhSachSinhVien() {
                                 },
                             },
                             {
-                                title: 'Tên lớp',
-                                width: 300,
+                                title: 'Lớp',
+                                width: 100,
+                                align: 'center',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.fixedClass?.name || ''}-${
-                                        record?.studentSubjectScore?.student?.fixedClass
-                                            ?.trainingCourse?.name || ''
-                                    }`,
+                                    `${record?.studentSubjectScore?.student?.fixedClass?.code || ''}`,
                             },
                             {
                                 title: 'Điểm CC',
@@ -721,7 +741,9 @@ export default function DanhSachSinhVien() {
                                         >
                                             <Checkbox
                                                 disabled={
-                                                    examData?.lockExamSessions || isCreateExamCode
+                                                    isAssignedExamRoom ||
+                                                    examData?.lockExamSessions ||
+                                                    isCreatedExamCode
                                                 }
                                             />
                                         </Form.Item>
@@ -753,9 +775,10 @@ export default function DanhSachSinhVien() {
                                                     }))}
                                                     styles={{ popup: { root: { width: 'fit' } } }}
                                                     disabled={
+                                                        isAssignedExamRoom ||
                                                         !examPostponed ||
                                                         examData?.lockExamSessions ||
-                                                        isCreateExamCode
+                                                        isCreatedExamCode
                                                     }
                                                 />
                                             )}
@@ -778,7 +801,7 @@ export default function DanhSachSinhVien() {
                                         >
                                             <Input
                                                 disabled={
-                                                    examData?.lockExamSessions || isCreateExamCode
+                                                    examData?.lockExamSessions || isCreatedExamCode
                                                 }
                                             />
                                         </Form.Item>

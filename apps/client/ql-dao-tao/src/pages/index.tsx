@@ -1,11 +1,11 @@
 import Loading from '@components/commons/loading'
 import { useMenuList } from '@hooks/menu-list'
+import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-const IndexPage: NextPage = () => {
+const IndexPage = () => {
     const menus = useMenuList()
     const { status } = useSession()
     const router = useRouter()
@@ -13,14 +13,18 @@ const IndexPage: NextPage = () => {
     useEffect(() => {
         console.log(status)
         if (status === 'authenticated') {
-            const firstMenu = menus.flat()
-            console.log(firstMenu)
-            router.push('/home')
-            if (firstMenu.length > 0 && firstMenu[0].path) {
-                router.push(firstMenu[0].path)
+            const flatMenu = menus.flat()
+
+            const firstMenu = flatMenu.find((i) => i.path)
+            if (firstMenu?.path) {
+                router.push(firstMenu.path)
             }
         }
     }, [status, menus, router.push])
     return <Loading />
 }
 export default IndexPage
+
+IndexPage.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

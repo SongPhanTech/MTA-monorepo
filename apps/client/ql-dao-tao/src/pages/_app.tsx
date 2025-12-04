@@ -26,7 +26,6 @@ import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
 import { lightThemeCustom } from '@workspace/ui'
-import { env } from '@/env'
 
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)
@@ -36,7 +35,6 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(quarterOfYear)
 dayjs.extend(isBetween)
 
-dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
     const getLayout: (page: ReactNode) => ReactNode =
         (
@@ -88,17 +86,6 @@ function App({ Component, pageProps }: AppProps) {
                     progress={progress}
                     onLoaderFinished={onRouteDone}
                 />
-                <Head>
-                    <link
-                        rel="stylesheet"
-                        href={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.css`}
-                    />
-                    <script
-                        src={`${process.env.NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT}/web-apps/apps/api/documents/api.js`}
-                        async
-                    />
-                    <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />
-                </Head>
                 <Head>
                     <title>Học viện kỹ thuật quân sự</title>
                 </Head>

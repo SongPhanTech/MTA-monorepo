@@ -253,7 +253,12 @@ const importFileGiaoVienCoGioGiay = async (
                     phongHoc: null as string | null,
                     ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                     ngayKetThuc: null as Date | null,
-                    ngayThi: null as Date | null,
+                    ngayThi:
+                        hinhThucHoc === 'Thi'
+                            ? ngayHoc
+                                ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate()
+                                : null
+                            : null,
                     caHoc:
                         caHoc === 'Sáng'
                             ? $Enums.SubjectClassSchedule.MORNING
@@ -381,7 +386,9 @@ const importFileGiaoVienCoGioGiay = async (
                             lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
                             extraLecturerId:
                                 subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+                            startDate: subjectClass.ngayBatDau ?? existSubjectClass.startDate,
                             endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
+                            examDate: subjectClass.ngayThi ?? existSubjectClass.examDate,
                             fixedClasses: {
                                 set: subjectClass.lopNienChe.map((e) => ({
                                     id: e,
@@ -504,8 +511,9 @@ const importFileGiaoVienCoGioGiay = async (
                             name: tenMon ? tenMon.trim() : '',
                             schedule: subjectClass.caHoc,
                             maxStudent: subjectClass.quanSo,
-                            startDate: subjectClass.ngayBatDau ?? new Date(),
-                            examDate: subjectClass.ngayThi ?? new Date(),
+                            startDate: subjectClass.ngayBatDau ?? null,
+                            endDate: subjectClass.ngayKetThuc ?? null,
+                            examDate: subjectClass.ngayThi ?? null,
                             semesterId,
                             lecturerId: subjectClass.gvChinh,
                             extraLecturerId: subjectClass.gvPhu,

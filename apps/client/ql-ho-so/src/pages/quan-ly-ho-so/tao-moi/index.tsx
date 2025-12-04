@@ -96,7 +96,6 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
     }
 }> & {
     file?: FileType
-    bLaGiangVien?: boolean
     lecturerTypeId?: string
     staffTypeId?: string
     staffPositionId?: string
@@ -464,6 +463,8 @@ export default function CreateUserPage() {
                 sAvatarId: form.getFieldValue('avatar'),
                 bLaHocVien: values.bLaHocVien || false,
                 bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
+                bLaNguoiDung: values.bLaNguoiDung || false,
+                bLaGiangVien: values.bLaGiangVien || false,
             })
             if (res?.status === 200) {
                 let rank = null
@@ -494,9 +495,9 @@ export default function CreateUserPage() {
                         lastName: values.lastName.trim(),
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
-                        bLaCanBoNhanVien: !!(
-                            bLaGiangVien === true || values?.bLaCanBoNhanVien === true
-                        ),
+                        bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
+                        bLaGiangVien:  values?.bLaGiangVien,
+                        bLaNguoiDung:  values?.bLaNguoiDung,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,

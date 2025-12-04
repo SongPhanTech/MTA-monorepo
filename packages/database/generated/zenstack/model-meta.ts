@@ -227,6 +227,10 @@ const metadata: ModelMeta = {
                     name: "bLaNguoiDung",
                     type: "Boolean",
                     isOptional: true,
+                }, bLaGiangVien: {
+                    name: "bLaGiangVien",
+                    type: "Boolean",
+                    isOptional: true,
                 }, bLaCanBoNhanVien: {
                     name: "bLaCanBoNhanVien",
                     type: "Boolean",
@@ -5522,6 +5526,18 @@ const metadata: ModelMeta = {
                     name: "sDiaChi",
                     type: "String",
                     isOptional: true,
+                }, iNhomDonVi: {
+                    name: "iNhomDonVi",
+                    type: "Int",
+                    isOptional: true,
+                }, iCapDonVi: {
+                    name: "iCapDonVi",
+                    type: "Int",
+                    isOptional: true,
+                }, iLoaiDonVi: {
+                    name: "iLoaiDonVi",
+                    type: "Int",
+                    isOptional: true,
                 }, lecturers: {
                     name: "lecturers",
                     type: "Lecturer",
@@ -6295,6 +6311,10 @@ const metadata: ModelMeta = {
                 }, dNgaySinh: {
                     name: "dNgaySinh",
                     type: "DateTime",
+                    isOptional: true,
+                }, bLaGiangVien: {
+                    name: "bLaGiangVien",
+                    type: "Boolean",
                     isOptional: true,
                 }, iGioiTinh: {
                     name: "iGioiTinh",

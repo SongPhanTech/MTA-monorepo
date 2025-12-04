@@ -9,7 +9,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/model.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -28,7 +27,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/training.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -47,7 +45,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/exam.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -67,7 +64,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/portal.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -86,7 +82,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/system.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -105,7 +100,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/system-share.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },
@@ -124,7 +118,6 @@ export default defineConfig({
             mode: 'single',
             target: './src/api/storage.ts',
             schemas: './src/api/schemas',
-            biome: true,
             packageJson: 'fake',
             override: {
                 query: { version: 5 },

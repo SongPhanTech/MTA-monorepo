@@ -95,3 +95,19 @@ select {
         --chart-5: 340 75% 55%;
     }
 }
+
+.ant-select-disabled .ant-select-selector .ant-select-selection-item {
+    color: #000 !important;
+}
+
+.ant-picker-disabled > .ant-picker-input > input {
+    color: #000 !important;
+}
+
+.ant-input-number-disabled .ant-input-number-input {
+    color: #000 !important;
+}
+
+.ant-input-disabled {
+    color: #000 !important;
+}

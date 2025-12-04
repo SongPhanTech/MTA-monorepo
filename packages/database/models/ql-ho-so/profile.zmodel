@@ -27,6 +27,7 @@ enum UserType {
 
 model UserProfile extends Base {
   bLaNguoiDung                  Boolean?
+  bLaGiangVien                  Boolean?
   bLaCanBoNhanVien              Boolean?
   bLaHocVien                    Boolean?
   group                         Group?                       @relation(fields: [groupId], references: [id])

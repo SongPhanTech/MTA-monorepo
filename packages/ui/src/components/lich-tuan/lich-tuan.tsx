@@ -11,6 +11,7 @@ import { dayjs } from '..'
 import ReactBigCalendarCustom, { type CustomCalendarEvent } from '../react-big-calendar'
 import TableWeekCalendar from '../table-week-calendar'
 import { CalendarFilter } from './calendar-filter'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export const TYPE_WORK_SCHEDULE_COLOR_OPTIONS = [
     { label: 'Lịch học lý thuyết', value: '#7bb3e6', type: PeriodType.THEORY },
@@ -114,6 +115,7 @@ const convertApiToCalendarEventReactBigCalendar = (
         include: {
             subjectClass: {
                 select: {
+                    id: true
                     name: true
                     code: true
                     room: true
@@ -200,6 +202,7 @@ const convertApiToCalendarEventReactBigCalendar = (
                     ?.map((student) => student.student.userProfile?.fullname)
                     ?.filter(Boolean)
                     .join(', ') || '',
+            subjectClassId: event.subjectClass?.id,
         }
     })
 }
@@ -231,11 +234,9 @@ const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
 
 export function LichCongTac({
     hiddenCalendarFilter = false,
-    showTitle = true,
     onlyMySchedule = false,
 }: {
     hiddenCalendarFilter?: boolean
-    showTitle?: boolean
     onlyMySchedule?: boolean
 }) {
     const { data: profile } = useSession()
@@ -256,39 +257,41 @@ export function LichCongTac({
     const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule({
         where: {
             ...(onlyMySchedule
-                ? [
-                      {
-                          subjectClass: {
-                              subjectClassStudent: {
-                                  some: {
-                                      student: {
-                                          userProfileId: profileIdLogin,
+                ? {
+                      OR: [
+                          {
+                              subjectClass: {
+                                  subjectClassStudent: {
+                                      some: {
+                                          student: {
+                                              userProfileId: profileIdLogin,
+                                          },
                                       },
                                   },
                               },
                           },
-                      },
-                      {
-                          lecturer: {
-                              userProfileId: profileIdLogin,
-                          },
-                      },
-                      {
-                          subjectClass: {
-                              mainLecturer: {
+                          {
+                              lecturer: {
                                   userProfileId: profileIdLogin,
                               },
                           },
-                      },
-                      {
-                          subjectClass: {
-                              extraLecturer: {
-                                  userProfileId: profileIdLogin,
+                          {
+                              subjectClass: {
+                                  mainLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
                               },
                           },
-                      },
-                  ]
-                : []),
+                          {
+                              subjectClass: {
+                                  extraLecturer: {
+                                      userProfileId: profileIdLogin,
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
             periodType: {
                 in: selectedColors
                     .map((color) => {
@@ -303,6 +306,7 @@ export function LichCongTac({
         include: {
             subjectClass: {
                 select: {
+                    id: true,
                     name: true,
                     code: true,
                     room: true,
@@ -429,33 +433,49 @@ export function LichCongTac({
         const source = diffDays >= 1 ? 'multi-day' : 'single-day'
     }
 
+    const { onOpen: onOpenSubjectClass } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+        schedules?: Date[]
+    }>({
+        tag: 'PutOneSubjectClassModal',
+    })
+
     const handleSelectEventReactBigCalendar = (event: CustomCalendarEvent) => {
-        // Calculate source based on event duration like we do for slot selection
-        let source = 'multi-day' // default
-        if (event?.start && event?.end) {
-            const diffMs = event.end.getTime() - event.start.getTime()
-            const diffDays = diffMs / (1000 * 60 * 60 * 24)
-            source = diffDays >= 1 ? 'multi-day' : 'single-day'
-        }
-        Modal.info({
-            title: event?.title,
-            content: (
-                <div>
-                    <p>
-                        <p>Ngày {dayjs(event.start).format('DD/MM/YYYY')}</p>
+        console.log('event', event)
+        if (event?.subjectClassId) {
+            onOpenSubjectClass({
+                id: event?.subjectClassId as string,
+                mode: 'view',
+                schedules: [event.start],
+            })
+        } else {
+            let source = 'multi-day' // default
+            if (event?.start && event?.end) {
+                const diffMs = event.end.getTime() - event.start.getTime()
+                const diffDays = diffMs / (1000 * 60 * 60 * 24)
+                source = diffDays >= 1 ? 'multi-day' : 'single-day'
+            }
+            Modal.info({
+                title: event?.title,
+                content: (
+                    <div>
                         <p>
-                            Từ {dayjs(event.start).format('HH:mm')} đến{' '}
-                            {dayjs(event.end).format('HH:mm')}
+                            <p>Ngày {dayjs(event.start).format('DD/MM/YYYY')}</p>
+                            <p>
+                                Từ {dayjs(event.start).format('HH:mm')} đến{' '}
+                                {dayjs(event.end).format('HH:mm')}
+                            </p>
                         </p>
-                    </p>
-                    <p>Địa điểm: {event?.location || '-'}</p>
-                    <p>Giảng viên: {event?.host || '-'}</p>
-                </div>
-            ),
-            // okButtonProps: { hidden: true },
-            okText: 'Đóng',
-            okButtonProps: { className: 'bg-primary text-white' },
-        })
+                        <p>Địa điểm: {event?.location || '-'}</p>
+                        <p>Giảng viên: {event?.host || '-'}</p>
+                    </div>
+                ),
+                // okButtonProps: { hidden: true },
+                okText: 'Đóng',
+                okButtonProps: { className: 'bg-primary text-white' },
+            })
+        }
     }
 
     const handleEventClickTableCalendar = (eventId: string, eventRecord?: any) => {
@@ -510,6 +530,7 @@ export function LichCongTac({
                         ?.map((scs) => scs.student.userProfile)
                         .filter(Boolean) as UserProfile[]
                 ),
+                subjectClassId: event?.subjectClass?.id,
             }
         })
     }, [eventsDataTableCalendar])

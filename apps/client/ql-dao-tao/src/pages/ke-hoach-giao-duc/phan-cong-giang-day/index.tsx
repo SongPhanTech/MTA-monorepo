@@ -275,7 +275,7 @@ export default function PhanCongGiangDay({
                     : {}),
                 type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai, trainingCourseId]
+        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
@@ -668,7 +668,10 @@ export default function PhanCongGiangDay({
         tag: 'ModalNhapTKB',
     })
 
-    const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
+    const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
+        id: string
+        mode: 'edit' | 'view'
+    }>({
         tag: 'PutOneSubjectClassModal',
     })
 
@@ -1360,7 +1363,11 @@ export default function PhanCongGiangDay({
 
                                                                 const itemBySubjectCode =
                                                                     Object.groupBy(
-                                                                        items,
+                                                                        items.filter(
+                                                                            (e) =>
+                                                                                e.fixedClasses
+                                                                                    .length > 0
+                                                                        ),
                                                                         (item) => item.subject.code
                                                                     )
 
@@ -2166,7 +2173,10 @@ export default function PhanCongGiangDay({
                                                                   <EditIcon
                                                                       onClick={onOpenEditSubjectClass.bind(
                                                                           null,
-                                                                          id
+                                                                          {
+                                                                              id,
+                                                                              mode: 'edit',
+                                                                          }
                                                                       )}
                                                                       className="text-sm text-blue-700 cursor-pointer"
                                                                   />
