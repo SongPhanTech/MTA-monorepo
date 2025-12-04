@@ -5,6 +5,11 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
+import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
+import { useSubjectClassStatusOptions } from '@hooks/subjectClassStatus'
+import { useExamStatusOptions } from '@hooks/examStatus'
+import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
+import { useHistorySubjectVersionActionOptions } from '@hooks/historySubjectVersionAction'
 import 'dayjs/locale/vi'
 
 dayjs.locale('vi')
@@ -20,6 +25,12 @@ export default function ModalChiTietMonHoc() {
     const { subjectId, subjectVersionId } = input || {}
     const { getExamTypeLabel } = useExamTypeOptions()
     const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
+    const { getSubjectVersionTypeLabel } = useSubjectVersionTypeOptions()
+    const { getSubjectClassStatusLabel, getSubjectClassStatusColor } =
+        useSubjectClassStatusOptions()
+    const { getExamStatusLabel, getExamStatusColor } = useExamStatusOptions()
+    const { getSubjectRequirementTypeLabel } = useSubjectRequirementTypeOptions()
+    const { getHistoryActionLabel, getHistoryActionColor } = useHistorySubjectVersionActionOptions()
 
     const { data: subjectData, isLoading } = useFindUniqueSubject(
         {
@@ -79,11 +90,25 @@ export default function ModalChiTietMonHoc() {
                         subjectClass: {
                             include: {
                                 semester: true,
+                                trainingObjectType: true,
+                                room: true,
+                                trainingLocation: true,
                                 mainLecturer: {
                                     include: {
                                         userProfile: true,
                                     },
                                 },
+                                extraLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                                enterGradeLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                                exam: true,
                             },
                         },
                         // Đề thi
@@ -156,16 +181,6 @@ export default function ModalChiTietMonHoc() {
                             <Tag color="error">Không hoạt động</Tag>
                         )}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Ngày tạo">
-                        {subject?.createdAt
-                            ? dayjs(subject.createdAt).format('DD/MM/YYYY HH:mm')
-                            : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Ngày cập nhật">
-                        {subject?.updatedAt
-                            ? dayjs(subject.updatedAt).format('DD/MM/YYYY HH:mm')
-                            : ''}
-                    </Descriptions.Item>
                 </Descriptions>
             ),
         },
@@ -182,19 +197,7 @@ export default function ModalChiTietMonHoc() {
                     </Descriptions.Item>
                     <Descriptions.Item label="Mã TKB">{currentVersion.codeTkb}</Descriptions.Item>
                     <Descriptions.Item label="Loại phiên bản">
-                        {currentVersion.type === 'Normal'
-                            ? 'Bình thường'
-                            : currentVersion.type === 'Internship'
-                              ? 'Thực tập'
-                              : currentVersion.type === 'Research'
-                                ? 'Nghiên cứu'
-                                : currentVersion.type === 'Project'
-                                  ? 'Đồ án'
-                                  : currentVersion.type === 'Practice'
-                                    ? 'Thực hành'
-                                    : currentVersion.type === 'Graduation'
-                                      ? 'Tốt nghiệp'
-                                      : currentVersion.type}
+                        {getSubjectVersionTypeLabel(currentVersion.type)}
                     </Descriptions.Item>
                     <Descriptions.Item label="Số tín chỉ">
                         {currentVersion.credit}
@@ -285,16 +288,6 @@ export default function ModalChiTietMonHoc() {
                             <Tag color="success">Đang mở</Tag>
                         )}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Ngày tạo">
-                        {currentVersion.createdAt
-                            ? dayjs(currentVersion.createdAt).format('DD/MM/YYYY HH:mm')
-                            : ''}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Ngày cập nhật">
-                        {currentVersion.updatedAt
-                            ? dayjs(currentVersion.updatedAt).format('DD/MM/YYYY HH:mm')
-                            : ''}
-                    </Descriptions.Item>
                 </Descriptions>
             ) : (
                 <div>Chưa có phiên bản nào</div>
@@ -382,6 +375,70 @@ export default function ModalChiTietMonHoc() {
                                     <Tag color="success">Đang mở</Tag>
                                 ),
                         },
+                        {
+                            title: 'Loại',
+                            dataIndex: 'type',
+                            width: 120,
+                            render: (value) => getSubjectVersionTypeLabel(value),
+                        },
+                        {
+                            title: 'Số tuần',
+                            dataIndex: 'week',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết TKB',
+                            dataIndex: 'schedulePeriod',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết LT',
+                            dataIndex: 'numberOfTheory',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết BT',
+                            dataIndex: 'numberOfPractical',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết ThL',
+                            dataIndex: 'numberOfSelfStudy',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết TN,TH',
+                            dataIndex: 'numberOfPractice',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết Ôn',
+                            dataIndex: 'numberOfReview',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Tiết KT,Thi',
+                            dataIndex: 'numberOfExam',
+                            width: 80,
+                            align: 'center' as const,
+                        },
+                        {
+                            title: 'Nhóm PB',
+                            width: 150,
+                            render: (_: any, record: any) => record.subjectVersionCategory?.name,
+                        },
+                        {
+                            title: 'Đơn vị QL',
+                            width: 200,
+                            render: (_: any, record: any) => record.managementOrganization?.sTen,
+                        },
                     ]}
                 />
             ),
@@ -463,6 +520,143 @@ export default function ModalChiTietMonHoc() {
                                     <Tag color="error">Không hoạt động</Tag>
                                 ),
                         },
+                        {
+                            title: 'Trạng thái lớp',
+                            dataIndex: 'status',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value) => (
+                                <Tag color={getSubjectClassStatusColor(value)}>
+                                    {getSubjectClassStatusLabel(value)}
+                                </Tag>
+                            ),
+                        },
+                        {
+                            title: 'Đối tượng ĐT',
+                            width: 150,
+                            render: (_: any, record: any) => record.trainingObjectType?.name,
+                        },
+                        {
+                            title: 'Đã hủy',
+                            dataIndex: 'cancelled',
+                            width: 100,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Phòng học',
+                            width: 150,
+                            render: (_: any, record: any) => record.room?.name,
+                        },
+                        {
+                            title: 'Địa điểm ĐT',
+                            width: 150,
+                            render: (_: any, record: any) => record.trainingLocation?.name,
+                        },
+                        {
+                            title: 'GV phụ',
+                            width: 200,
+                            render: (_: any, record: any) =>
+                                record.extraLecturer?.userProfile?.fullName,
+                        },
+                        {
+                            title: 'GV nhập điểm',
+                            width: 200,
+                            render: (_: any, record: any) =>
+                                record.enterGradeLecturer?.userProfile?.fullName,
+                        },
+                        {
+                            title: 'Hạn phân công GV',
+                            dataIndex: 'lecturerAssignmentDeadline',
+                            width: 140,
+                            render: (value) =>
+                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+                        },
+                        {
+                            title: 'Ngày thi',
+                            dataIndex: 'examDate',
+                            width: 120,
+                            render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            dataIndex: 'examType',
+                            width: 120,
+                            render: (value) => getExamTypeLabel(value),
+                        },
+                        {
+                            title: 'Mã đề thi',
+                            width: 120,
+                            render: (_: any, record: any) => record.exam?.code,
+                        },
+                        {
+                            title: 'Bắt đầu nhập CC/TX',
+                            dataIndex: 'scoreDeadLineStart',
+                            width: 140,
+                            render: (value) =>
+                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+                        },
+                        {
+                            title: 'Hạn nhập CC/TX',
+                            dataIndex: 'scoreDeadline',
+                            width: 140,
+                            render: (value) =>
+                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+                        },
+                        {
+                            title: 'Hạn nhập điểm thi',
+                            dataIndex: 'examScoreDeadline',
+                            width: 140,
+                            render: (value) =>
+                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+                        },
+                        {
+                            title: 'Khóa CC/TX',
+                            dataIndex: 'isLockScore',
+                            width: 100,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Khóa điểm thi',
+                            dataIndex: 'isLockExamScore',
+                            width: 100,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Đã nhập CC/TX',
+                            dataIndex: 'enteredScore',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Đã nhập thi',
+                            dataIndex: 'enteredExamScore',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Đã nộp điểm',
+                            dataIndex: 'scoreSubmitted',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Đã kiểm tra',
+                            dataIndex: 'scoreChecked',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Mô tả',
+                            dataIndex: 'description',
+                            width: 250,
+                        },
                     ]}
                 />
             ),
@@ -518,6 +712,38 @@ export default function ModalChiTietMonHoc() {
                             dataIndex: 'order',
                             width: 80,
                             align: 'center',
+                        },
+                        {
+                            title: 'Loại',
+                            dataIndex: 'type',
+                            width: 120,
+                            render: (value) => getSubjectRequirementTypeLabel(value),
+                        },
+                        {
+                            title: 'Tính điểm cuối',
+                            dataIndex: 'useForFinalScore',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Môn tốt nghiệp',
+                            dataIndex: 'graduation',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value: boolean) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
                         },
                     ]}
                 />
@@ -742,10 +968,10 @@ export default function ModalChiTietMonHoc() {
                             align: 'center',
                         },
                         {
-                            title: 'Ngày tạo',
-                            dataIndex: 'createdAt',
-                            width: 120,
-                            render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                            title: 'Số ca',
+                            dataIndex: 'session',
+                            width: 80,
+                            align: 'center' as const,
                         },
                         {
                             title: 'Trạng thái',
@@ -758,6 +984,29 @@ export default function ModalChiTietMonHoc() {
                                 ) : (
                                     <Tag color="error">Không hoạt động</Tag>
                                 ),
+                        },
+                        {
+                            title: 'Trạng thái đề',
+                            dataIndex: 'status',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (value) => (
+                                <Tag color={getExamStatusColor(value)}>
+                                    {getExamStatusLabel(value)}
+                                </Tag>
+                            ),
+                        },
+                        {
+                            title: 'Khóa DS thi',
+                            dataIndex: 'lockExamSessions',
+                            width: 100,
+                            align: 'center' as const,
+                            render: (value: boolean) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Mô tả',
+                            dataIndex: 'description',
+                            width: 250,
                         },
                     ]}
                 />
@@ -804,13 +1053,6 @@ export default function ModalChiTietMonHoc() {
                                 return `${(size / (1024 * 1024)).toFixed(2)} MB`
                             },
                         },
-                        {
-                            title: 'Ngày tạo',
-                            dataIndex: 'createdAt',
-                            width: 120,
-                            render: (value: Date) =>
-                                value ? dayjs(value).format('DD/MM/YYYY') : '',
-                        },
                     ]}
                 />
             ),
@@ -836,32 +1078,19 @@ export default function ModalChiTietMonHoc() {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Mã câu hỏi',
+                            title: 'Mã ngân hàng',
                             dataIndex: 'code',
-                            width: 120,
-                        },
-                        {
-                            title: 'Nội dung',
-                            dataIndex: 'content',
-                            width: 400,
-                            render: (value) => <div className="line-clamp-2">{value}</div>,
-                        },
-                        {
-                            title: 'Loại',
-                            dataIndex: 'type',
                             width: 150,
                         },
                         {
-                            title: 'Độ khó',
-                            dataIndex: 'difficulty',
-                            width: 100,
-                            align: 'center',
+                            title: 'Tên ngân hàng',
+                            dataIndex: 'name',
+                            width: 300,
                         },
                         {
-                            title: 'Điểm',
-                            dataIndex: 'point',
-                            width: 80,
-                            align: 'center',
+                            title: 'Mô tả',
+                            dataIndex: 'description',
+                            width: 350,
                         },
                         {
                             title: 'Trạng thái',
@@ -903,19 +1132,11 @@ export default function ModalChiTietMonHoc() {
                             title: 'Thao tác',
                             dataIndex: 'action',
                             width: 120,
-                            render: (value) => {
-                                const actionMap: Record<string, { label: string; color: string }> =
-                                    {
-                                        CREATE: { label: 'Tạo mới', color: 'success' },
-                                        UPDATE: { label: 'Cập nhật', color: 'processing' },
-                                        DELETE: { label: 'Xóa', color: 'error' },
-                                    }
-                                const action = actionMap[value] || {
-                                    label: value,
-                                    color: 'default',
-                                }
-                                return <Tag color={action.color}>{action.label}</Tag>
-                            },
+                            render: (value) => (
+                                <Tag color={getHistoryActionColor(value)}>
+                                    {getHistoryActionLabel(value)}
+                                </Tag>
+                            ),
                         },
                         {
                             title: 'Nội dung',
@@ -929,7 +1150,7 @@ export default function ModalChiTietMonHoc() {
                         },
                         {
                             title: 'Thời gian',
-                            dataIndex: 'createdAt',
+                            dataIndex: 'updatedAt',
                             width: 150,
                             render: (value) =>
                                 value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',

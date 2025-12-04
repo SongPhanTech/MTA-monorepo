@@ -26,7 +26,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
-import { Eye } from 'lucide-react'
+import { Eye, Info } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -219,6 +219,12 @@ export default function FixedClassPage() {
 
     const { onOpen: onOpenChuyenLop } = useDisclosure({
         tag: 'ModalChuyenLop',
+    })
+
+    const { onOpen: onOpenChiTietLopBienChe } = useDisclosure<{
+        fixedClassId: string
+    }>({
+        tag: 'ModalChiTietLopBienChe',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -499,7 +505,7 @@ export default function FixedClassPage() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 150,
                                 fixed: 'right',
                                 align: 'center',
                                 hidden: !canSome(
@@ -514,13 +520,40 @@ export default function FixedClassPage() {
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
                                             'XEM_CHI_TIET'
                                         ) && (
-                                            <Tooltip title="Xem danh sách học viên" placement="top">
-                                                <Eye
-                                                    size={16}
-                                                    strokeWidth={1.5}
-                                                    className="text-base cursor-pointer"
-                                                />
-                                            </Tooltip>
+                                            <>
+                                                <Tooltip title="Xem chi tiết lớp" placement="top">
+                                                    <Info
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                        className="text-base cursor-pointer"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenChiTietLopBienChe({
+                                                                fixedClassId: id,
+                                                            })
+                                                        }}
+                                                    />
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title="Xem danh sách học viên"
+                                                    placement="top"
+                                                >
+                                                    <Eye
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                        className="text-base cursor-pointer"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            router.push(
+                                                                ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                                                                    '[id]',
+                                                                    String(id)
+                                                                )
+                                                            )
+                                                        }}
+                                                    />
+                                                </Tooltip>
+                                            </>
                                         )}
                                         {can(
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
