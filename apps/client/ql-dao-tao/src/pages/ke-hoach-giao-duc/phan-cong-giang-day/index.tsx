@@ -1360,7 +1360,11 @@ export default function PhanCongGiangDay({
 
                                                                 const itemBySubjectCode =
                                                                     Object.groupBy(
-                                                                        items,
+                                                                        items.filter(
+                                                                            (e) =>
+                                                                                e.fixedClasses
+                                                                                    .length > 0
+                                                                        ),
                                                                         (item) => item.subject.code
                                                                     )
 
