@@ -228,7 +228,7 @@ model ExamRoom extends Base {
   exam     Exam       @relation(fields: [examId], references: [id])
   examId   String
 
-  // Null khi là phòng chung ảo (không xác định cụ thể, dùng để gom thí sinh khi không phân phòng, hoặc bị cấm thi, hoẵn thi)
+  // Null khi là phòng chung ảo (không xác định cụ thể, dùng để gom thí sinh khi không phân phòng, hoặc bị cấm thi, hoãn thi)
   room     Room?      @relation(fields: [roomId], references: [id])
   roomId   String?
 

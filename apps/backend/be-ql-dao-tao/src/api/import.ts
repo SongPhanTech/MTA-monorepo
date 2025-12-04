@@ -136,6 +136,7 @@ app.openapi(importLecturer, async (c) => {
                 {
                     Id: existing.userProfileId,
                     sMa: lecturer.code,
+                    bLaGiangVien: true,
                     bLaCanBoNhanVien: true,
                     bLaTaiKhoan: true,
                     dNgaySinh: lecturer.dateOfBirth
@@ -158,7 +159,7 @@ app.openapi(importLecturer, async (c) => {
                 }
             )
 
-            console.log('[LSB update User]:', res.status, res.data, res.data.extra.data)
+            console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (res.status === 200) {
                 await prisma.lecturer.update({
                     where: { id: existing.id },
@@ -180,6 +181,7 @@ app.openapi(importLecturer, async (c) => {
                 {
                     // Id: profileId,
                     sMa: lecturer.idCardNumber,
+                    bLaGiangVien: true,
                     bLaCanBoNhanVien: true,
                     bLaTaiKhoan: true,
                     dNgaySinh: lecturer.dateOfBirth
