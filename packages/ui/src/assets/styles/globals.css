@@ -97,7 +97,7 @@ select {
 }
 
 .ant-select-disabled .ant-select-selector .ant-select-selection-item {
-   color: #000 !important;
+    color: #000 !important;
 }
 
 .ant-picker-disabled > .ant-picker-input > input {

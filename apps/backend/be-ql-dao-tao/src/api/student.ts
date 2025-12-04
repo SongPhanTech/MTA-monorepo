@@ -158,6 +158,15 @@ app.openapi(importStudent, async (c) => {
         existingStudent.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
     )
 
+    const existingProfile = await prisma.userProfile.findMany({
+        where: { idCardNumber: { in: data.students.map((student) => student.idCardNumber) } },
+        select: { id: true, idCardNumber: true },
+    })
+
+    const existingProfileMap = new Map(
+        existingProfile.map(({ idCardNumber, id }) => [idCardNumber, id])
+    )
+
     const start = Date.now()
     // await prisma.$transaction(
     //     async (tx) => {
@@ -226,12 +235,51 @@ app.openapi(importStudent, async (c) => {
             positionCPVId: positionMap.get(student.position ?? '') || null,
         }
 
+        const existingProfile = existingProfileMap.get(student.idCardNumber)
         const existing = existingStudentMap.get(student.code)
-        if (existing) {
+
+        const createStudentFn = async () => {
+            const st = await prisma.student.create({
+                data: {
+                    ...studentData,
+                    userProfile: {
+                        connectOrCreate: {
+                            where: { idCardNumber: student.idCardNumber },
+                            create: profileData,
+                        },
+                    },
+                },
+            })
+
+            if (student.department) {
+                await prisma.quaTrinhCongTac.create({
+                    data: {
+                        userProfileId: st.userProfileId,
+                        donVi: student.department,
+                        diaChi: student.departmentAddress,
+                        chucVuId: positionMap.get(student.position ?? ''),
+                    },
+                })
+            }
+
+            if (student.universitySchool && student.universityMajor) {
+                await prisma.quaTrinhHocTap.create({
+                    data: {
+                        userProfileId: st.userProfileId,
+                        tenTruongId: dmTruong.get(student.universitySchool) as string,
+                        nganhHocId: dmNganh.get(student.universityMajor) as string,
+                        chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
+                    },
+                })
+            }
+        }
+
+        if (existingProfile) {
             const res = await putDMNhanViens(
                 {
-                    Id: existing.userProfileId,
+                    Id: existingProfile,
                     sMa: student.idCardNumber,
+                    bLaGiangVien: false,
                     bLaHocVien: true,
                     bLaTaiKhoan: true,
                     dNgaySinh: student.dateOfBirth
@@ -254,21 +302,26 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
-            console.log('[LSB update User]:', res.status, res.data)
-            if (res.status === 200) {
-                await prisma.student.update({
-                    where: { id: existing.id },
-                    data: {
-                        ...studentData,
-                        userProfile: { update: profileData },
-                    },
-                })
+
+            if (existing) {
+                console.log('[LSB update User]:', res.status, res.data)
+                if (res.status === 200) {
+                    await prisma.student.update({
+                        where: { id: existing.id },
+                        data: {
+                            ...studentData,
+                            userProfile: { update: profileData },
+                        },
+                    })
+                } else {
+                    const extra = res.data?.extra as ErrorExtra | undefined
+                    return c.json(
+                        { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                        400
+                    )
+                }
             } else {
-                const extra = res.data?.extra as ErrorExtra | undefined
-                return c.json(
-                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                    400
-                )
+                await createStudentFn()
             }
         } else {
             // const profileId = crypto.randomUUID()
@@ -302,39 +355,7 @@ app.openapi(importStudent, async (c) => {
             console.log('[LSB create User]:', res.status, res.data)
 
             if (res.status === 200) {
-                const st = await prisma.student.create({
-                    data: {
-                        ...studentData,
-                        userProfile: {
-                            connectOrCreate: {
-                                where: { idCardNumber: student.idCardNumber },
-                                create: profileData,
-                            },
-                        },
-                    },
-                })
-
-                if (student.department) {
-                    await prisma.quaTrinhCongTac.create({
-                        data: {
-                            userProfileId: st.userProfileId,
-                            donVi: student.department,
-                            diaChi: student.departmentAddress,
-                            chucVuId: positionMap.get(student.position ?? ''),
-                        },
-                    })
-                }
-
-                if (student.universitySchool && student.universityMajor) {
-                    await prisma.quaTrinhHocTap.create({
-                        data: {
-                            userProfileId: st.userProfileId,
-                            tenTruongId: dmTruong.get(student.universitySchool) as string,
-                            nganhHocId: dmNganh.get(student.universityMajor) as string,
-                            chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
-                        },
-                    })
-                }
+                await createStudentFn()
             } else {
                 const extra = res.data?.extra as ErrorExtra | undefined
                 return c.json(

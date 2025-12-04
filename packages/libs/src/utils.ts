@@ -99,16 +99,15 @@ Array.prototype.compare = function <T>(
     return true
 }
 
-
 Array.prototype.uniqueByKey = function <T, K extends keyof T>(this: T[], key: K): T[] {
     const seen = new Set<T[K]>()
-    return this.filter(item => {
-    if (!seen.has(item[key])) {
-      seen.add(item[key]);
-      return true;
-    }
-    return false;
-  });
+    return this.filter((item) => {
+        if (!seen.has(item[key])) {
+            seen.add(item[key])
+            return true
+        }
+        return false
+    })
 }
 
 export function splitFullName(fullName?: string): {
