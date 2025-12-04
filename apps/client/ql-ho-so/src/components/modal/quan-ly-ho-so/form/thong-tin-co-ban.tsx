@@ -300,7 +300,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     </Col>
                     <Col span={24}>
                         <Flex>
-                                <FormItem
+                            <FormItem
                                 form={form}
                                 name="bLaNguoiDung"
                                 label=""
@@ -336,7 +336,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             >
                                 <Checkbox>Bạn là cán bộ, nhân viên</Checkbox>
                             </FormItem>
-                          
                         </Flex>
                     </Col>
                     {bLaGiangVien && (

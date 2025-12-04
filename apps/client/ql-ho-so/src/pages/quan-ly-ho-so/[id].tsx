@@ -516,9 +516,9 @@ export default function UpdateUserPage() {
                             lastName: values.lastName.trim(),
                             firstName: values.firstName.trim(),
                             bLaHocVien: values.bLaHocVien,
-                            bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
-                            bLaGiangVien:  values?.bLaGiangVien,
-                            bLaNguoiDung:  values?.bLaNguoiDung,
+                            bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+                            bLaGiangVien: values?.bLaGiangVien,
+                            bLaNguoiDung: values?.bLaNguoiDung,
                             fullname:
                                 `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                             dateOfBirth: values.dateOfBirth

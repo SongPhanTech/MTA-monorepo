@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { BookCheckIcon, EyeIcon } from 'lucide-react'
+import { EyeIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'

@@ -495,9 +495,9 @@ export default function CreateUserPage() {
                         lastName: values.lastName.trim(),
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
-                        bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
-                        bLaGiangVien:  values?.bLaGiangVien,
-                        bLaNguoiDung:  values?.bLaNguoiDung,
+                        bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+                        bLaGiangVien: values?.bLaGiangVien,
+                        bLaNguoiDung: values?.bLaNguoiDung,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,
