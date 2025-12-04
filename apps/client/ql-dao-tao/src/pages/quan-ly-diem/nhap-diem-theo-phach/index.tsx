@@ -5,10 +5,7 @@ import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
-import {
-    useFindFirstSubjectClass,
-    useUpdateSubjectClass
-} from '@workspace/db/hooks'
+import { useFindFirstSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'

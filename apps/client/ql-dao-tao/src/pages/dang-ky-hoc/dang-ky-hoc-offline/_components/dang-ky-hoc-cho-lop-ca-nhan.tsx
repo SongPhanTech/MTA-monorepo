@@ -268,7 +268,7 @@ export default function DangKyHocChoCaNhan({ hocLai }: RegisterClassProps) {
                             title: 'Tên',
                             align: 'center',
                             width: 200,
-                             render: (_, record) => (
+                            render: (_, record) => (
                                 <p className="text-left">{record?.userProfile?.fullname}</p>
                             ),
                         },

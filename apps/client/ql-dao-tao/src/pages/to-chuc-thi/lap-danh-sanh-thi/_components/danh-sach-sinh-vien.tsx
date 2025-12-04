@@ -664,7 +664,7 @@ export default function DanhSachSinhVien() {
                                 width: 100,
                                 align: 'center',
                                 render: (_, record) =>
-                                    `${record?.studentSubjectScore?.student?.fixedClass?.code || ''}`
+                                    `${record?.studentSubjectScore?.student?.fixedClass?.code || ''}`,
                             },
                             {
                                 title: 'Điểm CC',

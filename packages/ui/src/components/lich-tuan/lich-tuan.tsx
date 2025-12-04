@@ -436,6 +436,7 @@ export function LichCongTac({
     const { onOpen: onOpenSubjectClass } = useDisclosure<{
         id: string
         mode: 'edit' | 'view'
+        schedules?: Date[]
     }>({
         tag: 'PutOneSubjectClassModal',
     })
@@ -446,6 +447,7 @@ export function LichCongTac({
             onOpenSubjectClass({
                 id: event?.subjectClassId as string,
                 mode: 'view',
+                schedules: [event.start],
             })
         } else {
             let source = 'multi-day' // default

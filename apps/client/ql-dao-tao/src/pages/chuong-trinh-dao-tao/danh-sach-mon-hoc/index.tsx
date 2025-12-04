@@ -436,7 +436,7 @@ export default function SubjectList() {
                         headerTitleKey={({ name, managementOrganization }) =>
                             `Nhóm môn: ${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
                         }
-                        className='mt-0'
+                        className="mt-0"
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         defaultExpandAll
