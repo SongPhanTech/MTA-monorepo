@@ -723,6 +723,11 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_KHAO_SAT_CUM,
                     },
                     {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                        label: 'Báo cáo khảo sát giảng viên',
+                        path: ROUTER_PATH.KHAO_THI.BAO_CAO_KHAO_SAT_GIANG_VIEN,
+                    },
+                    {
                         id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
                         label: 'Khảo sát của tôi',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
