@@ -238,6 +238,13 @@ export default function SubjectList() {
         tag: 'PutVersionSubjectModal',
     })
 
+    const { onOpen: onOpenDetailSubject } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
@@ -680,11 +687,10 @@ export default function SubjectList() {
                                                 ) && (
                                                     <ViewIcon
                                                         onClick={() =>
-                                                            handleModalSubjectVersion(
+                                                            onOpenDetailSubject({
                                                                 subjectId,
                                                                 subjectVersionId,
-                                                                isLocked
-                                                            )
+                                                            })
                                                         }
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
@@ -751,10 +757,11 @@ export default function SubjectList() {
                                             'XEM'
                                         ) && (
                                             <ViewIcon
-                                                onClick={onOpen.bind(null, {
-                                                    id: record.id,
-                                                    isLocked,
-                                                })}
+                                                onClick={() =>
+                                                    onOpenDetailSubject({
+                                                        subjectId: record.id,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer mr-8"
                                             />
                                         )}

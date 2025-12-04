@@ -1,0 +1,955 @@
+import useSpinner from '@hooks/spinner'
+import { useFindUniqueSubject } from '@workspace/db/hooks'
+import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
+import dayjs from 'dayjs'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useExamTypeOptions } from '@hooks/examType'
+import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
+import 'dayjs/locale/vi'
+
+dayjs.locale('vi')
+
+export default function ModalChiTietMonHoc() {
+    const { isOpen, onClose, input } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+    }>({
+        tag: 'ModalChiTietMonHoc',
+    })
+
+    const { subjectId, subjectVersionId } = input || {}
+    const { getExamTypeLabel } = useExamTypeOptions()
+    const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
+
+    const { data: subjectData, isLoading } = useFindUniqueSubject(
+        {
+            where: { id: subjectId },
+            include: {
+                managementOrganization: true,
+                subjectVersion: {
+                    orderBy: { createdAt: 'desc' },
+                    include: {
+                        trainingObjectType: true,
+                        subjectVersionCategory: true,
+                        managementOrganization: true,
+                        // Môn tiên quyết
+                        prerequisiteSubject: {
+                            include: {
+                                subject: true,
+                            },
+                        },
+                        // Môn học trước
+                        coRequisiteSubject: {
+                            include: {
+                                subject: true,
+                            },
+                        },
+                        // Nhóm tương đương
+                        equivalencyGroups: {
+                            include: {
+                                equivalencyGroup: {
+                                    include: {
+                                        subjects: {
+                                            include: {
+                                                subject: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        // Khối kiến thức
+                        knowledgeBlocks: true,
+                        // Khối đào tạo
+                        trainingBlocks: {
+                            include: {
+                                trainingBlockOnCurriculumVersion: {
+                                    include: {
+                                        trainingBlock: true,
+                                        curriculumVersion: {
+                                            include: {
+                                                curriculum: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        // Lớp môn học
+                        subjectClass: {
+                            include: {
+                                semester: true,
+                                mainLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                            },
+                        },
+                        // Đề thi
+                        exams: {
+                            include: {
+                                questionBank: true,
+                            },
+                        },
+                        // Tài liệu
+                        documentFiles: true,
+                        // Ngân hàng câu hỏi
+                        questionBanks: true,
+                        // Lịch sử thay đổi
+                        subjectVersionHistory: {
+                            orderBy: { createdAt: 'desc' },
+                            include: {
+                                updatedBy: true,
+                            },
+                        },
+                    },
+                },
+                certificateOnSubject: {
+                    include: {
+                        certificate: true,
+                    },
+                },
+                awardOnSubject: true,
+            },
+        },
+        {
+            enabled: !!subjectId && isOpen,
+        }
+    )
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    if (!subjectId) {
+        return null
+    }
+
+    const subject = subjectData
+    const currentVersion = subjectVersionId
+        ? subject?.subjectVersion.find((v: any) => v.id === subjectVersionId)
+        : subject?.subjectVersion?.[0]
+
+    const items = [
+        {
+            key: '1',
+            label: 'Thông tin cơ bản',
+            children: (
+                <Descriptions bordered column={2} size="small">
+                    <Descriptions.Item label="Mã môn học">{subject?.code}</Descriptions.Item>
+                    <Descriptions.Item label="Tên môn học">{subject?.name}</Descriptions.Item>
+                    <Descriptions.Item label="Tên tiếng Anh" span={2}>
+                        {subject?.englishName}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Đơn vị quản lý" span={2}>
+                        {subject?.managementOrganization?.sTen}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Mô tả" span={2}>
+                        {subject?.description}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Thông tin bổ sung" span={2}>
+                        {subject?.information}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Trạng thái">
+                        {subject?.active ? (
+                            <Tag color="success">Đang hoạt động</Tag>
+                        ) : (
+                            <Tag color="error">Không hoạt động</Tag>
+                        )}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Ngày tạo">
+                        {subject?.createdAt
+                            ? dayjs(subject.createdAt).format('DD/MM/YYYY HH:mm')
+                            : ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Ngày cập nhật">
+                        {subject?.updatedAt
+                            ? dayjs(subject.updatedAt).format('DD/MM/YYYY HH:mm')
+                            : ''}
+                    </Descriptions.Item>
+                </Descriptions>
+            ),
+        },
+        {
+            key: '2',
+            label: `Phiên bản hiện tại ${currentVersion ? `(${currentVersion.code || currentVersion.name})` : ''}`,
+            children: currentVersion ? (
+                <Descriptions bordered column={2} size="small">
+                    <Descriptions.Item label="Mã phiên bản">
+                        {currentVersion.code}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Tên phiên bản">
+                        {currentVersion.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Mã TKB">{currentVersion.codeTkb}</Descriptions.Item>
+                    <Descriptions.Item label="Loại phiên bản">
+                        {currentVersion.type === 'Normal'
+                            ? 'Bình thường'
+                            : currentVersion.type === 'Internship'
+                              ? 'Thực tập'
+                              : currentVersion.type === 'Research'
+                                ? 'Nghiên cứu'
+                                : currentVersion.type === 'Project'
+                                  ? 'Đồ án'
+                                  : currentVersion.type === 'Practice'
+                                    ? 'Thực hành'
+                                    : currentVersion.type === 'Graduation'
+                                      ? 'Tốt nghiệp'
+                                      : currentVersion.type}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tín chỉ">
+                        {currentVersion.credit}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết">{currentVersion.period}</Descriptions.Item>
+                    <Descriptions.Item label="Số tuần">{currentVersion.week}</Descriptions.Item>
+                    <Descriptions.Item label="Số tiết TKB">
+                        {currentVersion.schedulePeriod}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Hình thức thi">
+                        {getExamTypeLabel(currentVersion.examType)}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="1 đầu điểm">
+                        {currentVersion.onePoint ? 'Có' : 'Không'}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết LT">
+                        {currentVersion.numberOfTheory}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết BT">
+                        {currentVersion.numberOfPractical}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết ThL">
+                        {currentVersion.numberOfSelfStudy}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết TN, TH">
+                        {currentVersion.numberOfPractice}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết Ôn">
+                        {currentVersion.numberOfReview}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết KT, Thi">
+                        {currentVersion.numberOfExam}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Số tiết khác">
+                        {currentVersion.numberOfOther}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Đối tượng đào tạo">
+                        {currentVersion.trainingObjectType?.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Nhóm phiên bản">
+                        {currentVersion.subjectVersionCategory?.name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Đơn vị quản lý">
+                        {currentVersion.managementOrganization?.sTen}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Mục tiêu" span={2}>
+                        <div
+                            dangerouslySetInnerHTML={{ __html: currentVersion.objectives || '' }}
+                        />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Chuẩn đầu ra" span={2}>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: currentVersion.learningOutcome || '',
+                            }}
+                        />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Nội dung" span={2}>
+                        <div dangerouslySetInnerHTML={{ __html: currentVersion.structure || '' }} />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Hướng dẫn" span={2}>
+                        <div dangerouslySetInnerHTML={{ __html: currentVersion.guild || '' }} />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Kết quả học tập" span={2}>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: currentVersion.academicResults || '',
+                            }}
+                        />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Tài liệu" span={2}>
+                        <div dangerouslySetInnerHTML={{ __html: currentVersion.materials || '' }} />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Quy định" span={2}>
+                        <div dangerouslySetInnerHTML={{ __html: currentVersion.rules || '' }} />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Trạng thái">
+                        {currentVersion.active ? (
+                            <Tag color="success">Đang hoạt động</Tag>
+                        ) : (
+                            <Tag color="error">Không hoạt động</Tag>
+                        )}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Trạng thái khóa">
+                        {currentVersion.isLocked ? (
+                            <Tag color="error">Đã khóa</Tag>
+                        ) : (
+                            <Tag color="success">Đang mở</Tag>
+                        )}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Ngày tạo">
+                        {currentVersion.createdAt
+                            ? dayjs(currentVersion.createdAt).format('DD/MM/YYYY HH:mm')
+                            : ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Ngày cập nhật">
+                        {currentVersion.updatedAt
+                            ? dayjs(currentVersion.updatedAt).format('DD/MM/YYYY HH:mm')
+                            : ''}
+                    </Descriptions.Item>
+                </Descriptions>
+            ) : (
+                <div>Chưa có phiên bản nào</div>
+            ),
+        },
+        {
+            key: '3',
+            label: `Tất cả phiên bản (${subject?.subjectVersion.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={subject?.subjectVersion}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Tên',
+                            dataIndex: 'name',
+                            width: 200,
+                        },
+                        {
+                            title: 'Mã TKB',
+                            dataIndex: 'codeTkb',
+                            width: 100,
+                        },
+                        {
+                            title: 'Tín chỉ',
+                            dataIndex: 'credit',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số tiết',
+                            dataIndex: 'period',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            dataIndex: 'examType',
+                            width: 120,
+                            render: (value) => getExamTypeLabel(value),
+                        },
+                        {
+                            title: 'Đối tượng ĐT',
+                            width: 150,
+                            render: (_: any, record: any) => record.trainingObjectType?.name,
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                        {
+                            title: 'Khóa',
+                            dataIndex: 'isLocked',
+                            width: 100,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="error">Đã khóa</Tag>
+                                ) : (
+                                    <Tag color="success">Đang mở</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '4',
+            label: `Lớp môn học (${currentVersion?.subjectClass.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.subjectClass}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã lớp',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Tên lớp',
+                            dataIndex: 'name',
+                            width: 200,
+                        },
+                        {
+                            title: 'Loại lớp',
+                            dataIndex: 'type',
+                            width: 120,
+                            render: (value) => getSubjectClassTypeLabel(value),
+                        },
+                        {
+                            title: 'Số SV tối đa',
+                            dataIndex: 'maxStudent',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Học kỳ',
+                            width: 150,
+                            render: (_: any, record: any) => record.semester?.name,
+                        },
+                        {
+                            title: 'Giảng viên',
+                            width: 200,
+                            render: (_: any, record: any) =>
+                                record.mainLecturer?.userProfile?.fullName,
+                        },
+                        {
+                            title: 'Ngày bắt đầu',
+                            dataIndex: 'startDate',
+                            width: 120,
+                            render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                        },
+                        {
+                            title: 'Ngày kết thúc',
+                            dataIndex: 'endDate',
+                            width: 120,
+                            render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '5',
+            label: `Khối đào tạo (${currentVersion?.trainingBlocks.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.trainingBlocks}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Chương trình đào tạo',
+                            width: 250,
+                            render: (_: any, record: any) =>
+                                record.trainingBlockOnCurriculumVersion?.curriculumVersion
+                                    ?.curriculum?.name,
+                        },
+                        {
+                            title: 'Khối đào tạo',
+                            width: 200,
+                            render: (_: any, record: any) =>
+                                record.trainingBlockOnCurriculumVersion?.trainingBlock?.name,
+                        },
+                        {
+                            title: 'Học kỳ',
+                            dataIndex: 'semester',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Bắt buộc',
+                            dataIndex: 'isRequired',
+                            width: 100,
+                            align: 'center',
+                            render: (value) => (value ? 'Có' : 'Không'),
+                        },
+                        {
+                            title: 'Thứ tự',
+                            dataIndex: 'order',
+                            width: 80,
+                            align: 'center',
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '6',
+            label: `Môn tiên quyết (${currentVersion?.prerequisiteSubject.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.prerequisiteSubject}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã môn',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Tên môn',
+                            dataIndex: 'name',
+                            width: 250,
+                        },
+                        {
+                            title: 'Tín chỉ',
+                            dataIndex: 'credit',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '7',
+            label: `Môn học trước (${currentVersion?.coRequisiteSubject.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.coRequisiteSubject}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã môn',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Tên môn',
+                            dataIndex: 'name',
+                            width: 250,
+                        },
+                        {
+                            title: 'Tín chỉ',
+                            dataIndex: 'credit',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value: boolean) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '8',
+            label: `Nhóm tương đương (${currentVersion?.equivalencyGroups.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.equivalencyGroups}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Tên nhóm',
+                            width: 200,
+                            render: (_: any, record: any) => record.equivalencyGroup?.name,
+                        },
+                        {
+                            title: 'Mô tả',
+                            width: 250,
+                            render: (_: any, record: any) => record.equivalencyGroup?.description,
+                        },
+                        {
+                            title: 'Số môn trong nhóm',
+                            width: 120,
+                            align: 'center' as const,
+                            render: (_: any, record: any) =>
+                                record.equivalencyGroup?.subjects?.length || 0,
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '9',
+            label: `Khối kiến thức (${currentVersion?.knowledgeBlocks.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.knowledgeBlocks}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center' as const,
+                            render: (_: any, __: any, index: number) => index + 1,
+                        },
+                        {
+                            title: 'Tên khối',
+                            dataIndex: 'name',
+                            width: 250,
+                        },
+                        {
+                            title: 'Mô tả',
+                            dataIndex: 'description',
+                            width: 300,
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '10',
+            label: `Đề thi (${currentVersion?.exams.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.exams}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã đề',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Tên đề',
+                            dataIndex: 'name',
+                            width: 250,
+                        },
+                        {
+                            title: 'Ngân hàng câu hỏi',
+                            width: 150,
+                            render: (_: any, record: any) => record.questionBank?.name,
+                        },
+                        {
+                            title: 'Thời gian (phút)',
+                            dataIndex: 'duration',
+                            width: 120,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Ngày tạo',
+                            dataIndex: 'createdAt',
+                            width: 120,
+                            render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '11',
+            label: `Tài liệu (${currentVersion?.documentFiles.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.documentFiles}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Tên file',
+                            dataIndex: 'name',
+                            width: 300,
+                        },
+                        {
+                            title: 'Loại file',
+                            dataIndex: 'mimeType',
+                            width: 120,
+                        },
+                        {
+                            title: 'Kích thước',
+                            width: 120,
+                            render: (_: any, record: any) => {
+                                const size = Number(record.size)
+                                if (!size) return ''
+                                if (size < 1024) return `${size} B`
+                                if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`
+                                return `${(size / (1024 * 1024)).toFixed(2)} MB`
+                            },
+                        },
+                        {
+                            title: 'Ngày tạo',
+                            dataIndex: 'createdAt',
+                            width: 120,
+                            render: (value: Date) =>
+                                value ? dayjs(value).format('DD/MM/YYYY') : '',
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '12',
+            label: `Ngân hàng câu hỏi (${currentVersion?.questionBanks.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.questionBanks}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã câu hỏi',
+                            dataIndex: 'code',
+                            width: 120,
+                        },
+                        {
+                            title: 'Nội dung',
+                            dataIndex: 'content',
+                            width: 400,
+                            render: (value) => <div className="line-clamp-2">{value}</div>,
+                        },
+                        {
+                            title: 'Loại',
+                            dataIndex: 'type',
+                            width: 150,
+                        },
+                        {
+                            title: 'Độ khó',
+                            dataIndex: 'difficulty',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Điểm',
+                            dataIndex: 'point',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'active',
+                            width: 120,
+                            align: 'center',
+                            render: (value) =>
+                                value ? (
+                                    <Tag color="success">Hoạt động</Tag>
+                                ) : (
+                                    <Tag color="error">Không hoạt động</Tag>
+                                ),
+                        },
+                    ]}
+                />
+            ),
+        },
+        {
+            key: '13',
+            label: `Lịch sử thay đổi (${currentVersion?.subjectVersionHistory.length || 0})`,
+            children: (
+                <Table
+                    size="small"
+                    dataSource={currentVersion?.subjectVersionHistory}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+                    }}
+                    scroll={{ x: 'max-content' }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Thao tác',
+                            dataIndex: 'action',
+                            width: 120,
+                            render: (value) => {
+                                const actionMap: Record<string, { label: string; color: string }> =
+                                    {
+                                        CREATE: { label: 'Tạo mới', color: 'success' },
+                                        UPDATE: { label: 'Cập nhật', color: 'processing' },
+                                        DELETE: { label: 'Xóa', color: 'error' },
+                                    }
+                                const action = actionMap[value] || {
+                                    label: value,
+                                    color: 'default',
+                                }
+                                return <Tag color={action.color}>{action.label}</Tag>
+                            },
+                        },
+                        {
+                            title: 'Nội dung',
+                            dataIndex: 'content',
+                            width: 400,
+                        },
+                        {
+                            title: 'Người thực hiện',
+                            width: 200,
+                            render: (_: any, record: any) => record.updatedBy?.fullName,
+                        },
+                        {
+                            title: 'Thời gian',
+                            dataIndex: 'createdAt',
+                            width: 150,
+                            render: (value) =>
+                                value ? dayjs(value).format('DD/MM/YYYY HH:mm') : '',
+                        },
+                    ]}
+                />
+            ),
+        },
+    ]
+
+    return (
+        <Modal
+            title={`Chi tiết môn học: ${subject?.name || ''}`}
+            open={isOpen}
+            onCancel={onClose}
+            width="90%"
+            footer={null}
+            style={{ top: 20 }}
+        >
+            <Tabs defaultActiveKey="1" items={items} />
+        </Modal>
+    )
+}

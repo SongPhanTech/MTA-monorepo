@@ -6,6 +6,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import 'dayjs/locale/vi'
 
 dayjs.locale('vi')
@@ -25,15 +26,7 @@ const ModalChiTietGiangVien = () => {
         useStudentThesisRegistrationStatusOptions()
     const { getScheduleLabel } = useScheduleOptions()
 
-    // Việt hóa SubjectClassType
-    const getSubjectClassTypeLabel = (type: string) => {
-        const labels: Record<string, string> = {
-            NORMAL: 'Bình thường',
-            RETAKE: 'Học lại',
-            REEXAM: 'Thi lại',
-        }
-        return labels[type] || type
-    }
+    const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
 
     const { data: lecturerData, isLoading } = useFindUniqueLecturer(
         {
