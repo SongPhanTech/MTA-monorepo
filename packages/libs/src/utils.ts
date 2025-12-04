@@ -53,6 +53,7 @@ declare global {
     }
     interface Array<T> {
         compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
+        uniqueByKey<K extends keyof T>(key: K): T[]
     }
 }
 
@@ -96,6 +97,18 @@ Array.prototype.compare = function <T>(
         }
     }
     return true
+}
+
+
+Array.prototype.uniqueByKey = function <T, K extends keyof T>(this: T[], key: K): T[] {
+    const seen = new Set<T[K]>()
+    return this.filter(item => {
+    if (!seen.has(item[key])) {
+      seen.add(item[key]);
+      return true;
+    }
+    return false;
+  });
 }
 
 export function splitFullName(fullName?: string): {

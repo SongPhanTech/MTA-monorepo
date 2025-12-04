@@ -189,12 +189,16 @@ const PutOneSubjectClassModal = () => {
                 scoreDeadLineStart: subjectClassData.scoreDeadLineStart
                     ? dayjs(subjectClassData.scoreDeadLineStart)
                     : null,
-                dayOfWeeks: subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek),
-                times: subjectClassData.subjectClassTimes?.map((item) => ({
-                    dayOfWeek: item.dayOfWeek,
-                    startPeriod: item.startPeriod,
-                    endPeriod: item.endPeriod,
-                })),
+                dayOfWeeks: [
+                    ...new Set(subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek)),
+                ],
+                times: subjectClassData.subjectClassTimes
+                    ?.uniqueByKey('dayOfWeek')
+                    ?.map((item) => ({
+                        dayOfWeek: item.dayOfWeek,
+                        startPeriod: item.startPeriod,
+                        endPeriod: item.endPeriod,
+                    })),
             })
         }
     }, [subjectClassData])
@@ -209,7 +213,7 @@ const PutOneSubjectClassModal = () => {
             title={id ? 'Cập nhật lớp môn học' : 'Mở lớp môn học'}
             className="w-[85vw]"
         >
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="semesterId" label="Học kỳ" required>
                     <Select
                         placeholder="Chọn học kỳ"
@@ -227,7 +231,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="subjectId" label="Môn học" required>
                     <Select
                         disabled={true}
@@ -244,7 +248,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
 
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="schedule" label="Kíp học">
                     <Select
                         placeholder="Chọn kíp học"
@@ -260,7 +264,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="trainingLocationId" label="Địa điểm">
                     <Select
                         placeholder="Chọn địa điểm"
@@ -279,7 +283,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="roomId" label="Chọn phòng học">
                     <TreeSelect
                         treeData={buildingData.map((e) => ({
@@ -304,7 +308,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={6}>
                 <FormItem form={form} name="maxStudent" label="Số SV tối đa">
                     <InputNumber
                         type="number"
@@ -315,9 +319,10 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
                 <FormItem form={form} name="lecturerId" label="Giảng viên 1">
                     <Select
+                        disabled
                         options={lecturerData.map((i) => {
                             return {
                                 ...i,
@@ -331,9 +336,10 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
                 <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
                     <Select
+                        disabled
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
@@ -346,9 +352,10 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
                 <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
                     <Select
+                        disabled
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
@@ -361,7 +368,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
                     <DatePicker
                         placeholder="DD/MM/YYYY"
@@ -373,7 +380,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="examDate" label="Ngày thi">
                     <DatePicker
                         onChange={handleChangeDate}
@@ -386,22 +393,22 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="scoreDeadLineStart" label="Hạn bắt đầu nhập điểm CC/TX">
-                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="scoreDeadline" label="Hạn kết thúc nhập điểm CC/TX">
-                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
-                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={4}>
+            <Col span={6}>
                 <FormItem form={form} name="examType" label="Hình thức thi">
                     <Select placeholder="Chọn hình thức thi" options={options} />
                 </FormItem>
@@ -436,6 +443,7 @@ const PutOneSubjectClassModal = () => {
             <FormItem form={form} name="times" hidden />
             <Col span={24}>
                 <Table
+                    pagination={false}
                     columns={[
                         {
                             title: 'Thứ',

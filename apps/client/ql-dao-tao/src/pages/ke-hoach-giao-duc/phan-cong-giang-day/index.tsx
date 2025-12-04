@@ -275,7 +275,7 @@ export default function PhanCongGiangDay({
                     : {}),
                 type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai, trainingCourseId]
+        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(

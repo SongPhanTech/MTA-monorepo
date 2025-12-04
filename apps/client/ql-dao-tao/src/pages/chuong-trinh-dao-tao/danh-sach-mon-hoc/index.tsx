@@ -430,16 +430,18 @@ export default function SubjectList() {
                         </Col>
                     </Row>
                 </Col>
-
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ name, managementOrganization }) =>
-                            `${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
+                            `Nhóm môn: ${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
                         }
+                        className='mt-0'
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         defaultExpandAll
+                        scrollable
+                        maxHeight={'calc(100vh - 340px)'}
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
@@ -447,28 +449,28 @@ export default function SubjectList() {
                         }}
                         columns={[
                             {
-                                title: 'Mã môn học',
+                                title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
                                 dataIndex: 'code',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên phiên bản MH',
+                                title: 'Tên môn',
                                 dataIndex: 'name',
                                 width: 200,
                                 type: 'input',
                             },
                             {
-                                title: 'Mã TKB',
+                                title: <Tooltip title="Mã thời khóa biểu">Mã TKB</Tooltip>,
                                 dataIndex: 'codeTkb',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                             },
                             {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'credit',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -485,7 +487,7 @@ export default function SubjectList() {
                             {
                                 title: 'Số tiết',
                                 dataIndex: 'period',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -502,7 +504,7 @@ export default function SubjectList() {
                             {
                                 title: 'LT',
                                 dataIndex: 'numberOfTheory',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -519,7 +521,7 @@ export default function SubjectList() {
                             {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -536,7 +538,7 @@ export default function SubjectList() {
                             {
                                 title: 'ThL',
                                 dataIndex: 'numberOfSelfStudy',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -553,7 +555,7 @@ export default function SubjectList() {
                             {
                                 title: 'TN, TH',
                                 dataIndex: 'numberOfPractice',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -570,7 +572,7 @@ export default function SubjectList() {
                             {
                                 title: 'Ôn',
                                 dataIndex: 'numberOfReview',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -587,7 +589,7 @@ export default function SubjectList() {
                             {
                                 title: 'KT, Thi',
                                 dataIndex: 'numberOfExam',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -604,7 +606,7 @@ export default function SubjectList() {
                             {
                                 title: 'Hình thức thi',
                                 dataIndex: 'examType',
-                                width: 150,
+                                width: 120,
                                 type: 'select',
                                 align: 'center',
                                 options: examTypeFilters.map((opt) => ({
@@ -624,7 +626,7 @@ export default function SubjectList() {
                                 align: 'center',
                                 dataIndex: 'isTeaching',
                                 width: 120,
-                                fixed: 'right',
+                                // fixed: 'right',
                                 type: 'select',
                                 options: [
                                     { value: true, label: 'Đã đưa vào giảng dạy' },
@@ -655,7 +657,7 @@ export default function SubjectList() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                fixed: 'right',
+                                // fixed: 'right',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                                     'THEM',

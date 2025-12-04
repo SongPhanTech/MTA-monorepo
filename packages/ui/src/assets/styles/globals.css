@@ -95,3 +95,11 @@ select {
         --chart-5: 340 75% 55%;
     }
 }
+
+.ant-select-disabled .ant-select-selector .ant-select-selection-item {
+   color: #000 !important;
+}
+
+.ant-picker-disabled > .ant-picker-input > input {
+    color: #000 !important;
+}
