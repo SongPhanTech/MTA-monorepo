@@ -26,7 +26,6 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
-import { env } from '@/env'
 
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)
@@ -88,13 +87,6 @@ function App({ Component, pageProps }: AppProps) {
                     progress={progress}
                     onLoaderFinished={onRouteDone}
                 />
-                <Head>
-                    <link
-                        rel="stylesheet"
-                        href={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.css`}
-                    />
-                    <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />
-                </Head>
                 <Head>
                     <title>Học viện kỹ thuật quân sự</title>
                 </Head>

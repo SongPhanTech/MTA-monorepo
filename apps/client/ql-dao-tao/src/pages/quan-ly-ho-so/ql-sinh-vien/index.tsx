@@ -1,5 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { BookCheckIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -27,12 +26,13 @@ import {
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { useRouter } from 'next/router'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
+import { BookCheckIcon } from 'lucide-react'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
