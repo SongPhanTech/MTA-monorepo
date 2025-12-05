@@ -50,11 +50,11 @@ import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
+import { postDMNhanViens } from '@workspace/libs/api/system'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
-import { postDMNhanViens } from '@workspace/libs/api/system'
-import dayjs from 'dayjs'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 interface itemType {
@@ -468,10 +468,9 @@ export default function CreateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 sAvatarId: form.getFieldValue('avatar'),
-                bLaHocVien: values.bLaHocVien || false,
-                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
-                // bLaNguoiDung: values.bLaNguoiDung || false,
-                bLaGiangVien: values.bLaGiangVien || false,
+                bLaHocVien: values.bLaHocVien || undefined,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
+                bLaGiangVien: bLaGiangVien || undefined,
             })
             if (res?.status === 200) {
                 let rank = null
@@ -503,7 +502,7 @@ export default function CreateUserPage() {
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
                         bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
-                        bLaGiangVien: values?.bLaGiangVien,
+                        bLaGiangVien: bLaGiangVien || undefined,
                         bLaNguoiDung: values?.bLaNguoiDung,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()

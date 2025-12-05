@@ -62,7 +62,7 @@ enum RelativeType {
   @@schema("ql-ho-so")
 }
 
-/// !DEPRECATED: user DM_NhanVien instead
+/// !DEPRECATED: user UserProfile instead
 enum UserRole {
   ADMIN
   USER

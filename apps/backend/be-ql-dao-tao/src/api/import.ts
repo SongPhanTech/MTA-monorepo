@@ -90,6 +90,19 @@ app.openapi(importLecturer, async (c) => {
         data.lecturers.map(({ departmentOrganization }) => departmentOrganization)
     )
 
+    const existingProfiles = await prisma.userProfile.findMany({
+        where: {
+            idCardNumber: {
+                in: data.lecturers.map((lecturer) => lecturer.idCardNumber),
+            },
+        },
+        select: { id: true, idCardNumber: true },
+    })
+
+    const existingProfileMap = new Map(
+        existingProfiles.map(({ idCardNumber, id }) => [idCardNumber, id])
+    )
+
     const existingLecturer = await prisma.lecturer.findMany({
         where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
         select: { id: true, code: true, userProfileId: true },
@@ -130,11 +143,11 @@ app.openapi(importLecturer, async (c) => {
             idCardNumber: lecturer.idCardNumber,
         }
 
-        const existing = existingLecturerMap.get(lecturer.code)
-        if (existing) {
+        const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
+        if (existingProfileId) {
             const res = await putDMNhanViens(
                 {
-                    Id: existing.userProfileId,
+                    Id: existingProfileId,
                     sMa: lecturer.code,
                     bLaGiangVien: true,
                     bLaCanBoNhanVien: true,
@@ -159,21 +172,36 @@ app.openapi(importLecturer, async (c) => {
                 }
             )
 
-            console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
-            if (res.status === 200) {
-                await prisma.lecturer.update({
-                    where: { id: existing.id },
+            const existing = existingLecturerMap.get(lecturer.code)
+            if (existing) {
+                console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
+                if (res.status === 200) {
+                    await prisma.lecturer.update({
+                        where: { id: existing.id },
+                        data: {
+                            ...lecturerData,
+                            userProfile: { update: profileData },
+                        },
+                    })
+                } else {
+                    const extra = res.data?.extra as ErrorExtra | undefined
+                    return c.json(
+                        { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                        400
+                    )
+                }
+            } else {
+                await prisma.lecturer.create({
                     data: {
                         ...lecturerData,
-                        userProfile: { update: profileData },
+                        userProfile: {
+                            connectOrCreate: {
+                                where: { idCardNumber: lecturer.idCardNumber },
+                                create: { id: res.data as string, ...profileData },
+                            },
+                        },
                     },
                 })
-            } else {
-                const extra = res.data?.extra as ErrorExtra | undefined
-                return c.json(
-                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                    400
-                )
             }
         } else {
             // const profileId = crypto.randomUUID()
