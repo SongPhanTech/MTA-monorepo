@@ -379,6 +379,7 @@ app.openapi(openSubjectClass, async (c) => {
         create: {
             trainingObjectTypeId,
             semesterId,
+            trainingCourseId,
         },
         select: {
             id: true,
@@ -579,6 +580,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
         create: {
             trainingObjectTypeId,
             semesterId,
+            trainingCourseId,
         },
         select: {
             id: true,
@@ -628,7 +630,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id)
+                        where TBS."subjectId" = sv.id and TBS.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
         select id, code, name, count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
@@ -638,7 +640,6 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and TBS.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -691,7 +692,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id)
+                        where TBS."subjectId" = sv.id and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'}))
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
@@ -701,7 +702,6 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
-          and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'})
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )

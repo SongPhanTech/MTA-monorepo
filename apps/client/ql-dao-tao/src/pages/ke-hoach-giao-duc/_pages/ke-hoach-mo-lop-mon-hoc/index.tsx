@@ -38,7 +38,7 @@ type MoLMHNhanhForm = {
     isOverride: boolean
 }
 
-export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolean }) {
+export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClassType }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
     const [formMoLMHNhanh] = Form.useForm<MoLMHNhanhForm>()
@@ -63,9 +63,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 trainingObjectTypeId,
                                 trainingCourseId,
                             },
-                            subjectClassType: hocLai
-                                ? $Enums.SubjectClassType.RETAKE
-                                : $Enums.SubjectClassType.NORMAL,
+                            subjectClassType: type,
                         },
                     },
                 },
@@ -93,9 +91,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 trainingObjectTypeId,
                                 trainingCourseId,
                             },
-                            subjectClassType: hocLai
-                                ? $Enums.SubjectClassType.RETAKE
-                                : $Enums.SubjectClassType.NORMAL,
+                            subjectClassType: type,
                         },
                     },
                 },
@@ -260,13 +256,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                               trainingObjectTypeId,
                                                                               status: 'DRAFT',
                                                                               cancelled: false,
-                                                                              type: hocLai
-                                                                                  ? $Enums
-                                                                                        .SubjectClassType
-                                                                                        .RETAKE
-                                                                                  : $Enums
-                                                                                        .SubjectClassType
-                                                                                        .NORMAL,
+                                                                              type: type,
                                                                           },
                                                                       },
                                                                   },
@@ -282,13 +272,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                     trainingCourseId,
                                                                     planTrainingSubjects: {
                                                                         some: {
-                                                                            subjectClassType: hocLai
-                                                                                ? $Enums
-                                                                                      .SubjectClassType
-                                                                                      .RETAKE
-                                                                                : $Enums
-                                                                                      .SubjectClassType
-                                                                                      .NORMAL,
+                                                                            subjectClassType: type,
                                                                         },
                                                                     },
                                                                 },
@@ -308,13 +292,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                             },
                                                                         },
                                                                         where: {
-                                                                            subjectClassType: hocLai
-                                                                                ? $Enums
-                                                                                      .SubjectClassType
-                                                                                      .RETAKE
-                                                                                : $Enums
-                                                                                      .SubjectClassType
-                                                                                      .NORMAL,
+                                                                            subjectClassType: type,
                                                                         },
                                                                     },
                                                                 },
@@ -329,11 +307,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                     trainingObjectTypeId,
                                                                     status: 'DRAFT',
                                                                     cancelled: false,
-                                                                    type: hocLai
-                                                                        ? $Enums.SubjectClassType
-                                                                              .RETAKE
-                                                                        : $Enums.SubjectClassType
-                                                                              .NORMAL,
+                                                                    type: type,
                                                                 },
                                                             },
                                                         },
@@ -394,13 +368,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                             data: {
                                                                                 semesterId,
                                                                                 trainingObjectTypeId,
-                                                                                type: hocLai
-                                                                                    ? $Enums
-                                                                                          .SubjectClassType
-                                                                                          .RETAKE
-                                                                                    : $Enums
-                                                                                          .SubjectClassType
-                                                                                          .NORMAL,
+                                                                                type: type,
                                                                                 subjectId:
                                                                                     e
                                                                                         .trainingBlockSubject
@@ -486,9 +454,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                             trainingObjectTypeId,
                                                             status: 'DRAFT',
                                                             cancelled: false,
-                                                            type: hocLai
-                                                                ? $Enums.SubjectClassType.RETAKE
-                                                                : $Enums.SubjectClassType.NORMAL,
+                                                            type: type,
                                                             subjectId: {
                                                                 in: subjectIds,
                                                             },
@@ -507,13 +473,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                     data: {
                                                                         semesterId,
                                                                         trainingObjectTypeId,
-                                                                        type: hocLai
-                                                                            ? $Enums
-                                                                                  .SubjectClassType
-                                                                                  .RETAKE
-                                                                            : $Enums
-                                                                                  .SubjectClassType
-                                                                                  .NORMAL,
+                                                                        type: type,
                                                                         subjectId,
                                                                         code: `${v.code} ${String(idx + 1)}`,
                                                                         name: v.name,
@@ -618,7 +578,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     title: 'Danh sách lớp quản lý',
                                     dataIndex: 'fixedClass',
                                     align: 'center',
-                                    hidden: hocLai,
+                                    hidden: type !== $Enums.SubjectClassType.NORMAL,
                                     render: (__, record) => {
                                         return (
                                             <TextTruncate

@@ -40,10 +40,10 @@ type TeachingAssignmentForm = {
 }
 
 export default function ThoiKhoaBieu({
-    hocLai = false,
+    type,
     khoaBoMon = false,
 }: {
-    hocLai?: boolean
+    type?: $Enums.SubjectClassType
     khoaBoMon?: boolean
 }) {
     const { can } = useAbility()
@@ -226,9 +226,9 @@ export default function ThoiKhoaBieu({
                           },
                       }
                     : {}),
-                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                type: type,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
+        [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
