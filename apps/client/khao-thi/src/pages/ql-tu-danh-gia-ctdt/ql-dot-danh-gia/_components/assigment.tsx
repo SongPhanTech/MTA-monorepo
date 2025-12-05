@@ -450,7 +450,7 @@ export default function AssigmentOfAssessmentTab() {
                                             className="mb-0"
                                         >
                                             <Select
-                                                placeholder="Chọn giáo viên"
+                                                placeholder="Chọn giảng viên"
                                                 disabled={!isVicePersident}
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {

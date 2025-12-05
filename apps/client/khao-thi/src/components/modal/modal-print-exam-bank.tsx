@@ -176,7 +176,7 @@ export const ModalPrintExamBank = () => {
                             <tr>
                                 {/* Cột trái */}
                                 <td className="w-1/5 border-2 border-black border-double p-2 align-top">
-                                    <span className="font-bold">Giáo viên ra đề</span>
+                                    <span className="font-bold">Giảng viên ra đề</span>
                                 </td>
 
                                 {/* Cột giữa */}

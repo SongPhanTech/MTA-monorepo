@@ -1197,7 +1197,7 @@ export default function NhapDiem({
                     hàng ngang
                 </div>
                 <div className="text-red-500 font-bold uppercase text-lg">
-                    Giáo viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho
+                    Giảng viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho
                     điểm
                 </div>
             </div>

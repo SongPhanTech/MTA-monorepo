@@ -456,7 +456,7 @@ export default function FixedClassPage() {
                             //         value ? <CheckOutlined className="text-[#028850]" /> : '',
                             // },
                             {
-                                title: 'Giáo viên chủ nhiệm',
+                                title: 'Giảng viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
                                 width: 180,

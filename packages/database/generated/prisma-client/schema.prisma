@@ -2690,13 +2690,17 @@ model TrainingCourse {
   coef_1                     Float                      @default(0.1)
   coef_2                     Float                      @default(0.3)
   coef_3                     Float                      @default(0.6)
-  scoreToTakeExam            Float                      @default(0)
-  scoreToPass                Float                      @default(4)
+  scoreToTakeExam            Float                      @default(5)
+  scoreToPass                Float                      @default(5)
   scoreToPassConditional     Float                      @default(5)
   scoreToTakeGraduation      Float                      @default(5)
   scoreToPassGraduation      Float                      @default(5.5)
+  /// điểm tối đa khi thi lại
+  maxReExamScore             Float                      @default(6.9)
+  /// trừ điểm khi thi lại
+  reduceReExamScore          Float                      @default(1)
   /// điểm giữ lại khi lưu ban
-  scoreToRetain              Float                      @default(6.9)
+  scoreToRetain              Float                      @default(10.5)
   trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String
   trainingCourseRegulation   TrainingCourseRegulation[]
@@ -2902,6 +2906,7 @@ model SubjectVersion {
   name                     String
   codeTkb                  String?
   examType                 ExamType
+  /// loại học phần
   type                     SubjectVersionType      @default(Normal)
   /// 1 đầu điểm
   onePoint                 Boolean                 @default(false)
@@ -4091,7 +4096,7 @@ model StudentTrainingScore {
   @@schema("ql-dao-tao")
 }
 
-/// Loại giáo viên
+/// Loại giảng viên
 model LecturerType {
   id              String            @id() @default(cuid())
   code            String?           @unique()

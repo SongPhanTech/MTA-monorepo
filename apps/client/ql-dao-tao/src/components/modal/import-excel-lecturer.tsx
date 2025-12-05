@@ -240,7 +240,7 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
                         width: 100,
                     },
                     {
-                        title: 'Kiểu giáo viên',
+                        title: 'Kiểu giảng viên',
                         dataIndex: 'lecturerType',
                         key: 'type',
                         align: 'center',

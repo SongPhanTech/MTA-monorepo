@@ -2251,7 +2251,7 @@ Table LecturerType {
   lecturers Lecturer [not null]
   lecturerHistory LecturerHistory [not null]
 
-  Note: 'Loại giáo viên'
+  Note: 'Loại giảng viên'
 }
 
 Table StaffType {

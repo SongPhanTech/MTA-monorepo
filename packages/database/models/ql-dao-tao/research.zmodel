@@ -31,19 +31,19 @@ model ResearchProject extends Base {
   methodology       String?                       @db.Text() // Phương pháp nghiên cứu
   expectedResults   String?                       @db.Text() // Kết quả mong đợi
   requirements      String?                       @db.Text() // Yêu cầu với học viên
-  
-  // Giáo viên hướng dẫn
+
+  // Giảng viên hướng dẫn
   supervisor        Lecturer                      @relation(fields: [supervisorId], references: [id])
   supervisorId      String
-  
+
   // Đơn vị quản lý
   organization      DM_DonVi                      @relation(fields: [organizationId], references: [Id])
   organizationId    String                        @db.Uuid
-  
+
   // Thông tin đăng ký
   maxStudents       Int                         // Số lượng học viên tối đa
   currentStudents   Int                           @default(0) // Số học viên hiện tại
-  
+
   // Thời gian
   registrationStart DateTime                    // Thời gian mở đăng ký
   registrationEnd   DateTime                    // Thời gian đóng đăng ký
@@ -51,7 +51,7 @@ model ResearchProject extends Base {
   projectEnd        DateTime?                   // Thời gian kết thúc dự kiến
 
   status            ResearchProjectStatus         @default(OPEN)
-  
+
   // Đăng ký của học viên
   registrations     StudentResearchRegistration[]
 
@@ -65,20 +65,20 @@ model StudentResearchRegistration extends Base {
 
   researchProject   ResearchProject    @relation(fields: [researchProjectId], references: [id])
   researchProjectId String
-  
+
   // Thông tin đăng ký
   registeredAt      DateTime           @default(now()) // Thời gian đăng ký
   motivation        String?            @db.Text() // Lý do muốn tham gia
   experience        String?            @db.Text() // Kinh nghiệm liên quan
-  
+
   // Trạng thái
   status            RegistrationStatus @default(PENDING)
-  
+
   // Phê duyệt
   reviewedAt        DateTime?                 // Thời gian phê duyệt
   reviewedBy        Lecturer?          @relation(fields: [reviewedById], references: [id])
   reviewedById      String?
-  reviewNote        String?            @db.Text() // Ghi chú của giáo viên
+  reviewNote        String?            @db.Text() // Ghi chú của giảng viên
 
   @@unique([studentId, researchProjectId])
   @@schema("ql-dao-tao")

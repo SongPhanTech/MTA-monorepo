@@ -81,7 +81,7 @@ const data3: TableRow2[] = [
         relationship: 'Mẹ',
         fullName: 'Trần Thị B',
         yearOfBirth: '1972',
-        details: 'Hà Nội, Giáo viên, Trường THPT XYZ, Thành viên Hội Phụ nữ',
+        details: 'Hà Nội, Giảng viên, Trường THPT XYZ, Thành viên Hội Phụ nữ',
     },
     // Add more rows as needed
 ]

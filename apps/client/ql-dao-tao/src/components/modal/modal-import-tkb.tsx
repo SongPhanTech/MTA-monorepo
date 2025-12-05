@@ -239,7 +239,7 @@ const ModalNhapTKB = () => {
                     <Radio.Group
                         options={[
                             {
-                                label: 'Mẫu 1: Thống kê các giáo viên đang có giờ dạy (Quân sự)',
+                                label: 'Mẫu 1: Thống kê các giảng viên đang có giờ dạy (Quân sự)',
                                 value: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
                             },
                             {

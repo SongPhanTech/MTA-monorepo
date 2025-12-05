@@ -553,7 +553,7 @@ const ModalPrintStudentSubjectScore = () => {
 
                     <Col span={8}>
                         <div className="uppercase font-bold mt-6">
-                            <span>Giáo viên chấm thi</span>
+                            <span>Giảng viên chấm thi</span>
                         </div>
                         <span>(Ký và ghi rõ họ tên)</span>
                     </Col>

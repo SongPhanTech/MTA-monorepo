@@ -234,7 +234,7 @@ export default function EvaluationAssignmentPage() {
                                             className="mb-0"
                                         >
                                             <Select
-                                                placeholder="Chọn giáo viên"
+                                                placeholder="Chọn giảng viên"
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
                                                         i.userProfile?.academicRankType?.sTen || ''

@@ -7,7 +7,7 @@ const getListTeacher = createRoute({
     operationId: 'get-list-teacher',
     tags: ['Teacher'],
     path: 'get-list-teacher',
-    summary: '2.16. Lấy danh sách hồ sơ giáo viên',
+    summary: '2.16. Lấy danh sách hồ sơ giảng viên',
     method: 'post',
     request: {
         body: {
@@ -120,7 +120,7 @@ const getTeacherDetail = createRoute({
     operationId: 'get-teacher-detail',
     tags: ['TeacherDetail'],
     path: 'get-teacher-detail',
-    summary: '2.17 Lấy hồ sơ giáo viên',
+    summary: '2.17 Lấy hồ sơ giảng viên',
     method: 'post',
     request: {
         body: {

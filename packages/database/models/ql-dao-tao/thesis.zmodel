@@ -74,7 +74,7 @@ model ThesisProject extends Base {
   technologies       String?                     @db.Text() // Công nghệ sử dụng
   thesisType         ThesisType                  @default(PROJECT)
   status             ThesisProjectStatus         @default(PROPOSED)
-  language           String?                     @db.Text() // Ngôn ngữ 
+  language           String?                     @db.Text() // Ngôn ngữ
   type               String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
 
   subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
@@ -94,7 +94,7 @@ model ThesisProject extends Base {
   /// Đơn vị quản lý
   organization       DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
   organizationId     String?                     @db.Uuid
-  
+
   // Thông tin đăng ký
   maxStudents        Int?                           // Số lượng học viên tối đa
 
@@ -110,7 +110,7 @@ model ThesisProject extends Base {
   defenseDate        DateTime?
   defenseSession     DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
   defenseSessionId   String?
-  
+
   // Thời gian
   registrationStart  DateTime?                     // Thời gian mở đăng ký
   registrationEnd    DateTime?                     // Thời gian đóng đăng ký
@@ -155,7 +155,7 @@ model StudentThesisRegistration extends Base {
 
   thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
   thesisProjectId       String
-  
+
   // Thông tin đăng ký
   registeredAt          DateTime                        @default(now()) // Thời gian đăng ký
   motivation            String?                         @db.Text() // Lý do muốn tham gia
@@ -166,7 +166,7 @@ model StudentThesisRegistration extends Base {
   reviewedAt            DateTime?                   // Thời gian phê duyệt
   reviewedBy            Lecturer?                       @relation(fields: [reviewedById], references: [id])
   reviewedById          String?
-  reviewNote            String?                         @db.Text() // Ghi chú của giáo viên
+  reviewNote            String?                         @db.Text() // Ghi chú của giảng viên
 
   council               Council?
 
@@ -341,7 +341,7 @@ model PaymentRecord  extends Base {
 
   expert          ExpertProfile  @relation(fields: [expertId], references: [id])
   expertId        String
-  
+
   // Có thể liên kết với thành viên hội đồng hoặc GVHD
   councilMemberId String?        @unique
   councilMember   CouncilMember? @relation(fields: [councilMemberId], references: [id])
