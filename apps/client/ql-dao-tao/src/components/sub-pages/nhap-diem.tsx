@@ -7,6 +7,7 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason, examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
+import { validateExamScore, validateScore } from '@lib/utils'
 import {
     type DiemLopMonHocProps,
     diemLopMonHocStore,
@@ -41,7 +42,6 @@ import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { validateExamScore, validateScore } from '@lib/utils'
 
 type FilterTable = FilterProps & {
     fullname?: string
@@ -750,22 +750,18 @@ export default function NhapDiem({
                                     midtermScore < scoreToTakeExam)
 
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
+                            if (!dataForCalc) return
 
+                            const defaultCoef = {
+                                coef_1: 0.1,
+                                coef_2: 0.3,
+                                coef_3: 0.6,
+                                scoreToPass: 4,
+                                maxReExamScore: 10,
+                                reduceReExamScore: 0,
+                            }
                             const finalScore = calcFinalScore(
-                                {
-                                    coef_1:
-                                        dataForCalc?.student?.fixedClass?.trainingCourse?.coef_1 ??
-                                        0.1,
-                                    coef_2:
-                                        dataForCalc?.student?.fixedClass?.trainingCourse?.coef_2 ??
-                                        0.3,
-                                    coef_3:
-                                        dataForCalc?.student?.fixedClass?.trainingCourse?.coef_3 ??
-                                        0.6,
-                                    scoreToPass:
-                                        dataForCalc?.student?.fixedClass?.trainingCourse
-                                            ?.scoreToPass ?? 4,
-                                },
+                                dataForCalc?.student?.fixedClass?.trainingCourse || defaultCoef,
                                 {
                                     examScore,
                                     attendanceScore,
@@ -782,7 +778,8 @@ export default function NhapDiem({
                                                 finalScore: c.archivedCertificate.finalScore ?? 0,
                                             },
                                         })) || [],
-                                }
+                                },
+                                dataForCalc.subjectClass?.type || 'NORMAL'
                             )?.toNumber()
 
                             form.setFieldsValue({
@@ -1004,7 +1001,8 @@ export default function NhapDiem({
                                             midtermScore:
                                                 recordForm?.midtermScore ?? record?.midtermScore,
                                             examScore: recordForm?.examScore ?? record?.examScore,
-                                        }
+                                        },
+                                        record.subjectClass?.type || 'NORMAL'
                                     )?.toNumber()
                                     return <div>{finalScore}</div>
                                 },

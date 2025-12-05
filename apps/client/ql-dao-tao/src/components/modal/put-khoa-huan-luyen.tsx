@@ -489,9 +489,12 @@ const PutTrainingCourseModal = () => {
                 scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
                 scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
                 maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
-                regulation: selectedTrainingCourse.regulation,
+                // regulation: selectedTrainingCourse.regulation,
                 trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
                 baseScore: selectedTrainingCourse.baseScore,
+                maxReExamScore: selectedTrainingCourse.maxReExamScore,
+                reduceReExamScore: selectedTrainingCourse.reduceReExamScore,
+                scoreToRetain: selectedTrainingCourse.scoreToRetain,
             })
         } else {
             form.setFieldsValue({
@@ -508,7 +511,7 @@ const PutTrainingCourseModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khoá' : 'Thêm mới khoá'}
+            title={id ? 'Chỉnh sửa Khoá' : 'Thêm mới Khoá'}
             className="w-[1000px]"
             formProps={{
                 onValuesChange(changedValues, values) {
@@ -526,7 +529,7 @@ const PutTrainingCourseModal = () => {
             <Row gutter={16} className="px-6 mt-3">
                 <Col
                     span={24}
-                    className="flex items-center justify-between text-base font-semibold mb-4"
+                    className="flex items-center justify-between text-base font-semibold mb-1"
                 >
                     <span className="underline-offset-2 underline">Thông tin chung</span>
                     <Form.Item name="isGeneralInfoLocked" valuePropName="checked" className="mb-0">
@@ -661,7 +664,7 @@ const PutTrainingCourseModal = () => {
             <Row gutter={16} className="px-6">
                 <Col
                     span={24}
-                    className="flex items-center justify-between text-base font-semibold mb-4"
+                    className="flex items-center justify-between text-base font-semibold mb-1"
                 >
                     <span className="underline-offset-2 underline">Quyết định/Quy chế</span>
                     <Form.Item name="isRegulationLocked" valuePropName="checked" className="mb-0">
@@ -729,7 +732,7 @@ const PutTrainingCourseModal = () => {
             <Row gutter={16} className="px-6">
                 <Col
                     span={24}
-                    className="flex items-center justify-between text-base font-semibold mb-4 "
+                    className="flex items-center justify-between text-base font-semibold mb-1 "
                 >
                     <span className="underline-offset-2 underline">Thông tin điểm</span>
                     <Form.Item name="isScoreConfigLocked" valuePropName="checked" className="mb-0">
@@ -743,7 +746,7 @@ const PutTrainingCourseModal = () => {
                             name="trainingCourseClone"
                             label={
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span>Sao chép quy chế</span>
+                                    <span className="text-primary font-bold">Sao chép quy chế</span>
                                     <Tooltip
                                         placement="topLeft"
                                         title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ khoá đã chọn sang khoá hiện tại"
@@ -945,6 +948,28 @@ const PutTrainingCourseModal = () => {
                             onChange={() => {
                                 setTimeout(() => debouncedValidate(['coef_1', 'coef_2']), 300)
                             }}
+                            readOnly={isScoreConfigLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="maxReExamScore" label="Điểm tối đa khi thi lại">
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm tối đa khi thi lại"
+                            className="w-full"
+                            readOnly={isScoreConfigLocked}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="reduceReExamScore" label="Trừ điểm khi thi lại">
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm trừ khi thi lại"
+                            className="w-full"
                             readOnly={isScoreConfigLocked}
                         />
                     </FormItem>
