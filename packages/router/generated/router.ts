@@ -8,7 +8,7 @@ export default {
     "KHAO_SAT": "/khao-sat"
   },
   "KHAO_THI": {
-    "BAO_CAO_KHAO_SAT_ID": "/bao-cao-khao-sat/[id]",
+    "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "DANH_MUC_DANH_MUC_CHUONG_MUC": "/danh-muc/danh-muc-chuong-muc",
     "DANH_MUC_MUC_DO_KHO": "/danh-muc/muc-do-kho",
     "HOME": "/home",
@@ -82,6 +82,7 @@ export default {
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_LAP_KE_HOACH": "/ke-hoach-giao-duc/lap-ke-hoach",
     "KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY": "/ke-hoach-giao-duc/phan-cong-giang-day",
+    "KE_HOACH_GIAO_DUC_THOI_KHOA_BIEU": "/ke-hoach-giao-duc/thoi-khoa-bieu",
     "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
     "KE_HOACH_HOC_LAI_THONG_KE_NO": "/ke-hoach-hoc-lai/thong-ke-no",
     "KHOA_BO_MON_PHAN_CONG_GIANG_DAY": "/khoa-bo-mon-phan-cong-giang-day",
