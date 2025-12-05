@@ -3428,7 +3428,7 @@ model TrainingField {
   createdAt           DateTime                            @default(now())
   updatedAt           DateTime                            @default(now()) @updatedAt()
   createdBy           String?                             @db.Uuid()
-  name                String                              @unique()
+  name                String
   englishName         String
   publishDate         DateTime
   ///  số QĐ mở mã ngành

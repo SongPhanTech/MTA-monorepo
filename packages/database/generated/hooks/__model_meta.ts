@@ -11837,9 +11837,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
                 },
             },
         },

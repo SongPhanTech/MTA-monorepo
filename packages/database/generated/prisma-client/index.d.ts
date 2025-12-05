@@ -365492,7 +365492,6 @@ export namespace Prisma {
   export type TrainingFieldWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    name?: string
     AND?: TrainingFieldWhereInput | TrainingFieldWhereInput[]
     OR?: TrainingFieldWhereInput[]
     NOT?: TrainingFieldWhereInput | TrainingFieldWhereInput[]
@@ -365502,6 +365501,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TrainingField"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingField"> | Date | string
     createdBy?: UuidNullableFilter<"TrainingField"> | string | null
+    name?: StringFilter<"TrainingField"> | string
     englishName?: StringFilter<"TrainingField"> | string
     publishDate?: DateTimeFilter<"TrainingField"> | Date | string
     decisionNo?: StringNullableFilter<"TrainingField"> | string | null
@@ -365511,7 +365511,7 @@ export namespace Prisma {
     trainingMajors?: TrainingMajorListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
-  }, "id" | "code" | "name">
+  }, "id" | "code">
 
   export type TrainingFieldOrderByWithAggregationInput = {
     id?: SortOrder
