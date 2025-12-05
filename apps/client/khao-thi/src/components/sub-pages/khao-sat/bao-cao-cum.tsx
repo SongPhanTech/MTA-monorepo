@@ -8,7 +8,6 @@ import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { buildOrgTree, cn } from '@lib/utils'
-import { LectuerType } from '@pages/thiet-lap-khao-sat/khao-sat-cum'
 const { Title } = Typography
 function ClusterSurveyReport({
     selectedId,
@@ -20,7 +19,7 @@ function ClusterSurveyReport({
     selectedId: string
     surveyName: string
     surveyId: string
-    setSurvey: (value: LectuerType) => void
+    setSurvey: (value: string) => void
     organizationSelected: string
 }) {
     const router = useRouter()
@@ -229,9 +228,9 @@ function ClusterSurveyReport({
                 onRow={(record) => {
                     return {
                         onClick: () => {
-                            setSurvey(record as LectuerType)
+                            setSurvey(record?.id as string)
                         },
-                        className: cn(surveyId === record.id ? 'bg-orange-200' : ''),
+                        className: cn(surveyId === record?.id ? 'bg-orange-200' : ''),
                     }
                 }}
                 columns={
