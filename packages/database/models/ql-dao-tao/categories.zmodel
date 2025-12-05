@@ -135,7 +135,7 @@ model Room extends Base {
 
 /// ngành đào tạo
 model TrainingField extends Base {
-  name                String                              @unique
+  name                String
   englishName         String
   publishDate         DateTime
   ///  số QĐ mở mã ngành

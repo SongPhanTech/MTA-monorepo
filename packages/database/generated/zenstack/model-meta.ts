@@ -12372,7 +12372,6 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, englishName: {
                     name: "englishName",
                     type: "String",
@@ -12430,9 +12429,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
