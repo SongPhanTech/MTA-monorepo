@@ -337,7 +337,11 @@ export default function UpdateUserPage() {
         setActiveKey(item.id)
         setExpland([...expland, item.id])
         const el = document.getElementById(item.id)
-        el?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+        el?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+        })
     }
 
     const listTabsRender = useMemo(() => {
@@ -387,7 +391,9 @@ export default function UpdateUserPage() {
             formData.append('file', file?.originFileObj)
             // const tenantCode = getCookie(c, 'x-tenantcode')
             const resPresignedUrl = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${window.tenantCode || 'dev'}&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${
+                    window.tenantCode || 'dev'
+                }&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
                 formData,
                 {
                     headers: {
@@ -411,8 +417,9 @@ export default function UpdateUserPage() {
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
                 sTen: values.firstName.trim(),
-                sTenDayDu:
-                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                sTenDayDu: `${values.lastName.trim() || ''} ${
+                    values.firstName.trim() || ''
+                }`.trim(),
                 sDM_GioiTinhId: genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
@@ -420,10 +427,9 @@ export default function UpdateUserPage() {
                 sEmail: values?.email || '',
                 Id: id,
                 sAvatarId: form.getFieldValue('avatar'),
-                bLaHocVien: values.bLaHocVien || false,
-                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
-                bLaGiangVien: values.bLaGiangVien || false,
-                bLaNguoiDung: values.bLaNguoiDung || false,
+                bLaHocVien: values.bLaHocVien || undefined,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
+                bLaGiangVien: bLaGiangVien || undefined,
             }).catch((error) => {
                 console.log(error)
             })
@@ -516,11 +522,12 @@ export default function UpdateUserPage() {
                             lastName: values.lastName.trim(),
                             firstName: values.firstName.trim(),
                             bLaHocVien: values.bLaHocVien,
-                            bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
-                            bLaGiangVien:  values?.bLaGiangVien,
-                            bLaNguoiDung:  values?.bLaNguoiDung,
-                            fullname:
-                                `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                            bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+                            bLaGiangVien: bLaGiangVien,
+                            bLaNguoiDung: values?.bLaNguoiDung,
+                            fullname: `${values.lastName.trim() || ''} ${
+                                values.firstName.trim() || ''
+                            }`.trim(),
                             dateOfBirth: values.dateOfBirth
                                 ? dayjs(values.dateOfBirth).toISOString()
                                 : null,

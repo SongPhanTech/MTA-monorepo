@@ -389,7 +389,11 @@ export default function CreateUserPage() {
         setActiveKey(item.id)
         setExpland([...expland, item.id])
         const el = document.getElementById(item.id)
-        el?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+        el?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+        })
     }
 
     const listTabsRender = useMemo(() => {
@@ -430,7 +434,9 @@ export default function CreateUserPage() {
             const formData = new FormData()
             formData.append('file', file?.originFileObj)
             const resPresignedUrl = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${window.tenantCode || 'dev'}&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${
+                    window.tenantCode || 'dev'
+                }&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
                 formData,
                 {
                     headers: {
@@ -453,8 +459,9 @@ export default function CreateUserPage() {
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
                 sTen: values.firstName.trim(),
-                sTenDayDu:
-                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                sTenDayDu: `${values.lastName.trim() || ''} ${
+                    values.firstName.trim() || ''
+                }`.trim(),
                 sDM_GioiTinhId: values.genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
@@ -463,7 +470,7 @@ export default function CreateUserPage() {
                 sAvatarId: form.getFieldValue('avatar'),
                 bLaHocVien: values.bLaHocVien || false,
                 bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
-                bLaNguoiDung: values.bLaNguoiDung || false,
+                // bLaNguoiDung: values.bLaNguoiDung || false,
                 bLaGiangVien: values.bLaGiangVien || false,
             })
             if (res?.status === 200) {
@@ -495,9 +502,9 @@ export default function CreateUserPage() {
                         lastName: values.lastName.trim(),
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
-                        bLaCanBoNhanVien:  values?.bLaCanBoNhanVien,
-                        bLaGiangVien:  values?.bLaGiangVien,
-                        bLaNguoiDung:  values?.bLaNguoiDung,
+                        bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+                        bLaGiangVien: values?.bLaGiangVien,
+                        bLaNguoiDung: values?.bLaNguoiDung,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,
@@ -515,8 +522,9 @@ export default function CreateUserPage() {
                             ? dayjs(values.tenureDate).toISOString()
                             : null,
                         avatar: form.getFieldValue('avatar'),
-                        fullname:
-                            `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                        fullname: `${values.lastName.trim() || ''} ${
+                            values.firstName.trim() || ''
+                        }`.trim(),
                         rankId: rank?.capBacId ?? undefined,
                         academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
                         academicRankTypeId: hocham?.academicRankTypeId ?? undefined,

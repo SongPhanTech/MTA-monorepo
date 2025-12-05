@@ -74,24 +74,6 @@ export default defineConfig({
             },
         },
     },
-    system_api: {
-        input: 'https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json',
-        output: {
-            client: 'react-query',
-            httpClient: 'fetch',
-            mode: 'single',
-            target: './src/api/system.ts',
-            schemas: './src/api/schemas',
-            packageJson: 'fake',
-            override: {
-                query: { version: 5 },
-                mutator: {
-                    path: './src/api/custom-instance.ts',
-                    name: 'customSystemFetch',
-                },
-            },
-        },
-    },
     system_share_api: {
         input: 'https://mta.swantech.vn/api/system/share/swagger/v1/swagger.json',
         output: {
@@ -124,6 +106,24 @@ export default defineConfig({
                 mutator: {
                     path: './src/api/custom-instance.ts',
                     name: 'customStorageFetch',
+                },
+            },
+        },
+    },
+    system_api: {
+        input: 'https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json',
+        output: {
+            client: 'react-query',
+            httpClient: 'fetch',
+            mode: 'single',
+            target: './src/api/system.ts',
+            schemas: './src/api/schemas',
+            packageJson: 'fake',
+            override: {
+                query: { version: 5 },
+                mutator: {
+                    path: './src/api/custom-instance.ts',
+                    name: 'customSystemFetch',
                 },
             },
         },
