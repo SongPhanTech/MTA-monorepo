@@ -302,9 +302,8 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
-
+            console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (existing) {
-                console.log('[LSB update User]:', res.status, res.data)
                 if (res.status === 200) {
                     await prisma.student.update({
                         where: { id: existing.id },
@@ -352,7 +351,7 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
-            console.log('[LSB create User]:', res.status, res.data)
+            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
 
             if (res.status === 200) {
                 await createStudentFn()

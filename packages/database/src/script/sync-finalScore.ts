@@ -6,6 +6,11 @@ const prisma = new PrismaClient()
 const subjectScores = await prisma.studentSubjectScore.findMany({
     select: {
         id: true,
+        subjectClass: {
+            select: {
+                type: true,
+            },
+        },
         certificates: {
             select: {
                 archivedCertificate: {
@@ -37,6 +42,8 @@ const subjectScores = await prisma.studentSubjectScore.findMany({
                                 coef_2: true,
                                 coef_3: true,
                                 scoreToPass: true,
+                                maxReExamScore: true,
+                                reduceReExamScore: true,
                             },
                         },
                     },
@@ -51,10 +58,16 @@ const defaultCoef = {
     coef_2: 0.3,
     coef_3: 0.6,
     scoreToPass: 4,
+    maxReExamScore: 10,
+    reduceReExamScore: 0,
 }
 
 const updates = subjectScores.map((s) => {
-    const finalScore = calcFinalScore(s.student.fixedClass?.trainingCourse || defaultCoef, s)
+    const finalScore = calcFinalScore(
+        s.student.fixedClass?.trainingCourse || defaultCoef,
+        s,
+        s.subjectClass?.type || 'NORMAL'
+    )
 
     return { id: s.id, finalScore }
 })
