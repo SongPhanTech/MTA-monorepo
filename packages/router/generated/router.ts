@@ -17,6 +17,7 @@ export default {
     "LAM_KHAO_SAT_PRIVATE_ID": "/lam-khao-sat/private/[id]",
     "QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi",
     "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi",
+    "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID_PHANCONG": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]/phancong",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia",
@@ -40,6 +41,7 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
+  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -170,6 +172,7 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

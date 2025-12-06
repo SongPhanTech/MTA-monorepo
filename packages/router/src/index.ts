@@ -765,6 +765,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                     },
                     {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                        label: 'Phiếu phân tích và đánh giá',
+                        icon: FolderOpen,
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                        description: 'Phiếu phân tích và đánh giá',
+                    },
+                    {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
                         label: 'Phiếu phân tích tiêu chí',
                         icon: FolderOpen,
