@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { EyeIcon } from 'lucide-react'
+import {  InfoIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -604,7 +604,7 @@ export default function UserProfilePageDs() {
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip title="Xem chi tiết" placement="top">
-                                            <EyeIcon
+                                            <InfoIcon
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     onOpenDetail(record.id)

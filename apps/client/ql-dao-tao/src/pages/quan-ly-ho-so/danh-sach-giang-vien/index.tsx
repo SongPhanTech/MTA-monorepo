@@ -21,7 +21,7 @@ import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
-import { Eye } from 'lucide-react'
+import {  InfoIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -494,11 +494,11 @@ export default function UserProfilePageLecture() {
                                                     'XEM_CHI_TIET'
                                                 ) && (
                                                     <Tooltip title="Xem chi tiết" placement="top">
-                                                        <Eye
+                                                        <InfoIcon
                                                             onClick={() => handleRowClick({ id })}
                                                             size={16}
                                                             strokeWidth={1.5}
-                                                            className="text-base cursor-pointer"
+                                                            className="text-green-600 cursor-pointer"
                                                         />
                                                     </Tooltip>
                                                 )}
