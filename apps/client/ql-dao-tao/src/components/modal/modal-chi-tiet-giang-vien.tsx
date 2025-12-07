@@ -3,6 +3,10 @@ import { useFindUniqueLecturer } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
 import 'dayjs/locale/vi'
 
 dayjs.locale('vi')
@@ -15,6 +19,14 @@ const ModalChiTietGiangVien = () => {
     } = useDisclosure<string>({
         tag: 'ModalChiTietGiangVien',
     })
+
+    const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
+        useThesisProjectStatusOptions()
+    const { getStudentThesisRegistrationStatusLabel, getStudentThesisRegistrationStatusColor } =
+        useStudentThesisRegistrationStatusOptions()
+    const { getScheduleLabel } = useScheduleOptions()
+
+    const { getSubjectClassTypeLabel } = useSubjectClassTypeOptions()
 
     const { data: lecturerData, isLoading } = useFindUniqueLecturer(
         {
@@ -186,7 +198,7 @@ const ModalChiTietGiangVien = () => {
     useSpinner()
 
     if (!lecturerData) return null // Type cast để tránh lỗi TypeScript
-    const lecturer = lecturerData as any
+    const lecturer = lecturerData
 
     const tabItems = [
         {
@@ -246,9 +258,6 @@ const ModalChiTietGiangVien = () => {
                     <Descriptions.Item label="Từ ngày" span={1}>
                         {lecturer.from ? dayjs(lecturer.from).format('DD/MM/YYYY') : ''}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Địa chỉ" span={2}>
-                        {lecturer.userProfile?.address}
-                    </Descriptions.Item>
                     <Descriptions.Item label="Mô tả" span={2}>
                         {lecturer.description}
                     </Descriptions.Item>
@@ -263,14 +272,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.mainSubjectClasses || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã lớp',
@@ -319,6 +328,7 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'type',
                             width: 100,
                             align: 'center',
+                            render: (type: any) => getSubjectClassTypeLabel(type),
                         },
                         {
                             title: 'Trạng thái',
@@ -353,14 +363,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.extraSubjectClasses || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã lớp',
@@ -409,6 +419,7 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'type',
                             width: 100,
                             align: 'center',
+                            render: (type: any) => getSubjectClassTypeLabel(type),
                         },
                         {
                             title: 'Trạng thái',
@@ -443,14 +454,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.enterGradeClasses || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã lớp',
@@ -499,6 +510,7 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'type',
                             width: 100,
                             align: 'center',
+                            render: (type: any) => getSubjectClassTypeLabel(type),
                         },
                     ]}
                 />
@@ -512,14 +524,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.manageFixedClass || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã lớp',
@@ -602,14 +614,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.classSchedules || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1400 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Lớp học phần',
@@ -670,6 +682,7 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'periodType',
                             width: 100,
                             align: 'center',
+                            render: (periodType: any) => getScheduleLabel(periodType),
                         },
                         {
                             title: 'Ghi chú',
@@ -688,14 +701,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.extraClassSchedules || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1400 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Lớp học phần',
@@ -756,6 +769,7 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'periodType',
                             width: 100,
                             align: 'center',
+                            render: (periodType: any) => getScheduleLabel(periodType),
                         },
                         {
                             title: 'Ghi chú',
@@ -774,28 +788,24 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.researchProjects || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
-                        {
-                            title: 'Mã đề tài',
-                            dataIndex: 'code',
-                            width: 120,
-                        },
+
                         {
                             title: 'Tên đề tài',
                             dataIndex: 'title',
                             width: 300,
                         },
                         {
-                            title: 'Mô tả',
-                            dataIndex: 'description',
+                            title: 'Đơn vị quản lý',
+                            dataIndex: 'organization',
                             width: 250,
                         },
                         {
@@ -805,29 +815,21 @@ const ModalChiTietGiangVien = () => {
                             align: 'center',
                         },
                         {
-                            title: 'Trạng thái',
-                            dataIndex: 'status',
+                            title: 'Sĩ số sinh viên hiện tại',
+                            dataIndex: 'currentStudents',
                             width: 100,
                             align: 'center',
-                            render: (status: 'OPEN' | 'FULL' | 'CLOSED' | 'COMPLETED') => {
-                                const colors = {
-                                    OPEN: 'green',
-                                    FULL: 'orange',
-                                    CLOSED: 'red',
-                                    COMPLETED: 'blue',
-                                }
-                                const labels = {
-                                    OPEN: 'Mở',
-                                    FULL: 'Đầy',
-                                    CLOSED: 'Đóng',
-                                    COMPLETED: 'Hoàn thành',
-                                }
-                                return (
-                                    <Tag color={colors[status] || 'default'}>
-                                        {labels[status] || status}
-                                    </Tag>
-                                )
-                            },
+                        },
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'status',
+                            width: 120,
+                            align: 'center',
+                            render: (status: any) => (
+                                <Tag color={getThesisProjectStatusColor(status)}>
+                                    {getThesisProjectStatusLabel(status)}
+                                </Tag>
+                            ),
                         },
                     ]}
                 />
@@ -841,14 +843,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.reviewedRegistrations || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Sinh viên',
@@ -868,25 +870,11 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'status',
                             width: 120,
                             align: 'center',
-                            render: (status) => {
-                                const colors = {
-                                    PENDING: 'blue',
-                                    APPROVED: 'green',
-                                    REJECTED: 'red',
-                                    CANCELLED: 'default',
-                                } as const
-                                const labels = {
-                                    PENDING: 'Chờ duyệt',
-                                    APPROVED: 'Đã duyệt',
-                                    REJECTED: 'Từ chối',
-                                    CANCELLED: 'Đã hủy',
-                                } as const
-                                return (
-                                    <Tag color={colors[status as keyof typeof colors] || 'default'}>
-                                        {labels[status as keyof typeof labels] || status}
-                                    </Tag>
-                                )
-                            },
+                            render: (status: any) => (
+                                <Tag color={getStudentThesisRegistrationStatusColor(status)}>
+                                    {getStudentThesisRegistrationStatusLabel(status)}
+                                </Tag>
+                            ),
                         },
                         {
                             title: 'Ngày đăng ký',
@@ -907,14 +895,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.reviewedThesisRegistrations || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1200 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Sinh viên',
@@ -934,25 +922,11 @@ const ModalChiTietGiangVien = () => {
                             dataIndex: 'status',
                             width: 120,
                             align: 'center',
-                            render: (status) => {
-                                const colors = {
-                                    PENDING: 'blue',
-                                    APPROVED: 'green',
-                                    REJECTED: 'red',
-                                    CANCELLED: 'default',
-                                } as const
-                                const labels = {
-                                    PENDING: 'Chờ duyệt',
-                                    APPROVED: 'Đã duyệt',
-                                    REJECTED: 'Từ chối',
-                                    CANCELLED: 'Đã hủy',
-                                } as const
-                                return (
-                                    <Tag color={colors[status as keyof typeof colors] || 'default'}>
-                                        {labels[status as keyof typeof labels] || status}
-                                    </Tag>
-                                )
-                            },
+                            render: (status: any) => (
+                                <Tag color={getStudentThesisRegistrationStatusColor(status)}>
+                                    {getStudentThesisRegistrationStatusLabel(status)}
+                                </Tag>
+                            ),
                         },
                         {
                             title: 'Ngày đăng ký',
@@ -973,14 +947,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.expertProfile || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 2000 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã',
@@ -1059,14 +1033,14 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.evaluationCouncilMember || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     scroll={{ x: 1000 }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Hội đồng',
@@ -1095,13 +1069,13 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.survey || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã',
@@ -1139,13 +1113,13 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.clusterSurvey || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     columns={[
                         {
                             title: 'STT',
                             width: 50,
                             align: 'center',
-                            render: (_, __, index) => index + 1,
+                            render: (_: any, __: any, index: number) => index + 1,
                         },
                         {
                             title: 'Mã',
@@ -1183,7 +1157,7 @@ const ModalChiTietGiangVien = () => {
                     dataSource={lecturer?.examRoomsMain || []}
                     rowKey="id"
                     size="small"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{ pageSize: 10, showSizeChanger: false }}
                     columns={[
                         {
                             title: 'Mã phòng',
@@ -1226,7 +1200,7 @@ const ModalChiTietGiangVien = () => {
 
     return (
         <Modal
-            title={`Chi tiết giảng viên: ${lecturer.name || ''} (${lecturer.code || ''})`}
+            title={`Chi tiết giảng viên: ${lecturer.userProfile?.lastName || ''} ${lecturer.userProfile?.firstName || ''} (${lecturer.code || ''})`}
             open={isOpen}
             onCancel={onClose}
             width="90%"
