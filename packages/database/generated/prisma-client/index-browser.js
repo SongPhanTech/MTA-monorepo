@@ -1704,6 +1704,8 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',
   scoreToPassGraduation: 'scoreToPassGraduation',
+  maxReExamScore: 'maxReExamScore',
+  reduceReExamScore: 'reduceReExamScore',
   scoreToRetain: 'scoreToRetain',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };

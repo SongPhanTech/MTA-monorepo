@@ -863,7 +863,8 @@ const PutOneSubjectClassModal = () => {
                                                 attendanceScore: record?.attendanceScore,
                                                 midtermScore: record?.midtermScore,
                                                 examScore: record?.examScore,
-                                            }
+                                            },
+                                            record.subjectClass?.type || 'NORMAL'
                                         )?.toNumber()
                                         return <div>{finalScore}</div>
                                     },

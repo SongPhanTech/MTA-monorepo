@@ -23,7 +23,7 @@ type MonDaLapKeHoachForm = {
     subjectSelected?: Array<string>
 }
 
-export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
+export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassType }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
@@ -113,9 +113,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     : {}),
                             },
                         },
-                        subjectClassType: hocLai
-                            ? $Enums.SubjectClassType.RETAKE
-                            : $Enums.SubjectClassType.NORMAL,
+                        subjectClassType: type,
                     },
                 },
                 _count: {
@@ -124,9 +122,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             where: {
                                 deletedAt: null,
                                 active: true,
-                                subjectClassType: hocLai
-                                    ? $Enums.SubjectClassType.RETAKE
-                                    : $Enums.SubjectClassType.NORMAL,
+                                subjectClassType: type,
                             },
                         },
                     },
@@ -137,7 +133,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
     )
 
     const { onOpen: openKhoiTaoMon } = useDisclosure<{
-        hocLai: boolean
+        type?: $Enums.SubjectClassType
     }>({
         tag: 'KhoiTaoMon',
     })
@@ -195,7 +191,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                         <Button
                             onClick={() =>
                                 openKhoiTaoMon({
-                                    hocLai,
+                                    type,
                                 })
                             }
                             type="default"
@@ -314,9 +310,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     await deleteManyPlanTrainingSubject({
                                         where: {
                                             trainingBlockSubjectId: { in: subjectSelected },
-                                            subjectClassType: hocLai
-                                                ? $Enums.SubjectClassType.RETAKE
-                                                : $Enums.SubjectClassType.NORMAL,
+                                            subjectClassType: type,
                                         },
                                     })
                                     debouncedRefetch()

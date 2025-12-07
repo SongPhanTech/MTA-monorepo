@@ -445,7 +445,7 @@ export default function StudentFixedClassPage() {
                 {
                     cells: [
                         {
-                            value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giáo viên chưa nhập điểm",
+                            value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
                             border: false,
                             colSpan: 20,
                         },

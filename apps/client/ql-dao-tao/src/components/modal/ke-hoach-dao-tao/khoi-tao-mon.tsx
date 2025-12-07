@@ -29,7 +29,7 @@ dayjs.locale('vi')
 const KhoiTaoMon = () => {
     const [form] = Form.useForm<KhoiTaoMonFormType>()
     const { isOpen, onClose, input } = useDisclosure<{
-        hocLai: boolean
+        type?: $Enums.SubjectClassType
     }>({
         tag: 'KhoiTaoMon',
         onClose: form.resetFields,
@@ -71,7 +71,7 @@ const KhoiTaoMon = () => {
                                     subjectVersionId: true,
                                 },
                                 where: {
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    subjectClassType: input?.type,
                                 },
                             },
                         },
@@ -142,9 +142,7 @@ const KhoiTaoMon = () => {
                                         trainingObjectTypeId,
                                         semesterId,
                                     },
-                                    subjectClassType: input?.hocLai
-                                        ? $Enums.SubjectClassType.RETAKE
-                                        : $Enums.SubjectClassType.NORMAL,
+                                    subjectClassType: input?.type,
                                 },
                             },
                         },

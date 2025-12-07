@@ -93,10 +93,14 @@ const PutAddCertificateScoreModal = () => {
                 }
             }
             if (!trainingCourse) return
-            const finalScore = calcFinalScore(trainingCourse, {
-                ...input.subjectClassStudent,
-                certificates: listCertificates,
-            })
+            const finalScore = calcFinalScore(
+                trainingCourse,
+                {
+                    ...input.subjectClassStudent,
+                    certificates: listCertificates,
+                },
+                'NORMAL'
+            )
             await updateStudentSubjectScore({
                 data: {
                     ...rest,

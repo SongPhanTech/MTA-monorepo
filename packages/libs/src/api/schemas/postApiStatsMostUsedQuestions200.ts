@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsMostUsedQuestions200DataItem } from './postApiStatsMostUsedQuestions200DataItem'
 import type { PostApiStatsMostUsedQuestions200Summary } from './postApiStatsMostUsedQuestions200Summary'
+import type { PostApiStatsMostUsedQuestions200DataItem } from './postApiStatsMostUsedQuestions200DataItem'
 
 export type PostApiStatsMostUsedQuestions200 = {
     summary: PostApiStatsMostUsedQuestions200Summary

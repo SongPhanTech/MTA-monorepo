@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetClassRegisterSession200ItemSemesterSchoolYear } from './getClassRegisterSession200ItemSemesterSchoolYear'
 import type { GetClassRegisterSession200ItemSemesterSemesterType } from './getClassRegisterSession200ItemSemesterSemesterType'
+import type { GetClassRegisterSession200ItemSemesterSchoolYear } from './getClassRegisterSession200ItemSemesterSchoolYear'
 
 export type GetClassRegisterSession200ItemSemester = {
     id: string

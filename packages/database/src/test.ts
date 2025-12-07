@@ -2,12 +2,21 @@ import { PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-const subjects = await prisma.subject.findMany({
-    where: { subjectVersion: { some: { name: { contains: 'tra', mode: 'insensitive' } } } },
+const users = await prisma.userProfile.findMany({
+    where: {
+        id: {
+            startsWith: 'cmi',
+        },
+    },
 })
 
-console.log(
-    JSON.stringify({
-        where: { subjectVersion: { some: {} } },
+for (const user of users) {
+    await prisma.userProfile.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            id: crypto.randomUUID(),
+        },
     })
-)
+}

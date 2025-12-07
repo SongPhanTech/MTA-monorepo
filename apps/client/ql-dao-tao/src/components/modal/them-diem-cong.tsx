@@ -94,10 +94,14 @@ const PutAddOlympicScoreModal = () => {
                 }
             }
             if (!trainingCourse) return
-            const finalScore = calcFinalScore(trainingCourse, {
-                ...input.subjectClassStudent,
-                awards: listAward,
-            })
+            const finalScore = calcFinalScore(
+                trainingCourse,
+                {
+                    ...input.subjectClassStudent,
+                    awards: listAward,
+                },
+                'NORMAL'
+            )
             await updateStudentSubjectScore({
                 data: {
                     ...rest,

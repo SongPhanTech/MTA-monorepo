@@ -84,10 +84,10 @@ type XepKhuVucForm = {
 }
 
 export default function PhanCongGiangDay({
-    hocLai = false,
+    type,
     khoaBoMon = false,
 }: {
-    hocLai?: boolean
+    type?: $Enums.SubjectClassType
     khoaBoMon?: boolean
 }) {
     const { can } = useAbility()
@@ -273,9 +273,9 @@ export default function PhanCongGiangDay({
                           },
                       }
                     : {}),
-                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                type: type,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
+        [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
@@ -417,7 +417,7 @@ export default function PhanCongGiangDay({
             active: true,
             deletedAt: null,
             cancelled: false,
-            type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+            type: type,
         },
     })
 
@@ -428,7 +428,7 @@ export default function PhanCongGiangDay({
             active: true,
             deletedAt: null,
             cancelled: false,
-            type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+            type: type,
         },
     })
 
@@ -487,7 +487,7 @@ export default function PhanCongGiangDay({
                         : {
                               lecturerAssignmentDeadline: null,
                           }),
-                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                    type: type,
                 },
             })
             message.success('Báo dạy thành công')
@@ -883,13 +883,7 @@ export default function PhanCongGiangDay({
                                                                                 null,
                                                                             approveLecturerAssignmentAt:
                                                                                 null,
-                                                                            type: hocLai
-                                                                                ? $Enums
-                                                                                      .SubjectClassType
-                                                                                      .RETAKE
-                                                                                : $Enums
-                                                                                      .SubjectClassType
-                                                                                      .NORMAL,
+                                                                            type: type,
                                                                             trainingObjectTypeId,
                                                                             semesterId,
                                                                             id: {

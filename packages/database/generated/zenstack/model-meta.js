@@ -9051,11 +9051,11 @@ const metadata = {
                 }, scoreToTakeExam: {
                     name: "scoreToTakeExam",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, scoreToPass: {
                     name: "scoreToPass",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 4 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, scoreToPassConditional: {
                     name: "scoreToPassConditional",
                     type: "Float",
@@ -9068,10 +9068,18 @@ const metadata = {
                     name: "scoreToPassGraduation",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                }, maxReExamScore: {
+                    name: "maxReExamScore",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 6 }] }],
+                }, reduceReExamScore: {
+                    name: "reduceReExamScore",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
                 }, scoreToRetain: {
                     name: "scoreToRetain",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 6 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 10 }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -12361,7 +12369,6 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, englishName: {
                     name: "englishName",
                     type: "String",
@@ -12419,9 +12426,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

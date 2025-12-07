@@ -54,7 +54,7 @@ import '../ql-dao-tao/staff'
 //   @@schema("ql-danh-muc")
 // }
 
-/// Loại giáo viên
+/// Loại giảng viên
 model LecturerType extends Base {
   name            String            @unique
 

@@ -502,7 +502,7 @@ export const buildLecturerTypeMapOrThrow = async (
 
     if (missing.length) {
         throw new HTTPException(400, {
-            message: `Loại giáo viên không tồn tại: ${missing.join(', ')}`,
+            message: `Loại giảng viên không tồn tại: ${missing.join(', ')}`,
         })
     }
 

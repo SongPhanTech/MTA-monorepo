@@ -5,8 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetClassesInfo200ItemExamType } from './getClassesInfo200ItemExamType'
-import type { GetClassesInfo200ItemSubjectClassItem } from './getClassesInfo200ItemSubjectClassItem'
 import type { GetClassesInfo200ItemType } from './getClassesInfo200ItemType'
+import type { GetClassesInfo200ItemSubjectClassItem } from './getClassesInfo200ItemSubjectClassItem'
 
 export type GetClassesInfo200Item = {
     id: string

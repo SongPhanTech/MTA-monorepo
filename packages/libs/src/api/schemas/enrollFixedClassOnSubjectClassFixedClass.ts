@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersion } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersion'
 import type { EnrollFixedClassOnSubjectClassFixedClassTrainingCourse } from './enrollFixedClassOnSubjectClassFixedClassTrainingCourse'
+import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersion } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersion'
 
 export type EnrollFixedClassOnSubjectClassFixedClass = {
     id: string

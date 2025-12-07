@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass'
 import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemStatus } from './listOfundefinedAllOfDataItemEducationAndTrainingItemStatus'
+import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass } from './listOfundefinedAllOfDataItemEducationAndTrainingItemFixedClass'
 import type { ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse } from './listOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse'
 
 export type ListOfundefinedAllOfDataItemEducationAndTrainingItem = {

@@ -1,6 +1,8 @@
 import DefaultLayout from '@layouts/default-layout'
-import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/ke-hoach-ghep-lop-mon-hoc'
-import ThongKeNo from '@pages/ke-hoach-hoc-lai/thong-ke-no'
+import KeHoachGhepLopMonHoc from '@pages/ke-hoach-giao-duc/_pages/ke-hoach-ghep-lop-mon-hoc'
+import ThongKeNoHocLai from '@pages/ke-hoach-hoc-lai/_pages/thong-ke-hoc-lai'
+import ThongKeNoThiLai from '@pages/ke-hoach-thi-lai/_pages/thong-ke-thi-lai'
+import type { $Enums } from '@workspace/db/client'
 import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import {
     SelectTrainingCourse,
@@ -11,11 +13,11 @@ import {
 } from '@workspace/ui'
 import { Flex, Form, Select, Tabs } from 'antd'
 import type React from 'react'
-import { useState } from 'react'
-import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
-import LapKeHoach from './lap-ke-hoach'
-import PhanCongGiangDay from './phan-cong-giang-day'
-import ThoiKhoaBieu from './thoi-khoa-bieu'
+import { useMemo, useState } from 'react'
+import KeHoachMoLopMonHoc from './_pages/ke-hoach-mo-lop-mon-hoc'
+import LapKeHoach from './_pages/lap-ke-hoach'
+import PhanCongGiangDay from './_pages/phan-cong-giang-day'
+import ThoiKhoaBieu from './_pages/thoi-khoa-bieu'
 
 interface TabItem {
     key: string
@@ -24,52 +26,136 @@ interface TabItem {
 }
 
 type KeHoachDaoTaoPageProps = {
-    hocLai: boolean
+    type: $Enums.SubjectClassType
+    role: 'P2_QLDT' | 'P2_KHCT'
 }
 
-export default function KeHoachDaoTao({ hocLai }: KeHoachDaoTaoPageProps) {
-    const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? 'thong-ke-no' : 'lap-ke-hoach')
+export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
+    const [activeLeftTab, setActiveLeftTab] = useState(
+        type !== 'NORMAL' ? 'thong-ke-no' : 'lap-ke-hoach'
+    )
 
-    const tabs: TabItem[] = [
-        ...(hocLai
-            ? [
-                  {
-                      key: 'thong-ke-no',
-                      label: 'Thống kê nợ',
-                      content: <ThongKeNo />,
-                  },
-              ]
-            : []),
-        {
-            key: 'lap-ke-hoach',
-            label: 'Lập kế hoạch giảng dạy học kỳ',
-            content: <LapKeHoach hocLai={hocLai} />,
-        },
-        {
-            key: 'mo-lop-mon-hoc',
-            label: 'Mở LMH',
-            content: <KeHoachMoLopMonHoc hocLai={hocLai} />,
-        },
-        ...(hocLai
-            ? []
-            : [
-                  {
-                      key: 'ghep-lop-mon-hoc',
-                      label: 'Ghép LMH',
-                      content: <KeHoachGhepLopMonHoc />,
-                  },
-              ]),
-        {
-            key: 'phan-cong-giang-day',
-            label: 'Phân công giảng dạy',
-            content: <PhanCongGiangDay hocLai={hocLai} />,
-        },
-        {
-            key: 'thoi-khoa-bieu',
-            label: 'Thời khóa biểu',
-            content: <ThoiKhoaBieu hocLai={hocLai} />,
-        },
-    ]
+    const tabs: TabItem[] = useMemo(() => {
+        if (type === 'NORMAL') {
+            return [
+                {
+                    key: 'lap-ke-hoach',
+                    label: 'Lập kế hoạch giảng dạy học kỳ',
+                    content: <LapKeHoach type={type} />,
+                },
+                {
+                    key: 'mo-lop-mon-hoc',
+                    label: 'Mở LMH',
+                    content: <KeHoachMoLopMonHoc type={type} />,
+                },
+                {
+                    key: 'ghep-lop-mon-hoc',
+                    label: 'Ghép LMH',
+                    content: <KeHoachGhepLopMonHoc />,
+                },
+                {
+                    key: 'phan-cong-giang-day',
+                    label: 'Phân công giảng dạy',
+                    content: <PhanCongGiangDay type={type} />,
+                },
+                {
+                    key: 'thoi-khoa-bieu',
+                    label: 'Thời khóa biểu',
+                    content: <ThoiKhoaBieu type={type} />,
+                },
+            ]
+        }
+
+        if (type === 'RETAKE') {
+            if (role === 'P2_QLDT') {
+                return [
+                    {
+                        key: 'thong-ke-no',
+                        label: 'Thống kê học lại',
+                        content: <ThongKeNoHocLai />,
+                    },
+                    {
+                        key: 'lap-ke-hoach',
+                        label: 'Lập kế hoạch học lại',
+                        content: <LapKeHoach type={type} />,
+                    },
+                    {
+                        key: 'thoi-khoa-bieu',
+                        label: 'Thời khóa biểu học lại',
+                        content: <ThoiKhoaBieu type={type} />,
+                    },
+                ]
+            }
+
+            return [
+                {
+                    key: 'lap-ke-hoach',
+                    label: 'Lập kế hoạch giảng dạy học lại',
+                    content: <LapKeHoach type={type} />,
+                },
+                {
+                    key: 'mo-lop-mon-hoc',
+                    label: 'Mở LMH',
+                    content: <KeHoachMoLopMonHoc type={type} />,
+                },
+                {
+                    key: 'phan-cong-giang-day',
+                    label: 'Phân công giảng dạy',
+                    content: <PhanCongGiangDay type={type} />,
+                },
+                {
+                    key: 'thoi-khoa-bieu',
+                    label: 'Thời khóa biểu học lại',
+                    content: <ThoiKhoaBieu type={type} />,
+                },
+            ]
+        }
+
+        if (type === 'REEXAM') {
+            if (role === 'P2_QLDT') {
+                return [
+                    {
+                        key: 'thong-ke-no',
+                        label: 'Thống kê thi lại',
+                        content: <ThongKeNoThiLai />,
+                    },
+                    {
+                        key: 'lap-ke-hoach',
+                        label: 'Lập kế hoạch thi lại',
+                        content: <LapKeHoach type={type} />,
+                    },
+                    {
+                        key: 'thoi-khoa-bieu',
+                        label: 'Thời khóa biểu thi lại',
+                        content: <ThoiKhoaBieu type={type} />,
+                    },
+                ]
+            }
+            return [
+                {
+                    key: 'lap-ke-hoach',
+                    label: 'Lập kế hoạch thi lại',
+                    content: <LapKeHoach type={type} />,
+                },
+                {
+                    key: 'mo-lop-mon-hoc',
+                    label: 'Mở LMH',
+                    content: <KeHoachMoLopMonHoc type={type} />,
+                },
+                {
+                    key: 'phan-cong-giang-day',
+                    label: 'Phân công giảng dạy',
+                    content: <PhanCongGiangDay type={type} />,
+                },
+                {
+                    key: 'thoi-khoa-bieu',
+                    label: 'Thời khóa biểu thi lại',
+                    content: <ThoiKhoaBieu type={type} />,
+                },
+            ]
+        }
+        return []
+    }, [type, role])
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 

@@ -271,7 +271,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportLecturerModalProps) =>
                         width: 100,
                     },
                     {
-                        title: 'Kiểu giáo viên',
+                        title: 'Kiểu giảng viên',
                         dataIndex: 'type',
                         key: 'type',
                         align: 'center',

@@ -50,11 +50,11 @@ import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
+import { postDMNhanViens } from '@workspace/libs/api/system'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
-import { postDMNhanViens } from '@workspace/libs/api/system'
-import dayjs from 'dayjs'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 interface itemType {
@@ -389,7 +389,11 @@ export default function CreateUserPage() {
         setActiveKey(item.id)
         setExpland([...expland, item.id])
         const el = document.getElementById(item.id)
-        el?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+        el?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+        })
     }
 
     const listTabsRender = useMemo(() => {
@@ -430,7 +434,9 @@ export default function CreateUserPage() {
             const formData = new FormData()
             formData.append('file', file?.originFileObj)
             const resPresignedUrl = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${window.tenantCode || 'dev'}&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${
+                    window.tenantCode || 'dev'
+                }&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
                 formData,
                 {
                     headers: {
@@ -453,18 +459,18 @@ export default function CreateUserPage() {
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
                 sTen: values.firstName.trim(),
-                sTenDayDu:
-                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                sTenDayDu: `${values.lastName.trim() || ''} ${
+                    values.firstName.trim() || ''
+                }`.trim(),
                 sDM_GioiTinhId: values.genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
                 sAvatarId: form.getFieldValue('avatar'),
-                bLaHocVien: values.bLaHocVien || false,
-                bLaCanBoNhanVien: values.bLaCanBoNhanVien || false,
-                bLaNguoiDung: values.bLaNguoiDung || false,
-                bLaGiangVien: values.bLaGiangVien || false,
+                bLaHocVien: values.bLaHocVien || undefined,
+                bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
+                bLaGiangVien: bLaGiangVien || undefined,
             })
             if (res?.status === 200) {
                 let rank = null
@@ -496,7 +502,7 @@ export default function CreateUserPage() {
                         firstName: values.firstName.trim(),
                         id: res?.data?.Id,
                         bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
-                        bLaGiangVien: values?.bLaGiangVien,
+                        bLaGiangVien: bLaGiangVien || undefined,
                         bLaNguoiDung: values?.bLaNguoiDung,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
@@ -515,8 +521,9 @@ export default function CreateUserPage() {
                             ? dayjs(values.tenureDate).toISOString()
                             : null,
                         avatar: form.getFieldValue('avatar'),
-                        fullname:
-                            `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+                        fullname: `${values.lastName.trim() || ''} ${
+                            values.firstName.trim() || ''
+                        }`.trim(),
                         rankId: rank?.capBacId ?? undefined,
                         academicDegreeTypeId: hocvi?.academicRankTypeId ?? undefined,
                         academicRankTypeId: hocham?.academicRankTypeId ?? undefined,

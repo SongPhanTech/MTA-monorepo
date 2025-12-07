@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { OpenSubjectClassRetakeStudentsResponseFixedClass } from './openSubjectClassRetakeStudentsResponseFixedClass'
 import type { OpenSubjectClassRetakeStudentsResponseUserProfile } from './openSubjectClassRetakeStudentsResponseUserProfile'
+import type { OpenSubjectClassRetakeStudentsResponseFixedClass } from './openSubjectClassRetakeStudentsResponseFixedClass'
 
 export interface OpenSubjectClassRetakeStudentsResponse {
     id: string

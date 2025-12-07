@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { Prisma } from '@workspace/db'
+import { $Enums, Prisma } from '@workspace/db'
 import { calcFinalScore } from '@workspace/libs/utils'
 import { prisma } from '..'
 
@@ -199,6 +199,9 @@ app.openapi(saveExamScore, async (c) => {
             studentSubjectScore: {
                 select: {
                     id: true,
+                    subjectClass: {
+                        select: { type: true },
+                    },
                     certificates: {
                         select: {
                             archivedCertificate: {
@@ -230,6 +233,8 @@ app.openapi(saveExamScore, async (c) => {
                                             coef_2: true,
                                             coef_3: true,
                                             scoreToPass: true,
+                                            maxReExamScore: true,
+                                            reduceReExamScore: true,
                                         },
                                     },
                                 },
@@ -273,6 +278,8 @@ app.openapi(saveExamScore, async (c) => {
         coef_2: 0.3,
         coef_3: 0.6,
         scoreToPass: 4,
+        maxReExamScore: 10,
+        reduceReExamScore: 0,
     }
 
     const updates = examPapers.map((p) => {
@@ -280,7 +287,8 @@ app.openapi(saveExamScore, async (c) => {
 
         const finalScore = calcFinalScore(
             p.studentSubjectScore.student.fixedClass?.trainingCourse || defaultCoef,
-            { ...p.studentSubjectScore, examScore }
+            { ...p.studentSubjectScore, examScore },
+            p.studentSubjectScore.subjectClass?.type || $Enums.SubjectClassType.NORMAL
         )
 
         return { examPaperId: p.id, examScore, finalScore }

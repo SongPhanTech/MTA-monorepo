@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsAcademicPerformanceByYearFiltered200DataItem } from './postApiStatsAcademicPerformanceByYearFiltered200DataItem'
 import type { PostApiStatsAcademicPerformanceByYearFiltered200Summary } from './postApiStatsAcademicPerformanceByYearFiltered200Summary'
+import type { PostApiStatsAcademicPerformanceByYearFiltered200DataItem } from './postApiStatsAcademicPerformanceByYearFiltered200DataItem'
 
 export type PostApiStatsAcademicPerformanceByYearFiltered200 = {
     summary: PostApiStatsAcademicPerformanceByYearFiltered200Summary

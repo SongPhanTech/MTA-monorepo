@@ -7,7 +7,7 @@ const ExportTemplateLecturer = () => {
     const exportTemplate = async () => {
         // Tạo workbook mới
         const workbook = new ExcelJS.Workbook()
-        const worksheet = workbook.addWorksheet('Danh sách giáo viên')
+        const worksheet = workbook.addWorksheet('Danh sách giảng viên')
 
         // Thiết lập style
         const golbalFontStyle = {
@@ -65,7 +65,7 @@ const ExportTemplateLecturer = () => {
         worksheet.getCell('C1').value = 'HỌC VIỆN KỸ THUẬT QUÂN SỰ'
         worksheet.getCell('C1').style = headerTitleStyle
 
-        worksheet.getCell('A2').value = 'Danh sách giáo viên'
+        worksheet.getCell('A2').value = 'Danh sách giảng viên'
         worksheet.getCell('A2').style = headerTitleStyle
 
         // Thêm tiêu đề bảng
@@ -73,10 +73,10 @@ const ExportTemplateLecturer = () => {
         headerRow.values = [
             'STT',
             'Mã GV',
-            'Tên giáo viên',
+            'Tên giảng viên',
             'Ngày sinh (dd/mm/yyyy)',
             'Giới tính',
-            'Kiểu giáo viên',
+            'Kiểu giảng viên',
             'Học hàm',
             'Học vị',
             'Khoa',

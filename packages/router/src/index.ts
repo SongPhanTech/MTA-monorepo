@@ -151,6 +151,21 @@ const NAVIGATION: NavigationType = {
                         label: 'Kế hoạch học lại',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI,
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_THI_LAI,
+                        label: 'Kế hoạch thi lại',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_THI_LAI,
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_KE_HOC_LAI,
+                        label: 'Thống kê học lại',
+                        path: ROUTER_PATH.QL_DAO_TAO.THONG_KE_HOC_LAI,
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_KE_THI_LAI,
+                        label: 'Thống kê thi lại',
+                        path: ROUTER_PATH.QL_DAO_TAO.THONG_KE_THI_LAI,
+                    },
                 ],
             },
             {

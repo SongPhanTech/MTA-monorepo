@@ -4,10 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { EnrollFixedClassOnSubjectClassFixedClass } from './enrollFixedClassOnSubjectClassFixedClass'
 import type { EnrollFixedClassOnSubjectClassStatus } from './enrollFixedClassOnSubjectClassStatus'
 import type { EnrollFixedClassOnSubjectClassUserProfile } from './enrollFixedClassOnSubjectClassUserProfile'
+import type { EnrollFixedClassOnSubjectClassFixedClass } from './enrollFixedClassOnSubjectClassFixedClass'
 
 export interface EnrollFixedClassOnSubjectClass {
     id: string

@@ -1,4 +1,5 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
+import { SubjectClassType } from '@workspace/db'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
 
@@ -132,6 +133,8 @@ export const calcFinalScore = (
             coef_2: true
             coef_3: true
             scoreToPass: true
+            maxReExamScore: true
+            reduceReExamScore: true
         }
     }>,
     subjectScore: Prisma.StudentSubjectScoreGetPayload<{
@@ -158,7 +161,8 @@ export const calcFinalScore = (
             midtermScore: true
             examScore: true
         }
-    }>
+    }>,
+    subjectClassType: SubjectClassType
 ): Decimal | null => {
     // 1. Find max certificate final score
     const maxCertFinalScore = subjectScore.certificates?.length
@@ -179,18 +183,23 @@ export const calcFinalScore = (
         return maxCertFinalScore || null
     }
 
+    const examScore =
+        subjectClassType === SubjectClassType.REEXAM
+            ? subjectScore.examScore - coef.reduceReExamScore
+            : subjectScore.examScore
+
     // 4. Calculate final score
     const finalScore =
-        subjectScore.examScore < coef?.scoreToPass
-            ? subjectScore.examScore
+        examScore < coef.scoreToPass
+            ? examScore
             : Math.min(
-                  subjectScore.attendanceScore * coef?.coef_1 +
-                      subjectScore.midtermScore * coef?.coef_2 +
-                      subjectScore.examScore * coef?.coef_3,
+                  subjectScore.attendanceScore * coef.coef_1 +
+                      subjectScore.midtermScore * coef.coef_2 +
+                      examScore * coef.coef_3,
                   10
               )
 
-    if (maxCertFinalScore === null && finalScore < coef?.scoreToPass) {
+    if (maxCertFinalScore === null && finalScore < coef.scoreToPass) {
         return new Decimal(finalScore).toDecimalPlaces(1)
     }
 
@@ -201,7 +210,7 @@ export const calcFinalScore = (
 
     return Decimal.min(
         Decimal.max(finalScore, maxCertFinalScore || 0).add(bonusScore),
-        10
+        subjectClassType === SubjectClassType.REEXAM ? coef.maxReExamScore : 10
     ).toDecimalPlaces(1)
 }
 

@@ -488,7 +488,7 @@ const PutFixedClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="lecturerManagementId" label="GVCN">
                     <Select
-                        placeholder="Chọn giáo viên chủ nhiệm"
+                        placeholder="Chọn giảng viên chủ nhiệm"
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,

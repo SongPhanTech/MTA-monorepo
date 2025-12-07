@@ -4,11 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetClassRegisterSession200ItemCreditLimitItem } from './getClassRegisterSession200ItemCreditLimitItem'
-import type { GetClassRegisterSession200ItemCurriculumVersionsItem } from './getClassRegisterSession200ItemCurriculumVersionsItem'
 import type { GetClassRegisterSession200ItemSemester } from './getClassRegisterSession200ItemSemester'
 import type { GetClassRegisterSession200ItemTrainingCoursesItem } from './getClassRegisterSession200ItemTrainingCoursesItem'
+import type { GetClassRegisterSession200ItemCurriculumVersionsItem } from './getClassRegisterSession200ItemCurriculumVersionsItem'
+import type { GetClassRegisterSession200ItemCreditLimitItem } from './getClassRegisterSession200ItemCreditLimitItem'
 
 export type GetClassRegisterSession200Item = {
     id: string

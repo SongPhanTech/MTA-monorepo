@@ -4,9 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { PostApiStatsQuestionStatistics200DataItem } from './postApiStatsQuestionStatistics200DataItem'
 import type { PostApiStatsQuestionStatistics200Summary } from './postApiStatsQuestionStatistics200Summary'
+import type { PostApiStatsQuestionStatistics200DataItem } from './postApiStatsQuestionStatistics200DataItem'
 
 export type PostApiStatsQuestionStatistics200 = {
     summary: PostApiStatsQuestionStatistics200Summary

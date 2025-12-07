@@ -4,15 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem'
-import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem'
+import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic'
+import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem'
 import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem'
 import type { GetClusterSurveyStatistics200SurveyChoiceItem } from './getClusterSurveyStatistics200SurveyChoiceItem'
-import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem'
 import type { GetClusterSurveyStatistics200SurveyQuestionItem } from './getClusterSurveyStatistics200SurveyQuestionItem'
 import type { GetClusterSurveyStatistics200SurveysItem } from './getClusterSurveyStatistics200SurveysItem'
-import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic'
+import type { GetClusterSurveyStatistics200ChoicesItem } from './getClusterSurveyStatistics200ChoicesItem'
+import type { GetClusterSurveyStatistics200DataItem } from './getClusterSurveyStatistics200DataItem'
 
 export type GetClusterSurveyStatistics200 = {
     id: string

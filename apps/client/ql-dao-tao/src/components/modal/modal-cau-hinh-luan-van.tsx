@@ -1025,7 +1025,7 @@ const ModalCauHinhLuanVan = () => {
                     {/* Cột chính chứa thông tin thanh toán */}
                     <Col span={24}>
                         <Title level={5} className="mb-4" style={{ marginTop: 0 }}>
-                            Thanh toán giáo viên hướng dẫn
+                            Thanh toán giảng viên hướng dẫn
                         </Title>
 
                         {/* --- GVHD 1 --- */}

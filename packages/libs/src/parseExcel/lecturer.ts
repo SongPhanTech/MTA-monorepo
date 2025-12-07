@@ -10,7 +10,7 @@ dayjs.extend(customParseFormat)
 
 export const parseSheetLecturer = (file: ArrayBufferLike) => {
     const wb = read(file)
-    const sheetName = 'Danh sách giáo viên'
+    const sheetName = 'Danh sách giảng viên'
     const errors: ParseSheetError[] = []
 
     const ws = wb.Sheets[sheetName]
@@ -122,7 +122,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
                 errors.push({
                     sheetRef: sheetName,
                     cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
-                    message: 'Kiểu giáo viên không được để trống',
+                    message: 'Kiểu giảng viên không được để trống',
                 })
             }
 

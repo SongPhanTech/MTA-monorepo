@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,8 +19,7 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { customModelFetch } from './custom-instance'
+
 import type {
     AccessRequests200Item,
     AccessRequestsParams,
@@ -61,6 +60,7 @@ import type {
     UrlDto,
 } from './schemas'
 
+import { customModelFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -99,7 +99,7 @@ export const getGetSessionUrl = (params: GetSessionParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/auth/get-session?${stringifiedParams}`
-        : '/api/auth/get-session'
+        : `/api/auth/get-session`
 }
 
 export const getSession = async (
@@ -113,7 +113,7 @@ export const getSession = async (
 }
 
 export const getGetSessionQueryKey = (params?: GetSessionParams) => {
-    return ['/api/auth/get-session', ...(params ? [params] : [])] as const
+    return [`/api/auth/get-session`, ...(params ? [params] : [])] as const
 }
 
 export const getGetSessionQueryOptions = <
@@ -239,7 +239,7 @@ export const getAccessRequestsUrl = (params: AccessRequestsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/apim-logs/access-requests?${stringifiedParams}`
-        : '/api/apim-logs/access-requests'
+        : `/api/apim-logs/access-requests`
 }
 
 export const accessRequests = async (
@@ -253,7 +253,7 @@ export const accessRequests = async (
 }
 
 export const getAccessRequestsQueryKey = (params?: AccessRequestsParams) => {
-    return ['/api/apim-logs/access-requests', ...(params ? [params] : [])] as const
+    return [`/api/apim-logs/access-requests`, ...(params ? [params] : [])] as const
 }
 
 export const getAccessRequestsQueryOptions = <
@@ -381,7 +381,7 @@ export const getCountRequestsUrl = (params: CountRequestsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/apim-logs/count-requests?${stringifiedParams}`
-        : '/api/apim-logs/count-requests'
+        : `/api/apim-logs/count-requests`
 }
 
 export const countRequests = async (
@@ -395,7 +395,7 @@ export const countRequests = async (
 }
 
 export const getCountRequestsQueryKey = (params?: CountRequestsParams) => {
-    return ['/api/apim-logs/count-requests', ...(params ? [params] : [])] as const
+    return [`/api/apim-logs/count-requests`, ...(params ? [params] : [])] as const
 }
 
 export const getCountRequestsQueryOptions = <
@@ -521,7 +521,7 @@ export const getLatencyAverageUrl = (params: LatencyAverageParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/apim-logs/latency-average?${stringifiedParams}`
-        : '/api/apim-logs/latency-average'
+        : `/api/apim-logs/latency-average`
 }
 
 export const latencyAverage = async (
@@ -535,7 +535,7 @@ export const latencyAverage = async (
 }
 
 export const getLatencyAverageQueryKey = (params?: LatencyAverageParams) => {
-    return ['/api/apim-logs/latency-average', ...(params ? [params] : [])] as const
+    return [`/api/apim-logs/latency-average`, ...(params ? [params] : [])] as const
 }
 
 export const getLatencyAverageQueryOptions = <
@@ -663,7 +663,7 @@ export const getErrorRateUrl = (params: ErrorRateParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/apim-logs/error-rate?${stringifiedParams}`
-        : '/api/apim-logs/error-rate'
+        : `/api/apim-logs/error-rate`
 }
 
 export const errorRate = async (
@@ -677,7 +677,7 @@ export const errorRate = async (
 }
 
 export const getErrorRateQueryKey = (params?: ErrorRateParams) => {
-    return ['/api/apim-logs/error-rate', ...(params ? [params] : [])] as const
+    return [`/api/apim-logs/error-rate`, ...(params ? [params] : [])] as const
 }
 
 export const getErrorRateQueryOptions = <
@@ -791,7 +791,7 @@ export const getThroughputUrl = (params: ThroughputParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/apim-logs/throughput?${stringifiedParams}`
-        : '/api/apim-logs/throughput'
+        : `/api/apim-logs/throughput`
 }
 
 export const throughput = async (
@@ -805,7 +805,7 @@ export const throughput = async (
 }
 
 export const getThroughputQueryKey = (params?: ThroughputParams) => {
-    return ['/api/apim-logs/throughput', ...(params ? [params] : [])] as const
+    return [`/api/apim-logs/throughput`, ...(params ? [params] : [])] as const
 }
 
 export const getThroughputQueryOptions = <
@@ -919,7 +919,7 @@ export const getApplicationsUrl = (params?: ApplicationsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/wso2am/applications?${stringifiedParams}`
-        : '/api/wso2am/applications'
+        : `/api/wso2am/applications`
 }
 
 export const applications = async (
@@ -933,7 +933,7 @@ export const applications = async (
 }
 
 export const getApplicationsQueryKey = (params?: ApplicationsParams) => {
-    return ['/api/wso2am/applications', ...(params ? [params] : [])] as const
+    return [`/api/wso2am/applications`, ...(params ? [params] : [])] as const
 }
 
 export const getApplicationsQueryOptions = <
@@ -1047,7 +1047,7 @@ export const getGetDatabasesUrl = (params: GetDatabasesParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/get-databases?${stringifiedParams}`
-        : '/api/excel-import-export/get-databases'
+        : `/api/excel-import-export/get-databases`
 }
 
 export const getDatabases = async (
@@ -1061,7 +1061,7 @@ export const getDatabases = async (
 }
 
 export const getGetDatabasesQueryKey = (params?: GetDatabasesParams) => {
-    return ['/api/excel-import-export/get-databases', ...(params ? [params] : [])] as const
+    return [`/api/excel-import-export/get-databases`, ...(params ? [params] : [])] as const
 }
 
 export const getGetDatabasesQueryOptions = <
@@ -1175,7 +1175,7 @@ export const getGetTablesUrl = (params: GetTablesParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/get-tables?${stringifiedParams}`
-        : '/api/excel-import-export/get-tables'
+        : `/api/excel-import-export/get-tables`
 }
 
 export const getTables = async (
@@ -1189,7 +1189,7 @@ export const getTables = async (
 }
 
 export const getGetTablesQueryKey = (params?: GetTablesParams) => {
-    return ['/api/excel-import-export/get-tables', ...(params ? [params] : [])] as const
+    return [`/api/excel-import-export/get-tables`, ...(params ? [params] : [])] as const
 }
 
 export const getGetTablesQueryOptions = <
@@ -1303,7 +1303,7 @@ export const getGetColumnsUrl = (params: GetColumnsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/get-columns?${stringifiedParams}`
-        : '/api/excel-import-export/get-columns'
+        : `/api/excel-import-export/get-columns`
 }
 
 export const getColumns = async (
@@ -1317,7 +1317,7 @@ export const getColumns = async (
 }
 
 export const getGetColumnsQueryKey = (params?: GetColumnsParams) => {
-    return ['/api/excel-import-export/get-columns', ...(params ? [params] : [])] as const
+    return [`/api/excel-import-export/get-columns`, ...(params ? [params] : [])] as const
 }
 
 export const getGetColumnsQueryOptions = <
@@ -1431,7 +1431,7 @@ export const getExportTableByColumnsUrl = (params: ExportTableByColumnsParams) =
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/export-table-by-columns?${stringifiedParams}`
-        : '/api/excel-import-export/export-table-by-columns'
+        : `/api/excel-import-export/export-table-by-columns`
 }
 
 export const exportTableByColumns = async (
@@ -1446,7 +1446,7 @@ export const exportTableByColumns = async (
 
 export const getExportTableByColumnsQueryKey = (params?: ExportTableByColumnsParams) => {
     return [
-        '/api/excel-import-export/export-table-by-columns',
+        `/api/excel-import-export/export-table-by-columns`,
         ...(params ? [params] : []),
     ] as const
 }
@@ -1596,7 +1596,7 @@ export const getCheckExportTableBySqlUrl = (params: CheckExportTableBySqlParams)
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/check-export-table-by-sql?${stringifiedParams}`
-        : '/api/excel-import-export/check-export-table-by-sql'
+        : `/api/excel-import-export/check-export-table-by-sql`
 }
 
 export const checkExportTableBySql = async (
@@ -1611,7 +1611,7 @@ export const checkExportTableBySql = async (
 
 export const getCheckExportTableBySqlQueryKey = (params?: CheckExportTableBySqlParams) => {
     return [
-        '/api/excel-import-export/check-export-table-by-sql',
+        `/api/excel-import-export/check-export-table-by-sql`,
         ...(params ? [params] : []),
     ] as const
 }
@@ -1752,7 +1752,7 @@ export const getExportTableBySqlUrl = (params: ExportTableBySqlParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/excel-import-export/export-table-by-sql?${stringifiedParams}`
-        : '/api/excel-import-export/export-table-by-sql'
+        : `/api/excel-import-export/export-table-by-sql`
 }
 
 export const exportTableBySql = async (
@@ -1766,7 +1766,7 @@ export const exportTableBySql = async (
 }
 
 export const getExportTableBySqlQueryKey = (params?: ExportTableBySqlParams) => {
-    return ['/api/excel-import-export/export-table-by-sql', ...(params ? [params] : [])] as const
+    return [`/api/excel-import-export/export-table-by-sql`, ...(params ? [params] : [])] as const
 }
 
 export const getExportTableBySqlQueryOptions = <
@@ -1890,7 +1890,7 @@ export type readExcelColumnsResponseSuccess = readExcelColumnsResponse200 & {
 export type readExcelColumnsResponse = readExcelColumnsResponseSuccess
 
 export const getReadExcelColumnsUrl = () => {
-    return '/api/excel-import-export/read-excel-columns'
+    return `/api/excel-import-export/read-excel-columns`
 }
 
 export const readExcelColumns = async (
@@ -1898,7 +1898,7 @@ export const readExcelColumns = async (
     options?: RequestInit
 ): Promise<readExcelColumnsResponse> => {
     const formData = new FormData()
-    formData.append('file', readExcelColumnsBody.file)
+    formData.append(`file`, readExcelColumnsBody.file)
 
     return customModelFetch<readExcelColumnsResponse>(getReadExcelColumnsUrl(), {
         ...options,
@@ -1980,7 +1980,7 @@ export type importExcelToDatabaseResponseSuccess = importExcelToDatabaseResponse
 export type importExcelToDatabaseResponse = importExcelToDatabaseResponseSuccess
 
 export const getImportExcelToDatabaseUrl = () => {
-    return '/api/excel-import-export/import-excel-to-database'
+    return `/api/excel-import-export/import-excel-to-database`
 }
 
 export const importExcelToDatabase = async (
@@ -1988,13 +1988,13 @@ export const importExcelToDatabase = async (
     options?: RequestInit
 ): Promise<importExcelToDatabaseResponse> => {
     const formData = new FormData()
-    formData.append('file', importExcelToDatabaseBody.file)
-    formData.append('url', importExcelToDatabaseBody.url)
-    formData.append('database', importExcelToDatabaseBody.database)
-    formData.append('table', importExcelToDatabaseBody.table)
-    formData.append('columns', importExcelToDatabaseBody.columns)
+    formData.append(`file`, importExcelToDatabaseBody.file)
+    formData.append(`url`, importExcelToDatabaseBody.url)
+    formData.append(`database`, importExcelToDatabaseBody.database)
+    formData.append(`table`, importExcelToDatabaseBody.table)
+    formData.append(`columns`, importExcelToDatabaseBody.columns)
     if (importExcelToDatabaseBody.dbType !== undefined) {
-        formData.append('dbType', importExcelToDatabaseBody.dbType)
+        formData.append(`dbType`, importExcelToDatabaseBody.dbType)
     }
 
     return customModelFetch<importExcelToDatabaseResponse>(getImportExcelToDatabaseUrl(), {
@@ -2080,7 +2080,7 @@ export type generatePresignedUrlResponseSuccess = generatePresignedUrlResponse20
 export type generatePresignedUrlResponse = generatePresignedUrlResponseSuccess
 
 export const getGeneratePresignedUrlUrl = () => {
-    return '/api/minio/generate-presigned-url'
+    return `/api/minio/generate-presigned-url`
 }
 
 export const generatePresignedUrl = async (
@@ -2181,7 +2181,7 @@ export const getListObjectsUrl = (params: ListObjectsParams) => {
 
     const stringifiedParams = normalizedParams.toString()
 
-    return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : '/api/minio'
+    return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
 }
 
 export const listObjects = async (
@@ -2195,7 +2195,7 @@ export const listObjects = async (
 }
 
 export const getListObjectsQueryKey = (params?: ListObjectsParams) => {
-    return ['/api/minio', ...(params ? [params] : [])] as const
+    return [`/api/minio`, ...(params ? [params] : [])] as const
 }
 
 export const getListObjectsQueryOptions = <
@@ -2309,7 +2309,7 @@ export const getPresignedGetObjectUrl = (params: PresignedGetObjectParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/minio/presigned-url?${stringifiedParams}`
-        : '/api/minio/presigned-url'
+        : `/api/minio/presigned-url`
 }
 
 export const presignedGetObject = async (
@@ -2323,7 +2323,7 @@ export const presignedGetObject = async (
 }
 
 export const getPresignedGetObjectQueryKey = (params?: PresignedGetObjectParams) => {
-    return ['/api/minio/presigned-url', ...(params ? [params] : [])] as const
+    return [`/api/minio/presigned-url`, ...(params ? [params] : [])] as const
 }
 
 export const getPresignedGetObjectQueryOptions = <
@@ -2449,7 +2449,7 @@ export type sqlTransactionResponseSuccess = sqlTransactionResponse200 & {
 export type sqlTransactionResponse = sqlTransactionResponseSuccess
 
 export const getSqlTransactionUrl = () => {
-    return '/api/sql/transaction'
+    return `/api/sql/transaction`
 }
 
 export const sqlTransaction = async (

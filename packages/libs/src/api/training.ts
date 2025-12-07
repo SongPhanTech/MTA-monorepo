@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,8 +19,7 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { customTrainingFetch } from './custom-instance'
+
 import type {
     AwardIds,
     AwardIdsResult,
@@ -195,6 +194,7 @@ import type {
     UploadExcelUpdateUserProfile400,
 } from './schemas'
 
+import { customTrainingFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -221,7 +221,7 @@ export type trainingFieldResponseError = trainingFieldResponse400 & {
 export type trainingFieldResponse = trainingFieldResponseSuccess | trainingFieldResponseError
 
 export const getTrainingFieldUrl = () => {
-    return '/api/training-field'
+    return `/api/training-field`
 }
 
 export const trainingField = async (options?: RequestInit): Promise<trainingFieldResponse> => {
@@ -232,7 +232,7 @@ export const trainingField = async (options?: RequestInit): Promise<trainingFiel
 }
 
 export const getTrainingFieldQueryKey = () => {
-    return ['/api/training-field'] as const
+    return [`/api/training-field`] as const
 }
 
 export const getTrainingFieldQueryOptions = <
@@ -347,7 +347,7 @@ export type roomResponseError = roomResponse400 & {
 export type roomResponse = roomResponseSuccess | roomResponseError
 
 export const getRoomUrl = () => {
-    return '/api/room'
+    return `/api/room`
 }
 
 export const room = async (options?: RequestInit): Promise<roomResponse> => {
@@ -358,7 +358,7 @@ export const room = async (options?: RequestInit): Promise<roomResponse> => {
 }
 
 export const getRoomQueryKey = () => {
-    return ['/api/room'] as const
+    return [`/api/room`] as const
 }
 
 export const getRoomQueryOptions = <
@@ -470,7 +470,7 @@ export type uploadExcelCreateUserProfileResponse =
     | uploadExcelCreateUserProfileResponseError
 
 export const getUploadExcelCreateUserProfileUrl = () => {
-    return '/api/user-profile/upload-excel-create-user-profile'
+    return `/api/user-profile/upload-excel-create-user-profile`
 }
 
 export const uploadExcelCreateUserProfile = async (
@@ -478,8 +478,8 @@ export const uploadExcelCreateUserProfile = async (
     options?: RequestInit
 ): Promise<uploadExcelCreateUserProfileResponse> => {
     const formData = new FormData()
-    formData.append('file', uploadExcelCreateUserProfile.file)
-    formData.append('type', uploadExcelCreateUserProfile.type)
+    formData.append(`file`, uploadExcelCreateUserProfile.file)
+    formData.append(`type`, uploadExcelCreateUserProfile.type)
 
     return customTrainingFetch<uploadExcelCreateUserProfileResponse>(
         getUploadExcelCreateUserProfileUrl(),
@@ -588,7 +588,7 @@ export type uploadExcelUpdateUserProfileResponse =
     | uploadExcelUpdateUserProfileResponseError
 
 export const getUploadExcelUpdateUserProfileUrl = () => {
-    return '/api/user-profile/upload-excel-update-user-profile'
+    return `/api/user-profile/upload-excel-update-user-profile`
 }
 
 export const uploadExcelUpdateUserProfile = async (
@@ -596,7 +596,7 @@ export const uploadExcelUpdateUserProfile = async (
     options?: RequestInit
 ): Promise<uploadExcelUpdateUserProfileResponse> => {
     const formData = new FormData()
-    formData.append('file', uploadExcelUpdateUserProfile.file)
+    formData.append(`file`, uploadExcelUpdateUserProfile.file)
 
     return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(
         getUploadExcelUpdateUserProfileUrl(),
@@ -702,7 +702,7 @@ export type classDivisionResponseError = classDivisionResponse400 & {
 export type classDivisionResponse = classDivisionResponseSuccess | classDivisionResponseError
 
 export const getClassDivisionUrl = () => {
-    return '/api/fixed-class/upload-excel-update-user-profile'
+    return `/api/fixed-class/upload-excel-update-user-profile`
 }
 
 export const classDivision = async (
@@ -710,7 +710,7 @@ export const classDivision = async (
     options?: RequestInit
 ): Promise<classDivisionResponse> => {
     const formData = new FormData()
-    formData.append('file', classDivision.file)
+    formData.append(`file`, classDivision.file)
 
     return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(), {
         ...options,
@@ -815,7 +815,7 @@ export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParam
 
     return stringifiedParams.length > 0
         ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
-        : '/api/fixed-class/fixed-class-student-count'
+        : `/api/fixed-class/fixed-class-student-count`
 }
 
 export const fixedClassStudentCount = async (
@@ -832,7 +832,7 @@ export const fixedClassStudentCount = async (
 }
 
 export const getFixedClassStudentCountQueryKey = (params?: FixedClassStudentCountParams) => {
-    return ['/api/fixed-class/fixed-class-student-count', ...(params ? [params] : [])] as const
+    return [`/api/fixed-class/fixed-class-student-count`, ...(params ? [params] : [])] as const
 }
 
 export const getFixedClassStudentCountQueryOptions = <
@@ -985,7 +985,7 @@ export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/subject-class/open-subject-class?${stringifiedParams}`
-        : '/api/subject-class/open-subject-class'
+        : `/api/subject-class/open-subject-class`
 }
 
 export const openSubjectClass = async (
@@ -999,7 +999,7 @@ export const openSubjectClass = async (
 }
 
 export const getOpenSubjectClassQueryKey = (params?: OpenSubjectClassParams) => {
-    return ['/api/subject-class/open-subject-class', ...(params ? [params] : [])] as const
+    return [`/api/subject-class/open-subject-class`, ...(params ? [params] : [])] as const
 }
 
 export const getOpenSubjectClassQueryOptions = <
@@ -1152,7 +1152,7 @@ export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParam
 
     return stringifiedParams.length > 0
         ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}`
-        : '/api/subject-class/open-subject-class-retake'
+        : `/api/subject-class/open-subject-class-retake`
 }
 
 export const openSubjectClassRetake = async (
@@ -1169,7 +1169,7 @@ export const openSubjectClassRetake = async (
 }
 
 export const getOpenSubjectClassRetakeQueryKey = (params?: OpenSubjectClassRetakeParams) => {
-    return ['/api/subject-class/open-subject-class-retake', ...(params ? [params] : [])] as const
+    return [`/api/subject-class/open-subject-class-retake`, ...(params ? [params] : [])] as const
 }
 
 export const getOpenSubjectClassRetakeQueryOptions = <
@@ -1329,7 +1329,7 @@ export const getOpenSubjectClassRetakeStudentsUrl = (
 
     return stringifiedParams.length > 0
         ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}`
-        : '/api/subject-class/open-subject-class-retake-students'
+        : `/api/subject-class/open-subject-class-retake-students`
 }
 
 export const openSubjectClassRetakeStudents = async (
@@ -1349,7 +1349,7 @@ export const getOpenSubjectClassRetakeStudentsQueryKey = (
     params?: OpenSubjectClassRetakeStudentsParams
 ) => {
     return [
-        '/api/subject-class/open-subject-class-retake-students',
+        `/api/subject-class/open-subject-class-retake-students`,
         ...(params ? [params] : []),
     ] as const
 }
@@ -1517,7 +1517,7 @@ export type enrollFixedClassOnSubjectClassResponse =
     | enrollFixedClassOnSubjectClassResponseError
 
 export const getEnrollFixedClassOnSubjectClassUrl = () => {
-    return '/api/subject-class/enroll-fixed-class-on-subject-class'
+    return `/api/subject-class/enroll-fixed-class-on-subject-class`
 }
 
 export const enrollFixedClassOnSubjectClass = async (
@@ -1628,7 +1628,7 @@ export type setScoreDeadLineResponse =
     | setScoreDeadLineResponseError
 
 export const getSetScoreDeadLineUrl = () => {
-    return '/api/subject-class/set-score-dead-line'
+    return `/api/subject-class/set-score-dead-line`
 }
 
 export const setScoreDeadLine = async (
@@ -1733,7 +1733,7 @@ export type setExamScoreDeadLineResponse =
     | setExamScoreDeadLineResponseError
 
 export const getSetExamScoreDeadLineUrl = () => {
-    return '/api/subject-class/set-exam-score-dead-line'
+    return `/api/subject-class/set-exam-score-dead-line`
 }
 
 export const setExamScoreDeadLine = async (
@@ -1843,7 +1843,7 @@ export type uploadExcelImportScoreResponse =
     | uploadExcelImportScoreResponseError
 
 export const getUploadExcelImportScoreUrl = () => {
-    return '/api/subject-class/upload-excel-import-score'
+    return `/api/subject-class/upload-excel-import-score`
 }
 
 export const uploadExcelImportScore = async (
@@ -1851,8 +1851,8 @@ export const uploadExcelImportScore = async (
     options?: RequestInit
 ): Promise<uploadExcelImportScoreResponse> => {
     const formData = new FormData()
-    formData.append('file', uploadExcelImportScore.file)
-    formData.append('subjectClassId', uploadExcelImportScore.subjectClassId)
+    formData.append(`file`, uploadExcelImportScore.file)
+    formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
 
     return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
         ...options,
@@ -1948,7 +1948,7 @@ export type importStudentResponseError = importStudentResponse400 & {
 export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
 
 export const getImportStudentUrl = () => {
-    return '/api/student/import-student'
+    return `/api/student/import-student`
 }
 
 export const importStudent = async (
@@ -1956,9 +1956,9 @@ export const importStudent = async (
     options?: RequestInit
 ): Promise<importStudentResponse> => {
     const formData = new FormData()
-    formData.append('file', importStudentRequest.file)
+    formData.append(`file`, importStudentRequest.file)
     if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
-        formData.append('timeout', importStudentRequest.timeout.toString())
+        formData.append(`timeout`, importStudentRequest.timeout.toString())
     }
 
     return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
@@ -2056,7 +2056,7 @@ export type updateStudentStatusResponse =
     | updateStudentStatusResponseError
 
 export const getUpdateStudentStatusUrl = () => {
-    return '/api/student/update-students-status'
+    return `/api/student/update-students-status`
 }
 
 export const updateStudentStatus = async (
@@ -2180,7 +2180,7 @@ export const getExportStudentResultSemesterJsonUrl = (
 
     return stringifiedParams.length > 0
         ? `/api/student/export-json-list-student-to-check-academic?${stringifiedParams}`
-        : '/api/student/export-json-list-student-to-check-academic'
+        : `/api/student/export-json-list-student-to-check-academic`
 }
 
 export const exportStudentResultSemesterJson = async (
@@ -2200,7 +2200,7 @@ export const getExportStudentResultSemesterJsonQueryKey = (
     params?: ExportStudentResultSemesterJsonParams
 ) => {
     return [
-        '/api/student/export-json-list-student-to-check-academic',
+        `/api/student/export-json-list-student-to-check-academic`,
         ...(params ? [params] : []),
     ] as const
 }
@@ -2389,7 +2389,7 @@ export const getCalculateStudentSemesterResultJsonUrl = (
 
     return stringifiedParams.length > 0
         ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}`
-        : '/api/student/calculate-student-semester-result-json'
+        : `/api/student/calculate-student-semester-result-json`
 }
 
 export const calculateStudentSemesterResultJson = async (
@@ -2497,7 +2497,7 @@ export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
 export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
 
 export const getImportHeQuanSuUrl = () => {
-    return '/api/student/import-he-quan-su'
+    return `/api/student/import-he-quan-su`
 }
 
 export const importHeQuanSu = async (
@@ -2505,9 +2505,9 @@ export const importHeQuanSu = async (
     options?: RequestInit
 ): Promise<importHeQuanSuResponse> => {
     const formData = new FormData()
-    formData.append('file', importHeQuanSuRequest.file)
+    formData.append(`file`, importHeQuanSuRequest.file)
     if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
-        formData.append('timeout', importHeQuanSuRequest.timeout.toString())
+        formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
     }
 
     return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
@@ -2611,7 +2611,7 @@ export const getDebtStatisticsUrl = (params: DebtStatisticsParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/student/debt-statistics?${stringifiedParams}`
-        : '/api/student/debt-statistics'
+        : `/api/student/debt-statistics`
 }
 
 export const debtStatistics = async (
@@ -2625,7 +2625,7 @@ export const debtStatistics = async (
 }
 
 export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams) => {
-    return ['/api/student/debt-statistics', ...(params ? [params] : [])] as const
+    return [`/api/student/debt-statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getDebtStatisticsQueryOptions = <
@@ -2751,7 +2751,7 @@ export type exportLecturerProfileResponse =
     | exportLecturerProfileResponseError
 
 export const getExportLecturerProfileUrl = () => {
-    return '/api/lecturer/export-lecturer-profile'
+    return `/api/lecturer/export-lecturer-profile`
 }
 
 export const exportLecturerProfile = async (
@@ -2864,7 +2864,7 @@ export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificati
 
     return stringifiedParams.length > 0
         ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}`
-        : '/api/diploma-verification/export-diploma-verification'
+        : `/api/diploma-verification/export-diploma-verification`
 }
 
 export const exportDiplomaVerification = async (
@@ -2882,7 +2882,7 @@ export const exportDiplomaVerification = async (
 
 export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams) => {
     return [
-        '/api/diploma-verification/export-diploma-verification',
+        `/api/diploma-verification/export-diploma-verification`,
         ...(params ? [params] : []),
     ] as const
 }
@@ -3031,7 +3031,7 @@ export type uploadExcelImportTrainingScoreResponse =
     | uploadExcelImportTrainingScoreResponseError
 
 export const getUploadExcelImportTrainingScoreUrl = () => {
-    return '/api/training-score/upload-excel-import-score'
+    return `/api/training-score/upload-excel-import-score`
 }
 
 export const uploadExcelImportTrainingScore = async (
@@ -3039,9 +3039,9 @@ export const uploadExcelImportTrainingScore = async (
     options?: RequestInit
 ): Promise<uploadExcelImportTrainingScoreResponse> => {
     const formData = new FormData()
-    formData.append('file', uploadExcelImportTrainingScore.file)
-    formData.append('fixedClassId', uploadExcelImportTrainingScore.fixedClassId)
-    formData.append('trainingSessionId', uploadExcelImportTrainingScore.trainingSessionId)
+    formData.append(`file`, uploadExcelImportTrainingScore.file)
+    formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
+    formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
 
     return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(
         getUploadExcelImportTrainingScoreUrl(),
@@ -3154,9 +3154,9 @@ export const importPhienBanCTDT = async (
     options?: RequestInit
 ): Promise<importPhienBanCTDTResponse> => {
     const formData = new FormData()
-    formData.append('file', importPhienBanCTDT.file)
+    formData.append(`file`, importPhienBanCTDT.file)
     if (importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
-        formData.append('timeout', importPhienBanCTDT.timeout.toString())
+        formData.append(`timeout`, importPhienBanCTDT.timeout.toString())
     }
 
     return customTrainingFetch<importPhienBanCTDTResponse>(
@@ -3255,7 +3255,7 @@ export type importPhienBanCTDTSubjectResponse =
     | importPhienBanCTDTSubjectResponseError
 
 export const getImportPhienBanCTDTSubjectUrl = () => {
-    return '/api/curriculum-subject/import-phien-ban-ctdt-subject'
+    return `/api/curriculum-subject/import-phien-ban-ctdt-subject`
 }
 
 export const importPhienBanCTDTSubject = async (
@@ -3263,20 +3263,20 @@ export const importPhienBanCTDTSubject = async (
     options?: RequestInit
 ): Promise<importPhienBanCTDTSubjectResponse> => {
     const formData = new FormData()
-    formData.append('file', importPhienBanCTDTSubject.file)
-    formData.append('trainingObjectTypeId', importPhienBanCTDTSubject.trainingObjectTypeId)
-    formData.append('curriculumVersionId', importPhienBanCTDTSubject.curriculumVersionId)
+    formData.append(`file`, importPhienBanCTDTSubject.file)
+    formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubject.trainingObjectTypeId)
+    formData.append(`curriculumVersionId`, importPhienBanCTDTSubject.curriculumVersionId)
     if (
         importPhienBanCTDTSubject.createNewSubjects !== undefined &&
         importPhienBanCTDTSubject.createNewSubjects !== null
     ) {
-        formData.append('createNewSubjects', importPhienBanCTDTSubject.createNewSubjects.toString())
+        formData.append(`createNewSubjects`, importPhienBanCTDTSubject.createNewSubjects.toString())
     }
     if (
         importPhienBanCTDTSubject.timeout !== undefined &&
         importPhienBanCTDTSubject.timeout !== null
     ) {
-        formData.append('timeout', importPhienBanCTDTSubject.timeout.toString())
+        formData.append(`timeout`, importPhienBanCTDTSubject.timeout.toString())
     }
 
     return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
@@ -3378,7 +3378,7 @@ export type graduationApplicationInitResponse =
     | graduationApplicationInitResponseError
 
 export const getGraduationApplicationInitUrl = () => {
-    return '/api/graduation/application-init'
+    return `/api/graduation/application-init`
 }
 
 export const graduationApplicationInit = async (
@@ -3483,7 +3483,7 @@ export type graduationCheckResponseError = graduationCheckResponse400 & {
 export type graduationCheckResponse = graduationCheckResponseSuccess | graduationCheckResponseError
 
 export const getGraduationCheckUrl = () => {
-    return '/api/graduation/check'
+    return `/api/graduation/check`
 }
 
 export const graduationCheck = async (
@@ -3590,7 +3590,7 @@ export type generateDiplomaNumberResponse =
     | generateDiplomaNumberResponseError
 
 export const getGenerateDiplomaNumberUrl = () => {
-    return '/api/graduation/generate-diploma-number'
+    return `/api/graduation/generate-diploma-number`
 }
 
 export const generateDiplomaNumber = async (
@@ -3706,7 +3706,7 @@ export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisio
 
     return stringifiedParams.length > 0
         ? `/api/graduation/session-decision?${stringifiedParams}`
-        : '/api/graduation/session-decision'
+        : `/api/graduation/session-decision`
 }
 
 export const graduationSessionDecision = async (
@@ -3723,7 +3723,7 @@ export const graduationSessionDecision = async (
 }
 
 export const getGraduationSessionDecisionQueryKey = (params?: GraduationSessionDecisionParams) => {
-    return ['/api/graduation/session-decision', ...(params ? [params] : [])] as const
+    return [`/api/graduation/session-decision`, ...(params ? [params] : [])] as const
 }
 
 export const getGraduationSessionDecisionQueryOptions = <
@@ -3873,7 +3873,7 @@ export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationD
 
     return stringifiedParams.length > 0
         ? `/api/graduation/statistics?${stringifiedParams}`
-        : '/api/graduation/statistics'
+        : `/api/graduation/statistics`
 }
 
 export const statisticsGraduationDecision = async (
@@ -3892,7 +3892,7 @@ export const statisticsGraduationDecision = async (
 export const getStatisticsGraduationDecisionQueryKey = (
     params?: StatisticsGraduationDecisionParams
 ) => {
-    return ['/api/graduation/statistics', ...(params ? [params] : [])] as const
+    return [`/api/graduation/statistics`, ...(params ? [params] : [])] as const
 }
 
 export const getStatisticsGraduationDecisionQueryOptions = <
@@ -4030,7 +4030,7 @@ export type exportGraduationDecisionPptxResponse =
     | exportGraduationDecisionPptxResponseError
 
 export const getExportGraduationDecisionPptxUrl = () => {
-    return '/api/graduation/export-graduation-decision-pptx'
+    return `/api/graduation/export-graduation-decision-pptx`
 }
 
 export const exportGraduationDecisionPptx = async (
@@ -4039,16 +4039,16 @@ export const exportGraduationDecisionPptx = async (
 ): Promise<exportGraduationDecisionPptxResponse> => {
     const formData = new FormData()
     if (exportGraduationDecisionPptxBody.file !== undefined) {
-        formData.append('file', exportGraduationDecisionPptxBody.file)
+        formData.append(`file`, exportGraduationDecisionPptxBody.file)
     }
     if (exportGraduationDecisionPptxBody.sessionId !== undefined) {
-        formData.append('sessionId', exportGraduationDecisionPptxBody.sessionId)
+        formData.append(`sessionId`, exportGraduationDecisionPptxBody.sessionId)
     }
     if (
         exportGraduationDecisionPptxBody.timeout !== undefined &&
         exportGraduationDecisionPptxBody.timeout !== null
     ) {
-        formData.append('timeout', exportGraduationDecisionPptxBody.timeout.toString())
+        formData.append(`timeout`, exportGraduationDecisionPptxBody.timeout.toString())
     }
 
     return customTrainingFetch<exportGraduationDecisionPptxResponse>(
@@ -4154,7 +4154,7 @@ export type importPhanCongGiangDayResponse =
     | importPhanCongGiangDayResponseError
 
 export const getImportPhanCongGiangDayUrl = () => {
-    return '/api/plan-training/import-phan-cong-giang-day'
+    return `/api/plan-training/import-phan-cong-giang-day`
 }
 
 export const importPhanCongGiangDay = async (
@@ -4162,17 +4162,17 @@ export const importPhanCongGiangDay = async (
     options?: RequestInit
 ): Promise<importPhanCongGiangDayResponse> => {
     const formData = new FormData()
-    formData.append('file', importPhanCongGiangDay.file)
-    formData.append('semesterId', importPhanCongGiangDay.semesterId)
-    formData.append('trainingObjectTypeId', importPhanCongGiangDay.trainingObjectTypeId)
+    formData.append(`file`, importPhanCongGiangDay.file)
+    formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
+    formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
     if (importPhanCongGiangDay.retake !== undefined && importPhanCongGiangDay.retake !== null) {
-        formData.append('retake', importPhanCongGiangDay.retake.toString())
+        formData.append(`retake`, importPhanCongGiangDay.retake.toString())
     }
     if (importPhanCongGiangDay.fileType !== undefined) {
-        formData.append('fileType', importPhanCongGiangDay.fileType)
+        formData.append(`fileType`, importPhanCongGiangDay.fileType)
     }
     if (importPhanCongGiangDay.importType !== undefined) {
-        formData.append('importType', importPhanCongGiangDay.importType)
+        formData.append(`importType`, importPhanCongGiangDay.importType)
     }
 
     return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
@@ -4263,7 +4263,7 @@ export type postApiStatsStudentDistributionByTrainingObjectTypeResponse =
     postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
-    return '/api/stats/student-distribution-by-training-object-type'
+    return `/api/stats/student-distribution-by-training-object-type`
 }
 
 export const postApiStatsStudentDistributionByTrainingObjectType = async (
@@ -4364,7 +4364,7 @@ export type postApiStatsStudentDistributionByTrainingLevelResponse =
     postApiStatsStudentDistributionByTrainingLevelResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingLevelUrl = () => {
-    return '/api/stats/student-distribution-by-training-level'
+    return `/api/stats/student-distribution-by-training-level`
 }
 
 export const postApiStatsStudentDistributionByTrainingLevel = async (
@@ -4465,7 +4465,7 @@ export type postApiStatsStudentDistributionByTrainingCourseResponse =
     postApiStatsStudentDistributionByTrainingCourseResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingCourseUrl = () => {
-    return '/api/stats/student-distribution-by-training-course'
+    return `/api/stats/student-distribution-by-training-course`
 }
 
 export const postApiStatsStudentDistributionByTrainingCourse = async (
@@ -4566,7 +4566,7 @@ export type postApiStatsAverageEntryScoreByCourseResponse =
     postApiStatsAverageEntryScoreByCourseResponseSuccess
 
 export const getPostApiStatsAverageEntryScoreByCourseUrl = () => {
-    return '/api/stats/average-entry-score-by-course'
+    return `/api/stats/average-entry-score-by-course`
 }
 
 export const postApiStatsAverageEntryScoreByCourse = async (
@@ -4662,7 +4662,7 @@ export type postApiStatsAverageGpaByCourseResponseSuccess =
 export type postApiStatsAverageGpaByCourseResponse = postApiStatsAverageGpaByCourseResponseSuccess
 
 export const getPostApiStatsAverageGpaByCourseUrl = () => {
-    return '/api/stats/average-gpa-by-course'
+    return `/api/stats/average-gpa-by-course`
 }
 
 export const postApiStatsAverageGpaByCourse = async (
@@ -4758,7 +4758,7 @@ export type postApiStatsGraduationRateByCourseResponse =
     postApiStatsGraduationRateByCourseResponseSuccess
 
 export const getPostApiStatsGraduationRateByCourseUrl = () => {
-    return '/api/stats/graduation-rate-by-course'
+    return `/api/stats/graduation-rate-by-course`
 }
 
 export const postApiStatsGraduationRateByCourse = async (
@@ -4854,7 +4854,7 @@ export type postApiStatsAcademicPerformanceByYearResponse =
     postApiStatsAcademicPerformanceByYearResponseSuccess
 
 export const getPostApiStatsAcademicPerformanceByYearUrl = () => {
-    return '/api/stats/academic-performance-by-year'
+    return `/api/stats/academic-performance-by-year`
 }
 
 export const postApiStatsAcademicPerformanceByYear = async (
@@ -4949,7 +4949,7 @@ export type postApiStatsKpiCardsResponseSuccess = postApiStatsKpiCardsResponse20
 export type postApiStatsKpiCardsResponse = postApiStatsKpiCardsResponseSuccess
 
 export const getPostApiStatsKpiCardsUrl = () => {
-    return '/api/stats/kpi-cards'
+    return `/api/stats/kpi-cards`
 }
 
 export const postApiStatsKpiCards = async (
@@ -5042,7 +5042,7 @@ export type postApiStatsStudentDistributionByProvinceResponse =
     postApiStatsStudentDistributionByProvinceResponseSuccess
 
 export const getPostApiStatsStudentDistributionByProvinceUrl = () => {
-    return '/api/stats/student-distribution-by-province'
+    return `/api/stats/student-distribution-by-province`
 }
 
 export const postApiStatsStudentDistributionByProvince = async (
@@ -5139,7 +5139,7 @@ export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse 
     postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = () => {
-    return '/api/stats/student-distribution-by-training-object-type-filtered'
+    return `/api/stats/student-distribution-by-training-object-type-filtered`
 }
 
 export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
@@ -5240,7 +5240,7 @@ export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse =
     postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl = () => {
-    return '/api/stats/student-distribution-by-training-level-filtered'
+    return `/api/stats/student-distribution-by-training-level-filtered`
 }
 
 export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
@@ -5341,7 +5341,7 @@ export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse =
     postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess
 
 export const getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl = () => {
-    return '/api/stats/student-distribution-by-training-course-filtered'
+    return `/api/stats/student-distribution-by-training-course-filtered`
 }
 
 export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
@@ -5442,7 +5442,7 @@ export type postApiStatsAverageEntryScoreByCourseFilteredResponse =
     postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess
 
 export const getPostApiStatsAverageEntryScoreByCourseFilteredUrl = () => {
-    return '/api/stats/average-entry-score-by-course-filtered'
+    return `/api/stats/average-entry-score-by-course-filtered`
 }
 
 export const postApiStatsAverageEntryScoreByCourseFiltered = async (
@@ -5542,7 +5542,7 @@ export type postApiStatsAverageGpaByCourseFilteredResponse =
     postApiStatsAverageGpaByCourseFilteredResponseSuccess
 
 export const getPostApiStatsAverageGpaByCourseFilteredUrl = () => {
-    return '/api/stats/average-gpa-by-course-filtered'
+    return `/api/stats/average-gpa-by-course-filtered`
 }
 
 export const postApiStatsAverageGpaByCourseFiltered = async (
@@ -5639,7 +5639,7 @@ export type postApiStatsGraduationRateByCourseFilteredResponse =
     postApiStatsGraduationRateByCourseFilteredResponseSuccess
 
 export const getPostApiStatsGraduationRateByCourseFilteredUrl = () => {
-    return '/api/stats/graduation-rate-by-course-filtered'
+    return `/api/stats/graduation-rate-by-course-filtered`
 }
 
 export const postApiStatsGraduationRateByCourseFiltered = async (
@@ -5736,7 +5736,7 @@ export type postApiStatsAcademicPerformanceByYearFilteredResponse =
     postApiStatsAcademicPerformanceByYearFilteredResponseSuccess
 
 export const getPostApiStatsAcademicPerformanceByYearFilteredUrl = () => {
-    return '/api/stats/academic-performance-by-year-filtered'
+    return `/api/stats/academic-performance-by-year-filtered`
 }
 
 export const postApiStatsAcademicPerformanceByYearFiltered = async (
@@ -5836,7 +5836,7 @@ export type postApiStatsStudentDistributionByProvinceFilteredResponse =
     postApiStatsStudentDistributionByProvinceFilteredResponseSuccess
 
 export const getPostApiStatsStudentDistributionByProvinceFilteredUrl = () => {
-    return '/api/stats/student-distribution-by-province-filtered'
+    return `/api/stats/student-distribution-by-province-filtered`
 }
 
 export const postApiStatsStudentDistributionByProvinceFiltered = async (
@@ -5936,7 +5936,7 @@ export type postApiStatsStudentsOfInterestResponseSuccess =
 export type postApiStatsStudentsOfInterestResponse = postApiStatsStudentsOfInterestResponseSuccess
 
 export const getPostApiStatsStudentsOfInterestUrl = () => {
-    return '/api/stats/students-of-interest'
+    return `/api/stats/students-of-interest`
 }
 
 export const postApiStatsStudentsOfInterest = async (
@@ -6032,7 +6032,7 @@ export type postApiStatsAverageGpaByFixedClassResponse =
     postApiStatsAverageGpaByFixedClassResponseSuccess
 
 export const getPostApiStatsAverageGpaByFixedClassUrl = () => {
-    return '/api/stats/average-gpa-by-fixed-class'
+    return `/api/stats/average-gpa-by-fixed-class`
 }
 
 export const postApiStatsAverageGpaByFixedClass = async (
@@ -6128,7 +6128,7 @@ export type postApiStatsAverageGpaByTrainingMajorResponse =
     postApiStatsAverageGpaByTrainingMajorResponseSuccess
 
 export const getPostApiStatsAverageGpaByTrainingMajorUrl = () => {
-    return '/api/stats/average-gpa-by-training-major'
+    return `/api/stats/average-gpa-by-training-major`
 }
 
 export const postApiStatsAverageGpaByTrainingMajor = async (
@@ -6224,7 +6224,7 @@ export type postApiStatsSubjectPassFailRateResponseSuccess =
 export type postApiStatsSubjectPassFailRateResponse = postApiStatsSubjectPassFailRateResponseSuccess
 
 export const getPostApiStatsSubjectPassFailRateUrl = () => {
-    return '/api/stats/subject-pass-fail-rate'
+    return `/api/stats/subject-pass-fail-rate`
 }
 
 export const postApiStatsSubjectPassFailRate = async (
@@ -6320,7 +6320,7 @@ export type postApiStatsCurriculumStatisticsResponse =
     postApiStatsCurriculumStatisticsResponseSuccess
 
 export const getPostApiStatsCurriculumStatisticsUrl = () => {
-    return '/api/stats/curriculum-statistics'
+    return `/api/stats/curriculum-statistics`
 }
 
 export const postApiStatsCurriculumStatistics = async (
@@ -6416,7 +6416,7 @@ export type postApiStatsSubjectClassStatisticsResponse =
     postApiStatsSubjectClassStatisticsResponseSuccess
 
 export const getPostApiStatsSubjectClassStatisticsUrl = () => {
-    return '/api/stats/subject-class-statistics'
+    return `/api/stats/subject-class-statistics`
 }
 
 export const postApiStatsSubjectClassStatistics = async (
@@ -6511,7 +6511,7 @@ export type postApiStatsLecturerWorkloadResponseSuccess =
 export type postApiStatsLecturerWorkloadResponse = postApiStatsLecturerWorkloadResponseSuccess
 
 export const getPostApiStatsLecturerWorkloadUrl = () => {
-    return '/api/stats/lecturer-workload'
+    return `/api/stats/lecturer-workload`
 }
 
 export const postApiStatsLecturerWorkload = async (
@@ -6607,7 +6607,7 @@ export type postApiStatsGraduationRankingStatisticsResponse =
     postApiStatsGraduationRankingStatisticsResponseSuccess
 
 export const getPostApiStatsGraduationRankingStatisticsUrl = () => {
-    return '/api/stats/graduation-ranking-statistics'
+    return `/api/stats/graduation-ranking-statistics`
 }
 
 export const postApiStatsGraduationRankingStatistics = async (
@@ -6704,7 +6704,7 @@ export type postApiStatsStudentsForAcademicActionResponse =
     postApiStatsStudentsForAcademicActionResponseSuccess
 
 export const getPostApiStatsStudentsForAcademicActionUrl = () => {
-    return '/api/stats/students-for-academic-action'
+    return `/api/stats/students-for-academic-action`
 }
 
 export const postApiStatsStudentsForAcademicAction = async (
@@ -6801,7 +6801,7 @@ export type postApiStatsExamParticipantsBySemesterResponse =
     postApiStatsExamParticipantsBySemesterResponseSuccess
 
 export const getPostApiStatsExamParticipantsBySemesterUrl = () => {
-    return '/api/stats/exam-participants-by-semester'
+    return `/api/stats/exam-participants-by-semester`
 }
 
 export const postApiStatsExamParticipantsBySemester = async (
@@ -6898,7 +6898,7 @@ export type postApiStatsAverageExamScoreTrendResponse =
     postApiStatsAverageExamScoreTrendResponseSuccess
 
 export const getPostApiStatsAverageExamScoreTrendUrl = () => {
-    return '/api/stats/average-exam-score-trend'
+    return `/api/stats/average-exam-score-trend`
 }
 
 export const postApiStatsAverageExamScoreTrend = async (
@@ -6993,7 +6993,7 @@ export type postApiStatsQuestionStatisticsResponseSuccess =
 export type postApiStatsQuestionStatisticsResponse = postApiStatsQuestionStatisticsResponseSuccess
 
 export const getPostApiStatsQuestionStatisticsUrl = () => {
-    return '/api/stats/question-statistics'
+    return `/api/stats/question-statistics`
 }
 
 export const postApiStatsQuestionStatistics = async (
@@ -7089,7 +7089,7 @@ export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse =
     postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess
 
 export const getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
-    return '/api/stats/highest-incorrect-answer-rate-questions'
+    return `/api/stats/highest-incorrect-answer-rate-questions`
 }
 
 export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
@@ -7189,7 +7189,7 @@ export type postApiStatsMostUsedQuestionsResponseSuccess =
 export type postApiStatsMostUsedQuestionsResponse = postApiStatsMostUsedQuestionsResponseSuccess
 
 export const getPostApiStatsMostUsedQuestionsUrl = () => {
-    return '/api/stats/most-used-questions'
+    return `/api/stats/most-used-questions`
 }
 
 export const postApiStatsMostUsedQuestions = async (
@@ -7283,7 +7283,7 @@ export type postApiStatsDemographicsResponseSuccess = postApiStatsDemographicsRe
 export type postApiStatsDemographicsResponse = postApiStatsDemographicsResponseSuccess
 
 export const getPostApiStatsDemographicsUrl = () => {
-    return '/api/stats/demographics'
+    return `/api/stats/demographics`
 }
 
 export const postApiStatsDemographics = async (
@@ -7374,7 +7374,7 @@ export type postApiStatsEnrollmentTrendResponseSuccess = postApiStatsEnrollmentT
 export type postApiStatsEnrollmentTrendResponse = postApiStatsEnrollmentTrendResponseSuccess
 
 export const getPostApiStatsEnrollmentTrendUrl = () => {
-    return '/api/stats/enrollment-trend'
+    return `/api/stats/enrollment-trend`
 }
 
 export const postApiStatsEnrollmentTrend = async (
@@ -7476,7 +7476,7 @@ export type importLecturerResponseError = importLecturerResponse400 & {
 export type importLecturerResponse = importLecturerResponseSuccess | importLecturerResponseError
 
 export const getImportLecturerUrl = () => {
-    return '/api/import/import-lecturer'
+    return `/api/import/import-lecturer`
 }
 
 export const importLecturer = async (
@@ -7484,9 +7484,9 @@ export const importLecturer = async (
     options?: RequestInit
 ): Promise<importLecturerResponse> => {
     const formData = new FormData()
-    formData.append('file', importLecturerBody.file)
+    formData.append(`file`, importLecturerBody.file)
     if (importLecturerBody.timeout !== undefined && importLecturerBody.timeout !== null) {
-        formData.append('timeout', importLecturerBody.timeout.toString())
+        formData.append(`timeout`, importLecturerBody.timeout.toString())
     }
 
     return customTrainingFetch<importLecturerResponse>(getImportLecturerUrl(), {
@@ -7584,7 +7584,7 @@ export type certificateScoreResponse =
     | certificateScoreResponseError
 
 export const getCertificateScoreUrl = () => {
-    return '/api/archived-score/certificate-score'
+    return `/api/archived-score/certificate-score`
 }
 
 export const certificateScore = async (
@@ -7690,7 +7690,7 @@ export type awardScoreResponseError = awardScoreResponse400 & {
 export type awardScoreResponse = awardScoreResponseSuccess | awardScoreResponseError
 
 export const getAwardScoreUrl = () => {
-    return '/api/archived-score/award-score'
+    return `/api/archived-score/award-score`
 }
 
 export const awardScore = async (
@@ -7787,7 +7787,7 @@ export type createExamsResponseError = createExamsResponse400 & {
 export type createExamsResponse = createExamsResponseSuccess | createExamsResponseError
 
 export const getCreateExamsUrl = () => {
-    return '/api/exam'
+    return `/api/exam`
 }
 
 export const createExams = async (
@@ -7886,7 +7886,7 @@ export type createNewReExamListResponse =
     | createNewReExamListResponseError
 
 export const getCreateNewReExamListUrl = () => {
-    return '/api/exam/reexam-list'
+    return `/api/exam/reexam-list`
 }
 
 export const createNewReExamList = async (
@@ -7985,7 +7985,7 @@ export type mergeExamResponseError = mergeExamResponse400 & {
 export type mergeExamResponse = mergeExamResponseSuccess | mergeExamResponseError
 
 export const getMergeExamUrl = () => {
-    return '/api/exam/merge'
+    return `/api/exam/merge`
 }
 
 export const mergeExam = async (
@@ -8082,7 +8082,7 @@ export type unmergeExamResponseError = unmergeExamResponse400 & {
 export type unmergeExamResponse = unmergeExamResponseSuccess | unmergeExamResponseError
 
 export const getUnmergeExamUrl = () => {
-    return '/api/exam/unmerge'
+    return `/api/exam/unmerge`
 }
 
 export const unmergeExam = async (
@@ -8191,7 +8191,7 @@ export type genExamListCodeResponseError = (
 export type genExamListCodeResponse = genExamListCodeResponseSuccess | genExamListCodeResponseError
 
 export const getGenExamListCodeUrl = () => {
-    return '/api/exam-score/gen-exam-list-code'
+    return `/api/exam-score/gen-exam-list-code`
 }
 
 export const genExamListCode = async (
@@ -8298,7 +8298,7 @@ export type saveExamScoreResponseError = saveExamScoreResponse400 & {
 export type saveExamScoreResponse = saveExamScoreResponseSuccess | saveExamScoreResponseError
 
 export const getSaveExamScoreUrl = () => {
-    return '/api/exam-score/save-exam-score'
+    return `/api/exam-score/save-exam-score`
 }
 
 export const saveExamScore = async (

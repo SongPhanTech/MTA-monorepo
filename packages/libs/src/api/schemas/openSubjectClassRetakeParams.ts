@@ -4,12 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { Search } from './search'
-import type { SemesterId } from './semesterId'
 import type { TrainingCourseId } from './trainingCourseId'
 import type { TrainingMajorId } from './trainingMajorId'
+import type { Search } from './search'
 import type { TrainingObjectTypeId } from './trainingObjectTypeId'
+import type { SemesterId } from './semesterId'
 
 export type OpenSubjectClassRetakeParams = {
     /**

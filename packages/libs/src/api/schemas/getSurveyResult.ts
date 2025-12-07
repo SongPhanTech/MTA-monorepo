@@ -4,10 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo'
-import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
 import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem'
+import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
+import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo'
 
 export interface GetSurveyResult {
     id: string

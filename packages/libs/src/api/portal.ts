@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
     DataTag,
     DefinedInitialDataOptions,
@@ -19,8 +19,7 @@ import type {
     UseQueryOptions,
     UseQueryResult,
 } from '@tanstack/react-query'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { customPortalFetch } from './custom-instance'
+
 import type {
     ClassRegister200,
     ClassRegister400,
@@ -30,17 +29,18 @@ import type {
     ClassUnregister400,
     ClassUnregister404,
     ClassUnregisterBody,
+    GetClassRegisterSession200Item,
+    GetClassRegisterSession400,
+    GetClassRegisterSession404,
     GetClassesInfo200Item,
     GetClassesInfo400,
     GetClassesInfo404,
     GetClassesInfoParams,
-    GetClassRegisterSession200Item,
-    GetClassRegisterSession400,
-    GetClassRegisterSession404,
     Session,
     Unauthorized,
 } from './schemas'
 
+import { customPortalFetch } from './custom-instance'
 type AwaitedInput<T> = PromiseLike<T> | T
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
@@ -67,7 +67,7 @@ export type getSessionResponseError = getSessionResponse401 & {
 export type getSessionResponse = getSessionResponseSuccess | getSessionResponseError
 
 export const getGetSessionUrl = () => {
-    return '/api/auth/get-session'
+    return `/api/auth/get-session`
 }
 
 export const getSession = async (options?: RequestInit): Promise<getSessionResponse> => {
@@ -78,7 +78,7 @@ export const getSession = async (options?: RequestInit): Promise<getSessionRespo
 }
 
 export const getGetSessionQueryKey = () => {
-    return ['/api/auth/get-session'] as const
+    return [`/api/auth/get-session`] as const
 }
 
 export const getGetSessionQueryOptions = <
@@ -207,7 +207,7 @@ export type getClassRegisterSessionResponse =
     | getClassRegisterSessionResponseError
 
 export const getGetClassRegisterSessionUrl = () => {
-    return '/api/class-register/get-class-register-session'
+    return `/api/class-register/get-class-register-session`
 }
 
 export const getClassRegisterSession = async (
@@ -220,7 +220,7 @@ export const getClassRegisterSession = async (
 }
 
 export const getGetClassRegisterSessionQueryKey = () => {
-    return ['/api/class-register/get-class-register-session'] as const
+    return [`/api/class-register/get-class-register-session`] as const
 }
 
 export const getGetClassRegisterSessionQueryOptions = <
@@ -377,7 +377,7 @@ export const getGetClassesInfoUrl = (params: GetClassesInfoParams) => {
 
     return stringifiedParams.length > 0
         ? `/api/class-register/get-classes-info?${stringifiedParams}`
-        : '/api/class-register/get-classes-info'
+        : `/api/class-register/get-classes-info`
 }
 
 export const getClassesInfo = async (
@@ -391,7 +391,7 @@ export const getClassesInfo = async (
 }
 
 export const getGetClassesInfoQueryKey = (params?: GetClassesInfoParams) => {
-    return ['/api/class-register/get-classes-info', ...(params ? [params] : [])] as const
+    return [`/api/class-register/get-classes-info`, ...(params ? [params] : [])] as const
 }
 
 export const getGetClassesInfoQueryOptions = <
@@ -527,7 +527,7 @@ export type classRegisterResponseError = (classRegisterResponse400 | classRegist
 export type classRegisterResponse = classRegisterResponseSuccess | classRegisterResponseError
 
 export const getClassRegisterUrl = () => {
-    return '/api/class-register/class-register'
+    return `/api/class-register/class-register`
 }
 
 export const classRegister = async (
@@ -639,7 +639,7 @@ export type classUnregisterResponseError = (
 export type classUnregisterResponse = classUnregisterResponseSuccess | classUnregisterResponseError
 
 export const getClassUnregisterUrl = () => {
-    return '/api/class-register/class-unregister'
+    return `/api/class-register/class-unregister`
 }
 
 export const classUnregister = async (

@@ -33,12 +33,14 @@ const baseSchema = z.object({
     coef_1: z.number().default(0.1),
     coef_2: z.number().default(0.3),
     coef_3: z.number().default(0.6),
-    scoreToTakeExam: z.number().default(0),
-    scoreToPass: z.number().default(4),
+    scoreToTakeExam: z.number().default(5),
+    scoreToPass: z.number().default(5),
     scoreToPassConditional: z.number().default(5),
     scoreToTakeGraduation: z.number().default(5),
     scoreToPassGraduation: z.number().default(5.5),
-    scoreToRetain: z.number().default(6.9),
+    maxReExamScore: z.number().default(6.9),
+    reduceReExamScore: z.number().default(1),
+    scoreToRetain: z.number().default(10.5),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -73,6 +75,8 @@ const baseSchemaWithoutDefaults = z.object({
     scoreToPassConditional: z.number(),
     scoreToTakeGraduation: z.number(),
     scoreToPassGraduation: z.number(),
+    maxReExamScore: z.number(),
+    reduceReExamScore: z.number(),
     scoreToRetain: z.number(),
 }
 ).strict();
@@ -157,6 +161,8 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
     scoreToPassConditional: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToTakeGraduation: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToPassGraduation: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    maxReExamScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    reduceReExamScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
     scoreToRetain: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
@@ -165,7 +171,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
  * `TrainingCourse` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingCourseCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, scoreToRetain: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, maxReExamScore: true, reduceReExamScore: true, scoreToRetain: true
 });
 
 

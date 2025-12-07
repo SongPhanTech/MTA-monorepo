@@ -7,6 +7,7 @@ import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
+import type { $Enums } from '@workspace/db/client'
 
 interface TabItem {
     key: string
@@ -14,10 +15,10 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
+export default function LapKeHoach({ type }: { type?: $Enums.SubjectClassType }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
 
-    const leftTabs: TabItem[] = hocLai
+    const leftTabs: TabItem[] = type
         ? [
               {
                   key: '1',
@@ -47,7 +48,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
         {
             key: '1',
             label: 'Môn học dự kiến giảng dạy',
-            content: <MonDaLapKeHoach hocLai={hocLai} />,
+            content: <MonDaLapKeHoach type={type} />,
         },
     ]
 

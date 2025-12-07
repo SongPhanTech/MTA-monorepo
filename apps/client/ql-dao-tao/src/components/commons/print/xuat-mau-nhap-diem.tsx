@@ -169,7 +169,7 @@ const ExportScoreTemplate = ({
         worksheet.getCell('D4').style = headerSubtitleStyle
 
         worksheet.mergeCells('A5:B5')
-        worksheet.getCell('A5').value = 'Giáo viên:'
+        worksheet.getCell('A5').value = 'Giảng viên:'
         worksheet.getCell('A5').style = headerSubtitleStyle
 
         worksheet.mergeCells('C5:H5')
