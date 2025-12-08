@@ -148,19 +148,11 @@ export default function GraduationDecisionDiploma() {
                     ? {
                           fixedClassId: filters.fixedClassId,
                       }
-                    : {}),
-                ...(filters.trainingObjectId
-                    ? {
-                          trainingObjectTypeId: filters.trainingObjectId,
-                      }
-                    : {}),
-                fixedClass: {
-                    ...(filters.trainingCourseId
-                        ? {
-                              trainingCourseId: filters.trainingCourseId,
-                          }
+                    : filters.trainingCourseId
+                      ? { trainingCourseId: filters.trainingCourseId }
+                      : trainingObjectTypeId
+                        ? { trainingCourse: { trainingObjectTypeId } }
                         : {}),
-                },
             },
         }),
         [
@@ -205,12 +197,12 @@ export default function GraduationDecisionDiploma() {
                         include: {
                             trainingCourse: {
                                 include: {
+                                    trainingObjectType: true,
                                     scoreConverts: true,
                                 },
                             },
                         },
                     },
-                    trainingObjectType: true,
                     graduationDecision: {
                         select: {
                             id: true,
