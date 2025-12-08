@@ -50,10 +50,13 @@ const PutStudentModal = () => {
             where: { id },
             include: {
                 userProfile: true,
-                trainingObjectType: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: {
+                                trainingObjectType: true,
+                            },
+                        },
                     },
                 },
             },
@@ -191,7 +194,6 @@ const PutStudentModal = () => {
                     data: {
                         userProfileId: cccdUserProfileData?.id,
                         fixedClassId: output.fixedClassId,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
@@ -210,7 +212,6 @@ const PutStudentModal = () => {
                     data: {
                         userProfileId: cccdUserProfileData?.id,
                         fixedClassId: output.fixedClassId,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
@@ -253,7 +254,6 @@ const PutStudentModal = () => {
             form.setFieldsValue({
                 // Student fields với ID
                 code: studentData.code,
-                trainingObjectTypeId: studentData.trainingObjectTypeId ?? trainingObjectTypeId,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
@@ -267,7 +267,7 @@ const PutStudentModal = () => {
                 idCardNumber: studentData.userProfile?.idCardNumber,
             })
         }
-    }, [studentData, form, trainingObjectTypeId])
+    }, [studentData, form])
 
     // Effect để fill thông tin khi có dữ liệu từ API
     useEffect(() => {
@@ -326,24 +326,6 @@ const PutStudentModal = () => {
                     <Col sm={12} lg={12}>
                         <FormItem form={form} name="firstName" label="Tên" required>
                             <Input disabled placeholder="Nhập tên" />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="trainingObjectTypeId"
-                            label="Đối tượng đào tạo"
-                            required
-                        >
-                            <Select
-                                placeholder="Chọn đối tượng đào tạo"
-                                value={trainingObjectTypeId}
-                                options={trainingObjectTypeData.map((value) => ({
-                                    value: value.id,
-                                    label: value.name,
-                                }))}
-                                disabled
-                            />
                         </FormItem>
                     </Col>
                     <Col span={12}>
