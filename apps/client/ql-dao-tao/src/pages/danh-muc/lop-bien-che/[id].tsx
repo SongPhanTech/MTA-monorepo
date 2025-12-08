@@ -391,7 +391,8 @@ export default function StudentFixedClassPage() {
                             border: true,
                         },
                         {
-                            value: student.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
+                            value:
+                                student.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
                             align: 'center' as const,
                             border: true,
                         },
