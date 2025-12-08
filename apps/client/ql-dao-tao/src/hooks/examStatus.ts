@@ -9,9 +9,6 @@ export type ExamStatusOption = {
 export const useExamStatusOptions = () => {
     const options: ExamStatusOption[] = [
         { value: ExamStatus.DRAFT, label: 'Nháp', color: 'default' },
-        { value: ExamStatus.PENDING, label: 'Chờ duyệt', color: 'warning' },
-        { value: ExamStatus.APPROVED, label: 'Đã duyệt', color: 'success' },
-        { value: ExamStatus.REJECTED, label: 'Từ chối', color: 'error' },
     ]
 
     const getExamStatusLabel = (value: ExamStatus | null | undefined): string => {
