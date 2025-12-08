@@ -22,7 +22,7 @@ import { useMemo, useState } from 'react'
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_DonViId || '8bca0fb4-e233-4010-bb23-ed4cbe414726'
+    const idProfile = me?.sDM_DonViId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
@@ -95,7 +95,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
-                disabled: disableAnalysisWritingTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -109,13 +109,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
 
         const isCouncilMember = !!councilMember
 
-        if (
-            isAdvisoryBoard ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
+        if (isAdvisoryBoard) {
             tabs.push({
                 key: '3',
                 label: 'Xét duyệt phiếu (Ban tư vấn)',
@@ -124,13 +118,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             })
         }
 
-        if (
-            isSecretary ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                'XEM_TAT_CA'
-            )
-        ) {
+        if (isSecretary) {
             tabs.push({
                 key: '4',
                 label: 'Xét duyệt phiếu (Thư ký)',
@@ -149,17 +137,11 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '5',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disableAnalysisWritingTab,
             })
         }
 
-        if (
-            isSecretary ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                'XEM_TAT_CA'
-            )
-        ) {
+        if (isSecretary) {
             tabs.push({
                 key: '6',
                 label: 'Phân công phản biện chéo',
@@ -168,13 +150,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             })
         }
 
-        if (
-            isCouncilMember ||
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                'XEM_TAT_CA'
-            )
-        ) {
+        if (isCouncilMember) {
             tabs.push({
                 key: '7',
                 label: 'Phản biện chéo',
