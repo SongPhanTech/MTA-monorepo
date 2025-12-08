@@ -11,6 +11,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
     FixedClass,
+    Prisma,
     TrainingCourse,
     TrainingField,
     TrainingMajor,
@@ -65,7 +66,7 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const where: any = useMemo(
+    const where: Prisma.StudentWhereInput = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
                 ? {
@@ -127,11 +128,7 @@ export default function UserProfilePageDs() {
                           in: filters.curriculumVersion,
                       },
                   }
-                : {
-                      trainingCourse: {
-                          trainingObjectTypeId,
-                      },
-                  }),
+                : {}),
             ...(filters.curriculumVersionParallel
                 ? {
                       curriculumVersionParallelId: {
@@ -166,7 +163,13 @@ export default function UserProfilePageDs() {
                           trainingCourseId: filters.trainingCourseId,
                       },
                   }
-                : {}),
+                : {
+                      fixedClass: {
+                          trainingCourse: {
+                              trainingObjectTypeId,
+                          },
+                      },
+                  }),
             ...(filters.trainingMajors || filters.trainingField
                 ? {
                       fixedClass: {
@@ -471,25 +474,25 @@ export default function UserProfilePageDs() {
                                         ? record.userProfile?.rank?.sTen
                                         : '',
                             },
-                            {
-                                title: 'ĐTĐT',
-                                align: 'center',
-                                width: 150,
-                                // type: 'select',
-                                dataIndex: 'trainingObjectTypes',
-                                // options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
-                                //     label: item.name,
-                                //     value: item.id,
-                                // })),
-                                render: (__, record: any) =>
-                                    record?.trainingObjectType
-                                        ? record?.trainingObjectType?.name
-                                        : '',
-                            },
+                            // {
+                            //     title: 'ĐTĐT',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     // type: 'select',
+                            //     dataIndex: 'trainingObjectTypes',
+                            //     // options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
+                            //     //     label: item.name,
+                            //     //     value: item.id,
+                            //     // })),
+                            //     render: (__, record: any) =>
+                            //         record?.trainingObjectType
+                            //             ? record?.trainingObjectType?.name
+                            //             : '',
+                            // },
                             {
                                 title: 'Lớp',
                                 align: 'center',
-                                width: 200,
+                                width: 120,
                                 dataIndex: 'fixedClass',
                                 type: 'select',
                                 options: fixedClassData.map((item: FixedClass) => ({
@@ -498,10 +501,7 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    const fixedClass = `${record.fixedClass?.code || ''} - ${
-                                        record.fixedClass?.name
-                                    }`
-                                    return fixedClass || ''
+                                    return <Tooltip title={record.fixedClass?.name}>{record.fixedClass?.code}</Tooltip>
                                 },
                             },
                             {
@@ -550,7 +550,7 @@ export default function UserProfilePageDs() {
                                 },
                             },
                             {
-                                title: 'CTĐT',
+                                title: <Tooltip title="Chương trình đào tạo">CTĐT</Tooltip>,
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 width: 180,
