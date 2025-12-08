@@ -3127,6 +3127,7 @@ model CurriculumVersion {
   learningDiagram                  String?
   guide                            String?
   renderPath                       String?
+  outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClasses                     FixedClass[]
@@ -3960,6 +3961,9 @@ model Certificate {
   createdBy           String?                @default("") @db.Uuid()
   name                String
   englishName         String?
+  /// chuẩn đầu ra
+  outputStandard      OutputStandard?        @relation(fields: [outputStandardId], references: [id])
+  outputStandardId    String?
   /// SV đạt
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
@@ -4084,6 +4088,52 @@ model LoadCategory {
   note                String?
   isOverageCalculated Boolean
 
+  @@schema("ql-dao-tao")
+}
+
+/// Danh mục các chuẩn đầu ra
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model OutputStandard {
+  id                         String                       @id() @default(cuid())
+  code                       String?                      @unique()
+  active                     Boolean                      @default(true)
+  description                String?                      @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now()) @updatedAt()
+  createdBy                  String?                      @default("") @db.Uuid()
+  name                       String
+  /// Chứng chỉ
+  certificates               Certificate[]
+  /// CTĐT áp dụng
+  outputStandardOnCurriculum OutputStandardOnCurriculum[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chuẩn đầu ra CTĐT
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model OutputStandardOnCurriculum {
+  id                  String            @id() @default(cuid())
+  code                String?           @unique()
+  active              Boolean           @default(true)
+  description         String?           @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @default(now()) @updatedAt()
+  createdBy           String?           @default("") @db.Uuid()
+  outputStandardId    String
+  outputStandard      OutputStandard    @relation(fields: [outputStandardId], references: [id])
+  curriculumVersionId String
+  curriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+  isRequired          Boolean           @default(true)
+  semesterIndex       Int?
+
+  @@unique([outputStandardId, curriculumVersionId])
   @@schema("ql-dao-tao")
 }
 

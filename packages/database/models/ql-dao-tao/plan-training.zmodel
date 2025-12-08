@@ -15,6 +15,7 @@ import 'ranking'
 import '../ql-danh-muc/notification'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'
+import '../ql-dao-tao/output-standard'
 import '../khao-thi/exam'
 import "../khao-thi/survey"
 
@@ -428,29 +429,29 @@ model FixedClass extends Base {
   name                     String
   summary                  String?
   startYear                Int?
-  graduated                Boolean?                   @default(false)
+  graduated                Boolean?           @default(false)
 
-  classMonitor             Student?                   @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?                    @unique
+  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?            @unique
 
-  unionLeader              Student?                   @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?                    @unique
+  unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])
+  unionLeaderId            String?            @unique
 
-  trainingCourse           TrainingCourse             @relation(fields: [trainingCourseId], references: [id]) // Khoá học
+  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String
 
-  managementOrganization   DM_DonVi?                  @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                    @db.Uuid
+  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?            @db.Uuid
 
-  lecturerManagement       Lecturer?                  @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
+  lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
 
-  staffManagement          Staff?                     @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
+  staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
 
   students                 Student[]
 
-  curriculumVersion        CurriculumVersion?         @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
 
   subjectClasses           SubjectClass[]
@@ -533,6 +534,7 @@ model CurriculumVersion extends Base {
   guide                            String? // X. Hướng dẫn thực hiện
   renderPath                       String? // Đường dẫn tài liệu kết xuất
 
+  outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClasses                     FixedClass[] // Lớp niên chế
@@ -593,18 +595,18 @@ enum SubjectVersionType {
 
 /// Phiên bản môn học
 model SubjectVersion extends Base {
-  isLocked                 Boolean                    @default(false)
+  isLocked                 Boolean                 @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
   /// loại học phần
-  type                     SubjectVersionType         @default(Normal)
+  type                     SubjectVersionType      @default(Normal)
   /// 1 đầu điểm
-  onePoint                 Boolean                    @default(false)
+  onePoint                 Boolean                 @default(false)
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   /// số tiết
-  period                   Int                        @default(0)
+  period                   Int                     @default(0)
   /// số tiết TKB
   schedulePeriod           Int?
   numberOfTheory           Int? // số tiết lý thuyết
@@ -624,28 +626,28 @@ model SubjectVersion extends Base {
   materials                String? // VIII. Cơ sở vật chất, học liệu
   rules                    String? // ​IX. Quy định của học phần
 
-  managementOrganization   DM_DonVi?                  @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                    @db.Uuid
+  managementOrganization   DM_DonVi?               @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                 @db.Uuid
 
-  subject                  Subject                    @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subject                  Subject                 @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
 
-  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType       TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
 
-  subjectVersionCategory   SubjectVersionCategory?    @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
   subjectVersionCategoryId String?
 
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
 
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]           @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]           @relation(name: "PrerequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]        @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]        @relation(name: "PrerequisiteSubject")
 
   // môn học song hành
-  coRequisiteSubject       SubjectVersion[]           @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]           @relation(name: "CoRequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]        @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]        @relation(name: "CoRequisiteSubject")
 
   // Nhóm môn tương đương
   equivalencyGroups        SubjectInGroup[]

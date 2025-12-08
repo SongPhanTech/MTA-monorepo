@@ -79,6 +79,7 @@ const relationSchema = z.object({
     trainingType: z.record(z.string(), z.unknown()),
     trainingTime: z.record(z.string(), z.unknown()),
     diplomaType: z.record(z.string(), z.unknown()),
+    outputStandardOnCurriculum: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     fixedClasses: z.array(z.unknown()).optional(),

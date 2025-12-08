@@ -2304,7 +2304,8 @@ exports.Prisma.CertificateScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  englishName: 'englishName'
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId'
 };
 
 exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
@@ -2383,6 +2384,33 @@ exports.Prisma.LoadCategoryScalarFieldEnum = {
   category: 'category',
   note: 'note',
   isOverageCalculated: 'isOverageCalculated'
+};
+
+exports.Prisma.OutputStandardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId',
+  isRequired: 'isRequired',
+  semesterIndex: 'semesterIndex'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -5804,7 +5832,8 @@ exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  englishName: 'englishName'
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId'
 };
 
 exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
@@ -5853,6 +5882,23 @@ exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
   unit: 'unit',
   category: 'category',
   note: 'note'
+};
+
+exports.Prisma.OutputStandardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId'
 };
 
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
@@ -7666,6 +7712,8 @@ exports.Prisma.ModelName = {
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
   LoadCategory: 'LoadCategory',
+  OutputStandard: 'OutputStandard',
+  OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
   Student: 'Student',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
