@@ -24,7 +24,7 @@ export default function LapKeHoach({ type }: { type?: $Enums.SubjectClassType })
                   {
                       key: '1',
                       label: 'Môn có SV/HV chưa đạt',
-                      content: <MonCoHVSVChuaDat />,
+                      content: <MonCoHVSVChuaDat type={type} />,
                   },
               ]
             : [

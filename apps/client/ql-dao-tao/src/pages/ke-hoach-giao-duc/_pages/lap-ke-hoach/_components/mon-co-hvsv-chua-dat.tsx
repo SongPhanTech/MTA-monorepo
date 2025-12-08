@@ -3,7 +3,7 @@ import useSpinner from '@hooks/spinner'
 import { queryClient } from '@lib/api'
 import { $Enums, type PlanTraining } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { useOpenSubjectClassReExam, useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import {
     useSemesterStore,
@@ -23,7 +23,7 @@ interface SubjectBySemesterForm {
     }>
 }
 
-export default function MonCoHVSVChuaDat() {
+export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassType }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -37,19 +37,42 @@ export default function MonCoHVSVChuaDat() {
 
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { id: trainingMajorId } = useTrainingMajorStore()
-    const { data: res } = useOpenSubjectClassRetake(
-        {
-            search: searchText,
-            trainingCourseId: trainingCourseId as string,
-            trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId as string,
-            semesterId: semesterId as string,
-            limit: numberOfPages,
-            page: currentPage,
-            viewAll: 0,
-        },
-        { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
-    )
+    const { data: res } =
+        type === $Enums.SubjectClassType.RETAKE
+            ? useOpenSubjectClassRetake(
+                  {
+                      search: searchText,
+                      trainingCourseId: trainingCourseId as string,
+                      trainingMajorId,
+                      trainingObjectTypeId: trainingObjectTypeId as string,
+                      semesterId: semesterId as string,
+                      limit: numberOfPages,
+                      page: currentPage,
+                      viewAll: 0,
+                  },
+                  {
+                      query: {
+                          enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId,
+                      },
+                  }
+              )
+            : useOpenSubjectClassReExam(
+                  {
+                      search: searchText,
+                      trainingCourseId: trainingCourseId as string,
+                      trainingMajorId,
+                      trainingObjectTypeId: trainingObjectTypeId as string,
+                      semesterId: semesterId as string,
+                      limit: numberOfPages,
+                      page: currentPage,
+                      viewAll: 0,
+                  },
+                  {
+                      query: {
+                          enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId,
+                      },
+                  }
+              )
     // queryKey /api/subject-class/open-subject-class-retake
 
     const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
