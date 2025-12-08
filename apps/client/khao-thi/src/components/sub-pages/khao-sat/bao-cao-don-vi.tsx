@@ -6,9 +6,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
-import TreeSelect from '@components/commons/tree-select'
-import { useFindManyDM_DonVi } from '@workspace/db/hooks'
-import { buildOrgTree, cn } from '@lib/utils'
+import {  cn } from '@lib/utils'
 const { Title } = Typography
 function OrganizationSurveyReport({
     selectedId,
@@ -32,8 +30,8 @@ function OrganizationSurveyReport({
               }
             : {}
     )
-    const { data: organizations = [] } = useFindManyDM_DonVi()
-    const treeData = buildOrgTree(organizations)
+    // const { data: organizations = [] } = useFindManyDM_DonVi()
+    // const treeData = buildOrgTree(organizations)
 
     const dataBarchart = useMemo(() => {
         let choices: any = []
@@ -297,7 +295,7 @@ function OrganizationSurveyReport({
                             <div className="px-4 py-2 flex justify-between">
                                 <Title level={4}>Thống kê theo đơn vị</Title>
                                 <Flex justify="end">
-                                    <TreeSelect
+                                    {/* <TreeSelect
                                         multiple
                                         maxTagCount="responsive"
                                         allowClear
@@ -310,7 +308,7 @@ function OrganizationSurveyReport({
                                         onChange={(value) => {
                                             setOrganization(value)
                                         }}
-                                    />
+                                    /> */}
                                     <Button
                                         size="small"
                                         type="primary"
