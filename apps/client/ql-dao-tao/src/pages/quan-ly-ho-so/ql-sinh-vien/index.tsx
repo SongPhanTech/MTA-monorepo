@@ -1,5 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { InfoIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -68,10 +67,6 @@ export default function UserProfilePageDs() {
 
     const where: any = useMemo(
         () => ({
-            // ...(filters.trainingObjectTypes && {
-            //     trainingObjectTypeId: { in: filters.trainingObjectTypes },
-            // }),
-            trainingObjectTypeId,
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -132,7 +127,11 @@ export default function UserProfilePageDs() {
                           in: filters.curriculumVersion,
                       },
                   }
-                : {}),
+                : {
+                      trainingCourse: {
+                          trainingObjectTypeId,
+                      },
+                  }),
             ...(filters.curriculumVersionParallel
                 ? {
                       curriculumVersionParallelId: {
@@ -202,14 +201,13 @@ export default function UserProfilePageDs() {
         where,
         include: {
             userProfile: {
-                include: {
-                    rank: true,
-                },
+                include: { rank: true },
             },
             fixedClass: {
                 include: {
                     trainingCourse: {
                         include: {
+                            trainingObjectType: true,
                             scoreConverts: true,
                         },
                     },

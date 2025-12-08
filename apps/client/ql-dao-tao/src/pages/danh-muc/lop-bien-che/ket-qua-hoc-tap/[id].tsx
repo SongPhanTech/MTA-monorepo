@@ -19,8 +19,8 @@ import {
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -152,7 +152,8 @@ export default function StudentScoreClassPage() {
             fullname: student?.userProfile?.fullname,
             dateOfBirth: student?.userProfile?.dateOfBirth,
             maSV: student?.code,
-            htdt: student?.trainingObjectType?.name,
+            // TODO: check htdt
+            htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
             nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
             lop: student?.fixedClass?.trainingCourse?.name,
             hocKis: hocKis,
@@ -338,9 +339,7 @@ export default function StudentScoreClassPage() {
 
     const { data: student } = useFindUniqueStudent(
         {
-            where: {
-                id: studentId,
-            },
+            where: { id: studentId },
             include: {
                 userProfile: true,
                 curriculumVersion: {
@@ -361,12 +360,12 @@ export default function StudentScoreClassPage() {
                     include: {
                         trainingCourse: {
                             include: {
+                                trainingObjectType: true,
                                 scoreConverts: true,
                             },
                         },
                     },
                 },
-                trainingObjectType: true,
             },
         },
         {
@@ -569,7 +568,7 @@ export default function StudentScoreClassPage() {
                 {[
                     student?.code,
                     student?.userProfile?.fullname,
-                    student?.trainingObjectType?.name,
+                    student?.fixedClass?.trainingCourse.trainingObjectType.name,
                     student?.fixedClass?.trainingCourse?.name,
                     student?.curriculumVersion?.name,
                     student?.curriculumVersion?.curriculum.trainingMajor.name,

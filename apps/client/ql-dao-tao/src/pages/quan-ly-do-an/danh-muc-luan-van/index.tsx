@@ -5,6 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import {
@@ -30,11 +31,10 @@ import {
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, DatePicker, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
+import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { SquarePen } from 'lucide-react'
-import DefaultLayout from '@layouts/default-layout'
 
 // import { getMinioUrl } from '@workspace/constant'
 
@@ -1478,7 +1478,8 @@ export default function PostgraduateProject({
                                 title: 'Đối tượng đào tạo',
                                 width: 120,
                                 render: (_, record) => {
-                                    return record?.trainingObjectType?.name
+                                    return record?.fixedClass?.trainingCourse.trainingObjectType
+                                        .name
                                 },
                             },
                             {
