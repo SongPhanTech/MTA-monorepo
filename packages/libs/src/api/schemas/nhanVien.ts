@@ -50,6 +50,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
+import type { NhanVienOldData } from './nhanVienOldData'
 
 /**
  * Danh mục nhân viên
@@ -71,6 +72,8 @@ export interface NhanVien {
     RowStatus?: number | null
     /** @nullable */
     RowIndex?: number | null
+    /** @nullable */
+    OldData?: NhanVienOldData
     /** Id nhân viên */
     Id?: string
     /**

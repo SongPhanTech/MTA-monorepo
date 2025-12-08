@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import {  InfoIcon } from 'lucide-react'
+import { InfoIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'

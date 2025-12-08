@@ -88,6 +88,8 @@ import type {
     ImportStudentRequest,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfOpenSubjectClass,
+    ListOfOpenSubjectClassReExamResponse,
+    ListOfOpenSubjectClassReExamStudentsResponse,
     ListOfOpenSubjectClassRetakeResponse,
     ListOfOpenSubjectClassRetakeStudentsResponse,
     ListOfundefined,
@@ -95,6 +97,8 @@ import type {
     MergeExamRequest,
     MergeExamResponse,
     OpenSubjectClassParams,
+    OpenSubjectClassReExamParams,
+    OpenSubjectClassReExamStudentsParams,
     OpenSubjectClassRetakeParams,
     OpenSubjectClassRetakeStudentsParams,
     PostApiStatsAcademicPerformanceByYear200,
@@ -1479,6 +1483,381 @@ export function useOpenSubjectClassRetakeStudents<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách môn học có hssv cần thi lại
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+export type openSubjectClassReExamResponse200 = {
+    data: ListOfOpenSubjectClassReExamResponse
+    status: 200
+}
+
+export type openSubjectClassReExamResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamResponseSuccess = openSubjectClassReExamResponse200 & {
+    headers: Headers
+}
+export type openSubjectClassReExamResponseError = openSubjectClassReExamResponse400 & {
+    headers: Headers
+}
+
+export type openSubjectClassReExamResponse =
+    | openSubjectClassReExamResponseSuccess
+    | openSubjectClassReExamResponseError
+
+export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam`
+}
+
+export const openSubjectClassReExam = async (
+    params: OpenSubjectClassReExamParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamResponse> => {
+    return customTrainingFetch<openSubjectClassReExamResponse>(
+        getOpenSubjectClassReExamUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams) => {
+    return [`/api/subject-class/open-subject-class-reexam`, ...(params ? [params] : [])] as const
+}
+
+export const getOpenSubjectClassReExamQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({
+        signal,
+    }) => openSubjectClassReExam(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExam>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExam>>
+>
+export type OpenSubjectClassReExamQueryError = void
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách sinh viên cần thi lại môn học
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+export type openSubjectClassReExamStudentsResponse200 = {
+    data: ListOfOpenSubjectClassReExamStudentsResponse
+    status: 200
+}
+
+export type openSubjectClassReExamStudentsResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamStudentsResponseSuccess =
+    openSubjectClassReExamStudentsResponse200 & {
+        headers: Headers
+    }
+export type openSubjectClassReExamStudentsResponseError =
+    openSubjectClassReExamStudentsResponse400 & {
+        headers: Headers
+    }
+
+export type openSubjectClassReExamStudentsResponse =
+    | openSubjectClassReExamStudentsResponseSuccess
+    | openSubjectClassReExamStudentsResponseError
+
+export const getOpenSubjectClassReExamStudentsUrl = (
+    params: OpenSubjectClassReExamStudentsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam-students`
+}
+
+export const openSubjectClassReExamStudents = async (
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamStudentsResponse> => {
+    return customTrainingFetch<openSubjectClassReExamStudentsResponse>(
+        getOpenSubjectClassReExamStudentsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamStudentsQueryKey = (
+    params?: OpenSubjectClassReExamStudentsParams
+) => {
+    return [
+        `/api/subject-class/open-subject-class-reexam-students`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getOpenSubjectClassReExamStudentsQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
+        signal,
+    }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+>
+export type OpenSubjectClassReExamStudentsQueryError = void
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

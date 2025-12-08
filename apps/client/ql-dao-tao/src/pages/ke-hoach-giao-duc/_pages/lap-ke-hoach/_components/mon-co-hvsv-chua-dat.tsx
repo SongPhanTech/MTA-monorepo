@@ -18,6 +18,7 @@ interface SubjectBySemesterForm {
     searchText?: string
     subjectSelected?: Array<{
         id: string
+        trainingBlockSubjectId: string
         count: number
     }>
 }
@@ -78,7 +79,7 @@ export default function MonCoHVSVChuaDat() {
                             id: true,
                             planTrainingSubjects: {
                                 select: {
-                                    subjectVersionId: true,
+                                    trainingBlockSubjectId: true,
                                 },
                                 where: {
                                     subjectClassType: $Enums.SubjectClassType.RETAKE,
@@ -106,7 +107,7 @@ export default function MonCoHVSVChuaDat() {
                         data: {
                             planTrainingSubjects: {
                                 create: subjectSelected.map((subject) => ({
-                                    subjectVersionId: subject.id,
+                                    trainingBlockSubjectId: subject.trainingBlockSubjectId,
                                     subjectClassType: $Enums.SubjectClassType.RETAKE,
                                     studentCount: subject.count,
                                 })),
@@ -170,6 +171,7 @@ export default function MonCoHVSVChuaDat() {
                                     selectedRows.map((e) => ({
                                         id: e.id,
                                         count: e.count,
+                                        trainingBlockSubjectId: e.trainingBlockSubjectId,
                                     }))
                                 )
                             },
@@ -190,6 +192,8 @@ export default function MonCoHVSVChuaDat() {
                                             {
                                                 id: record.id,
                                                 count: record.count,
+                                                trainingBlockSubjectId:
+                                                    record.trainingBlockSubjectId,
                                             },
                                         ]
                                         form.setFieldValue('subjectSelected', newSelected)

@@ -10,18 +10,19 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 - Định dạng dữ liệu: JSON
 
 ## Xác thực API
-Để sử dụng API, mỗi request phải gửi kèm header:
-- cookie x-token=accesstoken của phiên đăng nhập.
-- header k-appcode: Mã ứng dụng của bạn
-- header k-tenantcode: Mã tổ chức của bạn
+Để sử dụng API, bạn cần được cấp quyền truy cập thông qua x-clientid và x-clientsecret.
 
 ### Cách lấy thông tin xác thực
-1. accesstoken lấy từ phiên đăng nhập    
-2. appcode và tenantcode lấy từ hệ thống
+1. Liên hệ với phòng Quản trị Hệ thống (QTHT) để được cấp thông tin xác thực
+2. Cung cấp thông tin về ứng dụng của bạn và mục đích sử dụng API
+3. Sau khi được phê duyệt, bạn sẽ nhận được:
+    - x-clientid: ID định danh ứng dụng của bạn
+    - x-clientsecret: Mã bí mật để xác thực
 
 ### Sử dụng thông tin xác thực
-- Thêm accesstoken, appcode và tenantcode vào header của mỗi request
+- Thêm x-clientid và x-clientsecret vào header của mỗi request
 - Không chia sẻ thông tin xác thực với bên thứ 3
+- Báo cáo ngay cho QTHT nếu phát hiện thông tin xác thực bị lộ
 
 ## Các lỗi thường gặp
 | Status Code | Mô tả |
@@ -32,6 +33,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
+| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -78,6 +80,7 @@ export * from './awardIds'
 export * from './awardIdsResult'
 export * from './awardScore400'
 export * from './baseEntity'
+export * from './baseEntityOldData'
 export * from './bucketItemDto'
 export * from './caiDatUngDung'
 export * from './caiDatUngDungEditDto'
@@ -869,6 +872,10 @@ export * from './listOfFixedClassBySubjectClassSemester'
 export * from './listOfFixedClassBySubjectClassSemesterAllOf'
 export * from './listOfOpenSubjectClass'
 export * from './listOfOpenSubjectClassAllOf'
+export * from './listOfOpenSubjectClassReExamResponse'
+export * from './listOfOpenSubjectClassReExamResponseAllOf'
+export * from './listOfOpenSubjectClassReExamStudentsResponse'
+export * from './listOfOpenSubjectClassReExamStudentsResponseAllOf'
 export * from './listOfOpenSubjectClassRetakeResponse'
 export * from './listOfOpenSubjectClassRetakeResponseAllOf'
 export * from './listOfOpenSubjectClassRetakeStudentsResponse'
@@ -927,6 +934,7 @@ export * from './nguoiDungUngDungEditDtoState'
 export * from './nhanVien'
 export * from './nhanVienEditDto'
 export * from './nhanVienEditDtoState'
+export * from './nhanVienOldData'
 export * from './nhatKyDangNhapQTPM'
 export * from './nhatKyDangNhapQTPMEditDto'
 export * from './nhatKyDangNhapQTPMEditDtoState'
@@ -951,6 +959,13 @@ export * from './openSubjectClass'
 export * from './openSubjectClassCurriculumVersionItem'
 export * from './openSubjectClassFixedClassItem'
 export * from './openSubjectClassParams'
+export * from './openSubjectClassReExamParams'
+export * from './openSubjectClassReExamResponse'
+export * from './openSubjectClassReExamStudentsParams'
+export * from './openSubjectClassReExamStudentsResponse'
+export * from './openSubjectClassReExamStudentsResponseFixedClass'
+export * from './openSubjectClassReExamStudentsResponseFixedClassTrainingCourse'
+export * from './openSubjectClassReExamStudentsResponseUserProfile'
 export * from './openSubjectClassRetake200'
 export * from './openSubjectClassRetake200AllOf'
 export * from './openSubjectClassRetake200AllOfAllOf'
@@ -1397,6 +1412,7 @@ export * from './unauthorized'
 export * from './unitInfo'
 export * from './unitInfoEditDto'
 export * from './unitInfoEditDtoState'
+export * from './unitInfoOldData'
 export * from './unmergeExamBadResponse'
 export * from './unmergeExamRequest'
 export * from './unmergeExamResponse'
@@ -1437,6 +1453,7 @@ export * from './validateUserSurveyParams'
 export * from './versionApp'
 export * from './versionAppEditDto'
 export * from './versionAppEditDtoState'
+export * from './viewAll'
 export * from './webhookEventsApp'
 export * from './webhookEventsAppEditDto'
 export * from './webhookEventsAppEditDtoState'
