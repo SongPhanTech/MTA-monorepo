@@ -83,20 +83,6 @@ const AddStudentToFixedClassModal = () => {
         },
         include: {
             userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
             fixedClass: {
                 include: {
                     trainingCourse: true,
@@ -170,20 +156,6 @@ const AddStudentToFixedClassModal = () => {
         },
         include: {
             userProfile: true,
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
             fixedClass: {
                 include: {
                     trainingCourse: true,
