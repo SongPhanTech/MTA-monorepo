@@ -482,17 +482,6 @@ enum QuestionType {
   @@schema("khao-thi")
 }
 
-/// Trạng thái của kỳ thi
-enum ExamStatus {
-  DRAFT
-  PUBLISHED
-  ONGOING
-  FINISHED
-  ARCHIVED
-
-  @@schema("khao-thi")
-}
-
 /// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
 enum CriteriaField {
   SEMESTER_GPA
@@ -5955,7 +5944,6 @@ model Exam {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @default(now()) @updatedAt()
   createdBy          String?             @default("") @db.Uuid()
-  status             ExamStatus          @default(DRAFT)
   questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
   questionBankId     String?
   /// khoá DS thi

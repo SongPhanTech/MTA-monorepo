@@ -557,7 +557,6 @@ export * from './SurveyObject.schema';
 export * from './SurveyType.schema';
 export * from './SurveyQuestionType.schema';
 export * from './QuestionType.schema';
-export * from './ExamStatus.schema';
 export * from './GraduationSessionStatus.schema';
 export * from './ApplicationStatus.schema';
 export * from './RankingContext.schema';

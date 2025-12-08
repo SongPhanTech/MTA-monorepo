@@ -4,7 +4,6 @@ import type {
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
-    ExamStatus,
     ExamType,
     GraduationSessionStatus,
     QuestionType,
@@ -122,7 +121,6 @@ export type FilterProps = {
     startTime?: string
     duration?: 'asc' | 'desc'
     passScore?: 'asc' | 'desc'
-    examStatus?: ExamStatus[]
     questionBankId?: string | null
     questionPoint?: 'asc' | 'desc'
     surveyQuestionType?: SurveyQuestionType[]

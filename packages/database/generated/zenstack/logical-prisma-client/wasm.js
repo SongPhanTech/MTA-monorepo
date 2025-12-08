@@ -3548,7 +3548,6 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  status: 'status',
   questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
   duration: 'duration',
@@ -7520,14 +7519,6 @@ exports.QuestionType = exports.$Enums.QuestionType = {
   MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
   FILL_IN_BLANK: 'FILL_IN_BLANK',
   ORDERING: 'ORDERING'
-};
-
-exports.ExamStatus = exports.$Enums.ExamStatus = {
-  DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED',
-  ONGOING: 'ONGOING',
-  FINISHED: 'FINISHED',
-  ARCHIVED: 'ARCHIVED'
 };
 
 exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {

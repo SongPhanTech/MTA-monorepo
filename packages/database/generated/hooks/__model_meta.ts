@@ -19738,10 +19738,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Exam$createdBy,
-                }, status: {
-                    name: "status",
-                    type: "ExamStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",

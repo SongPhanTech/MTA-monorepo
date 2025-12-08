@@ -52,7 +52,6 @@ import { SurveyQuestionType } from "../prisma-client";
 import { SurveyObject } from "../prisma-client";
 import { SurveyType } from "../prisma-client";
 import { QuestionType } from "../prisma-client";
-import { ExamStatus } from "../prisma-client";
 import { CriteriaField } from "../prisma-client";
 import { CriteriaOperator } from "../prisma-client";
 import { GraduationSessionStatus } from "../prisma-client";
