@@ -664,7 +664,9 @@ export default function PhanCongGiangDay({
         }
     }
 
-    const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
+    const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
+        type?: $Enums.SubjectClassType
+    }>({
         tag: 'ModalNhapTKB',
     })
 
@@ -1544,7 +1546,7 @@ export default function PhanCongGiangDay({
                                             <Button
                                                 type="primary"
                                                 className="bg-yellow-500 text-black"
-                                                onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                                onClick={() => onOpenModalNhapTKB({ type })}
                                             >
                                                 4. Nhập từ TKB
                                             </Button>

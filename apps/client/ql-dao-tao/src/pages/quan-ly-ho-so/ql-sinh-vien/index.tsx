@@ -501,7 +501,11 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    return <Tooltip title={record.fixedClass?.name}>{record.fixedClass?.code}</Tooltip>
+                                    return (
+                                        <Tooltip title={record.fixedClass?.name}>
+                                            {record.fixedClass?.code}
+                                        </Tooltip>
+                                    )
                                 },
                             },
                             {

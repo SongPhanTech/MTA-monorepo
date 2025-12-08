@@ -6,7 +6,7 @@ import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
-import type { Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
+import type { $Enums, Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, message, Radio, Space, Tag } from 'antd'
@@ -90,14 +90,15 @@ const ModalNhapTKB = () => {
         | 'THONG_KE_GIAO_VIEN_GIANG_DAY'
         | 'TKB_THEO_LOP_HOC_PHAN'
     const previewData = (Form.useWatch('previewData', form) as SubjectClassPreviewData[]) || []
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        type: $Enums.SubjectClassType
+    }>({
         tag: 'ModalNhapTKB',
         onClose: form.resetFields,
     })
+
+    const { type } = input || {}
+
     const { showSpinner, hideSpinner } = useSpinner()
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const [file, setFile] = useState<File | null>(null)
@@ -119,6 +120,7 @@ const ModalNhapTKB = () => {
                 trainingObjectTypeId,
                 fileType: fileType,
                 importType: 'XEM_TRUOC',
+                type,
             },
         })
         if (res?.status === 200) {
@@ -157,6 +159,7 @@ const ModalNhapTKB = () => {
                     semesterId,
                     trainingObjectTypeId,
                     fileType: output?.fileType,
+                    type,
                 },
             })
             if (res?.status === 200) {
@@ -194,7 +197,6 @@ const ModalNhapTKB = () => {
             formProps={{
                 initialValues: {
                     fileType: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
-                    semesterId: id,
                 },
             }}
         >
