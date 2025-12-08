@@ -539,7 +539,6 @@ app.openapi(importStudent, async (c) => {
                     sTenDayDu: student.fullname,
                     sSDTDiDong: student.phoneNumber ?? '',
                     //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
                     sEmail: `${student.idCardNumber}@gmail.com`,
                     sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                 },
@@ -587,8 +586,6 @@ app.openapi(importStudent, async (c) => {
                     sTen: profileData.firstName,
                     sTenDayDu: student.fullname,
                     sSDTDiDong: student.phoneNumber ?? '',
-                    //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
                     sEmail: `${student.idCardNumber}@gmail.com`,
                     sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                 },

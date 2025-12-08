@@ -284,7 +284,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            required
                             name="sDM_DonViId"
                             label="Đơn vị quản lý"
                             className="mb-2"
