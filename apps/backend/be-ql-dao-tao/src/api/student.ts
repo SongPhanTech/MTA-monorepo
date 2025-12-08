@@ -1,420 +1,17 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
-import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
-import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
+import { AcademicActionType, StudentStatus } from '@workspace/db'
 import { getTemplateBuffer } from '@workspace/libs/server'
-import { splitFullName } from '@workspace/libs/utils'
 import dayjs from 'dayjs'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
-import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
     calculateStudentSemesterResult,
+    calculateStudentYearResult,
     listStudentResultInfo,
     resultCourseStudentResult,
 } from '../services/student-result.service'
-import type { ErrorExtra } from '../types/error-extra'
-import {
-    buildCurriculumMapOrThrow,
-    buildDMChuyenNganhMap,
-    buildDMNganhMap,
-    buildDMTruongMap,
-    buildEthnicityMapOrThrow,
-    buildGenderMapOrThrow,
-    buildNationalityMapOrThrow,
-    buildPositionMapOrThrow,
-    buildProvinceMapOrThrow,
-    buildRankMapOrThrow,
-} from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
-
-const importStudent = createRoute({
-    operationId: 'import-student',
-    tags: ['Student'],
-    path: '/import-student',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'multipart/form-data': {
-                    schema: UploadExcelModel.extend({
-                        timeout: z.coerce.number().default(30),
-                    }).openapi('ImportStudentRequest'),
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            description: 'Import Student successfully',
-            content: {
-                'application/json': {
-                    schema: z.object({ message: z.string(), time: z.number() }),
-                },
-            },
-        },
-        400: {
-            description: 'Invalid file type',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                        errors: z.array(zParseSheetError).optional(),
-                    }),
-                },
-            },
-        },
-    },
-})
-
-app.openapi(importStudent, async (c) => {
-    const { file, timeout } = c.req.valid('form')
-
-    const buf = await file.arrayBuffer()
-    const data = parseSheetStudent(buf)
-
-    if (data.errors.length) {
-        return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
-    }
-
-    const trainingObjectType = await prisma.trainingObjectType.findFirst({
-        where: { name: data.trainingObjectType as string, active: true },
-    })
-
-    if (!trainingObjectType) {
-        return c.json(
-            {
-                message: `Đối tượng đào tạo không tồn tại: ${data.trainingObjectType}`,
-            },
-            400
-        )
-    }
-
-    const trainingCourse = await prisma.trainingCourse.findFirst({
-        where: {
-            OR: [{ name: data.trainingCourse as string }, { code: data.trainingCourse as string }],
-            active: true,
-        },
-    })
-
-    if (!trainingCourse) {
-        return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
-    }
-
-    const genderMap = await buildGenderMapOrThrow(
-        prisma,
-        data.students.map((student) => student.gender)
-    )
-
-    const ethnicityMap = await buildEthnicityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.ethnicity)
-    )
-
-    const nationalityMap = await buildNationalityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.nationality)
-    )
-
-    const provinceMap = await buildProvinceMapOrThrow(
-        prisma,
-        data.students.map((student) => student.provinceHometown)
-    )
-
-    const rankMap = await buildRankMapOrThrow(
-        prisma,
-        data.students.map((student) => student.rank)
-    )
-
-    const positionMap = await buildPositionMapOrThrow(
-        prisma,
-        data.students.map((student) => student.position)
-    )
-
-    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
-
-    const dmTruong = await buildDMTruongMap(
-        prisma,
-        data.students.map((student) => student.universitySchool)
-    )
-
-    const dmNganh = await buildDMNganhMap(
-        prisma,
-        data.students.map((student) => student.universityMajor)
-    )
-
-    const dmChuyenNganh = await buildDMChuyenNganhMap(
-        prisma,
-        data.students.map((student) => student.universityMajor)
-    )
-
-    const existingStudent = await prisma.student.findMany({
-        where: { code: { in: data.students.map((student) => student.code) } },
-        select: { id: true, code: true, userProfileId: true },
-    })
-
-    const existingStudentMap = new Map(
-        existingStudent.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
-    )
-
-    const existingProfile = await prisma.userProfile.findMany({
-        where: { idCardNumber: { in: data.students.map((student) => student.idCardNumber) } },
-        select: { id: true, idCardNumber: true },
-    })
-
-    const existingProfileMap = new Map(
-        existingProfile.map(({ idCardNumber, id }) => [idCardNumber, id])
-    )
-
-    const start = Date.now()
-    // await prisma.$transaction(
-    //     async (tx) => {
-    await prisma.fixedClass.createMany({
-        skipDuplicates: true,
-        data: data.students.map(({ fixedClass, curriculum }) => ({
-            name: fixedClass,
-            trainingCourseId: trainingCourse.id,
-            curriculumVersionId: curriculumVersionMap.get(curriculum),
-            startYear: new Date().getFullYear(),
-        })),
-    })
-
-    const fixedClass = await prisma.fixedClass.findMany({
-        where: {
-            OR: data.students.map(({ fixedClass, curriculum }) => ({
-                name: fixedClass,
-                trainingCourseId: trainingCourse.id,
-                curriculumVersionId: curriculumVersionMap.get(curriculum),
-            })),
-        },
-        select: { id: true, name: true },
-    })
-
-    const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
-
-    for (const student of data.students) {
-        const studentData: Prisma.StudentCreateInput = {
-            code: student.code,
-            entryScore: Number.parseFloat(student.entryScore ?? '') || null,
-            trainingObjectType: {
-                connect: { id: trainingObjectType.id },
-            },
-            fixedClass: {
-                connect: { id: fixedClassMap.get(student.fixedClass) },
-            },
-            curriculumVersion: {
-                connect: { id: curriculumVersionMap.get(student.curriculum) },
-            },
-            userProfile: {},
-            department: student.department,
-            departmentAddress: student.departmentAddress,
-            careerYear: Number.parseInt(student.careerYear ?? '0', 10),
-            universitySchool: student.universitySchool,
-            universityTrainingType: student.universityTrainingType,
-            universityGraduationYear: Number.parseInt(student.universityGraduationYear ?? '0', 10),
-            universityMajor: student.universityMajor,
-            universityRank: student.universityRank,
-            basic: student.basic ? Number.parseFloat(student.basic) : null,
-            facility: student.facility ? Number.parseFloat(student.facility) : null,
-            foreignLanguage: student.foreignLanguage,
-            priorityReason: student.priorityReason,
-            description: student.description,
-        }
-        const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
-            ...splitFullName(student.fullname),
-            dateOfBirth: student.dateOfBirth,
-            idCardNumber: student.idCardNumber,
-            genderId: student.gender ? genderMap.get(student.gender) : null,
-            ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
-            nationalityId: nationalityMap.get(student.nationality ?? '') || null,
-            provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
-            phoneNumber: student.phoneNumber,
-            officerNumber: student.officerNumber,
-            rankId: rankMap.get(student.rank ?? '') || null,
-            positionCPVId: positionMap.get(student.position ?? '') || null,
-        }
-
-        const existingProfile = existingProfileMap.get(student.idCardNumber)
-        const existing = existingStudentMap.get(student.code)
-
-        const createStudentFn = async () => {
-            const st = await prisma.student.create({
-                data: {
-                    ...studentData,
-                    userProfile: {
-                        connectOrCreate: {
-                            where: { idCardNumber: student.idCardNumber },
-                            create: profileData,
-                        },
-                    },
-                },
-            })
-
-            if (student.department) {
-                await prisma.quaTrinhCongTac.create({
-                    data: {
-                        userProfileId: st.userProfileId,
-                        donVi: student.department,
-                        diaChi: student.departmentAddress,
-                        chucVuId: positionMap.get(student.position ?? ''),
-                    },
-                })
-            }
-
-            if (student.universitySchool && student.universityMajor) {
-                await prisma.quaTrinhHocTap.create({
-                    data: {
-                        userProfileId: st.userProfileId,
-                        tenTruongId: dmTruong.get(student.universitySchool) as string,
-                        nganhHocId: dmNganh.get(student.universityMajor) as string,
-                        chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
-                    },
-                })
-            }
-        }
-
-        if (existingProfile) {
-            const res = await putDMNhanViens(
-                {
-                    Id: existingProfile,
-                    sMa: student.idCardNumber,
-                    bLaGiangVien: false,
-                    bLaHocVien: true,
-                    bLaTaiKhoan: true,
-                    dNgaySinh: student.dateOfBirth
-                        ? new Date(student.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: student.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: student.fullname,
-                    sSDTDiDong: student.phoneNumber ?? '',
-                    //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
-                    sEmail: `${student.idCardNumber}@gmail.com`,
-                    sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                },
-                {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                }
-            )
-            console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
-            if (existing) {
-                if (res.status === 200) {
-                    await prisma.student.update({
-                        where: { id: existing.id },
-                        data: {
-                            ...studentData,
-                            userProfile: { update: profileData },
-                        },
-                    })
-                } else {
-                    const extra = res.data?.extra as ErrorExtra | undefined
-                    return c.json(
-                        { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                        400
-                    )
-                }
-            } else {
-                await createStudentFn()
-            }
-        } else {
-            // const profileId = crypto.randomUUID()
-
-            const res = await postDMNhanViens(
-                {
-                    // Id: profileId,
-                    sMa: student.idCardNumber,
-                    bLaHocVien: true,
-                    bLaTaiKhoan: true,
-                    dNgaySinh: student.dateOfBirth
-                        ? new Date(student.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: student.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: student.fullname,
-                    sSDTDiDong: student.phoneNumber ?? '',
-                    //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
-                    sEmail: `${student.idCardNumber}@gmail.com`,
-                    sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                },
-                {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                }
-            )
-            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
-
-            if (res.status === 200) {
-                await createStudentFn()
-            } else {
-                const extra = res.data?.extra as ErrorExtra | undefined
-                return c.json(
-                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                    400
-                )
-            }
-        }
-    }
-    //     },
-    //     { timeout: timeout * 1000 }
-    // )
-
-    return c.json(
-        {
-            message: `Import students successfully: ${data.students.length}`,
-            time: Date.now() - start,
-        },
-        200
-    )
-})
-
-const importHeQuanSu = createRoute({
-    operationId: 'import-he-quan-su',
-    tags: ['Student'],
-    path: '/import-he-quan-su',
-    method: 'post',
-    request: {
-        body: {
-            content: {
-                'multipart/form-data': {
-                    schema: UploadExcelModel.extend({
-                        timeout: z.coerce.number().default(30),
-                    }).openapi('importHeQuanSuRequest'),
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            description: 'Import He quan su successfully',
-            content: {
-                'application/json': {
-                    schema: z.object({ message: z.string(), time: z.number() }),
-                },
-            },
-        },
-        400: {
-            description: 'Invalid file type',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                        errors: z.array(zParseSheetError).optional(),
-                    }),
-                },
-            },
-        },
-    },
-})
 
 const tongKetHocKyHVSV = createRoute({
     operationId: 'calculateStudentSemesterResultJson',
@@ -441,6 +38,51 @@ const tongKetHocKyHVSV = createRoute({
         },
         400: {
             description: 'Invalid semester ID',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        500: {
+            description: 'Server error during calculation',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+const tongKetNamHocHVSV = createRoute({
+    operationId: 'calculateStudentSchoolYearResult',
+    path: '/calculate-student-school-year-result',
+    tags: ['Student'],
+    summary: 'Tổng kết kết quả năm học của học viên, sinh viên',
+    description: 'Trả kết quả năm học của học viên, sinh viên dưới dạng',
+    method: 'post',
+    request: {
+        query: z.object({
+            semesterId: z.string(),
+            trainingObjectTypeId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student schoolYear result',
+            content: {
+                'application/json': {
+                    schema: z.any(),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid',
             content: {
                 'application/json': {
                     schema: z.object({
@@ -699,153 +341,55 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
     }
 })
 
-app.openapi(importHeQuanSu, async (c) => {
-    const { file, timeout } = c.req.valid('form')
-
-    const buf = await file.arrayBuffer()
-    const data = parseSheetHeQuanSu(buf)
-
-    if (data.errors.length) {
-        return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
+app.openapi(tongKetNamHocHVSV, async (c) => {
+    const { semesterId, trainingObjectTypeId } = c.req.valid('query')
+    const semester = await prisma.semester.findUnique({
+        where: { id: semesterId },
+    })
+    if (!semester) {
+        return c.json({ message: `Kỳ học với ID ${semesterId} không tồn tại` }, 400)
     }
 
-    const trainingObjectType = await prisma.trainingObjectType.findFirst({
-        where: { name: data.trainingObjectType as string, active: true },
+    const trainingObjectType = await prisma.trainingObjectType.findUnique({
+        where: { id: trainingObjectTypeId },
     })
-
     if (!trainingObjectType) {
         return c.json(
-            {
-                message: `Đối tượng đào tạo không tồn tại: ${data.trainingObjectType}`,
-            },
+            { message: `Loại đối tượng đào tạo với ID ${trainingObjectTypeId} không tồn tại` },
             400
         )
     }
 
-    const trainingCourse = await prisma.trainingCourse.findFirst({
-        where: { name: data.trainingCourse as string, active: true },
-    })
-
-    if (!trainingCourse) {
-        return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
-    }
-
-    const genderMap = await buildGenderMapOrThrow(
-        prisma,
-        data.students.map((student) => student.gender)
-    )
-
-    const ethnicityMap = await buildEthnicityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.ethnicity)
-    )
-
-    const nationalityMap = await buildNationalityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.nationality)
-    )
-
-    const provinceMap = await buildProvinceMapOrThrow(
-        prisma,
-        data.students.map((student) => student.provinceHometown)
-    )
-
-    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
-
-    const existingStudent = await prisma.student.findMany({
-        where: { code: { in: data.students.map((student) => student.code) } },
-        select: { id: true, code: true },
-    })
-
-    const existingStudentMap = new Map(existingStudent.map(({ code, id }) => [code, id]))
-
-    const start = Date.now()
-    await prisma.$transaction(
-        async (tx) => {
-            await tx.fixedClass.createMany({
-                skipDuplicates: true,
-                data: data.students.map(({ fixedClass, curriculum }) => ({
-                    name: fixedClass,
-                    trainingCourseId: trainingCourse.id,
-                    curriculumVersionId: curriculumVersionMap.get(curriculum),
-                    startYear: new Date().getFullYear(),
-                })),
-            })
-
-            const fixedClass = await tx.fixedClass.findMany({
-                where: {
-                    OR: data.students.map(({ fixedClass, curriculum }) => ({
-                        name: fixedClass,
-                        trainingCourseId: trainingCourse.id,
-                        curriculumVersionId: curriculumVersionMap.get(curriculum),
-                    })),
-                },
-                select: { id: true, name: true },
-            })
-
-            const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
-
-            for (const student of data.students) {
-                const studentData: Prisma.StudentCreateInput = {
-                    code: student.code,
-                    entryScore: Number.parseFloat(student.admissionScore ?? '') || null,
+    const students = await prisma.student.findMany({
+        select: { id: true },
+        where: {
+            fixedClass: {
+                trainingCourse: {
                     trainingObjectType: {
-                        connect: { id: trainingObjectType.id },
+                        id: trainingObjectTypeId,
                     },
-                    fixedClass: {
-                        connect: { id: fixedClassMap.get(student.fixedClass) },
-                    },
-                    curriculumVersion: {
-                        connect: { id: curriculumVersionMap.get(student.curriculum) },
-                    },
-                    userProfile: {},
-                }
-                const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
-                    {
-                        ...splitFullName(student.fullname),
-                        dateOfBirth: student.dateOfBirth,
-                        // TODO: need to use idCardNumber
-                        idCardNumber: student.code,
-                        genderId: student.gender ? genderMap.get('Nữ') : null,
-                        ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
-                        nationalityId: nationalityMap.get(student.nationality ?? '') || null,
-                        provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
-                    }
-
-                const existingId = existingStudentMap.get(student.code)
-                if (existingId) {
-                    await tx.student.update({
-                        where: { id: existingId },
-                        data: {
-                            ...studentData,
-                            userProfile: { update: profileData },
-                        },
-                    })
-                } else {
-                    await tx.student.create({
-                        data: {
-                            ...studentData,
-                            userProfile: {
-                                connectOrCreate: {
-                                    where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
-                                    create: profileData,
-                                },
-                            },
-                        },
-                    })
-                }
-            }
+                },
+            },
+            status: {
+                notIn: [
+                    StudentStatus.GRADUATED,
+                    StudentStatus.DEFERRED_STUDY,
+                    StudentStatus.WITHDRAWN,
+                    StudentStatus.TRANSFERRED,
+                ],
+            },
+            deletedAt: null,
+            active: true,
         },
-        { timeout: timeout * 1000 }
+    })
+
+    await Promise.allSettled(
+        students.map((s) =>
+            calculateStudentYearResult({ studentId: s.id, schoolYearId: semester.schoolYearId })
+        )
     )
 
-    return c.json(
-        {
-            message: `Import students successfully: ${data.students.length}`,
-            time: Date.now() - start,
-        },
-        200
-    )
+    return c.json({ message: 'success' }, 200)
 })
 
 const debtStatistics = createRoute({

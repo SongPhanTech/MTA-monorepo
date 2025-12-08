@@ -8177,7 +8177,6 @@ export namespace Prisma {
         status: 'status',
         fixedClassId: 'fixedClassId',
         userProfileId: 'userProfileId',
-        trainingObjectTypeId: 'trainingObjectTypeId',
         registrationAreaId: 'registrationAreaId',
         curriculumVersionId: 'curriculumVersionId',
         curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -11397,7 +11396,6 @@ export namespace Prisma {
         unionLeader: 'unionLeader',
         fixedClassId: 'fixedClassId',
         userProfileId: 'userProfileId',
-        trainingObjectTypeId: 'trainingObjectTypeId',
         registrationAreaId: 'registrationAreaId',
         curriculumVersionId: 'curriculumVersionId',
         curriculumVersionParallelId: 'curriculumVersionParallelId'
@@ -52783,7 +52781,6 @@ export namespace Prisma {
         curriculumVersion<T extends TrainingObjectType$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$curriculumVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trainingMajors<T extends TrainingObjectType$trainingMajorsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingMajorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorOnTrainingObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trainingFields<T extends TrainingObjectType$trainingFieldsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingFieldsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingFieldOnTrainingObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        students<T extends TrainingObjectType$studentsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trainingScoreSession<T extends TrainingObjectType$trainingScoreSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$trainingScoreSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingScoreSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectClass<T extends TrainingObjectType$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$subjectClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         graduationSession<T extends TrainingObjectType$graduationSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$graduationSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -61653,7 +61650,6 @@ export namespace Prisma {
         fixedClass<T extends Student$fixedClassArgs<ExtArgs> = {}>(args?: Subset<T, Student$fixedClassArgs<ExtArgs>>): Prisma__FixedClassClient<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectClassStudent<T extends Student$subjectClassStudentArgs<ExtArgs> = {}>(args?: Subset<T, Student$subjectClassStudentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        trainingObjectType<T extends Student$trainingObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, Student$trainingObjectTypeArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         registrationArea<T extends Student$registrationAreaArgs<ExtArgs> = {}>(args?: Subset<T, Student$registrationAreaArgs<ExtArgs>>): Prisma__DM_KhuVuc_DiaLyClient<$Result.GetResult<Prisma.$DM_KhuVuc_DiaLyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         curriculumVersion<T extends Student$curriculumVersionArgs<ExtArgs> = {}>(args?: Subset<T, Student$curriculumVersionArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         curriculumVersionParallel<T extends Student$curriculumVersionParallelArgs<ExtArgs> = {}>(args?: Subset<T, Student$curriculumVersionParallelArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -61736,7 +61732,6 @@ export namespace Prisma {
         readonly status: FieldRef<"Student", 'StudentStatus'>;
         readonly fixedClassId: FieldRef<"Student", 'String'>;
         readonly userProfileId: FieldRef<"Student", 'String'>;
-        readonly trainingObjectTypeId: FieldRef<"Student", 'String'>;
         readonly registrationAreaId: FieldRef<"Student", 'String'>;
         readonly curriculumVersionId: FieldRef<"Student", 'String'>;
         readonly curriculumVersionParallelId: FieldRef<"Student", 'String'>;
@@ -131221,7 +131216,6 @@ export namespace Prisma {
         curriculumVersion: number
         trainingMajors: number
         trainingFields: number
-        students: number
         trainingScoreSession: number
         subjectClass: number
         graduationSession: number
@@ -131235,7 +131229,6 @@ export namespace Prisma {
         curriculumVersion?: boolean | TrainingObjectTypeCountOutputTypeCountCurriculumVersionArgs
         trainingMajors?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingMajorsArgs
         trainingFields?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingFieldsArgs
-        students?: boolean | TrainingObjectTypeCountOutputTypeCountStudentsArgs
         trainingScoreSession?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingScoreSessionArgs
         subjectClass?: boolean | TrainingObjectTypeCountOutputTypeCountSubjectClassArgs
         graduationSession?: boolean | TrainingObjectTypeCountOutputTypeCountGraduationSessionArgs
@@ -131281,12 +131274,6 @@ export namespace Prisma {
      */
     export type TrainingObjectTypeCountOutputTypeCountTrainingFieldsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: TrainingFieldOnTrainingObjectTypeWhereInput
-    };
-    /**
-     * TrainingObjectTypeCountOutputType without action
-     */
-    export type TrainingObjectTypeCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: StudentWhereInput
     };
     /**
      * TrainingObjectTypeCountOutputType without action
@@ -217676,7 +217663,6 @@ export namespace Prisma {
         curriculumVersion?: boolean | TrainingObjectType$curriculumVersionArgs<ExtArgs>
         trainingMajors?: boolean | TrainingObjectType$trainingMajorsArgs<ExtArgs>
         trainingFields?: boolean | TrainingObjectType$trainingFieldsArgs<ExtArgs>
-        students?: boolean | TrainingObjectType$studentsArgs<ExtArgs>
         trainingScoreSession?: boolean | TrainingObjectType$trainingScoreSessionArgs<ExtArgs>
         subjectClass?: boolean | TrainingObjectType$subjectClassArgs<ExtArgs>
         graduationSession?: boolean | TrainingObjectType$graduationSessionArgs<ExtArgs>
@@ -217740,7 +217726,6 @@ export namespace Prisma {
         curriculumVersion?: boolean | TrainingObjectType$curriculumVersionArgs<ExtArgs>
         trainingMajors?: boolean | TrainingObjectType$trainingMajorsArgs<ExtArgs>
         trainingFields?: boolean | TrainingObjectType$trainingFieldsArgs<ExtArgs>
-        students?: boolean | TrainingObjectType$studentsArgs<ExtArgs>
         trainingScoreSession?: boolean | TrainingObjectType$trainingScoreSessionArgs<ExtArgs>
         subjectClass?: boolean | TrainingObjectType$subjectClassArgs<ExtArgs>
         graduationSession?: boolean | TrainingObjectType$graduationSessionArgs<ExtArgs>
@@ -217767,7 +217752,6 @@ export namespace Prisma {
             curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs>[]
             trainingMajors: Prisma.$TrainingMajorOnTrainingObjectTypePayload<ExtArgs>[]
             trainingFields: Prisma.$TrainingFieldOnTrainingObjectTypePayload<ExtArgs>[]
-            students: Prisma.$StudentPayload<ExtArgs>[]
             trainingScoreSession: Prisma.$TrainingScoreSessionPayload<ExtArgs>[]
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs>[]
             graduationSession: Prisma.$GraduationSessionPayload<ExtArgs>[]
@@ -218322,29 +218306,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: TrainingFieldOnTrainingObjectTypeScalarFieldEnum | TrainingFieldOnTrainingObjectTypeScalarFieldEnum[]
-    };
-    /**
-     * TrainingObjectType.students
-     */
-    export type TrainingObjectType$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Student
-         */
-        select?: StudentSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Student
-         */
-        omit?: StudentOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: StudentInclude<ExtArgs> | null
-        where?: StudentWhereInput
-        orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
-        cursor?: StudentWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
     };
     /**
      * TrainingObjectType.trainingScoreSession
@@ -234704,7 +234665,6 @@ export namespace Prisma {
         status: $Enums.StudentStatus | null
         fixedClassId: string | null
         userProfileId: string | null
-        trainingObjectTypeId: string | null
         registrationAreaId: string | null
         curriculumVersionId: string | null
         curriculumVersionParallelId: string | null
@@ -234751,7 +234711,6 @@ export namespace Prisma {
         status: $Enums.StudentStatus | null
         fixedClassId: string | null
         userProfileId: string | null
-        trainingObjectTypeId: string | null
         registrationAreaId: string | null
         curriculumVersionId: string | null
         curriculumVersionParallelId: string | null
@@ -234798,7 +234757,6 @@ export namespace Prisma {
         status: number
         fixedClassId: number
         userProfileId: number
-        trainingObjectTypeId: number
         registrationAreaId: number
         curriculumVersionId: number
         curriculumVersionParallelId: number
@@ -234866,7 +234824,6 @@ export namespace Prisma {
         status?: true
         fixedClassId?: true
         userProfileId?: true
-        trainingObjectTypeId?: true
         registrationAreaId?: true
         curriculumVersionId?: true
         curriculumVersionParallelId?: true
@@ -234913,7 +234870,6 @@ export namespace Prisma {
         status?: true
         fixedClassId?: true
         userProfileId?: true
-        trainingObjectTypeId?: true
         registrationAreaId?: true
         curriculumVersionId?: true
         curriculumVersionParallelId?: true
@@ -234960,7 +234916,6 @@ export namespace Prisma {
         status?: true
         fixedClassId?: true
         userProfileId?: true
-        trainingObjectTypeId?: true
         registrationAreaId?: true
         curriculumVersionId?: true
         curriculumVersionParallelId?: true
@@ -235088,7 +235043,6 @@ export namespace Prisma {
         status: $Enums.StudentStatus
         fixedClassId: string | null
         userProfileId: string
-        trainingObjectTypeId: string | null
         registrationAreaId: string | null
         curriculumVersionId: string | null
         curriculumVersionParallelId: string | null
@@ -235152,7 +235106,6 @@ export namespace Prisma {
         status?: boolean
         fixedClassId?: boolean
         userProfileId?: boolean
-        trainingObjectTypeId?: boolean
         registrationAreaId?: boolean
         curriculumVersionId?: boolean
         curriculumVersionParallelId?: boolean
@@ -235171,7 +235124,6 @@ export namespace Prisma {
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         subjectClassStudent?: boolean | Student$subjectClassStudentArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235231,7 +235183,6 @@ export namespace Prisma {
         status?: boolean
         fixedClassId?: boolean
         userProfileId?: boolean
-        trainingObjectTypeId?: boolean
         registrationAreaId?: boolean
         curriculumVersionId?: boolean
         curriculumVersionParallelId?: boolean
@@ -235246,7 +235197,6 @@ export namespace Prisma {
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235285,7 +235235,6 @@ export namespace Prisma {
         status?: boolean
         fixedClassId?: boolean
         userProfileId?: boolean
-        trainingObjectTypeId?: boolean
         registrationAreaId?: boolean
         curriculumVersionId?: boolean
         curriculumVersionParallelId?: boolean
@@ -235300,7 +235249,6 @@ export namespace Prisma {
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235339,7 +235287,6 @@ export namespace Prisma {
         status?: boolean
         fixedClassId?: boolean
         userProfileId?: boolean
-        trainingObjectTypeId?: boolean
         registrationAreaId?: boolean
         curriculumVersionId?: boolean
         curriculumVersionParallelId?: boolean
@@ -235352,7 +235299,7 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
     };
-    export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "note" | "from" | "to" | "registerNumber" | "doctoralCode" | "admissionCombination" | "entryScore" | "competencyScore" | "department" | "departmentAddress" | "careerYear" | "universitySchool" | "universityTrainingType" | "universityGraduationYear" | "universityMajor" | "universityRank" | "basic" | "facility" | "foreignLanguage" | "priorityReason" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "trainingObjectTypeId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>;
+    export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "note" | "from" | "to" | "registerNumber" | "doctoralCode" | "admissionCombination" | "entryScore" | "competencyScore" | "department" | "departmentAddress" | "careerYear" | "universitySchool" | "universityTrainingType" | "universityGraduationYear" | "universityMajor" | "universityRank" | "basic" | "facility" | "foreignLanguage" | "priorityReason" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>;
     export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
         priorityObject?: boolean | Student$priorityObjectArgs<ExtArgs>
@@ -235361,7 +235308,6 @@ export namespace Prisma {
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         subjectClassStudent?: boolean | Student$subjectClassStudentArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235391,7 +235337,6 @@ export namespace Prisma {
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235400,7 +235345,6 @@ export namespace Prisma {
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        trainingObjectType?: boolean | Student$trainingObjectTypeArgs<ExtArgs>
         registrationArea?: boolean | Student$registrationAreaArgs<ExtArgs>
         curriculumVersion?: boolean | Student$curriculumVersionArgs<ExtArgs>
         curriculumVersionParallel?: boolean | Student$curriculumVersionParallelArgs<ExtArgs>
@@ -235418,7 +235362,6 @@ export namespace Prisma {
             fixedClass: Prisma.$FixedClassPayload<ExtArgs> | null
             subjectClassStudent: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
-            trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs> | null
             registrationArea: Prisma.$DM_KhuVuc_DiaLyPayload<ExtArgs> | null
             curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs> | null
             curriculumVersionParallel: Prisma.$CurriculumVersionPayload<ExtArgs> | null
@@ -235528,7 +235471,6 @@ export namespace Prisma {
             status: $Enums.StudentStatus
             fixedClassId: string | null
             userProfileId: string
-            trainingObjectTypeId: string | null
             registrationAreaId: string | null
             curriculumVersionId: string | null
             curriculumVersionParallelId: string | null
@@ -236041,24 +235983,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentSubjectScoreScalarFieldEnum | StudentSubjectScoreScalarFieldEnum[]
-    };
-    /**
-     * Student.trainingObjectType
-     */
-    export type Student$trainingObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the TrainingObjectType
-         */
-        select?: TrainingObjectTypeSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the TrainingObjectType
-         */
-        omit?: TrainingObjectTypeOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: TrainingObjectTypeInclude<ExtArgs> | null
-        where?: TrainingObjectTypeWhereInput
     };
     /**
      * Student.registrationArea
@@ -341400,7 +341324,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionListRelationFilter
         trainingMajors?: TrainingMajorOnTrainingObjectTypeListRelationFilter
         trainingFields?: TrainingFieldOnTrainingObjectTypeListRelationFilter
-        students?: StudentListRelationFilter
         trainingScoreSession?: TrainingScoreSessionListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         graduationSession?: GraduationSessionListRelationFilter
@@ -341428,7 +341351,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionOrderByRelationAggregateInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeOrderByRelationAggregateInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeOrderByRelationAggregateInput
-        students?: StudentOrderByRelationAggregateInput
         trainingScoreSession?: TrainingScoreSessionOrderByRelationAggregateInput
         subjectClass?: SubjectClassOrderByRelationAggregateInput
         graduationSession?: GraduationSessionOrderByRelationAggregateInput
@@ -341460,7 +341382,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionListRelationFilter
         trainingMajors?: TrainingMajorOnTrainingObjectTypeListRelationFilter
         trainingFields?: TrainingFieldOnTrainingObjectTypeListRelationFilter
-        students?: StudentListRelationFilter
         trainingScoreSession?: TrainingScoreSessionListRelationFilter
         subjectClass?: SubjectClassListRelationFilter
         graduationSession?: GraduationSessionListRelationFilter
@@ -343507,7 +343428,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
         fixedClassId?: StringNullableFilter<"Student"> | string | null
         userProfileId?: StringFilter<"Student"> | string
-        trainingObjectTypeId?: StringNullableFilter<"Student"> | string | null
         registrationAreaId?: UuidNullableFilter<"Student"> | string | null
         curriculumVersionId?: StringNullableFilter<"Student"> | string | null
         curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -343526,7 +343446,6 @@ export namespace Prisma {
         fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
         subjectClassStudent?: StudentSubjectScoreListRelationFilter
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-        trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
         registrationArea?: XOR<DM_KhuVuc_DiaLyNullableScalarRelationFilter, DM_KhuVuc_DiaLyWhereInput> | null
         curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
         curriculumVersionParallel?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
@@ -343585,7 +343504,6 @@ export namespace Prisma {
         status?: SortOrder
         fixedClassId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
-        trainingObjectTypeId?: SortOrderInput | SortOrder
         registrationAreaId?: SortOrderInput | SortOrder
         curriculumVersionId?: SortOrderInput | SortOrder
         curriculumVersionParallelId?: SortOrderInput | SortOrder
@@ -343604,7 +343522,6 @@ export namespace Prisma {
         fixedClass?: FixedClassOrderByWithRelationInput
         subjectClassStudent?: StudentSubjectScoreOrderByRelationAggregateInput
         userProfile?: UserProfileOrderByWithRelationInput
-        trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
         registrationArea?: DM_KhuVuc_DiaLyOrderByWithRelationInput
         curriculumVersion?: CurriculumVersionOrderByWithRelationInput
         curriculumVersionParallel?: CurriculumVersionOrderByWithRelationInput
@@ -343667,7 +343584,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
         fixedClassId?: StringNullableFilter<"Student"> | string | null
         userProfileId?: StringFilter<"Student"> | string
-        trainingObjectTypeId?: StringNullableFilter<"Student"> | string | null
         registrationAreaId?: UuidNullableFilter<"Student"> | string | null
         curriculumVersionId?: StringNullableFilter<"Student"> | string | null
         curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -343686,7 +343602,6 @@ export namespace Prisma {
         fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
         subjectClassStudent?: StudentSubjectScoreListRelationFilter
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-        trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
         registrationArea?: XOR<DM_KhuVuc_DiaLyNullableScalarRelationFilter, DM_KhuVuc_DiaLyWhereInput> | null
         curriculumVersion?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
         curriculumVersionParallel?: XOR<CurriculumVersionNullableScalarRelationFilter, CurriculumVersionWhereInput> | null
@@ -343745,7 +343660,6 @@ export namespace Prisma {
         status?: SortOrder
         fixedClassId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
-        trainingObjectTypeId?: SortOrderInput | SortOrder
         registrationAreaId?: SortOrderInput | SortOrder
         curriculumVersionId?: SortOrderInput | SortOrder
         curriculumVersionParallelId?: SortOrderInput | SortOrder
@@ -343800,7 +343714,6 @@ export namespace Prisma {
         status?: EnumStudentStatusWithAggregatesFilter<"Student"> | $Enums.StudentStatus
         fixedClassId?: StringNullableWithAggregatesFilter<"Student"> | string | null
         userProfileId?: StringWithAggregatesFilter<"Student"> | string
-        trainingObjectTypeId?: StringNullableWithAggregatesFilter<"Student"> | string | null
         registrationAreaId?: UuidNullableWithAggregatesFilter<"Student"> | string | null
         curriculumVersionId?: StringNullableWithAggregatesFilter<"Student"> | string | null
         curriculumVersionParallelId?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -369462,7 +369375,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -369488,7 +369400,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -369514,7 +369425,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -369540,7 +369450,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -371832,7 +371741,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -371891,7 +371799,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -371974,7 +371881,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -372033,7 +371939,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -372104,7 +372009,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -372191,7 +372095,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -395344,10 +395247,6 @@ export namespace Prisma {
         is?: FixedClassWhereInput | null
         isNot?: FixedClassWhereInput | null
     };
-    export type TrainingObjectTypeNullableScalarRelationFilter = {
-        is?: TrainingObjectTypeWhereInput | null
-        isNot?: TrainingObjectTypeWhereInput | null
-    };
     export type DM_KhuVuc_DiaLyNullableScalarRelationFilter = {
         is?: DM_KhuVuc_DiaLyWhereInput | null
         isNot?: DM_KhuVuc_DiaLyWhereInput | null
@@ -395446,7 +395345,6 @@ export namespace Prisma {
         status?: SortOrder
         fixedClassId?: SortOrder
         userProfileId?: SortOrder
-        trainingObjectTypeId?: SortOrder
         registrationAreaId?: SortOrder
         curriculumVersionId?: SortOrder
         curriculumVersionParallelId?: SortOrder
@@ -395503,7 +395401,6 @@ export namespace Prisma {
         status?: SortOrder
         fixedClassId?: SortOrder
         userProfileId?: SortOrder
-        trainingObjectTypeId?: SortOrder
         registrationAreaId?: SortOrder
         curriculumVersionId?: SortOrder
         curriculumVersionParallelId?: SortOrder
@@ -395550,7 +395447,6 @@ export namespace Prisma {
         status?: SortOrder
         fixedClassId?: SortOrder
         userProfileId?: SortOrder
-        trainingObjectTypeId?: SortOrder
         registrationAreaId?: SortOrder
         curriculumVersionId?: SortOrder
         curriculumVersionParallelId?: SortOrder
@@ -413583,12 +413479,6 @@ export namespace Prisma {
         createMany?: TrainingFieldOnTrainingObjectTypeCreateManyTrainingObjectTypeInputEnvelope
         connect?: TrainingFieldOnTrainingObjectTypeWhereUniqueInput | TrainingFieldOnTrainingObjectTypeWhereUniqueInput[]
     };
-    export type StudentCreateNestedManyWithoutTrainingObjectTypeInput = {
-        create?: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput> | StudentCreateWithoutTrainingObjectTypeInput[] | StudentUncheckedCreateWithoutTrainingObjectTypeInput[]
-        connectOrCreate?: StudentCreateOrConnectWithoutTrainingObjectTypeInput | StudentCreateOrConnectWithoutTrainingObjectTypeInput[]
-        createMany?: StudentCreateManyTrainingObjectTypeInputEnvelope
-        connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-    };
     export type TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingScoreSessionCreateWithoutTrainingObjectTypeInput, TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingScoreSessionCreateWithoutTrainingObjectTypeInput[] | TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingScoreSessionCreateOrConnectWithoutTrainingObjectTypeInput | TrainingScoreSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -413654,12 +413544,6 @@ export namespace Prisma {
         connectOrCreate?: TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingObjectTypeInput[]
         createMany?: TrainingFieldOnTrainingObjectTypeCreateManyTrainingObjectTypeInputEnvelope
         connect?: TrainingFieldOnTrainingObjectTypeWhereUniqueInput | TrainingFieldOnTrainingObjectTypeWhereUniqueInput[]
-    };
-    export type StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
-        create?: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput> | StudentCreateWithoutTrainingObjectTypeInput[] | StudentUncheckedCreateWithoutTrainingObjectTypeInput[]
-        connectOrCreate?: StudentCreateOrConnectWithoutTrainingObjectTypeInput | StudentCreateOrConnectWithoutTrainingObjectTypeInput[]
-        createMany?: StudentCreateManyTrainingObjectTypeInputEnvelope
-        connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
     };
     export type TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingScoreSessionCreateWithoutTrainingObjectTypeInput, TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingScoreSessionCreateWithoutTrainingObjectTypeInput[] | TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
@@ -413782,19 +413666,6 @@ export namespace Prisma {
         update?: TrainingFieldOnTrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
         updateMany?: TrainingFieldOnTrainingObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: TrainingFieldOnTrainingObjectTypeScalarWhereInput | TrainingFieldOnTrainingObjectTypeScalarWhereInput[]
-    };
-    export type StudentUpdateManyWithoutTrainingObjectTypeNestedInput = {
-        create?: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput> | StudentCreateWithoutTrainingObjectTypeInput[] | StudentUncheckedCreateWithoutTrainingObjectTypeInput[]
-        connectOrCreate?: StudentCreateOrConnectWithoutTrainingObjectTypeInput | StudentCreateOrConnectWithoutTrainingObjectTypeInput[]
-        upsert?: StudentUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | StudentUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
-        createMany?: StudentCreateManyTrainingObjectTypeInputEnvelope
-        set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        update?: StudentUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | StudentUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
-        updateMany?: StudentUpdateManyWithWhereWithoutTrainingObjectTypeInput | StudentUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
-        deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
     };
     export type TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingScoreSessionCreateWithoutTrainingObjectTypeInput, TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingScoreSessionCreateWithoutTrainingObjectTypeInput[] | TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
@@ -413938,19 +413809,6 @@ export namespace Prisma {
         update?: TrainingFieldOnTrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
         updateMany?: TrainingFieldOnTrainingObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: TrainingFieldOnTrainingObjectTypeScalarWhereInput | TrainingFieldOnTrainingObjectTypeScalarWhereInput[]
-    };
-    export type StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
-        create?: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput> | StudentCreateWithoutTrainingObjectTypeInput[] | StudentUncheckedCreateWithoutTrainingObjectTypeInput[]
-        connectOrCreate?: StudentCreateOrConnectWithoutTrainingObjectTypeInput | StudentCreateOrConnectWithoutTrainingObjectTypeInput[]
-        upsert?: StudentUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | StudentUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
-        createMany?: StudentCreateManyTrainingObjectTypeInputEnvelope
-        set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
-        update?: StudentUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | StudentUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
-        updateMany?: StudentUpdateManyWithWhereWithoutTrainingObjectTypeInput | StudentUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
-        deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
     };
     export type TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingScoreSessionCreateWithoutTrainingObjectTypeInput, TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingScoreSessionCreateWithoutTrainingObjectTypeInput[] | TrainingScoreSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
@@ -415733,11 +415591,6 @@ export namespace Prisma {
         connectOrCreate?: UserProfileCreateOrConnectWithoutEducationAndTrainingInput
         connect?: UserProfileWhereUniqueInput
     };
-    export type TrainingObjectTypeCreateNestedOneWithoutStudentsInput = {
-        create?: XOR<TrainingObjectTypeCreateWithoutStudentsInput, TrainingObjectTypeUncheckedCreateWithoutStudentsInput>
-        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutStudentsInput
-        connect?: TrainingObjectTypeWhereUniqueInput
-    };
     export type DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput = {
         create?: XOR<DM_KhuVuc_DiaLyCreateWithoutStudentInput, DM_KhuVuc_DiaLyUncheckedCreateWithoutStudentInput>
         connectOrCreate?: DM_KhuVuc_DiaLyCreateOrConnectWithoutStudentInput
@@ -416080,15 +415933,6 @@ export namespace Prisma {
         upsert?: UserProfileUpsertWithoutEducationAndTrainingInput
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutEducationAndTrainingInput, UserProfileUpdateWithoutEducationAndTrainingInput>, UserProfileUncheckedUpdateWithoutEducationAndTrainingInput>
-    };
-    export type TrainingObjectTypeUpdateOneWithoutStudentsNestedInput = {
-        create?: XOR<TrainingObjectTypeCreateWithoutStudentsInput, TrainingObjectTypeUncheckedCreateWithoutStudentsInput>
-        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutStudentsInput
-        upsert?: TrainingObjectTypeUpsertWithoutStudentsInput
-        disconnect?: TrainingObjectTypeWhereInput | boolean
-        delete?: TrainingObjectTypeWhereInput | boolean
-        connect?: TrainingObjectTypeWhereUniqueInput
-        update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutStudentsInput, TrainingObjectTypeUpdateWithoutStudentsInput>, TrainingObjectTypeUncheckedUpdateWithoutStudentsInput>
     };
     export type DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput = {
         create?: XOR<DM_KhuVuc_DiaLyCreateWithoutStudentInput, DM_KhuVuc_DiaLyUncheckedCreateWithoutStudentInput>
@@ -429670,7 +429514,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -429728,7 +429571,6 @@ export namespace Prisma {
         unionLeader?: string | null
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -433044,7 +432886,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
         fixedClassId?: StringNullableFilter<"Student"> | string | null
         userProfileId?: StringFilter<"Student"> | string
-        trainingObjectTypeId?: StringNullableFilter<"Student"> | string | null
         registrationAreaId?: UuidNullableFilter<"Student"> | string | null
         curriculumVersionId?: StringNullableFilter<"Student"> | string | null
         curriculumVersionParallelId?: StringNullableFilter<"Student"> | string | null
@@ -460044,7 +459885,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
@@ -460102,7 +459942,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
         academicWarningLevel?: number
@@ -468570,7 +468409,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -468595,7 +468433,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -468823,7 +468660,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -468848,7 +468684,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -469233,7 +469068,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -469291,7 +469125,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -469492,7 +469325,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -469550,7 +469382,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -470202,7 +470033,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -470261,7 +470091,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -470873,7 +470702,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -470932,7 +470760,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -472286,7 +472113,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -472344,7 +472170,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -472578,7 +472403,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -472636,7 +472460,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -473006,7 +472829,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -473064,7 +472886,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -473298,7 +473119,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -473356,7 +473176,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -475240,7 +475059,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -475265,7 +475083,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -475991,7 +475808,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -476016,7 +475832,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -476618,7 +476433,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -476677,7 +476491,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -476762,7 +476575,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -476821,7 +476633,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -477198,7 +477009,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -477256,7 +477066,6 @@ export namespace Prisma {
         unionLeader?: string | null
         status?: $Enums.StudentStatus
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -477641,7 +477450,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -477700,7 +477508,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -477790,7 +477597,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -477849,7 +477655,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -478499,7 +478304,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -478524,7 +478328,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -478876,7 +478679,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -478901,7 +478703,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -479020,7 +478821,6 @@ export namespace Prisma {
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -479045,7 +478845,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -479415,7 +479214,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
@@ -479473,7 +479271,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionParallelId?: string | null
         academicWarningLevel?: number
@@ -479563,7 +479360,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
@@ -479621,7 +479417,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         academicWarningLevel?: number
@@ -479769,7 +479564,6 @@ export namespace Prisma {
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -479794,7 +479588,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -480727,7 +480520,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -480752,7 +480544,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -481888,7 +481679,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -481913,7 +481703,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -484415,7 +484204,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -484473,7 +484261,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -484724,7 +484511,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -484782,7 +484568,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484942,7 +484727,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -484967,7 +484751,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -486102,7 +485885,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -486127,7 +485909,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -489420,154 +489201,6 @@ export namespace Prisma {
         data: TrainingFieldOnTrainingObjectTypeCreateManyTrainingObjectTypeInput | TrainingFieldOnTrainingObjectTypeCreateManyTrainingObjectTypeInput[]
         skipDuplicates?: boolean
     };
-    export type StudentCreateWithoutTrainingObjectTypeInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        note?: string | null
-        from?: Date | string | null
-        to?: Date | string | null
-        registerNumber?: string | null
-        doctoralCode?: string | null
-        admissionCombination?: string | null
-        entryScore?: number | null
-        competencyScore?: number | null
-        department?: string | null
-        departmentAddress?: string | null
-        careerYear?: number | null
-        universitySchool?: string | null
-        universityTrainingType?: string | null
-        universityGraduationYear?: number | null
-        universityMajor?: string | null
-        universityRank?: string | null
-        basic?: number | null
-        facility?: number | null
-        foreignLanguage?: string | null
-        priorityReason?: string | null
-        unionLeader?: string | null
-        status?: $Enums.StudentStatus
-        academicWarningLevel?: number
-        disciplinaryWarningLevel?: number
-        suspended?: boolean
-        expelled?: boolean
-        foreignLangPass?: boolean
-        ITCertificationPass?: boolean
-        strengthTrainingPass?: boolean
-        militaryTrainingPass?: boolean
-        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
-        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
-        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
-        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
-        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
-        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
-        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
-        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
-        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
-        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
-        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
-        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
-        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
-        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
-        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
-        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
-        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
-        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
-        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
-        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
-        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
-        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
-        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
-        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
-        notes?: NoteCreateNestedManyWithoutStudentInput
-        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
-    };
-    export type StudentUncheckedCreateWithoutTrainingObjectTypeInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        note?: string | null
-        from?: Date | string | null
-        to?: Date | string | null
-        registerNumber?: string | null
-        doctoralCode?: string | null
-        admissionCombination?: string | null
-        entryScore?: number | null
-        competencyScore?: number | null
-        department?: string | null
-        departmentAddress?: string | null
-        careerYear?: number | null
-        universitySchool?: string | null
-        universityTrainingType?: string | null
-        universityGraduationYear?: number | null
-        universityMajor?: string | null
-        universityRank?: string | null
-        basic?: number | null
-        facility?: number | null
-        foreignLanguage?: string | null
-        priorityReason?: string | null
-        trainingLocationId?: string | null
-        unionLeader?: string | null
-        status?: $Enums.StudentStatus
-        fixedClassId?: string | null
-        userProfileId: string
-        registrationAreaId?: string | null
-        curriculumVersionId?: string | null
-        curriculumVersionParallelId?: string | null
-        academicWarningLevel?: number
-        disciplinaryWarningLevel?: number
-        suspended?: boolean
-        expelled?: boolean
-        foreignLangPass?: boolean
-        ITCertificationPass?: boolean
-        strengthTrainingPass?: boolean
-        militaryTrainingPass?: boolean
-        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
-        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
-        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
-        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
-        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
-        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
-        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
-        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
-        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
-        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
-        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
-        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
-        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
-        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
-        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
-        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
-        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
-        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
-        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
-        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
-    };
-    export type StudentCreateOrConnectWithoutTrainingObjectTypeInput = {
-        where: StudentWhereUniqueInput
-        create: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput>
-    };
-    export type StudentCreateManyTrainingObjectTypeInputEnvelope = {
-        data: StudentCreateManyTrainingObjectTypeInput | StudentCreateManyTrainingObjectTypeInput[]
-        skipDuplicates?: boolean
-    };
     export type TrainingScoreSessionCreateWithoutTrainingObjectTypeInput = {
         id?: string
         code?: string | null
@@ -490107,19 +489740,6 @@ export namespace Prisma {
         trainingFieldId?: StringFilter<"TrainingFieldOnTrainingObjectType"> | string
         trainingObjectTypeId?: StringFilter<"TrainingFieldOnTrainingObjectType"> | string
     };
-    export type StudentUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
-        where: StudentWhereUniqueInput
-        update: XOR<StudentUpdateWithoutTrainingObjectTypeInput, StudentUncheckedUpdateWithoutTrainingObjectTypeInput>
-        create: XOR<StudentCreateWithoutTrainingObjectTypeInput, StudentUncheckedCreateWithoutTrainingObjectTypeInput>
-    };
-    export type StudentUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
-        where: StudentWhereUniqueInput
-        data: XOR<StudentUpdateWithoutTrainingObjectTypeInput, StudentUncheckedUpdateWithoutTrainingObjectTypeInput>
-    };
-    export type StudentUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
-        where: StudentScalarWhereInput
-        data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutTrainingObjectTypeInput>
-    };
     export type TrainingScoreSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
         where: TrainingScoreSessionWhereUniqueInput
         update: XOR<TrainingScoreSessionUpdateWithoutTrainingObjectTypeInput, TrainingScoreSessionUncheckedUpdateWithoutTrainingObjectTypeInput>
@@ -490262,7 +489882,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -490321,7 +489940,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -490592,7 +490210,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -490617,7 +490234,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -490693,7 +490309,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -490718,7 +490333,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -490896,7 +490510,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -490954,7 +490567,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -492488,7 +492100,6 @@ export namespace Prisma {
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -492513,7 +492124,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -492596,7 +492206,6 @@ export namespace Prisma {
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -492621,7 +492230,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -493699,7 +493307,6 @@ export namespace Prisma {
         curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -493724,7 +493331,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -493821,7 +493427,6 @@ export namespace Prisma {
         curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -493846,7 +493451,6 @@ export namespace Prisma {
         curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -496341,60 +495945,6 @@ export namespace Prisma {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutEducationAndTrainingInput, UserProfileUncheckedCreateWithoutEducationAndTrainingInput>
     };
-    export type TrainingObjectTypeCreateWithoutStudentsInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-        type: $Enums.TrainingObjectTypes
-        trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
-        trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
-        trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
-        curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
-        curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
-        subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
-        graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
-        subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
-        planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
-        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
-    };
-    export type TrainingObjectTypeUncheckedCreateWithoutStudentsInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-        type: $Enums.TrainingObjectTypes
-        trainingFormId?: string | null
-        trainingLevelId?: string | null
-        trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    };
-    export type TrainingObjectTypeCreateOrConnectWithoutStudentsInput = {
-        where: TrainingObjectTypeWhereUniqueInput
-        create: XOR<TrainingObjectTypeCreateWithoutStudentsInput, TrainingObjectTypeUncheckedCreateWithoutStudentsInput>
-    };
     export type DM_KhuVuc_DiaLyCreateWithoutStudentInput = {
         Id?: string
         sMa?: string | null
@@ -498134,65 +497684,6 @@ export namespace Prisma {
         evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
     };
-    export type TrainingObjectTypeUpsertWithoutStudentsInput = {
-        update: XOR<TrainingObjectTypeUpdateWithoutStudentsInput, TrainingObjectTypeUncheckedUpdateWithoutStudentsInput>
-        create: XOR<TrainingObjectTypeCreateWithoutStudentsInput, TrainingObjectTypeUncheckedCreateWithoutStudentsInput>
-        where?: TrainingObjectTypeWhereInput
-    };
-    export type TrainingObjectTypeUpdateToOneWithWhereWithoutStudentsInput = {
-        where?: TrainingObjectTypeWhereInput
-        data: XOR<TrainingObjectTypeUpdateWithoutStudentsInput, TrainingObjectTypeUncheckedUpdateWithoutStudentsInput>
-    };
-    export type TrainingObjectTypeUpdateWithoutStudentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
-        trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
-        trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
-        trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
-        curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
-        curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
-        subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
-        graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
-        subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
-        planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
-        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
-    };
-    export type TrainingObjectTypeUncheckedUpdateWithoutStudentsInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
-        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    };
     export type DM_KhuVuc_DiaLyUpsertWithoutStudentInput = {
         update: XOR<DM_KhuVuc_DiaLyUpdateWithoutStudentInput, DM_KhuVuc_DiaLyUncheckedUpdateWithoutStudentInput>
         create: XOR<DM_KhuVuc_DiaLyCreateWithoutStudentInput, DM_KhuVuc_DiaLyUncheckedCreateWithoutStudentInput>
@@ -498895,7 +498386,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -498953,7 +498443,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -499160,7 +498649,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -499218,7 +498706,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -499422,7 +498909,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -499480,7 +498966,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -499669,7 +499154,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -499727,7 +499211,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -500071,7 +499554,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -500129,7 +499611,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -502963,7 +502444,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -503021,7 +502501,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -503310,7 +502789,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -503368,7 +502846,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -503626,7 +503103,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -503651,7 +503127,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -503784,7 +503259,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -503809,7 +503283,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -503907,7 +503380,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -503965,7 +503437,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -504097,7 +503568,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -504155,7 +503625,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508090,7 +507559,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -508148,7 +507616,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -508365,7 +507832,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -508423,7 +507889,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508609,7 +508074,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -508634,7 +508098,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -508868,7 +508331,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -508893,7 +508355,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -510503,7 +509964,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -510561,7 +510021,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -510916,7 +510375,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -510974,7 +510432,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521013,7 +520470,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -521071,7 +520527,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -521634,7 +521089,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -521692,7 +521146,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527990,7 +527443,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -528048,7 +527500,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -528237,7 +527688,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -528295,7 +527745,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528453,7 +527902,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
@@ -528478,7 +527926,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
@@ -528572,7 +528019,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -528597,7 +528043,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -528663,7 +528108,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -528721,7 +528165,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -529258,7 +528701,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -529316,7 +528758,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530280,7 +529721,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -530338,7 +529778,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -530772,7 +530211,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -530830,7 +530268,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532589,7 +532026,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -532647,7 +532083,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -532901,7 +532336,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -532959,7 +532393,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -533041,7 +532474,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -533099,7 +532531,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -533370,7 +532801,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -533428,7 +532858,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -533625,7 +533054,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -533683,7 +533111,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -533894,7 +533321,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -533952,7 +533378,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534491,7 +533916,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -534549,7 +533973,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -534740,7 +534163,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -534798,7 +534220,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534952,7 +534373,6 @@ export namespace Prisma {
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
         curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
         curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
@@ -535010,7 +534430,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -535187,7 +534606,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -535245,7 +534663,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538340,7 +537757,6 @@ export namespace Prisma {
         unionLeader?: string | null
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -539721,7 +539137,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -539779,7 +539194,6 @@ export namespace Prisma {
         unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -539849,7 +539263,6 @@ export namespace Prisma {
         unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547038,7 +546451,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
         academicWarningLevel?: number
@@ -547096,7 +546508,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -547154,7 +546565,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -547224,7 +546634,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -564081,7 +563490,6 @@ export namespace Prisma {
         unionLeader?: string | null
         status?: $Enums.StudentStatus
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -564139,7 +563547,6 @@ export namespace Prisma {
         unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -564197,7 +563604,6 @@ export namespace Prisma {
         unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564267,7 +563673,6 @@ export namespace Prisma {
         unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -564935,7 +564340,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionParallelId?: string | null
         academicWarningLevel?: number
@@ -564981,7 +564385,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         academicWarningLevel?: number
@@ -565283,7 +564686,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -565341,7 +564743,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -565411,7 +564812,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -565469,7 +564869,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -565527,7 +564926,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -565597,7 +564995,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -569253,52 +568650,6 @@ export namespace Prisma {
         createdBy?: string | null
         trainingFieldId: string
     };
-    export type StudentCreateManyTrainingObjectTypeInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        note?: string | null
-        from?: Date | string | null
-        to?: Date | string | null
-        registerNumber?: string | null
-        doctoralCode?: string | null
-        admissionCombination?: string | null
-        entryScore?: number | null
-        competencyScore?: number | null
-        department?: string | null
-        departmentAddress?: string | null
-        careerYear?: number | null
-        universitySchool?: string | null
-        universityTrainingType?: string | null
-        universityGraduationYear?: number | null
-        universityMajor?: string | null
-        universityRank?: string | null
-        basic?: number | null
-        facility?: number | null
-        foreignLanguage?: string | null
-        priorityReason?: string | null
-        trainingLocationId?: string | null
-        unionLeader?: string | null
-        status?: $Enums.StudentStatus
-        fixedClassId?: string | null
-        userProfileId: string
-        registrationAreaId?: string | null
-        curriculumVersionId?: string | null
-        curriculumVersionParallelId?: string | null
-        academicWarningLevel?: number
-        disciplinaryWarningLevel?: number
-        suspended?: boolean
-        expelled?: boolean
-        foreignLangPass?: boolean
-        ITCertificationPass?: boolean
-        strengthTrainingPass?: boolean
-        militaryTrainingPass?: boolean
-    };
     export type TrainingScoreSessionCreateManyTrainingObjectTypeInput = {
         id?: string
         code?: string | null
@@ -569817,192 +569168,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: StringFieldUpdateOperationsInput | string
     };
-    export type StudentUpdateWithoutTrainingObjectTypeInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        note?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
-        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
-        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        department?: NullableStringFieldUpdateOperationsInput | string | null
-        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
-        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
-        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
-        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
-        basic?: NullableFloatFieldUpdateOperationsInput | number | null
-        facility?: NullableFloatFieldUpdateOperationsInput | number | null
-        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
-        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-        academicWarningLevel?: IntFieldUpdateOperationsInput | number
-        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
-        suspended?: BoolFieldUpdateOperationsInput | boolean
-        expelled?: BoolFieldUpdateOperationsInput | boolean
-        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
-        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
-        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
-        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
-        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
-        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
-        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
-        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
-        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
-        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
-        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
-        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
-        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
-        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
-        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
-        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
-        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
-        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
-        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
-        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
-        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
-        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
-        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
-        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
-        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
-        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
-        notes?: NoteUpdateManyWithoutStudentNestedInput
-        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
-    };
-    export type StudentUncheckedUpdateWithoutTrainingObjectTypeInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        note?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
-        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
-        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        department?: NullableStringFieldUpdateOperationsInput | string | null
-        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
-        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
-        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
-        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
-        basic?: NullableFloatFieldUpdateOperationsInput | number | null
-        facility?: NullableFloatFieldUpdateOperationsInput | number | null
-        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
-        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        userProfileId?: StringFieldUpdateOperationsInput | string
-        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicWarningLevel?: IntFieldUpdateOperationsInput | number
-        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
-        suspended?: BoolFieldUpdateOperationsInput | boolean
-        expelled?: BoolFieldUpdateOperationsInput | boolean
-        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
-        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
-        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
-        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
-        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
-        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
-        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
-        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
-        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
-        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
-        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
-        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
-        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
-        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
-        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
-        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
-        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
-        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
-        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
-        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
-        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
-        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
-    };
-    export type StudentUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        note?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
-        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
-        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        department?: NullableStringFieldUpdateOperationsInput | string | null
-        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
-        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
-        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
-        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
-        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
-        basic?: NullableFloatFieldUpdateOperationsInput | number | null
-        facility?: NullableFloatFieldUpdateOperationsInput | number | null
-        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
-        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        userProfileId?: StringFieldUpdateOperationsInput | string
-        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicWarningLevel?: IntFieldUpdateOperationsInput | number
-        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
-        suspended?: BoolFieldUpdateOperationsInput | boolean
-        expelled?: BoolFieldUpdateOperationsInput | boolean
-        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
-        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
-        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-    };
     export type TrainingScoreSessionUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570517,7 +569682,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -570576,7 +569740,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570646,7 +569809,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571009,7 +570171,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -571034,7 +570195,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -571085,7 +570245,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -571110,7 +570269,6 @@ export namespace Prisma {
         curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
@@ -571164,7 +570322,6 @@ export namespace Prisma {
         status?: $Enums.StudentStatus
         fixedClassId?: string | null
         userProfileId: string
-        trainingObjectTypeId?: string | null
         registrationAreaId?: string | null
         curriculumVersionId?: string | null
         curriculumVersionParallelId?: string | null
@@ -571275,7 +570432,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -571333,7 +570489,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -571403,7 +570558,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575895,7 +575049,6 @@ export namespace Prisma {
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
         curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
         curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
@@ -575953,7 +575106,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576023,7 +575175,6 @@ export namespace Prisma {
         status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
         fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null

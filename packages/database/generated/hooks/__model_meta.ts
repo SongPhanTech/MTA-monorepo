@@ -11152,12 +11152,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
@@ -13182,20 +13176,6 @@ const metadata: ModelMeta = {
                     backLink: 'educationAndTraining',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
                 }, registrationArea: {
                     name: "registrationArea",
                     type: "DM_KhuVuc_DiaLy",
