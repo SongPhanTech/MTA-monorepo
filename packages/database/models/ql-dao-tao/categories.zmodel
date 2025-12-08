@@ -37,7 +37,6 @@ model TrainingObjectType extends Base {
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
-  students             Student[]
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]

@@ -2447,7 +2447,6 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -5922,7 +5921,6 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId'

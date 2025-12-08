@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -18,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
@@ -353,23 +352,11 @@ function YearAndSemester() {
                             fixed: 'right',
                             hidden: !canSome(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
-                                'XEM_CHI_TIET',
                                 'SUA',
                                 'XOA'
                             ),
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
-                                        'XEM_CHI_TIET'
-                                    ) && (
-                                        <Tooltip
-                                            title="Cảnh cáo học tập, Xét học bổng"
-                                            placement="top"
-                                        >
-                                            <EyeOutlined className="text-sm cursor-pointer" />
-                                        </Tooltip>
-                                    )}
                                     {can(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
                                         'SUA'

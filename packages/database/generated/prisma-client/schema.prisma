@@ -3276,7 +3276,6 @@ model TrainingObjectType {
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
-  students             Student[]
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
@@ -3802,8 +3801,6 @@ model Student {
   subjectClassStudent            StudentSubjectScore[]
   userProfileId                  String
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
-  trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId           String?
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
   curriculumVersion              CurriculumVersion?               @relation("CurriculumVersion", fields: [curriculumVersionId], references: [id])
