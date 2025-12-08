@@ -169,7 +169,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             },
                         },
                     },
-                    trainingObjectType: true,
                 },
             },
         },
