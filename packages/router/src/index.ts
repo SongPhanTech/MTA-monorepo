@@ -248,7 +248,7 @@ const NAVIGATION: NavigationType = {
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_TONG_KET_NAM_HOC,
                         label: 'Tổng kết năm học',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_TONG_KET_KY_HOC,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_TONG_KET_NAM_HOC,
                         description: 'Tổng kết năm học',
                     },
                     {

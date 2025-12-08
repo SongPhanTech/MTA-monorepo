@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
  * @param studentId ID sinh viên
  * @param schoolYearId ID năm học cần tính
  */
-export async function calculateStudentYearResult({
+async function calcStudentYearResult({
     studentId,
     schoolYearId,
 }: {
@@ -279,7 +279,7 @@ export async function calculateStudentYearResult({
     return result
 }
 
-const result = await calculateStudentYearResult({
+const result = await calcStudentYearResult({
     studentId: 'cmhlhx381000ds301llwk7gu0',
     schoolYearId: 'cmhldvbga0002p001o6c9u2t9',
 })

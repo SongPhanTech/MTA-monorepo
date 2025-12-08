@@ -68,7 +68,7 @@ export default function UserProfilePageDs() {
 
     const where: Prisma.StudentWhereInput = useMemo(
         () => ({
-            ...(filters.code && filters.code !== ''
+            ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
@@ -76,9 +76,7 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...((filters.name && filters.name !== '') ||
-            (filters.rank && filters.rank !== '') ||
-            (filters.phone && filters.phone !== '')
+            ...(filters.name || filters.rank || filters.phone
                 ? {
                       userProfile: {
                           OR: [
@@ -135,7 +133,7 @@ export default function UserProfilePageDs() {
                           in: filters.curriculumVersionParallel,
                       },
                   }
-                : undefined),
+                : {}),
             ...(filters.fixedClass
                 ? {
                       fixedClassId: {
