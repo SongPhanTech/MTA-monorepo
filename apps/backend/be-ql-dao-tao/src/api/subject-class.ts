@@ -1066,12 +1066,11 @@ app.openapi(openSubjectClassReExam, async (c) => {
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
-          and (truot_mon = true
-            or cam_thi = true
-            or dinh_chi = true)
+          and (truot_mon = true or "examPostponed" = true)
+          and cam_thi = false
+          and dinh_chi = false
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
-          and "examPostponed" = false -- hoãn thi
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -1128,12 +1127,11 @@ app.openapi(openSubjectClassReExam, async (c) => {
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
-          and (truot_mon = true
-            or cam_thi = true
-            or dinh_chi = true)
+          and (truot_mon = true or "examPostponed" = true)
+          and cam_thi = false
+          and dinh_chi = false
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
-          and "examPostponed" = false -- hoãn thi
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -1223,10 +1221,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                nam_hoc
         from mon_no
         where rn = 1
-          and (truot_mon = true or cam_thi = true or dinh_chi = true)
+          and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
-          and hoan_thi = false -- hoãn thi
           and (
             ${trainingObjectTypeId}::TEXT IS NULL
                 OR "trainingObjectTypeId" = ${trainingObjectTypeId}

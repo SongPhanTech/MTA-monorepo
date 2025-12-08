@@ -1819,13 +1819,16 @@ export default function PhanCongGiangDay({
                                     width: 80,
                                     align: 'center',
                                     type: 'order',
-                                    distinctFilters: ['maxStudent', 'credit'],
+                                    distinctFilters: ['maxStudent'],
                                     render: (_, record) => (
                                         <p>
-                                            {record?.fixedClasses?.reduce(
-                                                (acc, curr) => acc + (curr?._count?.students ?? 0),
-                                                0
-                                            ) ?? 0}
+                                            {record.maxStudent ??
+                                                record?.fixedClasses?.reduce(
+                                                    (acc, curr) =>
+                                                        acc + (curr?._count?.students ?? 0),
+                                                    0
+                                                ) ??
+                                                0}
                                         </p>
                                     ),
                                 },
