@@ -46,6 +46,7 @@ export default function MonCoHVSVChuaDat() {
             semesterId: semesterId as string,
             limit: numberOfPages,
             page: currentPage,
+            viewAll: 0,
         },
         { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
     )

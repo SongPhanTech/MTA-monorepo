@@ -84,6 +84,7 @@ export default function ThongKeNoThiLai() {
             trainingMajorId,
             semesterId: semesterId as string,
             trainingObjectTypeId: trainingObjectTypeId as string,
+            viewAll: 1,
         },
         { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
     )

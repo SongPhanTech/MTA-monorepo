@@ -32,7 +32,7 @@ type KeHoachDaoTaoPageProps = {
 
 export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
     const [activeLeftTab, setActiveLeftTab] = useState(
-        type !== 'NORMAL' ? 'thong-ke-no' : 'lap-ke-hoach'
+        type !== 'NORMAL' ? (role === 'P2_QLDT' ? 'thong-ke-no' : 'mo-lop-mon-hoc') : 'lap-ke-hoach'
     )
 
     const tabs: TabItem[] = useMemo(() => {

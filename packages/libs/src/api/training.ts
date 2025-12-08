@@ -24,6 +24,10 @@ import type {
     AwardIds,
     AwardIdsResult,
     AwardScore400,
+    CalculateStudentSchoolYearResult200,
+    CalculateStudentSchoolYearResult400,
+    CalculateStudentSchoolYearResult500,
+    CalculateStudentSchoolYearResultParams,
     CalculateStudentSemesterResultJson200,
     CalculateStudentSemesterResultJson400,
     CalculateStudentSemesterResultJson500,
@@ -2307,108 +2311,6 @@ export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TC
     return useMutation(mutationOptions, queryClient)
 }
 
-export type importStudentResponse200 = {
-    data: ImportStudent200
-    status: 200
-}
-
-export type importStudentResponse400 = {
-    data: ImportStudent400
-    status: 400
-}
-
-export type importStudentResponseSuccess = importStudentResponse200 & {
-    headers: Headers
-}
-export type importStudentResponseError = importStudentResponse400 & {
-    headers: Headers
-}
-
-export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
-
-export const getImportStudentUrl = () => {
-    return `/api/student/import-student`
-}
-
-export const importStudent = async (
-    importStudentRequest: ImportStudentRequest,
-    options?: RequestInit
-): Promise<importStudentResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importStudentRequest.file)
-    if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
-        formData.append(`timeout`, importStudentRequest.timeout.toString())
-    }
-
-    return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
-}
-
-export const getImportStudentMutationOptions = <
-    TError = ImportStudent400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importStudent>>,
-        TError,
-        { data: ImportStudentRequest },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof importStudent>>,
-    TError,
-    { data: ImportStudentRequest },
-    TContext
-> => {
-    const mutationKey = ['importStudent']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importStudent>>,
-        { data: ImportStudentRequest }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return importStudent(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
-export type ImportStudentMutationBody = ImportStudentRequest
-export type ImportStudentMutationError = ImportStudent400
-
-export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importStudent>>,
-            TError,
-            { data: ImportStudentRequest },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof importStudent>>,
-    TError,
-    { data: ImportStudentRequest },
-    TContext
-> => {
-    const mutationOptions = getImportStudentMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
 /**
  * Cập nhật trạng thái, điểm học viên theo xử lý học tập
  * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
@@ -2856,64 +2758,89 @@ export const useCalculateStudentSemesterResultJson = <
     return useMutation(mutationOptions, queryClient)
 }
 
-export type importHeQuanSuResponse200 = {
-    data: ImportHeQuanSu200
+/**
+ * Trả kết quả năm học của học viên, sinh viên dưới dạng
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export type calculateStudentSchoolYearResultResponse200 = {
+    data: CalculateStudentSchoolYearResult200
     status: 200
 }
 
-export type importHeQuanSuResponse400 = {
-    data: ImportHeQuanSu400
+export type calculateStudentSchoolYearResultResponse400 = {
+    data: CalculateStudentSchoolYearResult400
     status: 400
 }
 
-export type importHeQuanSuResponseSuccess = importHeQuanSuResponse200 & {
-    headers: Headers
-}
-export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
-    headers: Headers
+export type calculateStudentSchoolYearResultResponse500 = {
+    data: CalculateStudentSchoolYearResult500
+    status: 500
 }
 
-export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
-
-export const getImportHeQuanSuUrl = () => {
-    return `/api/student/import-he-quan-su`
-}
-
-export const importHeQuanSu = async (
-    importHeQuanSuRequest: ImportHeQuanSuRequest,
-    options?: RequestInit
-): Promise<importHeQuanSuResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importHeQuanSuRequest.file)
-    if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
-        formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
+export type calculateStudentSchoolYearResultResponseSuccess =
+    calculateStudentSchoolYearResultResponse200 & {
+        headers: Headers
     }
-
-    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
+export type calculateStudentSchoolYearResultResponseError = (
+    | calculateStudentSchoolYearResultResponse400
+    | calculateStudentSchoolYearResultResponse500
+) & {
+    headers: Headers
 }
 
-export const getImportHeQuanSuMutationOptions = <
-    TError = ImportHeQuanSu400,
+export type calculateStudentSchoolYearResultResponse =
+    | calculateStudentSchoolYearResultResponseSuccess
+    | calculateStudentSchoolYearResultResponseError
+
+export const getCalculateStudentSchoolYearResultUrl = (
+    params: CalculateStudentSchoolYearResultParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/calculate-student-school-year-result?${stringifiedParams}`
+        : `/api/student/calculate-student-school-year-result`
+}
+
+export const calculateStudentSchoolYearResult = async (
+    params: CalculateStudentSchoolYearResultParams,
+    options?: RequestInit
+): Promise<calculateStudentSchoolYearResultResponse> => {
+    return customTrainingFetch<calculateStudentSchoolYearResultResponse>(
+        getCalculateStudentSchoolYearResultUrl(params),
+        {
+            ...options,
+            method: 'POST',
+        }
+    )
+}
+
+export const getCalculateStudentSchoolYearResultMutationOptions = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importHeQuanSu>>,
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
         TError,
-        { data: ImportHeQuanSuRequest },
+        { params: CalculateStudentSchoolYearResultParams },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
     TError,
-    { data: ImportHeQuanSuRequest },
+    { params: CalculateStudentSchoolYearResultParams },
     TContext
 > => {
-    const mutationKey = ['importHeQuanSu']
+    const mutationKey = ['calculateStudentSchoolYearResult']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -2921,39 +2848,49 @@ export const getImportHeQuanSuMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importHeQuanSu>>,
-        { data: ImportHeQuanSuRequest }
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+        { params: CalculateStudentSchoolYearResultParams }
     > = (props) => {
-        const { data } = props ?? {}
+        const { params } = props ?? {}
 
-        return importHeQuanSu(data, requestOptions)
+        return calculateStudentSchoolYearResult(params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
-export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
-export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+export type CalculateStudentSchoolYearResultMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>
+>
 
-export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
+export type CalculateStudentSchoolYearResultMutationError =
+    | CalculateStudentSchoolYearResult400
+    | CalculateStudentSchoolYearResult500
+
+/**
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export const useCalculateStudentSchoolYearResult = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown,
+>(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importHeQuanSu>>,
+            Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
             TError,
-            { data: ImportHeQuanSuRequest },
+            { params: CalculateStudentSchoolYearResultParams },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
     TError,
-    { data: ImportHeQuanSuRequest },
+    { params: CalculateStudentSchoolYearResultParams },
     TContext
 > => {
-    const mutationOptions = getImportHeQuanSuMutationOptions(options)
+    const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -7933,6 +7870,210 @@ export const useImportLecturer = <TError = ImportLecturer400, TContext = unknown
     TContext
 > => {
     const mutationOptions = getImportLecturerMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importStudentResponse200 = {
+    data: ImportStudent200
+    status: 200
+}
+
+export type importStudentResponse400 = {
+    data: ImportStudent400
+    status: 400
+}
+
+export type importStudentResponseSuccess = importStudentResponse200 & {
+    headers: Headers
+}
+export type importStudentResponseError = importStudentResponse400 & {
+    headers: Headers
+}
+
+export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
+
+export const getImportStudentUrl = () => {
+    return `/api/import/import-student`
+}
+
+export const importStudent = async (
+    importStudentRequest: ImportStudentRequest,
+    options?: RequestInit
+): Promise<importStudentResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importStudentRequest.file)
+    if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
+        formData.append(`timeout`, importStudentRequest.timeout.toString())
+    }
+
+    return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportStudentMutationOptions = <
+    TError = ImportStudent400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importStudent>>,
+        TError,
+        { data: ImportStudentRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importStudent>>,
+    TError,
+    { data: ImportStudentRequest },
+    TContext
+> => {
+    const mutationKey = ['importStudent']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importStudent>>,
+        { data: ImportStudentRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importStudent(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
+export type ImportStudentMutationBody = ImportStudentRequest
+export type ImportStudentMutationError = ImportStudent400
+
+export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importStudent>>,
+            TError,
+            { data: ImportStudentRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importStudent>>,
+    TError,
+    { data: ImportStudentRequest },
+    TContext
+> => {
+    const mutationOptions = getImportStudentMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importHeQuanSuResponse200 = {
+    data: ImportHeQuanSu200
+    status: 200
+}
+
+export type importHeQuanSuResponse400 = {
+    data: ImportHeQuanSu400
+    status: 400
+}
+
+export type importHeQuanSuResponseSuccess = importHeQuanSuResponse200 & {
+    headers: Headers
+}
+export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
+    headers: Headers
+}
+
+export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
+
+export const getImportHeQuanSuUrl = () => {
+    return `/api/import/import-he-quan-su`
+}
+
+export const importHeQuanSu = async (
+    importHeQuanSuRequest: ImportHeQuanSuRequest,
+    options?: RequestInit
+): Promise<importHeQuanSuResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importHeQuanSuRequest.file)
+    if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
+        formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
+    }
+
+    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportHeQuanSuMutationOptions = <
+    TError = ImportHeQuanSu400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        TError,
+        { data: ImportHeQuanSuRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSuRequest },
+    TContext
+> => {
+    const mutationKey = ['importHeQuanSu']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        { data: ImportHeQuanSuRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importHeQuanSu(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
+export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
+export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+
+export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importHeQuanSu>>,
+            TError,
+            { data: ImportHeQuanSuRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSuRequest },
+    TContext
+> => {
+    const mutationOptions = getImportHeQuanSuMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
