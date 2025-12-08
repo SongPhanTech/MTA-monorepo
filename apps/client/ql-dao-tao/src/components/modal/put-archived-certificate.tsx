@@ -159,7 +159,6 @@ const PutCertificateArchivedModal = () => {
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
-                trainingObjectTypeId,
                 ...(!!trainingCoursesId || !!fixedClassId
                     ? {
                           fixedClass: {

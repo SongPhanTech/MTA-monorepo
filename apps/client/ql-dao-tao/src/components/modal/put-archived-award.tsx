@@ -72,7 +72,6 @@ const PutArchivedAwardModal = () => {
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
-                trainingObjectTypeId,
                 ...(!!trainingCoursesId || !!fixedClassId
                     ? {
                           fixedClass: {
