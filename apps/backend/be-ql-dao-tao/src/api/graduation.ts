@@ -182,6 +182,18 @@ app.openapi(graduationCheck, async (c) => {
     })
 
     const results: z.infer<typeof GraduationCheckResult>[] = []
+
+    const curriculumSelect = {
+        requiredCredits: true,
+        electiveCredits: true,
+        diplomaType: true,
+        trainingBlocks: { include: { subjects: { include: { subject: true } } } },
+        curriculum: { include: { trainingMajor: true } },
+        outputStandardOnCurriculum: {
+            include: { outputStandard: { include: { certificates: true } } },
+            where: { deletedAt: null, active: true, isRequired: true },
+        },
+    }
     applicationLoop: for (const [idx, application] of session.applications.entries()) {
         const student = await prisma.student.findFirstOrThrow({
             where: { id: application.studentId },
@@ -192,25 +204,13 @@ app.openapi(graduationCheck, async (c) => {
                 entryScore: true,
                 foreignLangPass: true,
                 _count: { select: { priorityObject: true } },
-
                 classMonitor: { select: { id: true } },
                 studentAcademicDecision: true,
-                curriculumVersion: {
-                    select: {
-                        requiredCredits: true,
-                        electiveCredits: true,
-                        trainingBlocks: {
-                            include: { subjects: { include: { subject: true } } },
-                        },
-                        curriculum: {
-                            include: { trainingMajor: true },
-                        },
-                        diplomaType: true,
-                    },
-                },
+                curriculumVersion: { select: curriculumSelect },
                 studentTrainingScore: { take: 1, orderBy: { createdAt: 'desc' } },
                 studentSemesterResult: { take: 1, orderBy: { createdAt: 'desc' } },
                 studentYearResult: { take: 1, orderBy: { createdAt: 'desc' } },
+                archivedCertificate: true,
                 fixedClass: {
                     select: {
                         trainingCourse: {
@@ -231,19 +231,7 @@ app.openapi(graduationCheck, async (c) => {
                                 },
                             },
                         },
-                        curriculumVersion: {
-                            select: {
-                                requiredCredits: true,
-                                electiveCredits: true,
-                                trainingBlocks: {
-                                    include: { subjects: { include: { subject: true } } },
-                                },
-                                curriculum: {
-                                    include: { trainingMajor: true },
-                                },
-                                diplomaType: true,
-                            },
-                        },
+                        curriculumVersion: { select: curriculumSelect },
                     },
                 },
             },
@@ -267,6 +255,31 @@ app.openapi(graduationCheck, async (c) => {
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Sinh viên không có CTĐT',
+                trainingMajor: null,
+                diplomaType: null,
+            })
+            continue
+        }
+
+        const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter(
+            (standard) => {
+                const notCompleted = standard.outputStandard.certificates.every((cert) => {
+                    const archived = student.archivedCertificate.find(
+                        (archived) => archived.certificateId === cert.id
+                    )
+                    return !archived
+                })
+                return notCompleted
+            }
+        )
+
+        if (lackOfOutputStandard.length > 0) {
+            results.push({
+                applicationId: application.id,
+                graduation: false,
+                reason: `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
+                    .map((standard) => standard.outputStandard.name)
+                    .join(', ')}`,
                 trainingMajor: null,
                 diplomaType: null,
             })

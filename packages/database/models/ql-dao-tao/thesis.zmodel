@@ -342,7 +342,7 @@ model PaymentRecord  extends Base {
   expert          ExpertProfile  @relation(fields: [expertId], references: [id])
   expertId        String
 
-  // Có thể liên kết với thành viên hội đồng hoặc GVHD
+  // Có thể liên kết với thành viên hội đồng
   councilMemberId String?        @unique
   councilMember   CouncilMember? @relation(fields: [councilMemberId], references: [id])
 

@@ -1,0 +1,34 @@
+import '../base'
+import 'plan-training'
+import 'categories'
+import 'student'
+
+
+/// Danh mục các chuẩn đầu ra
+// Ví dụ: Name="Tiếng Anh B1"
+model OutputStandard extends Base {
+  name                       String
+
+  /// Chứng chỉ
+  certificates               Certificate[]
+
+  /// CTĐT áp dụng
+  outputStandardOnCurriculum OutputStandardOnCurriculum[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chuẩn đầu ra CTĐT
+model OutputStandardOnCurriculum extends Base {
+  outputStandardId    String
+  outputStandard      OutputStandard    @relation(fields: [outputStandardId], references: [id])
+
+  curriculumVersionId String
+  curriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+
+  isRequired          Boolean           @default(true) // Bắt buộc hay không
+  semesterIndex       Int?              // Kỳ vọng hoàn thành ở kỳ nào (để cảnh báo)
+
+  @@unique([outputStandardId, curriculumVersionId])
+  @@schema("ql-dao-tao")
+}

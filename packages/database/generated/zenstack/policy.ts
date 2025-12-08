@@ -2526,6 +2526,46 @@ const policy: PolicyDef = {
             },
 
         },
+        outputStandard: {
+            modelLevel: {
+                read: { guard: OutputStandard_read, },
+                create: { guard: OutputStandard_create, inputChecker: OutputStandard_create_input, },
+                update: { guard: OutputStandard_update, },
+                postUpdate: { guard: OutputStandard_postUpdate, },
+                delete: { guard: OutputStandard_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        outputStandardOnCurriculum: {
+            modelLevel: {
+                read: { guard: OutputStandardOnCurriculum_read, },
+                create: { guard: OutputStandardOnCurriculum_create, inputChecker: OutputStandardOnCurriculum_create_input, },
+                update: { guard: OutputStandardOnCurriculum_update, },
+                postUpdate: { guard: OutputStandardOnCurriculum_postUpdate, },
+                delete: { guard: OutputStandardOnCurriculum_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         student: {
             modelLevel: {
                 read: { guard: Student_read, },
@@ -5151,6 +5191,8 @@ const policy: PolicyDef = {
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
         loadCategory: { hasValidation: false },
+        outputStandard: { hasValidation: false },
+        outputStandardOnCurriculum: { hasValidation: false },
         student: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
@@ -13248,6 +13290,136 @@ function LoadCategory_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_LoadCategory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandard_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_OutputStandard_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandard_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandard_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandard_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function OutputStandard_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandard_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandard_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_OutputStandard_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function OutputStandard_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandard_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandardOnCurriculum_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_OutputStandardOnCurriculum_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandardOnCurriculum_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandardOnCurriculum_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandardOnCurriculum_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function OutputStandardOnCurriculum_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandardOnCurriculum_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OutputStandardOnCurriculum_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_OutputStandardOnCurriculum_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function OutputStandardOnCurriculum_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OutputStandardOnCurriculum_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
