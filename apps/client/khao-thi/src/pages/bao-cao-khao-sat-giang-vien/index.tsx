@@ -6,6 +6,7 @@ import {
     useFindManyClusterSurvey,
     useFindManyDM_DonVi,
     useFindManyLecturer,
+    useFindManySchoolYear,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Row } from 'antd'
@@ -14,6 +15,7 @@ import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-do
 import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
 import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
+import { SchoolYear, Semester } from '@workspace/db'
 
 export default function BaoCaoGiangVien() {
     const [filters, setFilters] = useState<any>({
@@ -34,8 +36,44 @@ export default function BaoCaoGiangVien() {
         clusterId: undefined,
     })
 
+       const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+            orderBy: { startDate: 'desc' },
+            include: {
+                semesters: {
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        })
+
+        const converData = (data: (SchoolYear & { semesters: Semester[] })[] | undefined) => {
+            return (
+                data?.map((schoolYear) => ({
+                    value: schoolYear.id,
+                    label: schoolYear.name,
+                    children:
+                        schoolYear?.semesters.map((semester) => ({
+                            value: semester.id,
+                            label: `${semester.name}`,
+                        })) || [],
+                })) || []
+            )
+        }
+    
+        // Tạo treeData từ schoolYears và semesters
+        const treeDataSemester = converData(schoolYears)
+
     const { data = [], refetch } = useFindManyClusterSurvey({
-        where: {},
+        where: {
+            surveys: {
+                some: {
+                   subjectClass: {
+                       semester: {
+                           id: filters?.semesterIds
+                       }
+                   }
+                },
+            }
+        },
         include: {
             surveyObjectType: true,
             surveyTopic: true,
@@ -142,6 +180,18 @@ export default function BaoCaoGiangVien() {
             <Col span={24}>
                 <Flex justify="space-between">
                     <Flex>
+                               <TreeSelect
+                                    className="w-[250px] mr-4"
+                                    allowClear
+                                    showSearch
+                                    placeholder="Chọn học kỳ"
+                                    treeDefaultExpandAll
+                                    treeData={treeDataSemester}
+                                    onChange={(value) => {
+                                        setFilters({ ...filters, semesterIds: value })
+                                    }}
+                                  
+                                />
                         <Select
                             onChange={(value) => setFilters({ ...filters, clusterId: value })}
                             className="mr-4 w-[250px]"
