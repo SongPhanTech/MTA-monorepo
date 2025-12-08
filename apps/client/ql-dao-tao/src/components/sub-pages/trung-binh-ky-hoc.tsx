@@ -44,11 +44,8 @@ const DiemTrungBinhKyHoc = () => {
     const where = useMemo(() => {
         return {
             deletedAt: null,
-            trainingObjectTypeId,
             studentSemesterResult: {
-                some: {
-                    semesterId,
-                },
+                some: { semesterId },
             },
             ...(filters.code
                 ? {
@@ -73,8 +70,12 @@ const DiemTrungBinhKyHoc = () => {
             ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
                 ? {
                       fixedClass: {
+                          ...(trainingCourseId
+                              ? { trainingCourseId }
+                              : trainingObjectTypeId
+                                ? { trainingCourse: { trainingObjectTypeId } }
+                                : {}),
                           ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-                          ...(trainingCourseId ? { trainingCourseId } : {}),
                           ...(filters.managementOrganizationId
                               ? { managementOrganizationId: filters.managementOrganizationId }
                               : {}),
