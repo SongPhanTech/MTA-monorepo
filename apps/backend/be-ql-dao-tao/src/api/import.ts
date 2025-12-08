@@ -147,6 +147,8 @@ app.openapi(importLecturer, async (c) => {
 
         const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(lecturer.fullname),
+            bLaGiangVien: true,
+            bLaCanBoNhanVien: true,
             dateOfBirth: lecturer.dateOfBirth,
             genderId: genderMap.get(lecturer.gender),
             academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ''),
@@ -165,7 +167,6 @@ app.openapi(importLecturer, async (c) => {
                     sMa: lecturer.code,
                     bLaGiangVien: true,
                     bLaCanBoNhanVien: true,
-                    bLaTaiKhoan: true,
                     dNgaySinh: lecturer.dateOfBirth
                         ? new Date(lecturer.dateOfBirth)?.toISOString()
                         : null,
@@ -468,6 +469,8 @@ app.openapi(importStudent, async (c) => {
         }
         const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
+            bLaGiangVien: false,
+            bLaHocVien: true,
             dateOfBirth: student.dateOfBirth,
             idCardNumber: student.idCardNumber,
             genderId: student.gender ? genderMap.get(student.gender) : null,
@@ -536,7 +539,6 @@ app.openapi(importStudent, async (c) => {
                     sTenDayDu: student.fullname,
                     sSDTDiDong: student.phoneNumber ?? '',
                     //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
                     sEmail: `${student.idCardNumber}@gmail.com`,
                     sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                 },
@@ -584,8 +586,6 @@ app.openapi(importStudent, async (c) => {
                     sTen: profileData.firstName,
                     sTenDayDu: student.fullname,
                     sSDTDiDong: student.phoneNumber ?? '',
-                    //! TODO: fix this
-                    sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
                     sEmail: `${student.idCardNumber}@gmail.com`,
                     sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                 },
@@ -760,6 +760,8 @@ app.openapi(importHeQuanSu, async (c) => {
                 const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
                     {
                         ...splitFullName(student.fullname),
+                        bLaGiangVien: false,
+                        bLaHocVien: true,
                         dateOfBirth: student.dateOfBirth,
                         // TODO: need to use idCardNumber
                         idCardNumber: student.code,

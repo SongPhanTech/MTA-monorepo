@@ -175,7 +175,11 @@ export const ModalPhuLucThacSi = () => {
         },
         {
             title: 'Hình thức đào tạo:',
-            value: <span>{data?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name}</span>,
+            value: (
+                <span>
+                    {data?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name}
+                </span>
+            ),
         },
     ]
 
@@ -915,7 +919,10 @@ export const ModalPhuLucThacSi = () => {
                                             </li>
                                             <li>
                                                 + Hình thức đào tạo:{' '}
-                                                {data?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name}
+                                                {
+                                                    data?.fixedClass?.trainingCourse
+                                                        ?.trainingObjectType?.trainingForm?.name
+                                                }
                                             </li>
                                         </ul>
                                     </td>

@@ -7,14 +7,14 @@ import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
 import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
-import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
+import { useCalculateStudentSchoolYearResult } from '@workspace/libs/api/training'
 import {
     SelectTrainingCourse,
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
 } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
@@ -42,11 +42,8 @@ const DiemTrungBinhKyHoc = () => {
 
     const where = useMemo(() => {
         return {
-            trainingObjectTypeId,
             studentSemesterResult: {
-                some: {
-                    semesterId,
-                },
+                some: { semesterId },
             },
             ...(filters.code
                 ? {
@@ -72,7 +69,18 @@ const DiemTrungBinhKyHoc = () => {
                 ? {
                       fixedClass: {
                           ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-                          ...(trainingCourseId ? { trainingCourseId } : {}),
+                          //   ...(trainingCourseId ? { trainingCourseId } : {}),
+                          ...(trainingCourseId
+                              ? {
+                                    trainingCourse: {
+                                        id: trainingCourseId,
+                                    },
+                                }
+                              : {
+                                    trainingCourse: {
+                                        trainingObjectTypeId,
+                                    },
+                                }),
                           ...(filters.managementOrganizationId
                               ? { managementOrganizationId: filters.managementOrganizationId }
                               : {}),
@@ -86,8 +94,8 @@ const DiemTrungBinhKyHoc = () => {
         {
             where,
             include: {
-                studentSemesterResult: {
-                    where: { semesterId },
+                studentYearResult: {
+                    where: { schoolYear: { semesters: { some: { id: semesterId } } } },
                     include: { rank: true },
                 },
                 userProfile: true,
@@ -151,7 +159,7 @@ const DiemTrungBinhKyHoc = () => {
         []
     )
 
-    const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
+    const { mutateAsync: calculateSchoolYearResult } = useCalculateStudentSchoolYearResult()
 
     const handleSummaryClick = async () => {
         if (!semesterId) {
@@ -159,20 +167,27 @@ const DiemTrungBinhKyHoc = () => {
             return
         }
 
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
+
         try {
             showSpinner()
-            const res = await calculateSemesterResults({ params: { semesterId } })
+            const res = await calculateSchoolYearResult({
+                params: { semesterId, trainingObjectTypeId },
+            })
 
             if (res?.status === 400 || res?.status === 500) {
-                message.error(res?.data?.message || 'Đã xảy ra lỗi khi tổng kết học kỳ')
+                message.error(res?.data?.message || 'Đã xảy ra lỗi khi tổng kết năm học')
                 return
             }
 
-            message.success('Tổng kết kết quả học kỳ thành công')
+            message.success('Tổng kết kết quả năm học thành công')
             refetch()
         } catch (error) {
-            console.error('Lỗi khi tổng kết kết quả học kỳ:', error)
-            message.error('Có lỗi xảy ra khi tổng kết kết quả học kỳ')
+            console.error('Lỗi khi tổng kết kết quả năm học:', error)
+            message.error('Có lỗi xảy ra khi tổng kết kết quả năm học')
         } finally {
             hideSpinner()
         }
@@ -186,7 +201,7 @@ const DiemTrungBinhKyHoc = () => {
                         <Col span={18}>
                             <Flex gap={8}>
                                 <Col span={4}>
-                                    <SelectTrainingCourse className="w-full" />
+                                    <SelectTrainingCourse allowClear className="w-full" />
                                 </Col>
                                 <Col span={8}>
                                     <Form.Item className="mb-0" name="fixedClassId">
@@ -243,6 +258,18 @@ const DiemTrungBinhKyHoc = () => {
                                 type: 'input',
                                 render: (__, record) => record?.userProfile?.fullname,
                             },
+                            {
+                                title: 'Lớp',
+                                dataIndex: 'fixedClass',
+                                width: 120,
+                                align: 'center',
+                                render: (__, record) => (
+                                    <Tooltip title={record?.fixedClass?.name}>
+                                        {record?.fixedClass.code}
+                                    </Tooltip>
+                                ),
+                            },
+
                             {
                                 title: 'Năm học thứ...',
                                 dataIndex: ['studentSemesterResult', '0', 'studyYear'],
