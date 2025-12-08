@@ -30,10 +30,13 @@ const ModalChiTietSinhVien = () => {
                         gender: true,
                     },
                 },
-                trainingObjectType: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: {
+                                trainingObjectType: true,
+                            },
+                        },
                         curriculumVersion: {
                             include: {
                                 curriculum: {
@@ -264,7 +267,7 @@ const ModalChiTietSinhVien = () => {
                             {studentData?.competencyScore}
                         </Descriptions.Item>
                         <Descriptions.Item label="Đối tượng đào tạo">
-                            {studentData?.trainingObjectType?.name}
+                            {studentData?.fixedClass?.trainingCourse?.trainingObjectType?.name}
                         </Descriptions.Item>
                         <Descriptions.Item label="Điểm cơ bản/Môn 1">
                             {studentData?.basic}
