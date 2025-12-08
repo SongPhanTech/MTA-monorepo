@@ -272,54 +272,48 @@ const DiemTrungBinhKyHoc = () => {
 
                             {
                                 title: 'Năm học thứ...',
-                                dataIndex: ['studentSemesterResult', '0', 'studyYear'],
+                                dataIndex: ['studentYearResult', '0', 'studyYear'],
                                 width: 100,
                                 align: 'center',
                             },
                             {
-                                title: 'Học kỳ thứ.../ toàn khoá',
-                                dataIndex: ['studentSemesterResult', '0', 'semesterIndexInCourse'],
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
                                 title: 'Hệ số xét học bổng',
-                                dataIndex: ['studentSemesterResult', '0', 'baseScore'],
+                                dataIndex: ['studentYearResult', '0', 'baseScore'],
                                 width: 100,
                                 align: 'center',
                                 render: (value) => getAcademicRankingBaseTypeLabel(value),
                             },
                             {
                                 title: 'Trung bình hệ 4',
-                                dataIndex: ['studentSemesterResult', '0', 'gpaBase4'],
+                                dataIndex: ['studentYearResult', '0', 'gpaBase4'],
                                 width: 90,
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Tích lỹ hệ 4',
-                                dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase4'],
+                                dataIndex: ['studentYearResult', '0', 'cumulativeGpaBase4'],
                                 width: 90,
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Trung bình hệ 10',
-                                dataIndex: ['studentSemesterResult', '0', 'gpaBase10'],
+                                dataIndex: ['studentYearResult', '0', 'gpaBase10'],
                                 width: 90,
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Tích lỹ hệ 10',
-                                dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase10'],
+                                dataIndex: ['studentYearResult', '0', 'cumulativeGpaBase10'],
                                 width: 90,
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Xếp loại học lực',
-                                dataIndex: ['studentSemesterResult', '0', 'rank'],
+                                dataIndex: ['studentYearResult', '0', 'rank'],
                                 width: 140,
                                 align: 'center',
                                 render: (rank?: AcademicRankingConvert) =>
@@ -327,7 +321,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Xếp loại rèn luyện',
-                                dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
+                                dataIndex: ['studentYearResult', '0', 'studentTrainingType'],
                                 width: 140,
                                 align: 'center',
                                 render: (value) => (
@@ -338,71 +332,67 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Điểm học phần thấp nhất',
-                                dataIndex: ['studentSemesterResult', '0', 'lowestFinalScore'],
+                                dataIndex: ['studentYearResult', '0', 'lowestFinalScore'],
                                 width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Điểm tốt nghiệp thấp nhất',
-                                dataIndex: ['studentSemesterResult', '0', 'lowestGraduationScore'],
+                                dataIndex: ['studentYearResult', '0', 'lowestGraduationScore'],
                                 width: 130,
                                 align: 'center',
                             },
                             {
                                 title: 'Tổng tín chỉ',
-                                dataIndex: ['studentSemesterResult', '0', 'totalCredits'],
+                                dataIndex: ['studentYearResult', '0', 'totalCredits'],
                                 width: 90,
                                 align: 'center',
                             },
                             {
                                 title: 'Số TC đăng ký',
-                                dataIndex: ['studentSemesterResult', '0', 'registeredCredits'],
+                                dataIndex: ['studentYearResult', '0', 'registeredCredits'],
                                 width: 90,
                                 align: 'center',
                             },
                             {
                                 title: 'Số TC học lại + cải thiện',
-                                dataIndex: ['studentSemesterResult', '0', 'retakingCredits'],
+                                dataIndex: ['studentYearResult', '0', 'retakingCredits'],
                                 width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Số TC đạt',
-                                dataIndex: ['studentSemesterResult', '0', 'passedCredits'],
+                                dataIndex: ['studentYearResult', '0', 'passedCredits'],
                                 width: 60,
                                 align: 'center',
                             },
                             {
                                 title: 'Số TC không đạt',
-                                dataIndex: ['studentSemesterResult', '0', 'failedCredits'],
+                                dataIndex: ['studentYearResult', '0', 'failedCredits'],
                                 width: 90,
                                 align: 'center',
                             },
                             {
                                 title: 'Tổng TC tích lũy',
-                                dataIndex: ['studentSemesterResult', '0', 'accumulatedCredits'],
+                                dataIndex: ['studentYearResult', '0', 'accumulatedCredits'],
                                 width: 80,
                                 align: 'center',
                             },
                             {
                                 title: 'Tổng TC học kỳ',
-                                dataIndex: [
-                                    'studentSemesterResult',
-                                    '0',
-                                    'totalCreditsByCurriculum',
-                                ],
+                                dataIndex: ['studentYearResult', '0', 'totalCreditsByCurriculum'],
                                 width: 80,
                                 align: 'center',
                             },
                             {
                                 title: 'Tổng TC nợ',
-                                dataIndex: ['studentSemesterResult', '0', 'totalFailedCredits'],
+                                dataIndex: ['studentYearResult', '0', 'totalFailedCredits'],
                                 width: 60,
                                 align: 'center',
                             },
                             {
                                 title: 'Chuẩn ngoại ngữ',
-                                dataIndex: ['studentSemesterResult', '0', 'foreignLangPass'],
+                                dataIndex: ['studentYearResult', '0', 'foreignLangPass'],
                                 align: 'center',
                                 width: 90,
                                 render: (value) => {
@@ -415,7 +405,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Lớp trưởng',
-                                dataIndex: ['studentSemesterResult', '0', 'isClassMonitor'],
+                                dataIndex: ['studentYearResult', '0', 'isClassMonitor'],
                                 align: 'center',
                                 width: 80,
                                 render: (value) => {
@@ -428,7 +418,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Bí thư',
-                                dataIndex: ['studentSemesterResult', '0', 'isUnionLeader'],
+                                dataIndex: ['studentYearResult', '0', 'isUnionLeader'],
                                 align: 'center',
                                 width: 80,
                                 render: (value) => {
@@ -441,13 +431,13 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Điểm thi đầu vào',
-                                dataIndex: ['studentSemesterResult', '0', 'entryScore'],
+                                dataIndex: ['studentYearResult', '0', 'entryScore'],
                                 width: 80,
                                 align: 'center',
                             },
                             {
                                 title: 'Học lại / Cải thiện',
-                                dataIndex: ['studentSemesterResult', '0', 'isImproving'],
+                                dataIndex: ['studentYearResult', '0', 'isImproving'],
                                 align: 'center',
                                 width: 80,
                                 render: (value) => {
@@ -460,7 +450,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Tạm ngưng có lý do',
-                                dataIndex: ['studentSemesterResult', '0', 'postponeWithReason'],
+                                dataIndex: ['studentYearResult', '0', 'postponeWithReason'],
                                 align: 'center',
                                 width: 100,
                                 render: (value) => {
@@ -473,7 +463,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Mức cảnh cáo học tập',
-                                dataIndex: ['studentSemesterResult', '0', 'academicWarningLevel'],
+                                dataIndex: ['studentYearResult', '0', 'academicWarningLevel'],
                                 width: 100,
                                 align: 'center',
                                 render: (value: number) => (
@@ -482,11 +472,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Mức cảnh cáo học đường',
-                                dataIndex: [
-                                    'studentSemesterResult',
-                                    '0',
-                                    'disciplinaryWarningLevel',
-                                ],
+                                dataIndex: ['studentYearResult', '0', 'disciplinaryWarningLevel'],
                                 width: 120,
                                 align: 'center',
                                 render: (value: number) => (
@@ -495,7 +481,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Đình chỉ học',
-                                dataIndex: ['studentSemesterResult', '0', 'suspended'],
+                                dataIndex: ['studentYearResult', '0', 'suspended'],
                                 align: 'center',
                                 width: 80,
                                 render: (value) => {
@@ -508,7 +494,7 @@ const DiemTrungBinhKyHoc = () => {
                             },
                             {
                                 title: 'Đuổi học',
-                                dataIndex: ['studentSemesterResult', '0', 'expelled'],
+                                dataIndex: ['studentYearResult', '0', 'expelled'],
                                 align: 'center',
                                 width: 80,
                                 render: (value) => {

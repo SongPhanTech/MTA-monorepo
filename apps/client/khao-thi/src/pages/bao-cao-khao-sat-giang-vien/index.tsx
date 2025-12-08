@@ -7,7 +7,7 @@ import {
     useFindManyDM_DonVi,
     useFindManyLecturer,
     useFindManySchoolYear,
-    useFindManySubjectClass,
+    useFindManySurvey,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Row } from 'antd'
 import { useMemo, useState } from 'react'
@@ -112,17 +112,20 @@ export default function BaoCaoGiangVien() {
             enabled: !!filters?.organizationId,
         }
     )
-    const { data: SubjectVersion = [], isLoading } = useFindManySubjectClass(
+    const { data: SubjectVersion = [], isLoading } = useFindManySurvey(
         {
             include: {
-                subject: true,
+                lecture: true,
+                subjectClass: true,
+
             },
             where: {
-                lecturerId: filters?.lectureId,
+                lectureId: filters?.lectureId,
                 active: true,
+                clusterSurveyId: filters?.clusterId
             },
         },
-        { enabled: !!filters?.lectureId }
+        { enabled: !!filters?.lectureId || !!filters?.clusterId }
     )
 
     const hanleSearchReport = () => {
@@ -142,7 +145,7 @@ export default function BaoCaoGiangVien() {
                     <LecturerSurveyReport
                         selectedId={filtersMore?.clusterId}
                         lectureId={filtersMore?.lectureId || ''}
-                        sublectClass={''}
+                        sublectClass={filters}
                         setSublectClass={(value: any) => {
                             setFilters({ ...filters, surveyId: value })
                         }}
@@ -233,7 +236,7 @@ export default function BaoCaoGiangVien() {
                             onChange={(value) => setFilters({ ...filters, surveyId: value })}
                             options={SubjectVersion?.map((i) => {
                                 return {
-                                    label: `${i?.code || ''} - ${i.name || ''}`.trim(),
+                                    label: `${i?.subjectClass?.code || ''} - ${i?.subjectClass?.name || ''}`.trim(),
                                     value: i.id,
                                     key: i.id,
                                 }

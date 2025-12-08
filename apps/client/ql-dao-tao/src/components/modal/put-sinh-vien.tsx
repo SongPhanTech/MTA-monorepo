@@ -6,7 +6,6 @@ import {
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useFindManyUserProfile,
     useFindUniqueStudent,
     useFindUniqueUserProfile,
@@ -30,6 +29,8 @@ export type StudentModalProps = {
 }
 
 const PutStudentModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const [form] = Form.useForm<PutStudentProfile>()
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: 'PutStudentModal',
@@ -39,12 +40,12 @@ const PutStudentModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
+        where: { trainingCourse: { trainingObjectTypeId } },
         include: {
             trainingCourse: true,
             curriculumVersion: true,
         },
     })
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: studentData } = useFindUniqueStudent(
         {
             where: { id },
@@ -66,9 +67,9 @@ const PutStudentModal = () => {
         }
     )
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        where: { trainingObjectTypeId },
         orderBy: { name: 'asc' },
     })
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId },
@@ -286,11 +287,6 @@ const PutStudentModal = () => {
             title={id ? 'Chỉnh sửa sinh viên, học viên' : 'Thêm sinh viên, học viên'}
             className="w-[1000px]"
             layout="vertical"
-            formProps={{
-                initialValues: {
-                    trainingObjectTypeId,
-                },
-            }}
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
@@ -329,6 +325,17 @@ const PutStudentModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
+                        <FormItem form={form} name="trainingCourseId" label="Khoá">
+                            <Select
+                                placeholder="Chọn khoá"
+                                options={filteredTrainingCourses.map((value) => ({
+                                    value: value.id,
+                                    label: value.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
                         <FormItem form={form} name="fixedClassId" label="Lớp">
                             <Select
                                 placeholder="Chọn lớp"
@@ -337,17 +344,6 @@ const PutStudentModal = () => {
                                 options={filteredFixedClasses.map((value) => ({
                                     value: value.id,
                                     label: `${value.code}-${value.name}`,
-                                }))}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="trainingCourseId" label="Khoá">
-                            <Select
-                                placeholder="Chọn khoá"
-                                options={filteredTrainingCourses.map((value) => ({
-                                    value: value.id,
-                                    label: value.name,
                                 }))}
                             />
                         </FormItem>
