@@ -106,7 +106,7 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                                     trainingBlockSubjectId: true,
                                 },
                                 where: {
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    subjectClassType: type,
                                 },
                             },
                         },
@@ -132,7 +132,7 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                             planTrainingSubjects: {
                                 create: subjectSelected.map((subject) => ({
                                     trainingBlockSubjectId: subject.trainingBlockSubjectId,
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    subjectClassType: type,
                                     studentCount: subject.count,
                                 })),
                             },
@@ -241,7 +241,6 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: 'subjectVersionName',
                                 align: 'center',
                                 render: (__, record) => {
                                     return <div className="text-left">{`${record?.name}`}</div>

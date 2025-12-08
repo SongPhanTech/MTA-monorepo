@@ -50,7 +50,6 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
     const { id: trainingCourseId } = useTrainingCourseStore()
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectVersions = Form.useWatch('subjectVersions', form) || {}
-
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: subjects, refetch } = useFindManySubjectVersion({
         where: {

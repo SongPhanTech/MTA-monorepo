@@ -30,7 +30,7 @@ type KeHoachDaoTaoPageProps = {
     role: 'P2_QLDT' | 'P2_KHCT'
 }
 
-export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
+export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPageProps) {
     const [activeLeftTab, setActiveLeftTab] = useState(
         type !== 'NORMAL' ? (role === 'P2_QLDT' ? 'thong-ke-no' : 'mo-lop-mon-hoc') : 'lap-ke-hoach'
     )
