@@ -325,10 +325,11 @@ export default function PostgraduateProject({
                 userProfile: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: { trainingObjectType: true },
+                        },
                     },
                 },
-                trainingObjectType: true,
                 thesisRegistrations: {
                     where: {
                         thesisProject: {
@@ -376,7 +377,9 @@ export default function PostgraduateProject({
                 userProfile: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: { trainingObjectType: true },
+                        },
                         curriculumVersion: {
                             include: {
                                 curriculum: {
@@ -384,14 +387,12 @@ export default function PostgraduateProject({
                                         trainingMajor: {
                                             include: { trainingField: true },
                                         },
-                                        trainingObjectType: true,
                                     },
                                 },
                             },
                         },
                     },
                 },
-                trainingObjectType: true,
                 thesisRegistrations: {
                     include: {
                         thesisProject: {
@@ -708,7 +709,9 @@ export default function PostgraduateProject({
                                 align: 'center',
                             },
                             {
-                                value: student?.trainingObjectType?.name || '',
+                                value:
+                                    student?.fixedClass?.trainingCourse?.trainingObjectType?.name ||
+                                    '',
                                 border: true,
                                 align: 'center',
                             },
@@ -932,7 +935,7 @@ export default function PostgraduateProject({
                 ngaysinh: student.userProfile?.dateOfBirth
                     ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
                     : '',
-                doituongdaotao: student.trainingObjectType?.name || '',
+                doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
                 khoa: student.fixedClass?.trainingCourse?.name || '',
                 tendetai: thesisProject.title || '',
                 gvhd1: thesisProject.supervisor?.name || '',
