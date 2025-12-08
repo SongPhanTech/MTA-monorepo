@@ -41,7 +41,6 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
-  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -107,6 +106,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_THI": "/quan-ly-diem/ql-diem-thi",
     "QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG": "/quan-ly-diem/ql-sv-hv-chuyen-truong",
     "QUAN_LY_DIEM_TONG_KET_KY_HOC": "/quan-ly-diem/tong-ket-ky-hoc",
+    "QUAN_LY_DIEM_TONG_KET_NAM_HOC": "/quan-ly-diem/tong-ket-nam-hoc",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG": "/quan-ly-do-an/danh-muc-do-an/cau-hinh-hoi-dong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",
@@ -169,7 +169,6 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
-  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

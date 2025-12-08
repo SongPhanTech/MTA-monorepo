@@ -449,15 +449,8 @@ app.openapi(importStudent, async (c) => {
         const studentData: Prisma.StudentCreateInput = {
             code: student.code,
             entryScore: Number.parseFloat(student.entryScore ?? '') || null,
-            trainingObjectType: {
-                connect: { id: trainingObjectType.id },
-            },
-            fixedClass: {
-                connect: { id: fixedClassMap.get(student.fixedClass) },
-            },
-            curriculumVersion: {
-                connect: { id: curriculumVersionMap.get(student.curriculum) },
-            },
+            fixedClass: { connect: { id: fixedClassMap.get(student.fixedClass) } },
+            curriculumVersion: { connect: { id: curriculumVersionMap.get(student.curriculum) } },
             userProfile: {},
             department: student.department,
             departmentAddress: student.departmentAddress,
@@ -758,12 +751,7 @@ app.openapi(importHeQuanSu, async (c) => {
                 const studentData: Prisma.StudentCreateInput = {
                     code: student.code,
                     entryScore: Number.parseFloat(student.admissionScore ?? '') || null,
-                    trainingObjectType: {
-                        connect: { id: trainingObjectType.id },
-                    },
-                    fixedClass: {
-                        connect: { id: fixedClassMap.get(student.fixedClass) },
-                    },
+                    fixedClass: { connect: { id: fixedClassMap.get(student.fixedClass) } },
                     curriculumVersion: {
                         connect: { id: curriculumVersionMap.get(student.curriculum) },
                     },
