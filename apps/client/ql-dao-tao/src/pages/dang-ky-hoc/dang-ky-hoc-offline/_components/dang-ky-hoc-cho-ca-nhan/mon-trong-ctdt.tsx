@@ -163,6 +163,7 @@ export default function MonTrongCTDT() {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
                 status: 'OFFICIAL',
+                type: $Enums.SubjectClassType.NORMAL,
             },
         },
         {

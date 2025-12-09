@@ -244,6 +244,7 @@ export default function MonHocLai() {
                             subjectClass: {
                                 semesterId,
                                 trainingObjectTypeId,
+                                type: $Enums.SubjectClassType.RETAKE,
                             },
                         },
                     },

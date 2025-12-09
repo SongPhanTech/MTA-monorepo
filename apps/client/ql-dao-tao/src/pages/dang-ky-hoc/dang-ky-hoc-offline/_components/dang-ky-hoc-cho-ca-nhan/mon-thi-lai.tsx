@@ -244,6 +244,7 @@ export default function MonThiLai() {
                             subjectClass: {
                                 semesterId,
                                 trainingObjectTypeId,
+                                type: $Enums.SubjectClassType.REEXAM,
                             },
                         },
                     },

@@ -129,6 +129,7 @@ export default function MonToanTruong() {
                 cancelled: false,
                 active: true,
                 status: 'OFFICIAL',
+                type: $Enums.SubjectClassType.NORMAL,
             },
         },
         {

@@ -9,6 +9,7 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
 import { dangKyHocChoLopQuanLyStore } from '../..'
+import { $Enums } from '@workspace/db/client'
 
 interface FilterProps {
     searchText: string | null
@@ -40,6 +41,7 @@ export default function DangKyHocChoLopQuanLy() {
             cancelled: false,
             active: true,
             status: 'OFFICIAL',
+            type: $Enums.SubjectClassType.NORMAL,
         },
         include: {
             subject: true,

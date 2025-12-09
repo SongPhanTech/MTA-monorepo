@@ -173,6 +173,7 @@ export default function MonTuongDuong() {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
                 status: 'OFFICIAL',
+                type: $Enums.SubjectClassType.NORMAL,
             },
         },
         {
