@@ -301,7 +301,7 @@ export default function PhanCongGiangDay({
             orgId || '0'
         ).map((org) => org.value),
         orgId,
-    ]
+    ].filter(Boolean)
 
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
