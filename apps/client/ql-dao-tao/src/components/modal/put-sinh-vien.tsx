@@ -296,7 +296,7 @@ const PutStudentModal = () => {
                         <FormItem form={form} name="idCardNumber" label="Số CCCD" required>
                             <Select
                                 maxTagCount={'responsive'}
-                                placeholder="Chọn phiên bản ngân hàng câu hỏi"
+                                placeholder="Chọn hồ sơ"
                                 options={idCardOptions}
                                 {...(id
                                     ? {

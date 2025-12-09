@@ -138,6 +138,9 @@ const ModalLearningResult = () => {
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
                     MÔN HỌC CHƯƠNG TRÌNH ĐÀO TẠO
                 </div>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    {learningResult?.fixedClass?.curriculumVersion?.name}
+                </div>
                 <TableCollapse
                     rowKey="key"
                     id="learning-result"
@@ -149,47 +152,46 @@ const ModalLearningResult = () => {
                     columns={[
                         {
                             title: 'Mã môn học',
-                            dataIndex: 'code',
-                            width: 145,
+                            width: 120,
                             align: 'center',
-                            fixed: 'left',
+                            // fixed: 'left',
+                            render: (_, record) => record?.code,
                         },
                         {
                             title: 'Tên môn học',
-                            dataIndex: 'name',
                             width: 200,
-                            fixed: 'left',
+                            // fixed: 'left',
+                            render: (_, record) => record?.name,
                         },
                         {
                             title: 'Số TC',
-                            dataIndex: 'credit',
                             width: 80,
                             align: 'center',
+                            render: (_, record) => record?.credit,
                         },
                         {
                             title: 'Điểm chuyên cần',
-                            dataIndex: 'attendanceScore',
                             width: 80,
                             align: 'center',
+                            render: (_, record) => record?.attendanceScore,
                         },
                         {
                             title: 'Điểm thường xuyên',
-                            dataIndex: 'midtermScore',
                             width: 80,
                             align: 'center',
+                            render: (_, record) => record?.midtermScore,
                         },
                         {
                             title: 'Điểm thi',
-                            dataIndex: 'examScore',
                             width: 80,
                             align: 'center',
+                            render: (_, record) => record?.examScore,
                         },
                         {
                             title: 'Điểm học phần',
-                            dataIndex: 'finalScore',
                             width: 80,
                             align: 'center',
-                            render: (record) => record?.toNumber(),
+                            render: (_, record) => record?.finalScore?.toNumber(),
                         },
                     ]}
                     pagination={{
