@@ -40,7 +40,6 @@ const relationSchema = z.object({
     curriculumVersion: z.array(z.unknown()).optional(),
     trainingMajors: z.array(z.unknown()).optional(),
     trainingFields: z.array(z.unknown()).optional(),
-    students: z.array(z.unknown()).optional(),
     trainingScoreSession: z.array(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     graduationSession: z.array(z.unknown()).optional(),

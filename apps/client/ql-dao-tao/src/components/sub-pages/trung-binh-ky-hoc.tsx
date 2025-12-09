@@ -5,17 +5,15 @@ import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseTyp
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import { buildOrgTree } from '@lib/utils'
-import type { AcademicRankingConvert, FixedClass, TrainingCourse } from '@workspace/db/client'
-import {
-    useCountStudent,
-    useFindManyDM_DonVi,
-    useFindManyFixedClass,
-    useFindManyStudent,
-    useFindManyTrainingCourse,
-} from '@workspace/db/hooks'
+import type { AcademicRankingConvert, FixedClass } from '@workspace/db/client'
+import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from '@workspace/db/hooks'
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import {
+    SelectTrainingCourse,
+    useSemesterStore,
+    useTrainingCourseStore,
+    useTrainingObjectTypeStore,
+} from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -27,6 +25,7 @@ dayjs.locale('vi')
 const DiemTrungBinhKyHoc = () => {
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -44,75 +43,47 @@ const DiemTrungBinhKyHoc = () => {
 
     const where = useMemo(() => {
         return {
-            trainingObjectTypeId,
+            deletedAt: null,
             studentSemesterResult: {
-                some: {
-                    semesterId,
-                },
+                some: { semesterId },
             },
-            ...((filters.code && filters.code !== '') || (filters.name && filters.name !== '')
+            ...(filters.code
                 ? {
                       userProfile: {
-                          ...(filters.code && filters.code !== ''
-                              ? {
-                                    code: {
-                                        contains: filters.code,
-                                        mode: 'insensitive' as const,
-                                    },
-                                }
-                              : {}),
-                          ...(filters.name && filters.name !== ''
-                              ? {
-                                    OR: [
-                                        {
-                                            fullname: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                        {
-                                            firstName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                        {
-                                            lastName: {
-                                                contains: filters.name,
-                                                mode: 'insensitive' as const,
-                                            },
-                                        },
-                                    ],
-                                }
-                              : {}),
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive' as const,
+                          },
                       },
                   }
                 : {}),
-            ...(!!filters.trainingCourseId ||
-            !!filters.fixedClassId ||
-            !!filters.managementOrganizationId
+            ...(filters.name
+                ? {
+                      userProfile: {
+                          fullname: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                  }
+                : {}),
+            ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
                 ? {
                       fixedClass: {
-                          ...(filters.fixedClassId
-                              ? {
-                                    id: filters.fixedClassId,
-                                }
-                              : {}),
-                          ...(filters.trainingCourseId
-                              ? {
-                                    trainingCourseId: filters.trainingCourseId,
-                                }
-                              : {}),
+                          ...(trainingCourseId
+                              ? { trainingCourseId }
+                              : trainingObjectTypeId
+                                ? { trainingCourse: { trainingObjectTypeId } }
+                                : {}),
+                          ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
                           ...(filters.managementOrganizationId
-                              ? {
-                                    managementOrganizationId: filters.managementOrganizationId,
-                                }
+                              ? { managementOrganizationId: filters.managementOrganizationId }
                               : {}),
                       },
                   }
                 : {}),
         }
-    }, [filters, semesterId, trainingObjectTypeId])
+    }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
 
     const { data: dataStudents, refetch } = useFindManyStudent(
         {
@@ -130,62 +101,24 @@ const DiemTrungBinhKyHoc = () => {
                     },
                 },
             },
-            orderBy: [
-                {
-                    userProfile: {
-                        firstName: 'asc',
-                    },
-                },
-                {
-                    userProfile: {
-                        lastName: 'asc',
-                    },
-                },
-            ],
+            orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!semesterId || !!trainingObjectTypeId }
     )
 
-    const { data: count } = useCountStudent(
-        {
-            where: {
-                ...where,
-                deletedAt: null,
-            },
-        },
-        { enabled: !!semesterId }
-    )
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: {
-            trainingObjectTypeId,
-        },
-    })
+    const { data: count } = useCountStudent({ where }, { enabled: !!semesterId })
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: { name: 'asc' },
         where: {
             ...(filters.managementOrganizationId
-                ? {
-                      managementOrganizationId: filters.managementOrganizationId,
-                  }
+                ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
-            ...(filters.trainingCourseId
-                ? {
-                      trainingCourseId: filters.trainingCourseId,
-                  }
-                : {}),
+            ...(trainingCourseId ? { trainingCourseId } : {}),
         },
     })
-
-    const { data: managementOrganizationData = [] } = useFindManyDM_DonVi({
-        orderBy: { sTen: 'asc' },
-    })
-
-    const treeData = buildOrgTree(managementOrganizationData)
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -236,22 +169,8 @@ const DiemTrungBinhKyHoc = () => {
                     <Row align="top" justify="space-between">
                         <Col span={18}>
                             <Flex gap={8}>
-                                <Col span={8}>
-                                    <Form.Item className="mb-0" name="trainingCourseId">
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingCourse) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingCourseId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
+                                <Col span={4}>
+                                    <SelectTrainingCourse className="w-full" />
                                 </Col>
                                 <Col span={8}>
                                     <Form.Item className="mb-0" name="fixedClassId">

@@ -23,18 +23,13 @@ const importPhanCongGiangDay = createRoute({
                     schema: UploadExcelModel.extend({
                         semesterId: z.string(), // loại thông tin
                         trainingObjectTypeId: z.string(), // loại thông tin
-                        retake: z
-                            .boolean({
-                                coerce: true,
-                            })
-                            .optional()
-                            .default(false), //
                         fileType: z
                             .enum(['THONG_KE_GIAO_VIEN_GIANG_DAY', 'TKB_THEO_LOP_HOC_PHAN'])
                             .default('THONG_KE_GIAO_VIEN_GIANG_DAY'), // loại thông tin
                         importType: z
                             .enum(['TAO_MOI', 'CAP_NHAT', 'XEM_TRUOC'])
                             .default('CAP_NHAT'), // loại thông tin
+                        type: z.nativeEnum($Enums.SubjectClassType).optional(),
                     }).openapi('importPhanCongGiangDay'),
                 },
             },
@@ -68,7 +63,7 @@ const importFileGiaoVienCoGioGiay = async (
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
     importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC',
-    retake = false
+    type: $Enums.SubjectClassType
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -202,7 +197,7 @@ const importFileGiaoVienCoGioGiay = async (
                 where: {
                     semesterId,
                     trainingObjectTypeId,
-                    type: retake ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                    type,
                 },
                 data: {
                     cancelled: true,
@@ -214,6 +209,7 @@ const importFileGiaoVienCoGioGiay = async (
                     subjectClass: {
                         semesterId,
                         trainingObjectTypeId,
+                        type,
                     },
                 },
             })
@@ -222,6 +218,7 @@ const importFileGiaoVienCoGioGiay = async (
                     subjectClass: {
                         semesterId,
                         trainingObjectTypeId,
+                        type,
                     },
                 },
             })
@@ -266,7 +263,7 @@ const importFileGiaoVienCoGioGiay = async (
                               ? $Enums.SubjectClassSchedule.AFTERNOON
                               : $Enums.SubjectClassSchedule.EVENING,
                     quanSo: quanSo ? Number(quanSo) : 0,
-                    type: retake ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                    type,
                 }
                 const dsTietHoc = String(tietHoc)
                     .trim()
@@ -371,9 +368,7 @@ const importFileGiaoVienCoGioGiay = async (
                         semesterId,
                         code: maLopMonHoc,
                         trainingObjectTypeId,
-                        type: retake
-                            ? $Enums.SubjectClassType.RETAKE
-                            : $Enums.SubjectClassType.NORMAL,
+                        type,
                     },
                 })
                 if (existSubjectClass) {
@@ -520,9 +515,7 @@ const importFileGiaoVienCoGioGiay = async (
                             subjectId: subjectClass.monHoc,
                             roomId: subjectClass.phongHoc,
                             approveLecturerAssignmentAt: new Date(),
-                            type: retake
-                                ? $Enums.SubjectClassType.RETAKE
-                                : $Enums.SubjectClassType.NORMAL,
+                            type,
                             fixedClasses: {
                                 connect: subjectClass.lopNienChe.map((e) => ({
                                     id: e,
@@ -650,7 +643,8 @@ const importFileTKBTheoLopHocPhan = async (
     semesterId: string,
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
-    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC'
+    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC',
+    type: $Enums.SubjectClassType
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -762,6 +756,7 @@ const importFileTKBTheoLopHocPhan = async (
                     where: {
                         semesterId,
                         trainingObjectTypeId,
+                        type,
                     },
                 })
             }
@@ -770,6 +765,7 @@ const importFileTKBTheoLopHocPhan = async (
                     subjectClass: {
                         semesterId,
                         trainingObjectTypeId,
+                        type,
                     },
                 },
             })
@@ -778,6 +774,7 @@ const importFileTKBTheoLopHocPhan = async (
                     subjectClass: {
                         semesterId,
                         trainingObjectTypeId,
+                        type,
                     },
                 },
             })
@@ -863,6 +860,7 @@ const importFileTKBTheoLopHocPhan = async (
                         semesterId,
                         code: String(maLopMonHoc).trim(),
                         trainingObjectTypeId,
+                        type,
                     },
                 })
 
@@ -908,6 +906,7 @@ const importFileTKBTheoLopHocPhan = async (
                                           },
                                       }
                                     : {},
+                            type,
                         },
                         include: {
                             fixedClasses: {
@@ -1006,6 +1005,7 @@ const importFileTKBTheoLopHocPhan = async (
                                           },
                                       }
                                     : {},
+                            type,
                         },
                         include: {
                             fixedClasses: {
@@ -1086,8 +1086,14 @@ const importFileTKBTheoLopHocPhan = async (
 }
 
 app.openapi(importPhanCongGiangDay, async (c) => {
-    const { file, semesterId, trainingObjectTypeId, fileType, importType, retake } =
-        c.req.valid('form')
+    const {
+        file,
+        semesterId,
+        trainingObjectTypeId,
+        fileType,
+        importType,
+        type = $Enums.SubjectClassType.NORMAL,
+    } = c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
@@ -1118,7 +1124,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         trainingObjectTypeId,
                         danhSachLopMonHoc,
                         importType,
-                        retake
+                        type
                     )
                 } catch (error) {
                     console.log('Error during preview import:', error)
@@ -1134,7 +1140,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     trainingObjectTypeId,
                     danhSachLopMonHoc,
                     importType,
-                    retake
+                    type
                 )
             }
         } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
@@ -1143,7 +1149,8 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                 semesterId,
                 trainingObjectTypeId,
                 danhSachLopMonHoc,
-                importType
+                importType,
+                type
             )
         } else {
             return c.json({ message: 'Loại file không hợp lệ' }, 400)

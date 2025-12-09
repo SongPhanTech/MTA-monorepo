@@ -9,6 +9,7 @@ import type { TrainingMajorId } from './trainingMajorId'
 import type { Search } from './search'
 import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 import type { SemesterId } from './semesterId'
+import type { ViewAll } from './viewAll'
 
 export type OpenSubjectClassRetakeParams = {
     /**
@@ -24,4 +25,5 @@ export type OpenSubjectClassRetakeParams = {
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId
     semesterId: SemesterId
+    viewAll?: ViewAll
 }

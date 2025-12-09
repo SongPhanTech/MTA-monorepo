@@ -50,7 +50,6 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
     const { id: trainingCourseId } = useTrainingCourseStore()
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectVersions = Form.useWatch('subjectVersions', form) || {}
-
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: subjects, refetch } = useFindManySubjectVersion({
         where: {
@@ -132,6 +131,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                 where: {
                     semesterId,
                     trainingObjectTypeId,
+                    type: type,
                 },
                 select: {
                     id: true,
@@ -167,8 +167,8 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         name: cur.name,
                         code: cur?.code,
                         maxStudent:
-                            cur.subjectClass?.[0]?.maxStudent ??
                             cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
+                            cur.subjectClass?.[0]?.maxStudent ??
                             cur.trainingBlocks[0].trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce?.(
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
@@ -595,17 +595,21 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                         )
                                     },
                                 },
-                                {
-                                    title: 'Tổng SV',
-                                    width: 80,
-                                    align: 'center',
-                                    render: (_, record) =>
-                                        record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
-                                            (sum: number, fc: any) =>
-                                                sum + (fc._count?.students ?? 0),
-                                            0
-                                        ) || 0,
-                                },
+                                ...(type === $Enums.SubjectClassType.NORMAL
+                                    ? [
+                                          {
+                                              title: 'Tổng SV',
+                                              width: 80,
+                                              align: 'center' as const,
+                                              render: (_: any, record: any) =>
+                                                  record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
+                                                      (sum: number, fc: any) =>
+                                                          sum + (fc._count?.students ?? 0),
+                                                      0
+                                                  ) || 0,
+                                          },
+                                      ]
+                                    : []),
                                 {
                                     title: 'Đơn vị phụ trách',
                                     width: 150,

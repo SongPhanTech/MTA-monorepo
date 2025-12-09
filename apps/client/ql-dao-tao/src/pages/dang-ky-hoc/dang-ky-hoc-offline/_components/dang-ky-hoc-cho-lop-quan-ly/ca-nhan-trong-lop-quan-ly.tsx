@@ -88,7 +88,6 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             active: true,
             status: 'ENROLLED',
             deletedAt: null,
-            trainingObjectTypeId,
         },
         include: {
             userProfile: {
@@ -179,7 +178,6 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             active: true,
             status: 'ENROLLED',
             deletedAt: null,
-            trainingObjectTypeId,
         },
         select: {
             id: true,
@@ -236,7 +234,6 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             active: true,
             status: 'ENROLLED',
             deletedAt: null,
-            trainingObjectTypeId,
         },
     })
 

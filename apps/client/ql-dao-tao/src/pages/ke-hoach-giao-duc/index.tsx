@@ -30,9 +30,9 @@ type KeHoachDaoTaoPageProps = {
     role: 'P2_QLDT' | 'P2_KHCT'
 }
 
-export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
+export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPageProps) {
     const [activeLeftTab, setActiveLeftTab] = useState(
-        type !== 'NORMAL' ? 'thong-ke-no' : 'lap-ke-hoach'
+        type !== 'NORMAL' ? (role === 'P2_QLDT' ? 'thong-ke-no' : 'mo-lop-mon-hoc') : 'lap-ke-hoach'
     )
 
     const tabs: TabItem[] = useMemo(() => {
@@ -88,11 +88,11 @@ export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
             }
 
             return [
-                {
-                    key: 'lap-ke-hoach',
-                    label: 'Lập kế hoạch giảng dạy học lại',
-                    content: <LapKeHoach type={type} />,
-                },
+                // {
+                //     key: 'lap-ke-hoach',
+                //     label: 'Lập kế hoạch giảng dạy học lại',
+                //     content: <LapKeHoach type={type} />,
+                // },
                 {
                     key: 'mo-lop-mon-hoc',
                     label: 'Mở LMH',
@@ -132,11 +132,11 @@ export default function KeHoachDaoTao({ type, role }: KeHoachDaoTaoPageProps) {
                 ]
             }
             return [
-                {
-                    key: 'lap-ke-hoach',
-                    label: 'Lập kế hoạch thi lại',
-                    content: <LapKeHoach type={type} />,
-                },
+                // {
+                //     key: 'lap-ke-hoach',
+                //     label: 'Lập kế hoạch thi lại',
+                //     content: <LapKeHoach type={type} />,
+                // },
                 {
                     key: 'mo-lop-mon-hoc',
                     label: 'Mở LMH',

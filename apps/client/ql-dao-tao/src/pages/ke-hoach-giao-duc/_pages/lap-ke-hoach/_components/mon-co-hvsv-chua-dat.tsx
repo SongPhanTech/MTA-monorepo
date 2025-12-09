@@ -3,7 +3,7 @@ import useSpinner from '@hooks/spinner'
 import { queryClient } from '@lib/api'
 import { $Enums, type PlanTraining } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { useOpenSubjectClassReExam, useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import {
     useSemesterStore,
@@ -18,11 +18,12 @@ interface SubjectBySemesterForm {
     searchText?: string
     subjectSelected?: Array<{
         id: string
+        trainingBlockSubjectId: string
         count: number
     }>
 }
 
-export default function MonCoHVSVChuaDat() {
+export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassType }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -36,18 +37,42 @@ export default function MonCoHVSVChuaDat() {
 
     const { id: trainingCourseId } = useTrainingCourseStore()
     const { id: trainingMajorId } = useTrainingMajorStore()
-    const { data: res } = useOpenSubjectClassRetake(
-        {
-            search: searchText,
-            trainingCourseId: trainingCourseId as string,
-            trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId as string,
-            semesterId: semesterId as string,
-            limit: numberOfPages,
-            page: currentPage,
-        },
-        { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
-    )
+    const { data: res } =
+        type === $Enums.SubjectClassType.RETAKE
+            ? useOpenSubjectClassRetake(
+                  {
+                      search: searchText,
+                      trainingCourseId: trainingCourseId as string,
+                      trainingMajorId,
+                      trainingObjectTypeId: trainingObjectTypeId as string,
+                      semesterId: semesterId as string,
+                      limit: numberOfPages,
+                      page: currentPage,
+                      viewAll: 0,
+                  },
+                  {
+                      query: {
+                          enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId,
+                      },
+                  }
+              )
+            : useOpenSubjectClassReExam(
+                  {
+                      search: searchText,
+                      trainingCourseId: trainingCourseId as string,
+                      trainingMajorId,
+                      trainingObjectTypeId: trainingObjectTypeId as string,
+                      semesterId: semesterId as string,
+                      limit: numberOfPages,
+                      page: currentPage,
+                      viewAll: 0,
+                  },
+                  {
+                      query: {
+                          enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId,
+                      },
+                  }
+              )
     // queryKey /api/subject-class/open-subject-class-retake
 
     const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
@@ -78,10 +103,10 @@ export default function MonCoHVSVChuaDat() {
                             id: true,
                             planTrainingSubjects: {
                                 select: {
-                                    subjectVersionId: true,
+                                    trainingBlockSubjectId: true,
                                 },
                                 where: {
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    subjectClassType: type,
                                 },
                             },
                         },
@@ -106,8 +131,8 @@ export default function MonCoHVSVChuaDat() {
                         data: {
                             planTrainingSubjects: {
                                 create: subjectSelected.map((subject) => ({
-                                    subjectVersionId: subject.id,
-                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                                    trainingBlockSubjectId: subject.trainingBlockSubjectId,
+                                    subjectClassType: type,
                                     studentCount: subject.count,
                                 })),
                             },
@@ -170,6 +195,7 @@ export default function MonCoHVSVChuaDat() {
                                     selectedRows.map((e) => ({
                                         id: e.id,
                                         count: e.count,
+                                        trainingBlockSubjectId: e.trainingBlockSubjectId,
                                     }))
                                 )
                             },
@@ -190,6 +216,8 @@ export default function MonCoHVSVChuaDat() {
                                             {
                                                 id: record.id,
                                                 count: record.count,
+                                                trainingBlockSubjectId:
+                                                    record.trainingBlockSubjectId,
                                             },
                                         ]
                                         form.setFieldValue('subjectSelected', newSelected)
@@ -213,7 +241,6 @@ export default function MonCoHVSVChuaDat() {
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: 'subjectVersionName',
                                 align: 'center',
                                 render: (__, record) => {
                                     return <div className="text-left">{`${record?.name}`}</div>

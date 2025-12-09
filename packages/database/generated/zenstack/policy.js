@@ -1604,6 +1604,32 @@ const policy = {
                 update: {},
             },
         },
+        outputStandard: {
+            modelLevel: {
+                read: { guard: OutputStandard_read, },
+                create: { guard: OutputStandard_create, inputChecker: OutputStandard_create_input, },
+                update: { guard: OutputStandard_update, },
+                postUpdate: { guard: OutputStandard_postUpdate, },
+                delete: { guard: OutputStandard_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        outputStandardOnCurriculum: {
+            modelLevel: {
+                read: { guard: OutputStandardOnCurriculum_read, },
+                create: { guard: OutputStandardOnCurriculum_create, inputChecker: OutputStandardOnCurriculum_create_input, },
+                update: { guard: OutputStandardOnCurriculum_update, },
+                postUpdate: { guard: OutputStandardOnCurriculum_postUpdate, },
+                delete: { guard: OutputStandardOnCurriculum_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         student: {
             modelLevel: {
                 read: { guard: Student_read, },
@@ -3354,6 +3380,8 @@ const policy = {
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
         loadCategory: { hasValidation: false },
+        outputStandard: { hasValidation: false },
+        outputStandardOnCurriculum: { hasValidation: false },
         student: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
@@ -13023,6 +13051,162 @@ function LoadCategory_delete(context, db) {
     return { OR: [] };
 }
 function $check_LoadCategory_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandard_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_OutputStandard_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandard_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandard_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandard_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function OutputStandard_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandard_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandard_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_OutputStandard_postUpdate(input, context) {
+    return true;
+}
+function OutputStandard_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandard_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandardOnCurriculum_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_OutputStandardOnCurriculum_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandardOnCurriculum_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandardOnCurriculum_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandardOnCurriculum_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function OutputStandardOnCurriculum_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandardOnCurriculum_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OutputStandardOnCurriculum_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_OutputStandardOnCurriculum_postUpdate(input, context) {
+    return true;
+}
+function OutputStandardOnCurriculum_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OutputStandardOnCurriculum_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

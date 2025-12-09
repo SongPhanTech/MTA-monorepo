@@ -133,6 +133,8 @@ export const SqlTransactionBodyItemModel = {
     DiplomaType: 'DiplomaType',
     ScoreConvert: 'ScoreConvert',
     LoadCategory: 'LoadCategory',
+    OutputStandard: 'OutputStandard',
+    OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
     Student: 'Student',
     StudentSemesterResult: 'StudentSemesterResult',
     StudentYearResult: 'StudentYearResult',

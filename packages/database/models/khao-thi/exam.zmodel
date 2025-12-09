@@ -16,17 +16,6 @@ enum QuestionType {
   @@schema("khao-thi")
 }
 
-/// Trạng thái của kỳ thi
-enum ExamStatus {
-  DRAFT     // Bản nháp, đang soạn thảo
-  PUBLISHED // Đã công bố, sẵn sàng cho thí sinh
-  ONGOING   // Đang diễn ra
-  FINISHED  // Đã kết thúc
-  ARCHIVED  // Đã lưu trữ
-
-  @@schema("khao-thi")
-}
-
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank extends Base {
   name               String           // Tên ngân hàng câu hỏi
@@ -190,7 +179,6 @@ model OrderingItem extends Base {
 
 /// Kỳ thi
 model Exam extends Base {
-  status             ExamStatus          @default(DRAFT)
   questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
   questionBankId     String?
 

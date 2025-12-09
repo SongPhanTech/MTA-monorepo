@@ -164,6 +164,7 @@ export const calcFinalScore = (
     }>,
     subjectClassType: SubjectClassType
 ): Decimal | null => {
+    if (!coef || !subjectScore) return null
     // 1. Find max certificate final score
     const maxCertFinalScore = subjectScore.certificates?.length
         ? Decimal.max(

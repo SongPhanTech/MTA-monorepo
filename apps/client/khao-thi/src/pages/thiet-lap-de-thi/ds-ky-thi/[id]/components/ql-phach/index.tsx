@@ -2,8 +2,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { ExamStatus } from '@workspace/db'
-import { useCountExamPaper, useFindManyExamPaper, useFindUniqueExam } from '@workspace/db/hooks'
+import { useCountExamPaper, useFindManyExamPaper } from '@workspace/db/hooks'
 import { Col, Flex, InputNumber, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 
@@ -51,18 +50,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
 
     const { data: count, refetch: refetchCount } = useCountExamPaper({ where }, { enabled: !!id })
 
-    const { data: initialValue } = useFindUniqueExam(
-        {
-            where: { id },
-        },
-        { enabled: !!id }
-    )
-
-    const isFinished = useMemo(() => {
-        if (!id) return true
-        return initialValue?.status === ExamStatus.FINISHED
-    }, [id, initialValue?.status])
-
     async function handleUpdateExamFaxes() {
         try {
             showSpinner()
@@ -101,12 +88,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={12}>
-                            <strong>
-                                {!isFinished &&
-                                    'Chỉ có thể sửa khi kỳ thi ở trạng thái: Đã kết thúc'}
-                            </strong>
-                        </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button
@@ -169,7 +150,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
                                                 },
                                             }))
                                         }
-                                        disabled={!isFinished}
                                         className="w-full"
                                     />
                                 ),

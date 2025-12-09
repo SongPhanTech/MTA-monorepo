@@ -2304,7 +2304,8 @@ exports.Prisma.CertificateScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  englishName: 'englishName'
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId'
 };
 
 exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
@@ -2385,6 +2386,33 @@ exports.Prisma.LoadCategoryScalarFieldEnum = {
   isOverageCalculated: 'isOverageCalculated'
 };
 
+exports.Prisma.OutputStandardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId',
+  isRequired: 'isRequired',
+  semesterIndex: 'semesterIndex'
+};
+
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2419,7 +2447,6 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId',
@@ -3521,7 +3548,6 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  status: 'status',
   questionBankId: 'questionBankId',
   lockExamSessions: 'lockExamSessions',
   duration: 'duration',
@@ -5804,7 +5830,8 @@ exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
-  englishName: 'englishName'
+  englishName: 'englishName',
+  outputStandardId: 'outputStandardId'
 };
 
 exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
@@ -5855,6 +5882,23 @@ exports.Prisma.LoadCategoryOrderByRelevanceFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.OutputStandardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.OutputStandardOnCurriculumOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  outputStandardId: 'outputStandardId',
+  curriculumVersionId: 'curriculumVersionId'
+};
+
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5876,7 +5920,6 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
   userProfileId: 'userProfileId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
   curriculumVersionParallelId: 'curriculumVersionParallelId'
@@ -7478,14 +7521,6 @@ exports.QuestionType = exports.$Enums.QuestionType = {
   ORDERING: 'ORDERING'
 };
 
-exports.ExamStatus = exports.$Enums.ExamStatus = {
-  DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED',
-  ONGOING: 'ONGOING',
-  FINISHED: 'FINISHED',
-  ARCHIVED: 'ARCHIVED'
-};
-
 exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
   PLANNING: 'PLANNING',
   OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
@@ -7666,6 +7701,8 @@ exports.Prisma.ModelName = {
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
   LoadCategory: 'LoadCategory',
+  OutputStandard: 'OutputStandard',
+  OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
   Student: 'Student',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',

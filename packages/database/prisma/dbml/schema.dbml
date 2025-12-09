@@ -125,7 +125,6 @@ Table Exam {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   title String [not null]
-  status ExamStatus [not null, default: 'DRAFT']
   questionBank QuestionBank [not null]
   questionBankId String [not null]
   startTime DateTime [not null]
@@ -3594,14 +3593,6 @@ Enum ConfigKey {
 
 Enum QuestionType {
   ESSAY
-}
-
-Enum ExamStatus {
-  DRAFT
-  PUBLISHED
-  ONGOING
-  FINISHED
-  ARCHIVED
 }
 
 Enum SemesterType {

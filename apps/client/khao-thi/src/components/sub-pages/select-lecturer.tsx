@@ -1,10 +1,12 @@
 import FormItem from '@components/commons/form-item'
 import type { PutSurveyType } from '@components/modal/put-modal-survey'
 import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
-import { Form, Table } from 'antd'
-import React, { useMemo, useState, useEffect } from 'react'
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Form, Table } from 'antd'
+import type React from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
+
 interface MyTreeNode {
     title: string
     key: string

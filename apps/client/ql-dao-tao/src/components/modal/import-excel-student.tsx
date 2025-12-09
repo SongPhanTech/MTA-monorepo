@@ -31,6 +31,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
+        setErrorData([])
         if (!file) return
 
         setFile(file)

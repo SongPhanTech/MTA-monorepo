@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import { debtStatistics, useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { debtStatistics, useOpenSubjectClassReExam } from '@workspace/libs/api/training'
 import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import {
     useSemesterStore,
@@ -77,13 +77,14 @@ export default function ThongKeNoThiLai() {
         }
     }
 
-    const { data: res } = useOpenSubjectClassRetake(
+    const { data: res } = useOpenSubjectClassReExam(
         {
             search: searchText || undefined,
             trainingCourseId: trainingCourseId as string,
             trainingMajorId,
             semesterId: semesterId as string,
             trainingObjectTypeId: trainingObjectTypeId as string,
+            viewAll: 1,
         },
         { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
     )

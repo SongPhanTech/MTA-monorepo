@@ -24,6 +24,10 @@ import type {
     AwardIds,
     AwardIdsResult,
     AwardScore400,
+    CalculateStudentSchoolYearResult200,
+    CalculateStudentSchoolYearResult400,
+    CalculateStudentSchoolYearResult500,
+    CalculateStudentSchoolYearResultParams,
     CalculateStudentSemesterResultJson200,
     CalculateStudentSemesterResultJson400,
     CalculateStudentSemesterResultJson500,
@@ -88,6 +92,8 @@ import type {
     ImportStudentRequest,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfOpenSubjectClass,
+    ListOfOpenSubjectClassReExamResponse,
+    ListOfOpenSubjectClassReExamStudentsResponse,
     ListOfOpenSubjectClassRetakeResponse,
     ListOfOpenSubjectClassRetakeStudentsResponse,
     ListOfundefined,
@@ -95,6 +101,8 @@ import type {
     MergeExamRequest,
     MergeExamResponse,
     OpenSubjectClassParams,
+    OpenSubjectClassReExamParams,
+    OpenSubjectClassReExamStudentsParams,
     OpenSubjectClassRetakeParams,
     OpenSubjectClassRetakeStudentsParams,
     PostApiStatsAcademicPerformanceByYear200,
@@ -1490,6 +1498,381 @@ export function useOpenSubjectClassRetakeStudents<
 }
 
 /**
+ * Lấy danh sách môn học có hssv cần thi lại
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+export type openSubjectClassReExamResponse200 = {
+    data: ListOfOpenSubjectClassReExamResponse
+    status: 200
+}
+
+export type openSubjectClassReExamResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamResponseSuccess = openSubjectClassReExamResponse200 & {
+    headers: Headers
+}
+export type openSubjectClassReExamResponseError = openSubjectClassReExamResponse400 & {
+    headers: Headers
+}
+
+export type openSubjectClassReExamResponse =
+    | openSubjectClassReExamResponseSuccess
+    | openSubjectClassReExamResponseError
+
+export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam`
+}
+
+export const openSubjectClassReExam = async (
+    params: OpenSubjectClassReExamParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamResponse> => {
+    return customTrainingFetch<openSubjectClassReExamResponse>(
+        getOpenSubjectClassReExamUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams) => {
+    return [`/api/subject-class/open-subject-class-reexam`, ...(params ? [params] : [])] as const
+}
+
+export const getOpenSubjectClassReExamQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({
+        signal,
+    }) => openSubjectClassReExam(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExam>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExam>>
+>
+export type OpenSubjectClassReExamQueryError = void
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExam>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách môn học có hssv cần thi lại
+ */
+
+export function useOpenSubjectClassReExam<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Lấy danh sách sinh viên cần thi lại môn học
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+export type openSubjectClassReExamStudentsResponse200 = {
+    data: ListOfOpenSubjectClassReExamStudentsResponse
+    status: 200
+}
+
+export type openSubjectClassReExamStudentsResponse400 = {
+    data: void
+    status: 400
+}
+
+export type openSubjectClassReExamStudentsResponseSuccess =
+    openSubjectClassReExamStudentsResponse200 & {
+        headers: Headers
+    }
+export type openSubjectClassReExamStudentsResponseError =
+    openSubjectClassReExamStudentsResponse400 & {
+        headers: Headers
+    }
+
+export type openSubjectClassReExamStudentsResponse =
+    | openSubjectClassReExamStudentsResponseSuccess
+    | openSubjectClassReExamStudentsResponseError
+
+export const getOpenSubjectClassReExamStudentsUrl = (
+    params: OpenSubjectClassReExamStudentsParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}`
+        : `/api/subject-class/open-subject-class-reexam-students`
+}
+
+export const openSubjectClassReExamStudents = async (
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: RequestInit
+): Promise<openSubjectClassReExamStudentsResponse> => {
+    return customTrainingFetch<openSubjectClassReExamStudentsResponse>(
+        getOpenSubjectClassReExamStudentsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getOpenSubjectClassReExamStudentsQueryKey = (
+    params?: OpenSubjectClassReExamStudentsParams
+) => {
+    return [
+        `/api/subject-class/open-subject-class-reexam-students`,
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getOpenSubjectClassReExamStudentsQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
+        signal,
+    }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+>
+export type OpenSubjectClassReExamStudentsQueryError = void
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy danh sách sinh viên cần thi lại môn học
+ */
+
+export function useOpenSubjectClassReExamStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+    TError = void,
+>(
+    params: OpenSubjectClassReExamStudentsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
  * Đăng ký lớp môn học cho lớp quản lý
  * @summary Đăng ký lớp môn học cho lớp quản lý
  */
@@ -1924,108 +2307,6 @@ export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TC
     TContext
 > => {
     const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-export type importStudentResponse200 = {
-    data: ImportStudent200
-    status: 200
-}
-
-export type importStudentResponse400 = {
-    data: ImportStudent400
-    status: 400
-}
-
-export type importStudentResponseSuccess = importStudentResponse200 & {
-    headers: Headers
-}
-export type importStudentResponseError = importStudentResponse400 & {
-    headers: Headers
-}
-
-export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
-
-export const getImportStudentUrl = () => {
-    return `/api/student/import-student`
-}
-
-export const importStudent = async (
-    importStudentRequest: ImportStudentRequest,
-    options?: RequestInit
-): Promise<importStudentResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importStudentRequest.file)
-    if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
-        formData.append(`timeout`, importStudentRequest.timeout.toString())
-    }
-
-    return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
-}
-
-export const getImportStudentMutationOptions = <
-    TError = ImportStudent400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importStudent>>,
-        TError,
-        { data: ImportStudentRequest },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof importStudent>>,
-    TError,
-    { data: ImportStudentRequest },
-    TContext
-> => {
-    const mutationKey = ['importStudent']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importStudent>>,
-        { data: ImportStudentRequest }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return importStudent(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
-export type ImportStudentMutationBody = ImportStudentRequest
-export type ImportStudentMutationError = ImportStudent400
-
-export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importStudent>>,
-            TError,
-            { data: ImportStudentRequest },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof importStudent>>,
-    TError,
-    { data: ImportStudentRequest },
-    TContext
-> => {
-    const mutationOptions = getImportStudentMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -2477,64 +2758,89 @@ export const useCalculateStudentSemesterResultJson = <
     return useMutation(mutationOptions, queryClient)
 }
 
-export type importHeQuanSuResponse200 = {
-    data: ImportHeQuanSu200
+/**
+ * Trả kết quả năm học của học viên, sinh viên dưới dạng
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export type calculateStudentSchoolYearResultResponse200 = {
+    data: CalculateStudentSchoolYearResult200
     status: 200
 }
 
-export type importHeQuanSuResponse400 = {
-    data: ImportHeQuanSu400
+export type calculateStudentSchoolYearResultResponse400 = {
+    data: CalculateStudentSchoolYearResult400
     status: 400
 }
 
-export type importHeQuanSuResponseSuccess = importHeQuanSuResponse200 & {
-    headers: Headers
-}
-export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
-    headers: Headers
+export type calculateStudentSchoolYearResultResponse500 = {
+    data: CalculateStudentSchoolYearResult500
+    status: 500
 }
 
-export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
-
-export const getImportHeQuanSuUrl = () => {
-    return `/api/student/import-he-quan-su`
-}
-
-export const importHeQuanSu = async (
-    importHeQuanSuRequest: ImportHeQuanSuRequest,
-    options?: RequestInit
-): Promise<importHeQuanSuResponse> => {
-    const formData = new FormData()
-    formData.append(`file`, importHeQuanSuRequest.file)
-    if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
-        formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
+export type calculateStudentSchoolYearResultResponseSuccess =
+    calculateStudentSchoolYearResultResponse200 & {
+        headers: Headers
     }
-
-    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
-        ...options,
-        method: 'POST',
-        body: formData,
-    })
+export type calculateStudentSchoolYearResultResponseError = (
+    | calculateStudentSchoolYearResultResponse400
+    | calculateStudentSchoolYearResultResponse500
+) & {
+    headers: Headers
 }
 
-export const getImportHeQuanSuMutationOptions = <
-    TError = ImportHeQuanSu400,
+export type calculateStudentSchoolYearResultResponse =
+    | calculateStudentSchoolYearResultResponseSuccess
+    | calculateStudentSchoolYearResultResponseError
+
+export const getCalculateStudentSchoolYearResultUrl = (
+    params: CalculateStudentSchoolYearResultParams
+) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/calculate-student-school-year-result?${stringifiedParams}`
+        : `/api/student/calculate-student-school-year-result`
+}
+
+export const calculateStudentSchoolYearResult = async (
+    params: CalculateStudentSchoolYearResultParams,
+    options?: RequestInit
+): Promise<calculateStudentSchoolYearResultResponse> => {
+    return customTrainingFetch<calculateStudentSchoolYearResultResponse>(
+        getCalculateStudentSchoolYearResultUrl(params),
+        {
+            ...options,
+            method: 'POST',
+        }
+    )
+}
+
+export const getCalculateStudentSchoolYearResultMutationOptions = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof importHeQuanSu>>,
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
         TError,
-        { data: ImportHeQuanSuRequest },
+        { params: CalculateStudentSchoolYearResultParams },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
     TError,
-    { data: ImportHeQuanSuRequest },
+    { params: CalculateStudentSchoolYearResultParams },
     TContext
 > => {
-    const mutationKey = ['importHeQuanSu']
+    const mutationKey = ['calculateStudentSchoolYearResult']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -2542,39 +2848,49 @@ export const getImportHeQuanSuMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof importHeQuanSu>>,
-        { data: ImportHeQuanSuRequest }
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+        { params: CalculateStudentSchoolYearResultParams }
     > = (props) => {
-        const { data } = props ?? {}
+        const { params } = props ?? {}
 
-        return importHeQuanSu(data, requestOptions)
+        return calculateStudentSchoolYearResult(params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
-export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
-export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+export type CalculateStudentSchoolYearResultMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>
+>
 
-export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
+export type CalculateStudentSchoolYearResultMutationError =
+    | CalculateStudentSchoolYearResult400
+    | CalculateStudentSchoolYearResult500
+
+/**
+ * @summary Tổng kết kết quả năm học của học viên, sinh viên
+ */
+export const useCalculateStudentSchoolYearResult = <
+    TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown,
+>(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof importHeQuanSu>>,
+            Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
             TError,
-            { data: ImportHeQuanSuRequest },
+            { params: CalculateStudentSchoolYearResultParams },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
+    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
     TError,
-    { data: ImportHeQuanSuRequest },
+    { params: CalculateStudentSchoolYearResultParams },
     TContext
 > => {
-    const mutationOptions = getImportHeQuanSuMutationOptions(options)
+    const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -4165,14 +4481,14 @@ export const importPhanCongGiangDay = async (
     formData.append(`file`, importPhanCongGiangDay.file)
     formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
     formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
-    if (importPhanCongGiangDay.retake !== undefined && importPhanCongGiangDay.retake !== null) {
-        formData.append(`retake`, importPhanCongGiangDay.retake.toString())
-    }
     if (importPhanCongGiangDay.fileType !== undefined) {
         formData.append(`fileType`, importPhanCongGiangDay.fileType)
     }
     if (importPhanCongGiangDay.importType !== undefined) {
         formData.append(`importType`, importPhanCongGiangDay.importType)
+    }
+    if (importPhanCongGiangDay.type !== undefined) {
+        formData.append(`type`, importPhanCongGiangDay.type)
     }
 
     return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
@@ -7554,6 +7870,210 @@ export const useImportLecturer = <TError = ImportLecturer400, TContext = unknown
     TContext
 > => {
     const mutationOptions = getImportLecturerMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importStudentResponse200 = {
+    data: ImportStudent200
+    status: 200
+}
+
+export type importStudentResponse400 = {
+    data: ImportStudent400
+    status: 400
+}
+
+export type importStudentResponseSuccess = importStudentResponse200 & {
+    headers: Headers
+}
+export type importStudentResponseError = importStudentResponse400 & {
+    headers: Headers
+}
+
+export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
+
+export const getImportStudentUrl = () => {
+    return `/api/import/import-student`
+}
+
+export const importStudent = async (
+    importStudentRequest: ImportStudentRequest,
+    options?: RequestInit
+): Promise<importStudentResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importStudentRequest.file)
+    if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
+        formData.append(`timeout`, importStudentRequest.timeout.toString())
+    }
+
+    return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportStudentMutationOptions = <
+    TError = ImportStudent400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importStudent>>,
+        TError,
+        { data: ImportStudentRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importStudent>>,
+    TError,
+    { data: ImportStudentRequest },
+    TContext
+> => {
+    const mutationKey = ['importStudent']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importStudent>>,
+        { data: ImportStudentRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importStudent(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
+export type ImportStudentMutationBody = ImportStudentRequest
+export type ImportStudentMutationError = ImportStudent400
+
+export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importStudent>>,
+            TError,
+            { data: ImportStudentRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importStudent>>,
+    TError,
+    { data: ImportStudentRequest },
+    TContext
+> => {
+    const mutationOptions = getImportStudentMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importHeQuanSuResponse200 = {
+    data: ImportHeQuanSu200
+    status: 200
+}
+
+export type importHeQuanSuResponse400 = {
+    data: ImportHeQuanSu400
+    status: 400
+}
+
+export type importHeQuanSuResponseSuccess = importHeQuanSuResponse200 & {
+    headers: Headers
+}
+export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
+    headers: Headers
+}
+
+export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
+
+export const getImportHeQuanSuUrl = () => {
+    return `/api/import/import-he-quan-su`
+}
+
+export const importHeQuanSu = async (
+    importHeQuanSuRequest: ImportHeQuanSuRequest,
+    options?: RequestInit
+): Promise<importHeQuanSuResponse> => {
+    const formData = new FormData()
+    formData.append(`file`, importHeQuanSuRequest.file)
+    if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
+        formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
+    }
+
+    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportHeQuanSuMutationOptions = <
+    TError = ImportHeQuanSu400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        TError,
+        { data: ImportHeQuanSuRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSuRequest },
+    TContext
+> => {
+    const mutationKey = ['importHeQuanSu']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        { data: ImportHeQuanSuRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importHeQuanSu(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
+export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
+export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+
+export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importHeQuanSu>>,
+            TError,
+            { data: ImportHeQuanSuRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSuRequest },
+    TContext
+> => {
+    const mutationOptions = getImportHeQuanSuMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

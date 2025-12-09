@@ -482,17 +482,6 @@ enum QuestionType {
   @@schema("khao-thi")
 }
 
-/// Trạng thái của kỳ thi
-enum ExamStatus {
-  DRAFT
-  PUBLISHED
-  ONGOING
-  FINISHED
-  ARCHIVED
-
-  @@schema("khao-thi")
-}
-
 /// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
 enum CriteriaField {
   SEMESTER_GPA
@@ -2845,6 +2834,7 @@ model CurriculumVersion {
   learningDiagram                  String?
   guide                            String?
   renderPath                       String?
+  outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClasses                     FixedClass[]
@@ -3275,7 +3265,6 @@ model TrainingObjectType {
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
-  students             Student[]
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
@@ -3588,6 +3577,9 @@ model Certificate {
   createdBy           String?                @db.Uuid()
   name                String
   englishName         String?
+  /// chuẩn đầu ra
+  outputStandard      OutputStandard?        @relation(fields: [outputStandardId], references: [id])
+  outputStandardId    String?
   /// SV đạt
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
@@ -3698,6 +3690,46 @@ model LoadCategory {
   @@schema("ql-dao-tao")
 }
 
+/// Danh mục các chuẩn đầu ra
+model OutputStandard {
+  id                         String                       @id() @default(cuid())
+  code                       String?                      @unique()
+  active                     Boolean                      @default(true)
+  description                String?                      @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now()) @updatedAt()
+  createdBy                  String?                      @db.Uuid()
+  name                       String
+  /// Chứng chỉ
+  certificates               Certificate[]
+  /// CTĐT áp dụng
+  outputStandardOnCurriculum OutputStandardOnCurriculum[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chuẩn đầu ra CTĐT
+model OutputStandardOnCurriculum {
+  id                  String            @id() @default(cuid())
+  code                String?           @unique()
+  active              Boolean           @default(true)
+  description         String?           @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @default(now()) @updatedAt()
+  createdBy           String?           @db.Uuid()
+  outputStandardId    String
+  outputStandard      OutputStandard    @relation(fields: [outputStandardId], references: [id])
+  curriculumVersionId String
+  curriculumVersion   CurriculumVersion @relation(fields: [curriculumVersionId], references: [id])
+  isRequired          Boolean           @default(true)
+  semesterIndex       Int?
+
+  @@unique([outputStandardId, curriculumVersionId])
+  @@schema("ql-dao-tao")
+}
+
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
   id                             String                           @id() @default(cuid())
@@ -3758,8 +3790,6 @@ model Student {
   subjectClassStudent            StudentSubjectScore[]
   userProfileId                  String
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
-  trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId           String?
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
   curriculumVersion              CurriculumVersion?               @relation("CurriculumVersion", fields: [curriculumVersionId], references: [id])
@@ -5323,7 +5353,6 @@ model Exam {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @default(now()) @updatedAt()
   createdBy          String?             @db.Uuid()
-  status             ExamStatus          @default(DRAFT)
   questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
   questionBankId     String?
   /// khoá DS thi

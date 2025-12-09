@@ -5,8 +5,6 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
-import { ExamStatus } from '../../zenstack/models';
-import { ExamStatusSchema } from '../enums/ExamStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,7 +14,6 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    status: ExamStatusSchema,
     lockExamSessions: z.boolean().default(false),
     duration: z.number().nullish(),
     session: z.number().default(1),
@@ -31,7 +28,6 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    status: ExamStatusSchema,
     lockExamSessions: z.boolean(),
     duration: z.number().nullish(),
     session: z.number(),
@@ -84,7 +80,6 @@ export const ExamPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    status: ExamStatusSchema,
     lockExamSessions: z.boolean(),
     duration: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     session: z.union([z.number(), z.record(z.string(), z.unknown())])
@@ -95,7 +90,7 @@ export const ExamPrismaUpdateSchema = z.object({
  * `Exam` schema for create operations excluding foreign keys and relations.
  */
 export const ExamCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, lockExamSessions: true, session: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, lockExamSessions: true, session: true
 });
 
 
