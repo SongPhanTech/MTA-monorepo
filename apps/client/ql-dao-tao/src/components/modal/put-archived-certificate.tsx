@@ -4,6 +4,7 @@ import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { DocumentFile } from '@workspace/db'
 import type { ArchivedCertificate } from '@workspace/db/client'
@@ -15,12 +16,14 @@ import {
     useFindManyTrainingCourse,
     useFindUniqueArchivedCertificate,
     useUpdateArchivedCertificate,
+    useFindManySubjectClass,
+    useCreateManyStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, InputNumber, message } from 'antd'
+import { Col, Form, Input, InputNumber, message, Typography, Divider } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutArchivedCertificate = ArchivedCertificate & {
     documentFiles?: DocumentFile[]
@@ -29,8 +32,11 @@ export type PutArchivedCertificate = ArchivedCertificate & {
 }
 dayjs.locale('vi')
 
+const { Title } = Typography
+
 const PutCertificateArchivedModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
+    const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
     const [form] = Form.useForm<PutArchivedCertificate>()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
@@ -45,7 +51,16 @@ const PutCertificateArchivedModal = () => {
 
     const { mutateAsync: createArchivedCertificate } = useCreateArchivedCertificate()
     const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
-    const { data: certificate = [] } = useFindManyCertificate()
+    const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
+    const { data: certificate = [] } = useFindManyCertificate({
+        include: {
+            subjects: {
+                include: {
+                    subject: true,
+                },
+            },
+        },
+    })
     const { data: trainingCourses = [] } = useFindManyTrainingCourse(
         {
             where: {
@@ -65,9 +80,54 @@ const PutCertificateArchivedModal = () => {
         },
         // skip: trainingCourses.length ? 0 : 1,
     })
+
+    // Lấy danh sách SubjectClass
+    const { data: subjectClasses = [] } = useFindManySubjectClass({
+        include: {
+            subject: {
+                include: {
+                    subject: true,
+                },
+            },
+            semester: true,
+        },
+    })
+
+    // Lấy certificateId từ form
+    const selectedCertificateId = Form.useWatch('certificateId', form)
+
+    // Lấy danh sách lớp môn học có thể phiên điểm từ chứng chỉ đã chọn
+    const availableSubjectClasses = useMemo(() => {
+        if (!selectedCertificateId) return []
+        const selectedCertificate = certificate.find((c: any) => c.id === selectedCertificateId)
+        
+        if (!selectedCertificate?.subjects) return []
+        
+        // Lấy danh sách subjectId từ chứng chỉ
+        const certificateSubjectIds = selectedCertificate.subjects.map((cs: any) => cs.subjectId)
+        
+        // Lọc SubjectClass có subject thuộc chứng chỉ
+        const filteredClasses = subjectClasses.filter((sc: any) => 
+            certificateSubjectIds.includes(sc.subject?.subjectId)
+        )
+        
+        // Map với điểm phiên từ chứng chỉ
+        return filteredClasses.map((sc: any) => {
+            const certSubject = selectedCertificate.subjects.find(
+                (cs: any) => cs.subjectId === sc.subject?.subjectId
+            )
+            
+            return {
+                ...sc,
+                finalScore: certSubject?.finalScore || 0,
+            }
+        })
+    }, [selectedCertificateId, certificate, subjectClasses])
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
             showSpinner()
+            let archivedCertificateId = id
+            
             if (id) {
                 await updateArchivedCertificate({
                     data: {
@@ -117,7 +177,7 @@ const PutCertificateArchivedModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createArchivedCertificate({
+                const result = await createArchivedCertificate({
                     data: {
                         studentId: rest.studentId,
                         certificateId: rest.certificateId,
@@ -137,11 +197,45 @@ const PutCertificateArchivedModal = () => {
                         },
                     },
                 })
+                archivedCertificateId = result.id
                 message.success('Thêm mới thành công')
             }
+
+            // Nếu có chọn lớp môn học để phiên điểm
+            if (selectedSubjectClassIds.length > 0 && rest.studentId) {
+                const records: any[] = []
+                
+                selectedSubjectClassIds.forEach((subjectClassId) => {
+                    const subjectClass = availableSubjectClasses.find(
+                        (sc: any) => sc.id === subjectClassId
+                    )
+
+                    if (subjectClass) {
+                        records.push({
+                            studentId: rest.studentId,
+                            subjectClassId,
+                            subjectVersionId: subjectClass.subjectId,
+                            finalScore: subjectClass.finalScore,
+                            examScore: subjectClass.finalScore,
+                            exempted: true,
+                        })
+                    }
+                })
+
+                if (records.length > 0) {
+                    await createManyStudentSubjectScore({
+                        data: records,
+                    })
+                    message.success(`Đã phiên điểm ${records.length} lớp môn học`)
+                }
+            }
+
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['ArchivedCertificate'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['StudentSubjectScore'],
             })
             onClose()
         } catch (error: any) {
@@ -217,8 +311,16 @@ const PutCertificateArchivedModal = () => {
                 documentFiles: [],
             })
             setDocument([])
+            setSelectedSubjectClassIds([])
         }
     }, [initialData])
+
+    const subjectClassRowSelection = {
+        selectedRowKeys: selectedSubjectClassIds,
+        onChange: (selectedKeys: React.Key[]) => {
+            setSelectedSubjectClassIds(selectedKeys as string[])
+        },
+    }
 
     return (
         <PutFormModal
@@ -232,7 +334,7 @@ const PutCertificateArchivedModal = () => {
                     ? 'Chỉnh sửa đơn phiển điểm chứng chỉ cho môn môn học'
                     : 'Thêm mới đơn phiển điểm chứng chỉ cho môn môn học'
             }
-            className="w-[700px]"
+            className="w-[1000px]"
         >
             <Col span={24} className="mb-3">
                 <FormItem form={form} name="certificateId" label="Chứng chỉ" required>
@@ -328,6 +430,65 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
+
+            {!id && selectedCertificateId && availableSubjectClasses.length > 0 && (
+                <>
+                    <Divider />
+                    <Col span={24} className="mb-3">
+                        <Title level={5}>Phiên điểm cho lớp môn học (Tùy chọn)</Title>
+                        <p className="text-gray-500 text-sm mb-3">
+                            Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ
+                        </p>
+                        <Table
+                            rowKey="id"
+                            dataSource={availableSubjectClasses}
+                            pagination={false}
+                            rowSelection={subjectClassRowSelection}
+                            size="small"
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
+                                    title: 'Mã MH',
+                                    dataIndex: ['subject', 'code'],
+                                    align: 'center',
+                                    width: 90,
+                                },
+                                {
+                                    title: 'Tên môn học',
+                                    dataIndex: ['subject', 'subject', 'name'],
+                                    align: 'left',
+                                },
+                                {
+                                    title: 'Mã lớp',
+                                    dataIndex: 'name',
+                                    align: 'center',
+                                    width: 90,
+                                },
+                                {
+                                    title: 'Học kỳ',
+                                    dataIndex: ['semester', 'name'],
+                                    align: 'center',
+                                    width: 110,
+                                },
+                                {
+                                    title: 'Điểm phiên',
+                                    dataIndex: 'finalScore',
+                                    align: 'center',
+                                    width: 90,
+                                    render: (score) => (
+                                        <strong className="text-blue-600">{score}</strong>
+                                    ),
+                                },
+                            ]}
+                        />
+                    </Col>
+                </>
+            )}
         </PutFormModal>
     )
 }

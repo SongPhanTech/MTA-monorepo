@@ -3,6 +3,8 @@ import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import PutMonHocTuongDuong from './modal-add-mon-tuong-duong'
 import PutUpdatePaymentStatus from './modal-cap-nhat-trang-thai-thanh-toan'
+import ModalChuyenDoiChungChiThanhDiem from './modal-chuyen-doi-chung-chi-thanh-diem'
+import ModalDanhSachChungChi from './modal-danh-sach-chung-chi'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalNhapTKB from './modal-import-tkb'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
@@ -211,6 +213,8 @@ export {
     PutDeadlineScoreModal,
     PutThesisSession,
     ModalCauHinhLuanVan,
+    ModalDanhSachChungChi,
+    ModalChuyenDoiChungChiThanhDiem,
 }
 export * from './ke-hoach-dao-tao'
 export * from './thong-bao'
