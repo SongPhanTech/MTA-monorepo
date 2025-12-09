@@ -728,12 +728,14 @@ export default function NhapDiem({
                                 0
                             const attendanceScore = dataDetailSubjectClass?.subject.onePoint
                                 ? examScore
-                                : (changedValues.list[changedId]?.attendanceScore ??
-                                  listForm[changedId].attendanceScore)
+                                : changedValues.list[changedId]?.attendanceScore !== undefined
+                                  ? changedValues.list[changedId]?.attendanceScore
+                                  : listForm[changedId].attendanceScore
                             const midtermScore = dataDetailSubjectClass?.subject.onePoint
                                 ? examScore
-                                : (changedValues.list[changedId]?.midtermScore ??
-                                  listForm[changedId].midtermScore)
+                                : changedValues.list[changedId]?.midtermScore !== undefined
+                                  ? changedValues.list[changedId]?.midtermScore
+                                  : listForm[changedId].midtermScore
 
                             const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
                             // TODO: fix not work if directly uncheck exam banned
@@ -756,6 +758,7 @@ export default function NhapDiem({
                                 coef_1: 0.1,
                                 coef_2: 0.3,
                                 coef_3: 0.6,
+                                scoreToTakeExam: 1,
                                 scoreToPass: 4,
                                 maxReExamScore: 10,
                                 reduceReExamScore: 0,
@@ -763,9 +766,9 @@ export default function NhapDiem({
                             const finalScore = calcFinalScore(
                                 dataForCalc?.student?.fixedClass?.trainingCourse || defaultCoef,
                                 {
-                                    examScore,
                                     attendanceScore,
                                     midtermScore,
+                                    examScore,
                                     awards:
                                         dataForCalc?.awards?.map?.((a) => ({
                                             archivedAward: {
@@ -794,7 +797,9 @@ export default function NhapDiem({
                                             ...listForm[changedId],
                                             ...changedValues.list[changedId],
                                         }),
-                                        finalScore,
+                                        finalScore: changedValues.list[changedId]?.examBanned
+                                            ? 0
+                                            : finalScore,
                                     },
                                 },
                             })
@@ -991,19 +996,24 @@ export default function NhapDiem({
                                 align: 'center',
                                 render: (_, record: any) => {
                                     const recordForm = listForm?.[record.id]
-                                    const finalScore = calcFinalScore(
-                                        record?.student?.fixedClass?.trainingCourse,
-                                        {
-                                            ...record,
-                                            attendanceScore:
-                                                recordForm?.attendanceScore ??
-                                                record?.attendanceScore,
-                                            midtermScore:
-                                                recordForm?.midtermScore ?? record?.midtermScore,
-                                            examScore: recordForm?.examScore ?? record?.examScore,
-                                        },
-                                        record.subjectClass?.type || 'NORMAL'
-                                    )?.toNumber()
+                                    const examBanned = recordForm?.examBanned ?? record?.examBanned
+                                    const finalScore = examBanned
+                                        ? 0
+                                        : calcFinalScore(
+                                              record?.student?.fixedClass?.trainingCourse,
+                                              {
+                                                  ...record,
+                                                  attendanceScore:
+                                                      recordForm?.attendanceScore ??
+                                                      record?.attendanceScore,
+                                                  midtermScore:
+                                                      recordForm?.midtermScore ??
+                                                      record?.midtermScore,
+                                                  examScore:
+                                                      recordForm?.examScore ?? record?.examScore,
+                                              },
+                                              record.subjectClass?.type || 'NORMAL'
+                                          )?.toNumber()
                                     return <div>{finalScore}</div>
                                 },
                             },

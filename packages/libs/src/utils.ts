@@ -132,6 +132,7 @@ export const calcFinalScore = (
             coef_1: true
             coef_2: true
             coef_3: true
+            scoreToTakeExam: true
             scoreToPass: true
             maxReExamScore: true
             reduceReExamScore: true
@@ -172,16 +173,28 @@ export const calcFinalScore = (
           ).toDecimalPlaces(1)
         : null
 
-    // 2. Check if all score is 0
+    // 2. Check if any score is null
     if (
-        (subjectScore.attendanceScore ?? subjectScore.midtermScore ?? subjectScore.examScore) === 0
+        subjectScore.attendanceScore === null ||
+        subjectScore.midtermScore === null ||
+        subjectScore.examScore === null
     ) {
-        return maxCertFinalScore || new Decimal(0)
+        return maxCertFinalScore || null
     }
 
-    // 3. Check if any score is null
-    if (!subjectScore.attendanceScore || !subjectScore.midtermScore || !subjectScore.examScore) {
-        return maxCertFinalScore || null
+    // if (
+    //     (subjectScore.attendanceScore || subjectScore.midtermScore || subjectScore.examScore) === 0
+    // ) {
+    //     return maxCertFinalScore || new Decimal(0)
+    // }
+
+    // 3. Check if not enough to take exam
+    if (
+        subjectScore.attendanceScore < coef.scoreToTakeExam ||
+        subjectScore.midtermScore < coef.scoreToTakeExam ||
+        subjectScore.examScore < coef.scoreToTakeExam
+    ) {
+        return new Decimal(0)
     }
 
     const examScore =
