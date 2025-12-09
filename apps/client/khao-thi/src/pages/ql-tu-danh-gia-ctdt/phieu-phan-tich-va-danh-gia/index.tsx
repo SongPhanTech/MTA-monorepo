@@ -22,7 +22,7 @@ import { useMemo, useState } from 'react'
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_DonViId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
+    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
@@ -60,9 +60,51 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             where: {
                 id: selectedEvaluationPeriodId,
             },
+            include: {
+                standards: {
+                    include: {
+                        criteria: {
+                            where: {
+                                OR: [
+                                    {
+                                        analysisCriterions: {
+                                            lecturer: {
+                                                userProfileId: idProfile,
+                                            },
+                                        },
+                                    },
+                                    {
+                                        evaluationCriterion: {
+                                            lecturer: {
+                                                userProfileId: idProfile,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                            include: {
+                                analysisCriterions: {
+                                    where: {
+                                        lecturer: {
+                                            userProfileId: idProfile,
+                                        },
+                                    },
+                                },
+                                evaluationCriterion: {
+                                    where: {
+                                        lecturer: {
+                                            userProfileId: idProfile,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
-            enabled: !!selectedEvaluationPeriodId,
+            enabled: !!selectedEvaluationPeriodId && !!idProfile,
         }
     )
 
@@ -75,15 +117,43 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             },
         ]
 
+        // Kiểm tra xem có phiếu phân tích nào đang yêu cầu chỉnh sửa không
+        const hasRevisionAnalysisCriterion = evaluationPeriod?.standards?.some((standard) =>
+            standard.criteria?.some(
+                (criterion) =>
+                    criterion.analysisCriterions?.status ===
+                    $Enums.EvaluationCriterionStatus.REVISION
+            )
+        )
+
+        // Kiểm tra xem có phiếu đánh giá nào đang yêu cầu chỉnh sửa không
+        const hasRevisionEvaluationCriterion = evaluationPeriod?.standards?.some((standard) =>
+            standard.criteria?.some(
+                (criterion) =>
+                    criterion.evaluationCriterion?.status === $Enums.EvaluationStatus.REVISION
+            )
+        )
+
         const disableAnalysisWritingTab =
             !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING
+            (evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING &&
+                !hasRevisionAnalysisCriterion)
+        const disabledEvaluationWriteTab =
+            !selectedEvaluationPeriodId ||
+            (evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.EVALUATION_WRITING &&
+                !hasRevisionEvaluationCriterion)
         const disableCrossReviewAssignmentTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
         const disableCrossReviewTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW
+        const disabledReviewAnalysisTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW
+        const disabledAdvisoryBoardTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.SECRETARY_REVIEW
 
         if (
             can(
@@ -95,7 +165,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disableAnalysisWritingTab,
             })
         }
 
@@ -114,7 +184,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '3',
                 label: 'Xét duyệt phiếu (Ban tư vấn)',
                 children: <ReviewCriteriaAnalysis userRole="BAN_TU_VAN" />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disabledAdvisoryBoardTab,
             })
         }
 
@@ -123,7 +193,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '4',
                 label: 'Xét duyệt phiếu (Thư ký)',
                 children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disabledReviewAnalysisTab,
             })
         }
 
@@ -137,7 +207,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '5',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
-                disabled: disableAnalysisWritingTab,
+                disabled: disabledEvaluationWriteTab,
             })
         }
 

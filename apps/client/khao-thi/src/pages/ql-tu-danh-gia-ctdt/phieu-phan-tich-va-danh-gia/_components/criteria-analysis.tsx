@@ -27,7 +27,7 @@ import { useCallback, useMemo } from 'react'
 
 export default function CriteriaAnalysisWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_DonViId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
+    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(
