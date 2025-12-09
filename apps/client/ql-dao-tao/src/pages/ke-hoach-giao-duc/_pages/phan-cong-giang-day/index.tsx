@@ -1591,7 +1591,7 @@ export default function PhanCongGiangDay({
                         <TableCollapse
                             rowKey="id"
                             scrollable
-                            maxHeight={'calc(100vh - 410px)'}
+                            maxHeight={khoaBoMon ? 'calc(100vh - 370px)' : 'calc(100vh - 460px)'}
                             filters={filters}
                             rowSelection={{
                                 type: 'checkbox',
