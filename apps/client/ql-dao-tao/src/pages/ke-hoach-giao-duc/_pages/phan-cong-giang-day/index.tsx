@@ -804,6 +804,7 @@ export default function PhanCongGiangDay({
                                                                         cancelled: false,
                                                                         active: true,
                                                                         deletedAt: null,
+                                                                        type: type,
                                                                     },
                                                                     data: {
                                                                         status: e.target.checked

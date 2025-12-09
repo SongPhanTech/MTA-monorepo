@@ -163,6 +163,7 @@ export default function MonHocLai() {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
                 status: 'OFFICIAL',
+                type: $Enums.SubjectClassType.RETAKE,
             },
         },
         {
