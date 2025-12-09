@@ -192,7 +192,11 @@ export default function EvaluationPeriod() {
                                 },
                             },
                             {
-                                title: 'SLTV',
+                                title: (
+                                    <Tooltip title="Số lượng thành viên">
+                                        <span>SLTV</span>
+                                    </Tooltip>
+                                ),
                                 width: 50,
                                 align: 'center',
                                 render: (_, record) => {

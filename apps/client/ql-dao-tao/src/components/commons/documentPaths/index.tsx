@@ -26,6 +26,7 @@ interface DocumentPathsComponentProps {
     multiple?: boolean
     accept?: string
     text?: string
+    onUploadingChange?: (count: number) => void
 }
 
 export type UploadedFileItem = {
@@ -46,8 +47,17 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     multiple = true,
     accept = '.doc,.docx,.xls,.xlsx,.pdf,.ppt,.txt',
     text = 'DOC, DOCX, XLSX, XLS, PDF, PPT, TXT',
+    onUploadingChange,
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
+    const [uploadingCount, setUploadingCount] = useState<number>(0)
+
+    // Thông báo parent component khi số file đang upload thay đổi
+    useEffect(() => {
+        if (onUploadingChange) {
+            onUploadingChange(uploadingCount)
+        }
+    }, [uploadingCount, onUploadingChange])
 
     const handleRemoveFile = (index: number): void => {
         const newList = [...fileList]
@@ -88,6 +98,9 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
 
     const handleCustomUpload = async (file: File) => {
         try {
+            // Tăng số file đang upload
+            setUploadingCount(prev => prev + 1)
+            
             const extension = file.name.split('.').pop() || ''
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'tai-lieu-ctdt',
@@ -121,21 +134,31 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 [relationType]: relationId,
             }
 
-            const newList = multiple ? [...fileList, newItem] : [newItem]
-
-            const documentFiles = newList.map((item) => ({
-                name: item.name,
-                path: item.path,
-                size: item.size,
-                mimeType: item.mimeType,
-                [relationType]: relationId,
-            }))
-
-            setFileList(newList)
-            form.setFieldValue(titleForm, documentFiles)
+            // Sử dụng callback để lấy giá trị mới nhất của fileList
+            setFileList((prevList) => {
+                const newList = multiple ? [...prevList, newItem] : [newItem]
+                
+                const documentFiles = newList.map((item) => ({
+                    name: item.name,
+                    path: item.path,
+                    size: item.size,
+                    mimeType: item.mimeType,
+                    [relationType]: relationId,
+                }))
+                
+                // Cập nhật form với danh sách mới
+                form.setFieldValue(titleForm, documentFiles)
+                
+                return newList
+            })
+            
+            // Giảm số file đang upload khi hoàn thành
+            setUploadingCount(prev => prev - 1)
         } catch (err) {
             console.error(err)
             message.error(`Không thể upload ${file.name}.`)
+            // Giảm số file đang upload khi lỗi
+            setUploadingCount(prev => prev - 1)
         }
     }
 

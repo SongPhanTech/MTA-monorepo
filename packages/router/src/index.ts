@@ -272,6 +272,11 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'quan-ly-chung-chi',
+                label: 'Quản lý chứng chỉ',
+                path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+            },
+            {
                 id: 'to-chuc-thi',
                 label: 'Tổ chức thi',
                 icon: FileOutlined,

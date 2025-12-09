@@ -1,21 +1,19 @@
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { formatDate } from '@lib/utils'
 import {
-    useCountArchivedCertificate,
-    useFindManyArchivedCertificate,
     useUpdateArchivedCertificate,
+    useFindManyStudent,
+    useCountStudent,
 } from '@workspace/db/hooks'
+import {InfoIcon} from 'lucide-react'
 import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Modal, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Modal, Row, } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -43,6 +41,21 @@ export default function ArchivedCertificate() {
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: 'PutCertificateArchivedModal',
+    })
+
+    const { onOpen: onOpenCertificateList } = useDisclosure<{
+        studentId: string
+        studentName: string
+        certificates: any[]
+    }>({
+        tag: 'ModalDanhSachChungChi',
+    })
+
+    const { onOpen: onOpenConvertCertificate } = useDisclosure<{
+        studentIds: string[]
+        studentNames: string[]
+    }>({
+        tag: 'ModalChuyenDoiChungChiThanhDiem',
     })
 
     const handleModal = () => {
@@ -73,29 +86,58 @@ export default function ArchivedCertificate() {
     }
 
     const where = useMemo(() => {
-        return {
-            ...(filters.name && filters.name !== ''
-                ? {
-                      certificate: {
-                          name: {
-                              contains: filters.name,
-                              mode: 'insensitive' as const,
-                          },
-                      },
-                  }
-                : {}),
+        const conditions: any = {
+            archivedCertificate: {
+                some: {
+                    deletedAt: null,
+                },
+            },
         }
+        
+        if (filters.name && filters.name !== '') {
+            conditions.OR = [
+                {
+                    userProfile: {
+                        firstName: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                },
+                {
+                    userProfile: {
+                        lastName: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                },
+            ]
+        }
+        
+        return conditions
     }, [filters])
 
-    const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
+    // Lấy danh sách học viên có chứng chỉ
+    const { data: dataTable = [], refetch } = useFindManyStudent({
         where,
         include: {
-            studentSubjectScore: true,
-            certificate: true,
-            _count: true,
-            student: {
+            userProfile: true,
+            fixedClass: {
                 include: {
-                    userProfile: true,
+                    trainingCourse: true,
+                },
+            },
+            archivedCertificate: {
+                where: {
+                    deletedAt: null,
+                },
+                include: {
+                    certificate: true,
+                    studentSubjectScore: true,
+                },
+                orderBy: {
+                    createdAt: 'desc',
                 },
             },
         },
@@ -115,17 +157,15 @@ export default function ArchivedCertificate() {
         []
     )
 
-    const { data: count } = useCountArchivedCertificate({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
+    const { data: count } = useCountStudent({
+        where,
     })
 
     const rowSelection = {
         selectedRowKeys,
         getCheckboxProps: (record: any) => ({
-            disabled: record.status !== 'PENDING', // disable theo điều kiện
+            // Cho phép chọn tất cả học viên có chứng chỉ
+            disabled: !record.archivedCertificate || record.archivedCertificate.length === 0,
         }),
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
@@ -158,27 +198,26 @@ export default function ArchivedCertificate() {
     const handleAprove = async (status: string) => {
         try {
             if (selectedRowKeys?.length > 0) {
-                // let listSqlTransaction: any = []
-                // listSqlTransaction = [
-                //     ...listSqlTransaction,
-                //     selectedRowKeys.map((item: any) => {
-                //         return {
-                //             model: 'ArchivedCertificate',
-                //             operation: 'update',
-                //             data: {
-                //                 where: {
-                //                     id: item,
-                //                 },
-                //                 data: {
-                //                     status,
-                //                 },
-                //             },
-                //         }
-                //     }),
-                // ]
-                // const res = await sqlTransaction(listSqlTransaction)
+                // Lấy tất cả các chứng chỉ PENDING từ các học viên được chọn
+                const certificateIds: string[] = []
+                selectedRowKeys.forEach((studentId) => {
+                    const student = dataTable.find((s: any) => s.id === studentId)
+                    if (student?.archivedCertificate) {
+                        student.archivedCertificate.forEach((cert: any) => {
+                            if (cert.status === 'PENDING') {
+                                certificateIds.push(cert.id)
+                            }
+                        })
+                    }
+                })
+
+                if (certificateIds.length === 0) {
+                    message.warning('Không có chứng chỉ nào cần phê duyệt')
+                    return
+                }
+
                 const res = await updateCertificateScore({
-                    data: { archivedCertificateIds: selectedRowKeys as string[] },
+                    data: { archivedCertificateIds: certificateIds },
                 })
                 if (res?.status === 200) {
                     message.success('Phê duyệt thành công')
@@ -206,27 +245,6 @@ export default function ArchivedCertificate() {
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
-                                // <Popover
-                                //         content={
-                                //             <Flex vertical align="flex-start" gap={4}>
-                                //                 <Button onClick={handleModal} type="primary" className="mr-3">
-                                //                     Từ chối
-                                //                 </Button>
-                                //                   <Button onClick={handleModal} type="primary">
-                                //                     Chấp thuận
-                                //                 </Button>
-                                //             </Flex>
-                                //         }
-                                //         trigger="click"
-                                //         open={open}
-                                //         onOpenChange={handleOpenChange}
-                                //         placement="bottomLeft"
-                                //         arrow={false}
-                                //     >
-                                //         <Button disabled={!selectedRowKeys.length}>
-                                //             Phê duyệt
-                                //         </Button>
-                                //     </Popover>
                                 <>
                                     <Button
                                         onClick={handleOpenReject}
@@ -242,6 +260,29 @@ export default function ArchivedCertificate() {
                                         type="primary"
                                     >
                                         Phê duyệt
+                                    </Button>
+                                    <Button
+                                        className="ml-3"
+                                        onClick={() => {
+                                            if (selectedRowKeys.length === 0) {
+                                                message.warning('Vui lòng chọn ít nhất một học viên')
+                                                return
+                                            }
+                                            const studentNames = dataTable
+                                                .filter((s: any) => selectedRowKeys.includes(s.id))
+                                                .map(
+                                                    (s: any) =>
+                                                        `${s?.userProfile?.lastName || ''} ${s?.userProfile?.firstName || ''}`.trim()
+                                                )
+                                            onOpenConvertCertificate({
+                                                studentIds: selectedRowKeys as string[],
+                                                studentNames,
+                                            })
+                                        }}
+                                        disabled={!selectedRowKeys.length}
+                                        type="default"
+                                    >
+                                        Chuyển đổi CC → Điểm
                                     </Button>
                                 </>
                             )}
@@ -277,112 +318,115 @@ export default function ArchivedCertificate() {
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Tên chứng chỉ',
-                            dataIndex: 'name',
+                            title: 'Mã học viên',
+                            dataIndex: ['userProfile', 'code'],
                             align: 'center',
-                            type: 'input',
-                            render: (__, record) => {
-                                return record?.certificate?.name || ''
-                            },
+                            width: 120,
                         },
                         {
-                            title: 'Học viên',
-                            dataIndex: 'studentName',
-                            align: 'center',
+                            title: 'Họ và tên',
+                            dataIndex: 'name',
+                            align: 'left',
+                            type: 'input',
+                            width: 200,
                             render: (__, record) => {
                                 return (
-                                    `${record?.student?.userProfile?.lastName} ${record?.student?.userProfile?.firstName}` ||
-                                    ''
+                                    `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
                                 )
                             },
                         },
                         {
-                            title: 'Điểm CC',
-                            dataIndex: 'name',
-                            align: 'center',
-                            type: 'input',
-                            width: 100,
-                            render: (__, record) => {
-                                return record?.score ?? ''
-                            },
+                            title: 'Email',
+                            dataIndex: ['userProfile', 'email'],
+                            align: 'left',
+                            width: 220,
                         },
                         {
-                            title: 'Điểm quy đổi',
-                            dataIndex: 'name',
-                            align: 'center',
-                            type: 'input',
-                            width: 140,
-                            render: (__, record) => {
-                                return record?.finalScore ?? ''
-                            },
-                        },
-                        {
-                            title: 'Ngày cấp',
-                            dataIndex: 'name',
+                            title: 'Khóa',
+                            dataIndex: ['fixedClass', 'trainingCourse', 'name'],
                             align: 'center',
                             width: 150,
                             render: (__, record) => {
-                                return record?.issuedDate ? formatDate(record?.issuedDate) : ''
+                                return record?.fixedClass?.trainingCourse?.code || '-'
                             },
                         },
                         {
-                            title: 'Ngày hết hạn',
-                            dataIndex: 'name',
+                            title: 'Lớp quản lý',
+                            dataIndex: ['fixedClass', 'name'],
                             align: 'center',
-                            width: 150,
+                            width: 120,
                             render: (__, record) => {
-                                return record?.expiredDate ? formatDate(record?.expiredDate) : ''
+                                return record?.fixedClass?.code || '-'
                             },
                         },
                         {
-                            title: 'Trạng thái',
-                            dataIndex: 'paymentStatus',
-                            width: 150,
+                            title: 'Tổng CC',
+                            dataIndex: 'certificateCount',
                             align: 'center',
-                            type: 'select',
-                            options: archivedCertificateStatusOptions,
-                            render: (_, record) => {
-                                const label = getArchivedCertificateStatusStatusLabel(
-                                    record?.status
+                            width: 90,
+                            render: (__, record) => {
+                                return record?.archivedCertificate?.length || 0
+                            },
+                        },
+                        {
+                            title: 'CC đã duyệt',
+                            dataIndex: 'approvedCount',
+                            align: 'center',
+                            width: 110,
+                            render: (__, record) => {
+                                return (
+                                    record?.archivedCertificate?.filter(
+                                        (cert: any) => cert.status === 'APPROVED'
+                                    )?.length || 0
                                 )
-                                const color = getArchivedCertificateStatusColor(record?.status)
-                                return <Tag color={color}>{label}</Tag>
+                            },
+                        },
+                        {
+                            title: 'CC chờ duyệt',
+                            dataIndex: 'pendingCount',
+                            align: 'center',
+                            width: 110,
+                            render: (__, record) => {
+                                return (
+                                    record?.archivedCertificate?.filter(
+                                        (cert: any) => cert.status === 'PENDING'
+                                    )?.length || 0
+                                )
+                            },
+                        },
+                        {
+                            title: 'CC bị từ chối',
+                            dataIndex: 'rejectedCount',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => {
+                                return (
+                                    record?.archivedCertificate?.filter(
+                                        (cert: any) => cert.status === 'REJECTED'
+                                    )?.length || 0
+                                )
                             },
                         },
                         {
                             title: 'Thao tác',
-                            width: 150,
+                            width: 100,
                             align: 'center',
                             fixed: 'right',
-                            hidden: !canSome(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                'SUA',
-                                'XOA'
-                            ),
-                            render: (_, { id, _count, status }) => {
+                            render: (_, record) => {
+                                const studentName = `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
                                 return (
                                     <Row className="justify-center gap-2">
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                            'SUA'
-                                        ) &&
-                                            status === 'PENDING' && (
-                                                <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                            )}
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-                                            'XOA'
-                                        ) &&
-                                            status === 'PENDING' && (
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
-                                            )}
+                                        <InfoIcon
+                                            onClick={() => {
+                                                onOpenCertificateList({
+                                                    studentId: record.id,
+                                                    studentName,
+                                                    certificates:
+                                                        record?.archivedCertificate || [],
+                                                })
+                                            }}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
                                     </Row>
                                 )
                             },
