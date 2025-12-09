@@ -328,7 +328,7 @@ export function useSuspenseCountEvaluationPeriod<TArgs extends Prisma.Evaluation
 }
 import type { EvaluationPeriodStatus } from '../zenstack/models';
 
-export function useCheckEvaluationPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; status?: EvaluationPeriodStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvaluationPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; status?: EvaluationPeriodStatus; semesterId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('EvaluationPeriod', `${endpoint}/evaluationPeriod/check`, args, options, fetch);
 }

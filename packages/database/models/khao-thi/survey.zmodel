@@ -105,6 +105,9 @@ model Survey extends Base {
 
   subjectClass         SubjectClass?  @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
+
+  semester                    Semester?              @relation(fields: [semesterId], references: [id])
+  semesterId                  String?
   // TODO: SurveyTopic[]
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
@@ -137,8 +140,8 @@ model SurveyQuestion extends Base {
   // Hiển thị surveyChoice khi type = SINGLE_CHOICE
   type                  SurveyQuestionType
 
-  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String
+  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String?
 
   survey                Survey[]
   clusterSurvey         ClusterSurvey[]

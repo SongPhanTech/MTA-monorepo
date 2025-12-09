@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { StandardCatalogTypeSchema } from '../enums/StandardCatalogType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,6 +17,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
+    objectType: StandardCatalogTypeSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -29,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     order: z.number(),
     name: z.string(),
+    objectType: StandardCatalogTypeSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -69,7 +72,8 @@ export const StandardCatalogPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     order: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    name: z.string()
+    name: z.string(),
+    objectType: StandardCatalogTypeSchema
 }).partial().passthrough();
 
 
