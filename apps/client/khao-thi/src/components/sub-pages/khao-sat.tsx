@@ -7,9 +7,10 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { cn } from '@lib/utils'
-import { Survey } from '@workspace/db'
+import { SchoolYear, Semester, Survey } from '@workspace/db'
 import {
     useCountSurvey,
+    useFindManySchoolYear,
     useFindManySurvey,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
@@ -17,6 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { useSemesterStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -33,6 +35,7 @@ function TabDotKhaoSat({
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { id: semesterId } = useSemesterStore()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         surveyObjectTypeId: undefined,
@@ -41,11 +44,13 @@ function TabDotKhaoSat({
         endDate: undefined,
         isPublic: undefined,
         anonymous: undefined,
+        semesterIds: undefined,
     })
     const router = useRouter()
     const where = useMemo(
         () => ({
             clusterSurveyId: null,
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -109,11 +114,38 @@ function TabDotKhaoSat({
             surveyTopic: true,
             surveyQuestion: true,
             surveySessions: true,
+            semester: true,
         },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+       const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+            orderBy: { startDate: 'desc' },
+            include: {
+                semesters: {
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        })
+    
+        const converData = (data: (SchoolYear & { semesters: Semester[] })[] | undefined) => {
+            return (
+                data?.map((schoolYear) => ({
+                    value: schoolYear.id,
+                    label: schoolYear.name,
+                    children:
+                        schoolYear?.semesters.map((semester) => ({
+                            value: semester.id,
+                            label: `${semester.name}`,
+                        })) || [],
+                })) || []
+            )
+        }
+    
+        // Tạo treeData từ schoolYears và semesters
+        const treeData = converData(schoolYears)
 
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
@@ -208,6 +240,7 @@ function TabDotKhaoSat({
                                 dataIndex: 'name',
                                 type: 'input',
                             },
+                         
                             {
                                 title: 'Chủ đề KS',
                                 dataIndex: 'surveyTopicId',
@@ -239,6 +272,16 @@ function TabDotKhaoSat({
                                     ) : (
                                         ''
                                     )
+                                },
+                            },
+                                {
+                                title: 'Học kỳ',
+                                dataIndex: 'semesterIds',
+                                type: 'tree_select',
+                                width: 175,
+                                options: treeData,
+                                render: (__, record) => {
+                                    return record?.semester?.name || ''
                                 },
                             },
                             {

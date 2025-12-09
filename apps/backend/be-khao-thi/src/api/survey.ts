@@ -823,6 +823,7 @@ const getSurveysByProfile = createRoute({
             taken: z.boolean().optional(),
             lecturerName: z.string().optional(),
             subjectClassName: z.string().optional(),
+            semesterId: z.string().optional(),
         }),
     },
     responses: {
@@ -858,10 +859,10 @@ const getSurveysByProfile = createRoute({
 
 app.openapi(getSurveysByProfile, async (c) => {
     const { id } = c.req.valid('param')
-    const { limit = 10, page = 1, ...q } = c.req.valid('query')
+    const { semesterId,limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const profile = await prisma.userProfile.findUniqueOrThrow({
-        where: { id },
+        where: { id ,...(semesterId&&{semesterId})},
         include: {
             lecturer: true,
             staffs: true,

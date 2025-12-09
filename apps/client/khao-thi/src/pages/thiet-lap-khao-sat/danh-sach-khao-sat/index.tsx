@@ -5,6 +5,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
 import { useGetSurveysOfProfile } from '@workspace/libs/api/exam'
+import { useSemesterStore } from '@workspace/ui'
 import { Col, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { ArrowRight } from 'lucide-react'
@@ -19,6 +20,7 @@ export default function DetailSurveyPage() {
     const profileId = session?.sDM_NhanVienId || 'fde8b90b-d93b-485d-aa5c-d403990678e5'
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { id: semesterId } = useSemesterStore()
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -94,6 +96,7 @@ export default function DetailSurveyPage() {
         limit: numberOfPages,
         name: filters.name,
         code: filters.code,
+        semesterId
     })
 
     const { onOpen } = useDisclosure<{ userId: string; surveyId: string }>({

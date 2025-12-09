@@ -15,6 +15,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { useSemesterStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -30,6 +31,7 @@ function TabDotKhaoSatCum({
 }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
+    const { id: semesterId } = useSemesterStore()
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
@@ -75,15 +77,20 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
+                ...(semesterId && {
+                    surveys: {
+                        some: {
+                            semesterId
+                        }
+                    },
+                }),
             ...(filters.semesterIds && {
                 surveys: {
-                    some: {
-                        subjectClass: {
-                            semesterId: {
-                                in: filters.semesterIds,
-                            },
-                        },
+                    some:{
+                         semesterId: {
+                        in: filters.semesterIds
                     },
+                    }
                 },
             }),
             ...(filters.surveyObjectTypeId
@@ -133,6 +140,7 @@ function TabDotKhaoSatCum({
             surveys: {
                 include: {
                     surveySessions: true,
+                    semester: true,
                     subjectClass: {
                         include: {
                             semester: true,
@@ -325,7 +333,7 @@ function TabDotKhaoSatCum({
                                 width: 175,
                                 options: treeData,
                                 render: (__, record) => {
-                                    return record?.surveys[0]?.subjectClass?.semester?.name || ''
+                                    return record?.surveys[0]?.semester?.name || ''
                                 },
                             },
                             {

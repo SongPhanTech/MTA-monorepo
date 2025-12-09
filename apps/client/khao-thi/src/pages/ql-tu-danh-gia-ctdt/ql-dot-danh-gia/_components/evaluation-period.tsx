@@ -20,6 +20,7 @@ import { BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import ExportReport from './export-eport'
+import { useSemesterStore } from '@workspace/ui'
 
 export default function EvaluationPeriod() {
     const { can, canSome } = useAbility()
@@ -30,11 +31,13 @@ export default function EvaluationPeriod() {
         startDate: undefined,
         endDate: undefined,
     })
+const { id: semesterId } = useSemesterStore()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const where = useMemo(
         () => ({
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {

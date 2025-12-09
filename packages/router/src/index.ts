@@ -18,7 +18,6 @@ import {
     FolderOpen,
     GraduationCap,
     House,
-    Landmark,
     Library,
     ListChecks,
     ListTree,
@@ -682,47 +681,47 @@ const NAVIGATION: NavigationType = {
     KHAO_THI: {
         label: 'Khảo thí',
         menus: [
-            {
-                id: KHAO_THI_PERMISSION.KHAO_THI_HOME,
-                label: 'Trang chủ',
-                icon: House,
-                path: ROUTER_PATH.KHAO_THI.HOME,
-                description: 'Thông tin trang chủ',
-            },
-            {
-                id: 'thiet-lap-de-thi',
-                label: 'Thiết lập đề thi',
-                icon: Landmark,
-                children: [
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
-                        label: 'Danh sách kỳ thi',
-                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
-                    },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-                        label: 'Ngân hàng câu hỏi',
-                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
-                    },
-                ],
-            },
-            {
-                id: 'category',
-                label: 'Danh mục',
-                icon: ListTree,
-                children: [
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
-                        label: 'Chuẩn đầu ra',
-                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
-                    },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
-                        label: 'Mức độ khó',
-                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
-                    },
-                ],
-            },
+            // {
+            //     id: KHAO_THI_PERMISSION.KHAO_THI_HOME,
+            //     label: 'Trang chủ',
+            //     icon: House,
+            //     path: ROUTER_PATH.KHAO_THI.HOME,
+            //     description: 'Thông tin trang chủ',
+            // },
+            // {
+            //     id: 'thiet-lap-de-thi',
+            //     label: 'Thiết lập đề thi',
+            //     icon: Landmark,
+            //     children: [
+            //         {
+            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+            //             label: 'Danh sách kỳ thi',
+            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
+            //         },
+            //         {
+            //             id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+            //             label: 'Ngân hàng câu hỏi',
+            //             path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+            //         },
+            //     ],
+            // },
+            // {
+            //     id: 'category',
+            //     label: 'Danh mục',
+            //     icon: ListTree,
+            //     children: [
+            //         {
+            //             id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
+            //             label: 'Chuẩn đầu ra',
+            //             path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
+            //         },
+            //         {
+            //             id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
+            //             label: 'Mức độ khó',
+            //             path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
+            //         },
+            //     ],
+            // },
             {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
