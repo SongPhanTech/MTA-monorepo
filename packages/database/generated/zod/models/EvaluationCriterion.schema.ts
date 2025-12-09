@@ -23,7 +23,7 @@ const baseSchema = z.object({
     strengths: z.string().default(""),
     weakness: z.string().default(""),
     actionPlan: z.string().default(""),
-    score: z.number().nullish(),
+    score: z.string().default(""),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -42,7 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
     strengths: z.string(),
     weakness: z.string(),
     actionPlan: z.string(),
-    score: z.number().nullish(),
+    score: z.string(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -98,7 +98,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
     strengths: z.string(),
     weakness: z.string(),
     actionPlan: z.string(),
-    score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    score: z.string()
 }).partial().passthrough();
 
 
@@ -106,7 +106,7 @@ export const EvaluationCriterionPrismaUpdateSchema = z.object({
  * `EvaluationCriterion` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true, score: true
 });
 
 

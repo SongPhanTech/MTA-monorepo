@@ -1,11 +1,11 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { Col, Input, Popover, Row, Select } from 'antd'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 interface RoomSelectorProps {
     value?: Array<{ roomId: string; quantity: number }>
-    onChange?: (value: Array<{ roomId: string; quantity: number }>) => void
+    onChange?: (value: Array<{ roomId: string; quantity?: number }>) => void
     rooms: Array<{ id: string; capacity: number; name: string }>
     disabled?: boolean
 }
@@ -14,7 +14,7 @@ interface RoomTableData {
     id: string
     name: string
     capacity: number
-    quantity: number
+    quantity?: number
     isSelected: boolean
 }
 
@@ -24,7 +24,7 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [searchText, setSearchText] = useState('')
 
-    const handleQuantityChange = (roomId: string, quantity: number) => {
+    const handleQuantityChange = (roomId: string, quantity?: number) => {
         const newValue = value.map((v) => (v.roomId === roomId ? { roomId, quantity } : v))
         onChange?.(newValue)
     }
@@ -34,16 +34,20 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
         onChange?.(newValue)
     }
 
-    const tableData: RoomTableData[] = rooms.map((room) => {
-        const selectedValue = value.find((v) => v.roomId === room.id)
-        return {
-            id: room.id,
-            capacity: room.capacity,
-            quantity: selectedValue?.quantity || room.capacity,
-            isSelected: !!selectedValue,
-            name: room.name,
-        }
-    })
+    const tableData: RoomTableData[] = useMemo(
+        () =>
+            rooms.map((room) => {
+                const selectedValue = value.find((v) => v.roomId === room.id)
+                return {
+                    id: room.id,
+                    capacity: room.capacity,
+                    quantity: selectedValue?.quantity,
+                    isSelected: !!selectedValue,
+                    name: room.name,
+                }
+            }),
+        [rooms, value]
+    )
 
     // Lọc dữ liệu theo search text
     const filteredData = tableData.filter((room) =>
@@ -112,16 +116,18 @@ const RoomSelector = ({ value = [], onChange, rooms, disabled }: RoomSelectorPro
                         render: (_, record) => (
                             <Input
                                 type="number"
+                                className={record.quantity > record.capacity ? 'text-red-500' : ''}
                                 value={record.quantity}
                                 disabled={!record.isSelected}
-                                min={1}
-                                max={record.capacity}
-                                onChange={(e) =>
+                                min={0}
+                                onChange={(e) => {
                                     handleQuantityChange(
                                         record.id,
-                                        Number.parseInt(e.target.value, 10) || 0
+                                        e.target.value
+                                            ? Number.parseInt(e.target.value, 10)
+                                            : undefined
                                     )
-                                }
+                                }}
                             />
                         ),
                     },

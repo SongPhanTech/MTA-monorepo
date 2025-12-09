@@ -620,19 +620,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             },
                             {
                                 title: 'Lớp',
-                                width: 150,
-                                dataIndex: 'fixedClassName',
-                                type: 'input',
+                                width: 120,
                                 align: 'center',
-                                render: (_, record) => record?.student?.fixedClass.name,
-                            },
-                            {
-                                title: 'Mã lớp',
-                                width: 80,
                                 dataIndex: 'fixedClassCode',
                                 type: 'input',
-                                align: 'center',
-                                render: (_, record) => record?.student?.fixedClass.code,
+                                render: (_, record) => (
+                                    <Tooltip title={record?.student?.fixedClass?.name}>
+                                        {record?.student?.fixedClass?.code}
+                                    </Tooltip>
+                                ),
                             },
                             {
                                 title: 'SĐT',

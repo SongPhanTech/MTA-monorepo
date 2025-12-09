@@ -414,6 +414,13 @@ enum EvaluationPeriodStatus {
   @@schema("khao-thi")
 }
 
+enum StandardCatalogType {
+  ASSET
+  PROGRAM
+
+  @@schema("khao-thi")
+}
+
 enum EvaluationCriterionStatus {
   PENDING
   SUBMITTED
@@ -443,6 +450,7 @@ enum EvaluationMemberRole {
   SECRETARY
   MEMBER
   ADVISORY_BOARD
+  SPECIALIZED
 
   @@schema("khao-thi")
 }
@@ -2857,6 +2865,8 @@ model Semester {
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
   planTraining            PlanTraining[]
+  survey                  Survey[]
+  evaluationPeriod        EvaluationPeriod[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -5162,6 +5172,8 @@ model EvaluationPeriod {
   startDate   DateTime               @default(now())
   endDate     DateTime?
   status      EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  semester    Semester?              @relation(fields: [semesterId], references: [id])
+  semesterId  String?
   standards   StandardPeriod[]
   council     EvaluationCouncil?
 
@@ -5173,17 +5185,18 @@ model EvaluationPeriod {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model StandardCatalog {
-  id          String             @id() @default(cuid())
-  code        String?            @unique()
-  active      Boolean            @default(true)
-  description String?            @db.Text()
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @default(now()) @updatedAt()
-  createdBy   String?            @default("") @db.Uuid()
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @default("") @db.Uuid()
   order       Int
   name        String
   criteria    CriterionCatalog[]
+  objectType  StandardCatalogType
 
   @@schema("khao-thi")
 }
@@ -5410,7 +5423,7 @@ model EvaluationCriterion {
   /// 4. Kế hoạch hành động
   actionPlan                  String                       @default("")
   /// 5. Tự đánh giá
-  score                       Int?
+  score                       String                       @default("")
 
   @@schema("khao-thi")
 }
@@ -5650,6 +5663,8 @@ model Survey {
   lectureId            String?
   subjectClass         SubjectClass?      @relation(fields: [subjectClassId], references: [id])
   subjectClassId       String?
+  semester             Semester?          @relation(fields: [semesterId], references: [id])
+  semesterId           String?
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
   additionalSuggestion Boolean
@@ -5666,18 +5681,18 @@ model Survey {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SurveyQuestion {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @default("") @db.Uuid()
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @default(now()) @updatedAt()
+  createdBy             String?              @default("") @db.Uuid()
   name                  String
   type                  SurveyQuestionType
-  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String
+  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String?
   survey                Survey[]
   clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]

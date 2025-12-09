@@ -173,7 +173,7 @@ const TableCollapse = <
             {
                 title: 'TT',
                 align: 'center',
-                width: 35,
+                width: 40,
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 

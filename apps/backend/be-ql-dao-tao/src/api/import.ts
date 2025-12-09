@@ -189,6 +189,7 @@ app.openapi(importLecturer, async (c) => {
 
             const existing = existingLecturerMap.get(lecturer.code)
             if (existing) {
+                // @ts-expect-error
                 console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
                 if (res.status === 200) {
                     await prisma.lecturer.update({
@@ -247,6 +248,7 @@ app.openapi(importLecturer, async (c) => {
                 }
             )
 
+            // @ts-expect-error
             console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
             if (res.status === 200) {
                 await prisma.lecturer.create({
@@ -346,8 +348,18 @@ app.openapi(importStudent, async (c) => {
 
     const trainingCourse = await prisma.trainingCourse.findFirst({
         where: {
-            OR: [{ name: data.trainingCourse as string }, { code: data.trainingCourse as string }],
+            deletedAt: null,
             active: true,
+            OR: [
+                {
+                    trainingObjectTypeId: trainingObjectType.id,
+                    name: data.trainingCourse as string,
+                },
+                {
+                    trainingObjectTypeId: trainingObjectType.id,
+                    code: data.trainingCourse as string,
+                },
+            ],
         },
     })
 
@@ -549,6 +561,7 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
+            // @ts-expect-error
             console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
             if (existing) {
                 if (res.status === 200) {
@@ -596,6 +609,7 @@ app.openapi(importStudent, async (c) => {
                     },
                 }
             )
+            // @ts-expect-error
             console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
 
             if (res.status === 200) {

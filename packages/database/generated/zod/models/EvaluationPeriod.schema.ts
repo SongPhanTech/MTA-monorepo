@@ -38,8 +38,13 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    semester: z.record(z.string(), z.unknown()).optional(),
     standards: z.array(z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    semesterId: z.string().nullish(),
 }
 );
 
@@ -52,7 +57,7 @@ export const EvaluationPeriodScalarSchema = baseSchema;
 /**
  * `EvaluationPeriod` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const EvaluationPeriodSchema = EvaluationPeriodScalarSchema.merge(relationSchema.partial());
+export const EvaluationPeriodSchema = EvaluationPeriodScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -93,9 +98,7 @@ export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `EvaluationPeriod` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const EvaluationPeriodCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true, status: true
-});
+export const EvaluationPeriodCreateSchema = EvaluationPeriodCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -107,5 +110,5 @@ export const EvaluationPeriodUpdateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `EvaluationPeriod` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const EvaluationPeriodUpdateSchema = EvaluationPeriodUpdateScalarSchema;
+export const EvaluationPeriodUpdateSchema = EvaluationPeriodUpdateScalarSchema.merge(fkSchema.partial());
 

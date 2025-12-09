@@ -138,6 +138,10 @@ const ModalLearningResult = () => {
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
                     MÔN HỌC CHƯƠNG TRÌNH ĐÀO TẠO
                 </div>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    {learningResult?.fixedClass?.curriculumVersion?.name}
+                </div>
+
                 <TableCollapse
                     rowKey="key"
                     id="learning-result"

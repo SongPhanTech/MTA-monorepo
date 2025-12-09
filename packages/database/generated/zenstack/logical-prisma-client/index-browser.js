@@ -3067,7 +3067,8 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
-  status: 'status'
+  status: 'status',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.StandardCatalogScalarFieldEnum = {
@@ -3080,7 +3081,8 @@ exports.Prisma.StandardCatalogScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   order: 'order',
-  name: 'name'
+  name: 'name',
+  objectType: 'objectType'
 };
 
 exports.Prisma.CriterionCatalogScalarFieldEnum = {
@@ -3369,6 +3371,7 @@ exports.Prisma.SurveyScalarFieldEnum = {
   anonymous: 'anonymous',
   lectureId: 'lectureId',
   subjectClassId: 'subjectClassId',
+  semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
   additionalSuggestion: 'additionalSuggestion',
   clusterSurveyId: 'clusterSurveyId'
@@ -6279,7 +6282,8 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
@@ -6380,7 +6384,8 @@ exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',
-  actionPlan: 'actionPlan'
+  actionPlan: 'actionPlan',
+  score: 'score'
 };
 
 exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
@@ -6475,6 +6480,7 @@ exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
   name: 'name',
   lectureId: 'lectureId',
   subjectClassId: 'subjectClassId',
+  semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
   clusterSurveyId: 'clusterSurveyId'
 };
@@ -7469,6 +7475,11 @@ exports.EvaluationPeriodStatus = exports.$Enums.EvaluationPeriodStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.StandardCatalogType = exports.$Enums.StandardCatalogType = {
+  ASSET: 'ASSET',
+  PROGRAM: 'PROGRAM'
+};
+
 exports.EvaluationCriterionStatus = exports.$Enums.EvaluationCriterionStatus = {
   PENDING: 'PENDING',
   SUBMITTED: 'SUBMITTED',
@@ -7492,7 +7503,8 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   HEAD_SECRETARY: 'HEAD_SECRETARY',
   SECRETARY: 'SECRETARY',
   MEMBER: 'MEMBER',
-  ADVISORY_BOARD: 'ADVISORY_BOARD'
+  ADVISORY_BOARD: 'ADVISORY_BOARD',
+  SPECIALIZED: 'SPECIALIZED'
 };
 
 exports.SurveyObject = exports.$Enums.SurveyObject = {

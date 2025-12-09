@@ -18,6 +18,7 @@ import '../ql-dao-tao/research'
 import '../ql-dao-tao/output-standard'
 import '../khao-thi/exam'
 import "../khao-thi/survey"
+import "../khao-thi/evaluate"
 
 
 // Kế hoạch đào tạo
@@ -318,6 +319,8 @@ model Semester extends Base {
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
   planTraining            PlanTraining[]
+	survey Survey[]
+	evaluationPeriod EvaluationPeriod[]
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
 }

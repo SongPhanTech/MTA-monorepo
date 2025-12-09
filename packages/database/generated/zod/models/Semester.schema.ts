@@ -50,6 +50,8 @@ const relationSchema = z.object({
     studentAcademicDecision: z.array(z.unknown()).optional(),
     classRegisterSession: z.array(z.unknown()).optional(),
     planTraining: z.array(z.unknown()).optional(),
+    survey: z.array(z.unknown()).optional(),
+    evaluationPeriod: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

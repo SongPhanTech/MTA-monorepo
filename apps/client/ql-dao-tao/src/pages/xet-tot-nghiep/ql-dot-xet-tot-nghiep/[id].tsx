@@ -649,21 +649,19 @@ export default function StudentGraduationApplication() {
                                                 },
                                                 {
                                                     title: 'Lớp',
-                                                    width: 150,
-                                                    align: 'center',
-                                                    dataIndex: 'fixedClassName',
-                                                    type: 'input',
-                                                    render: (_, record) =>
-                                                        record?.student?.fixedClass?.name,
-                                                },
-                                                {
-                                                    title: 'Mã lớp',
-                                                    width: 80,
+                                                    width: 120,
                                                     align: 'center',
                                                     dataIndex: 'fixedClassCode',
                                                     type: 'input',
-                                                    render: (_, record) =>
-                                                        record?.student?.fixedClass?.code,
+                                                    render: (_, record) => (
+                                                        <Tooltip
+                                                            title={
+                                                                record?.student?.fixedClass?.name
+                                                            }
+                                                        >
+                                                            {record?.student?.fixedClass?.code}
+                                                        </Tooltip>
+                                                    ),
                                                 },
                                                 {
                                                     title: 'SĐT',

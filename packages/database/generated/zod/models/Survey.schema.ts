@@ -43,6 +43,7 @@ const relationSchema = z.object({
     surveyObjectType: z.array(z.unknown()).optional(),
     lecture: z.record(z.string(), z.unknown()).optional(),
     subjectClass: z.record(z.string(), z.unknown()).optional(),
+    semester: z.record(z.string(), z.unknown()).optional(),
     surveyTopic: z.record(z.string(), z.unknown()),
     surveyChoice: z.array(z.unknown()).optional(),
     surveyQuestion: z.array(z.unknown()).optional(),
@@ -53,6 +54,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     lectureId: z.string().nullish(),
     subjectClassId: z.string().nullish(),
+    semesterId: z.string().nullish(),
     surveyTopicId: z.string(),
     clusterSurveyId: z.string().nullish(),
 }

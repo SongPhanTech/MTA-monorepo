@@ -8341,6 +8341,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, evaluationPeriod: {
+                    name: "evaluationPeriod",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16940,6 +16952,20 @@ const metadata: ModelMeta = {
                     name: "status",
                     type: "EvaluationPeriodStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationPeriod',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, standards: {
                     name: "standards",
                     type: "StandardPeriod",
@@ -17012,6 +17038,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'standard',
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17789,8 +17818,8 @@ const metadata: ModelMeta = {
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, score: {
                     name: "score",
-                    type: "Int",
-                    isOptional: true,
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18675,6 +18704,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectClass',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, surveyTopic: {
                     name: "surveyTopic",
                     type: "SurveyTopic",
@@ -18782,12 +18825,14 @@ const metadata: ModelMeta = {
                     name: "surveyQuestionGroup",
                     type: "SurveyQuestionGroup",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyQuestionGroupId" },
                 }, surveyQuestionGroupId: {
                     name: "surveyQuestionGroupId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'surveyQuestionGroup',
                 }, survey: {

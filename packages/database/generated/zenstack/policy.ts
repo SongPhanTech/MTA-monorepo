@@ -45,6 +45,7 @@ import { CouncilProposalStatus } from "../prisma-client";
 import { CouncilRole } from "../prisma-client";
 import { PaymentStatus } from "../prisma-client";
 import { EvaluationPeriodStatus } from "../prisma-client";
+import { StandardCatalogType } from "../prisma-client";
 import { EvaluationCriterionStatus } from "../prisma-client";
 import { EvaluationStatus } from "../prisma-client";
 import { EvaluationMemberRole } from "../prisma-client";
