@@ -17,6 +17,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem
+                            required
                             form={form}
                             name="phoneNumber"
                             label="Số điện thoại"
@@ -26,7 +27,13 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="email" label="Thư điện tử" className="mb-0">
+                        <FormItem
+                            required
+                            form={form}
+                            name="email"
+                            label="Thư điện tử (email)"
+                            className="mb-0"
+                        >
                             <Input placeholder="Nhập thư điện tử" className="h-9" />
                         </FormItem>
                     </Col>
