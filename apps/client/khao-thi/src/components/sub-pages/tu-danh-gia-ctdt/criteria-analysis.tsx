@@ -212,7 +212,9 @@ const CriteriaAnalysisSubPage = ({
         const status = item.analysisCriterions?.status
         return (
             status !== $Enums.EvaluationCriterionStatus.APPROVED &&
-            status !== $Enums.EvaluationCriterionStatus.COMPLETED
+            status !== $Enums.EvaluationCriterionStatus.COMPLETED &&
+            status !== $Enums.EvaluationCriterionStatus.SUBMITTED &&
+            status !== $Enums.EvaluationCriterionStatus.REVISION
         )
     })
 
