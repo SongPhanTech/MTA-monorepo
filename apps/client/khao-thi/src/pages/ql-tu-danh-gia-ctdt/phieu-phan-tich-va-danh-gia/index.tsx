@@ -22,7 +22,7 @@ import { useMemo, useState } from 'react'
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_DonViId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
+    const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
@@ -78,6 +78,9 @@ export default function CriteriaAnalysisAndEvaluationPage() {
         const disableAnalysisWritingTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING
+        const disabledEvaluationWriteTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.EVALUATION_WRITING
         const disableCrossReviewAssignmentTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
@@ -95,7 +98,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disableAnalysisWritingTab,
             })
         }
 
@@ -137,7 +140,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '5',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
-                disabled: disableAnalysisWritingTab,
+                disabled: disabledEvaluationWriteTab,
             })
         }
 
