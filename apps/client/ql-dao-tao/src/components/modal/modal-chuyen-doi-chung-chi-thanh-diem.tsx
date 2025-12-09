@@ -4,6 +4,7 @@ import {
     useFindManyCertificate,
     useCreateManyStudentSubjectScore,
     useFindManySubjectClass,
+    useFindManyStudent,
 } from '@workspace/db/hooks'
 import { Modal, message, Row, Col, Typography } from 'antd'
 import type React from 'react'
@@ -15,6 +16,7 @@ const { Title } = Typography
 interface ConvertCertificateInput {
     studentIds: string[]
     studentNames: string[]
+    studentCodes?: string[]
 }
 
 const ModalChuyenDoiChungChiThanhDiem = () => {
@@ -26,6 +28,18 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
 
     const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null)
     const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
+
+    // Lấy danh sách sinh viên
+    const { data: students = [] } = useFindManyStudent({
+        where: {
+            id: {
+                in: input?.studentIds || [],
+            },
+        },
+        include: {
+            userProfile: true,
+        },
+    }, { enabled: !!input?.studentIds && input.studentIds.length > 0 })
 
     // Lấy danh sách chứng chỉ
     const { data: certificates = [] } = useFindManyCertificate({
@@ -183,14 +197,33 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
             destroyOnClose
         >
             <div className="mb-4">
-                <p className="text-gray-600">
-                    Số học viên được chọn: <strong>{input?.studentIds?.length || 0}</strong>
-                </p>
-                {input?.studentNames && input.studentNames.length > 0 && (
-                    <p className="text-gray-600 text-sm">
-                        Danh sách: {input.studentNames.join(', ')}
-                    </p>
-                )}
+                <Title level={5}>Danh sách học viên được chọn ({students.length})</Title>
+                <Table
+                    rowKey="id"
+                    dataSource={students}
+                    pagination={false}
+                    size="small"
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'MSSV',
+                            dataIndex: ['userProfile', 'code'],
+                            width: 120,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Họ và tên',
+                            align: 'left',
+                            render: (_, record: any) => 
+                                `${record.userProfile?.lastName || ''} ${record.userProfile?.firstName || ''}`.trim(),
+                        },
+                    ]}
+                />
             </div>
 
             <Row gutter={16}>

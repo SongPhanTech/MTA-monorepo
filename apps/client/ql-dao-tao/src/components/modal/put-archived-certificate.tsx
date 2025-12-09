@@ -37,6 +37,8 @@ const { Title } = Typography
 const PutCertificateArchivedModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
+    const [allUploadedFiles, setAllUploadedFiles] = useState<DocumentFile[]>([])
+    const [uploadingCount, setUploadingCount] = useState<number>(0)
     const [form] = Form.useForm<PutArchivedCertificate>()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
@@ -95,6 +97,19 @@ const PutCertificateArchivedModal = () => {
 
     // Lấy certificateId từ form
     const selectedCertificateId = Form.useWatch('certificateId', form)
+    const fixedClassId = Form.useWatch('fixedClassesId', form)
+    const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
+    const selectedStudentIds = Form.useWatch('studentIds', form)
+    const uploadedFiles = Form.useWatch('allDocumentFiles', form)
+
+    // Cập nhật allUploadedFiles khi uploadedFiles thay đổi
+    useEffect(() => {
+        if (uploadedFiles) {
+            setAllUploadedFiles(uploadedFiles)
+        } else {
+            setAllUploadedFiles([])
+        }
+    }, [uploadedFiles])
 
     // Lấy danh sách lớp môn học có thể phiên điểm từ chứng chỉ đã chọn
     const availableSubjectClasses = useMemo(() => {
@@ -125,8 +140,13 @@ const PutCertificateArchivedModal = () => {
     }, [selectedCertificateId, certificate, subjectClasses])
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
+            // Kiểm tra nếu đang upload file
+            if (uploadingCount > 0) {
+                message.warning(`Vui lòng đợi ${uploadingCount} file đang upload hoàn thành`)
+                return
+            }
+            
             showSpinner()
-            let archivedCertificateId = id
             
             if (id) {
                 await updateArchivedCertificate({
@@ -177,31 +197,97 @@ const PutCertificateArchivedModal = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                const result = await createArchivedCertificate({
-                    data: {
-                        studentId: rest.studentId,
-                        certificateId: rest.certificateId,
-                        finalScore: rest.finalScore || 0,
-                        score: rest.score,
-                        issuedBy: rest.issuedBy,
-                        issuedDate: rest.issuedDate,
-                        expiredDate: rest.expiredDate,
-                        status: 'PENDING',
-                        documentFiles: {
-                            create: (rest.documentFiles || []).map((file) => ({
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            })),
+                // Xử lý thêm mới cho nhiều sinh viên
+                const studentIds = (rest as any).studentIds || []
+                
+                if (!studentIds || studentIds.length === 0) {
+                    message.warning('Vui lòng chọn ít nhất một học viên')
+                    hideSpinner()
+                    return
+                }
+
+                const createdCertificates: any[] = []
+                
+                // Tạo chứng chỉ cho từng sinh viên với file riêng
+                for (const studentId of studentIds) {
+                    const student = studentData.find((s) => s.id === studentId)
+                    const studentCode = student?.userProfile?.code || ''
+                    
+                    // Lấy file có tên chứa mã sinh viên
+                    const studentFiles = allUploadedFiles.filter((file: DocumentFile) => 
+                        file.name.toLowerCase().includes(studentCode.toLowerCase())
+                    )
+                    
+                    const result = await createArchivedCertificate({
+                        data: {
+                            studentId,
+                            certificateId: rest.certificateId,
+                            finalScore: rest.finalScore || 0,
+                            score: rest.score,
+                            issuedBy: rest.issuedBy,
+                            issuedDate: rest.issuedDate,
+                            expiredDate: rest.expiredDate,
+                            status: 'PENDING',
+                            documentFiles: {
+                                create: studentFiles.map((file: any) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })),
+                            },
                         },
-                    },
+                    })
+                    if (result) {
+                        createdCertificates.push({ id: result.id, studentId })
+                    }
+                }
+                
+                message.success(`Đã thêm mới ${createdCertificates.length} chứng chỉ cho ${studentIds.length} học viên`)
+
+                // Nếu có chọn lớp môn học để phiên điểm cho tất cả sinh viên
+                if (selectedSubjectClassIds.length > 0 && studentIds.length > 0) {
+                    const records: any[] = []
+                    
+                    studentIds.forEach((studentId: string) => {
+                        selectedSubjectClassIds.forEach((subjectClassId) => {
+                            const subjectClass = availableSubjectClasses.find(
+                                (sc: any) => sc.id === subjectClassId
+                            )
+
+                            if (subjectClass) {
+                                records.push({
+                                    studentId,
+                                    subjectClassId,
+                                    subjectVersionId: subjectClass.subjectId,
+                                    finalScore: subjectClass.finalScore,
+                                    examScore: subjectClass.finalScore,
+                                    exempted: true,
+                                })
+                            }
+                        })
+                    })
+
+                    if (records.length > 0) {
+                        await createManyStudentSubjectScore({
+                            data: records,
+                        })
+                        message.success(`Đã phiên điểm ${records.length} bản ghi cho ${studentIds.length} học viên`)
+                    }
+                }
+
+                // refetch() lại danh sách level
+                queryClient.invalidateQueries({
+                    queryKey: ['ArchivedCertificate'],
                 })
-                archivedCertificateId = result.id
-                message.success('Thêm mới thành công')
+                queryClient.invalidateQueries({
+                    queryKey: ['StudentSubjectScore'],
+                })
+                onClose()
+                return
             }
 
-            // Nếu có chọn lớp môn học để phiên điểm
+            // Nếu có chọn lớp môn học để phiên điểm (cho trường hợp update)
             if (selectedSubjectClassIds.length > 0 && rest.studentId) {
                 const records: any[] = []
                 
@@ -248,8 +334,6 @@ const PutCertificateArchivedModal = () => {
             hideSpinner()
         }
     }
-    const fixedClassId = Form.useWatch('fixedClassesId', form)
-    const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
@@ -273,6 +357,31 @@ const PutCertificateArchivedModal = () => {
         },
         { enabled: !!trainingObjectTypeId }
     )
+    
+    // Tính toán trạng thái upload cho từng sinh viên dựa trên tên file
+    const studentUploadStatus = useMemo(() => {
+        if (!selectedStudentIds || !allUploadedFiles || allUploadedFiles.length === 0) return {}
+        
+        const status: Record<string, { count: number; files: DocumentFile[] }> = {}
+        
+        selectedStudentIds.forEach((studentId: string) => {
+            const student = studentData.find((s) => s.id === studentId)
+            const studentCode = student?.userProfile?.code || ''
+            
+            // Tìm file có tên chứa mã sinh viên (không phân biệt hoa thường)
+            const matchedFiles = allUploadedFiles.filter((file: DocumentFile) => 
+                file.name.toLowerCase().includes(studentCode.toLowerCase())
+            )
+            
+            status[studentId] = {
+                count: matchedFiles.length,
+                files: matchedFiles
+            }
+        })
+        
+        return status
+    }, [selectedStudentIds, allUploadedFiles, studentData])
+    
     const { data: initialData } = useFindUniqueArchivedCertificate(
         {
             where: { id: id },
@@ -311,6 +420,8 @@ const PutCertificateArchivedModal = () => {
             })
             setDocument([])
             setSelectedSubjectClassIds([])
+            setAllUploadedFiles([])
+            setUploadingCount(0)
         }
     }, [initialData])
 
@@ -407,28 +518,138 @@ const PutCertificateArchivedModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
-                <FormItem form={form} name="studentId" label="Học viên, sinh viên" required>
+                <FormItem 
+                    form={form} 
+                    name={(id ? "studentId" : "studentIds") as any} 
+                    label={id ? "Học viên, sinh viên" : "Học viên, sinh viên (có thể chọn nhiều)"} 
+                    required
+                >
                     <Select
+                        mode={id ? undefined : "multiple"}
                         showSearch
                         style={{ width: '100%' }}
-                        placeholder="Chọn sinh viên"
+                        placeholder={id ? "Chọn sinh viên" : "Chọn sinh viên (có thể chọn nhiều)"}
                         options={studentData.map((item) => ({
                             label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
                             value: item.id,
                         }))}
+                        filterOption={(input, option) =>
+                            String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-3">
-                <FormItem form={form} name="documentFiles" label="Minh chứng">
-                    <DocumentPaths
-                        form={form}
-                        data={document}
-                        relationId={id ?? ''}
-                        relationType="curriculumId"
-                    />
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={24} className="mb-3">
+                    <FormItem form={form} name="documentFiles" label="Minh chứng">
+                        <DocumentPaths
+                            form={form}
+                            data={document}
+                            relationId={id ?? ''}
+                            relationType="curriculumId"
+                        />
+                    </FormItem>
+                </Col>
+            )}
+
+            {!id && selectedStudentIds && selectedStudentIds.length > 0 && (
+                <Col span={24} className="mb-3">
+                    <div>
+                        <div className="mb-2">
+                            <strong>Upload minh chứng chứng chỉ (nhiều file cùng lúc)</strong>
+                        </div>
+                        <FormItem 
+                            form={form} 
+                            name={"allDocumentFiles" as any}
+                            className="mb-3"
+                        >
+                            <DocumentPaths
+                                form={form}
+                                data={[]}
+                                relationId=""
+                                relationType="curriculumId"
+                                titleForm="allDocumentFiles"
+                                multiple={true}
+                                text="Kéo thả hoặc click để upload nhiều file cùng lúc (PDF, DOC, JPG, PNG)"
+                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                onUploadingChange={(count) => setUploadingCount(count)}
+                            />
+                        </FormItem>
+                        
+                        <div className="mt-4">
+                            <div className="mb-2">
+                                <strong>Trạng thái upload</strong>
+                                <span className="text-gray-500 text-xs ml-2">
+                                    (Tổng: {allUploadedFiles.length} file đã upload)
+                                </span>
+                                {uploadingCount > 0 && (
+                                    <span className="text-orange-500 text-xs ml-2">
+                                        Đang upload {uploadingCount} file...
+                                    </span>
+                                )}
+                            </div>
+                            <Table
+                                dataSource={selectedStudentIds.map((studentId: string) => {
+                                    const student = studentData.find((s) => s.id === studentId)
+                                    return {
+                                        key: studentId,
+                                        studentId,
+                                        studentCode: student?.userProfile?.code || 'N/A',
+                                        studentName: `${student?.userProfile?.lastName || ''} ${student?.userProfile?.firstName || ''}`.trim(),
+                                    }
+                                })}
+                                pagination={false}
+                                size="small"
+                                bordered
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 60,
+                                        align: 'center',
+                                        render: (_, __, index) => index + 1,
+                                    },
+                                    {
+                                        title: 'MSSV',
+                                        dataIndex: 'studentCode',
+                                        width: 120,
+                                        align: 'center',
+                                    },
+                                    {
+                                        title: 'Họ và tên',
+                                        dataIndex: 'studentName',
+                                        align: 'left',
+                                    },
+                                    {
+                                        title: 'Trạng thái',
+                                        dataIndex: 'studentId',
+                                        width: 180,
+                                        align: 'center',
+                                        render: (studentId: string) => {
+                                            const status = studentUploadStatus[studentId]
+                                            if (!status || status.count === 0) {
+                                                return (
+                                                    <span className="text-red-500 font-medium">
+                                                        Chưa có file
+                                                    </span>
+                                                )
+                                            }
+                                            return (
+                                                <span className="text-green-600 font-medium">
+                                                    Đã có {status.count} file
+                                                </span>
+                                            )
+                                        },
+                                    },
+                                ]}
+                            />
+                        </div>
+                        
+                        <p className="text-blue-500 text-xs mt-2">
+                            <strong>Hướng dẫn:</strong> Tên file phải chứa MSSV để hệ thống tự động nhận diện. 
+                        </p>
+                    </div>
+                </Col>
+            )}
 
             {!id && selectedCertificateId && availableSubjectClasses.length > 0 && (
                 <>
@@ -436,7 +657,7 @@ const PutCertificateArchivedModal = () => {
                     <Col span={24} className="mb-3">
                         <Title level={5}>Phiên điểm cho lớp môn học (Tùy chọn)</Title>
                         <p className="text-gray-500 text-sm mb-3">
-                            Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ
+                            Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ cho {selectedStudentIds?.length || 0} học viên đã chọn
                         </p>
                         <Table
                             rowKey="id"

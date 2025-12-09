@@ -13,7 +13,7 @@ import {InfoIcon} from 'lucide-react'
 import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Modal, Row, Tag, } from 'antd'
+import { Button, Col, Flex, message, Modal, Row, } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -123,6 +123,11 @@ export default function ArchivedCertificate() {
         where,
         include: {
             userProfile: true,
+            fixedClass: {
+                include: {
+                    trainingCourse: true,
+                },
+            },
             archivedCertificate: {
                 where: {
                     deletedAt: null,
@@ -314,15 +319,16 @@ export default function ArchivedCertificate() {
                         },
                         {
                             title: 'Mã học viên',
-                            dataIndex: 'code',
+                            dataIndex: ['userProfile', 'code'],
                             align: 'center',
-                            width: 150,
+                            width: 120,
                         },
                         {
                             title: 'Họ và tên',
                             dataIndex: 'name',
-                            align: 'center',
+                            align: 'left',
                             type: 'input',
+                            width: 200,
                             render: (__, record) => {
                                 return (
                                     `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
@@ -330,34 +336,80 @@ export default function ArchivedCertificate() {
                             },
                         },
                         {
-                            title: 'Số chứng chỉ',
-                            dataIndex: 'certificateCount',
+                            title: 'Email',
+                            dataIndex: ['userProfile', 'email'],
+                            align: 'left',
+                            width: 220,
+                        },
+                        {
+                            title: 'Khóa',
+                            dataIndex: ['fixedClass', 'trainingCourse', 'name'],
                             align: 'center',
                             width: 150,
                             render: (__, record) => {
+                                return record?.fixedClass?.trainingCourse?.code || '-'
+                            },
+                        },
+                        {
+                            title: 'Lớp quản lý',
+                            dataIndex: ['fixedClass', 'name'],
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => {
+                                return record?.fixedClass?.code || '-'
+                            },
+                        },
+                        {
+                            title: 'Tổng CC',
+                            dataIndex: 'certificateCount',
+                            align: 'center',
+                            width: 90,
+                            render: (__, record) => {
                                 return record?.archivedCertificate?.length || 0
+                            },
+                        },
+                        {
+                            title: 'CC đã duyệt',
+                            dataIndex: 'approvedCount',
+                            align: 'center',
+                            width: 110,
+                            render: (__, record) => {
+                                return (
+                                    record?.archivedCertificate?.filter(
+                                        (cert: any) => cert.status === 'APPROVED'
+                                    )?.length || 0
+                                )
                             },
                         },
                         {
                             title: 'CC chờ duyệt',
                             dataIndex: 'pendingCount',
                             align: 'center',
-                            width: 150,
+                            width: 110,
                             render: (__, record) => {
-                                const pendingCount =
+                                return (
                                     record?.archivedCertificate?.filter(
                                         (cert: any) => cert.status === 'PENDING'
                                     )?.length || 0
-                                return pendingCount > 0 ? (
-                                    <Tag color="orange">{pendingCount}</Tag>
-                                ) : (
-                                    0
+                                )
+                            },
+                        },
+                        {
+                            title: 'CC bị từ chối',
+                            dataIndex: 'rejectedCount',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => {
+                                return (
+                                    record?.archivedCertificate?.filter(
+                                        (cert: any) => cert.status === 'REJECTED'
+                                    )?.length || 0
                                 )
                             },
                         },
                         {
                             title: 'Thao tác',
-                            width: 150,
+                            width: 100,
                             align: 'center',
                             fixed: 'right',
                             render: (_, record) => {
