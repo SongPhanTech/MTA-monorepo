@@ -15,7 +15,7 @@ import {
     useFindManySemester,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import type { GenerateOriginalDiplomaNumberBody } from '@workspace/libs/api/schemas'
+import type { GenerateDiplomaNumberBody } from '@workspace/libs/api/schemas'
 import {
     exportGraduationDecisionPptx,
     generateDiplomaNumber,
@@ -169,7 +169,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             },
                         },
                     },
-                    trainingObjectType: true,
                 },
             },
         },
@@ -187,7 +186,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
 
     const [openGenerateOriginalNumber, setOpenGenerateOriginalNumber] = useState(false)
     const [openGenerateDiplomaNumber, setOpenGenerateDiplomaNumber] = useState(false)
-    type DiplomaNumberFormType = Omit<GenerateOriginalDiplomaNumberBody, 'sessionId' | 'field'> & {
+    type DiplomaNumberFormType = Omit<GenerateDiplomaNumberBody, 'sessionId' | 'field'> & {
         sample: number
     }
     const [originalNumberForm] = Form.useForm<DiplomaNumberFormType>()

@@ -4,8 +4,8 @@ import useSpinner from '@hooks/spinner'
 import { importLecturer } from '@workspace/libs/api/training'
 import { parseSheetLecturer } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
-import { useState } from 'react'
 import dayjs from 'dayjs'
+import { useState } from 'react'
 
 const { Panel } = Collapse
 interface ImportStudentModalProps {
@@ -26,6 +26,7 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
+        setErrorData([])
         if (!file) return
 
         setFile(file)

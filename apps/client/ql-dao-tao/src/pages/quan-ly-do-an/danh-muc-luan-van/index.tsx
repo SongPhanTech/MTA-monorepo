@@ -5,6 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import {
@@ -30,11 +31,10 @@ import {
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, DatePicker, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
+import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { SquarePen } from 'lucide-react'
-import DefaultLayout from '@layouts/default-layout'
 
 // import { getMinioUrl } from '@workspace/constant'
 
@@ -325,10 +325,11 @@ export default function PostgraduateProject({
                 userProfile: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: { trainingObjectType: true },
+                        },
                     },
                 },
-                trainingObjectType: true,
                 thesisRegistrations: {
                     where: {
                         thesisProject: {
@@ -376,7 +377,9 @@ export default function PostgraduateProject({
                 userProfile: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: { trainingObjectType: true },
+                        },
                         curriculumVersion: {
                             include: {
                                 curriculum: {
@@ -384,14 +387,12 @@ export default function PostgraduateProject({
                                         trainingMajor: {
                                             include: { trainingField: true },
                                         },
-                                        trainingObjectType: true,
                                     },
                                 },
                             },
                         },
                     },
                 },
-                trainingObjectType: true,
                 thesisRegistrations: {
                     include: {
                         thesisProject: {
@@ -708,7 +709,9 @@ export default function PostgraduateProject({
                                 align: 'center',
                             },
                             {
-                                value: student?.trainingObjectType?.name || '',
+                                value:
+                                    student?.fixedClass?.trainingCourse?.trainingObjectType?.name ||
+                                    '',
                                 border: true,
                                 align: 'center',
                             },
@@ -932,7 +935,7 @@ export default function PostgraduateProject({
                 ngaysinh: student.userProfile?.dateOfBirth
                     ? dayjs(student.userProfile.dateOfBirth).format('DD/MM/YYYY')
                     : '',
-                doituongdaotao: student.trainingObjectType?.name || '',
+                doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
                 khoa: student.fixedClass?.trainingCourse?.name || '',
                 tendetai: thesisProject.title || '',
                 gvhd1: thesisProject.supervisor?.name || '',
@@ -1475,7 +1478,8 @@ export default function PostgraduateProject({
                                 title: 'Đối tượng đào tạo',
                                 width: 120,
                                 render: (_, record) => {
-                                    return record?.trainingObjectType?.name
+                                    return record?.fixedClass?.trainingCourse.trainingObjectType
+                                        .name
                                 },
                             },
                             {

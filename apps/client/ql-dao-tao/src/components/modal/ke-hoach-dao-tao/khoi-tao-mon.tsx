@@ -68,7 +68,7 @@ const KhoiTaoMon = () => {
                             id: true,
                             planTrainingSubjects: {
                                 select: {
-                                    subjectVersionId: true,
+                                    trainingBlockSubjectId: true,
                                 },
                                 where: {
                                     subjectClassType: input?.type,

@@ -1,4 +1,5 @@
 import '../base'
+import 'output-standard'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/thesis'
@@ -36,7 +37,6 @@ model TrainingObjectType extends Base {
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
-  students             Student[]
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
@@ -245,10 +245,15 @@ model Certificate extends Base {
   name                String
   englishName         String?
 
+  /// chuẩn đầu ra
+  outputStandard      OutputStandard?        @relation(fields: [outputStandardId], references: [id])
+  outputStandardId    String?
+
   /// SV đạt
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
   subjects            CertificateOnSubject[]
+
   @@schema("ql-dao-tao")
 }
 

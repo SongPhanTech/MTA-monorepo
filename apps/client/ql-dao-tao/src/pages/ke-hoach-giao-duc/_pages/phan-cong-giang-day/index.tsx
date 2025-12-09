@@ -664,7 +664,9 @@ export default function PhanCongGiangDay({
         }
     }
 
-    const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
+    const { onOpen: onOpenModalNhapTKB } = useDisclosure<{
+        type?: $Enums.SubjectClassType
+    }>({
         tag: 'ModalNhapTKB',
     })
 
@@ -1544,7 +1546,7 @@ export default function PhanCongGiangDay({
                                             <Button
                                                 type="primary"
                                                 className="bg-yellow-500 text-black"
-                                                onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                                onClick={() => onOpenModalNhapTKB({ type })}
                                             >
                                                 4. Nhập từ TKB
                                             </Button>
@@ -1817,13 +1819,16 @@ export default function PhanCongGiangDay({
                                     width: 80,
                                     align: 'center',
                                     type: 'order',
-                                    distinctFilters: ['maxStudent', 'credit'],
+                                    distinctFilters: ['maxStudent'],
                                     render: (_, record) => (
                                         <p>
-                                            {record?.fixedClasses?.reduce(
-                                                (acc, curr) => acc + (curr?._count?.students ?? 0),
-                                                0
-                                            ) ?? 0}
+                                            {record.maxStudent ??
+                                                record?.fixedClasses?.reduce(
+                                                    (acc, curr) =>
+                                                        acc + (curr?._count?.students ?? 0),
+                                                    0
+                                                ) ??
+                                                0}
                                         </p>
                                     ),
                                 },

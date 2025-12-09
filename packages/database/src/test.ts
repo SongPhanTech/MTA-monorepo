@@ -2,21 +2,16 @@ import { PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-const users = await prisma.userProfile.findMany({
+await prisma.userProfile.updateMany({
     where: {
-        id: {
-            startsWith: 'cmi',
-        },
+        educationAndTraining: { some: {} },
     },
+    data: { bLaHocVien: true },
 })
 
-for (const user of users) {
-    await prisma.userProfile.update({
-        where: {
-            id: user.id,
-        },
-        data: {
-            id: crypto.randomUUID(),
-        },
-    })
-}
+await prisma.userProfile.updateMany({
+    where: {
+        lecturer: {},
+    },
+    data: { bLaGiangVien: true, bLaCanBoNhanVien: true, bLaNguoiDung: true },
+})

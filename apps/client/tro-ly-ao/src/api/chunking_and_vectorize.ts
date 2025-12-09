@@ -59,7 +59,7 @@ export const fetchFAQVectorize = async (faq_id: string) => {
 export const deleteVectorRecordHoiDap = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap`,
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
             id_document,
             'id_document'
         )

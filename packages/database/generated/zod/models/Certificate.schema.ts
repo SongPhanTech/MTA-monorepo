@@ -32,8 +32,13 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    outputStandard: z.record(z.string(), z.unknown()).optional(),
     archivedCertificate: z.array(z.unknown()).optional(),
     subjects: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    outputStandardId: z.string().nullish(),
 }
 );
 
@@ -46,7 +51,7 @@ export const CertificateScalarSchema = baseSchema;
 /**
  * `Certificate` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const CertificateSchema = CertificateScalarSchema.merge(relationSchema.partial());
+export const CertificateSchema = CertificateScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -85,9 +90,7 @@ export const CertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `Certificate` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const CertificateCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
-});
+export const CertificateCreateSchema = CertificateCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -99,5 +102,5 @@ export const CertificateUpdateScalarSchema = baseSchemaWithoutDefaults.partial()
 /**
  * `Certificate` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const CertificateUpdateSchema = CertificateUpdateScalarSchema;
+export const CertificateUpdateSchema = CertificateUpdateScalarSchema.merge(fkSchema.partial());
 

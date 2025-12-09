@@ -127,6 +127,8 @@ export * from './award';
 export * from './diploma-type';
 export * from './score-convert';
 export * from './load-category';
+export * from './output-standard';
+export * from './output-standard-on-curriculum';
 export * from './student';
 export * from './student-semester-result';
 export * from './student-year-result';

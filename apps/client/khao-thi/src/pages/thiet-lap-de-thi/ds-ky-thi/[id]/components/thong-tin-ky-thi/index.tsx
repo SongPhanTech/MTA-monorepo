@@ -1,10 +1,8 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
-import TreeSelectRoom from '@components/commons/room-select'
 import TreeSelectSubjectVersion from '@components/commons/subject-version-select'
-import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
-import { type Exam, ExamStatus, type StudentSubjectScore } from '@workspace/db'
+import type { Exam, StudentSubjectScore } from '@workspace/db'
 import {
     useCreateExam,
     useFindManyQuestionBank,
@@ -14,9 +12,9 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, InputNumber, message, Row, Select } from 'antd'
+import { Button, Col, Flex, Form, InputNumber, message, Row } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 export type PutExamType = Exam & {
     subjectClass: string[]
     semesterId?: string
@@ -31,7 +29,6 @@ interface InformationProps {
 export default function Information({ id, selectedIds }: InformationProps) {
     const router = useRouter()
     const [form] = Form.useForm<PutExamType>()
-    const { options: examStatusOptions } = useExamStatusOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     const [selectedSubjectVersionId, setSelectedSubjectVersionId] = useState<string>('')
     const { id: semesterId } = useSemesterStore()
@@ -77,13 +74,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
             if (initialValue.questionBank?.subjectVersionId) {
                 setSelectedSubjectVersionId(initialValue.questionBank.subjectVersionId)
             }
-        } else {
-            form.setFieldsValue({
-                status: ExamStatus.DRAFT,
-                // shuffleQuestions: true,
-                // shuffleAnswers: true,
-                // showResult: false,
-            })
         }
     }, [initialValue])
 
@@ -94,7 +84,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
         try {
             showSpinner()
             const data = {
-                status: output.status,
                 // questionBank: {
                 //     connect: {
                 //         id: output.questionBankId,
@@ -185,11 +174,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
         }
     }
 
-    const isDraft = useMemo(() => {
-        if (!id) return true
-        return initialValue?.status === ExamStatus.DRAFT
-    }, [id, initialValue?.status])
-
     return (
         <Form form={form} layout="vertical" onFinish={onOk}>
             <Row gutter={16}>
@@ -201,7 +185,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             className="w-full"
                             step={1}
                             placeholder="Nhập thời gian thi"
-                            readOnly={!isDraft}
                         />
                     </FormItem>
                 </Col>
@@ -235,14 +218,11 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             subjectVersionId={selectedSubjectVersionId}
                             edit={!!id}
                             defaultValue={selectedIds}
-                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="room" label="Phòng thi">
-                        <TreeSelectRoom disabled={!isDraft} />
-                    </FormItem>
+                    <FormItem form={form} name="room" label="Phòng thi" />
                 </Col>
                 {/* <Col span={12}>
                     <FormItem form={form} name="endTime" label="Thời gian kết thúc" required>
@@ -262,16 +242,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         />
                     </FormItem>
                 </Col> */}
-                <Col span={12}>
-                    <FormItem form={form} name="status" label="Trạng thái" required>
-                        <Select
-                            maxTagCount={'responsive'}
-                            placeholder="Chọn trạng thái"
-                            options={examStatusOptions}
-                            defaultValue={ExamStatus.DRAFT}
-                        />
-                    </FormItem>
-                </Col>
                 {/* <Col span={24}>
                     <FormItem form={form} name="shuffleQuestions" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự câu hỏi</Checkbox>

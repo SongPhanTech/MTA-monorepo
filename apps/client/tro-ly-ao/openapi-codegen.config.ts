@@ -22,7 +22,7 @@ export default defineConfig({
     qa: {
         from: {
             source: 'url',
-            url: 'http://117.4.240.104:8010/openapi.json',
+            url: 'http://14.224.217.69:8010/openapi.json',
         },
         outputDir: 'src/lib/api/qa',
         to: async (context) => {
@@ -39,7 +39,7 @@ export default defineConfig({
     chat: {
         from: {
             source: 'url',
-            url: 'http://117.4.240.104:8011/openapi.json',
+            url: 'http://14.224.217.69:8011/openapi.json',
         },
         outputDir: 'src/lib/api/chat',
         to: async (context) => {

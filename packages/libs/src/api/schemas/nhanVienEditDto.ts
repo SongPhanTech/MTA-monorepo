@@ -113,4 +113,9 @@ export type NhanVienEditDto = NhanVien & {
     sKeycloakId?: string | null
     /** @nullable */
     sUserName?: string | null
+    /** @nullable */
+    sPassword?: string | null
+    bHasAccount?: boolean
+    /** @nullable */
+    sPasswordConfirm?: string | null
 }

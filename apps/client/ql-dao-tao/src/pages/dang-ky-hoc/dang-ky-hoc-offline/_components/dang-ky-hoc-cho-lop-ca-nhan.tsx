@@ -83,7 +83,6 @@ export default function DangKyHocChoCaNhan({ hocLai }: RegisterClassProps) {
             active: true,
             status: 'ENROLLED',
             deletedAt: null,
-            trainingObjectTypeId,
         },
         include: {
             userProfile: {
@@ -149,7 +148,6 @@ export default function DangKyHocChoCaNhan({ hocLai }: RegisterClassProps) {
             active: true,
             status: 'ENROLLED',
             deletedAt: null,
-            trainingObjectTypeId,
         },
     })
 

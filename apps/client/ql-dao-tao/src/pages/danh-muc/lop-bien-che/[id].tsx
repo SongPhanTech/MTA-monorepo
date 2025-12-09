@@ -254,26 +254,25 @@ export default function StudentFixedClassPage() {
                     gender: true,
                 },
             },
-            trainingObjectType: {
-                include: {
-                    trainingFields: {
-                        include: {
-                            trainingField: true,
-                        },
-                    },
-                    trainingMajors: {
-                        include: {
-                            trainingMajor: true,
-                        },
-                    },
-                },
-            },
             fixedClass: {
                 include: {
                     trainingCourse: {
                         include: {
                             scoreConverts: true,
-                            trainingObjectType: true,
+                            trainingObjectType: {
+                                include: {
+                                    trainingFields: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                    trainingMajors: {
+                                        include: {
+                                            trainingMajor: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                     curriculumVersion: {
@@ -392,7 +391,8 @@ export default function StudentFixedClassPage() {
                             border: true,
                         },
                         {
-                            value: student.trainingObjectType?.name || '',
+                            value:
+                                student.fixedClass?.trainingCourse?.trainingObjectType?.name || '',
                             align: 'center' as const,
                             border: true,
                         },
@@ -798,7 +798,7 @@ export default function StudentFixedClassPage() {
                             }
                         })(item.userProfile?.dateOfBirth),
                         maSV: item.code,
-                        htdt: item.trainingObjectType?.name,
+                        htdt: item?.fixedClass?.trainingCourse?.trainingObjectType?.name,
                         nganh: item.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
                         lop: item.fixedClass?.name,
                         hocKis: hocKis,
@@ -1169,7 +1169,7 @@ export default function StudentFixedClassPage() {
                             }
                         })(item.userProfile?.dateOfBirth),
                         maSV: item.code,
-                        htdt: item.trainingObjectType?.name,
+                        htdt: item?.fixedClass?.trainingCourse?.trainingObjectType?.name,
                         nganh: item.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
                         lop: item.fixedClass?.name,
                         hocKis: hocKis,
@@ -1541,7 +1541,7 @@ export default function StudentFixedClassPage() {
                         ngaynhaphoc: item.fixedClass?.trainingCourse?.admissionStartDate,
                         thoigian: item.curriculumVersion?.trainingTime?.name,
                         khoa: item.fixedClass?.trainingCourse?.name,
-                        ctdt: item.trainingObjectType?.name,
+                        ctdt: item?.fixedClass?.trainingCourse?.trainingObjectType?.name,
                         ngonngu: item.curriculumVersion?.trainingLanguage?.name,
                         hocKis: hocKis,
                     }

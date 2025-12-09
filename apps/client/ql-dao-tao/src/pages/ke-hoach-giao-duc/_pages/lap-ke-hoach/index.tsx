@@ -7,7 +7,7 @@ import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
-import type { $Enums } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 
 interface TabItem {
     key: string
@@ -18,31 +18,32 @@ interface TabItem {
 export default function LapKeHoach({ type }: { type?: $Enums.SubjectClassType }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
 
-    const leftTabs: TabItem[] = type
-        ? [
-              {
-                  key: '1',
-                  label: 'Môn có SV/HV chưa đạt',
-                  content: <MonCoHVSVChuaDat />,
-              },
-          ]
-        : [
-              {
-                  key: '1',
-                  label: <Tooltip title="Môn theo học kỳ dự kiến">Môn theo HKDK</Tooltip>,
-                  content: <MonTheoKeHoachDuKien />,
-              },
-              {
-                  key: '2',
-                  label: 'Môn học chậm tiến độ',
-                  content: <MonCham />,
-              },
-              {
-                  key: '3',
-                  label: 'Môn học kỳ sau',
-                  content: <MonKySau />,
-              },
-          ]
+    const leftTabs: TabItem[] =
+        type !== $Enums.SubjectClassType.NORMAL
+            ? [
+                  {
+                      key: '1',
+                      label: 'Môn có SV/HV chưa đạt',
+                      content: <MonCoHVSVChuaDat type={type} />,
+                  },
+              ]
+            : [
+                  {
+                      key: '1',
+                      label: <Tooltip title="Môn theo học kỳ dự kiến">Môn theo HKDK</Tooltip>,
+                      content: <MonTheoKeHoachDuKien />,
+                  },
+                  {
+                      key: '2',
+                      label: 'Môn học chậm tiến độ',
+                      content: <MonCham />,
+                  },
+                  {
+                      key: '3',
+                      label: 'Môn học kỳ sau',
+                      content: <MonKySau />,
+                  },
+              ]
 
     const rightTabsMap: TabItem[] = [
         {

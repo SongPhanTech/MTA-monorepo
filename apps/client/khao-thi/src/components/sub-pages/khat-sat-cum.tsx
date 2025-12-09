@@ -15,7 +15,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -249,7 +249,21 @@ function TabDotKhaoSatCum({
             <Row gutter={[16, 8]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
+                        <Col span={12}>
+                            <TreeSelect
+                                className="w-[250px] h-[28px]"
+                                allowClear
+                                showSearch
+                                placeholder="Chọn học kỳ"
+                                treeDefaultExpandAll
+                                treeData={treeData}
+                                onChange={(value) => {
+                                    setFilters({ ...filters, semesterIds: [value] })
+                                    setCurrentPage(1)
+                                }}
+                            />
+                        </Col>
+                        <Col span={12}>
                             <Flex justify="end">
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,

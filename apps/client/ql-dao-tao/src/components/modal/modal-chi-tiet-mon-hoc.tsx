@@ -1,15 +1,14 @@
+import { useExamTypeOptions } from '@hooks/examType'
+import { useHistorySubjectVersionActionOptions } from '@hooks/historySubjectVersionAction'
 import useSpinner from '@hooks/spinner'
+import { useSubjectClassStatusOptions } from '@hooks/subjectClassStatus'
+import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
+import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
+import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
 import { useFindUniqueSubject } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useExamTypeOptions } from '@hooks/examType'
-import { useSubjectClassTypeOptions } from '@hooks/subjectClassType'
-import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
-import { useSubjectClassStatusOptions } from '@hooks/subjectClassStatus'
-import { useExamStatusOptions } from '@hooks/examStatus'
-import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
-import { useHistorySubjectVersionActionOptions } from '@hooks/historySubjectVersionAction'
 import 'dayjs/locale/vi'
 
 dayjs.locale('vi')
@@ -28,7 +27,6 @@ export default function ModalChiTietMonHoc() {
     const { getSubjectVersionTypeLabel } = useSubjectVersionTypeOptions()
     const { getSubjectClassStatusLabel, getSubjectClassStatusColor } =
         useSubjectClassStatusOptions()
-    const { getExamStatusLabel, getExamStatusColor } = useExamStatusOptions()
     const { getSubjectRequirementTypeLabel } = useSubjectRequirementTypeOptions()
     const { getHistoryActionLabel, getHistoryActionColor } = useHistorySubjectVersionActionOptions()
 
@@ -984,17 +982,6 @@ export default function ModalChiTietMonHoc() {
                                 ) : (
                                     <Tag color="error">Không hoạt động</Tag>
                                 ),
-                        },
-                        {
-                            title: 'Trạng thái đề',
-                            dataIndex: 'status',
-                            width: 120,
-                            align: 'center' as const,
-                            render: (value) => (
-                                <Tag color={getExamStatusColor(value)}>
-                                    {getExamStatusLabel(value)}
-                                </Tag>
-                            ),
                         },
                         {
                             title: 'Khóa DS thi',

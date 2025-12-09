@@ -78,9 +78,6 @@ model Student extends Base {
   userProfileId                  String
   userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
 
-  trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
-  trainingObjectTypeId           String?
-
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
   registrationAreaId             String?                          @db.Uuid
 

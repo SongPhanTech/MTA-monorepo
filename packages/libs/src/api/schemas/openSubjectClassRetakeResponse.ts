@@ -15,5 +15,6 @@ export interface OpenSubjectClassRetakeResponse {
     trainingMajorId: string | null
     /** @nullable */
     trainingCourseId: string | null
+    trainingBlockSubjectId: string
     count: number
 }

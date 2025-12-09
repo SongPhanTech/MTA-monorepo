@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
 import {
@@ -14,7 +13,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Pencil } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -26,17 +25,11 @@ function Exam() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const {
-        options: examStatusOptions,
-        getExamStatusLabel,
-        getExamStatusColor,
-    } = useExamStatusOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         title: '',
         startTime: undefined,
         duration: undefined,
-        examStatus: undefined,
         questionBankId: undefined,
     })
 
@@ -50,11 +43,7 @@ function Exam() {
                       },
                   }
                 : {}),
-            ...(filters.examStatus && filters.examStatus.length > 0
-                ? {
-                      status: { in: filters.examStatus },
-                  }
-                : {}),
+
             ...(filters.questionBankId
                 ? {
                       questionBankId: Array.isArray(filters.questionBankId)
@@ -68,7 +57,7 @@ function Exam() {
                 },
             },
         }),
-        [filters.startTime, filters.examStatus, filters.questionBankId, trainingObjectTypeId]
+        [filters.startTime, filters.questionBankId, trainingObjectTypeId]
     )
 
     const { data = [] } = useFindManyExam({
@@ -264,22 +253,6 @@ function Exam() {
                                         <div className="flex items-center justify-center">
                                             <Checkbox checked={value} disabled />
                                         </div>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'examStatus',
-                                align: 'center',
-                                fixed: 'right',
-                                width: 100,
-                                type: 'select',
-                                options: examStatusOptions,
-                                render: (__, record) => {
-                                    return (
-                                        <Tag color={getExamStatusColor(record?.status)}>
-                                            {getExamStatusLabel(record?.status)}
-                                        </Tag>
                                     )
                                 },
                             },

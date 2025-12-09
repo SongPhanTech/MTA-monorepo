@@ -246,6 +246,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Tổng kết học kỳ',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_TONG_KET_NAM_HOC,
+                        label: 'Tổng kết năm học',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_TONG_KET_NAM_HOC,
+                        description: 'Tổng kết năm học',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                         label: 'Điểm giải thưởng',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_OLYMPIC,
@@ -780,20 +786,26 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                        label: 'Phiếu phân tích tiêu chí',
+                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                        label: 'Phiếu phân tích và đánh giá',
                         icon: FolderOpen,
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
-                        description: 'Phiếu phân tích tiêu chí',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                        description: 'Phiếu phân tích và đánh giá',
                     },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                        label: 'Phiếu đánh giá tiêu chí',
-                        icon: FolderOpen,
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                        description: 'Phiếu đánh giá tiêu chí',
-                    },
-
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                    //     label: 'Phiếu phân tích tiêu chí',
+                    //     icon: FolderOpen,
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                    //     description: 'Phiếu phân tích tiêu chí',
+                    // },
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                    //     label: 'Phiếu đánh giá tiêu chí',
+                    //     icon: FolderOpen,
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                    //     description: 'Phiếu đánh giá tiêu chí',
+                    // },
                     // {
                     //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
                     //     label: 'Hội đồng thư ký',

@@ -253,7 +253,6 @@ const PutCertificateArchivedModal = () => {
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
-                trainingObjectTypeId,
                 ...(!!trainingCoursesId || !!fixedClassId
                     ? {
                           fixedClass: {
@@ -367,12 +366,12 @@ const PutCertificateArchivedModal = () => {
                 </FormItem>
             </Col>
             <Col span={12} className="mb-3">
-                <FormItem form={form} name="issuedBy" label="Nơi cấp chứng chỉ">
+                <FormItem form={form} name="issuedBy" label="Nơi cấp chứng chỉ" required>
                     <Input className="w-full" placeholder="Nhập nơi cấp chứng chỉ" />
                 </FormItem>
             </Col>
             <Col span={12} className="mb-3">
-                <FormItem form={form} name="issuedDate" label="Ngày cấp">
+                <FormItem form={form} name="issuedDate" label="Ngày cấp" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
                 </FormItem>
             </Col>

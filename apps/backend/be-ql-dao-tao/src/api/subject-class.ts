@@ -75,6 +75,14 @@ const openSubjectClassRetake = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID học kỳ',
             }),
+            viewAll: z
+                .number({
+                    coerce: true,
+                })
+                .default(0)
+                .openapi('viewAll', {
+                    description: 'Xem tất cả môn học nợ',
+                }),
         }),
     },
     responses: {
@@ -90,6 +98,7 @@ const openSubjectClassRetake = createRoute({
                                 trainingObjectTypeId: z.string().nullable(),
                                 trainingMajorId: z.string().nullable(),
                                 trainingCourseId: z.string().nullable(),
+                                trainingBlockSubjectId: z.string(),
                                 count: z.number(),
                             })
                             .openapi('OpenSubjectClassRetakeResponse')
@@ -155,6 +164,128 @@ const openSubjectClassRetakeStudents = createRoute({
                 },
             },
             description: 'Danh sách phân công giảng dạy thành công',
+        },
+        400: {
+            description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
+const openSubjectClassReExam = createRoute({
+    operationId: 'openSubjectClassReExam',
+    path: '/open-subject-class-reexam',
+    method: 'get',
+    description: 'Lấy danh sách môn học có hssv cần thi lại',
+    tags: ['SubjectClass'],
+    summary: 'Lấy danh sách môn học có hssv cần thi lại',
+    request: {
+        query: PaginationQuerySchema.extend({
+            trainingCourseId: z.string().openapi('trainingCourseId', {
+                description: 'ID khóa đào tạo',
+            }),
+            trainingMajorId: z
+                .string()
+                .openapi('trainingMajorId', {
+                    description: 'ID của chuyên ngành đào tạo',
+                })
+                .optional(),
+            search: z
+                .string()
+                .openapi('search', {
+                    description: 'Từ khoá tìm kiếm',
+                })
+                .optional(),
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
+            }),
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID học kỳ',
+            }),
+            viewAll: z
+                .number({
+                    coerce: true,
+                })
+                .default(0)
+                .openapi('viewAll', {
+                    description: 'Xem tất cả môn học nợ',
+                }),
+        }),
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: ListOf(
+                        z
+                            .object({
+                                id: z.string(),
+                                code: z.string(),
+                                name: z.string(),
+                                trainingObjectTypeId: z.string().nullable(),
+                                trainingMajorId: z.string().nullable(),
+                                trainingCourseId: z.string().nullable(),
+                                trainingBlockSubjectId: z.string(),
+                                count: z.number(),
+                            })
+                            .openapi('OpenSubjectClassReExamResponse')
+                    ),
+                },
+            },
+            description: 'Danh sách môn học cần thi lại',
+        },
+        400: {
+            description: 'Yêu cầu không hợp lệ',
+        },
+    },
+})
+
+const openSubjectClassReExamStudents = createRoute({
+    operationId: 'openSubjectClassReExamStudents',
+    path: '/open-subject-class-reexam-students',
+    method: 'get',
+    description: 'Lấy danh sách sinh viên cần thi lại môn học',
+    tags: ['SubjectClass'],
+    summary: 'Lấy danh sách sinh viên cần thi lại môn học',
+    request: {
+        query: z.object({
+            subjectVersionId: z.string(),
+            trainingCourseId: z.string().optional(),
+            search: z.string().optional(),
+            trainingObjectTypeId: z.string(),
+            page: z.number({ coerce: true }).default(1),
+            pageSize: z.number({ coerce: true }).default(10),
+        }),
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: ListOf(
+                        z
+                            .object({
+                                id: z.string(),
+                                code: z.string(),
+                                userProfile: z.object({
+                                    fullname: z.string(),
+                                }),
+                                fixedClass: z.object({
+                                    code: z.string(),
+                                    trainingCourse: z.object({
+                                        name: z.string(),
+                                    }),
+                                }),
+                                diem_cuoi: z.number().nullable(),
+                                withdrew: z.boolean(),
+                                mien_thi: z.boolean(),
+                                hoan_thi: z.boolean(),
+                                ly_do_hoan_thi: z.string().nullable(),
+                                truot_mon: z.boolean(),
+                            })
+                            .openapi('OpenSubjectClassReExamStudentsResponse')
+                    ),
+                },
+            },
+            description: 'Danh sách sinh viên cần thi lại môn học',
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
@@ -566,6 +697,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
         semesterId,
         limit,
         page,
+        viewAll = 0,
     } = c.req.valid('query')
 
     const planTraining = await prisma.planTraining.upsert({
@@ -616,6 +748,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                           as truot_mon,
+                               TBS.id                         as trainingBlockSubjectId,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -630,8 +763,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
-        select id, code, name, count("studentId") ::INTEGER as count
+                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
+        select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
           and (truot_mon = true
@@ -653,7 +786,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
             OR code ILIKE ${`%${search}%`}
             OR name ILIKE ${`%${search}%`}
             )
-        group by id, code, name
+        group by id, code, name, trainingBlockSubjectId
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
     `
@@ -799,6 +932,298 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
           and hoan_thi = false -- hoãn thi
+          and (
+            ${trainingObjectTypeId}::TEXT IS NULL
+                OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+            )
+          and (
+            ${trainingCourseId}::TEXT IS NULL
+                OR trainingCourseId = ${trainingCourseId}
+            )
+          and (
+            ${search}::TEXT IS NULL
+                OR code ILIKE ${`%${search}%`}
+                OR "fullname" ILIKE ${`%${search}%`}
+            )
+          and id = ${subjectVersionId}
+        limit ${pageSize} offset ${pageSize} * (${page} - 1)
+    `
+
+    const students = await prisma.student.findMany({
+        where: {
+            id: {
+                in: res.map((r) => r.studentId),
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+            userProfile: {
+                select: {
+                    fullname: true,
+                },
+            },
+            fixedClass: {
+                select: {
+                    code: true,
+                    trainingCourse: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    return c.json(
+        {
+            data: students.map((student) => ({
+                ...student,
+                ...res.find((r) => r.studentId === student.id),
+            })),
+        },
+        200
+    )
+})
+
+app.openapi(openSubjectClassReExam, async (c) => {
+    const {
+        search,
+        trainingCourseId,
+        trainingMajorId,
+        trainingObjectTypeId,
+        semesterId,
+        limit,
+        page,
+        viewAll = 0,
+    } = c.req.valid('query')
+
+    const planTraining = await prisma.planTraining.upsert({
+        where: {
+            trainingObjectTypeId_semesterId_trainingCourseId: {
+                trainingObjectTypeId,
+                semesterId,
+                trainingCourseId,
+            },
+        },
+        update: {},
+        create: {
+            trainingObjectTypeId,
+            semesterId,
+            trainingCourseId,
+        },
+        select: {
+            id: true,
+            planTrainingSubjects: {
+                select: {
+                    trainingBlockSubjectId: true,
+                },
+                where: {
+                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                },
+            },
+        },
+    })
+    const subjectAlreadyInPlan =
+        planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
+    const res = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               TBS.id                         as trainingBlockSubjectId,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
+        select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
+        from mon_no
+        where rn = 1
+          and (truot_mon = true or "examPostponed" = true)
+          and cam_thi = false
+          and dinh_chi = false
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          and (${trainingObjectTypeId}::TEXT IS NULL
+            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+            )
+          and (${trainingMajorId}::TEXT IS NULL
+            OR "trainingMajorId" = ${trainingMajorId}
+            )
+          and (${trainingCourseId}::TEXT IS NULL
+            OR trainingCourseId = ${trainingCourseId}
+            )
+          and (${search}::TEXT IS NULL
+            OR code ILIKE ${`%${search}%`}
+            OR name ILIKE ${`%${search}%`}
+            )
+        group by id, code, name, trainingBlockSubjectId
+        order by code
+        limit ${limit} offset ${limit} * (${page} - 1)
+    `
+
+    const countRaw: { count: number }[] = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'}))
+        select count(DISTINCT id) ::INTEGER as count
+        from mon_no
+        where rn = 1
+          and (truot_mon = true or "examPostponed" = true)
+          and cam_thi = false
+          and dinh_chi = false
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          and (${trainingObjectTypeId}::TEXT IS NULL
+            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+            )
+          and (${trainingMajorId}::TEXT IS NULL
+            OR "trainingMajorId" = ${trainingMajorId}
+            )
+          and (${trainingCourseId}::TEXT IS NULL
+            OR trainingCourseId = ${trainingCourseId}
+            )
+          and (${search}::TEXT IS NULL
+            OR code ILIKE ${`%${search}%`}
+            OR name ILIKE ${`%${search}%`}
+            )
+    `
+    return c.json({ data: res, count: countRaw[0]?.count }, 200)
+})
+
+app.openapi(openSubjectClassReExamStudents, async (c) => {
+    const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
+        c.req.valid('query')
+
+    type Result = {
+        studentId: string
+        diem_cuoi: number | null
+        withdrew: boolean
+        exempted: boolean
+        hoan_thi: boolean
+        ly_do_hoan_thi: string | null
+        truot_mon: boolean
+    }[]
+
+    const res = await prisma.$queryRaw<Result>`
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               "UP"."fullname",
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                             as trainingCourseId,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                                  as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted                                                                                      as mien_thi,
+                               SSS."examPostponed"                                                                               as hoan_thi,
+                               SSS."examPostponedReason"                                                                         as ly_do_hoan_thi,
+                               SSS."examBanned"                                                                                  as cam_thi,
+                               SSS."examBannedReason"                                                                            as ly_do_cam_thi,
+                               SSS.suspended                                                                                     as dinh_chi,
+                               SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
+                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                               TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                                  TC."scoreToPassConditional"                                    as truot_mon,
+                               SC."code"                                                                                         as ma_lop_mon_hoc,
+                               Sem."name"                                                                                        as ky_hoc,
+                               Sch."name"                                                                                        as nam_hoc,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
+                                 inner join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        where TBS."subjectId" = sv.id)
+        select "studentId",
+               diem_cuoi,
+               withdrew,
+               mien_thi,
+               hoan_thi,
+               ly_do_hoan_thi,
+               cam_thi,
+               ly_do_cam_thi,
+               dinh_chi,
+               ly_do_dinh_chi,
+               truot_mon,
+               ky_hoc,
+               nam_hoc
+        from mon_no
+        where rn = 1
+          and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
+          and withdrew = false -- rút khỏi lớp
+          and mien_thi = false -- miễn học
           and (
             ${trainingObjectTypeId}::TEXT IS NULL
                 OR "trainingObjectTypeId" = ${trainingObjectTypeId}

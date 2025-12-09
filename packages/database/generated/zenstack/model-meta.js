@@ -9787,6 +9787,12 @@ const metadata = {
                     name: "renderPath",
                     type: "String",
                     isOptional: true,
+                }, outputStandardOnCurriculum: {
+                    name: "outputStandardOnCurriculum",
+                    type: "OutputStandardOnCurriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'curriculumVersion',
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -11695,12 +11701,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
-                }, students: {
-                    name: "students",
-                    type: "Student",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
@@ -13055,6 +13055,21 @@ const metadata = {
                     name: "englishName",
                     type: "String",
                     isOptional: true,
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'certificates',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "outputStandardId" },
+                }, outputStandardId: {
+                    name: "outputStandardId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'outputStandard',
                 }, archivedCertificate: {
                     name: "archivedCertificate",
                     type: "ArchivedCertificate",
@@ -13473,6 +13488,160 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        outputStandard: {
+            name: 'OutputStandard', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OutputStandard$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, certificates: {
+                    name: "certificates",
+                    type: "Certificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                }, outputStandardOnCurriculum: {
+                    name: "outputStandardOnCurriculum",
+                    type: "OutputStandardOnCurriculum",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'outputStandard',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        outputStandardOnCurriculum: {
+            name: 'OutputStandardOnCurriculum', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OutputStandardOnCurriculum$createdBy,
+                }, outputStandardId: {
+                    name: "outputStandardId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'outputStandard',
+                }, outputStandard: {
+                    name: "outputStandard",
+                    type: "OutputStandard",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'outputStandardOnCurriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "outputStandardId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'curriculumVersion',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'outputStandardOnCurriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, isRequired: {
+                    name: "isRequired",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, semesterIndex: {
+                    name: "semesterIndex",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, outputStandardId_curriculumVersionId: {
+                    name: "outputStandardId_curriculumVersionId",
+                    fields: ["outputStandardId", "curriculumVersionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         student: {
             name: 'Student', fields: {
                 id: {
@@ -13672,21 +13841,6 @@ const metadata = {
                     backLink: 'educationAndTraining',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'students',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
                 }, registrationArea: {
                     name: "registrationArea",
                     type: "DM_KhuVuc_DiaLy",
@@ -20630,10 +20784,6 @@ const metadata = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$Exam$createdBy,
-                }, status: {
-                    name: "status",
-                    type: "ExamStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
@@ -25920,6 +26070,12 @@ function $default$ScoreConvert$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$LoadCategory$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$OutputStandard$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$OutputStandardOnCurriculum$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$Student$createdBy(user) {

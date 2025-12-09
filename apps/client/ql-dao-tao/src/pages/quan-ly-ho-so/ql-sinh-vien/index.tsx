@@ -1,5 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import {  InfoIcon } from 'lucide-react'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
@@ -12,6 +11,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
     FixedClass,
+    Prisma,
     TrainingCourse,
     TrainingField,
     TrainingMajor,
@@ -32,7 +32,7 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookCheckIcon, EyeIcon } from 'lucide-react'
+import { BookCheckIcon, InfoIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -66,13 +66,9 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const where: any = useMemo(
+    const where: Prisma.StudentWhereInput = useMemo(
         () => ({
-            // ...(filters.trainingObjectTypes && {
-            //     trainingObjectTypeId: { in: filters.trainingObjectTypes },
-            // }),
-            trainingObjectTypeId,
-            ...(filters.code && filters.code !== ''
+            ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
@@ -80,9 +76,7 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...((filters.name && filters.name !== '') ||
-            (filters.rank && filters.rank !== '') ||
-            (filters.phone && filters.phone !== '')
+            ...(filters.name || filters.rank || filters.phone
                 ? {
                       userProfile: {
                           OR: [
@@ -139,7 +133,7 @@ export default function UserProfilePageDs() {
                           in: filters.curriculumVersionParallel,
                       },
                   }
-                : undefined),
+                : {}),
             ...(filters.fixedClass
                 ? {
                       fixedClassId: {
@@ -167,7 +161,13 @@ export default function UserProfilePageDs() {
                           trainingCourseId: filters.trainingCourseId,
                       },
                   }
-                : {}),
+                : {
+                      fixedClass: {
+                          trainingCourse: {
+                              trainingObjectTypeId,
+                          },
+                      },
+                  }),
             ...(filters.trainingMajors || filters.trainingField
                 ? {
                       fixedClass: {
@@ -202,15 +202,13 @@ export default function UserProfilePageDs() {
         where,
         include: {
             userProfile: {
-                include: {
-                    rank: true,
-                },
+                include: { rank: true },
             },
-            trainingObjectType: true,
             fixedClass: {
                 include: {
                     trainingCourse: {
                         include: {
+                            trainingObjectType: true,
                             scoreConverts: true,
                         },
                     },
@@ -474,25 +472,25 @@ export default function UserProfilePageDs() {
                                         ? record.userProfile?.rank?.sTen
                                         : '',
                             },
-                            {
-                                title: 'ĐTĐT',
-                                align: 'center',
-                                width: 150,
-                                // type: 'select',
-                                dataIndex: 'trainingObjectTypes',
-                                // options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
-                                //     label: item.name,
-                                //     value: item.id,
-                                // })),
-                                render: (__, record: any) =>
-                                    record?.trainingObjectType
-                                        ? record?.trainingObjectType?.name
-                                        : '',
-                            },
+                            // {
+                            //     title: 'ĐTĐT',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     // type: 'select',
+                            //     dataIndex: 'trainingObjectTypes',
+                            //     // options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
+                            //     //     label: item.name,
+                            //     //     value: item.id,
+                            //     // })),
+                            //     render: (__, record: any) =>
+                            //         record?.trainingObjectType
+                            //             ? record?.trainingObjectType?.name
+                            //             : '',
+                            // },
                             {
                                 title: 'Lớp',
                                 align: 'center',
-                                width: 200,
+                                width: 120,
                                 dataIndex: 'fixedClass',
                                 type: 'select',
                                 options: fixedClassData.map((item: FixedClass) => ({
@@ -501,10 +499,11 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    const fixedClass = `${record.fixedClass?.code || ''} - ${
-                                        record.fixedClass?.name
-                                    }`
-                                    return fixedClass || ''
+                                    return (
+                                        <Tooltip title={record.fixedClass?.name}>
+                                            {record.fixedClass?.code}
+                                        </Tooltip>
+                                    )
                                 },
                             },
                             {
@@ -553,7 +552,7 @@ export default function UserProfilePageDs() {
                                 },
                             },
                             {
-                                title: 'CTĐT',
+                                title: <Tooltip title="Chương trình đào tạo">CTĐT</Tooltip>,
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 width: 180,

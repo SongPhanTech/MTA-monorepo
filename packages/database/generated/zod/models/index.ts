@@ -127,6 +127,8 @@ export * from './Award.schema';
 export * from './DiplomaType.schema';
 export * from './ScoreConvert.schema';
 export * from './LoadCategory.schema';
+export * from './OutputStandard.schema';
+export * from './OutputStandardOnCurriculum.schema';
 export * from './Student.schema';
 export * from './StudentSemesterResult.schema';
 export * from './StudentYearResult.schema';

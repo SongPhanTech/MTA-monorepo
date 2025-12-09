@@ -50,6 +50,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
+import type { UnitInfoOldData } from './unitInfoOldData'
 
 export interface UnitInfo {
     /** @nullable */
@@ -68,6 +69,8 @@ export interface UnitInfo {
     RowStatus?: number | null
     /** @nullable */
     RowIndex?: number | null
+    /** @nullable */
+    OldData?: UnitInfoOldData
     Id?: string
     /** @nullable */
     sTenDayDu?: string | null

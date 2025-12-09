@@ -7,7 +7,7 @@ import ViewIcon from '@components/icons/view'
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { ExamStatus, type Question } from '@workspace/db'
+import type { Question } from '@workspace/db'
 import {
     useCountExamBank,
     useDeleteExamBank,
@@ -198,11 +198,6 @@ export default function ExamBank({ id }: ExamBankProps) {
         },
     }
 
-    const isDraft = useMemo(() => {
-        if (!id) return true
-        return initialValue?.status === ExamStatus.DRAFT
-    }, [id, initialValue?.status])
-
     return (
         <div>
             {examBankData.length > 0 ? (
@@ -211,17 +206,8 @@ export default function ExamBank({ id }: ExamBankProps) {
                         <Col span={24}>
                             <Row gutter={[16, 16]} align="top" justify="end">
                                 <Col span={12}>
-                                    <strong>
-                                        {!isDraft &&
-                                            'Chỉ có thể sửa khi kỳ thi ở trạng thái: Bản nháp'}
-                                    </strong>
-                                </Col>
-                                <Col span={12}>
                                     <Flex justify="end" gap={4}>
-                                        <Button
-                                            onClick={() => onOpenModalSinhDeThiTuDong(id)}
-                                            disabled={!isDraft}
-                                        >
+                                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
                                             <Shuffle />
                                             Sinh đề tự động
                                         </Button>
@@ -233,7 +219,6 @@ export default function ExamBank({ id }: ExamBankProps) {
                                                     id: '',
                                                 })
                                             }}
-                                            disabled={!isDraft}
                                         >
                                             <BookPlus />
                                             Thêm đề thi
@@ -327,14 +312,12 @@ export default function ExamBank({ id }: ExamBankProps) {
                                                                     id: record.id,
                                                                 })
                                                             }
-                                                            disabled={!isDraft}
                                                         />
                                                         <DeleteIcon
                                                             popConfirm={{
                                                                 onConfirm: () =>
                                                                     handleDeleteExamBank(record.id),
                                                             }}
-                                                            disabled={!isDraft}
                                                         />
                                                     </Row>
                                                 )
@@ -379,7 +362,6 @@ export default function ExamBank({ id }: ExamBankProps) {
                         })()}
                         examCode={examBankModal.examCode}
                         examId={id}
-                        disabled={!isDraft}
                     />
                 </>
             ) : (
@@ -389,7 +371,7 @@ export default function ExamBank({ id }: ExamBankProps) {
                         Chưa có đề thi nào. Vui lòng thêm mới đề thi.
                     </span>
                     <div className="flex gap-2">
-                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)} disabled={!isDraft}>
+                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
                             <Shuffle />
                             Sinh đề tự động
                         </Button>

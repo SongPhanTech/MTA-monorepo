@@ -6,7 +6,6 @@ import {
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useFindManyUserProfile,
     useFindUniqueStudent,
     useFindUniqueUserProfile,
@@ -30,6 +29,8 @@ export type StudentModalProps = {
 }
 
 const PutStudentModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const [form] = Form.useForm<PutStudentProfile>()
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: 'PutStudentModal',
@@ -39,21 +40,24 @@ const PutStudentModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
+        where: { trainingCourse: { trainingObjectTypeId } },
         include: {
             trainingCourse: true,
             curriculumVersion: true,
         },
     })
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: studentData } = useFindUniqueStudent(
         {
             where: { id },
             include: {
                 userProfile: true,
-                trainingObjectType: true,
                 fixedClass: {
                     include: {
-                        trainingCourse: true,
+                        trainingCourse: {
+                            include: {
+                                trainingObjectType: true,
+                            },
+                        },
                     },
                 },
             },
@@ -63,9 +67,9 @@ const PutStudentModal = () => {
         }
     )
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        where: { trainingObjectTypeId },
         orderBy: { name: 'asc' },
     })
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId },
@@ -191,7 +195,6 @@ const PutStudentModal = () => {
                     data: {
                         userProfileId: cccdUserProfileData?.id,
                         fixedClassId: output.fixedClassId,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
@@ -210,7 +213,6 @@ const PutStudentModal = () => {
                     data: {
                         userProfileId: cccdUserProfileData?.id,
                         fixedClassId: output.fixedClassId,
-                        trainingObjectTypeId: output.trainingObjectTypeId,
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
@@ -253,7 +255,6 @@ const PutStudentModal = () => {
             form.setFieldsValue({
                 // Student fields với ID
                 code: studentData.code,
-                trainingObjectTypeId: studentData.trainingObjectTypeId ?? trainingObjectTypeId,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
@@ -267,7 +268,7 @@ const PutStudentModal = () => {
                 idCardNumber: studentData.userProfile?.idCardNumber,
             })
         }
-    }, [studentData, form, trainingObjectTypeId])
+    }, [studentData, form])
 
     // Effect để fill thông tin khi có dữ liệu từ API
     useEffect(() => {
@@ -286,11 +287,6 @@ const PutStudentModal = () => {
             title={id ? 'Chỉnh sửa sinh viên, học viên' : 'Thêm sinh viên, học viên'}
             className="w-[1000px]"
             layout="vertical"
-            formProps={{
-                initialValues: {
-                    trainingObjectTypeId,
-                },
-            }}
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
@@ -329,20 +325,13 @@ const PutStudentModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="trainingObjectTypeId"
-                            label="Đối tượng đào tạo"
-                            required
-                        >
+                        <FormItem form={form} name="trainingCourseId" label="Khoá">
                             <Select
-                                placeholder="Chọn đối tượng đào tạo"
-                                value={trainingObjectTypeId}
-                                options={trainingObjectTypeData.map((value) => ({
+                                placeholder="Chọn khoá"
+                                options={filteredTrainingCourses.map((value) => ({
                                     value: value.id,
                                     label: value.name,
                                 }))}
-                                disabled
                             />
                         </FormItem>
                     </Col>
@@ -355,17 +344,6 @@ const PutStudentModal = () => {
                                 options={filteredFixedClasses.map((value) => ({
                                     value: value.id,
                                     label: `${value.code}-${value.name}`,
-                                }))}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="trainingCourseId" label="Khoá">
-                            <Select
-                                placeholder="Chọn khoá"
-                                options={filteredTrainingCourses.map((value) => ({
-                                    value: value.id,
-                                    label: value.name,
                                 }))}
                             />
                         </FormItem>
