@@ -161,31 +161,31 @@ app.openapi(importLecturer, async (c) => {
 
         const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
         if (existingProfileId) {
-            const res = await putDMNhanViens(
-                {
-                    Id: existingProfileId,
-                    sMa: lecturer.code,
-                    bLaGiangVien: true,
-                    bLaCanBoNhanVien: true,
-                    dNgaySinh: lecturer.dateOfBirth
-                        ? new Date(lecturer.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: lecturer.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: lecturer.fullname,
-                    sSDTDiDong: lecturer.phoneNumber ?? '',
-                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                    sEmail: lecturer.email,
-                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+            const payload = {
+                Id: existingProfileId,
+                sMa: lecturer.code,
+                bLaGiangVien: true,
+                bLaCanBoNhanVien: true,
+                dNgaySinh: lecturer.dateOfBirth
+                    ? new Date(lecturer.dateOfBirth)?.toISOString()
+                    : null,
+                sCCCD: lecturer.idCardNumber,
+                sHoVaDem: profileData.lastName,
+                sTen: profileData.firstName,
+                sTenDayDu: lecturer.fullname,
+                sSDTDiDong: lecturer.phoneNumber ?? '',
+                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                sEmail: lecturer.email,
+                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+            }
+            console.log(payload)
+
+            const res = await putDMNhanViens(payload, {
+                headers: {
+                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                 },
-                {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                }
-            )
+            })
 
             const existing = existingLecturerMap.get(lecturer.code)
             if (existing) {
@@ -221,32 +221,32 @@ app.openapi(importLecturer, async (c) => {
             }
         } else {
             // const profileId = crypto.randomUUID()
-            const res = await postDMNhanViens(
-                {
-                    // Id: profileId,
-                    sMa: lecturer.idCardNumber,
-                    bLaGiangVien: true,
-                    bLaCanBoNhanVien: true,
-                    bLaTaiKhoan: true,
-                    dNgaySinh: lecturer.dateOfBirth
-                        ? new Date(lecturer.dateOfBirth)?.toISOString()
-                        : null,
-                    sCCCD: lecturer.idCardNumber,
-                    sHoVaDem: profileData.lastName,
-                    sTen: profileData.firstName,
-                    sTenDayDu: lecturer.fullname,
-                    sSDTDiDong: lecturer.phoneNumber ?? '',
-                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                    sEmail: lecturer.email,
-                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+            const payload = {
+                // Id: profileId,
+                sMa: lecturer.idCardNumber,
+                bLaGiangVien: true,
+                bLaCanBoNhanVien: true,
+                bLaTaiKhoan: true,
+                dNgaySinh: lecturer.dateOfBirth
+                    ? new Date(lecturer.dateOfBirth)?.toISOString()
+                    : null,
+                sCCCD: lecturer.idCardNumber,
+                sHoVaDem: profileData.lastName,
+                sTen: profileData.firstName,
+                sTenDayDu: lecturer.fullname,
+                sSDTDiDong: lecturer.phoneNumber ?? '',
+                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                sEmail: lecturer.email,
+                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+            }
+            console.log(payload)
+
+            const res = await postDMNhanViens(payload, {
+                headers: {
+                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                 },
-                {
-                    headers: {
-                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                    },
-                }
-            )
+            })
 
             // @ts-expect-error
             console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
