@@ -8,7 +8,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingType,
     useFindManyLoadCategory,
-    useUpdateTrainingType,
+    useUpdateLoadCategory
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -72,11 +72,11 @@ export default function NoiDungTinhTaiPage() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingType } = useUpdateTrainingType()
+    const { mutateAsync: updateLoadCategory } = useUpdateLoadCategory()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingType({
+            await updateLoadCategory({
                 where: {
                     id,
                 },

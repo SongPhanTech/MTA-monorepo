@@ -8,7 +8,7 @@ import {
     useFindUniqueLoadCategory,
     useUpdateLoadCategory,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, Checkbox } from 'antd'
+import { Col, Form, Input, message, Radio, Checkbox, InputNumber } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -92,6 +92,11 @@ const PutNoiDungTinhTaiModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa nội dung tính tải' : 'Thêm mới nội dung tính tải'}
             className="w-[60vw]"
+            formProps={{
+                initialValues: {
+                    isOverageCalculated: false,
+                },
+            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên nội dung tính tải" required>
@@ -110,7 +115,7 @@ const PutNoiDungTinhTaiModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="standardHours" label="Số quy giờ chuẩn" required>
-                    <Input placeholder="Nhập số quy giờ chuẩn" />
+                    <InputNumber className="w-full" placeholder="Nhập số quy giờ chuẩn" />
                 </FormItem>
             </Col>
             <Col span={12}>
