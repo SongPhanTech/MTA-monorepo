@@ -9,6 +9,8 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, message, Tree } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
+import Select from '@components/commons/select'
 
 export type PutEvaluationPeriod = EvaluationPeriod & {
     councilIds: string[]
@@ -52,34 +54,45 @@ const PutTieuChuanTieuChi = () => {
     type TreeData = typeof treeData
     const [checkedKeys, setCheckedKeys] = useState<string[]>([])
     const [catalogSelected, setCatalogSelected] = useState<TreeData>([])
+    const [selectedCatalogType, setSelectedCatalogType] = useState<
+        $Enums.StandardCatalogType | undefined
+    >(undefined)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: dataCatalog } = useFindManyStandardCatalog({
-        select: {
-            id: true,
-            name: true,
-            criteria: {
-                select: {
-                    id: true,
-                    name: true,
-                    requirementCriterionCatalog: {
-                        select: {
-                            id: true,
-                            name: true,
-                            questions: true,
-                        },
-                        orderBy: {
-                            order: 'asc',
+    const { data: dataCatalog } = useFindManyStandardCatalog(
+        {
+            where: {
+                objectType: selectedCatalogType,
+            },
+            select: {
+                id: true,
+                name: true,
+                criteria: {
+                    select: {
+                        id: true,
+                        name: true,
+                        requirementCriterionCatalog: {
+                            select: {
+                                id: true,
+                                name: true,
+                                questions: true,
+                            },
+                            orderBy: {
+                                order: 'asc',
+                            },
                         },
                     },
-                },
-                orderBy: {
-                    order: 'asc',
+                    orderBy: {
+                        order: 'asc',
+                    },
                 },
             },
         },
-    })
+        {
+            enabled: !!selectedCatalogType,
+        }
+    )
 
     const { data: existingStandards } = useFindManyStandardPeriod(
         {
@@ -165,6 +178,12 @@ const PutTieuChuanTieuChi = () => {
         }
     }, [treeData, id, existingStandards, dataCatalog])
 
+    // Reset tree khi đổi loại kho
+    useEffect(() => {
+        setCheckedKeys([])
+        setCatalogSelected([])
+    }, [])
+
     const onCheck = (checked: string[]) => {
         setCheckedKeys(checked)
         const filtered = filterTree(treeData, checked as string[])
@@ -184,6 +203,18 @@ const PutTieuChuanTieuChi = () => {
     }
 
     const onOk = async () => {
+        // Validate: Bắt buộc phải chọn kho tiêu chuẩn
+        if (!selectedCatalogType) {
+            message.error('Vui lòng chọn kho tiêu chuẩn')
+            return
+        }
+
+        // Validate: Bắt buộc phải chọn ít nhất một tiêu chuẩn
+        if (catalogSelected.length === 0) {
+            message.error('Vui lòng chọn ít nhất một tiêu chuẩn')
+            return
+        }
+
         const standards = catalogSelected.map((s, i1) => {
             const standardId = createId()
             const criteria = s.children.map((c, i2) => {
@@ -396,23 +427,37 @@ const PutTieuChuanTieuChi = () => {
             onFinish={onOk}
         >
             <Col span={24}>
-                <Form.Item label="Tiêu chuẩn đánh giá của đợt" required>
-                    <div className="mb-2 flex gap-2">
-                        <Button type="link" onClick={handleSelectAll} className="p-0">
-                            Chọn tất cả
-                        </Button>
-                        <Button type="link" onClick={handleDeselectAll} className="p-0" danger>
-                            Bỏ chọn tất cả
-                        </Button>
-                    </div>
-                    <Tree
-                        checkable
-                        checkedKeys={checkedKeys}
-                        treeData={treeData}
-                        onCheck={(checked) => onCheck(checked as string[])}
+                <Form.Item label="Chọn kho tiêu chuẩn" required>
+                    <Select
+                        placeholder="Chọn loại kho"
+                        value={selectedCatalogType}
+                        onChange={setSelectedCatalogType}
+                        options={STANDARD_CATALOG_TYPE_OPTIONS}
+                        allowClear
                     />
                 </Form.Item>
             </Col>
+
+            {selectedCatalogType && (
+                <Col span={24}>
+                    <Form.Item label="Tiêu chuẩn đánh giá của đợt" required>
+                        <div className="mb-2 flex gap-2">
+                            <Button type="link" onClick={handleSelectAll} className="p-0">
+                                Chọn tất cả
+                            </Button>
+                            <Button type="link" onClick={handleDeselectAll} className="p-0" danger>
+                                Bỏ chọn tất cả
+                            </Button>
+                        </div>
+                        <Tree
+                            checkable
+                            checkedKeys={checkedKeys}
+                            treeData={treeData}
+                            onCheck={(checked) => onCheck(checked as string[])}
+                        />
+                    </Form.Item>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

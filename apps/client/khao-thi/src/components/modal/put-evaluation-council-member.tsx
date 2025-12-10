@@ -174,7 +174,6 @@ const PutEvaluationCouncilMember = () => {
             <Col span={24}>
                 <FormItem form={form} name="role" label="Chức vụ trong hội đồng" required>
                     <Select
-                        mode="multiple"
                         maxTagCount={'responsive'}
                         placeholder="Chọn chức vụ trong hội đồng"
                         options={EVALUATION_MEMBER_ROLE}
@@ -184,6 +183,7 @@ const PutEvaluationCouncilMember = () => {
             <Col span={24}>
                 <FormItem form={form} name="lecturerId" label="Giảng viên">
                     <Select
+                        mode="multiple"
                         placeholder="Chọn giảng viên"
                         options={filteredLecturers.map((i) => {
                             const academicRank = i.userProfile?.academicRankType?.sTen || ''

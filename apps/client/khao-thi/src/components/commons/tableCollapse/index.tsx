@@ -172,7 +172,7 @@ const TableCollapse = <
                 title: 'STT',
                 align: 'center',
                 width: 60,
-                fixed: 'left',
+                // fixed: 'left',
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
@@ -312,9 +312,6 @@ const TableCollapse = <
                 }
                 .ant-table-row > td:first-child:not(:hover) {
                     background-color: white;
-                }
-                .ant-table-content {
-                    overflow: visible !important;
                 }
             `}
             </style>
