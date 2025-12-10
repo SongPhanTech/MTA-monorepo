@@ -36,6 +36,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     questionBank: z.record(z.string(), z.unknown()).optional(),
     subjectVersion: z.record(z.string(), z.unknown()),
+    semester: z.record(z.string(), z.unknown()),
     subjectClass: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
     testStructureRules: z.array(z.unknown()).optional(),
@@ -45,6 +46,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     questionBankId: z.string().nullish(),
     subjectVersionId: z.string(),
+    semesterId: z.string(),
 }
 );
 

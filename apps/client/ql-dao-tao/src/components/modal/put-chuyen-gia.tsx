@@ -28,30 +28,46 @@ const PutExpertProfile = () => {
         tag: 'PutExpertProfile',
         onClose: form.resetFields,
     })
+    const { showSpinner, hideSpinner } = useSpinner()
+    const [isInternal, setIsInternal] = useState(true)
+
+    const [search, setSearch] = useState('')
     const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
     const { data: expert } = useFindUniqueExpertProfile({ where: { id } }, { enabled: !!id })
 
-    const [isInternal, setIsInternal] = useState(true)
-
-    const { showSpinner, hideSpinner } = useSpinner()
     const { data: lecturer = [] } = useFindManyLecturer({
+        where: {
+            ...(search
+                ? {
+                      OR: [
+                          { code: { contains: search, mode: 'insensitive' } },
+                          {
+                              userProfile: {
+                                  fullname: { contains: search, mode: 'insensitive' },
+                              },
+                          },
+                          {
+                              organization: {
+                                  sTen: { contains: search, mode: 'insensitive' },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+        },
         include: {
             userProfile: true,
+            organization: true,
         },
+        take: 200,
     })
 
     const { data: selectedLecturer } = useFindUniqueLecturer(
         {
-            where: {
-                id: selectedLecturerId,
-            },
-            include: {
-                userProfile: true,
-            },
+            where: { id: selectedLecturerId },
+            include: { userProfile: true },
         },
-        {
-            enabled: !!selectedLecturerId,
-        }
+        { enabled: !!selectedLecturerId }
     )
 
     useEffect(() => {
@@ -161,11 +177,24 @@ const PutExpertProfile = () => {
                 <Col span={24}>
                     <FormItem form={form} name="lecturerId" label="Chuyên gia hướng dẫn" required>
                         <Select
-                            placeholder="Chọn chuyên gia hướng dẫn"
-                            options={lecturer.map((item) => ({
-                                label: `${item.code ? `${item.code} -` : ''} ${item?.userProfile.fullname}`,
-                                value: item.id,
-                            }))}
+                            placeholder="Chọn giảng viên"
+                            showSearch
+                            filterOption={false}
+                            searchValue={search}
+                            onSearch={(value) => {
+                                setSearch(value)
+                            }}
+                            options={lecturer.map((item) => {
+                                const label = [
+                                    item.code,
+                                    item?.userProfile.fullname,
+                                    item?.organization?.sTen,
+                                ].join(' - ')
+                                return {
+                                    label,
+                                    value: item.id,
+                                }
+                            })}
                             allowClear
                             onChange={(value) => {
                                 setSelectedLecturerId(value)
@@ -224,7 +253,7 @@ const PutExpertProfile = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="bankName" label="Ngân hàng" required>
-                    <Input placeholder="Nhập ngân hàng" />
+                    <Input placeholder="Nhập tên ngân hàng" />
                 </FormItem>
             </Col>
             {!isInternal && (

@@ -2,16 +2,37 @@ import { PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-await prisma.userProfile.updateMany({
+await prisma.examRoom.deleteMany({
     where: {
-        educationAndTraining: { some: {} },
+        exam: {
+            subjectClass: {
+                none: {},
+            },
+        },
     },
-    data: { bLaHocVien: true },
 })
 
-await prisma.userProfile.updateMany({
+await prisma.exam.deleteMany({
     where: {
-        lecturer: {},
+        subjectClass: {
+            none: {},
+        },
     },
-    data: { bLaGiangVien: true, bLaCanBoNhanVien: true, bLaNguoiDung: true },
 })
+
+const exams = await prisma.exam.findMany({
+    include: {
+        subjectClass: true,
+    },
+})
+
+await Promise.all(
+    exams.map((exam) => {
+        return prisma.exam.update({
+            where: { id: exam.id },
+            data: {
+                semesterId: exam.subjectClass[0]?.semesterId,
+            },
+        })
+    })
+)

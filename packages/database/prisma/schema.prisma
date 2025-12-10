@@ -2606,6 +2606,7 @@ model Semester {
   planTraining            PlanTraining[]
   survey                  Survey[]
   evaluationPeriod        EvaluationPeriod[]
+  exam                    Exam[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -2913,7 +2914,7 @@ model SubjectVersion {
   credit                   Int
   week                     Int?
   /// số tiết
-  period                   Int                     @default(0)
+  period                   Int?
   /// số tiết TKB
   schedulePeriod           Int?
   numberOfTheory           Int?
@@ -5377,6 +5378,8 @@ model Exam {
   session            Int                 @default(1)
   subjectVersionId   String
   subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  semester           Semester            @relation(fields: [semesterId], references: [id])
+  semesterId         String
   /// Lớp môn học
   subjectClass       SubjectClass[]
   examBank           ExamBank[]

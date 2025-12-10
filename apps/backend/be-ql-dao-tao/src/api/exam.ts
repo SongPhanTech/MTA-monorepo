@@ -115,6 +115,7 @@ app.openapi(createNewExamList, async (c) => {
             data: groupedExams.map(({ examId, subjectId }) => ({
                 id: examId,
                 subjectVersionId: subjectId,
+                semesterId,
             })),
         })
         for (const { classIds, examId } of groupedExams) {
@@ -245,6 +246,7 @@ app.openapi(createNewReExamList, async (c) => {
             data: groupedExams.map(({ examId, subjectId }) => ({
                 id: examId,
                 subjectVersionId: subjectId,
+                semesterId,
             })),
         })
 
@@ -337,8 +339,13 @@ app.openapi(mergeExam, async (c) => {
             id: true,
             examId: true,
             subjectId: true,
+            semesterId: true,
         },
     })
+
+    if (classes.length === 0) {
+        return c.json({ success: false, message: 'Không có lớp học cần ghép' }, 400)
+    }
 
     const subjectVersionIds = [...new Set(classes.map((cls) => cls.subjectId))]
     if (subjectVersionIds.length > 1) {
@@ -352,6 +359,7 @@ app.openapi(mergeExam, async (c) => {
     }
 
     const subjectVersionId = subjectVersionIds[0] as string
+    const semesterId = classes[0]?.examId as string
 
     const newExamId = createId()
 
@@ -359,7 +367,7 @@ app.openapi(mergeExam, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.create({
-            data: { id: newExamId, subjectVersionId },
+            data: { id: newExamId, subjectVersionId, semesterId },
         })
         await tx.subjectClass.updateMany({
             where: { id: { in: classIds } },
@@ -433,8 +441,13 @@ app.openapi(unmergeExam, async (c) => {
         select: {
             id: true,
             subjectId: true,
+            semesterId: true,
         },
     })
+
+    if (classes.length === 0) {
+        return c.json({ success: false, message: 'Không có lớp học nào cần tách' }, 400)
+    }
 
     if (classes.length === 1) {
         return c.json(
@@ -447,6 +460,7 @@ app.openapi(unmergeExam, async (c) => {
     }
 
     const subjectVersionId = classes?.[0]?.subjectId as string
+    const semesterId = classes?.[0]?.semesterId as string
 
     const newExams = classes.map((cls) => ({
         examId: createId(),
@@ -456,15 +470,14 @@ app.openapi(unmergeExam, async (c) => {
     await prisma.$transaction(async (tx) => {
         await tx.subjectClass.updateMany({
             where: { id: { in: classes.map((c) => c.id) } },
-            data: {
-                examId: null,
-            },
+            data: { examId: null },
         })
         for (const { examId, classId } of newExams) {
             await tx.exam.create({
                 data: {
                     id: examId,
                     subjectVersionId,
+                    semesterId,
                     subjectClass: {
                         connect: { id: classId },
                     },
