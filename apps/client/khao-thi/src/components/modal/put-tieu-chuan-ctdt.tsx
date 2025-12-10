@@ -14,7 +14,10 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutStandardCatalogType = StandardCatalog
 const PutStandardCatalog = () => {
     const [form] = Form.useForm<PutStandardCatalogType>()
-    const { isOpen, onClose, input } = useDisclosure<{ id: string; count: number }>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        count: number
+    }>({
         tag: 'PutStandardCatalog',
         onClose: form.resetFields,
     })
@@ -29,6 +32,7 @@ const PutStandardCatalog = () => {
             const data = {
                 order: output.order,
                 name: output.name.trim(),
+                objectType: 'PROGRAM' as const,
             }
             if (input?.id) {
                 await updateStandardCatalog({

@@ -19,4 +19,5 @@ export type GetSurveysOfProfileParams = {
     taken?: boolean
     lecturerName?: string
     subjectClassName?: string
+    semesterId?: string
 }

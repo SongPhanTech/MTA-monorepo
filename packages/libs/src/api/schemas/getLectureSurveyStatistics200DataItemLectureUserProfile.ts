@@ -26,6 +26,8 @@ export type GetLectureSurveyStatistics200DataItemLectureUserProfile = {
     /** @nullable */
     bLaNguoiDung?: boolean | null
     /** @nullable */
+    bLaGiangVien?: boolean | null
+    /** @nullable */
     bLaCanBoNhanVien?: boolean | null
     /** @nullable */
     bLaHocVien?: boolean | null

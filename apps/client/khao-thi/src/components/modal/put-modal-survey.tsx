@@ -31,6 +31,7 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useSemesterStore } from '@workspace/ui'
 
 const { Step } = Steps
 
@@ -65,7 +66,11 @@ interface Choices {
 
 const PutSurveyModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
-    const { isOpen, onClose, input } = useDisclosure<{ id: string; type: string }>({
+    const { id: semesterIdStore } = useSemesterStore()
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        type: string
+    }>({
         tag: 'PutSurveyModal',
         onClose: form.resetFields,
     })
@@ -513,6 +518,7 @@ const PutSurveyModal = () => {
             )
             form.setFieldsValue({
                 ...survey,
+                semesterId: semesterIdStore,
                 startDate: dayjs(survey.startDate),
                 endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
                 surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),

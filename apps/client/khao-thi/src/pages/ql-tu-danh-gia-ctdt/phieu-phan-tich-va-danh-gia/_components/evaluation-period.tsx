@@ -10,6 +10,7 @@ import {
     useFindManyEvaluationPeriod,
     useFindUniqueLecturer,
 } from '@workspace/db/hooks'
+import { useSemesterStore } from '@workspace/ui'
 import { Col, Row, Tag } from 'antd'
 import { type Key, useMemo, useState } from 'react'
 
@@ -19,6 +20,7 @@ export default function EvaluationPeriod() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+    const { id: semesterId } = useSemesterStore()
 
     const { data: lecturer } = useFindUniqueLecturer(
         {
@@ -67,6 +69,7 @@ export default function EvaluationPeriod() {
                     },
                 },
             ],
+            ...(semesterId && { semesterId }),
         }
     }, [idProfile, lecturer?.id])
 

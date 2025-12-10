@@ -258,11 +258,7 @@ export default function CaNhanHocLai() {
                 />
             </Col>
             <Col span={2} className="text-right">
-                <Button
-                    type="primary"
-                    className="h-[32px] px-4"
-                    onClick={handleSaveStudentClass}
-                >
+                <Button type="primary" className="h-[32px] px-4" onClick={handleSaveStudentClass}>
                     Lưu
                 </Button>
             </Col>
