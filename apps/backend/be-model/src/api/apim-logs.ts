@@ -46,7 +46,7 @@ app.openapi(
             await Promise.all(
                 apis.map((api: any) =>
                     fetch(
-                        `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${api.id}`,
+                        `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
                         {
                             method: 'PUT',
                             headers: {
