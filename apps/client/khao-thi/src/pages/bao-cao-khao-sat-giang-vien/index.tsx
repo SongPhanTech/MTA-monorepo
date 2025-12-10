@@ -41,9 +41,9 @@ export default function BaoCaoGiangVien() {
         where: {
             surveys: {
                 some: {
-                  semesterId
+                    semesterId,
                 },
-            }
+            },
         },
         include: {
             surveyObjectType: true,
@@ -88,12 +88,11 @@ export default function BaoCaoGiangVien() {
             include: {
                 lecture: true,
                 subjectClass: true,
-
             },
             where: {
                 lectureId: filters?.lectureId,
                 active: true,
-                clusterSurveyId: filters?.clusterId
+                clusterSurveyId: filters?.clusterId,
             },
         },
         { enabled: !!filters?.lectureId || !!filters?.clusterId }

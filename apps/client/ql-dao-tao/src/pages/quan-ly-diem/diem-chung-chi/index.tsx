@@ -9,11 +9,11 @@ import {
     useFindManyStudent,
     useCountStudent,
 } from '@workspace/db/hooks'
-import {InfoIcon} from 'lucide-react'
+import { InfoIcon } from 'lucide-react'
 import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Modal, Row, } from 'antd'
+import { Button, Col, Flex, message, Modal, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -93,7 +93,7 @@ export default function ArchivedCertificate() {
                 },
             },
         }
-        
+
         if (filters.name && filters.name !== '') {
             conditions.OR = [
                 {
@@ -114,7 +114,7 @@ export default function ArchivedCertificate() {
                 },
             ]
         }
-        
+
         return conditions
     }, [filters])
 
@@ -265,14 +265,15 @@ export default function ArchivedCertificate() {
                                         className="ml-3"
                                         onClick={() => {
                                             if (selectedRowKeys.length === 0) {
-                                                message.warning('Vui lòng chọn ít nhất một học viên')
+                                                message.warning(
+                                                    'Vui lòng chọn ít nhất một học viên'
+                                                )
                                                 return
                                             }
                                             const studentNames = dataTable
                                                 .filter((s: any) => selectedRowKeys.includes(s.id))
-                                                .map(
-                                                    (s: any) =>
-                                                        `${s?.userProfile?.lastName || ''} ${s?.userProfile?.firstName || ''}`.trim()
+                                                .map((s: any) =>
+                                                    `${s?.userProfile?.lastName || ''} ${s?.userProfile?.firstName || ''}`.trim()
                                                 )
                                             onOpenConvertCertificate({
                                                 studentIds: selectedRowKeys as string[],
@@ -330,9 +331,7 @@ export default function ArchivedCertificate() {
                             type: 'input',
                             width: 200,
                             render: (__, record) => {
-                                return (
-                                    `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
-                                )
+                                return `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
                             },
                         },
                         {
@@ -413,7 +412,8 @@ export default function ArchivedCertificate() {
                             align: 'center',
                             fixed: 'right',
                             render: (_, record) => {
-                                const studentName = `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
+                                const studentName =
+                                    `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
                                 return (
                                     <Row className="justify-center gap-2">
                                         <InfoIcon
@@ -421,8 +421,7 @@ export default function ArchivedCertificate() {
                                                 onOpenCertificateList({
                                                     studentId: record.id,
                                                     studentName,
-                                                    certificates:
-                                                        record?.archivedCertificate || [],
+                                                    certificates: record?.archivedCertificate || [],
                                                 })
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"

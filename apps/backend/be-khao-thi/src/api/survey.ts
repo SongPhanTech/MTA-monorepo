@@ -859,10 +859,10 @@ const getSurveysByProfile = createRoute({
 
 app.openapi(getSurveysByProfile, async (c) => {
     const { id } = c.req.valid('param')
-    const { semesterId,limit = 10, page = 1, ...q } = c.req.valid('query')
+    const { semesterId, limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const profile = await prisma.userProfile.findUniqueOrThrow({
-        where: { id ,...(semesterId&&{semesterId})},
+        where: { id, ...(semesterId && { semesterId }) },
         include: {
             lecturer: true,
             staffs: true,

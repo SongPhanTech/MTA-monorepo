@@ -121,31 +121,31 @@ function TabDotKhaoSat({
         skip: (currentPage - 1) * numberOfPages,
     })
 
-       const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
-            orderBy: { startDate: 'desc' },
-            include: {
-                semesters: {
-                    orderBy: { createdAt: 'desc' },
-                },
+    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
             },
-        })
-    
-        const converData = (data: (SchoolYear & { semesters: Semester[] })[] | undefined) => {
-            return (
-                data?.map((schoolYear) => ({
-                    value: schoolYear.id,
-                    label: schoolYear.name,
-                    children:
-                        schoolYear?.semesters.map((semester) => ({
-                            value: semester.id,
-                            label: `${semester.name}`,
-                        })) || [],
-                })) || []
-            )
-        }
-    
-        // Tạo treeData từ schoolYears và semesters
-        const treeData = converData(schoolYears)
+        },
+    })
+
+    const converData = (data: (SchoolYear & { semesters: Semester[] })[] | undefined) => {
+        return (
+            data?.map((schoolYear) => ({
+                value: schoolYear.id,
+                label: schoolYear.name,
+                children:
+                    schoolYear?.semesters.map((semester) => ({
+                        value: semester.id,
+                        label: `${semester.name}`,
+                    })) || [],
+            })) || []
+        )
+    }
+
+    // Tạo treeData từ schoolYears và semesters
+    const treeData = converData(schoolYears)
 
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
@@ -240,7 +240,7 @@ function TabDotKhaoSat({
                                 dataIndex: 'name',
                                 type: 'input',
                             },
-                         
+
                             {
                                 title: 'Chủ đề KS',
                                 dataIndex: 'surveyTopicId',
@@ -274,7 +274,7 @@ function TabDotKhaoSat({
                                     )
                                 },
                             },
-                                {
+                            {
                                 title: 'Học kỳ',
                                 dataIndex: 'semesterIds',
                                 type: 'tree_select',

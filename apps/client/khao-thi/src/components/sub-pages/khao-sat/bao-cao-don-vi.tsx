@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
-import {  cn } from '@lib/utils'
+import { cn } from '@lib/utils'
 const { Title } = Typography
 function OrganizationSurveyReport({
     selectedId,

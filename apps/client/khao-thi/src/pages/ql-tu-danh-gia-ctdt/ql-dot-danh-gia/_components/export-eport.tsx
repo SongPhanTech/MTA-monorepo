@@ -28,6 +28,7 @@ export default function ExportReport({ id }: { id: string }) {
         SECRETARY: 'Thư ký',
         MEMBER: 'Thành viên',
         ADVISORY_BOARD: 'Ban tư vấn',
+        SPECIALIZED: 'nhóm chuyên trách',
     }
     const rgbToHex = (rgb: string): string | undefined => {
         const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
@@ -132,7 +133,11 @@ export default function ExportReport({ id }: { id: string }) {
                 bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 right: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
-                insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideHorizontal: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: '000000',
+                },
                 insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
             },
             rows: [headerRow, ...dataRows],
@@ -212,7 +217,11 @@ export default function ExportReport({ id }: { id: string }) {
                 bottom: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
                 right: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
-                insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+                insideHorizontal: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: '000000',
+                },
                 insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
             },
             rows: [headerRow, ...dataRows],

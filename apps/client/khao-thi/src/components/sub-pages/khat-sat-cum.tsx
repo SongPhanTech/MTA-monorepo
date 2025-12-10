@@ -77,20 +77,20 @@ function TabDotKhaoSatCum({
                       },
                   }
                 : {}),
-                ...(semesterId && {
-                    surveys: {
-                        some: {
-                            semesterId
-                        }
+            ...(semesterId && {
+                surveys: {
+                    some: {
+                        semesterId,
                     },
-                }),
+                },
+            }),
             ...(filters.semesterIds && {
                 surveys: {
-                    some:{
-                         semesterId: {
-                        in: filters.semesterIds
+                    some: {
+                        semesterId: {
+                            in: filters.semesterIds,
+                        },
                     },
-                    }
                 },
             }),
             ...(filters.surveyObjectTypeId

@@ -155,14 +155,13 @@ const DefaultLayout = ({
                         </span> */}
 
                         <div className="flex items-center">
-                             <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2">
                                 <p>Học kỳ</p>
                                 <TreeSelectSemester />
                             </div>
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <Breadcrumb items={listBreadcrumb} />
                             {/* <SelectTrainingObjectType /> */}
-                           
                         </div>
                         <HeaderApp />
                     </Header>

@@ -30,16 +30,19 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
     const [selectedSubjectClassIds, setSelectedSubjectClassIds] = useState<string[]>([])
 
     // Lấy danh sách sinh viên
-    const { data: students = [] } = useFindManyStudent({
-        where: {
-            id: {
-                in: input?.studentIds || [],
+    const { data: students = [] } = useFindManyStudent(
+        {
+            where: {
+                id: {
+                    in: input?.studentIds || [],
+                },
+            },
+            include: {
+                userProfile: true,
             },
         },
-        include: {
-            userProfile: true,
-        },
-    }, { enabled: !!input?.studentIds && input.studentIds.length > 0 })
+        { enabled: !!input?.studentIds && input.studentIds.length > 0 }
+    )
 
     // Lấy danh sách chứng chỉ
     const { data: certificates = [] } = useFindManyCertificate({
@@ -68,23 +71,23 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
     const availableSubjectClasses = useMemo(() => {
         if (!selectedCertificateId) return []
         const certificate = certificates.find((c: any) => c.id === selectedCertificateId)
-        
+
         if (!certificate?.subjects) return []
-        
+
         // Lấy danh sách subjectId từ chứng chỉ
         const certificateSubjectIds = certificate.subjects.map((cs: any) => cs.subjectId)
-        
+
         // Lọc SubjectClass có subject thuộc chứng chỉ
-        const filteredClasses = subjectClasses.filter((sc: any) => 
+        const filteredClasses = subjectClasses.filter((sc: any) =>
             certificateSubjectIds.includes(sc.subject?.subjectId)
         )
-        
+
         // Map với điểm phiên từ chứng chỉ
         return filteredClasses.map((sc: any) => {
             const certSubject = certificate.subjects.find(
                 (cs: any) => cs.subjectId === sc.subject?.subjectId
             )
-            
+
             return {
                 ...sc,
                 finalScore: certSubject?.finalScore || 0,
@@ -219,7 +222,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
                         {
                             title: 'Họ và tên',
                             align: 'left',
-                            render: (_, record: any) => 
+                            render: (_, record: any) =>
                                 `${record.userProfile?.lastName || ''} ${record.userProfile?.firstName || ''}`.trim(),
                         },
                     ]}

@@ -115,23 +115,23 @@ const PutCertificateArchivedModal = () => {
     const availableSubjectClasses = useMemo(() => {
         if (!selectedCertificateId) return []
         const selectedCertificate = certificate.find((c: any) => c.id === selectedCertificateId)
-        
+
         if (!selectedCertificate?.subjects) return []
-        
+
         // Lấy danh sách subjectId từ chứng chỉ
         const certificateSubjectIds = selectedCertificate.subjects.map((cs: any) => cs.subjectId)
-        
+
         // Lọc SubjectClass có subject thuộc chứng chỉ
-        const filteredClasses = subjectClasses.filter((sc: any) => 
+        const filteredClasses = subjectClasses.filter((sc: any) =>
             certificateSubjectIds.includes(sc.subject?.subjectId)
         )
-        
+
         // Map với điểm phiên từ chứng chỉ
         return filteredClasses.map((sc: any) => {
             const certSubject = selectedCertificate.subjects.find(
                 (cs: any) => cs.subjectId === sc.subject?.subjectId
             )
-            
+
             return {
                 ...sc,
                 finalScore: certSubject?.finalScore || 0,
@@ -145,9 +145,9 @@ const PutCertificateArchivedModal = () => {
                 message.warning(`Vui lòng đợi ${uploadingCount} file đang upload hoàn thành`)
                 return
             }
-            
+
             showSpinner()
-            
+
             if (id) {
                 await updateArchivedCertificate({
                     data: {
@@ -199,7 +199,7 @@ const PutCertificateArchivedModal = () => {
             } else {
                 // Xử lý thêm mới cho nhiều sinh viên
                 const studentIds = (rest as any).studentIds || []
-                
+
                 if (!studentIds || studentIds.length === 0) {
                     message.warning('Vui lòng chọn ít nhất một học viên')
                     hideSpinner()
@@ -207,17 +207,17 @@ const PutCertificateArchivedModal = () => {
                 }
 
                 const createdCertificates: any[] = []
-                
+
                 // Tạo chứng chỉ cho từng sinh viên với file riêng
                 for (const studentId of studentIds) {
                     const student = studentData.find((s) => s.id === studentId)
                     const studentCode = student?.userProfile?.code || ''
-                    
+
                     // Lấy file có tên chứa mã sinh viên
-                    const studentFiles = allUploadedFiles.filter((file: DocumentFile) => 
+                    const studentFiles = allUploadedFiles.filter((file: DocumentFile) =>
                         file.name.toLowerCase().includes(studentCode.toLowerCase())
                     )
-                    
+
                     const result = await createArchivedCertificate({
                         data: {
                             studentId,
@@ -242,13 +242,15 @@ const PutCertificateArchivedModal = () => {
                         createdCertificates.push({ id: result.id, studentId })
                     }
                 }
-                
-                message.success(`Đã thêm mới ${createdCertificates.length} chứng chỉ cho ${studentIds.length} học viên`)
+
+                message.success(
+                    `Đã thêm mới ${createdCertificates.length} chứng chỉ cho ${studentIds.length} học viên`
+                )
 
                 // Nếu có chọn lớp môn học để phiên điểm cho tất cả sinh viên
                 if (selectedSubjectClassIds.length > 0 && studentIds.length > 0) {
                     const records: any[] = []
-                    
+
                     studentIds.forEach((studentId: string) => {
                         selectedSubjectClassIds.forEach((subjectClassId) => {
                             const subjectClass = availableSubjectClasses.find(
@@ -272,7 +274,9 @@ const PutCertificateArchivedModal = () => {
                         await createManyStudentSubjectScore({
                             data: records,
                         })
-                        message.success(`Đã phiên điểm ${records.length} bản ghi cho ${studentIds.length} học viên`)
+                        message.success(
+                            `Đã phiên điểm ${records.length} bản ghi cho ${studentIds.length} học viên`
+                        )
                     }
                 }
 
@@ -290,7 +294,7 @@ const PutCertificateArchivedModal = () => {
             // Nếu có chọn lớp môn học để phiên điểm (cho trường hợp update)
             if (selectedSubjectClassIds.length > 0 && rest.studentId) {
                 const records: any[] = []
-                
+
                 selectedSubjectClassIds.forEach((subjectClassId) => {
                     const subjectClass = availableSubjectClasses.find(
                         (sc: any) => sc.id === subjectClassId
@@ -357,31 +361,31 @@ const PutCertificateArchivedModal = () => {
         },
         { enabled: !!trainingObjectTypeId }
     )
-    
+
     // Tính toán trạng thái upload cho từng sinh viên dựa trên tên file
     const studentUploadStatus = useMemo(() => {
         if (!selectedStudentIds || !allUploadedFiles || allUploadedFiles.length === 0) return {}
-        
+
         const status: Record<string, { count: number; files: DocumentFile[] }> = {}
-        
+
         selectedStudentIds.forEach((studentId: string) => {
             const student = studentData.find((s) => s.id === studentId)
             const studentCode = student?.userProfile?.code || ''
-            
+
             // Tìm file có tên chứa mã sinh viên (không phân biệt hoa thường)
-            const matchedFiles = allUploadedFiles.filter((file: DocumentFile) => 
+            const matchedFiles = allUploadedFiles.filter((file: DocumentFile) =>
                 file.name.toLowerCase().includes(studentCode.toLowerCase())
             )
-            
+
             status[studentId] = {
                 count: matchedFiles.length,
-                files: matchedFiles
+                files: matchedFiles,
             }
         })
-        
+
         return status
     }, [selectedStudentIds, allUploadedFiles, studentData])
-    
+
     const { data: initialData } = useFindUniqueArchivedCertificate(
         {
             where: { id: id },
@@ -518,23 +522,25 @@ const PutCertificateArchivedModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
-                <FormItem 
-                    form={form} 
-                    name={(id ? "studentId" : "studentIds") as any} 
-                    label={id ? "Học viên, sinh viên" : "Học viên, sinh viên (có thể chọn nhiều)"} 
+                <FormItem
+                    form={form}
+                    name={(id ? 'studentId' : 'studentIds') as any}
+                    label={id ? 'Học viên, sinh viên' : 'Học viên, sinh viên (có thể chọn nhiều)'}
                     required
                 >
                     <Select
-                        mode={id ? undefined : "multiple"}
+                        mode={id ? undefined : 'multiple'}
                         showSearch
                         style={{ width: '100%' }}
-                        placeholder={id ? "Chọn sinh viên" : "Chọn sinh viên (có thể chọn nhiều)"}
+                        placeholder={id ? 'Chọn sinh viên' : 'Chọn sinh viên (có thể chọn nhiều)'}
                         options={studentData.map((item) => ({
                             label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
                             value: item.id,
                         }))}
                         filterOption={(input, option) =>
-                            String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            String(option?.label ?? '')
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                         }
                     />
                 </FormItem>
@@ -558,11 +564,7 @@ const PutCertificateArchivedModal = () => {
                         <div className="mb-2">
                             <strong>Upload minh chứng chứng chỉ (nhiều file cùng lúc)</strong>
                         </div>
-                        <FormItem 
-                            form={form} 
-                            name={"allDocumentFiles" as any}
-                            className="mb-3"
-                        >
+                        <FormItem form={form} name={'allDocumentFiles' as any} className="mb-3">
                             <DocumentPaths
                                 form={form}
                                 data={[]}
@@ -575,7 +577,7 @@ const PutCertificateArchivedModal = () => {
                                 onUploadingChange={(count) => setUploadingCount(count)}
                             />
                         </FormItem>
-                        
+
                         <div className="mt-4">
                             <div className="mb-2">
                                 <strong>Trạng thái upload</strong>
@@ -595,7 +597,8 @@ const PutCertificateArchivedModal = () => {
                                         key: studentId,
                                         studentId,
                                         studentCode: student?.userProfile?.code || 'N/A',
-                                        studentName: `${student?.userProfile?.lastName || ''} ${student?.userProfile?.firstName || ''}`.trim(),
+                                        studentName:
+                                            `${student?.userProfile?.lastName || ''} ${student?.userProfile?.firstName || ''}`.trim(),
                                     }
                                 })}
                                 pagination={false}
@@ -643,9 +646,10 @@ const PutCertificateArchivedModal = () => {
                                 ]}
                             />
                         </div>
-                        
+
                         <p className="text-blue-500 text-xs mt-2">
-                            <strong>Hướng dẫn:</strong> Tên file phải chứa MSSV để hệ thống tự động nhận diện. 
+                            <strong>Hướng dẫn:</strong> Tên file phải chứa MSSV để hệ thống tự động
+                            nhận diện.
                         </p>
                     </div>
                 </Col>
@@ -657,7 +661,8 @@ const PutCertificateArchivedModal = () => {
                     <Col span={24} className="mb-3">
                         <Title level={5}>Phiên điểm cho lớp môn học (Tùy chọn)</Title>
                         <p className="text-gray-500 text-sm mb-3">
-                            Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ cho {selectedStudentIds?.length || 0} học viên đã chọn
+                            Chọn các lớp môn học để tự động phiên điểm khi thêm chứng chỉ cho{' '}
+                            {selectedStudentIds?.length || 0} học viên đã chọn
                         </p>
                         <Table
                             rowKey="id"

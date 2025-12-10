@@ -23,6 +23,8 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile = {
     /** @nullable */
     bLaNguoiDung?: boolean | null
     /** @nullable */
+    bLaGiangVien?: boolean | null
+    /** @nullable */
     bLaCanBoNhanVien?: boolean | null
     /** @nullable */
     bLaHocVien?: boolean | null

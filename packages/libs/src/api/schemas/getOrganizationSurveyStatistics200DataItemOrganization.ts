@@ -47,4 +47,10 @@ export type GetOrganizationSurveyStatistics200DataItemOrganization = {
     sChucNangNhiemVu?: string | null
     /** @nullable */
     sDiaChi?: string | null
+    /** @nullable */
+    iNhomDonVi?: number | null
+    /** @nullable */
+    iCapDonVi?: number | null
+    /** @nullable */
+    iLoaiDonVi?: number | null
 }

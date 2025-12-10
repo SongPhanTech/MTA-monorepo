@@ -99,8 +99,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     const handleCustomUpload = async (file: File) => {
         try {
             // Tăng số file đang upload
-            setUploadingCount(prev => prev + 1)
-            
+            setUploadingCount((prev) => prev + 1)
+
             const extension = file.name.split('.').pop() || ''
             const resPresignedUrl = await generatePresignedUrl({
                 path: 'tai-lieu-ctdt',
@@ -137,7 +137,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
             // Sử dụng callback để lấy giá trị mới nhất của fileList
             setFileList((prevList) => {
                 const newList = multiple ? [...prevList, newItem] : [newItem]
-                
+
                 const documentFiles = newList.map((item) => ({
                     name: item.name,
                     path: item.path,
@@ -145,20 +145,20 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     mimeType: item.mimeType,
                     [relationType]: relationId,
                 }))
-                
+
                 // Cập nhật form với danh sách mới
                 form.setFieldValue(titleForm, documentFiles)
-                
+
                 return newList
             })
-            
+
             // Giảm số file đang upload khi hoàn thành
-            setUploadingCount(prev => prev - 1)
+            setUploadingCount((prev) => prev - 1)
         } catch (err) {
             console.error(err)
             message.error(`Không thể upload ${file.name}.`)
             // Giảm số file đang upload khi lỗi
-            setUploadingCount(prev => prev - 1)
+            setUploadingCount((prev) => prev - 1)
         }
     }
 

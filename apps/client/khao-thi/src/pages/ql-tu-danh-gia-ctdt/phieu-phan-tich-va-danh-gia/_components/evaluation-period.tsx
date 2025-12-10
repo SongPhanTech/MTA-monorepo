@@ -21,7 +21,7 @@ export default function EvaluationPeriod() {
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { id: semesterId } = useSemesterStore()
-    
+
     const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {

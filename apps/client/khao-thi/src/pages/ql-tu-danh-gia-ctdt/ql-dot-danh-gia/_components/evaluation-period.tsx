@@ -31,7 +31,7 @@ export default function EvaluationPeriod() {
         startDate: undefined,
         endDate: undefined,
     })
-const { id: semesterId } = useSemesterStore()
+    const { id: semesterId } = useSemesterStore()
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 

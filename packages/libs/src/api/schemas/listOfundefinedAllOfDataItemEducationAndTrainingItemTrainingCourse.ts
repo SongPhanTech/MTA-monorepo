@@ -54,5 +54,7 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse =
     scoreToPassConditional?: number
     scoreToTakeGraduation?: number
     scoreToPassGraduation?: number
+    maxReExamScore?: number
+    reduceReExamScore?: number
     scoreToRetain?: number
 }

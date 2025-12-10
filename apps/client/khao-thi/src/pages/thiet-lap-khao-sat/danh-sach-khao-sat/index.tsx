@@ -96,7 +96,7 @@ export default function DetailSurveyPage() {
         limit: numberOfPages,
         name: filters.name,
         code: filters.code,
-        semesterId
+        semesterId,
     })
 
     const { onOpen } = useDisclosure<{ userId: string; surveyId: string }>({
