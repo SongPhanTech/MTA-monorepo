@@ -8764,6 +8764,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10089,7 +10095,7 @@ const metadata: ModelMeta = {
                 }, period: {
                     name: "period",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    isOptional: true,
                 }, schedulePeriod: {
                     name: "schedulePeriod",
                     type: "Int",
@@ -20874,6 +20880,19 @@ const metadata: ModelMeta = {
                     backLink: 'exams',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectVersionId" },
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'exam',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",

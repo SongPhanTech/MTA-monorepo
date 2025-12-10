@@ -201,6 +201,10 @@ model Exam extends Base {
   subjectVersionId   String               // Môn thi
   subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
 
+  // xuất sang PM quản lý đề
+  semester           Semester            @relation(fields: [semesterId], references: [id])
+  semesterId         String
+
   /// Lớp môn học
   subjectClass       SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
 

@@ -3555,7 +3555,8 @@ exports.Prisma.ExamScalarFieldEnum = {
   lockExamSessions: 'lockExamSessions',
   duration: 'duration',
   session: 'session',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.ExamRoomScalarFieldEnum = {
@@ -6598,7 +6599,8 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   questionBankId: 'questionBankId',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  semesterId: 'semesterId'
 };
 
 exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {

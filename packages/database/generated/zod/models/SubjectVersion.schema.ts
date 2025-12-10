@@ -25,7 +25,7 @@ const baseSchema = z.object({
     onePoint: z.boolean().default(false),
     credit: z.number(),
     week: z.number().nullish(),
-    period: z.number().default(0),
+    period: z.number().nullish(),
     schedulePeriod: z.number().nullish(),
     numberOfTheory: z.number().nullish(),
     numberOfPractical: z.number().nullish(),
@@ -60,7 +60,7 @@ const baseSchemaWithoutDefaults = z.object({
     onePoint: z.boolean(),
     credit: z.number(),
     week: z.number().nullish(),
-    period: z.number(),
+    period: z.number().nullish(),
     schedulePeriod: z.number().nullish(),
     numberOfTheory: z.number().nullish(),
     numberOfPractical: z.number().nullish(),
@@ -147,7 +147,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
     onePoint: z.boolean(),
     credit: z.union([z.number(), z.record(z.string(), z.unknown())]),
     week: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    period: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    period: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     schedulePeriod: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     numberOfTheory: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     numberOfPractical: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
@@ -170,7 +170,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
  * `SubjectVersion` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLocked: true, type: true, onePoint: true, period: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isLocked: true, type: true, onePoint: true
 });
 
 

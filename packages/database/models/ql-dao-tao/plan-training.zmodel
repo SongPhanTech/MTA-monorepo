@@ -319,8 +319,10 @@ model Semester extends Base {
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
   planTraining            PlanTraining[]
-	survey Survey[]
-	evaluationPeriod EvaluationPeriod[]
+  survey                  Survey[]
+  evaluationPeriod        EvaluationPeriod[]
+  exam                    Exam[]
+
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
 }
@@ -609,7 +611,7 @@ model SubjectVersion extends Base {
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   /// số tiết
-  period                   Int                     @default(0)
+  period                   Int?
   /// số tiết TKB
   schedulePeriod           Int?
   numberOfTheory           Int? // số tiết lý thuyết
