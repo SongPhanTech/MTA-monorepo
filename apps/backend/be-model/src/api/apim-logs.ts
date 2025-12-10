@@ -9,6 +9,68 @@ const app = new OpenAPIHono({ strict: false })
 
 app.openapi(
     createRoute({
+        operationId: 'config-logs',
+        path: '/config-logs',
+        method: 'post',
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            apiId: z.string(),
+                            enabled: z.boolean(),
+                        }),
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                content: {
+                    'application/json': {
+                        schema: z.boolean(),
+                    },
+                },
+                description: 'Successfully',
+            },
+        },
+    }),
+    async (c) => {
+        const { apiId, enabled } = c.req.valid('json')
+        try {
+            const res = await fetch(
+                `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`
+            )
+            const data = await res.json()
+            const apis = data?.apis || []
+            await Promise.all(
+                apis.map((api: any) =>
+                    fetch(
+                        `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${api.id}`,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                logLevel: enabled ? 'off' : 'full',
+                                resourceMethod: api?.resourceMethod,
+                                resourcePath: api?.resourcePath,
+                            }),
+                        }
+                    )
+                )
+            )
+            return c.json(true, 200)
+        } catch (error) {
+            console.log('[ERROR][config-logs]', error)
+            return c.json(false, 200)
+        }
+    }
+)
+
+app.openapi(
+    createRoute({
         operationId: 'access-requests',
         path: '/access-requests',
         method: 'get',
@@ -60,7 +122,7 @@ app.openapi(
                 WHERE data ->> 'service' = ${service}
                 AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
                 AND (data ->> 'flow' = 'RESPONSE_OUT' or data ->> 'flow' = 'REQUEST_OUT')
-                ORDER BY time DESC;`
+                ORDER BY time DESC limit 1000;`
             return c.json(
                 res.map(
                     ({ data }) =>
@@ -71,6 +133,7 @@ app.openapi(
                 200
             )
         } catch (error) {
+            console.log('[ERROR][access-requests]', error)
             return c.json([], 200)
         }
     }
@@ -121,9 +184,10 @@ app.openapi(
             COUNT(*) AS total_requests
         FROM apim_logs
         WHERE data->>'service' = ${service}
+        AND (data ->> 'flow' = 'REQUEST_OUT')
         AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
         GROUP BY data->>'apiTo'
-        ORDER BY total_requests DESC;`
+        ORDER BY total_requests DESC limit 1000;`
 
             return c.json(
                 res.map(({ api, total_requests }) => ({
@@ -133,6 +197,7 @@ app.openapi(
                 200
             )
         } catch (error) {
+            console.log('[ERROR][count-requests]', error)
             return c.json([], 200)
         }
     }
@@ -201,7 +266,7 @@ app.openapi(
             MAX(response_time_ms)                                          AS max_ms,
             PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY response_time_ms) AS p95_ms
         FROM resp
-        GROUP BY api;`
+        GROUP BY api limit 1000;`
 
             return c.json(
                 res.map(({ api, avg_ms, min_ms, max_ms, p95_ms }) => ({
@@ -214,6 +279,7 @@ app.openapi(
                 200
             )
         } catch (error) {
+            console.log('[ERROR][latency-average]', error)
             return c.json([], 200)
         }
     }
@@ -255,14 +321,15 @@ app.openapi(
     }),
     async (c) => {
         const { from, service, to } = c.req.valid('query')
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                api: string
-                error_count: bigint
-                total_count: bigint
-                error_rate: number
-            }[]
-        >`
+        try {
+            const res = await prismaApimLogs.$queryRaw<
+                {
+                    api: string
+                    error_count: bigint
+                    total_count: bigint
+                    error_rate: number
+                }[]
+            >`
        SELECT
     data->>'apiTo' AS api,
     COUNT(*) FILTER (WHERE (data->>'statusCode')::int >= 400) AS error_count,
@@ -275,17 +342,21 @@ app.openapi(
     WHERE data->>'service' = ${service}
     AND (time AT TIME ZONE 'UTC') BETWEEN ${from} AND ${to}
     GROUP BY data->>'apiTo'
-    ORDER BY error_rate DESC;`
+    ORDER BY error_rate DESC limit 1000;`
 
-        return c.json(
-            res.map(({ api, error_count, total_count, error_rate }) => ({
-                api,
-                error_count: Number(error_count),
-                total_count: Number(total_count),
-                error_rate: Number(error_rate),
-            })),
-            200
-        )
+            return c.json(
+                res.map(({ api, error_count, total_count, error_rate }) => ({
+                    api,
+                    error_count: Number(error_count),
+                    total_count: Number(total_count),
+                    error_rate: Number(error_rate),
+                })),
+                200
+            )
+        } catch (error) {
+            console.log('[ERROR][count-requests]', error)
+            return c.json([], 200)
+        }
     }
 )
 
@@ -324,12 +395,13 @@ app.openapi(
     }),
     async (c) => {
         const { from, service, to, type } = c.req.valid('query')
-        const res = await prismaApimLogs.$queryRaw<
-            {
-                time: Date
-                request_count: bigint
-            }[]
-        >`
+        try {
+            const res = await prismaApimLogs.$queryRaw<
+                {
+                    time: Date
+                    request_count: bigint
+                }[]
+            >`
         with RC as (SELECT date_trunc(${type}, time) AS time,
                    COUNT(*)                 AS request_count
             FROM apim_logs
@@ -339,15 +411,19 @@ app.openapi(
         select time, sum(request_count) as request_count
         from RC
         group by time
-        ORDER BY time DESC`
+        ORDER BY time DESC limit 1000;`
 
-        return c.json(
-            res.map(({ time, request_count }) => ({
-                time,
-                request_count: Number(request_count),
-            })),
-            200
-        )
+            return c.json(
+                res.map(({ time, request_count }) => ({
+                    time,
+                    request_count: Number(request_count),
+                })),
+                200
+            )
+        } catch (error) {
+            console.log('[ERROR][throughput]', error)
+            return c.json([], 200)
+        }
     }
 )
 
