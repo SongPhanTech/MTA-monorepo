@@ -11,6 +11,46 @@ app.openapi(
     createRoute({
         operationId: 'config-logs',
         path: '/config-logs',
+        method: 'get',
+        request: {
+            query: z.object({
+                apiId: z.string(),
+            }),
+        },
+        responses: {
+            200: {
+                content: {
+                    'application/json': {
+                        schema: z.boolean(),
+                    },
+                },
+                description: 'Successfully',
+            },
+        },
+    }),
+    async (c) => {
+        const { apiId } = c.req.valid('query')
+        try {
+            const res = await fetch(
+                `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`
+            )
+            const data = await res.json()
+            const apis = data?.apis || []
+            return c.json(
+                apis.every((e: any) => e?.logLevel?.toUpperCase() === 'FULL'),
+                200
+            )
+        } catch (error) {
+            console.log('[ERROR][config-logs]', error)
+            return c.json(false, 200)
+        }
+    }
+)
+
+app.openapi(
+    createRoute({
+        operationId: 'config-logs',
+        path: '/config-logs',
         method: 'post',
         request: {
             body: {
@@ -51,6 +91,7 @@ app.openapi(
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'Authorization': 'Basic YWRtaW46YWRtaW4=',
                             },
                             body: JSON.stringify({
                                 logLevel: enabled ? 'off' : 'full',
