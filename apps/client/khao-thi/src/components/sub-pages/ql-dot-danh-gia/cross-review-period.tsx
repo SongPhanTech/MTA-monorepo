@@ -116,7 +116,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
                                                         label: (
                                                             <div>
                                                                 <span className="font-bold">
-                                                                    Tiêu chí {idx + 1}:{' '}
+                                                                    Tiêu chí {item.order}:{' '}
                                                                 </span>
                                                                 {item?.name}
                                                             </div>

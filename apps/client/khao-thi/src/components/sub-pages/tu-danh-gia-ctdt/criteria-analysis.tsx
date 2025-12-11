@@ -276,7 +276,7 @@ const CriteriaAnalysisSubPage = ({
                     <Empty description="Không có dữ liệu" />
                 </div>
             ) : (
-                filteredCriteria?.map((item, idx: number) => {
+                filteredCriteria?.map((item) => {
                     if (!item.analysisCriterions) return null
                     const status = item.analysisCriterions?.status
                     const statusConfig = getStatusEvaluation(status)
@@ -290,7 +290,7 @@ const CriteriaAnalysisSubPage = ({
                                     <div className="flex-1">
                                         <div className="text-base flex items-start gap-2 mb-2">
                                             <span className="font-bold whitespace-nowrap">
-                                                Tiêu chí {idx + 1}:
+                                                Tiêu chí {item.order}:
                                             </span>
                                             <span className="flex-1">{item?.name}</span>
                                         </div>

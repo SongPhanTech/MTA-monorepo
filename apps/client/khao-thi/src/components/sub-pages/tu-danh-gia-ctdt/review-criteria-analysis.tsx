@@ -419,7 +419,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx, role = 'BAN_TU_VAN' }: Props
                         <div key={item.id} className="ml-4 mb-6">
                             <div className="mb-3">
                                 <div className="text-base">
-                                    <span className="font-bold">Tiêu chí {idx + 1}: </span>
+                                    <span className="font-bold">Tiêu chí {item.order}: </span>
                                     <span>{item?.name}</span>
                                 </div>
                                 <div className="flex gap-2 items-center">
