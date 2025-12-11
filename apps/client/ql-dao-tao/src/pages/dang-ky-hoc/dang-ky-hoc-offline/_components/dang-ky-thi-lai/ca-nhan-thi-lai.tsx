@@ -13,7 +13,7 @@ import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
-import { dangKyHocLaiStore, dangKyThiLaiStore } from '../..'
+import { dangKyThiLaiStore } from '../..'
 
 interface FilterProps {
     searchText: string | null
@@ -195,7 +195,7 @@ export default function CaNhanThiLai() {
     }
 
     const handleRowSelection = (ids: string[]) => {
-        dangKyHocLaiStore.setState((prev) => ({
+        dangKyThiLaiStore.setState((prev) => ({
             ...prev,
             studentIds: ids,
         }))

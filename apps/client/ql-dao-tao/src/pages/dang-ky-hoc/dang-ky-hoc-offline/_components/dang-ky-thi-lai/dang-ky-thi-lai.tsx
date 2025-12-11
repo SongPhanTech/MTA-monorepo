@@ -8,7 +8,7 @@ import { Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
-import { dangKyHocLaiStore, dangKyThiLaiStore } from '../..'
+import { dangKyThiLaiStore } from '../..'
 
 interface FilterProps {
     searchText: string | null
@@ -147,13 +147,13 @@ export default function DangKyThiLai() {
                         return {
                             onClick: () => {
                                 if (subjectClassId === record?.id) {
-                                    dangKyHocLaiStore.setState((prev) => ({
+                                    dangKyThiLaiStore.setState((prev) => ({
                                         ...prev,
                                         subjectClassId: undefined,
                                     }))
                                     return
                                 }
-                                dangKyHocLaiStore.setState((prev) => ({
+                                dangKyThiLaiStore.setState((prev) => ({
                                     ...prev,
                                     subjectClassId: record?.id,
                                 }))
@@ -163,7 +163,7 @@ export default function DangKyThiLai() {
                     rowSelection={{
                         selectedRowKeys: [subjectClassId as Key],
                         onChange: (selectedRowKeys) => {
-                            dangKyHocLaiStore.setState((prev) => ({
+                            dangKyThiLaiStore.setState((prev) => ({
                                 ...prev,
                                 subjectClassId: selectedRowKeys[0] as string,
                             }))
