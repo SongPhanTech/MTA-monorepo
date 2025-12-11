@@ -32,7 +32,13 @@ app.openapi(
         const { apiId } = c.req.valid('query')
         try {
             const res = await fetch(
-                `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`
+                `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Basic YWRtaW46YWRtaW4=',
+                    },
+                }
             )
             const data = await res.json()
             const apis = data?.apis || []
@@ -68,7 +74,7 @@ app.openapi(
             200: {
                 content: {
                     'application/json': {
-                        schema: z.boolean(),
+                        schema: z.any(),
                     },
                 },
                 description: 'Successfully',
@@ -77,36 +83,38 @@ app.openapi(
     }),
     async (c) => {
         const { apiId, enabled } = c.req.valid('json')
-        try {
-            const res = await fetch(
-                `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`
-            )
-            const data = await res.json()
-            const apis = data?.apis || []
-            await Promise.all(
-                apis.map((api: any) =>
-                    fetch(
-                        `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
-                        {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Basic YWRtaW46YWRtaW4=',
-                            },
-                            body: JSON.stringify({
-                                logLevel: enabled ? 'off' : 'full',
-                                resourceMethod: api?.resourceMethod,
-                                resourcePath: api?.resourcePath,
-                            }),
-                        }
-                    )
+        const res = await fetch(
+            `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Basic YWRtaW46YWRtaW4=',
+                },
+            }
+        )
+        const data = await res.json()
+        const apis = data?.apis || []
+        const results = await Promise.all(
+            apis.map((api: any) =>
+                fetch(
+                    `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Basic YWRtaW46YWRtaW4=',
+                        },
+                        body: JSON.stringify({
+                            logLevel: enabled ? 'full' : 'off',
+                            resourceMethod: api?.resourceMethod,
+                            resourcePath: api?.resourcePath,
+                        }),
+                    }
                 )
             )
-            return c.json(true, 200)
-        } catch (error) {
-            console.log('[ERROR][config-logs]', error)
-            return c.json(false, 200)
-        }
+        )
+        const allJson = await Promise.all(results.map((res) => res.json()))
+        return c.json(allJson, 200)
     }
 )
 
