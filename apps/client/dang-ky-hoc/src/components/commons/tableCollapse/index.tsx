@@ -232,7 +232,7 @@ const TableCollapse = <
             <Table
                 id={id}
                 rowKey={rowKey}
-                className="mt-2"
+                className="mt-1"
                 // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
                 // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y

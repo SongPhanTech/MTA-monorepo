@@ -1,61 +1,329 @@
+import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
+import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { ArchivedAward, ArchivedCertificate, Certificate } from '@workspace/db'
+import { getMinioUrl } from '@workspace/constant'
+import type { ArchivedAward, ArchivedCertificate, Prisma } from '@workspace/db/client'
 import {
     useFindManySemester,
+    useFindManyStudentSubjectScore,
+    useFindManySubjectVersion,
     useFindUniqueStudent,
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Row } from 'antd'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { Button, Col, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Check, X } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
+export interface IMonHoc {
+    TenMonhoc: string
+    MaMH?: string
+    soTC?: number
+    diem01?: number
+    diem02?: number
+    diem07?: number
+    diemhe10?: number
+    diemhe4?: number
+    diemchu?: string
+    ghichu?: string
+}
+
+export interface IHocKi {
+    TenHocKi?: string
+    SoTinChiKy?: number
+    DiemTBKyHe10?: number
+    DiemTBKyHe4?: number
+    monHocs?: IMonHoc[]
+}
 export default function StudentScoreClassPage() {
     const { data: me } = useSession()
-    const [_filters, _setFilters] = useState({
-        searchText: '',
+    const id = me?.sDM_NhanVienId || ''
+    const { data: userProfile } = useFindUniqueUserProfile({
+        where: {
+            id,
+        },
+        select: {
+            educationAndTraining: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+                select: {
+                    id: true,
+                },
+            },
+        },
     })
 
-    const userId = me?.sDM_NhanVienId || ''
+    const studentId = userProfile?.educationAndTraining?.[0]?.id
+
+    const [semesterId, setSemesterId] = useState<string>()
+    const [filters, setFilters] = useState<FilterProps>({
+        name: '',
+    })
+
     const { onOpen } = useDisclosure<{
         dataTable: any
         dataStudent: any
     }>({
         tag: 'ModalPrintToKQHT',
     })
+    const exportTemplate = async () => {
+        const hocKis: IHocKi[] = []
+        if (data.length > 0) {
+            data.forEach((item) => {
+                const monhoc: IMonHoc[] = []
+                item.subjectClasses.forEach((subjectClass) => {
+                    subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
+                        monhoc.push({
+                            TenMonhoc: subjectClassStudent.subjectVersion.name,
+                            MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? '',
+                            soTC: subjectClassStudent.subjectVersion.credit,
+                            diemhe10:
+                                subjectClassStudent?.manualFinalScore ||
+                                subjectClassStudent?.finalScore?.toNumber() ||
+                                0,
+                            diemhe4:
+                                convertScore(
+                                    subjectClassStudent?.manualFinalScore ||
+                                        subjectClassStudent?.finalScore?.toNumber() ||
+                                        0
+                                ).base4 ?? 0,
+                            diemchu:
+                                convertScore(
+                                    subjectClassStudent?.manualFinalScore ||
+                                        subjectClassStudent?.finalScore?.toNumber() ||
+                                        0
+                                ).letter ?? '',
+                            ghichu: subjectClassStudent.description ?? '',
+                        })
+                    })
+                })
+                const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
 
-    const { data: userProfile } = useFindUniqueUserProfile(
-        {
-            where: {
-                id: userId,
-            },
-            select: {
-                educationAndTraining: {
-                    select: {
-                        id: true,
-                    },
-                    orderBy: {
-                        createdAt: 'desc',
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!userId,
+                const tongDiemNhanTinChiHe10 = monhoc.reduce(
+                    (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+                    0
+                )
+                const tongDiemNhanTinChiHe4 = monhoc.reduce(
+                    (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+                    0
+                )
+
+                const diemTBHe10_Raw =
+                    tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
+                const diemTBHe4_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
+
+                const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
+                const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
+
+                hocKis.push({
+                    TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
+                    SoTinChiKy: tongSoTinChi,
+                    DiemTBKyHe10: diemTBHe10,
+                    DiemTBKyHe4: diemTBHe4,
+                    monHocs: monhoc,
+                })
+            })
         }
-    )
-    const studentId = userProfile?.educationAndTraining?.[0]?.id
+        const sampleStudentData = {
+            fullname: student?.userProfile?.fullname,
+            dateOfBirth: student?.userProfile?.dateOfBirth,
+            maSV: student?.code,
+            // TODO: check htdt
+            htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
+            nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+            lop: student?.fixedClass?.trainingCourse?.name,
+            hocKis: hocKis,
+        }
+
+        const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
+            const hocKiRow: TableRow = {
+                cells: [
+                    {
+                        value: hocKi.TenHocKi ?? '',
+                        colSpan: 19,
+                        bold: true,
+                        align: 'left',
+                        border: true,
+                    },
+                ],
+            }
+            const monHocRows: TableRow[] =
+                hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+                    cells: [
+                        { value: index + 1 },
+                        { value: monHoc.TenMonhoc ?? '', colSpan: 6, border: true },
+                        { value: monHoc.MaMH ?? '' },
+                        { value: monHoc.soTC, align: 'center' },
+                        { value: monHoc.diem01 ?? 0, align: 'right' },
+                        { value: monHoc.diem02 ?? 0, align: 'right' },
+                        { value: monHoc.diem07 ?? 0, align: 'right' },
+                        { value: null },
+                        { value: null },
+                        { value: monHoc.diemhe10 ?? 0, align: 'right' },
+                        { value: monHoc.diemhe4 ?? 0, align: 'right' },
+                        { value: monHoc.diemchu ?? '', align: 'center' },
+                        { value: null },
+                        { value: monHoc.ghichu ?? '' },
+                    ],
+                })) ?? []
+
+            // Dòng trung bình học kỳ
+            const trungBinhRow: TableRow = {
+                cells: [
+                    { value: null },
+                    { value: 'Điểm trung bình học kỳ:', colSpan: 6, bold: true, align: 'center' },
+                    { value: null }, // Cột 7
+                    { value: hocKi.SoTinChiKy ?? 0, bold: true, align: 'center' }, // Cột 8
+                    { value: null }, // Cột 9
+                    { value: null }, // Cột 10
+                    { value: null }, // Cột 11
+                    { value: null }, // Cột 12
+                    { value: null }, // Cột 13
+                    { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: 'right' }, // Cột 14
+                    { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: 'right' }, // Cột 15
+                    { value: null }, // Cột 16
+                    { value: null }, // Cột 17
+                    { value: null }, // Cột 18
+                ],
+            }
+
+            return [hocKiRow, ...monHocRows, trungBinhRow]
+        })
+
+        const gapRow: TableRow = {
+            cells: [{ value: null, colSpan: 18, border: false }],
+        }
+        const tongtinchi = sampleStudentData.hocKis.reduce(
+            (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
+            0
+        )
+
+        // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+        const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
+            (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
+            0
+        )
+        const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
+            (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
+            0
+        )
+
+        const tongdiemhe10 =
+            tongtinchi === 0
+                ? 0
+                : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+        const tongdiemhe4 =
+            tongtinchi === 0
+                ? 0
+                : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+        const totalRow: TableRow = {
+            cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
+        }
+        const diemTBHe10Row: TableRow = {
+            cells: [
+                {
+                    value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+                    colSpan: 18,
+                    border: false,
+                },
+            ],
+        }
+        const diemTBHe4Row: TableRow = {
+            cells: [
+                {
+                    value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+                    colSpan: 18,
+                    border: false,
+                },
+            ],
+        }
+        const xeploai = convertScore(tongdiemhe10).classification
+        const xepLoaiRow: TableRow = {
+            cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
+        }
+
+        const dateSignatureRow: TableRow = {
+            cells: [
+                { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                {
+                    value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+                    colSpan: 6,
+                    border: false,
+                    align: 'center',
+                },
+            ],
+        }
+
+        const titleSignatureRow: TableRow = {
+            cells: [
+                { value: null, colSpan: 12, border: false },
+                {
+                    value: '  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG',
+                    colSpan: 6,
+                    border: false,
+                    align: 'center',
+                    bold: true,
+                },
+            ],
+        }
+        const nameSignatureRow: TableRow = {
+            cells: [
+                { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                {
+                    value: 'Đại tá, TS Nguyễn Văn Bình												',
+                    colSpan: 6,
+                    border: false,
+                    align: 'center',
+                    bold: true,
+                },
+            ],
+        }
+        exportFromTemplate({
+            templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
+            sheets: [
+                {
+                    sheet: 'BaoCaoDiem',
+                    data: {
+                        fullname: sampleStudentData.fullname ?? '',
+                        dateOfBirth: sampleStudentData.dateOfBirth
+                            ? dayjs(sampleStudentData.dateOfBirth).format('DD/MM/YYYY')
+                            : '',
+                        htdt: sampleStudentData.htdt ?? '',
+                        maSV: sampleStudentData.maSV ?? '',
+                        nganh: sampleStudentData.nganh ?? '',
+                        lop: sampleStudentData.lop ?? '',
+                    },
+                    tableStartCell: { row: 11, col: 1 },
+                    rows: [
+                        ...tableRows,
+                        gapRow,
+                        gapRow,
+                        totalRow,
+                        diemTBHe10Row,
+                        diemTBHe4Row,
+                        xepLoaiRow,
+                        dateSignatureRow,
+                        titleSignatureRow,
+                        nameSignatureRow,
+                    ],
+                    hiddenColumns: ['M', 'N', 'R', 'J', 'K', 'L'],
+                },
+            ],
+            fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+        })
+    }
+
     const { data: student } = useFindUniqueStudent(
         {
-            where: {
-                id: studentId,
-            },
+            where: { id: studentId },
             include: {
                 userProfile: true,
                 curriculumVersion: {
@@ -76,8 +344,8 @@ export default function StudentScoreClassPage() {
                     include: {
                         trainingCourse: {
                             include: {
-                                scoreConverts: true,
                                 trainingObjectType: true,
+                                scoreConverts: true,
                             },
                         },
                     },
@@ -89,14 +357,148 @@ export default function StudentScoreClassPage() {
         }
     )
 
-    const { data = [] } = useFindManySemester({
+    const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                studentId: studentId,
+                manualFinalScore: { gt: 0 },
+            },
+            include: { subjectVersion: true },
+        },
+        { enabled: !!studentId }
+    )
+
+    const { data: trainingSubjectVersions = [] } = useFindManySubjectVersion(
+        {
+            where: {
+                studentSubjectScore: {
+                    some: {
+                        studentId: studentId,
+                        subjectClass: { cancelled: false },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!studentId,
+        }
+    )
+
+    const subjectVersionWhere: Prisma.SubjectVersionWhereInput = useMemo(() => {
+        return {
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.creditCmp
+                ? {
+                      credit: {
+                          ...(filters.creditCmp.gte
+                              ? {
+                                    gte: Number(filters.creditCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.creditCmp.lte
+                              ? {
+                                    lte: Number(filters.creditCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+        }
+    }, [filters.name, filters.creditCmp, filters.code])
+
+    const subjectScoreWhere: Prisma.StudentSubjectScoreWhereInput = useMemo(() => {
+        return {
+            studentId,
+            ...(filters.attendanceScoreCmp
+                ? {
+                      attendanceScore: {
+                          ...(filters.attendanceScoreCmp.gte
+                              ? {
+                                    gte: Number(filters.attendanceScoreCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.attendanceScoreCmp.lte
+                              ? {
+                                    lte: Number(filters.attendanceScoreCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.midtermScoreCmp
+                ? {
+                      midtermScore: {
+                          ...(filters.midtermScoreCmp.gte
+                              ? {
+                                    gte: Number(filters.midtermScoreCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.midtermScoreCmp.lte
+                              ? {
+                                    lte: Number(filters.midtermScoreCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.examScoreCmp
+                ? {
+                      examScore: {
+                          ...(filters.examScoreCmp.gte
+                              ? {
+                                    gte: Number(filters.examScoreCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.examScoreCmp.lte
+                              ? {
+                                    lte: Number(filters.examScoreCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.finalScoreCmp
+                ? {
+                      finalScore: {
+                          ...(filters.finalScoreCmp.gte
+                              ? {
+                                    gte: Number(filters.finalScoreCmp.gte),
+                                }
+                              : {}),
+                          ...(filters.finalScoreCmp.lte
+                              ? {
+                                    lte: Number(filters.finalScoreCmp.lte),
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            subjectVersion: subjectVersionWhere,
+        }
+    }, [filters, studentId, subjectVersionWhere])
+
+    const { data = [], refetch } = useFindManySemester({
         where: {
             subjectClasses: {
                 some: {
+                    subject: subjectVersionWhere,
                     subjectClassStudent: {
-                        some: {
-                            studentId,
-                        },
+                        some: subjectScoreWhere,
                     },
                 },
             },
@@ -105,25 +507,17 @@ export default function StudentScoreClassPage() {
             subjectClasses: {
                 where: {
                     subjectClassStudent: {
-                        some: {
-                            studentId,
-                        },
+                        some: subjectScoreWhere,
                     },
                 },
                 include: {
                     subjectClassStudent: {
-                        where: {
-                            studentId,
-                        },
+                        where: subjectScoreWhere,
                         include: {
                             subjectVersion: true,
                             certificates: {
                                 include: {
-                                    archivedCertificate: {
-                                        include: {
-                                            certificate: true,
-                                        },
-                                    },
+                                    archivedCertificate: true,
                                 },
                             },
                             awards: {
@@ -146,7 +540,7 @@ export default function StudentScoreClassPage() {
             schoolYear: true,
         },
         orderBy: {
-            createdAt: 'asc',
+            startDate: 'asc',
         },
     })
 
@@ -154,13 +548,25 @@ export default function StudentScoreClassPage() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[8, 8]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
                         {/* Hàng chứa các button */}
                         <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                                <Select
+                                    value={semesterId}
+                                    onChange={(v) => {
+                                        setSemesterId(v)
+                                    }}
+                                    className="w-64"
+                                    placeholder="Chọn kỳ học"
+                                    options={data.map((s) => ({
+                                        label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
+                                        value: s.id,
+                                    }))}
+                                />
                                 <Button
                                     type="primary"
                                     onClick={() =>
@@ -172,6 +578,14 @@ export default function StudentScoreClassPage() {
                                 >
                                     In kết quả học tập
                                 </Button>
+                                <Button
+                                    type="primary"
+                                    onClick={() => {
+                                        exportTemplate()
+                                    }}
+                                >
+                                    Xuất bảng điểm cá nhân
+                                </Button>
                             </Flex>
                         </Col>
                     </Row>
@@ -180,48 +594,120 @@ export default function StudentScoreClassPage() {
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
-                        headerTitleKey={({ code, name, schoolYear }) =>
-                            `${[code, name, schoolYear?.name].filter(Boolean).join(' - ')}`
-                        }
+                        headerTitleKey={({ code, name, schoolYear }) => (
+                            <p className="font-bold text-base">
+                                {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                            </p>
+                        )}
+                        headerColumn={[
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, { code, name, schoolYear }) => (
+                                    <p className="font-bold text-base">
+                                        {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                                    </p>
+                                ),
+                                colSpan: 15,
+                            },
+                            // {
+                            //     render: (_, { code, name, schoolYear }) => (
+                            //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
+                            //         <Button>Chi tiết</Button>
+                            //     ),
+                            //     colSpan: 1,
+                            // },
+                        ]}
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                        }}
                         childrenFieldName="subjectClasses"
                         defaultExpandAll
                         columns={[
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'code'],
+
+                                dataIndex: 'code',
+                                type: 'input',
                                 fixed: 'left',
                                 width: 120,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.subjectVersion.code,
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'name'],
+                                align: 'center',
+                                dataIndex: 'name',
                                 fixed: 'left',
+                                type: 'input_search',
+                                options: trainingSubjectVersions.map((item) => ({
+                                    label: item.name,
+                                    value: item.name,
+                                })),
                                 width: 200,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.subjectVersion.name,
                             },
                             {
-                                title: 'Điểm chuyên cần',
+                                title: 'Điểm CC',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'attendanceScore'],
-                                width: 150,
+                                dataIndex: 'attendanceScoreCmp',
+                                type: 'cmp',
+                                width: 100,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.attendanceScore,
                             },
                             {
-                                title: 'Điểm thường xuyên',
+                                title: 'Điểm TX',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'midtermScore'],
-                                width: 150,
+                                dataIndex: 'midtermScoreCmp',
+                                type: 'cmp',
+                                width: 100,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.midtermScore,
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'examScore'],
+                                dataIndex: 'examScoreCmp',
+                                type: 'cmp',
                                 width: 100,
+                                render: (_, record) => record?.subjectClassStudent?.[0]?.examScore,
                             },
-
                             {
-                                title: 'Điểm tương đương',
+                                title: 'Điểm cộng',
+                                align: 'center',
+                                width: 100,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.awards.reduce(
+                                        (
+                                            acc: number,
+                                            curr: {
+                                                archivedAward: ArchivedAward
+                                            }
+                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                        0
+                                    ),
+                            },
+                            {
+                                title: 'Chứng chỉ',
                                 align: 'center',
                                 width: 150,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.certificates
+                                        .map(
+                                            (i: { archivedCertificate: ArchivedCertificate }) =>
+                                                i?.archivedCertificate?.code
+                                        )
+                                        .join(', '),
+                            },
+                            {
+                                title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
+                                align: 'center',
+                                width: 80,
                                 render: (__, { id, subjectClassStudent }) => {
                                     const arr: { finalScore: number }[] =
                                         subjectClassStudent?.[0]?.certificates.map(
@@ -241,21 +727,33 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                             {
-                                title: 'Điểm hệ 10',
+                                title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
                                 align: 'center',
+                                dataIndex: 'creditCmp',
+                                type: 'cmp',
                                 width: 100,
-                                render: (_, record) => {
-                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                                    return (
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore?.toNumber() ??
-                                        ''
-                                    )
-                                },
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.subjectVersion.credit,
                             },
+                            // {
+                            //     title: 'Điểm hệ 10',
+                            //     align: 'center',
+                            //     dataIndex: 'finalScoreCmp',
+                            //     type: 'cmp',
+                            //     width: 100,
+                            //     render: (_, record) => {
+                            //         const subjectClassStudent = record?.subjectClassStudent?.[0]
+                            //         return (
+                            //             subjectClassStudent?.manualFinalScore ??
+                            //             subjectClassStudent?.finalScore?.toNumber() ??
+                            //             ''
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
+                                dataIndex: 'finalScore4',
                                 width: 100,
                                 render: (_, record) => {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
@@ -282,7 +780,7 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Kết quả',
                                 align: 'center',
-                                width: 80,
+                                width: 100,
                                 render: (_: any, record: any) => {
                                     const subjectClassStudent = record.subjectClassStudent?.[0]
                                     const score =
@@ -305,36 +803,6 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                             {
-                                title: 'Điểm cộng',
-                                align: 'center',
-                                width: 120,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.awards.reduce(
-                                        (
-                                            acc: number,
-                                            curr: {
-                                                archivedAward: ArchivedAward
-                                            }
-                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
-                                        0
-                                    ),
-                            },
-                            {
-                                title: 'Chứng chỉ',
-                                align: 'center',
-                                width: 150,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.certificates
-                                        .map(
-                                            (i: {
-                                                archivedCertificate: ArchivedCertificate & {
-                                                    certificate: Certificate
-                                                }
-                                            }) => i?.archivedCertificate?.certificate.name
-                                        )
-                                        .join(', '),
-                            },
-                            {
                                 title: 'Ghi chú',
                                 align: 'center',
                                 dataIndex: ['subjectClassStudent', '0', 'description'],
@@ -344,7 +812,7 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                         ]}
-                        data={data}
+                        data={data.filter((s) => !semesterId || semesterId === s.id)}
                         pagination={{
                             hideOnSinglePage: true,
                         }}

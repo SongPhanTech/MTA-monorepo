@@ -461,30 +461,6 @@ export default function ThoiKhoaBieu({
                                         })
                                 },
                             },
-                            // {
-                            //     title: 'Số SV tối đa',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     type: 'order',
-                            //     distinctFilters: ['credit', 'subjectClassStudent'],
-                            // },
-                            // {
-                            //     title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
-                            //     width: 80,
-                            //     align: 'center',
-                            //     type: 'tree_select',
-                            //     options: treeData,
-                            //     render: (_, record) =>
-                            //         record.subject?.managementOrganization?.sMa || '',
-                            // },
-                            // {
-                            //     title: 'Điểm bằng nhau',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     render: (value) => (
-                            //         <Checkbox checked={value.subjectEquivalentType} disabled />
-                            //     ),
-                            // },
                         ]}
                         data={subjectClasses}
                         maxHeight={'calc(100vh - 410px)'}
