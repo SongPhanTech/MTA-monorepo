@@ -539,7 +539,6 @@ app.openapi(importStudent, async (c) => {
                 {
                     Id: existingProfile,
                     sMa: student.idCardNumber,
-                    bLaGiangVien: false,
                     bLaHocVien: true,
                     bLaTaiKhoan: true,
                     dNgaySinh: student.dateOfBirth

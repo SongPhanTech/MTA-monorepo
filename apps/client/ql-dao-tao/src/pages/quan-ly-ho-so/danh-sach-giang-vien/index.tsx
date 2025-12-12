@@ -2,6 +2,7 @@ import { TableOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import ExportTemplateLecturer from '@components/modal/export-template-lecturer'
 import ImportLecturerModal from '@components/modal/import-excel-lecturer'
+import ModalChiTietGiangVien from '@components/modal/modal-chi-tiet-giang-vien'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -26,7 +27,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import ModalChiTietGiangVien from '@components/modal/modal-chi-tiet-giang-vien'
 
 dayjs.locale('vi')
 

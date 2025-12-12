@@ -352,7 +352,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.period || 0),
+                                        0
+                                    ),
                                 colSpan: 1,
                             },
                             {
