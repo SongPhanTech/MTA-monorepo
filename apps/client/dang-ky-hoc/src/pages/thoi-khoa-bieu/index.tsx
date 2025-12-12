@@ -6,11 +6,8 @@ import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { $Enums, Prisma } from '@workspace/db/client'
-import {
-    useCountSubjectClass,
-    useFindManySubjectClass
-} from '@workspace/db/hooks'
+import type { $Enums, FixedClass, Prisma, SubjectClassTime } from '@workspace/db/client'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row } from 'antd'
 import _ from 'lodash'
@@ -18,12 +15,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-
-export default function ThoiKhoaBieu({
-    type,
-}: {
-    type?: $Enums.SubjectClassType
-}) {
+export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType }) {
     const { data: me } = useSession()
     const id = me?.sDM_NhanVienId || ''
     const [currentPage, setCurrentPage] = useState(1)
@@ -365,7 +357,9 @@ export default function ThoiKhoaBieu({
                                 width: 100,
                                 render: (_, record) => (
                                     <p>
-                                        {record?.fixedClasses?.map((e) => e.code).join(', ') || '-'}
+                                        {record?.fixedClasses
+                                            ?.map((e: FixedClass) => e.code)
+                                            .join(', ') || '-'}
                                     </p>
                                 ),
                             },
@@ -374,11 +368,12 @@ export default function ThoiKhoaBieu({
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
-                                distinctFilters: ['maxStudent', 'credit'],
+                                distinctFilters: ['maxStudent'],
                                 render: (_, record) => (
                                     <p>
                                         {record?.fixedClasses?.reduce(
-                                            (acc, curr) => acc + (curr?._count?.students ?? 0),
+                                            (acc: number, curr: any) =>
+                                                acc + (curr?._count?.students ?? 0),
                                             0
                                         ) ?? 0}
                                     </p>
@@ -449,7 +444,7 @@ export default function ThoiKhoaBieu({
                                 render: (_, record) => {
                                     return record.subjectClassTimes
                                         ?.uniqueByKey?.('dayOfWeek')
-                                        ?.map?.((tkb) => {
+                                        ?.map?.((tkb: SubjectClassTime) => {
                                             return (
                                                 <p>
                                                     {tkb.dayOfWeek === 8
@@ -463,7 +458,7 @@ export default function ThoiKhoaBieu({
                             },
                         ]}
                         data={subjectClasses}
-                        maxHeight={'calc(100vh - 410px)'}
+                        maxHeight={'calc(100vh - 200px)'}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
