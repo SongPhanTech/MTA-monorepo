@@ -825,7 +825,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'}))
+                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
@@ -1123,7 +1123,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${planTraining?.planTrainingSubjects?.length > 0 ? planTraining.planTrainingSubjects.map((e) => `'${e.trainingBlockSubjectId}'`).join(',') : '0'}))
+                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : '0'}))
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
