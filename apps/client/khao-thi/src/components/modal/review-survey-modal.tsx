@@ -105,6 +105,7 @@ const ReviewSurveyModal = () => {
             maskClosable={true}
             title={'Xem lại khảo sát'}
             className="w-[1100px]"
+            footer={null}
         >
             <div className="flex flex-col gap-2">
                 {isLoading ? (
@@ -215,6 +216,11 @@ const ReviewSurveyModal = () => {
                     </div>
                 )}
             </div>
+            <Col span={24}>
+                <div className="flex justify-end gap-2">
+                    <Button onClick={onClose}>Quay lại</Button>
+                </div>
+            </Col>
         </AntdModal>
     )
 }

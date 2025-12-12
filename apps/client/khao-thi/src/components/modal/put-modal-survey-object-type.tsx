@@ -334,7 +334,7 @@ const PutSurveyObjectTypeModal = () => {
                                     placeholder={'Chọn khóa'}
                                     options={trainingCourses.map((i: TrainingCourse) => ({
                                         value: i.id,
-                                        label: `${i.code} - ${i.name}`,
+                                        label: `${i.code ||''} - ${i.name||''}`,
                                     }))}
                                     allowClear
                                 />
