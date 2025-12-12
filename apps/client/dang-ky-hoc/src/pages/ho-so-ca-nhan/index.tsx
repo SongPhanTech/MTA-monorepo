@@ -4,7 +4,7 @@ import 'dayjs/locale/vi'
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from '@constants/constants'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
-import { useFindUniqueStudent } from '@workspace/db/hooks'
+import { useFindUniqueStudent, useFindUniqueUserProfile } from '@workspace/db/hooks'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
 
@@ -16,9 +16,25 @@ const HoSoCaNhan = () => {
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
-    const { data: studentData, isLoading } = useFindUniqueStudent(
+
+    const { data: userProfileData } = useFindUniqueUserProfile({
+        where: { id },
+        select: {
+            educationAndTraining: {
+                select: {
+                    id: true,
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
+        },
+    })
+    const studentId = userProfileData?.educationAndTraining?.[0]?.id || ''
+
+    const { data: studentData } = useFindUniqueStudent(
         {
-            where: { id },
+            where: { id: studentId },
             include: {
                 userProfile: {
                     include: {
