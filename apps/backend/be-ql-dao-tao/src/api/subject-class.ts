@@ -1020,7 +1020,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                     trainingBlockSubjectId: true,
                 },
                 where: {
-                    subjectClassType: $Enums.SubjectClassType.RETAKE,
+                    subjectClassType: $Enums.SubjectClassType.REEXAM,
                 },
             },
         },
