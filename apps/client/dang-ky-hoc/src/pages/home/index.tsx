@@ -5,7 +5,7 @@ import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankin
 import { LichCongTac, DanhSachThongBao } from '@workspace/ui'
 import { Col, Progress, Row, Typography } from 'antd'
 import { useMemo } from 'react'
-import DefaultLayout from '@layouts/default-layout';
+import DefaultLayout from '@layouts/default-layout'
 
 const { Title } = Typography
 
