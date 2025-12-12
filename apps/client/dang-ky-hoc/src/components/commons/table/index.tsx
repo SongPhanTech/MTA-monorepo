@@ -1,6 +1,7 @@
 import { FilterFilled } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { ColumnTypeProps, FilterProps } from '@constants/type'
+import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
     Button,
@@ -14,11 +15,12 @@ import {
     type TableProps as TableAntdProps,
     Tree,
 } from 'antd'
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import FilterSelect from './filter-select'
 
 dayjs.locale('vi')
 
@@ -28,13 +30,29 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
-type TableProps<T> = {
+declare type PropertyKey = string | number | symbol
+export type AnyObject = Record<PropertyKey, any>
+export type ColumnsType<RecordType = AnyObject> = ((
+    | ColumnGroupType<RecordType>
+    | ColumnType<RecordType>
+) & {
+    type?:
+        | 'input'
+        | 'input_search'
+        | 'select'
+        | 'tree_select'
+        | 'order'
+        | 'date'
+        | 'cmp'
+        | (string & {})
+})[]
+
+type TableProps<T = AnyObject> = {
     columns?: ColumnsType<T> & {
-        type?: string
         distinctFilters?: string[]
-        options?: ColumnOption[]
+        // options?: ColumnOption[]
     }
-    data?: T[]
+    data?: readonly T[]
     pagination?:
         | (TablePaginationConfig & {
               onShowSizeChange?: ((size: number) => void) | undefined
@@ -49,11 +67,11 @@ type TableProps<T> = {
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
-    maxHeight?: number
+    maxHeight?: number | string
     rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, 'pagination'>
 
-const Table = <T extends Record<string, unknown>>({
+const Table = <T extends AnyObject>({
     columns = [],
     data,
     pagination,
@@ -156,6 +174,7 @@ const Table = <T extends Record<string, unknown>>({
             )
         })
     }
+
     function searchVietnameseTree(data: TreeNode[], keyword: string): TreeNode[] {
         const normalizedKeyword = normalizeVietnamese(keyword.trim())
         if (!normalizedKeyword) return data
@@ -187,27 +206,25 @@ const Table = <T extends Record<string, unknown>>({
 
         return searchRecursive(data)
     }
+
     type TreeNode = {
         value: string
         label: string
         children?: TreeNode[]
     }
-    const genFilter = (item: ColumnTypeProps) => {
-        const ListButton = useCallback(
-            ({ clear, click }: { clear: () => void; click: () => void }) => {
-                return (
-                    <div className="flex justify-end gap-2">
-                        <Button size="small" onClick={clear}>
-                            Bỏ lọc
-                        </Button>
-                        <Button type="primary" size="small" onClick={click}>
-                            Lọc
-                        </Button>
-                    </div>
-                )
-            },
-            []
+    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+        return (
+            <div className="flex justify-end gap-2">
+                <Button size="small" onClick={clear}>
+                    Bỏ lọc
+                </Button>
+                <Button type="primary" size="small" onClick={click}>
+                    Lọc
+                </Button>
+            </div>
         )
+    }, [])
+    const genFilter = (item: ColumnTypeProps) => {
         if (item?.type === 'input') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (
@@ -372,74 +389,16 @@ const Table = <T extends Record<string, unknown>>({
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
-                    const [input, setInput] = useState('')
-                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
-                    const handleSearch = async (value: string) => {
-                        if (!value.trim()) {
-                            setOptionsSearch(item?.options || [])
-                            return
-                        }
-
-                        try {
-                            const response = searchVietnamese(item?.options || [], value.trim())
-                            setOptionsSearch(response)
-                        } catch (_error: unknown) {
-                            setOptionsSearch(item?.options || [])
-                        }
-                    }
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
-                            {item.options.length > 0 && (
-                                <div className="max-h-[500px] overflow-y-auto">
-                                    <div className="mb-2">Tìm kiếm</div>
-                                    <Input
-                                        placeholder="Nhập từ khoá cần tìm kiếm"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                        value={input}
-                                        onChange={(e) => {
-                                            setInput(e.target.value)
-                                            handleSearch(e.target.value)
-                                        }}
-                                        style={{ height: 36, width: '100%', marginBottom: 16 }}
-                                    />
-                                    {!input && optionsSearch.length > 0 && (
-                                        <Checkbox
-                                            onChange={(e: CheckboxChangeEvent) =>
-                                                onCheckAllChange(item, e)
-                                            }
-                                            indeterminate={indeterminate(item)}
-                                            checked={checkAll(item)}
-                                            className="mb-3"
-                                        >
-                                            Chọn tất cả
-                                        </Checkbox>
-                                    )}
-
-                                    <Checkbox.Group
-                                        className="mb-3"
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 12,
-                                        }}
-                                        value={
-                                            filtersTable[
-                                                item.dataIndex as keyof FilterProps
-                                            ] as string[]
-                                        }
-                                        onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={optionsSearch}
-                                    />
-                                </div>
-                            )}
+                            <FilterSelect
+                                item={item}
+                                onCheckAllChange={onCheckAllChange}
+                                onCheckChange={onCheckChange}
+                                checkAll={checkAll}
+                                indeterminate={indeterminate}
+                                filtersTable={filtersTable}
+                            />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({
@@ -500,20 +459,20 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
                     const [checkStrictly, setCheckStrictly] = useState(false)
 
                     const handleSearchTree = async (value: string) => {
                         if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                             return
                         }
 
                         try {
                             const response = searchVietnameseTree(item?.options || [], value.trim())
-                            setOptionsSerch(response)
+                            setOptionsSearch(response)
                         } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                         }
                     }
                     return (
@@ -542,7 +501,7 @@ const Table = <T extends Record<string, unknown>>({
                                 checkable={true}
                                 defaultExpandAll={true}
                                 multiple={true}
-                                treeData={optionsSerch}
+                                treeData={optionsSearch}
                                 checkedKeys={
                                     filtersTable[item.dataIndex as keyof FilterProps] as string[]
                                 }
@@ -553,7 +512,11 @@ const Table = <T extends Record<string, unknown>>({
                                     })
                                 }}
                                 checkStrictly={!!input}
-                                fieldNames={{ title: 'label', key: 'value', children: 'children' }}
+                                fieldNames={{
+                                    title: 'label',
+                                    key: 'value',
+                                    children: 'children',
+                                }}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton
@@ -810,15 +773,14 @@ const Table = <T extends Record<string, unknown>>({
                 },
             }
         }
-
         if (item?.type === 'cmp') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (
                     <div className="p-4 flex flex-col w-full min-w-[200px] max-w-[300px]">
                         <div>
-                            <div className="mb-2">Tìm kiếm</div>
+                            Lớn hơn hoặc bằng
                             <Input
-                                placeholder="Lớn hơn"
+                                placeholder="0"
                                 type="number"
                                 value={
                                     // @ts-expect-error
@@ -828,7 +790,7 @@ const Table = <T extends Record<string, unknown>>({
                                     setFiltersTable({
                                         ...filters,
                                         [item.dataIndex as keyof FilterProps]: {
-                                            // @ts-expect-error
+                                            //   @ts-expect-error
                                             ...filtersTable[item.dataIndex as keyof FilterProps],
                                             gte: e.target.value,
                                         },
@@ -836,8 +798,9 @@ const Table = <T extends Record<string, unknown>>({
                                 }}
                                 className="mb-3"
                             />
+                            Nhỏ hơn hoặc bằng
                             <Input
-                                placeholder="Nhỏ hơn"
+                                placeholder="10"
                                 type="number"
                                 value={
                                     // @ts-expect-error
@@ -912,12 +875,16 @@ const Table = <T extends Record<string, unknown>>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-4 custom-scrollbar"
+            className="mt-2"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({
                     ...column,
                     key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
+                    onCell: (record: T) => ({
+                        className: cn('px-2 py-[2px]', column.className || ''),
+                        ...(column.onCell ? column.onCell(record) : {}),
+                    }),
                     ...genFilter(column as ColumnTypeProps),
                 })) as ColumnsType<T>
             }
@@ -944,6 +911,7 @@ const Table = <T extends Record<string, unknown>>({
                     : false
             }
             expandable={expandable}
+            {...rest}
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {
@@ -956,9 +924,11 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className: cn(
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : ''
+                ),
+                ...rest.onRow?.(record),
             })}
-            {...rest}
         />
     )
 }

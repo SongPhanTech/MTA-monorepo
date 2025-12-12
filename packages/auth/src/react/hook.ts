@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router'
-import { useCallback, useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { fetchSession } from '.'
 import { SessionContext } from './provider'
 
 export const useSession = () => {
     const { sessionState, setSessionState, setStatus, status } = useContext(SessionContext)
-    const router = useRouter()
-
+    // const router = useRouter()
+    console.log(process.env);
+    
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (status === 'loading') return

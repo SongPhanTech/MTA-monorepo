@@ -621,7 +621,7 @@ export default function StudentScoreClassPage() {
                 </Col>
 
                 <Col span={24}>
-                    <h3 className="text-lg font-bold">Danh sách điểm theo kỳ</h3>
+                    <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
                     <Select
                         value={semesterId}
                         onChange={(v) => {
@@ -878,7 +878,6 @@ export default function StudentScoreClassPage() {
                                                 size={16}
                                             />
                                         </Tooltip>
-
                                         <Tooltip title="Thêm chứng chỉ">
                                             <SafetyCertificateOutlined
                                                 onClick={onOpenModalAddCertificate.bind(null, {

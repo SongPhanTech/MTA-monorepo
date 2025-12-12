@@ -7,7 +7,6 @@ export default function StudentScoreClassPage() {
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
-
     return (
         <center>
             <b className="text-lg">{'Chưa có đợt khảo sát nào. Vui lòng quay lại sau!'}</b>

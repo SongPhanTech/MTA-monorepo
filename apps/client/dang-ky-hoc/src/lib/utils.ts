@@ -9,6 +9,14 @@ const getPageCount = (totalItems: number, itemsPerPage: number) => {
     return Math.ceil(totalItems / itemsPerPage)
 }
 
+function normalizeVietnamese(str: string): string {
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+}
 const formatDate = (date: string | Date | Dayjs, unit?: 'Day' | 'Month' | 'Year') => {
     if (unit === 'Year') return dayjs(date).format('YYYY')
     if (unit === 'Month') return dayjs(date).format('MM/YYYY')
@@ -24,7 +32,22 @@ const formatDateVN = (date: string | Date | Dayjs) => {
     const d = dayjs(date)
     return `Ngày ${d.date().toString().padStart(2, '0')} tháng ${(d.month() + 1).toString().padStart(2, '0')} năm ${d.year()}`
 }
+export function searchVietnamese(
+    data: { value: string; label: string }[],
+    keyword: string
+): { value: string; label: string }[] {
+    const normalizedKeyword = normalizeVietnamese(keyword.trim())
+    if (!normalizedKeyword) return data
 
+    return data.filter((item) => {
+        const normalizedLabel = normalizeVietnamese(item.label)
+        const normalizedValue = normalizeVietnamese(item.value)
+        return (
+            normalizedLabel.includes(normalizedKeyword) ||
+            normalizedValue.includes(normalizedKeyword)
+        )
+    })
+}
 const getColorByIndex = (index: number) => {
     const colors = [
         '#3182CE',

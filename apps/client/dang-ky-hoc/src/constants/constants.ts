@@ -28,6 +28,13 @@ const GENDER_LIST = [
     },
 ]
 
+const SCORE_CONVERT_STATUS = {
+    PENDING: 'Chờ duyệt',
+    APPROVED: 'Đã duyệt',
+    REJECTED: 'Không được duyệt',
+    PARTIAL: 'Duyệt một phần',
+}
+
 const CTDT_STATUS = {
     ACTIVE: { label: 'Đang hoạt động', color: 'green' },
     INACTIVATED: { label: 'Không hoạt động', color: 'red' },
@@ -182,4 +189,5 @@ export {
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
     TRAINING_OBJECT_TYPE,
+    SCORE_CONVERT_STATUS,
 }

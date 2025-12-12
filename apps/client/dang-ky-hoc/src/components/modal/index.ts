@@ -4,6 +4,10 @@ import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalChiTietGiangVien from './modal-chi-tiet-giang-vien'
+import ModalChiTietLopBienChe from './modal-chi-tiet-lop-bien-che'
+import ModalChiTietMonHoc from './modal-chi-tiet-mon-hoc'
+import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -11,4 +15,8 @@ export {
     ThongTinBaoCaoModal,
     ModalPrintToKQHT,
     ModalLearningResult,
+    ModalChiTietGiangVien,
+    ModalChiTietLopBienChe,
+    ModalChiTietMonHoc,
+    ModalChiTietSinhVien,
 }

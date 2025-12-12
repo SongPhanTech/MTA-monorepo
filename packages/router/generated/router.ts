@@ -2,10 +2,12 @@ export default {
   "DANG_KY_HOC": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
+    "HO_SO_CA_NHAN": "/ho-so-ca-nhan",
     "HOME": "/home",
     "INDEX": "/",
     "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
-    "KHAO_SAT": "/khao-sat"
+    "KHAO_SAT": "/khao-sat",
+    "THOI_KHOA_BIEU": "/thoi-khoa-bieu"
   },
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
