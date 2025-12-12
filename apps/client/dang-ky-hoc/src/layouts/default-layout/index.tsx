@@ -144,15 +144,12 @@ const DefaultLayout = ({
                     }}
                 >
                     <Header
-                        className={`flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
+                        className={'flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0 '}
                     >
-                        {/* <span className="text-lg font-bold text-primary">
-                            {headerChildren ? headerChildren : title}
-                        </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
                         <HeaderApp />
                     </Header>
-                    <Content className="mx-2 mt-20">
+                    <Content className="mx-2">
                         {unLayout ? (
                             children
                         ) : (

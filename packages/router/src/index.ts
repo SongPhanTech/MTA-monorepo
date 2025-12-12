@@ -10,6 +10,7 @@ import {
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import {
     BarChart3,
+    BinocularsIcon,
     BookOpenCheck,
     BookUser,
     CalendarRange,
@@ -24,6 +25,8 @@ import {
     type LucideProps,
     ScrollText,
     Settings,
+    User2Icon,
+    AwardIcon,
 } from 'lucide-react'
 import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
 import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
@@ -69,9 +72,27 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin thời khoá biểu, lịch thi, thông báo...',
             },
             {
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_HO_SO_CA_NHAN,
+                label: 'Hồ sơ cá nhân',
+                icon: User2Icon,
+                path: ROUTER_PATH.DANG_KY_HOC.HO_SO_CA_NHAN,
+            },
+            {
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_THOI_KHOA_BIEU,
+                label: 'Thời khóa biểu',
+                icon: CalendarRange,
+                path: ROUTER_PATH.DANG_KY_HOC.THOI_KHOA_BIEU,
+            },
+            {
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_CHUONG_TRINH_DAO_TAO,
+                label: 'Chương trình đào tạo',
+                icon: Library,
+                path: ROUTER_PATH.DANG_KY_HOC.CHUONG_TRINH_DAO_TAO,
+            },
+            {
                 id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KET_QUA_HOC_TAP,
                 label: 'Kết quả học tập',
-                icon: FileOutlined,
+                icon: AwardIcon,
                 path: ROUTER_PATH.DANG_KY_HOC.KET_QUA_HOC_TAP,
             },
             {
@@ -83,14 +104,8 @@ const NAVIGATION: NavigationType = {
             {
                 id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KHAO_SAT,
                 label: 'Khảo sát',
-                icon: FileOutlined,
+                icon: BinocularsIcon,
                 path: ROUTER_PATH.DANG_KY_HOC.KHAO_SAT,
-            },
-            {
-                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_CHUONG_TRINH_DAO_TAO,
-                label: 'Chương trình đào tạo',
-                icon: Library,
-                path: ROUTER_PATH.DANG_KY_HOC.CHUONG_TRINH_DAO_TAO,
             },
         ],
     },

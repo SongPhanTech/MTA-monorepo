@@ -15,9 +15,12 @@ import type {
     TrainingObjectTypes,
 } from '@workspace/db'
 import type { ColumnsType } from 'antd/es/table'
+import type { ClassRegisterStatus, ScoreConvertStatus, StudentStatus } from '@workspace/db/client'
 export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
+    pcgd?: boolean[]
+    approved?: boolean[]
     name?: string | ''
     code?: string | ''
     sort?: string
@@ -26,9 +29,10 @@ export type FilterProps = {
     numberCreditsElective?: 'asc' | 'desc'
     organization?: string[]
     trainingCourses?: string[]
-    numberOfSemesters?: 'asc' | 'desc'
-    requiredCredits?: 'asc' | 'desc'
-    electiveCredits?: 'asc' | 'desc'
+    numberOfSemesters?: { lte?: number | null; gte?: number | null }
+    requiredCredits?: { lte?: number | null; gte?: number | null }
+    electiveCredits?: { lte?: number | null; gte?: number | null }
+    semesterCmp?: { lte?: number | null; gte?: number | null }
     trainingTime?: string[]
     trainingMajors?: string[]
     credit?: 'asc' | 'desc'
@@ -42,12 +46,16 @@ export type FilterProps = {
     numberOfExam?: 'asc' | 'desc'
     examType?: ExamType[]
     fixedClass?: string[]
+    fixedClassName?: string
+    fixedClassCode?: string
     trainingCourse?: string[]
     actionTaken?: AcademicActionType[]
     status?: DecisionStatus[]
+    statusStudent?: StudentStatus[]
     admissionQuota?: 'asc' | 'desc'
     semesterStart?: string
     curriculumVersion?: string[]
+    curriculumVersionParallel?: string[]
     managementOrganization?: string[]
     graduated?: boolean
     trainingLevel?: string[]
@@ -62,9 +70,6 @@ export type FilterProps = {
     lecturerType?: string[]
     staffType?: string[]
     bonusScore?: 'asc' | 'desc'
-    attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
-    midtermScoreCmp?: { lte?: number | null; gte?: number | null }
-    finalScoreCmp?: { lte?: number | null; gte?: number | null }
     finalScore?: 'asc' | 'desc'
     count?: 'asc' | 'desc'
     publishDate?: Date[]
@@ -107,10 +112,25 @@ export type FilterProps = {
     examDate?: Date[]
     endDate?: Date[]
     englishName?: string | ''
+    creditCmp?: { lte?: number | null; gte?: number | null }
+    periodCmp?: { lte?: number | null; gte?: number | null }
+    numberOfTheoryCmp?: { lte?: number | null; gte?: number | null }
+    numberOfPracticalCmp?: { lte?: number | null; gte?: number | null }
+    numberOfSelfStudyCmp?: { lte?: number | null; gte?: number | null }
+    numberOfPracticeCmp?: { lte?: number | null; gte?: number | null }
+    numberOfReviewCmp?: { lte?: number | null; gte?: number | null }
+    numberOfExamCmp?: { lte?: number | null; gte?: number | null }
+    attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
+    midtermScoreCmp?: { lte?: number | null; gte?: number | null }
+    examScoreCmp?: { lte?: number | null; gte?: number | null }
+    finalScoreCmp?: { lte?: number | null; gte?: number | null }
+    gpaCmp?: { lte?: number | null; gte?: number | null }
+    reason?: string
+    graduation?: boolean[]
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]
-    type?: TrainingObjectTypes
+    type?: TrainingObjectTypes[]
     baseScore?: 'Base10' | 'Base4'
     trainingFieldId?: string
     title?: string
@@ -123,6 +143,7 @@ export type FilterProps = {
     specialization?: string
     workplace?: string
     phone?: string
+    rank?: string
     email?: string
     originalDiplomaNumber?: string
     idCardNumber?: string
@@ -135,6 +156,16 @@ export type FilterProps = {
     paymentDate?: Date[]
     role?: CouncilRole[]
     order?: 'asc' | 'desc'
+    subjectClassId?: string
+    decisionNo?: string
+    classRegisterStatus?: ClassRegisterStatus[]
+    isTeaching?: boolean[]
+    subjectClassIds?: string[]
+    trainingObjectTypeId?: string
+    trainingFormId?: string[]
+    trainingLevelId?: string[]
+    formStatus?: ScoreConvertStatus
+    subjects?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?:

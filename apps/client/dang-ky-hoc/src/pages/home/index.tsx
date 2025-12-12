@@ -1,11 +1,11 @@
 import { useScoreConverter } from '@hooks/scoreConverter'
-import DashboardLayout from '@layouts/dashboard-layout'
 import { useSession } from '@workspace/auth/react'
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
 import { LichCongTac, DanhSachThongBao } from '@workspace/ui'
 import { Col, Progress, Row, Typography } from 'antd'
 import { useMemo } from 'react'
+import DefaultLayout from '@layouts/default-layout';
 
 const { Title } = Typography
 
@@ -179,5 +179,5 @@ function Page() {
 export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DashboardLayout>{page}</DashboardLayout>
+    return <DefaultLayout>{page}</DefaultLayout>
 }

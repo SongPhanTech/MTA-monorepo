@@ -1,40 +1,37 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
+import type { Prisma, SubjectVersion } from '@workspace/db/client'
+import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
-    $Enums,
-    type Prisma,
-    type SubjectVersion,
-    type TrainingBlockSubject,
-} from '@workspace/db/client'
-import {
+    useDeleteManyTrainingBlockSubject,
+    useDeleteTrainingBlockOnCurriculumVersion,
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
     useFindUniqueUserProfile,
+    useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
 import { cn } from '@workspace/ui/lib/utils'
-import { Col, Divider, Row, Tag } from 'antd'
+import { Col, Divider, message, Row, Tooltip } from 'antd'
+import type React from 'react'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useSession } from '@workspace/auth/react'
 export default function TrainingProgramSubjects() {
+    const { can, canSome } = useAbility()
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         organization: undefined,
         code: '',
         name: '',
         trainingMajors: undefined,
-        credit: undefined,
         semester: undefined,
-        period: undefined,
-        numberOfTheory: undefined,
-        numberOfPractical: undefined,
-        numberOfSelfStudy: undefined,
-        numberOfPractice: undefined,
-        numberOfReview: undefined,
-        numberOfExam: undefined,
         examType: undefined,
     })
 
@@ -55,6 +52,7 @@ export default function TrainingProgramSubjects() {
         }
     )
     const id = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ''
+
     const { data: initialValue } = useFindUniqueCurriculumVersion(
         {
             where: { id },
@@ -69,7 +67,13 @@ export default function TrainingProgramSubjects() {
                     include: {
                         subjects: {
                             include: {
-                                subject: true,
+                                subject: {
+                                    include: {
+                                        subjectClass: {
+                                            take: 1,
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -132,11 +136,12 @@ export default function TrainingProgramSubjects() {
                 : {},
         [filters, isFiltering]
     )
+
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
+            curriculumVersionId: id,
             curriculumVersion: {
                 deletedAt: null,
-                id: id,
             },
             ...where,
         },
@@ -176,7 +181,151 @@ export default function TrainingProgramSubjects() {
                             },
                             !!filters.examType
                         ),
+                        ...(filters.creditCmp
+                            ? {
+                                  credit: {
+                                      ...(filters.creditCmp.gte
+                                          ? {
+                                                gte: Number(filters.creditCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.creditCmp.lte
+                                          ? {
+                                                lte: Number(filters.creditCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.periodCmp
+                            ? {
+                                  period: {
+                                      ...(filters.periodCmp.gte
+                                          ? {
+                                                gte: Number(filters.periodCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.periodCmp.lte
+                                          ? {
+                                                lte: Number(filters.periodCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfTheoryCmp
+                            ? {
+                                  numberOfTheory: {
+                                      ...(filters.numberOfTheoryCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfTheoryCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfTheoryCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfTheoryCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfPracticalCmp
+                            ? {
+                                  numberOfPractical: {
+                                      ...(filters.numberOfPracticalCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfPracticalCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfPracticalCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfPracticalCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfSelfStudyCmp
+                            ? {
+                                  numberOfSelfStudy: {
+                                      ...(filters.numberOfSelfStudyCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfSelfStudyCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfSelfStudyCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfSelfStudyCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfPracticeCmp
+                            ? {
+                                  numberOfPractice: {
+                                      ...(filters.numberOfPracticeCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfPracticeCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfPracticeCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfPracticeCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfReviewCmp
+                            ? {
+                                  numberOfReview: {
+                                      ...(filters.numberOfReviewCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfReviewCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfReviewCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfReviewCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
+                        ...(filters.numberOfExamCmp
+                            ? {
+                                  numberOfExam: {
+                                      ...(filters.numberOfExamCmp.gte
+                                          ? {
+                                                gte: Number(filters.numberOfExamCmp.gte),
+                                            }
+                                          : {}),
+                                      ...(filters.numberOfExamCmp.lte
+                                          ? {
+                                                lte: Number(filters.numberOfExamCmp.lte),
+                                            }
+                                          : {}),
+                                  },
+                              }
+                            : {}),
                     },
+                    ...(filters.semesterCmp
+                        ? {
+                              semester: {
+                                  ...(filters.semesterCmp.gte
+                                      ? {
+                                            gte: Number(filters.semesterCmp.gte),
+                                        }
+                                      : {}),
+                                  ...(filters.semesterCmp.lte
+                                      ? {
+                                            lte: Number(filters.semesterCmp.lte),
+                                        }
+                                      : {}),
+                              },
+                          }
+                        : {}),
                 },
                 include: {
                     subject: {
@@ -189,91 +338,6 @@ export default function TrainingProgramSubjects() {
                         },
                     },
                 },
-                orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    credit: filters.credit,
-                                },
-                            },
-                        ],
-                        !!filters.credit
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    period: filters.period,
-                                },
-                            },
-                        ],
-                        !!filters.period
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfTheory: filters.numberOfTheory,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfTheory
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfSelfStudy: filters.numberOfSelfStudy,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfSelfStudy
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfPractical: filters.numberOfPractical,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfPractical
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfPractice: filters.numberOfPractice,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfPractice
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfReview: filters.numberOfReview,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfReview
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                subject: {
-                                    numberOfExam: filters.numberOfExam,
-                                },
-                            },
-                        ],
-                        !!filters.numberOfExam
-                    ),
-                    {
-                        semester: filters.semester ? filters.semester : 'asc',
-                    },
-                ],
             },
             trainingBlock: true,
         },
@@ -283,6 +347,93 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+
+    const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
+        curriculumVersionId: string
+        trainingBlockOnCurriculumVersionId: string
+        trainingBlockSubjectId: string
+    }>({
+        tag: 'PutTrainingBlockSubject',
+    })
+
+    const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
+        curriculumVersionId: string
+    }>({
+        tag: 'PutTrainingBlockOnCurriculumVersion',
+        onClose: () => {
+            refetch()
+        },
+    })
+
+    const { onOpen: onOpenSubjectVersion } = useDisclosure<{
+        subjectId: string
+        subjectVersionId?: string
+        isLocked?: boolean
+    }>({
+        tag: 'PutVersionSubjectModal',
+    })
+
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string,
+        isLocked: boolean
+    ) => {
+        onOpenSubjectVersion({ subjectId, subjectVersionId, isLocked })
+    }
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: deleteTrainingBlockOnCurriculumVersion } =
+        useDeleteTrainingBlockOnCurriculumVersion()
+    const { mutateAsync: deleteManyTrainingBlockSubject } = useDeleteManyTrainingBlockSubject()
+    async function handleDeleteTrainingBlockOnCurriculumVersion(id: string) {
+        try {
+            showSpinner()
+            await deleteManyTrainingBlockSubject({
+                where: {
+                    trainingBlockOnCurriculumVersionId: id,
+                },
+            })
+            await deleteTrainingBlockOnCurriculumVersion({
+                where: {
+                    id,
+                },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
+    async function handleDeleteTrainingBlockSubject(id: string) {
+        try {
+            showSpinner()
+            await updateTrainingBlockSubject({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const treeData = buildOrgTree(manageOrgData)
 
     return (
@@ -302,7 +453,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <div className="flex gap-2">
                         <p className="flex gap-2 items-center">
-                            <p className="w-4 h-4 bg-red-100" /> Môn bắt buộc
+                            <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
                         </p>
                         <p className="flex gap-2 items-center">
                             <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
@@ -312,6 +463,8 @@ export default function TrainingProgramSubjects() {
                         </p>
                     </div>
                     <TableCollapse
+                        scrollable
+                        maxHeight={'calc(100vh - 305px)'}
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
                             `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
@@ -326,7 +479,7 @@ export default function TrainingProgramSubjects() {
                                 className: cn(
                                     !subject.useForFinalScore && 'bg-orange-300',
                                     subject.type === $Enums.SubjectRequirementType.Mandatory &&
-                                        'bg-red-100',
+                                        'bg-white',
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100'
                                 ),
@@ -340,70 +493,111 @@ export default function TrainingProgramSubjects() {
                                 render: (_, record) => (
                                     <p className="font-bold">{record?.trainingBlock?.name}</p>
                                 ),
-                                colSpan: 3,
+                                colSpan: 2,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.credit, 0),
+                                render: (_, record) => (
+                                    <p className="text-center font-bold">
+                                        {record?.electiveCreditsRequired}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
+                                render: (_, record) => (
+                                    <p className="text-center font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + s.subject.credit,
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
-                                        0
-                                    ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
-                                        0
-                                    ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject?.period ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfReview ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
-                                render: (_, record) =>
-                                    record.subjects.reduce(
-                                        (sum, s) => sum + (s.subject.numberOfExam ?? 0),
-                                        0
-                                    ),
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfReview ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) => (
+                                    <p className="font-bold">
+                                        {record.subjects.reduce(
+                                            (sum, s) => sum + (s.subject.numberOfExam ?? 0),
+                                            0
+                                        )}
+                                    </p>
+                                ),
                                 colSpan: 1,
                             },
                             {
@@ -431,17 +625,28 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
                             },
                             {
-                                title: 'ĐVPT',
+                                title: (
+                                    <Tooltip title="Số tín chỉ tự chọn">
+                                        <span>TCTC</span>
+                                    </Tooltip>
+                                ),
+                                width: 100,
+                                align: 'center',
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Đơn vị phụ trách">
+                                        <span>ĐVPT</span>
+                                    </Tooltip>
+                                ),
                                 dataIndex: 'organization',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
@@ -451,9 +656,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Số TC',
-                                dataIndex: 'credit',
+                                dataIndex: 'creditCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
                                 distinctFilters: [
                                     'semester',
@@ -471,29 +676,33 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'HKDK',
-                                dataIndex: 'semester',
+                                title: (
+                                    <Tooltip title="Học kỳ dự kiến">
+                                        <span>HKDK</span>
+                                    </Tooltip>
+                                ),
+                                dataIndex: 'semesterCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
-                                distinctFilters: [
-                                    'credit',
-                                    'period',
-                                    'numberOfTheory',
-                                    'numberOfPractical',
-                                    'numberOfSelfStudy',
-                                    'numberOfPractice',
-                                    'numberOfReview',
-                                    'numberOfExam',
-                                    'numberOfOther',
-                                ],
+                                render: (__, record) => record?.semester,
+                            },
+                            {
+                                title: (
+                                    <Tooltip title="Học kỳ giảng dạy">
+                                        <span>HKGD</span>
+                                    </Tooltip>
+                                ),
+                                width: 80,
+                                type: 'cmp',
+                                align: 'center',
                             },
                             {
                                 title: 'Số tiết TKB',
-                                dataIndex: 'period',
+                                dataIndex: 'periodCmp',
                                 width: 120,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -511,9 +720,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'LT',
-                                dataIndex: 'numberOfTheory',
+                                dataIndex: 'numberOfTheoryCmp',
                                 width: 80,
-                                type: 'order',
+                                type: 'cmp',
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -532,8 +741,9 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'BT',
-                                dataIndex: 'numberOfPractical',
-                                type: 'order',
+                                dataIndex: 'numberOfPracticalCmp',
+                                type: 'cmp',
+                                width: 80,
                                 align: 'center',
                                 distinctFilters: [
                                     'credit',
@@ -552,10 +762,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'ThL',
-                                dataIndex: 'numberOfSelfStudy',
+                                dataIndex: 'numberOfSelfStudyCmp',
                                 width: 80,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -573,10 +783,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'TN, TH',
-                                dataIndex: 'numberOfPractice',
+                                dataIndex: 'numberOfPracticeCmp',
                                 width: 90,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -594,10 +804,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Ôn',
-                                dataIndex: 'numberOfReview',
+                                dataIndex: 'numberOfReviewCmp',
                                 width: 60,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -615,10 +825,10 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'KT, Thi',
-                                dataIndex: 'numberOfExam',
+                                dataIndex: 'numberOfExamCmp',
                                 width: 90,
                                 align: 'center',
-                                type: 'order',
+                                type: 'cmp',
                                 distinctFilters: [
                                     'credit',
                                     'semester',
@@ -654,20 +864,43 @@ export default function TrainingProgramSubjects() {
                             //         return <Checkbox checked={!!value} />
                             //     },
                             // },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 150,
-                                render: (record) => {
-                                    return !record?.active ? (
-                                        <Tag color="error">Ngừng đào tạo</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang hoạt động</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     render: (record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Ngừng đào tạo</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
                         ]}
                         data={data}
+                        // headerRight={({ id }) => (
+                        //     <div className="flex gap-2.5 w-[80px] justify-center items-center">
+                        //         <CreateIcon
+                        //             title={'Thêm môn học'}
+                        //             onClick={(e) => {
+                        //                 e.stopPropagation()
+                        //                 onOpenTrainingBlockSubject({
+                        //                     curriculumVersionId: id,
+                        //                     trainingBlockOnCurriculumVersionId: id,
+                        //                     trainingBlockSubjectId: '',
+                        //                 })
+                        //             }}
+                        //         />
+
+                        //         <DeleteIcon
+                        //             popConfirm={{
+                        //                 onConfirm: () =>
+                        //                     handleDeleteTrainingBlockOnCurriculumVersion(id),
+                        //             }}
+                        //             onClick={(e) => e.stopPropagation()}
+                        //         />
+                        //     </div>
+                        // )}
                         pagination={false}
                     />
                 </Col>
@@ -675,7 +908,6 @@ export default function TrainingProgramSubjects() {
         </div>
     )
 }
-
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout breadcrumbList={[{ title: 'Chương trình đào tạo' }]}>{page}</DefaultLayout>

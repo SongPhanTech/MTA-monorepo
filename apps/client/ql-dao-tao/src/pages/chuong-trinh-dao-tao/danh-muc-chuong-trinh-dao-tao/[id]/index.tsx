@@ -611,7 +611,7 @@ export default function TrainingProgramSubjects() {
                                 render: (_, record) => (
                                     <p className="font-bold">
                                         {record.subjects.reduce(
-                                            (sum, s) => sum + s.subject.period,
+                                            (sum, s) => sum + (s.subject?.period ?? 0),
                                             0
                                         )}
                                     </p>

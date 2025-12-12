@@ -8,7 +8,7 @@ import {
     useFindUniqueStudent,
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Row } from 'antd'
+import { Button, Col, Flex, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Check, X } from 'lucide-react'
@@ -77,11 +77,11 @@ export default function StudentScoreClassPage() {
                         trainingCourse: {
                             include: {
                                 scoreConverts: true,
+                                trainingObjectType: true,
                             },
                         },
                     },
                 },
-                trainingObjectType: true,
             },
         },
         {
@@ -154,19 +154,6 @@ export default function StudentScoreClassPage() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                {[
-                    student?.code,
-                    student?.userProfile?.fullname,
-                    student?.trainingObjectType?.name,
-                    student?.fixedClass?.trainingCourse?.name,
-                    student?.curriculumVersion?.name,
-                    student?.curriculumVersion?.curriculum.trainingMajor.name,
-                    student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
