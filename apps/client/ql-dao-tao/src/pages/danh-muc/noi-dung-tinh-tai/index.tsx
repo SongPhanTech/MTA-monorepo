@@ -8,7 +8,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountTrainingType,
     useFindManyLoadCategory,
-    useUpdateLoadCategory
+    useUpdateLoadCategory,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'

@@ -12,7 +12,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
@@ -44,8 +44,8 @@ const PutSubjectModal = () => {
                     data: {
                         name: output.name.trim(),
                         managementOrganizationId: output.managementOrganizationId,
-                        credit: +output.credit,
-                        period: +output.period,
+                        credit: output.credit,
+                        period: output.period,
                         // numberOfTheory: +output.numberOfTheory,
                         // numberOfPractice: +output.numberOfPractice,
                         // numberOfSelfStudy: +output.numberOfSelfStudy,
@@ -158,27 +158,27 @@ const PutSubjectModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
-                    <Input placeholder="Nhập số tín chỉ" />
+                    <InputNumber placeholder="Nhập số tín chỉ" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="period" label="Số tiết" required>
-                    <Input placeholder="Nhập số tiết" />
+                    <InputNumber placeholder="Nhập số tiết" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết" required>
-                    <Input placeholder="Nhập số tiết lý thuyết" />
+                    <InputNumber placeholder="Nhập số tiết lý thuyết" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberOfPractice" label="Số tiết thực hành" required>
-                    <Input placeholder="Nhập số tiết thực hành" />
+                    <InputNumber placeholder="Nhập số tiết thực hành" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberOfSelfStudy" label="Số tiết tự học" required>
-                    <Input placeholder="Nhập số tiết tự học" />
+                    <InputNumber placeholder="Nhập số tiết tự học" />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -188,7 +188,7 @@ const PutSubjectModal = () => {
                     label="Số tiết đồ án"
                     required
                 >
-                    <Input placeholder="Nhập số tiết đồ án" />
+                    <InputNumber placeholder="Nhập số tiết đồ án" />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -198,12 +198,12 @@ const PutSubjectModal = () => {
                     label="Số tiết thực tập"
                     required
                 >
-                    <Input placeholder="Nhập số tiết thực tập" />
+                    <InputNumber placeholder="Nhập số tiết thực tập" />
                 </FormItem>
             </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="numberOfOther" label="Số tiết khác" required>
-                    <Input placeholder="Nhập số tiết khác" />
+                    <InputNumber placeholder="Nhập số tiết khác" />
                 </FormItem>
             </Col>
         </PutFormModal>

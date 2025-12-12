@@ -144,7 +144,9 @@ const DefaultLayout = ({
                     }}
                 >
                     <Header
-                        className={'flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0 '}
+                        className={
+                            'flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0 '
+                        }
                     >
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
                         <HeaderApp />
