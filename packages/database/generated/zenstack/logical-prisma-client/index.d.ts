@@ -8306,7 +8306,8 @@ export namespace Prisma {
         diplomaVerificationBackId: 'diplomaVerificationBackId',
         trainingFieldId: 'trainingFieldId',
         studentScoreConvertId: 'studentScoreConvertId',
-        noteId: 'noteId'
+        noteId: 'noteId',
+        evaluationPeriodId: 'evaluationPeriodId'
     };
     export const AcademicActionConfigScalarFieldEnum: {
         id: 'id',
@@ -11451,7 +11452,8 @@ export namespace Prisma {
         diplomaVerificationBackId: 'diplomaVerificationBackId',
         trainingFieldId: 'trainingFieldId',
         studentScoreConvertId: 'studentScoreConvertId',
-        noteId: 'noteId'
+        noteId: 'noteId',
+        evaluationPeriodId: 'evaluationPeriodId'
     };
     export const AcademicActionConfigOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -63320,6 +63322,7 @@ export namespace Prisma {
         trainingField<T extends DocumentFile$trainingFieldArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$trainingFieldArgs<ExtArgs>>): Prisma__TrainingFieldClient<$Result.GetResult<Prisma.$TrainingFieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         studentScoreConvert<T extends DocumentFile$studentScoreConvertArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$studentScoreConvertArgs<ExtArgs>>): Prisma__StudentScoreConvertClient<$Result.GetResult<Prisma.$StudentScoreConvertPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         note<T extends DocumentFile$noteArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$noteArgs<ExtArgs>>): Prisma__NoteClient<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        evaluationPeriod<T extends DocumentFile$evaluationPeriodArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$evaluationPeriodArgs<ExtArgs>>): Prisma__EvaluationPeriodClient<$Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63377,6 +63380,7 @@ export namespace Prisma {
         readonly trainingFieldId: FieldRef<"DocumentFile", 'String'>;
         readonly studentScoreConvertId: FieldRef<"DocumentFile", 'String'>;
         readonly noteId: FieldRef<"DocumentFile", 'String'>;
+        readonly evaluationPeriodId: FieldRef<"DocumentFile", 'String'>;
     }
 
     export interface AcademicActionConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -74230,6 +74234,7 @@ export namespace Prisma {
         semester<T extends EvaluationPeriod$semesterArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$semesterArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         standards<T extends EvaluationPeriod$standardsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         council<T extends EvaluationPeriod$councilArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$councilArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        documentFiles<T extends EvaluationPeriod$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -132778,9 +132783,11 @@ export namespace Prisma {
      */
     export type EvaluationPeriodCountOutputType = {
         standards: number
+        documentFiles: number
     };
     export type EvaluationPeriodCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         standards?: boolean | EvaluationPeriodCountOutputTypeCountStandardsArgs
+        documentFiles?: boolean | EvaluationPeriodCountOutputTypeCountDocumentFilesArgs
     };
     /**
      * EvaluationPeriodCountOutputType without action
@@ -132796,6 +132803,12 @@ export namespace Prisma {
      */
     export type EvaluationPeriodCountOutputTypeCountStandardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StandardPeriodWhereInput
+    };
+    /**
+     * EvaluationPeriodCountOutputType without action
+     */
+    export type EvaluationPeriodCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DocumentFileWhereInput
     };
     /**
      * Count Type StandardCatalogCountOutputType
@@ -239582,6 +239595,7 @@ export namespace Prisma {
         trainingFieldId: string | null
         studentScoreConvertId: string | null
         noteId: string | null
+        evaluationPeriodId: string | null
     };
     export type DocumentFileMaxAggregateOutputType = {
         id: string | null
@@ -239615,6 +239629,7 @@ export namespace Prisma {
         trainingFieldId: string | null
         studentScoreConvertId: string | null
         noteId: string | null
+        evaluationPeriodId: string | null
     };
     export type DocumentFileCountAggregateOutputType = {
         id: number
@@ -239648,6 +239663,7 @@ export namespace Prisma {
         trainingFieldId: number
         studentScoreConvertId: number
         noteId: number
+        evaluationPeriodId: number
         _all: number
     };
     export type DocumentFileAvgAggregateInputType = {
@@ -239688,6 +239704,7 @@ export namespace Prisma {
         trainingFieldId?: true
         studentScoreConvertId?: true
         noteId?: true
+        evaluationPeriodId?: true
     };
     export type DocumentFileMaxAggregateInputType = {
         id?: true
@@ -239721,6 +239738,7 @@ export namespace Prisma {
         trainingFieldId?: true
         studentScoreConvertId?: true
         noteId?: true
+        evaluationPeriodId?: true
     };
     export type DocumentFileCountAggregateInputType = {
         id?: true
@@ -239754,6 +239772,7 @@ export namespace Prisma {
         trainingFieldId?: true
         studentScoreConvertId?: true
         noteId?: true
+        evaluationPeriodId?: true
         _all?: true
     };
     export type DocumentFileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -239868,6 +239887,7 @@ export namespace Prisma {
         trainingFieldId: string | null
         studentScoreConvertId: string | null
         noteId: string | null
+        evaluationPeriodId: string | null
         _count: DocumentFileCountAggregateOutputType | null
         _avg: DocumentFileAvgAggregateOutputType | null
         _sum: DocumentFileSumAggregateOutputType | null
@@ -239918,6 +239938,7 @@ export namespace Prisma {
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
         noteId?: boolean
+        evaluationPeriodId?: boolean
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
         archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -239937,6 +239958,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     }, ExtArgs["result"]["documentFile"]>;
     export type DocumentFileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -239970,6 +239992,7 @@ export namespace Prisma {
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
         noteId?: boolean
+        evaluationPeriodId?: boolean
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
         archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -239989,6 +240012,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     }, ExtArgs["result"]["documentFile"]>;
     export type DocumentFileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -240022,6 +240046,7 @@ export namespace Prisma {
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
         noteId?: boolean
+        evaluationPeriodId?: boolean
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
         archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -240041,6 +240066,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     }, ExtArgs["result"]["documentFile"]>;
     export type DocumentFileSelectScalar = {
         id?: boolean
@@ -240074,8 +240100,9 @@ export namespace Prisma {
         trainingFieldId?: boolean
         studentScoreConvertId?: boolean
         noteId?: boolean
+        evaluationPeriodId?: boolean
     };
-    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "noteId", ExtArgs["result"]["documentFile"]>;
+    export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "trainingCourseId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "librarySubmissionId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "studentScoreConvertId" | "noteId" | "evaluationPeriodId", ExtArgs["result"]["documentFile"]>;
     export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
         trainingCourse?: boolean | DocumentFile$trainingCourseArgs<ExtArgs>
@@ -240096,6 +240123,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     };
     export type DocumentFileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
@@ -240117,6 +240145,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     };
     export type DocumentFileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
@@ -240138,6 +240167,7 @@ export namespace Prisma {
         trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
         studentScoreConvert?: boolean | DocumentFile$studentScoreConvertArgs<ExtArgs>
         note?: boolean | DocumentFile$noteArgs<ExtArgs>
+        evaluationPeriod?: boolean | DocumentFile$evaluationPeriodArgs<ExtArgs>
     };
     export type $DocumentFilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DocumentFile"
@@ -240161,6 +240191,7 @@ export namespace Prisma {
             trainingField: Prisma.$TrainingFieldPayload<ExtArgs> | null
             studentScoreConvert: Prisma.$StudentScoreConvertPayload<ExtArgs> | null
             note: Prisma.$NotePayload<ExtArgs> | null
+            evaluationPeriod: Prisma.$EvaluationPeriodPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -240194,6 +240225,7 @@ export namespace Prisma {
             trainingFieldId: string | null
             studentScoreConvertId: string | null
             noteId: string | null
+            evaluationPeriodId: string | null
         }, ExtArgs["result"]["documentFile"]>
         composites: {}
     };
@@ -240919,6 +240951,24 @@ export namespace Prisma {
          */
         include?: NoteInclude<ExtArgs> | null
         where?: NoteWhereInput
+    };
+    /**
+     * DocumentFile.evaluationPeriod
+     */
+    export type DocumentFile$evaluationPeriodArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the EvaluationPeriod
+         */
+        select?: EvaluationPeriodSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the EvaluationPeriod
+         */
+        omit?: EvaluationPeriodOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: EvaluationPeriodInclude<ExtArgs> | null
+        where?: EvaluationPeriodWhereInput
     };
     /**
      * DocumentFile without action
@@ -262206,6 +262256,7 @@ export namespace Prisma {
         semester?: boolean | EvaluationPeriod$semesterArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
         council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
+        documentFiles?: boolean | EvaluationPeriod$documentFilesArgs<ExtArgs>
         _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -262260,6 +262311,7 @@ export namespace Prisma {
         semester?: boolean | EvaluationPeriod$semesterArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
         council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
+        documentFiles?: boolean | EvaluationPeriod$documentFilesArgs<ExtArgs>
         _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type EvaluationPeriodIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -262274,6 +262326,7 @@ export namespace Prisma {
             semester: Prisma.$SemesterPayload<ExtArgs> | null
             standards: Prisma.$StandardPeriodPayload<ExtArgs>[]
             council: Prisma.$EvaluationCouncilPayload<ExtArgs> | null
+            documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -262731,6 +262784,29 @@ export namespace Prisma {
          */
         include?: EvaluationCouncilInclude<ExtArgs> | null
         where?: EvaluationCouncilWhereInput
+    };
+    /**
+     * EvaluationPeriod.documentFiles
+     */
+    export type EvaluationPeriod$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DocumentFile
+         */
+        select?: DocumentFileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DocumentFile
+         */
+        omit?: DocumentFileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DocumentFileInclude<ExtArgs> | null
+        where?: DocumentFileWhereInput
+        orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+        cursor?: DocumentFileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
     };
     /**
      * EvaluationPeriod without action
@@ -344492,6 +344568,7 @@ export namespace Prisma {
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
+        evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
         archivedCertificate?: XOR<ArchivedCertificateNullableScalarRelationFilter, ArchivedCertificateWhereInput> | null
         trainingCourse?: XOR<TrainingCourseNullableScalarRelationFilter, TrainingCourseWhereInput> | null
         archivedAward?: XOR<ArchivedAwardNullableScalarRelationFilter, ArchivedAwardWhereInput> | null
@@ -344511,6 +344588,7 @@ export namespace Prisma {
         trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
         studentScoreConvert?: XOR<StudentScoreConvertNullableScalarRelationFilter, StudentScoreConvertWhereInput> | null
         note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
+        evaluationPeriod?: XOR<EvaluationPeriodNullableScalarRelationFilter, EvaluationPeriodWhereInput> | null
     };
     export type DocumentFileOrderByWithRelationInput = {
         id?: SortOrder
@@ -344544,6 +344622,7 @@ export namespace Prisma {
         trainingFieldId?: SortOrderInput | SortOrder
         studentScoreConvertId?: SortOrderInput | SortOrder
         noteId?: SortOrderInput | SortOrder
+        evaluationPeriodId?: SortOrderInput | SortOrder
         archivedCertificate?: ArchivedCertificateOrderByWithRelationInput
         trainingCourse?: TrainingCourseOrderByWithRelationInput
         archivedAward?: ArchivedAwardOrderByWithRelationInput
@@ -344563,6 +344642,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldOrderByWithRelationInput
         studentScoreConvert?: StudentScoreConvertOrderByWithRelationInput
         note?: NoteOrderByWithRelationInput
+        evaluationPeriod?: EvaluationPeriodOrderByWithRelationInput
         _relevance?: DocumentFileOrderByRelevanceInput
     };
     export type DocumentFileWhereUniqueInput = Prisma.AtLeast<{
@@ -344600,6 +344680,7 @@ export namespace Prisma {
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
+        evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
         archivedCertificate?: XOR<ArchivedCertificateNullableScalarRelationFilter, ArchivedCertificateWhereInput> | null
         trainingCourse?: XOR<TrainingCourseNullableScalarRelationFilter, TrainingCourseWhereInput> | null
         archivedAward?: XOR<ArchivedAwardNullableScalarRelationFilter, ArchivedAwardWhereInput> | null
@@ -344619,6 +344700,7 @@ export namespace Prisma {
         trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
         studentScoreConvert?: XOR<StudentScoreConvertNullableScalarRelationFilter, StudentScoreConvertWhereInput> | null
         note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
+        evaluationPeriod?: XOR<EvaluationPeriodNullableScalarRelationFilter, EvaluationPeriodWhereInput> | null
     }, "id" | "code" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId">;
     export type DocumentFileOrderByWithAggregationInput = {
         id?: SortOrder
@@ -344652,6 +344734,7 @@ export namespace Prisma {
         trainingFieldId?: SortOrderInput | SortOrder
         studentScoreConvertId?: SortOrderInput | SortOrder
         noteId?: SortOrderInput | SortOrder
+        evaluationPeriodId?: SortOrderInput | SortOrder
         _count?: DocumentFileCountOrderByAggregateInput
         _avg?: DocumentFileAvgOrderByAggregateInput
         _max?: DocumentFileMaxOrderByAggregateInput
@@ -344693,6 +344776,7 @@ export namespace Prisma {
         trainingFieldId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
         noteId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+        evaluationPeriodId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     };
     export type AcademicActionConfigWhereInput = {
         AND?: AcademicActionConfigWhereInput | AcademicActionConfigWhereInput[]
@@ -347599,6 +347683,7 @@ export namespace Prisma {
         semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
+        documentFiles?: DocumentFileListRelationFilter
     };
     export type EvaluationPeriodOrderByWithRelationInput = {
         id?: SortOrder
@@ -347617,6 +347702,7 @@ export namespace Prisma {
         semester?: SemesterOrderByWithRelationInput
         standards?: StandardPeriodOrderByRelationAggregateInput
         council?: EvaluationCouncilOrderByWithRelationInput
+        documentFiles?: DocumentFileOrderByRelationAggregateInput
         _relevance?: EvaluationPeriodOrderByRelevanceInput
     };
     export type EvaluationPeriodWhereUniqueInput = Prisma.AtLeast<{
@@ -347639,6 +347725,7 @@ export namespace Prisma {
         semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
+        documentFiles?: DocumentFileListRelationFilter
     }, "id" | "code">;
     export type EvaluationPeriodOrderByWithAggregationInput = {
         id?: SortOrder
@@ -373015,6 +373102,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateInput = {
         id?: string
@@ -373048,6 +373136,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373081,6 +373170,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373114,6 +373204,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileCreateManyInput = {
         id?: string
@@ -373147,6 +373238,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -373194,6 +373286,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type AcademicActionConfigCreateInput = {
         id?: string
@@ -376468,6 +376561,7 @@ export namespace Prisma {
         semester?: SemesterCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodUncheckedCreateInput = {
         id?: string
@@ -376485,6 +376579,7 @@ export namespace Prisma {
         semesterId?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -376502,6 +376597,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -376519,6 +376615,7 @@ export namespace Prisma {
         semesterId?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodCreateManyInput = {
         id?: string
@@ -396245,6 +396342,10 @@ export namespace Prisma {
         is?: NoteWhereInput | null
         isNot?: NoteWhereInput | null
     };
+    export type EvaluationPeriodNullableScalarRelationFilter = {
+        is?: EvaluationPeriodWhereInput | null
+        isNot?: EvaluationPeriodWhereInput | null
+    };
     export type DocumentFileOrderByRelevanceInput = {
         fields: DocumentFileOrderByRelevanceFieldEnum | DocumentFileOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -396282,6 +396383,7 @@ export namespace Prisma {
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
         noteId?: SortOrder
+        evaluationPeriodId?: SortOrder
     };
     export type DocumentFileAvgOrderByAggregateInput = {
         size?: SortOrder
@@ -396318,6 +396420,7 @@ export namespace Prisma {
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
         noteId?: SortOrder
+        evaluationPeriodId?: SortOrder
     };
     export type DocumentFileMinOrderByAggregateInput = {
         id?: SortOrder
@@ -396351,6 +396454,7 @@ export namespace Prisma {
         trainingFieldId?: SortOrder
         studentScoreConvertId?: SortOrder
         noteId?: SortOrder
+        evaluationPeriodId?: SortOrder
     };
     export type DocumentFileSumOrderByAggregateInput = {
         size?: SortOrder
@@ -417234,6 +417338,11 @@ export namespace Prisma {
         connectOrCreate?: NoteCreateOrConnectWithoutAttachmentsInput
         connect?: NoteWhereUniqueInput
     };
+    export type EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput = {
+        create?: XOR<EvaluationPeriodCreateWithoutDocumentFilesInput, EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput>
+        connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutDocumentFilesInput
+        connect?: EvaluationPeriodWhereUniqueInput
+    };
     export type BigIntFieldUpdateOperationsInput = {
         set?: bigint | number
         increment?: bigint | number
@@ -417411,6 +417520,15 @@ export namespace Prisma {
         delete?: NoteWhereInput | boolean
         connect?: NoteWhereUniqueInput
         update?: XOR<XOR<NoteUpdateToOneWithWhereWithoutAttachmentsInput, NoteUpdateWithoutAttachmentsInput>, NoteUncheckedUpdateWithoutAttachmentsInput>
+    };
+    export type EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput = {
+        create?: XOR<EvaluationPeriodCreateWithoutDocumentFilesInput, EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput>
+        connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutDocumentFilesInput
+        upsert?: EvaluationPeriodUpsertWithoutDocumentFilesInput
+        disconnect?: EvaluationPeriodWhereInput | boolean
+        delete?: EvaluationPeriodWhereInput | boolean
+        connect?: EvaluationPeriodWhereUniqueInput
+        update?: XOR<XOR<EvaluationPeriodUpdateToOneWithWhereWithoutDocumentFilesInput, EvaluationPeriodUpdateWithoutDocumentFilesInput>, EvaluationPeriodUncheckedUpdateWithoutDocumentFilesInput>
     };
     export type TrainingCourseCreateNestedOneWithoutAcademicActionConfigInput = {
         create?: XOR<TrainingCourseCreateWithoutAcademicActionConfigInput, TrainingCourseUncheckedCreateWithoutAcademicActionConfigInput>
@@ -419968,6 +420086,12 @@ export namespace Prisma {
         connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
         connect?: EvaluationCouncilWhereUniqueInput
     };
+    export type DocumentFileCreateNestedManyWithoutEvaluationPeriodInput = {
+        create?: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput> | DocumentFileCreateWithoutEvaluationPeriodInput[] | DocumentFileUncheckedCreateWithoutEvaluationPeriodInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutEvaluationPeriodInput | DocumentFileCreateOrConnectWithoutEvaluationPeriodInput[]
+        createMany?: DocumentFileCreateManyEvaluationPeriodInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    };
     export type StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput = {
         create?: XOR<StandardPeriodCreateWithoutPeriodInput, StandardPeriodUncheckedCreateWithoutPeriodInput> | StandardPeriodCreateWithoutPeriodInput[] | StandardPeriodUncheckedCreateWithoutPeriodInput[]
         connectOrCreate?: StandardPeriodCreateOrConnectWithoutPeriodInput | StandardPeriodCreateOrConnectWithoutPeriodInput[]
@@ -419978,6 +420102,12 @@ export namespace Prisma {
         create?: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
         connectOrCreate?: EvaluationCouncilCreateOrConnectWithoutPeriodInput
         connect?: EvaluationCouncilWhereUniqueInput
+    };
+    export type DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput = {
+        create?: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput> | DocumentFileCreateWithoutEvaluationPeriodInput[] | DocumentFileUncheckedCreateWithoutEvaluationPeriodInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutEvaluationPeriodInput | DocumentFileCreateOrConnectWithoutEvaluationPeriodInput[]
+        createMany?: DocumentFileCreateManyEvaluationPeriodInputEnvelope
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
     };
     export type EnumEvaluationPeriodStatusFieldUpdateOperationsInput = {
         set?: $Enums.EvaluationPeriodStatus
@@ -420013,6 +420143,19 @@ export namespace Prisma {
         connect?: EvaluationCouncilWhereUniqueInput
         update?: XOR<XOR<EvaluationCouncilUpdateToOneWithWhereWithoutPeriodInput, EvaluationCouncilUpdateWithoutPeriodInput>, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
     };
+    export type DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput> | DocumentFileCreateWithoutEvaluationPeriodInput[] | DocumentFileUncheckedCreateWithoutEvaluationPeriodInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutEvaluationPeriodInput | DocumentFileCreateOrConnectWithoutEvaluationPeriodInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutEvaluationPeriodInput | DocumentFileUpsertWithWhereUniqueWithoutEvaluationPeriodInput[]
+        createMany?: DocumentFileCreateManyEvaluationPeriodInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput | DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput | DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+    };
     export type StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput = {
         create?: XOR<StandardPeriodCreateWithoutPeriodInput, StandardPeriodUncheckedCreateWithoutPeriodInput> | StandardPeriodCreateWithoutPeriodInput[] | StandardPeriodUncheckedCreateWithoutPeriodInput[]
         connectOrCreate?: StandardPeriodCreateOrConnectWithoutPeriodInput | StandardPeriodCreateOrConnectWithoutPeriodInput[]
@@ -420034,6 +420177,19 @@ export namespace Prisma {
         delete?: EvaluationCouncilWhereInput | boolean
         connect?: EvaluationCouncilWhereUniqueInput
         update?: XOR<XOR<EvaluationCouncilUpdateToOneWithWhereWithoutPeriodInput, EvaluationCouncilUpdateWithoutPeriodInput>, EvaluationCouncilUncheckedUpdateWithoutPeriodInput>
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput = {
+        create?: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput> | DocumentFileCreateWithoutEvaluationPeriodInput[] | DocumentFileUncheckedCreateWithoutEvaluationPeriodInput[]
+        connectOrCreate?: DocumentFileCreateOrConnectWithoutEvaluationPeriodInput | DocumentFileCreateOrConnectWithoutEvaluationPeriodInput[]
+        upsert?: DocumentFileUpsertWithWhereUniqueWithoutEvaluationPeriodInput | DocumentFileUpsertWithWhereUniqueWithoutEvaluationPeriodInput[]
+        createMany?: DocumentFileCreateManyEvaluationPeriodInputEnvelope
+        set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+        update?: DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput | DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput[]
+        updateMany?: DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput | DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput[]
+        deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
     export type CriterionCatalogCreateNestedManyWithoutStandardInput = {
         create?: XOR<CriterionCatalogCreateWithoutStandardInput, CriterionCatalogUncheckedCreateWithoutStandardInput> | CriterionCatalogCreateWithoutStandardInput[] | CriterionCatalogUncheckedCreateWithoutStandardInput[]
@@ -469642,6 +469798,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutStudentScoreConvertInput = {
         id?: string
@@ -469674,6 +469831,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutStudentScoreConvertInput = {
         where: DocumentFileWhereUniqueInput
@@ -469912,6 +470070,7 @@ export namespace Prisma {
         trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
         studentScoreConvertId?: StringNullableFilter<"DocumentFile"> | string | null
         noteId?: StringNullableFilter<"DocumentFile"> | string | null
+        evaluationPeriodId?: StringNullableFilter<"DocumentFile"> | string | null
     };
     export type SubjectScoreConvertUpsertWithWhereUniqueWithoutStudentScoreConvertInput = {
         where: SubjectScoreConvertWhereUniqueInput
@@ -472687,6 +472846,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutArchivedCertificateInput = {
         id?: string
@@ -472719,6 +472879,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutArchivedCertificateInput = {
         where: DocumentFileWhereUniqueInput
@@ -473403,6 +473564,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutArchivedAwardInput = {
         id?: string
@@ -473435,6 +473597,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutArchivedAwardInput = {
         where: DocumentFileWhereUniqueInput
@@ -474730,6 +474893,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodUncheckedCreateWithoutSemesterInput = {
         id?: string
@@ -474746,6 +474910,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodCreateOrConnectWithoutSemesterInput = {
         where: EvaluationPeriodWhereUniqueInput
@@ -476268,6 +476433,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -476300,6 +476466,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutTrainingCourseInput = {
         where: DocumentFileWhereUniqueInput
@@ -479077,6 +479244,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutCurriculumInput = {
         id?: string
@@ -479109,6 +479277,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutCurriculumInput = {
         where: DocumentFileWhereUniqueInput
@@ -479742,6 +479911,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
@@ -479774,6 +479944,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutCurriculumVersionInput = {
         where: DocumentFileWhereUniqueInput
@@ -482038,6 +482209,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -482070,6 +482242,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutSubjectVersionInput = {
         where: DocumentFileWhereUniqueInput
@@ -492552,6 +492725,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutTrainingFieldInput = {
         id?: string
@@ -492584,6 +492758,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutTrainingFieldInput = {
         where: DocumentFileWhereUniqueInput
@@ -500384,6 +500559,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutNotificationInput = {
         id?: string
@@ -500416,6 +500592,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutNotificationInput = {
         where: DocumentFileWhereUniqueInput
@@ -501472,6 +501649,44 @@ export namespace Prisma {
     export type NoteCreateOrConnectWithoutAttachmentsInput = {
         where: NoteWhereUniqueInput
         create: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
+    };
+    export type EvaluationPeriodCreateWithoutDocumentFilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate?: Date | string
+        endDate?: Date | string | null
+        status?: $Enums.EvaluationPeriodStatus
+        semester?: SemesterCreateNestedOneWithoutEvaluationPeriodInput
+        standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
+        council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+    };
+    export type EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate?: Date | string
+        endDate?: Date | string | null
+        status?: $Enums.EvaluationPeriodStatus
+        semesterId?: string | null
+        standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
+        council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+    };
+    export type EvaluationPeriodCreateOrConnectWithoutDocumentFilesInput = {
+        where: EvaluationPeriodWhereUniqueInput
+        create: XOR<EvaluationPeriodCreateWithoutDocumentFilesInput, EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput>
     };
     export type ArchivedCertificateUpsertWithoutDocumentFilesInput = {
         update: XOR<ArchivedCertificateUpdateWithoutDocumentFilesInput, ArchivedCertificateUncheckedUpdateWithoutDocumentFilesInput>
@@ -502564,6 +502779,49 @@ export namespace Prisma {
         tags?: NoteTagUncheckedUpdateManyWithoutNotesNestedInput
         reminders?: NoteReminderUncheckedUpdateManyWithoutNoteNestedInput
     };
+    export type EvaluationPeriodUpsertWithoutDocumentFilesInput = {
+        update: XOR<EvaluationPeriodUpdateWithoutDocumentFilesInput, EvaluationPeriodUncheckedUpdateWithoutDocumentFilesInput>
+        create: XOR<EvaluationPeriodCreateWithoutDocumentFilesInput, EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput>
+        where?: EvaluationPeriodWhereInput
+    };
+    export type EvaluationPeriodUpdateToOneWithWhereWithoutDocumentFilesInput = {
+        where?: EvaluationPeriodWhereInput
+        data: XOR<EvaluationPeriodUpdateWithoutDocumentFilesInput, EvaluationPeriodUncheckedUpdateWithoutDocumentFilesInput>
+    };
+    export type EvaluationPeriodUpdateWithoutDocumentFilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        semester?: SemesterUpdateOneWithoutEvaluationPeriodNestedInput
+        standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
+        council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+    };
+    export type EvaluationPeriodUncheckedUpdateWithoutDocumentFilesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+        semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+        standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
+        council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+    };
     export type TrainingCourseCreateWithoutAcademicActionConfigInput = {
         id?: string
         code?: string | null
@@ -503402,6 +503660,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutStudentAcademicDecisionInput = {
         id?: string
@@ -503434,6 +503693,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutStudentAcademicDecisionInput = {
         where: DocumentFileWhereUniqueInput
@@ -512228,6 +512488,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDecisionInput = {
         id?: string
@@ -512260,6 +512521,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDecisionInput = {
         where: DocumentFileWhereUniqueInput
@@ -513230,6 +513492,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDefenseRecordInput = {
         id?: string
@@ -513262,6 +513525,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDefenseRecordInput = {
         where: DocumentFileWhereUniqueInput
@@ -513492,6 +513756,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutLibrarySubmissionInput = {
         id?: string
@@ -513524,6 +513789,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutLibrarySubmissionInput = {
         where: DocumentFileWhereUniqueInput
@@ -514275,6 +514541,80 @@ export namespace Prisma {
         where: EvaluationCouncilWhereUniqueInput
         create: XOR<EvaluationCouncilCreateWithoutPeriodInput, EvaluationCouncilUncheckedCreateWithoutPeriodInput>
     };
+    export type DocumentFileCreateWithoutEvaluationPeriodInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+        trainingCourse?: TrainingCourseCreateNestedOneWithoutDocumentFilesInput
+        archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+        curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+        subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+        notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+        decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutDocumentFileInput
+        diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+        diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+        diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+        trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        note?: NoteCreateNestedOneWithoutAttachmentsInput
+    };
+    export type DocumentFileUncheckedCreateWithoutEvaluationPeriodInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        librarySubmissionId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
+    };
+    export type DocumentFileCreateOrConnectWithoutEvaluationPeriodInput = {
+        where: DocumentFileWhereUniqueInput
+        create: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput>
+    };
+    export type DocumentFileCreateManyEvaluationPeriodInputEnvelope = {
+        data: DocumentFileCreateManyEvaluationPeriodInput | DocumentFileCreateManyEvaluationPeriodInput[]
+        skipDuplicates?: boolean
+    };
     export type SemesterUpsertWithoutEvaluationPeriodInput = {
         update: XOR<SemesterUpdateWithoutEvaluationPeriodInput, SemesterUncheckedUpdateWithoutEvaluationPeriodInput>
         create: XOR<SemesterCreateWithoutEvaluationPeriodInput, SemesterUncheckedCreateWithoutEvaluationPeriodInput>
@@ -514403,6 +514743,19 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         members?: EvaluationCouncilMemberUncheckedUpdateManyWithoutEvaluationCouncilNestedInput
+    };
+    export type DocumentFileUpsertWithWhereUniqueWithoutEvaluationPeriodInput = {
+        where: DocumentFileWhereUniqueInput
+        update: XOR<DocumentFileUpdateWithoutEvaluationPeriodInput, DocumentFileUncheckedUpdateWithoutEvaluationPeriodInput>
+        create: XOR<DocumentFileCreateWithoutEvaluationPeriodInput, DocumentFileUncheckedCreateWithoutEvaluationPeriodInput>
+    };
+    export type DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput = {
+        where: DocumentFileWhereUniqueInput
+        data: XOR<DocumentFileUpdateWithoutEvaluationPeriodInput, DocumentFileUncheckedUpdateWithoutEvaluationPeriodInput>
+    };
+    export type DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput = {
+        where: DocumentFileScalarWhereInput
+        data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodInput>
     };
     export type CriterionCatalogCreateWithoutStandardInput = {
         id?: string
@@ -515821,6 +516174,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         semester?: SemesterCreateNestedOneWithoutEvaluationPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodUncheckedCreateWithoutStandardsInput = {
         id?: string
@@ -515837,6 +516191,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         semesterId?: string | null
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodCreateOrConnectWithoutStandardsInput = {
         where: EvaluationPeriodWhereUniqueInput
@@ -515902,6 +516257,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         semester?: SemesterUpdateOneWithoutEvaluationPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodUncheckedUpdateWithoutStandardsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -515918,6 +516274,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         semesterId?: NullableStringFieldUpdateOperationsInput | string | null
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type CriterionPeriodUpsertWithWhereUniqueWithoutEvaluationStandardInput = {
         where: CriterionPeriodWhereUniqueInput
@@ -517184,6 +517541,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         semester?: SemesterCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodUncheckedCreateWithoutCouncilInput = {
         id?: string
@@ -517200,6 +517558,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationPeriodStatus
         semesterId?: string | null
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
     export type EvaluationPeriodCreateOrConnectWithoutCouncilInput = {
         where: EvaluationPeriodWhereUniqueInput
@@ -517263,6 +517622,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         semester?: SemesterUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodUncheckedUpdateWithoutCouncilInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -517279,6 +517639,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         semesterId?: NullableStringFieldUpdateOperationsInput | string | null
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationCouncilMemberUpsertWithWhereUniqueWithoutEvaluationCouncilInput = {
         where: EvaluationCouncilMemberWhereUniqueInput
@@ -531136,6 +531497,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDiplomaFrontInput = {
         id?: string
@@ -531168,6 +531530,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDiplomaFrontInput = {
         where: DocumentFileWhereUniqueInput
@@ -531204,6 +531567,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDiplomaBackInput = {
         id?: string
@@ -531236,6 +531600,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDiplomaBackInput = {
         where: DocumentFileWhereUniqueInput
@@ -531646,6 +532011,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDiplomaFrontInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531678,6 +532044,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUpsertWithoutDiplomaBackInput = {
         update: XOR<DocumentFileUpdateWithoutDiplomaBackInput, DocumentFileUncheckedUpdateWithoutDiplomaBackInput>
@@ -531719,6 +532086,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDiplomaBackInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -531751,6 +532119,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingCourseCreateWithoutAcademicRankingConvertInput = {
         id?: string
@@ -532945,6 +533314,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDiplomaVerificationInput = {
         id?: string
@@ -532977,6 +533347,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDiplomaVerificationInput = {
         where: DocumentFileWhereUniqueInput
@@ -533017,6 +533388,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDiplomaVerificationFrontInput = {
         id?: string
@@ -533049,6 +533421,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDiplomaVerificationFrontInput = {
         where: DocumentFileWhereUniqueInput
@@ -533085,6 +533458,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
         note?: NoteCreateNestedOneWithoutAttachmentsInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutDiplomaVerificationBackInput = {
         id?: string
@@ -533117,6 +533491,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutDiplomaVerificationBackInput = {
         where: DocumentFileWhereUniqueInput
@@ -533317,6 +533692,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDiplomaVerificationFrontInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533349,6 +533725,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUpsertWithoutDiplomaVerificationBackInput = {
         update: XOR<DocumentFileUpdateWithoutDiplomaVerificationBackInput, DocumentFileUncheckedUpdateWithoutDiplomaVerificationBackInput>
@@ -533390,6 +533767,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDiplomaVerificationBackInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -533422,6 +533800,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentUpsertWithoutDiplomaVerificationApplicationInput = {
         update: XOR<StudentUpdateWithoutDiplomaVerificationApplicationInput, StudentUncheckedUpdateWithoutDiplomaVerificationApplicationInput>
@@ -533807,6 +534186,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
         trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
         studentScoreConvert?: StudentScoreConvertCreateNestedOneWithoutDocumentFilesInput
+        evaluationPeriod?: EvaluationPeriodCreateNestedOneWithoutDocumentFilesInput
     };
     export type DocumentFileUncheckedCreateWithoutNoteInput = {
         id?: string
@@ -533839,6 +534219,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileCreateOrConnectWithoutNoteInput = {
         where: DocumentFileWhereUniqueInput
@@ -561230,6 +561611,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type SubjectScoreConvertCreateManyStudentScoreConvertInput = {
         id?: string
@@ -561275,6 +561657,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561307,6 +561690,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561339,6 +561723,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectScoreConvertUpdateWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561804,6 +562189,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreCreateManyArchivedCertificateInput = {
         id?: string
@@ -561847,6 +562233,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561879,6 +562266,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561911,6 +562299,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561976,6 +562365,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type ArchivedAwardOnStudentSubjectScoreCreateManyArchivedAwardInput = {
         id?: string
@@ -562019,6 +562409,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562051,6 +562442,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562083,6 +562475,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedAwardOnStudentSubjectScoreUpdateWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -563521,6 +563914,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodUncheckedUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -563537,6 +563931,7 @@ export namespace Prisma {
         status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
     export type EvaluationPeriodUncheckedUpdateManyWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564088,6 +564483,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type ThesisSessionCreateManyTrainingCourseInput = {
         id?: string
@@ -564683,6 +565079,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564715,6 +565112,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564747,6 +565145,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ThesisSessionUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565359,6 +565758,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type CurriculumVersionCreateManyCurriculumInput = {
         id?: string
@@ -565428,6 +565828,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565460,6 +565861,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565492,6 +565894,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CurriculumVersionUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565660,6 +566063,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type TrainingBlockOnCurriculumVersionCreateManyCurriculumVersionInput = {
         id?: string
@@ -565854,6 +566258,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565886,6 +566291,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -565918,6 +566324,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingBlockOnCurriculumVersionUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -566973,6 +567380,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type QuestionBankCreateManySubjectVersionInput = {
         id?: string
@@ -567980,6 +568388,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -568012,6 +568421,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -568044,6 +568454,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuestionBankUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -572920,6 +573331,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type TrainingFieldOnTrainingObjectTypeUpdateWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573106,6 +573518,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573138,6 +573551,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -573170,6 +573584,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingMajorOnTrainingObjectTypeCreateManyTrainingMajorInput = {
         id?: string
@@ -576184,6 +576599,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type TrainingCourseUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576610,6 +577026,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutNotificationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576642,6 +577059,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutNotificationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576674,6 +577092,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type AcademicActionRuleSetCreateManyConfigInput = {
         id?: string
@@ -576894,6 +577313,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576926,6 +577346,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576958,6 +577379,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -576990,6 +577412,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentTrainingScoreCreateManyTrainingScoreSessionInput = {
         id?: string
@@ -580415,6 +580838,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateWithoutDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580447,6 +580871,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580479,6 +580904,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580511,6 +580937,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ThesisProjectCreateManyCouncilInput = {
         id?: string
@@ -580749,6 +581176,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateWithoutDefenseRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580781,6 +581209,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDefenseRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580813,6 +581242,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutDefenseRecordInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580845,6 +581275,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileCreateManyLibrarySubmissionInput = {
         id?: string
@@ -580877,6 +581308,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateWithoutLibrarySubmissionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580909,6 +581341,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutLibrarySubmissionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580941,6 +581374,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580973,6 +581407,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StandardPeriodCreateManyPeriodInput = {
         id?: string
@@ -580987,6 +581422,39 @@ export namespace Prisma {
         order: number
         opening?: string
         conclusion?: string
+    };
+    export type DocumentFileCreateManyEvaluationPeriodInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        path: string
+        size: bigint | number
+        mimeType?: string | null
+        archivedCertificateId?: string | null
+        trainingCourseId?: string | null
+        archivedAwardId?: string | null
+        curriculumId?: string | null
+        curriculumVersionId?: string | null
+        subjectVersionId?: string | null
+        studentAcademicDecisionId?: string | null
+        notificationId?: string | null
+        decisionId?: string | null
+        defenseRecordId?: string | null
+        librarySubmissionId?: string | null
+        diplomaFrontId?: string | null
+        diplomaBackId?: string | null
+        diplomaVerificationId?: string | null
+        diplomaVerificationFrontId?: string | null
+        diplomaVerificationBackId?: string | null
+        trainingFieldId?: string | null
+        studentScoreConvertId?: string | null
+        noteId?: string | null
     };
     export type StandardPeriodUpdateWithoutPeriodInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -581031,6 +581499,105 @@ export namespace Prisma {
         order?: IntFieldUpdateOperationsInput | number
         opening?: StringFieldUpdateOperationsInput | string
         conclusion?: StringFieldUpdateOperationsInput | string
+    };
+    export type DocumentFileUpdateWithoutEvaluationPeriodInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+        trainingCourse?: TrainingCourseUpdateOneWithoutDocumentFilesNestedInput
+        archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+        curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+        subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+        notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+        decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutDocumentFileNestedInput
+        diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+        diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+        diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+        diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+        trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        note?: NoteUpdateOneWithoutAttachmentsNestedInput
+    };
+    export type DocumentFileUncheckedUpdateWithoutEvaluationPeriodInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        path?: StringFieldUpdateOperationsInput | string
+        size?: BigIntFieldUpdateOperationsInput | bigint | number
+        mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+        librarySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+        diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        noteId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CriterionCatalogCreateManyStandardInput = {
         id?: string
@@ -586225,6 +586792,7 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type DocumentFileUpdateWithoutDiplomaVerificationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586257,6 +586825,7 @@ export namespace Prisma {
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
         note?: NoteUpdateOneWithoutAttachmentsNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutDiplomaVerificationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586289,6 +586858,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutDiplomaVerificationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586321,6 +586891,7 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileCreateManyNoteInput = {
         id?: string
@@ -586353,6 +586924,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: string | null
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
+        evaluationPeriodId?: string | null
     };
     export type NoteReminderCreateManyNoteInput = {
         id?: string
@@ -586437,6 +587009,7 @@ export namespace Prisma {
         diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
         trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateOneWithoutDocumentFilesNestedInput
+        evaluationPeriod?: EvaluationPeriodUpdateOneWithoutDocumentFilesNestedInput
     };
     export type DocumentFileUncheckedUpdateWithoutNoteInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586469,6 +587042,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUncheckedUpdateManyWithoutNoteInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586501,6 +587075,7 @@ export namespace Prisma {
         diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
+        evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type NoteReminderUpdateWithoutNoteInput = {
         id?: StringFieldUpdateOperationsInput | string

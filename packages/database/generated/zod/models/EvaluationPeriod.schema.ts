@@ -41,6 +41,7 @@ const relationSchema = z.object({
     semester: z.record(z.string(), z.unknown()).optional(),
     standards: z.array(z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

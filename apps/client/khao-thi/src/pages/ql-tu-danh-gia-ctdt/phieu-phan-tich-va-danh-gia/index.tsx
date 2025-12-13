@@ -2,10 +2,11 @@ import DefaultLayout from '@layouts/default-layout'
 import CriteriaAnalysisWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-analysis'
 import EvaluationPeriod from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period'
 import ReviewCriteriaAnalysis from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis'
-import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation'
 import CrossReview from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review'
 import CrossReviewAssignment from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import StandardReports from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
+import CriteriaEvaluationWrite from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db/client'
@@ -22,7 +23,7 @@ import { useMemo, useState } from 'react'
 export default function CriteriaAnalysisAndEvaluationPage() {
     const [activeKey, setActiveKey] = useState('1')
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
+    const idProfile = me?.sDM_NhanVienId || 'f807eaaa-d3d9-4899-9024-3363ff2d3193'
 
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
@@ -203,17 +204,27 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 'THEM'
             )
         ) {
-            tabs.push({
-                key: '5',
-                label: 'Phiếu đánh giá tiêu chí',
-                children: <CriteriaEvaluationWrite />,
-                disabled: disabledEvaluationWriteTab,
-            })
+            tabs.push(
+                {
+                    key: '5',
+                    label: 'Phiếu đánh giá tiêu chí',
+                    children: <CriteriaEvaluationWrite />,
+                    // disabled: !selectedEvaluationPeriodId,
+                    disabled: !selectedEvaluationPeriodId,
+                },
+                {
+                    key: '6',
+                    label: 'Báo cáo tiêu chuẩn',
+                    children: <StandardReports />,
+                    // disabled: disabledEvaluationWriteTab,
+                    disabled: !selectedEvaluationPeriodId,
+                }
+            )
         }
 
         if (isSecretary) {
             tabs.push({
-                key: '6',
+                key: '7',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
                 disabled: disableCrossReviewAssignmentTab,
@@ -222,7 +233,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
 
         if (isCouncilMember) {
             tabs.push({
-                key: '7',
+                key: '8',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
                 disabled: disableCrossReviewTab,

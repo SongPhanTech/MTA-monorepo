@@ -142,6 +142,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 const newExam = await createExam({
                     data: {
                         ...data,
+                        semester: {
+                            connect: { id: semesterId },
+                        },
                         subjectVersion: {
                             connect: { id: selectedSubjectVersionId },
                         },

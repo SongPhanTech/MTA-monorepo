@@ -140,22 +140,36 @@ export default function CriteriaAnalysisWrite() {
             children: [
                 new TableCell({
                     rowSpan: 2,
-                    children: [new Paragraph('STT')],
+                    width: {
+                        size: 5,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'STT',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
                 new TableCell({
                     columnSpan: 2,
-                    children: [new Paragraph('Phân tích tiêu chí')],
+                    children: [
+                        new Paragraph({
+                            text: 'Phân tích tiêu chí',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
                 new TableCell({
                     columnSpan: 3,
-                    children: [new Paragraph('Thông tin minh chứng')],
-                    verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                    rowSpan: 2,
-                    children: [new Paragraph('Thao tác')],
+                    children: [
+                        new Paragraph({
+                            text: 'Thông tin minh chứng',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
             ],
@@ -165,21 +179,66 @@ export default function CriteriaAnalysisWrite() {
             children: [
                 // 2 cột nhỏ trong "Phân tích tiêu chí"
                 new TableCell({
-                    children: [new Paragraph('Các yêu cầu')],
+                    width: {
+                        size: 20,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'Các yêu cầu',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                 }),
                 new TableCell({
-                    children: [new Paragraph('Các câu hỏi đặt ra')],
+                    width: {
+                        size: 20,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'Các câu hỏi đặt ra',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                 }),
 
                 // 3 cột nhỏ trong "Thông tin minh chứng"
                 new TableCell({
-                    children: [new Paragraph('Tên minh chứng')],
+                    width: {
+                        size: 15,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'Tên minh chứng',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                 }),
                 new TableCell({
-                    children: [new Paragraph('Nơi thu thập')],
+                    width: {
+                        size: 15,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'Nơi thu thập',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                 }),
                 new TableCell({
-                    children: [new Paragraph('Phương pháp thu thập')],
+                    width: {
+                        size: 25,
+                        type: WidthType.PERCENTAGE,
+                    },
+                    children: [
+                        new Paragraph({
+                            text: 'Phương pháp thu thập',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                 }),
             ],
         })
@@ -189,23 +248,49 @@ export default function CriteriaAnalysisWrite() {
             (item: any, index: number) =>
                 new TableRow({
                     children: [
-                        new TableCell({ children: [new Paragraph(`${index + 1}`)] }),
                         new TableCell({
+                            width: {
+                                size: 5,
+                                type: WidthType.PERCENTAGE,
+                            },
+                            children: [new Paragraph(`${index + 1}`)],
+                        }),
+                        new TableCell({
+                            width: {
+                                size: 20,
+                                type: WidthType.PERCENTAGE,
+                            },
                             children: [new Paragraph(`${item?.name || ''}`)],
                         }),
                         new TableCell({
+                            width: {
+                                size: 20,
+                                type: WidthType.PERCENTAGE,
+                            },
                             children: item?.questions.map((t: string) => new Paragraph(`${t}`)),
                         }),
                         new TableCell({
+                            width: {
+                                size: 15,
+                                type: WidthType.PERCENTAGE,
+                            },
                             children: item?.evidences.map(
                                 (t: any) => new Paragraph(`${t?.evidence?.name || ''}`)
                             ),
                         }),
 
                         new TableCell({
+                            width: {
+                                size: 15,
+                                type: WidthType.PERCENTAGE,
+                            },
                             children: [new Paragraph(`${item?.evidencePlaces || ''}`)],
                         }),
                         new TableCell({
+                            width: {
+                                size: 25,
+                                type: WidthType.PERCENTAGE,
+                            },
                             children: [new Paragraph(`${item?.collectionMethod || ''}`)],
                         }),
                     ],
@@ -354,7 +439,7 @@ export default function CriteriaAnalysisWrite() {
                 })
 
                 const blob = await Packer.toBlob(doc)
-                saveAs(blob, `bao_cao_dot_danh_gia_${data?.name}.docx`)
+                saveAs(blob, `phieu_phan_tich_danh_gia_${data?.name}.docx`)
             } catch (error) {
                 console.log(error)
             }

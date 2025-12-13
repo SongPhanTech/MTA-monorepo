@@ -163,6 +163,13 @@ export default function BaoCaoGiangVien() {
                                 }
                             })}
                             placeholder="Chọn đợt khảo sát"
+                            dropdownStyle={{
+                                maxHeight: 400,
+                                overflow: 'auto',
+                                width: 'fit-content',
+                                maxWidth: 400
+                                }}
+                            dropdownMatchSelectWidth={false}
                         />
                         <TreeSelect
                             allowClear
@@ -173,6 +180,13 @@ export default function BaoCaoGiangVien() {
                             value={filters.organizationId}
                             className="mr-4 w-[250px]"
                             onChange={(value) => setFilters({ ...filters, organizationId: value })}
+                            dropdownStyle={{
+                                maxHeight: 400,
+                                overflow: 'auto',
+                                width: 'fit-content',
+                                maxWidth: 400
+                                }}
+                            dropdownMatchSelectWidth={false}
                         />
                         <Select
                             className="mr-4 w-[250px]"
@@ -186,6 +200,13 @@ export default function BaoCaoGiangVien() {
                                     key: i.id,
                                 }
                             })}
+                            dropdownStyle={{
+                                maxHeight: 400,
+                                overflow: 'auto',
+                                width: 'fit-content',
+                                maxWidth: 400
+                                }}
+                            dropdownMatchSelectWidth={false}
                         />
                         <Select
                             className="mr-4 w-[250px]"
@@ -199,6 +220,13 @@ export default function BaoCaoGiangVien() {
                                     key: i.id,
                                 }
                             })}
+                            dropdownStyle={{
+                                maxHeight: 400,
+                                overflow: 'auto',
+                                width: 'fit-content',
+                                maxWidth: 400
+                                }}
+                            dropdownMatchSelectWidth={false}
                         />
                     </Flex>
                     <Button onClick={hanleSearchReport} type="primary">

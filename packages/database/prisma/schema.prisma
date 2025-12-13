@@ -3999,6 +3999,8 @@ model DocumentFile {
   studentScoreConvertId      String?
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
+  evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
+  evaluationPeriodId         String?
 
   @@schema("ql-danh-muc")
 }
@@ -4666,22 +4668,23 @@ model SupervisorPaymentRecord {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod {
-  id          String                 @id() @default(cuid())
-  code        String?                @unique()
-  active      Boolean                @default(true)
-  description String?                @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime               @default(now())
-  updatedAt   DateTime               @default(now()) @updatedAt()
-  createdBy   String?                @db.Uuid()
-  name        String
-  startDate   DateTime               @default(now())
-  endDate     DateTime?
-  status      EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  semester    Semester?              @relation(fields: [semesterId], references: [id])
-  semesterId  String?
-  standards   StandardPeriod[]
-  council     EvaluationCouncil?
+  id            String                 @id() @default(cuid())
+  code          String?                @unique()
+  active        Boolean                @default(true)
+  description   String?                @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @default(now()) @updatedAt()
+  createdBy     String?                @db.Uuid()
+  name          String
+  startDate     DateTime               @default(now())
+  endDate       DateTime?
+  status        EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  semester      Semester?              @relation(fields: [semesterId], references: [id])
+  semesterId    String?
+  standards     StandardPeriod[]
+  council       EvaluationCouncil?
+  documentFiles DocumentFile[]
 
   @@schema("khao-thi")
 }

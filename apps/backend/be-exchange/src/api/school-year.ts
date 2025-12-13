@@ -26,6 +26,7 @@ const getSchoolYear = createRoute({
 app.openapi(getSchoolYear, async (c) => {
     const data = await prisma.schoolYear.findMany({
         where: { deletedAt: null },
+        include: { semesters: true },
     })
 
     return c.json(data, 200)

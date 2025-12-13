@@ -107,7 +107,7 @@ const CriteriaAnalysisPeriodSubPage = ({
                                     <div className="flex-1">
                                         <div className="text-base flex items-start gap-2 mb-2">
                                             <span className="font-bold whitespace-nowrap">
-                                                Tiêu chí {idx + 1}:
+                                                Tiêu chí {item.order}:
                                             </span>
                                             <span className="flex-1">{item?.name}</span>
                                         </div>

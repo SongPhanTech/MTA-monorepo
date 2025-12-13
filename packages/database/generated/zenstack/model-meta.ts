@@ -14855,6 +14855,21 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'note',
+                }, evaluationPeriod: {
+                    name: "evaluationPeriod",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationPeriodId" },
+                }, evaluationPeriodId: {
+                    name: "evaluationPeriodId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'evaluationPeriod',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17888,6 +17903,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'period',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationPeriod',
                 },
             }, uniqueConstraints: {
                 id: {

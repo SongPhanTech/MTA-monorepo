@@ -63,7 +63,7 @@ export default function EvaluationPeriod() {
                   }
                 : {}),
         }),
-        [filters.name, filters.startDate, filters.endDate]
+        [filters.name, filters.startDate, filters.endDate, semesterId]
     )
 
     const { data, refetch } = useFindManyEvaluationPeriod({
@@ -74,6 +74,11 @@ export default function EvaluationPeriod() {
                     id: true,
                     name: true,
                     members: true,
+                },
+            },
+            semester: {
+                select: {
+                    name: true,
                 },
             },
         },
@@ -175,7 +180,7 @@ export default function EvaluationPeriod() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 50,
+                                width: 60,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -183,13 +188,13 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Tên',
                                 dataIndex: 'name',
-                                width: 150,
+                                width: 250,
                                 align: 'center',
                                 type: 'input',
                             },
                             {
                                 title: 'Hội đồng đánh giá',
-                                width: 150,
+                                width: 250,
                                 render: (_, record) => {
                                     return <div className="text-left">{record.council?.name}</div>
                                 },
@@ -200,16 +205,21 @@ export default function EvaluationPeriod() {
                                         <span>SLTV</span>
                                     </Tooltip>
                                 ),
-                                width: 50,
+                                width: 70,
                                 align: 'center',
                                 render: (_, record) => {
                                     return <div>{record.council?.members?.length || 0}</div>
                                 },
                             },
                             {
+                                title: 'Kỳ học',
+                                width: 180,
+                                render: (_, record) => record?.semester?.name,
+                            },
+                            {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
-                                width: 100,
+                                width: 120,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.startDate
@@ -219,7 +229,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
-                                width: 110,
+                                width: 120,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.endDate
@@ -229,7 +239,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Mô tả',
                                 align: 'center',
-                                width: 130,
+                                width: 150,
                                 dataIndex: 'description',
                                 render: (value: string) => {
                                     return (
@@ -242,7 +252,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
-                                width: 110,
+                                width: 130,
                                 render: (_, record) => {
                                     const statusInfo =
                                         EVALUATION_PERIOD_STATUS_LABELS[record.status]
@@ -256,7 +266,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Thao tác',
                                 align: 'center',
-                                width: 80,
+                                width: 100,
                                 fixed: 'right',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,

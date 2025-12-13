@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -23,7 +22,7 @@ import type {
     TrainingTime,
 } from '@workspace/db/client'
 import {
-    useCountCurriculumVersion,
+    useCountCurriculum,
     useFindManyCurriculum,
     useFindManyDM_DonVi,
     useFindManyTrainingCourse,
@@ -42,6 +41,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -127,6 +127,7 @@ export default function TrainingProgramCatalog() {
         }
 
         return {
+            deletedAt: null,
             trainingObjectTypeId,
             ...(filters.managementOrganizationId && {
                 managementOrganizationId: filters.managementOrganizationId,
@@ -244,94 +245,8 @@ export default function TrainingProgramCatalog() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountCurriculumVersion({
-        where: {
-            ...(filters.name
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            trainingObjectTypeId,
-            ...(filters.trainingCourses
-                ? {
-                      fixedClasses: {
-                          some: {
-                              trainingCourseId: {
-                                  in: filters.trainingCourses,
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingTime
-                ? {
-                      trainingTimeId: {
-                          in: filters.trainingTime,
-                      },
-                  }
-                : {}),
-            ...(filters.requiredCredits
-                ? {
-                      requiredCredits: {
-                          ...(filters.requiredCredits.gte
-                              ? {
-                                    gte: Number(filters.requiredCredits.gte),
-                                }
-                              : {}),
-                          ...(filters.requiredCredits.lte
-                              ? {
-                                    lte: Number(filters.requiredCredits.lte),
-                                }
-                              : {}),
-                      },
-                  }
-                : {}),
-            ...(filters.electiveCredits
-                ? {
-                      electiveCredits: {
-                          ...(filters.electiveCredits.gte
-                              ? {
-                                    gte: Number(filters.electiveCredits.gte),
-                                }
-                              : {}),
-                          ...(filters.electiveCredits.lte
-                              ? {
-                                    lte: Number(filters.electiveCredits.lte),
-                                }
-                              : {}),
-                      },
-                  }
-                : {}),
-            ...(filters.numberOfSemesters
-                ? {
-                      numberOfSemesters: {
-                          ...(filters.numberOfSemesters.gte
-                              ? {
-                                    gte: Number(filters.numberOfSemesters.gte),
-                                }
-                              : {}),
-                          ...(filters.numberOfSemesters.lte
-                              ? {
-                                    lte: Number(filters.numberOfSemesters.lte),
-                                }
-                              : {}),
-                      },
-                  }
-                : {}),
-            deletedAt: null,
-            active: true,
-        },
+    const { data: count } = useCountCurriculum({
+        where,
     })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },

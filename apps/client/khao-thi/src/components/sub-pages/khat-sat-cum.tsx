@@ -16,7 +16,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, message, Row, Tooltip, TreeSelect } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -258,7 +258,7 @@ function TabDotKhaoSatCum({
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <TreeSelect
+                            {/* <TreeSelect
                                 className="w-[250px] h-[28px]"
                                 allowClear
                                 showSearch
@@ -269,7 +269,7 @@ function TabDotKhaoSatCum({
                                     setFilters({ ...filters, semesterIds: [value] })
                                     setCurrentPage(1)
                                 }}
-                            />
+                            /> */}
                         </Col>
                         <Col span={12}>
                             <Flex justify="end">

@@ -13,6 +13,7 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
     { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
+    { label: 'Nhóm chuyên trách', value: $Enums.EvaluationMemberRole.SPECIALIZED },
 ]
 
 const EVALUATION_CRITERION_STATUS_OPTIONS = [
@@ -29,6 +30,11 @@ const EVALUATION_CRITERION_STATUS_OPTIONS = [
 const DEADLINE_OPTIONS = [
     { value: 'overdue', label: 'Quá hạn' },
     { value: 'near', label: 'Sắp quá hạn' },
+]
+
+const STANDARD_CATALOG_TYPE_OPTIONS = [
+    { value: $Enums.StandardCatalogType.PROGRAM, label: 'Chương trình đào tạo' },
+    { value: $Enums.StandardCatalogType.ASSET, label: 'Cơ sở vật chất' },
 ]
 
 const SUBJECT_OBJECT = [
@@ -161,4 +167,5 @@ export {
     EVALUATION_PERIOD_STATUS_LABELS,
     EVALUATION_CRITERION_STATUS_OPTIONS,
     DEADLINE_OPTIONS,
+    STANDARD_CATALOG_TYPE_OPTIONS,
 }

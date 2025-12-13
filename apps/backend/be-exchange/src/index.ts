@@ -9,6 +9,7 @@ import FixedClassApp from './api/fixed-class'
 import SchoolYearApp from './api/school-year'
 import SemesterApp from './api/semester'
 import TrainingCourseApp from './api/training-course'
+import TrainingFieldApp from './api/training-field'
 import TrainingMajorApp from './api/training-major'
 import TrainingObjectTypeApp from './api/training-object-type'
 import { setupOpenApi } from './utils/openapi'
@@ -41,6 +42,7 @@ app.route('', FixedClassApp)
 app.route('', SchoolYearApp)
 app.route('', SemesterApp)
 app.route('', TrainingCourseApp)
+app.route('', TrainingFieldApp)
 app.route('', TrainingMajorApp)
 app.route('', TrainingObjectTypeApp)
 

@@ -1,8 +1,10 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { STANDARD_CATALOG_TYPE_OPTIONS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { StandardCatalog } from '@workspace/db'
+import type { StandardCatalog } from '@workspace/db/client'
 import {
     useCreateStandardCatalog,
     useFindUniqueStandardCatalog,
@@ -32,7 +34,7 @@ const PutStandardCatalog = () => {
             const data = {
                 order: output.order,
                 name: output.name.trim(),
-                objectType: 'PROGRAM' as const,
+                objectType: output.objectType,
             }
             if (input?.id) {
                 await updateStandardCatalog({
@@ -107,6 +109,17 @@ const PutStandardCatalog = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên tiêu chuẩn" required>
                     <Input placeholder="Nhập tên tiêu chuẩn" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="objectType" label="Loại kho" required>
+                    <Select
+                        placeholder="Chọn loại kho"
+                        options={STANDARD_CATALOG_TYPE_OPTIONS.map(({ value, label }) => ({
+                            value,
+                            label,
+                        }))}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

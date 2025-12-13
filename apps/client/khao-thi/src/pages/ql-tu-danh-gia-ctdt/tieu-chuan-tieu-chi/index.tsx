@@ -1,374 +1,42 @@
-import { EyeOutlined } from '@ant-design/icons'
-import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilter'
-import CreateIcon from '@components/icons/create'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf } from '@workspace/constant'
-import {
-    useCountStandardCatalog,
-    useDeleteCriterionCatalog,
-    useDeleteStandardCatalog,
-    useFindManyStandardCatalog,
-} from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
-import { BookPlus } from 'lucide-react'
-import { useRouter } from 'next/router'
+import Facilities from '@pages/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi/_components/facilities'
+import TrainingProgram from '@pages/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi/_components/training-program'
+import { Col, Row, Tabs } from 'antd'
+import type { TabsProps } from 'antd/lib'
 import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+export default function StandardCatalogPage() {
+    const [activeKey, setActiveKey] = useState('1')
 
-export default function StandardCatalog() {
-    const { can, canSome } = useAbility()
-    const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        order: undefined,
-        name: '',
-        searchText: '',
-        scoreScalesId: undefined,
-    })
-
-    const where = useMemo(
-        () => ({
-            ...(filters.searchText && {
-                name: {
-                    contains: filters.searchText,
-                    mode: 'insensitive' as const,
-                },
-            }),
-            ...(filters.name && {
-                criteria: {
-                    some: {
-                        name: {
-                            contains: filters.name,
-                            mode: 'insensitive' as const,
-                        },
-                    },
-                },
-            }),
-            ...(filters.scoreScalesId && {
-                criteria: {
-                    some: {
-                        scoreScaleId: Array.isArray(filters.scoreScalesId)
-                            ? filters.scoreScalesId.length > 1
-                                ? { in: filters.scoreScalesId }
-                                : { equals: filters.scoreScalesId[0] }
-                            : { equals: filters.scoreScalesId },
-                    },
-                },
-            }),
-        }),
-        [filters.searchText, filters.name, filters.scoreScalesId]
+    const tabItems: TabsProps['items'] = useMemo(
+        () => [
+            {
+                key: '1',
+                label: 'Chương trình đào tạo',
+                children: <TrainingProgram />,
+            },
+            {
+                key: '2',
+                label: 'Cơ sở giáo dục',
+                children: <Facilities />,
+            },
+        ],
+        []
     )
 
-    const { data, refetch } = useFindManyStandardCatalog({
-        where,
-        include: {
-            criteria: {
-                where: {
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.scoreScalesId && {
-                        scoreScaleId: Array.isArray(filters.scoreScalesId)
-                            ? filters.scoreScalesId.length > 1
-                                ? { in: filters.scoreScalesId }
-                                : { equals: filters.scoreScalesId[0] }
-                            : { equals: filters.scoreScalesId },
-                    }),
-                },
-                orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                order: filters.order,
-                            },
-                        ],
-                        !!filters.order
-                    ),
-                    { order: 'asc' },
-                ],
-            },
-        },
-        orderBy: [{ order: 'asc' }],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const { data: count } = useCountStandardCatalog({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
-
-    const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{ id: string; count: number }>({
-        tag: 'PutStandardCatalog',
-    })
-
-    const { onOpen: onOpenPutCriterionCatalog } = useDisclosure<{
-        id: string
-        standardId: string
-    }>({
-        tag: 'PutCriterionCatalog',
-    })
-
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const { mutateAsync: deleteStandardCatalog } = useDeleteStandardCatalog()
-    async function handleDeleteStandardCatalog(id: string) {
-        try {
-            showSpinner()
-            await deleteStandardCatalog({
-                where: { id },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const { mutateAsync: deleteCriterionCatalog } = useDeleteCriterionCatalog()
-    async function handleDeleteCriterionCatalog(id: string) {
-        try {
-            showSpinner()
-            await deleteCriterionCatalog({
-                where: { id },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
     return (
-        <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Flex justify="end">
-                        {can(
-                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                            'THEM'
-                        ) && (
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => {
-                                    onOpenPutStandardCatalog({ id: '', count: count || 0 })
-                                }}
-                            >
-                                <BookPlus />
-                                Thêm mới
-                            </Button>
-                        )}
-                    </Flex>
-                </Col>
-
-                <Col span={24}>
-                    <TableCollapse
-                        rowKey="id"
-                        headerTitleKey={({ order, name }) =>
-                            `${[order, name].filter(Boolean).join(' - ')}`
-                        }
-                        className="w-full mt-2"
-                        scroll={{ y: 'calc(100vh - 220px)', x: 'max-content' }}
-                        childrenFieldName="criteria"
-                        defaultExpandAll
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        headerRight={(record) => (
-                            <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'THEM'
-                                ) && (
-                                    <CreateIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenPutCriterionCatalog({
-                                                id: '',
-                                                standardId: record?.id,
-                                            })
-                                        }}
-                                        title="Thêm mới phiên bản"
-                                    />
-                                )}
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'SUA'
-                                ) && (
-                                    <EditIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenPutStandardCatalog({
-                                                id: record?.id,
-                                                count: count || 0,
-                                            })
-                                        }}
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                )}
-                                {can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'XOA'
-                                ) && (
-                                    <DeleteIcon
-                                        popConfirm={{
-                                            onConfirm: (e) => {
-                                                handleDeleteStandardCatalog(record?.id)
-                                                e?.stopPropagation()
-                                            },
-                                            onCancel: (e) => {
-                                                e?.stopPropagation()
-                                            },
-                                        }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
-                                )}
-                            </div>
-                        )}
-                        onRowClick={({ id }) => {
-                            if (
-                                id &&
-                                can(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'XEM'
-                                )
-                            ) {
-                                router.push(
-                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
-                                )
-                            }
-                        }}
-                        columns={[
-                            {
-                                title: 'Thứ tự',
-                                dataIndex: 'order',
-                                width: 150,
-                                align: 'center',
-                                type: 'order',
-                            },
-                            {
-                                title: 'Tiêu chí',
-                                dataIndex: 'name',
-                                align: 'center',
-                                type: 'input',
-                                width: 400,
-                            },
-                            {
-                                title: 'Thao tác',
-                                align: 'center',
-                                width: 80,
-                                hidden: !canSome(
-                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                    'SUA',
-                                    'XOA'
-                                ),
-                                render: (_, record) => {
-                                    if (record?.id) {
-                                        return (
-                                            <Row className="justify-end gap-2 px-3">
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'XEM'
-                                                ) && (
-                                                    <Tooltip
-                                                        title="Chi tiết tiêu chí"
-                                                        placement="top"
-                                                    >
-                                                        <EyeOutlined
-                                                            style={{ fontSize: '24px' }}
-                                                            className="text-sm cursor-pointer"
-                                                        />
-                                                    </Tooltip>
-                                                )}
-
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            onOpenPutCriterionCatalog({
-                                                                id: record?.id,
-                                                                standardId: record?.standardId,
-                                                            })
-                                                        }}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: (e) => {
-                                                                handleDeleteCriterionCatalog(
-                                                                    record?.id
-                                                                )
-                                                                e?.stopPropagation()
-                                                            },
-                                                            onCancel: (e) => {
-                                                                e?.stopPropagation()
-                                                            },
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Col>
-            </Row>
-        </div>
+        <Row gutter={[12, 0]}>
+            <Col span={24}>
+                <Tabs
+                    activeKey={activeKey}
+                    onChange={setActiveKey}
+                    items={tabItems}
+                    destroyOnHidden={false}
+                />
+            </Col>
+        </Row>
     )
 }
 
-StandardCatalog.getLayout = function getLayout(page: React.ReactElement) {
+StandardCatalogPage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
