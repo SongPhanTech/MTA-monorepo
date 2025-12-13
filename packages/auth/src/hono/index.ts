@@ -1,15 +1,10 @@
-import type { PrismaClient } from '@workspace/db'
 import type { MiddlewareHandler } from 'hono'
 import { getCookie } from 'hono/cookie'
-import { createRemoteJWKSet, jwtVerify } from 'jose'
-import type { Session } from '..'
-
 declare module 'hono' {
     interface ContextVariableMap {
         user: {
             userName: string
             fullName: string
-            sessionId: string
             sub: string
             id: string
             organizationUnitId?: string | null
@@ -17,50 +12,36 @@ declare module 'hono' {
     }
 }
 
-export const jwtAuth = (
-    jwksUri: string,
-    audience: string,
-    issuer: string,
-    prisma: PrismaClient
-): MiddlewareHandler => {
-    const JWKS = createRemoteJWKSet(new URL(jwksUri))
+export const jwtAuth = (appCode: string): MiddlewareHandler => {
     return async (c, next) => {
-        const token = getCookie(c, 'x-token')
+        const token = getCookie(c, `x-token-${appCode}`)
+        const cookie = c.req.header('Cookie')
         if (!token) {
             return c.text('Unauthorized: No token provided', 401)
         }
         try {
-            const { payload } = await jwtVerify<Session>(token, JWKS, {
-                issuer,
-                audience,
-            })
+            const response = await fetch(
+                'https://mta.swantech.vn/api/system/share/users/user-info',
+                {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        Cookie: cookie || '',
+                        'K-AppCode': appCode,
+                        'K-TenantCode': 'dev',
+                    },
+                }
+            )
+            const data = await response.json()
+            const sessionData = data.Data
             // Attach user info to context
             c.set('user', {
-                userName: payload.preferred_username || payload.name,
-                fullName: payload.name,
-                sessionId: payload.sid,
-                sub: payload.sub,
-                id: payload.sDM_NhanVienId,
-                organizationUnitId: payload.sDM_DonViId,
+                userName: sessionData.preferred_username,
+                fullName: sessionData.name,
+                sub: sessionData.sDM_NhanVienId,
+                id: sessionData.sDM_NhanVienId,
+                organizationUnitId: sessionData.sDM_DonViId,
             })
-            const existedUser = await prisma.userProfile.findFirst({
-                where: {
-                    id: payload.sDM_NhanVienId,
-                },
-            })
-            if (!existedUser) {
-                // Create user if not exists
-                await prisma.userProfile.create({
-                    data: {
-                        id: payload.sDM_NhanVienId,
-                        firstName: payload.name,
-                        lastName: payload.family_name,
-                        fullname: payload.name,
-                        idCardNumber: payload.sDM_NhanVienId, // TODO: use idCardNumber
-                        // ssoId: payload.sub,
-                    },
-                })
-            }
             await next()
         } catch (err) {
             console.error('JWT verification failed:', err)

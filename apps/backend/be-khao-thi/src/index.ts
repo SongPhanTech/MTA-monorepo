@@ -64,7 +64,7 @@ const audience = config.keycloak.clientId
 app.route('/api/survey', surveyPublicApp)
 
 // TODO!: uncomment
-// app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+// app.use('/api/*', jwtAuth('ems'))
 
 setupOpenApi(app)
 

@@ -31,7 +31,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { appCode = 'portal' } = c.req.valid('query')
+        const appCode = 'dangkyhoc'
         const xToken = getCookie(c, `x-token-${appCode}`)
         const tenantCode = getCookie(c, 'x-tenantcode')
         const cookie = c.req.header('Cookie')

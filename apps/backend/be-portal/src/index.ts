@@ -14,9 +14,9 @@ import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
 
-import './otel'
+// import './otel'
 
-export const prisma = new PrismaClient()
+export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
 const register = new Registry()
@@ -46,7 +46,7 @@ const config = {
     keycloak: {
         url: process.env.KEYCLOAK_URL || 'http://localhost:8080',
         realm: process.env.KEYCLOAK_REALM || 'swantech',
-        clientId: process.env.KEYCLOAK_CLIENT_ID || 'fe-test-local',
+        clientId: process.env.KEYCLOAK_CLIENT_ID_PORTAL || 'fe-test-local',
     },
 }
 app.use(contextStorage())
@@ -60,7 +60,7 @@ const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+app.use('/api/*', jwtAuth('dangkyhoc'))
 
 app.route('/api/class-register', ClassRegisterApp)
 

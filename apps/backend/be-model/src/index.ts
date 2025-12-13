@@ -89,7 +89,7 @@ app.route('/api/apim-logs', ApimLogsApp)
 app.route('/api/wso2am', WSO2AmApp)
 app.route('/api/excel-import-export', ExcelImportExportApp)
 // TODO!: remove `/check`
-app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
+app.use('/api/check/*', jwtAuth('lms'))
 // setupAuth(app)
 app.all('/api/system/:appcode/*', async (c) => {
     const appCode = c.req.param('appcode')
