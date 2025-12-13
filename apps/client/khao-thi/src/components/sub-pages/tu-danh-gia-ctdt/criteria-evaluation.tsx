@@ -14,11 +14,10 @@ import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gi
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import CommentList from '@components/commons/comment-list'
+import ExportCriteriaEvaluation from '@components/modal/export-criteria-evaluation'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
-    opening: string
-    conclusion: string
 }
 
 const CriteriaEvaluationSubPage = ({
@@ -34,7 +33,7 @@ const CriteriaEvaluationSubPage = ({
     const { can } = useAbility()
 
     const canEdit = can(
-        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
         'THEM'
     )
 
@@ -44,23 +43,6 @@ const CriteriaEvaluationSubPage = ({
         const dataSubmit = form.getFieldsValue()
 
         let listSqlTransaction: any[] = []
-
-        // Cập nhật opening và conclusion cho StandardPeriod
-        if (data?.id) {
-            listSqlTransaction.push({
-                model: 'StandardPeriod',
-                operation: 'update',
-                data: {
-                    where: {
-                        id: data.id,
-                    },
-                    data: {
-                        opening: dataSubmit?.opening || '',
-                        conclusion: dataSubmit?.conclusion || '',
-                    },
-                },
-            })
-        }
 
         // Cập nhật các tiêu chí
         if (dataSubmit?.criteria && dataSubmit.criteria.length > 0) {
@@ -85,6 +67,7 @@ const CriteriaEvaluationSubPage = ({
                                     strengths: i.evaluationCriterion.strengths || '',
                                     weakness: i.evaluationCriterion.weakness || '',
                                     actionPlan: i.evaluationCriterion.actionPlan || '',
+                                    score: i.evaluationCriterion.score || '',
                                 },
                             },
                         }
@@ -229,8 +212,6 @@ const CriteriaEvaluationSubPage = ({
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
-                opening: data?.opening || '',
-                conclusion: data?.conclusion || '',
                 criteria: data?.criteria?.map((item) => ({
                     ...item,
                     evaluationCriterion: {
@@ -240,6 +221,7 @@ const CriteriaEvaluationSubPage = ({
                         strengths: item.evaluationCriterion?.strengths || '',
                         weakness: item.evaluationCriterion?.weakness || '',
                         actionPlan: item.evaluationCriterion?.actionPlan || '',
+                        score: item.evaluationCriterion?.score || '',
                     },
                 })),
             })
@@ -302,10 +284,19 @@ const CriteriaEvaluationSubPage = ({
                         Xem đánh giá
                     </Button>
                 </Badge>
+                <ExportCriteriaEvaluation data={data} />
                 {currentStatus !== $Enums.EvaluationStatus.SUBMITTED &&
                     currentStatus !== $Enums.EvaluationStatus.APPROVED &&
                     currentStatus !== $Enums.EvaluationStatus.COMPLETED && (
                         <>
+                            <Button
+                                type="primary"
+                                size="small"
+                                onClick={handleSubmit}
+                                disabled={!canEdit}
+                            >
+                                Lưu đánh giá
+                            </Button>
                             <Button
                                 type="primary"
                                 className="bg-blue-500"
@@ -314,14 +305,6 @@ const CriteriaEvaluationSubPage = ({
                                 disabled={!canEdit}
                             >
                                 Nộp phiếu đánh giá
-                            </Button>
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={handleSubmit}
-                                disabled={!canEdit}
-                            >
-                                Lưu đánh giá
                             </Button>
                         </>
                     )}
@@ -332,7 +315,7 @@ const CriteriaEvaluationSubPage = ({
     return (
         <div className="flex flex-col h-[calc(100vh-200px)]">
             {headerSection}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden">
                 {showComments && (
                     <div className="mb-3 border border-gray-200 rounded-lg overflow-hidden">
                         <CommentList
@@ -345,11 +328,6 @@ const CriteriaEvaluationSubPage = ({
                 )}
 
                 <Form form={form} layout="vertical" className="form-evidence">
-                    {/* Phần mở đầu */}
-                    <Form.Item label="Mở đầu" name="opening" required>
-                        <RichTextEditor id="opening" editable={!isReadOnly} />
-                    </Form.Item>
-
                     <Form.List name="criteria">
                         {(fields) => (
                             <>
@@ -363,7 +341,7 @@ const CriteriaEvaluationSubPage = ({
                                                         label: (
                                                             <div>
                                                                 <span className="font-bold">
-                                                                    Tiêu chí {idx + 1}:{' '}
+                                                                    Tiêu chí {item.order}:{' '}
                                                                 </span>
                                                                 {item?.name}
                                                             </div>
@@ -426,6 +404,19 @@ const CriteriaEvaluationSubPage = ({
                                                                         editable={!isReadOnly}
                                                                     />
                                                                 </Form.Item>
+                                                                <Form.Item
+                                                                    label="5. Tự đánh giá"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'score',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={!isReadOnly}
+                                                                    />
+                                                                </Form.Item>
                                                             </>
                                                         ),
                                                     },
@@ -440,11 +431,6 @@ const CriteriaEvaluationSubPage = ({
                             </>
                         )}
                     </Form.List>
-
-                    {/* Phần kết luận */}
-                    <Form.Item label="Kết luận" name="conclusion" required>
-                        <RichTextEditor id="conclusion" editable={!isReadOnly} />
-                    </Form.Item>
                 </Form>
             </div>
         </div>

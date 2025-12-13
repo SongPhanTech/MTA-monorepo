@@ -1,7 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
-import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
@@ -9,7 +8,7 @@ import { useSession } from '@workspace/auth/react'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindFirstEvaluationCouncilMember,
-    useFindManyLecturer,
+    useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
     useFindUniqueLecturer,
 } from '@workspace/db/hooks'
@@ -52,36 +51,39 @@ export default function AssigmentOfAssessmentTab() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
 
-    const { onOpen } = useDisclosure<{
-        criterionPeriodId?: string
-        refetch?: () => void
-    }>({
-        tag: 'CriteriaAssignmentModal',
-    })
-
     const { onOpen: openPhanCongHangLoat } = useDisclosure<PutPhanCongHangLoatModalProps>({
         tag: 'PutPhanCongHangLoatModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: lecturers = [] } = useFindManyLecturer({
+    const { data: lecturers = [] } = useFindManyEvaluationCouncilMember({
         where: {
-            deletedAt: null,
+            evaluationCouncil: {
+                periodId: selectedEvaluationPeriodId,
+            },
+            role: {
+                has: $Enums.EvaluationMemberRole.SPECIALIZED,
+            },
         },
         include: {
-            userProfile: {
+            lecturer: {
                 include: {
-                    academicDegreeType: {
-                        select: {
-                            sTen: true,
+                    userProfile: {
+                        include: {
+                            academicDegreeType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                            academicRankType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
                         },
                     },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
+                    organization: true,
                 },
             },
         },
@@ -442,7 +444,7 @@ export default function AssigmentOfAssessmentTab() {
                             },
                             {
                                 title: 'Giảng viên phân công',
-                                width: 200,
+                                width: 400,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -455,22 +457,24 @@ export default function AssigmentOfAssessmentTab() {
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
-                                                        i.userProfile?.academicRankType?.sTen || ''
+                                                        i.lecturer?.userProfile?.academicRankType
+                                                            ?.sTen || ''
                                                     const degreeRank =
-                                                        i.userProfile?.academicDegreeType?.sTen ||
-                                                        ''
+                                                        i.lecturer?.userProfile?.academicDegreeType
+                                                            ?.sTen || ''
 
-                                                    const fullName = i?.userProfile?.fullname
-                                                        ? i?.userProfile?.fullname
-                                                        : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`
+                                                    const fullName = i?.lecturer?.userProfile
+                                                        ?.fullname
+                                                        ? i?.lecturer?.userProfile?.fullname
+                                                        : `${i?.lecturer?.userProfile?.firstName} ${i?.lecturer?.userProfile?.lastName}`
 
                                                     const academicTitle = [academicRank, degreeRank]
                                                         .filter(Boolean)
                                                         .join('.')
 
                                                     return {
-                                                        value: i?.id,
-                                                        label: `${i.code} - ${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
+                                                        value: i?.lecturerId,
+                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}`,
                                                     }
                                                 })}
                                             />
@@ -497,27 +501,6 @@ export default function AssigmentOfAssessmentTab() {
                                                 }
                                             />
                                         </Form.Item>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 80,
-                                hidden: !isVicePersident,
-                                render: (_, record) => {
-                                    return (
-                                        <Flex justify="center" align="center" gap={8}>
-                                            <UserPlusIcon
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    e.preventDefault()
-                                                    onOpen({
-                                                        criterionPeriodId: record.id,
-                                                        refetch: refetch,
-                                                    })
-                                                }}
-                                            />
-                                        </Flex>
                                     )
                                 },
                             },

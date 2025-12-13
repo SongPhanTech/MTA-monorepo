@@ -77,6 +77,7 @@ export default function EvaluationCouncilTab() {
         const secretaryMembers: typeof evaluationCouncil.members = []
         const otherMembers: typeof evaluationCouncil.members = []
         const advisoryBoardMembers: typeof evaluationCouncil.members = []
+        const specializedMembers: typeof evaluationCouncil.members = []
 
         const hasRole = (
             member: (typeof evaluationCouncil.members)[0],
@@ -87,11 +88,14 @@ export default function EvaluationCouncilTab() {
             const isSecretary = hasRole(member, $Enums.EvaluationMemberRole.SECRETARY)
             const isHeadSecretary = hasRole(member, $Enums.EvaluationMemberRole.HEAD_SECRETARY)
             const isAdvisory = hasRole(member, $Enums.EvaluationMemberRole.ADVISORY_BOARD)
+            const isSpecialized = hasRole(member, $Enums.EvaluationMemberRole.SPECIALIZED)
 
             if (isSecretary || isHeadSecretary) {
                 secretaryMembers.push(member)
             } else if (isAdvisory) {
                 advisoryBoardMembers.push(member)
+            } else if (isSpecialized) {
+                specializedMembers.push(member)
             } else {
                 otherMembers.push(member)
             }
@@ -131,6 +135,21 @@ export default function EvaluationCouncilTab() {
                 name: 'Ban tư vấn',
                 $type: 'parent' as const,
                 children: advisoryBoardMembers.map((member) => ({
+                    ...member,
+                    key: member.id,
+                    $type: 'child' as const,
+                    $stt: sttCounter++,
+                })),
+            })
+        }
+
+        if (specializedMembers.length > 0) {
+            result.push({
+                id: 'specialized-group',
+                key: 'specialized-group',
+                name: 'Nhóm chuyên trách',
+                $type: 'parent' as const,
+                children: specializedMembers.map((member) => ({
                     ...member,
                     key: member.id,
                     $type: 'child' as const,

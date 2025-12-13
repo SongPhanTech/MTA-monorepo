@@ -5,48 +5,26 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
-import { useFindUniqueEvaluationPeriod, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
+import {
+    useFindManySchoolYear,
+    useFindUniqueEvaluationPeriod,
+    useUpdateEvaluationPeriod,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationPeriod = EvaluationPeriod & {
     councilIds: string[]
 }
 dayjs.locale('vi')
-
-type TreeNode = {
-    key: string
-    title: string
-    children?: TreeNode[]
-}
-
-const filterTree = (nodes: TreeNode[], checkedKeys: string[]): TreeNode[] => {
-    return nodes
-        .map((node) => {
-            const children = node.children ? filterTree(node.children, checkedKeys) : []
-            if (checkedKeys.includes(node.key) || children.length > 0) {
-                return {
-                    ...node,
-                    children: children.length > 0 ? children : [],
-                }
-            }
-            return null
-        })
-        .filter(Boolean) as TreeNode[]
-}
-
-const getAllKeys = (nodes: TreeNode[]) => {
-    let keys: string[] = []
-    for (const node of nodes) {
-        keys.push(node.key)
-        if (node.children) {
-            keys = keys.concat(getAllKeys(node.children))
-        }
-    }
-    return keys
+interface TreeNodeType {
+    value: string
+    title: React.ReactNode
+    children?: TreeNodeType[]
+    selectable?: boolean
 }
 
 const PutEvaluationPeriod = () => {
@@ -68,6 +46,34 @@ const PutEvaluationPeriod = () => {
         { enabled: !!id }
     )
 
+    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
+
+    const treeData: TreeNodeType[] = useMemo(() => {
+        return (
+            schoolYears?.map((schoolYear) => ({
+                value: `schoolYear-${schoolYear.id}`,
+                title: schoolYear.name,
+                selectable: false,
+                children:
+                    schoolYear.semesters.map((semester) => ({
+                        value: semester.id,
+                        title: `${semester.name}`,
+                    })) || [],
+            })) || []
+        )
+    }, [schoolYears])
+
+    const filterTreeNode = (input: string, treeNode: any) => {
+        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+    }
+
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
     async function onOk(output?: PutEvaluationPeriod) {
         if (!output) return
@@ -78,6 +84,7 @@ const PutEvaluationPeriod = () => {
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,
+                semesterId: output.semesterId,
                 createdBy: idProfile,
             }
             if (id) {
@@ -90,7 +97,6 @@ const PutEvaluationPeriod = () => {
                 message.success('Cập nhật thành công')
             } else {
                 const periodId = createId()
-
                 const res = await sqlTransaction([
                     {
                         model: 'EvaluationPeriod',
@@ -111,12 +117,10 @@ const PutEvaluationPeriod = () => {
                         },
                     },
                 ])
-
                 if (res.status !== 200) {
                     message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
                     return
                 }
-
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -153,11 +157,26 @@ const PutEvaluationPeriod = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đánh giá CTĐT' : 'Thêm mới đợt đánh giá CTĐT'}
-            className="w-[700px]"
+            className="w-[60vw]"
         >
-            <Col span={24}>
+            <Col span={16}>
                 <FormItem form={form} name="name" label="Tên đợt đánh giá" required>
                     <Input placeholder="Nhập tên đợt đánh giá" />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="semesterId" label="Kỳ học" required>
+                    <TreeSelect
+                        showSearch
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        placeholder={'Chọn kỳ học'}
+                        allowClear
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={filterTreeNode}
+                        treeNodeFilterProp="title"
+                        loading={schoolYearLoading}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

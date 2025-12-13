@@ -12,13 +12,11 @@ import {
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
-import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
     const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
-    const router = useRouter()
     const { isOpen, onClose, input } = useDisclosure<{
         evaluationCouncilId: string
         evaluationCouncilMemberId?: string
@@ -26,7 +24,6 @@ const PutEvaluationCouncilMember = () => {
         tag: 'PutEvaluationCouncilMember',
         onClose: form.resetFields,
     })
-    const evaluationCouncilId = router.query.id as string
 
     const roleWatch = Form.useWatch('role', form)
 
@@ -43,7 +40,7 @@ const PutEvaluationCouncilMember = () => {
                 lecturerId: output.lecturerId,
                 role: output.role,
             }
-            if (input.evaluationCouncilMemberId && evaluationCouncilId) {
+            if (input.evaluationCouncilMemberId) {
                 await updateEvaluationCouncilMember({
                     data,
                     where: {
@@ -107,8 +104,6 @@ const PutEvaluationCouncilMember = () => {
         }
     )
 
-    console.log(roleWatch)
-
     const filteredLecturers = useMemo(() => {
         if (!roleWatch || roleWatch.length === 0) return lecturerData
 
@@ -148,7 +143,6 @@ const PutEvaluationCouncilMember = () => {
         })
     }, [roleWatch, lecturerData])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({

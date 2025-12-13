@@ -2,28 +2,9 @@ import CriteriaEvaluationSubPage from '@components/sub-pages/tu-danh-gia-ctdt/cr
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import type {
-    CriterionPeriod,
-    EvaluationCriterion,
-    EvaluationCriterionComment,
-    StandardPeriod,
-} from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
-
-export type DataTabEvaluationCriterionType = StandardPeriod & {
-    criteria: (CriterionPeriod & {
-        evaluationCriterion?:
-            | (EvaluationCriterion & {
-                  evaluationCriterionComments?: (EvaluationCriterionComment & {
-                      reviewer?: { fullname?: string | null }
-                  })[]
-                  lecturer?: { userProfile?: { fullname?: string | null } } | null
-              })
-            | null
-    })[]
-}
 
 export default function CriteriaEvaluationWrite() {
     const { data: me } = useSession()
@@ -135,21 +116,19 @@ export default function CriteriaEvaluationWrite() {
                         <Tabs
                             className="h-[calc(100vh-200px)]"
                             tabPosition="left"
-                            items={data.standards.map(
-                                (standard: DataTabEvaluationCriterionType) => {
-                                    return {
-                                        key: standard.id,
-                                        label: `Tiêu chuẩn ${standard.order}`,
-                                        children: (
-                                            <CriteriaEvaluationSubPage
-                                                key={standard.id}
-                                                data={standard}
-                                                onRefetch={refetch}
-                                            />
-                                        ),
-                                    }
+                            items={data.standards.map((standard) => {
+                                return {
+                                    key: standard.id,
+                                    label: `Tiêu chuẩn ${standard.order}`,
+                                    children: (
+                                        <CriteriaEvaluationSubPage
+                                            key={standard.id}
+                                            data={standard}
+                                            onRefetch={refetch}
+                                        />
+                                    ),
                                 }
-                            )}
+                            })}
                             tabBarStyle={{
                                 height: '100%',
                                 overflow: 'auto',

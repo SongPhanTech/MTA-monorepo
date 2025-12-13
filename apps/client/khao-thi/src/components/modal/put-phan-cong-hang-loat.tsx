@@ -1,14 +1,21 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
-import LecturerSelector from '@components/commons/lecturer-selector'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { PutPhanCongHangLoatModalProps } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, message, Tree } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import Select from '@components/commons/select'
+import {
+    useFindManyEvaluationCouncilMember,
+    useUpsertAnalysisCriterion,
+    useUpsertEvaluationCriterion,
+} from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
+import { useStore } from '@tanstack/react-store'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 
 type CriteriaAssignmentModalFormType = {
     lecturerId: string
@@ -17,11 +24,44 @@ type CriteriaAssignmentModalFormType = {
 
 export default function PutPhanCongHangLoatModal() {
     const [form] = Form.useForm<CriteriaAssignmentModalFormType>()
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { isOpen, onClose, input } = useDisclosure<PutPhanCongHangLoatModalProps>({
         tag: 'PutPhanCongHangLoatModal',
         onClose: form.resetFields,
+    })
+
+    const { data: lecturers = [] } = useFindManyEvaluationCouncilMember({
+        where: {
+            evaluationCouncil: {
+                periodId: selectedEvaluationPeriodId,
+            },
+            role: {
+                has: $Enums.EvaluationMemberRole.SPECIALIZED,
+            },
+        },
+        include: {
+            lecturer: {
+                include: {
+                    userProfile: {
+                        include: {
+                            academicDegreeType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                            academicRankType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                        },
+                    },
+                    organization: true,
+                },
+            },
+        },
     })
 
     const treeData = useMemo(() => {
@@ -46,64 +86,43 @@ export default function PutPhanCongHangLoatModal() {
             }))
     }, [input?.tableData, input?.selectedCriteriaIds])
 
+    const { mutateAsync: upsertAnalysisCriterion } = useUpsertAnalysisCriterion()
+    const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
+
     const handleFinish = async (values: CriteriaAssignmentModalFormType) => {
         try {
             if (!values) return
             showSpinner()
             if (input?.selectedCriteriaIds) {
-                const operations: any[] = input.selectedCriteriaIds.flatMap((criterionId) => [
-                    {
-                        model: 'AnalysisCriterion',
-                        operation: 'upsert',
-                        data: {
-                            where: {
-                                criterionPeriodId: criterionId,
-                            },
-                            create: {
-                                criterionPeriodId: criterionId,
-                                lecturerId: values.lecturerId,
-                                deadline: values.deadline
-                                    ? dayjs(values.deadline).toISOString()
-                                    : undefined,
-                            },
-                            update: {
-                                lecturerId: values.lecturerId,
-                                deadline: values.deadline
-                                    ? dayjs(values.deadline).toISOString()
-                                    : undefined,
-                            },
-                        },
-                    },
-                    {
-                        model: 'EvaluationCriterion',
-                        operation: 'upsert',
-                        data: {
-                            where: {
-                                criterionPeriodId: criterionId,
-                            },
-                            create: {
-                                criterionPeriodId: criterionId,
-                                lecturerId: values.lecturerId,
-                                deadline: values.deadline
-                                    ? dayjs(values.deadline).toISOString()
-                                    : undefined,
-                            },
-                            update: {
-                                lecturerId: values.lecturerId,
-                                deadline: values.deadline
-                                    ? dayjs(values.deadline).toISOString()
-                                    : undefined,
-                            },
-                        },
-                    },
-                ])
-
-                const res = await sqlTransaction(operations)
-
-                if (res.status !== 200) {
-                    message.error('Đã có lỗi xảy ra, vui lòng thử lại')
-                    return
+                const upsertData = {
+                    lecturerId: values.lecturerId,
+                    deadline: values.deadline ? dayjs(values.deadline).toISOString() : undefined,
                 }
+
+                await Promise.all(
+                    input.selectedCriteriaIds.flatMap((criterionId) => [
+                        upsertAnalysisCriterion({
+                            where: {
+                                criterionPeriodId: criterionId,
+                            },
+                            create: {
+                                criterionPeriodId: criterionId,
+                                ...upsertData,
+                            },
+                            update: upsertData,
+                        }),
+                        upsertEvaluationCriterion({
+                            where: {
+                                criterionPeriodId: criterionId,
+                            },
+                            create: {
+                                criterionPeriodId: criterionId,
+                                ...upsertData,
+                            },
+                            update: upsertData,
+                        }),
+                    ])
+                )
 
                 message.success('Phân công giảng viên đánh giá hàng loạt thành công')
                 if (input?.refetch) {
@@ -132,7 +151,26 @@ export default function PutPhanCongHangLoatModal() {
         >
             <Col span={24}>
                 <FormItem label="Chọn giảng viên" form={form} name="lecturerId" required>
-                    <LecturerSelector />
+                    <Select
+                        placeholder="Chọn giảng viên"
+                        options={lecturers.map((i) => {
+                            const academicRank =
+                                i.lecturer?.userProfile?.academicRankType?.sTen || ''
+                            const degreeRank =
+                                i.lecturer?.userProfile?.academicDegreeType?.sTen || ''
+                            const fullName = i?.lecturer?.userProfile?.fullname
+                                ? i?.lecturer?.userProfile?.fullname
+                                : `${i?.lecturer?.userProfile?.firstName} ${i?.lecturer?.userProfile?.lastName}`
+                            const academicTitle = [academicRank, degreeRank]
+                                .filter(Boolean)
+                                .join('.')
+
+                            return {
+                                value: i?.lecturerId,
+                                label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}`,
+                            }
+                        })}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
