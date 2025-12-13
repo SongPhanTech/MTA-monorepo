@@ -4,6 +4,7 @@ import '../ql-dao-tao/student'
 import '../ql-dao-tao/categories'
 import '../ql-ho-so/profile'
 import '../ql-dao-tao/lecturer'
+import '../ql-danh-muc/document'
 
 /// Trạng thái đợt đánh giá
 enum EvaluationPeriodStatus {
@@ -37,7 +38,7 @@ model EvaluationPeriod extends Base {
   semesterId String?
   standards  StandardPeriod[]
   council    EvaluationCouncil?
-
+  documentFiles  DocumentFile[] 
   @@schema("khao-thi")
 }
 

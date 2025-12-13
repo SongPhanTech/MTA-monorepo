@@ -2582,7 +2582,8 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
-  noteId: 'noteId'
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId'
 };
 
 exports.Prisma.AcademicActionConfigScalarFieldEnum = {
@@ -5982,7 +5983,8 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
   studentScoreConvertId: 'studentScoreConvertId',
-  noteId: 'noteId'
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId'
 };
 
 exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {

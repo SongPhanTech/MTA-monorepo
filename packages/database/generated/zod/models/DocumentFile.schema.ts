@@ -55,6 +55,7 @@ const relationSchema = z.object({
     trainingField: z.record(z.string(), z.unknown()).optional(),
     studentScoreConvert: z.record(z.string(), z.unknown()).optional(),
     note: z.record(z.string(), z.unknown()).optional(),
+    evaluationPeriod: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -77,6 +78,7 @@ const fkSchema = z.object({
     trainingFieldId: z.string().nullish(),
     studentScoreConvertId: z.string().nullish(),
     noteId: z.string().nullish(),
+    evaluationPeriodId: z.string(),
 }
 );
 
