@@ -69,7 +69,7 @@ model DocumentFile extends Base {
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
 
-	evaluationPeriod EvaluationPeriod @relation(fields: [evaluationPeriodId], references: [id])
-	evaluationPeriodId String
+	evaluationPeriod EvaluationPeriod? @relation(fields: [evaluationPeriodId], references: [id])
+	evaluationPeriodId String?
   @@schema("ql-danh-muc")
 }

@@ -14859,6 +14859,7 @@ const metadata: ModelMeta = {
                     name: "evaluationPeriod",
                     type: "EvaluationPeriod",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
@@ -14866,6 +14867,7 @@ const metadata: ModelMeta = {
                 }, evaluationPeriodId: {
                     name: "evaluationPeriodId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'evaluationPeriod',
                 },
