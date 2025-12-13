@@ -89,7 +89,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             if (!row[cols.gender]) {
                 errors.push({
                     sheetRef: sheetName,
-                    cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+                    cellRef: `${cols.gender}${row.__rowNum__ + 1}`,
                     message: 'Giới tính không được để trống',
                 })
             }
@@ -97,7 +97,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             if (!row[cols.facultyOrganization]) {
                 errors.push({
                     sheetRef: sheetName,
-                    cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+                    cellRef: `${cols.facultyOrganization}${row.__rowNum__ + 1}`,
                     message: 'Khoa không được để trống',
                 })
             }
@@ -105,7 +105,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             if (!row[cols.departmentOrganization]) {
                 errors.push({
                     sheetRef: sheetName,
-                    cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+                    cellRef: `${cols.departmentOrganization}${row.__rowNum__ + 1}`,
                     message: 'Bộ môn không được để trống',
                 })
             }
@@ -121,7 +121,7 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
             if (!row[cols.lecturerType]) {
                 errors.push({
                     sheetRef: sheetName,
-                    cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
+                    cellRef: `${cols.lecturerType}${row.__rowNum__ + 1}`,
                     message: 'Kiểu giảng viên không được để trống',
                 })
             }

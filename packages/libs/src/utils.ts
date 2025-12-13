@@ -121,7 +121,7 @@ export function splitFullName(fullName?: string): {
     const parts = fullName.trim().split(/\s+/)
 
     const firstName = parts.pop() || '' // Lấy phần cuối cùng làm tên
-    const lastName = parts.join(' ') // Phần còn lại là họ + tên đệm
+    const lastName = parts.join(' ') || '' // Phần còn lại là họ + tên đệm
 
     return { firstName, lastName }
 }

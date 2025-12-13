@@ -10,12 +10,15 @@ export const FixedClassScalar = models.FixedClassScalarSchema.extend({
     .describe('Lớp quản lý')
     .openapi('FixedClassScalar')
 
-export const SchoolYearScalar =
-    models.SchoolYearScalarSchema.describe('Năm học').openapi('SchoolYearScalar')
-
 export const SemesterScalar = models.SemesterScalarSchema.extend({ schoolYearId: z.string() })
     .describe('Học kỳ')
     .openapi('SemesterScalar')
+
+export const SchoolYearScalar = models.SchoolYearScalarSchema.extend({
+    semesters: z.array(SemesterScalar),
+})
+    .describe('Năm học')
+    .openapi('SchoolYearScalar')
 
 export const TrainingCourseScalar = models.TrainingCourseScalarSchema.extend({
     semesterStartId: z.string(),
