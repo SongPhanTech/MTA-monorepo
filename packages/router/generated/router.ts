@@ -17,8 +17,6 @@ export default {
     "INDEX": "/",
     "LAM_KHAO_SAT_ID": "/lam-khao-sat/[id]",
     "LAM_KHAO_SAT_PRIVATE_ID": "/lam-khao-sat/private/[id]",
-    "QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi",
-    "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi",
     "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID_PHANCONG": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]/phancong",
@@ -169,6 +167,7 @@ export default {
     "QL_GIANG_VIEN": "/ql-giang-vien",
     "QUAN_LY_HO_SO_ID": "/quan-ly-ho-so/[id]",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
+    "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
   "TRO_LY_AO": {

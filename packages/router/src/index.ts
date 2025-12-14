@@ -837,13 +837,13 @@ const NAVIGATION: NavigationType = {
     QL_HO_SO: {
         label: 'Quản lý hồ sơ',
         menus: [
-            // {
-            //     id: QL_HO_SO_PERMISSION.QL_HO_SO_HOME,
-            //     label: 'Trang chủ',
-            //     icon: House,
-            //     path: ROUTER_PATH.KHAO_THI.HOME,
-            //     description: 'Thông tin trang chủ',
-            // },
+            {
+                id: QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO_ME,
+                label: 'Hồ sơ của tôi',
+                icon: House,
+                path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ME,
+                description: 'Hồ sơ của tôi',
+            },
             {
                 id: QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
                 label: 'Quản lý hồ sơ',

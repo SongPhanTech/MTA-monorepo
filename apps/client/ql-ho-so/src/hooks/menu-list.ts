@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
 import { useAbility, usePermissions } from '@workspace/permissions/hooks'
-import NAVIGATION, { type QL_HO_SO_PERMISSION } from '@workspace/router'
+import NAVIGATION, { ROUTER_PATH, type QL_HO_SO_PERMISSION } from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
@@ -27,6 +27,7 @@ const useMenuList = () => {
         () =>
             NAVIGATION.QL_HO_SO.menus
                 .map((menu) => {
+                    if (menu.path === ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ME) return menu // Luôn hiển thị menu "Hồ sơ của tôi"
                     if (menu.children) {
                         const filteredChildren = menu.children.filter((child) => {
                             return can(child.id as QL_HO_SO_PERMISSION, 'XEM')
