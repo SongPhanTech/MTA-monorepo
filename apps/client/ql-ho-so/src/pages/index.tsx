@@ -2,7 +2,6 @@ import Loading from '@components/commons/loading'
 import { useSession } from '@workspace/auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import DefaultLayout from '@layouts/default-layout'
 import { ROUTER_PATH } from '@workspace/router'
 
 const IndexPage = () => {
@@ -23,7 +22,3 @@ const IndexPage = () => {
     return <Loading />
 }
 export default IndexPage
-
-IndexPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
-}
