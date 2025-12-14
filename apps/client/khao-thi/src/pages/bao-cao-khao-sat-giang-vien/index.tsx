@@ -167,8 +167,8 @@ export default function BaoCaoGiangVien() {
                                 maxHeight: 400,
                                 overflow: 'auto',
                                 width: 'fit-content',
-                                maxWidth: 400
-                                }}
+                                maxWidth: 400,
+                            }}
                             dropdownMatchSelectWidth={false}
                         />
                         <TreeSelect
@@ -184,8 +184,8 @@ export default function BaoCaoGiangVien() {
                                 maxHeight: 400,
                                 overflow: 'auto',
                                 width: 'fit-content',
-                                maxWidth: 400
-                                }}
+                                maxWidth: 400,
+                            }}
                             dropdownMatchSelectWidth={false}
                         />
                         <Select
@@ -204,8 +204,8 @@ export default function BaoCaoGiangVien() {
                                 maxHeight: 400,
                                 overflow: 'auto',
                                 width: 'fit-content',
-                                maxWidth: 400
-                                }}
+                                maxWidth: 400,
+                            }}
                             dropdownMatchSelectWidth={false}
                         />
                         <Select
@@ -224,8 +224,8 @@ export default function BaoCaoGiangVien() {
                                 maxHeight: 400,
                                 overflow: 'auto',
                                 width: 'fit-content',
-                                maxWidth: 400
-                                }}
+                                maxWidth: 400,
+                            }}
                             dropdownMatchSelectWidth={false}
                         />
                     </Flex>

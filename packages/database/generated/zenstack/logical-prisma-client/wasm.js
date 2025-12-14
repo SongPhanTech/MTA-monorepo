@@ -1450,6 +1450,7 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId'
@@ -1462,6 +1463,7 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   planTrainingId: 'planTrainingId',
   trainingBlockSubjectId: 'trainingBlockSubjectId',
   studentCount: 'studentCount',
@@ -1717,6 +1719,7 @@ exports.Prisma.TrainingCourseRegulationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   trainingCourseId: 'trainingCourseId',
   code: 'code',
   name: 'name',
@@ -1831,13 +1834,13 @@ exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
 
 exports.Prisma.SubjectVersionScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
+  code: 'code',
   isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
@@ -1983,6 +1986,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   code: 'code',
   name: 'name',
   startDate: 'startDate',
@@ -2467,6 +2471,7 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   code: 'code',
   studentId: 'studentId',
   semesterId: 'semesterId',
@@ -2510,6 +2515,7 @@ exports.Prisma.StudentYearResultScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
   code: 'code',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',
@@ -5330,6 +5336,7 @@ exports.Prisma.DM_ViTriCongViecOrderByRelevanceFieldEnum = {
 exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   trainingCourseId: 'trainingCourseId'
@@ -5338,6 +5345,7 @@ exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
 exports.Prisma.PlanTrainingSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   planTrainingId: 'planTrainingId',
   trainingBlockSubjectId: 'trainingBlockSubjectId'
 };
@@ -5476,6 +5484,7 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
 exports.Prisma.TrainingCourseRegulationOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   trainingCourseId: 'trainingCourseId',
   code: 'code',
   name: 'name'
@@ -5560,9 +5569,9 @@ exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
+  code: 'code',
   name: 'name',
   codeTkb: 'codeTkb',
   objectives: 'objectives',
@@ -5645,6 +5654,7 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   code: 'code',
   name: 'name',
   subjectId: 'subjectId',
@@ -5933,6 +5943,7 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
 exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   code: 'code',
   studentId: 'studentId',
   semesterId: 'semesterId',
@@ -5942,6 +5953,7 @@ exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
 exports.Prisma.StudentYearResultOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
+  createdBy: 'createdBy',
   code: 'code',
   studentId: 'studentId',
   schoolYearId: 'schoolYearId',

@@ -191,6 +191,9 @@ export default function EvaluationPeriod() {
                                 width: 250,
                                 align: 'center',
                                 type: 'input',
+                                render: (_, record) => {
+                                    return <div className="text-left">{record.name}</div>
+                                },
                             },
                             {
                                 title: 'Hội đồng đánh giá',

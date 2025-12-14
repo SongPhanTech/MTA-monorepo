@@ -7542,6 +7542,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PlanTraining$createdBy,
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -7629,6 +7635,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PlanTrainingSubject$createdBy,
                 }, planTraining: {
                     name: "planTraining",
                     type: "PlanTraining",
@@ -9235,6 +9247,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingCourseRegulation$createdBy,
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -10031,11 +10049,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -10063,6 +10076,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SubjectVersion$createdBy,
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
                 }, isLocked: {
                     name: "isLocked",
                     type: "Boolean",
@@ -10306,9 +10323,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -10949,6 +10963,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SubjectClass$createdBy,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14107,6 +14127,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentSemesterResult$createdBy,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14293,6 +14319,12 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentYearResult$createdBy,
                 }, code: {
                     name: "code",
                     type: "String",
@@ -26059,6 +26091,14 @@ function $default$DocumentClassification$createdBy(user: any): unknown {
     return user?.id;
 }
 
+function $default$PlanTraining$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$PlanTrainingSubject$createdBy(user: any): unknown {
+    return user?.id;
+}
+
 function $default$StudentScoreConvert$createdBy(user: any): unknown {
     return user?.id;
 }
@@ -26111,6 +26151,10 @@ function $default$TrainingCourse$createdBy(user: any): unknown {
     return user?.id;
 }
 
+function $default$TrainingCourseRegulation$createdBy(user: any): unknown {
+    return user?.id;
+}
+
 function $default$FixedClass$createdBy(user: any): unknown {
     return user?.id;
 }
@@ -26160,6 +26204,10 @@ function $default$ClassRegisterSession$createdBy(user: any): unknown {
 }
 
 function $default$ClassRegisterLogs$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SubjectClass$createdBy(user: any): unknown {
     return user?.id;
 }
 
@@ -26268,6 +26316,14 @@ function $default$OutputStandardOnCurriculum$createdBy(user: any): unknown {
 }
 
 function $default$Student$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentSemesterResult$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentYearResult$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -355,7 +355,6 @@ export const buildSubjectMapOrThrow = async (
             subjects.map((s) => s.organizationCode || null)
         )
 
-        const subjectMap = new Map(missing.map((s) => [s.name, createId()]))
         const newSubjects = await prisma.$transaction(async (tx) => {
             await tx.subject.createMany({
                 data: missing.map((s) => ({

@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     studentCount: z.number().default(0),
     subjectClassType: SubjectClassTypeSchema,
 }
@@ -25,6 +26,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     studentCount: z.number(),
     subjectClassType: SubjectClassTypeSchema,
 }
@@ -70,6 +72,7 @@ export const PlanTrainingSubjectPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     studentCount: z.union([z.number(), z.record(z.string(), z.unknown())]),
     subjectClassType: SubjectClassTypeSchema
 }).partial().passthrough();
@@ -79,7 +82,7 @@ export const PlanTrainingSubjectPrismaUpdateSchema = z.object({
  * `PlanTrainingSubject` schema for create operations excluding foreign keys and relations.
  */
 export const PlanTrainingSubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, studentCount: true, subjectClassType: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, studentCount: true, subjectClassType: true
 });
 
 

@@ -30,6 +30,7 @@ import PutTieuChuanTieuChi from './ql-dot-tu-danh-gia/put-tieu-chuan-tieu-chi'
 import PutPhanCongHangLoatModal from './put-phan-cong-hang-loat'
 import PutPhanCongHangLoatCrossModal from './put-phan-cong-hang-loat-cross'
 import ReviewSurveyModal from './review-survey-modal'
+import { XemTaiLieu } from '@workspace/ui'
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -63,4 +64,5 @@ export {
     PutPhanCongHangLoatModal,
     PutPhanCongHangLoatCrossModal,
     ReviewSurveyModal,
+    XemTaiLieu,
 }

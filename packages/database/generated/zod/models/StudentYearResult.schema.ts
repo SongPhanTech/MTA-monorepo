@@ -16,6 +16,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    createdBy: z.string().uuid().nullish(),
     code: z.string(),
     studyYear: z.number(),
     isLastStudyYear: z.boolean(),
@@ -43,6 +44,7 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     code: z.string(),
     studyYear: z.number(),
     isLastStudyYear: z.boolean(),
@@ -106,6 +108,7 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    createdBy: z.string().uuid().nullish(),
     code: z.string(),
     studyYear: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isLastStudyYear: z.boolean(),
@@ -131,7 +134,7 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
  * `StudentYearResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentYearResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
 
