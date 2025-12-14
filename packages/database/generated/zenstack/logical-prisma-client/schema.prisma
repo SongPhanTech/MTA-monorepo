@@ -865,6 +865,7 @@ model UserProfile {
   surveySession                 SurveySession[]
   evaluationCriterionComments   EvaluationCriterionComment[]
   classSchedules                ClassSchedule[]
+  evaluationCouncilMember       EvaluationCouncilMember[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4664,7 +4665,6 @@ model Lecturer {
   reviewedRegistrations       StudentResearchRegistration[]
   reviewedThesisRegistrations StudentThesisRegistration[]
   expertProfile               ExpertProfile[]
-  evaluationCouncilMember     EvaluationCouncilMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
@@ -5522,7 +5522,7 @@ model EvaluationCouncilMember {
   createdBy            String?                @default("") @db.Uuid()
   evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId  String
-  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
+  lecturer             UserProfile            @relation(fields: [lecturerId], references: [id])
   lecturerId           String
   role                 EvaluationMemberRole[]
   evaluationCriterions EvaluationCriterion[]
