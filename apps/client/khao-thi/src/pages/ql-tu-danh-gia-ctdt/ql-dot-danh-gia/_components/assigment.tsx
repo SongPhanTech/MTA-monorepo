@@ -69,18 +69,14 @@ export default function AssigmentOfAssessmentTab() {
         include: {
             lecturer: {
                 include: {
-                    userProfile: {
-                        include: {
-                            academicDegreeType: {
-                                select: {
-                                    sTen: true,
-                                },
-                            },
-                            academicRankType: {
-                                select: {
-                                    sTen: true,
-                                },
-                            },
+                    academicDegreeType: {
+                        select: {
+                            sTen: true,
+                        },
+                    },
+                    academicRankType: {
+                        select: {
+                            sTen: true,
                         },
                     },
                     organization: true,
@@ -457,16 +453,13 @@ export default function AssigmentOfAssessmentTab() {
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
-                                                        i.lecturer?.userProfile?.academicRankType
-                                                            ?.sTen || ''
+                                                        i.academicRankType?.sTen || ''
                                                     const degreeRank =
-                                                        i.lecturer?.userProfile?.academicDegreeType
-                                                            ?.sTen || ''
+                                                        i.academicDegreeType?.sTen || ''
 
-                                                    const fullName = i?.lecturer?.userProfile
-                                                        ?.fullname
-                                                        ? i?.lecturer?.userProfile?.fullname
-                                                        : `${i?.lecturer?.userProfile?.firstName} ${i?.lecturer?.userProfile?.lastName}`
+                                                    const fullName = i?.fullname
+                                                        ? i?.fullname
+                                                        : `${i?.firstName} ${i?.lastName}`
 
                                                     const academicTitle = [academicRank, degreeRank]
                                                         .filter(Boolean)

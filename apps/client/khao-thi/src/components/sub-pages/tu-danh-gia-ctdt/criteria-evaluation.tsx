@@ -3,8 +3,13 @@ import useSpinner from '@hooks/spinner'
 import { Button, Collapse, Form, message, Tag, Badge } from 'antd'
 import { useEffect, useState } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
-import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
+import {
+    $Enums,
+    type EvaluationCriterionComment,
+    type StandardPeriod,
+    type CriterionPeriod,
+    type EvaluationCriterion,
+} from '@workspace/db/client'
 import { useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
 import { getStatusConfig } from '@constants/constants'
@@ -15,6 +20,19 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import CommentList from '@components/commons/comment-list'
 import ExportCriteriaEvaluation from '@components/modal/export-criteria-evaluation'
+
+export type DataTabEvaluationCriterionType = StandardPeriod & {
+    criteria: (CriterionPeriod & {
+        evaluationCriterion?:
+            | (EvaluationCriterion & {
+                  evaluationCriterionComments?: (EvaluationCriterionComment & {
+                      reviewer?: { fullname?: string | null }
+                  })[]
+                  lecturer?: { userProfile?: { fullname?: string | null } } | null
+              })
+            | null
+    })[]
+}
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

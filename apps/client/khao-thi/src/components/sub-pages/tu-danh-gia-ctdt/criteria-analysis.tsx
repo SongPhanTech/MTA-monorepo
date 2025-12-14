@@ -10,11 +10,16 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
-import { $Enums } from '@workspace/db/client'
+import {
+    $Enums,
+    type AnalysisCriterion,
+    type CriterionPeriod,
+    type EvaluationCriterionComment,
+    type StandardPeriod,
+} from '@workspace/db/client'
 import { useUpdateAnalysisCriterion, useUpdateEvaluationPeriod } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -24,6 +29,23 @@ import dayjs from 'dayjs'
 import { MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+export type DataTabType = StandardPeriod & {
+    criteria: (CriterionPeriod & {
+        analysisCriterions?:
+            | (AnalysisCriterion & {
+                  lecturer?: { userProfile?: { fullname?: string | null } } | null
+                  requirementCriterions: (RequirementCriterion & {
+                      evidences: (AnalysisFormEvidence & {
+                          evidence: Evidence
+                      })[]
+                      evaluationCriterionComment?: EvaluationCriterionComment[]
+                  })[]
+                  evaluationCriterionComments?: EvaluationCriterionComment[]
+              })
+            | null
+    })[]
+}
 
 const CriteriaAnalysisSubPage = ({
     data,

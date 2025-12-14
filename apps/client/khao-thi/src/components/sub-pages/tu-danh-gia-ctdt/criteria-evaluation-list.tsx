@@ -3,10 +3,10 @@ import { Collapse, Form, Tag, Button, Badge } from 'antd'
 import { useEffect, useState } from 'react'
 import { $Enums } from '@workspace/db/client'
 import dayjs from 'dayjs'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>

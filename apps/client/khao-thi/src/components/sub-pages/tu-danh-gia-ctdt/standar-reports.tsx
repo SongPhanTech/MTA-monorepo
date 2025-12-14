@@ -3,7 +3,6 @@ import useSpinner from '@hooks/spinner'
 import { Button, Collapse, Form, message, Tag } from 'antd'
 import { useEffect } from 'react'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
 import { useUpdateEvaluationPeriod, useUpdateStandardPeriod } from '@workspace/db/hooks'
 import dayjs from 'dayjs'
@@ -11,6 +10,7 @@ import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import { useStore } from '@tanstack/react-store'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
