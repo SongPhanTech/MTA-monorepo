@@ -25,7 +25,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useSession } from '@workspace/auth/react'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
-    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         organization: undefined,
         code: '',
@@ -36,9 +35,10 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: me } = useSession()
+    const userId = me?.sDM_NhanVienId || ''
     const { data: userProfile } = useFindUniqueUserProfile(
         {
-            where: { id: me?.sDM_NhanVienId || '' },
+            where: { id: userId },
             select: {
                 educationAndTraining: {
                     select: {
@@ -48,7 +48,7 @@ export default function TrainingProgramSubjects() {
             },
         },
         {
-            enabled: !!me?.sDM_NhanVienId,
+            enabled: !!userId,
         }
     )
     const id = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ''
@@ -137,7 +137,7 @@ export default function TrainingProgramSubjects() {
         [filters, isFiltering]
     )
 
-    const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
+    const { data = [] } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id,
             curriculumVersion: {
@@ -347,23 +347,6 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-
-    const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
-        curriculumVersionId: string
-        trainingBlockOnCurriculumVersionId: string
-        trainingBlockSubjectId: string
-    }>({
-        tag: 'PutTrainingBlockSubject',
-    })
-
-    const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
-        curriculumVersionId: string
-    }>({
-        tag: 'PutTrainingBlockOnCurriculumVersion',
-        onClose: () => {
-            refetch()
-        },
-    })
 
     const { onOpen: onOpenSubjectVersion } = useDisclosure<{
         subjectId: string
