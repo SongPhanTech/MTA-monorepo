@@ -10,7 +10,7 @@ import {
     useFindFirstEvaluationCouncilMember,
     useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
-    useFindUniqueLecturer,
+    useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
@@ -115,10 +115,10 @@ export default function AssigmentOfAssessmentTab() {
         }
     )
 
-    const { data: lecturer } = useFindUniqueLecturer(
+    const { data: lecturer } = useFindUniqueUserProfile(
         {
             where: {
-                userProfileId: idProfile || '',
+                id: idProfile || '',
             },
         },
         {
