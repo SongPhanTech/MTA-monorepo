@@ -18,8 +18,8 @@ import {
     TableOfContents,
 } from 'docx'
 import { saveAs } from 'file-saver'
-import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/_components/criteria-evaluation'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
 
 interface ExportCriteriaEvaluationProps {
     data: DataTabEvaluationCriterionType
