@@ -37,13 +37,12 @@ model Lecturer extends Base {
   reviewedRegistrations       StudentResearchRegistration[] // Đăng ký đã phê duyệt
   reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
   expertProfile               ExpertProfile[]
-  evaluationCouncilMember     EvaluationCouncilMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
   evaluationCriterions        EvaluationCriterion[]
-	analysisCriterion AnalysisCriterion[]
+  analysisCriterion           AnalysisCriterion[]
 
   @@schema("ql-dao-tao")
 }

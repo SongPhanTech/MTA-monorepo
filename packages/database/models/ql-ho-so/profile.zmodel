@@ -253,6 +253,7 @@ model UserProfile extends Base {
   surveySession                 SurveySession[]
   evaluationCriterionComments   EvaluationCriterionComment[]
   classSchedules                ClassSchedule[]
+  evaluationCouncilMember       EvaluationCouncilMember[]
 
   @@auth()
   @@schema("ql-nguoi-dung")

@@ -1,10 +1,17 @@
-import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
-import type { EvidenceFile, Prisma } from '@workspace/db'
+import {
+    CloseOutlined,
+    CloudUploadOutlined,
+    DownloadOutlined,
+    PaperClipOutlined,
+} from '@ant-design/icons'
+import type { EvidenceFile, DocumentFile, Prisma } from '@workspace/db'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import { getMinioUrl } from '@workspace/constant'
 import { env } from '@/env'
 
 const { Dragger } = Upload
@@ -12,13 +19,16 @@ const { Link } = Typography
 
 interface DocumentPathsComponentProps {
     form: FormInstance
-    data: EvidenceFile[]
+    data: EvidenceFile[] | DocumentFile[]
     relationId: string
-    relationType: Extract<Prisma.EvidenceFileScalarFieldEnum, `${string}Id`>
+    relationType:
+        | Extract<Prisma.EvidenceFileScalarFieldEnum, `${string}Id`>
+        | Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
     titleForm?: string
     multiple?: boolean
     accept?: string
     text?: string
+    onUploadingChange?: (count: number) => void
 }
 
 interface UploadedFileItem {
@@ -39,8 +49,16 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     multiple = true,
     accept = '.doc,.docx,.xls,.xlsx',
     text = 'DOC, DOCX, XLSX, XLS',
+    onUploadingChange,
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
+    const [uploadingCount, setUploadingCount] = useState<number>(0)
+
+    useEffect(() => {
+        if (onUploadingChange) {
+            onUploadingChange(uploadingCount)
+        }
+    }, [uploadingCount, onUploadingChange])
 
     const handleRemoveFile = (index: number): void => {
         const newList = [...fileList]
@@ -58,30 +76,21 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
         form.setFieldValue(titleForm, updatedFiles)
     }
 
+    const { onOpen: onOpenPreview } = useDisclosure<{
+        uri: string
+        name?: string
+        mimeType?: string
+    }>({
+        tag: 'XemTaiLieu',
+    })
+
     const handlePreviewFile = async (file: UploadedFileItem) => {
         try {
-            if (file.file) {
-                // Nếu là file mới upload
-                const fileUrl = URL.createObjectURL(file.file)
-                const a = document.createElement('a')
-                a.href = fileUrl
-                a.download = file.name
-                a.target = '_blank'
-                document.body.appendChild(a)
-                a.click()
-                document.body.removeChild(a)
-                setTimeout(() => URL.revokeObjectURL(fileUrl), 100)
-            } else {
-                // Nếu là file từ server
-                const fileUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${file.path}`
-                const a = document.createElement('a')
-                a.href = fileUrl
-                a.download = file.name
-                a.target = '_blank'
-                document.body.appendChild(a)
-                a.click()
-                document.body.removeChild(a)
-            }
+            return onOpenPreview({
+                uri: getMinioUrl(file.path),
+                name: file.name,
+                mimeType: file.name.split('.').pop() || file.mimeType,
+            })
         } catch (error) {
             console.error('Error opening file:', error)
             message.error('Không thể mở file')
@@ -90,9 +99,10 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
 
     const handleCustomUpload = async (file: File) => {
         try {
+            setUploadingCount((prev) => prev + 1)
             const extension = file.name.split('.').pop() || ''
             const resPresignedUrl = await generatePresignedUrl({
-                path: 'tai-lieu-ctdt',
+                path: 'tai-lieu-khao-thi',
                 extension: extension,
             })
 
@@ -133,16 +143,33 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 [relationType]: relationId,
             }))
 
-            setFileList(newList)
-            form.setFieldValue(titleForm, evidenceFile)
+            setFileList((prevList) => {
+                const newList = multiple ? [...prevList, newItem] : [newItem]
+
+                const documentFiles = newList.map((item) => ({
+                    name: item.name,
+                    path: item.path,
+                    size: item.size,
+                    mimeType: item.mimeType,
+                    [relationType]: relationId,
+                }))
+
+                // Cập nhật form với danh sách mới
+                form.setFieldValue(titleForm, documentFiles)
+
+                return newList
+            })
+
+            setUploadingCount((prev) => prev - 1)
         } catch (err) {
             console.error(err)
             message.error(`Không thể upload ${file.name}.`)
+            setUploadingCount((prev) => prev - 1)
         }
     }
 
     useEffect(() => {
-        const initial = data.map((file: EvidenceFile) => ({
+        const initial = data.map((file) => ({
             file: null,
             name: file.name,
             path: file.path,
@@ -225,6 +252,28 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                                 >
                                     {displayName}
                                 </span>
+                            </Tooltip>
+                            <Tooltip title="Tải xuống">
+                                <DownloadOutlined
+                                    style={{
+                                        marginLeft: 12,
+                                        cursor: 'pointer',
+                                        color: '#595959',
+                                        fontSize: 14,
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                        const fileUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item.path}`
+                                        const a = document.createElement('a')
+                                        a.href = fileUrl
+                                        a.download = item.name
+                                        a.target = '_blank'
+                                        document.body.appendChild(a)
+                                        a.click()
+                                        document.body.removeChild(a)
+                                    }}
+                                />
                             </Tooltip>
                             <CloseOutlined
                                 style={{
