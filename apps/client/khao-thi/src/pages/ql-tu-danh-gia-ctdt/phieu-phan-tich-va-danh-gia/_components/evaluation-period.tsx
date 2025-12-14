@@ -8,7 +8,7 @@ import { $Enums } from '@workspace/db/client'
 import {
     useCountEvaluationPeriod,
     useFindManyEvaluationPeriod,
-    useFindUniqueLecturer,
+    useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import { Col, Row, Tag } from 'antd'
@@ -22,10 +22,10 @@ export default function EvaluationPeriod() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { id: semesterId } = useSemesterStore()
 
-    const { data: lecturer } = useFindUniqueLecturer(
+    const { data: lecturer } = useFindUniqueUserProfile(
         {
             where: {
-                userProfileId: idProfile || '',
+                id: idProfile || '',
             },
         },
         {
@@ -71,7 +71,7 @@ export default function EvaluationPeriod() {
             ],
             ...(semesterId && { semesterId }),
         }
-    }, [idProfile, lecturer?.id])
+    }, [idProfile, lecturer?.id, semesterId])
 
     const { data: assignments = [], isLoading } = useFindManyEvaluationPeriod(
         {
