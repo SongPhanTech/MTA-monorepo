@@ -2311,6 +2311,7 @@ model PlanTraining {
   deletedAt            DateTime?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @default(now()) @updatedAt()
+  createdBy            String?               @db.Uuid()
   trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
   semester             Semester              @relation(fields: [semesterId], references: [id])
@@ -2330,6 +2331,7 @@ model PlanTrainingSubject {
   deletedAt              DateTime?
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @default(now()) @updatedAt()
+  createdBy              String?              @db.Uuid()
   planTraining           PlanTraining         @relation(fields: [planTrainingId], references: [id])
   planTrainingId         String
   trainingBlockSubjectId String
@@ -2728,6 +2730,7 @@ model TrainingCourseRegulation {
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @db.Uuid()
   trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
   code             String
@@ -2896,13 +2899,13 @@ model SubjectVersionCategory {
 /// Phiên bản môn học
 model SubjectVersion {
   id                       String                  @id() @default(cuid())
-  code                     String?                 @unique()
   active                   Boolean                 @default(true)
   description              String?                 @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @default(now()) @updatedAt()
   createdBy                String?                 @db.Uuid()
+  code                     String?
   isLocked                 Boolean                 @default(false)
   name                     String
   codeTkb                  String?
@@ -3115,6 +3118,7 @@ model SubjectClass {
   deletedAt                   DateTime?
   createdAt                   DateTime              @default(now())
   updatedAt                   DateTime              @default(now()) @updatedAt()
+  createdBy                   String?               @db.Uuid()
   code                        String
   name                        String
   startDate                   DateTime?
@@ -3846,6 +3850,7 @@ model StudentSemesterResult {
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @default(now()) @updatedAt()
+  createdBy                String?                 @db.Uuid()
   code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
@@ -3895,6 +3900,7 @@ model StudentYearResult {
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @default(now()) @updatedAt()
+  createdBy                String?                 @db.Uuid()
   code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
