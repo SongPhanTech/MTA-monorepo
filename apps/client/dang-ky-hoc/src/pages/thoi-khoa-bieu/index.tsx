@@ -7,8 +7,13 @@ import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
 import type { $Enums, FixedClass, Prisma, SubjectClassTime } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import {
+    useCountSubjectClass,
+    useFindFirstSemester,
+    useFindManySubjectClass,
+    useFindUniqueUserProfile,
+} from '@workspace/db/hooks'
+import { dayjs } from '@workspace/ui'
 import { Col, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -28,16 +33,63 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
         subjectClassStudent: undefined,
         mainLecturer: undefined,
         extraLecturer: undefined,
-        enterGradeLecturer: undefined,
         examType: undefined,
         room: undefined,
-        pcgd: undefined,
-        approved: undefined,
     })
 
-    const { id: semesterId } = useSemesterStore()
+    const toDay = dayjs().startOf('day')
+
+    const { data: currentSemester } = useFindFirstSemester({
+        where: {
+            schoolYear: {
+                startDate: { lte: toDay.toDate() },
+                endDate: { gte: toDay.toDate() },
+            },
+            startDate: { lte: toDay.toDate() },
+            endDate: { gte: toDay.toDate() },
+        },
+        select: {
+            id: true,
+            name: true,
+            schoolYear: {
+                select: {
+                    name: true,
+                },
+            },
+        },
+    })
+    const { data: userProfile } = useFindUniqueUserProfile(
+        {
+            where: {
+                id,
+            },
+            select: {
+                educationAndTraining: {
+                    select: {
+                        id: true,
+                        fixedClass: {
+                            select: {
+                                trainingCourse: {
+                                    select: {
+                                        trainingObjectTypeId: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!id,
+        }
+    )
+    const semesterId = currentSemester?.id
+    const trainingObjectTypeId =
+        userProfile?.educationAndTraining?.[0]?.fixedClass?.trainingCourse?.trainingObjectTypeId
+    // const { id: semesterId } = useSemesterStore()
     const { options, getExamTypeLabel } = useExamTypeOptions()
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    // const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const where = useMemo(
         () =>
             ({
@@ -56,20 +108,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                     ? {
                           examType: {
                               in: filters.examType,
-                          },
-                      }
-                    : {}),
-                ...(filters.schedule
-                    ? {
-                          schedule: {
-                              in: filters.schedule,
-                          },
-                      }
-                    : {}),
-                ...(semesterId
-                    ? {
-                          semester: {
-                              id: semesterId,
                           },
                       }
                     : {}),
@@ -138,47 +176,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                           },
                       }
                     : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && filters.pcgd[0]
-                    ? {
-                          lecturerId: { not: null },
-                          extraLecturerId: { not: null },
-                          submitLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.pcgd && filters.pcgd.length === 1 && !filters.pcgd[0]
-                    ? {
-                          OR: [
-                              {
-                                  lecturerId: null,
-                              },
-                              {
-                                  extraLecturerId: null,
-                              },
-                              {
-                                  submitLecturerAssignmentAt: null,
-                              },
-                          ],
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: { not: null },
-                      }
-                    : {}),
-                ...(filters.approved && filters.approved.length === 1 && !filters.approved[0]
-                    ? {
-                          approveLecturerAssignmentAt: null,
-                      }
-                    : {}),
-                subject: {
-                    ...(filters.organization && filters.organization.length > 0
-                        ? {
-                              managementOrganizationId: {
-                                  in: filters.organization,
-                              },
-                          }
-                        : {}),
-                },
                 deletedAt: null,
                 active: true,
                 status: 'OFFICIAL',
@@ -190,6 +187,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                         },
                     },
                 },
+                semesterId,
                 type: type,
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, id, type]
@@ -307,6 +305,11 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
         <div>
             <Row gutter={[8, 8]}>
                 <Col span={24}>
+                    <h2 className="m-0 text-center text-2xl font-bold">
+                        Thời khoá biểu {currentSemester?.name}
+                    </h2>
+                </Col>
+                <Col span={24}>
                     <Table
                         rowKey="id"
                         scrollable
@@ -419,25 +422,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                                 render: (_, record) => record?.room?.name || '',
                             },
                             {
-                                title: 'Ngày thi',
-                                align: 'center',
-                                width: 100,
-                                render: (_, record) =>
-                                    record.examDate ? formatDate(record.examDate) : '',
-                            },
-                            // {
-                            //     title: 'Hạn nhập điểm CC/TX',
-                            //     width: 200,
-                            //     align: 'center',
-                            //     render: (value) => (value ? formatDate(value) : ''),
-                            // },
-                            // {
-                            //     title: 'Hạn nhập điểm thi',
-                            //     width: 170,
-                            //     align: 'center',
-                            //     render: (value) => (value ? formatDate(value) : ''),
-                            // },
-                            {
                                 title: 'Thời khoá biểu',
                                 width: 150,
                                 align: 'center',
@@ -455,6 +439,13 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                                             )
                                         })
                                 },
+                            },
+                            {
+                                title: 'Ngày thi',
+                                align: 'center',
+                                width: 100,
+                                render: (_, record) =>
+                                    record.examDate ? formatDate(record.examDate) : '',
                             },
                         ]}
                         data={subjectClasses}

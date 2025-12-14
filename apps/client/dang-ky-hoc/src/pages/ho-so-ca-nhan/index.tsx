@@ -82,6 +82,9 @@ const HoSoCaNhan = () => {
                 trainingLocation: true,
                 priorityObject: true,
                 subjectClassStudent: {
+                    where: {
+                        subjectClassId: { not: null },
+                    },
                     include: {
                         subjectClass: {
                             include: {
@@ -219,7 +222,7 @@ const HoSoCaNhan = () => {
                 },
             },
         },
-        { enabled: !!id }
+        { enabled: !!studentId }
     )
 
     const getStatusTag = (status: string) => {
@@ -458,24 +461,24 @@ const HoSoCaNhan = () => {
                             dataIndex: 'attendanceScore',
                             width: 90,
                             align: 'center',
-                            render: (score) => (score ? Number(score).toFixed(2) : ''),
+                            render: (score) => (score ? Number(score).toFixedSmart(2) : ''),
                         },
                         {
-                            title: 'Điểm GK',
+                            title: 'Điểm TX',
                             dataIndex: 'midtermScore',
                             width: 90,
                             align: 'center',
-                            render: (score) => (score ? Number(score).toFixed(2) : ''),
+                            render: (score) => (score ? Number(score).toFixedSmart(2) : ''),
                         },
                         {
-                            title: 'Điểm CK',
+                            title: 'Điểm thi',
                             dataIndex: 'examScore',
                             width: 90,
                             align: 'center',
-                            render: (score) => (score ? Number(score).toFixed(2) : ''),
+                            render: (score) => (score ? Number(score).toFixedSmart(2) : ''),
                         },
                         {
-                            title: 'Điểm TK',
+                            title: 'Điểm hệ 10',
                             dataIndex: 'finalScore',
                             width: 90,
                             align: 'center',
@@ -487,7 +490,7 @@ const HoSoCaNhan = () => {
                                             : 'text-red-600'
                                     }
                                 >
-                                    {score ? Number(score).toFixed(2) : ''}
+                                    {score ? Number(score).toFixedSmart(2) : ''}
                                 </span>
                             ),
                         },
