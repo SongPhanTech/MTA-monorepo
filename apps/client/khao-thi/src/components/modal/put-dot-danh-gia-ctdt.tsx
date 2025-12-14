@@ -1,10 +1,12 @@
 import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import { createId, type EvaluationPeriod } from '@workspace/db'
+import type { DocumentFile } from '@workspace/db/client'
 import {
     useFindManySchoolYear,
     useFindUniqueEvaluationPeriod,
@@ -14,10 +16,11 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationPeriod = EvaluationPeriod & {
     councilIds: string[]
+    documentFiles?: DocumentFile[]
 }
 dayjs.locale('vi')
 interface TreeNodeType {
@@ -28,6 +31,7 @@ interface TreeNodeType {
 }
 
 const PutEvaluationPeriod = () => {
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutEvaluationPeriod>()
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
@@ -42,7 +46,7 @@ const PutEvaluationPeriod = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: initialData } = useFindUniqueEvaluationPeriod(
-        { where: { id }, include: { council: true } },
+        { where: { id }, include: { council: true, documentFiles: true } },
         { enabled: !!id }
     )
 
@@ -76,6 +80,8 @@ const PutEvaluationPeriod = () => {
 
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
     async function onOk(output?: PutEvaluationPeriod) {
+        console.log(output)
+
         if (!output) return
         try {
             showSpinner()
@@ -91,6 +97,46 @@ const PutEvaluationPeriod = () => {
                 await updateEvaluationPeriod({
                     data: {
                         ...data,
+                        documentFiles: {
+                            upsert: (output.documentFiles || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: {
+                                        id: file.id,
+                                    },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                        evaluationPeriod: {
+                                            connect: {
+                                                id,
+                                            },
+                                        },
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+                            create: (output.documentFiles || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })),
+                            disconnect: document
+                                .filter(
+                                    (existing) =>
+                                        !output.documentFiles?.some((f) => f.id === existing.id)
+                                )
+                                .map((file) => ({ id: file.id })),
+                        },
                     },
                     where: { id },
                 })
@@ -102,7 +148,18 @@ const PutEvaluationPeriod = () => {
                         model: 'EvaluationPeriod',
                         operation: 'create',
                         data: {
-                            data: { id: periodId, ...data },
+                            data: {
+                                id: periodId,
+                                ...data,
+                                documentFiles: {
+                                    create: (output.documentFiles || []).map((file) => ({
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    })),
+                                },
+                            },
                         },
                     },
                     {
@@ -142,12 +199,16 @@ const PutEvaluationPeriod = () => {
                 startDate: dayjs(initialData.startDate),
                 endDate: initialData.endDate ? dayjs(initialData.endDate) : undefined,
             })
+            setDocument(initialData.documentFiles)
         } else {
             form.setFieldsValue({
                 startDate: dayjs(),
             })
+            setDocument([])
         }
     }, [initialData])
+
+    console.log(document)
 
     return (
         <PutFormModal
@@ -210,6 +271,17 @@ const PutEvaluationPeriod = () => {
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={id ?? ''}
+                        relationType="evaluationPeriodId"
+                        titleForm="documentFiles"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>
