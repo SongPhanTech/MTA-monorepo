@@ -2,13 +2,13 @@ import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import type { DataTabType } from '@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis'
 import {
     getStatusEvaluation,
     EVALUATION_CRITERION_STATUS_OPTIONS,
     DEADLINE_OPTIONS,
 } from '@constants/constants'
 import { formatDate } from '@lib/utils'
-import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
 import type { $Enums } from '@workspace/db/client'
 import { Badge, Button, Empty, Tag } from 'antd'

@@ -41,7 +41,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
         (c) => c.evaluationCriterion
     )?.evaluationCriterion
     const evaluatorName = firstEvaluationCriterion?.lecturer?.userProfile?.fullname
-    const reviewerName = firstEvaluationCriterion?.reviewer?.lecturer?.userProfile?.fullname
+    const reviewerName = firstEvaluationCriterion?.reviewer?.lecturer?.fullname
     const reviewDeadline = firstEvaluationCriterion?.deadlineReview
     const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
     const status = firstEvaluationCriterion?.status

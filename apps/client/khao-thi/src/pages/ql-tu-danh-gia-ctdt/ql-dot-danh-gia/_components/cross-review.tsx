@@ -21,7 +21,7 @@ export type DataTabCrossReviewPeriodType = StandardPeriod & {
                   })[]
                   lecturer?: { userProfile?: { fullname?: string | null } } | null
                   reviewer?: {
-                      lecturer?: { userProfile?: { fullname?: string | null } } | null
+                      lecturer?: { fullname?: string | null } | null
                   } | null
                   deadlineReview?: Date | null
               })
@@ -74,12 +74,8 @@ export default function CrossReviewPeriod() {
                                         reviewer: {
                                             include: {
                                                 lecturer: {
-                                                    include: {
-                                                        userProfile: {
-                                                            select: {
-                                                                fullname: true,
-                                                            },
-                                                        },
+                                                    select: {
+                                                        fullname: true,
                                                     },
                                                 },
                                             },

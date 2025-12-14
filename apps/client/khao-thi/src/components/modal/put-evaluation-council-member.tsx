@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import { $Enums, type EvaluationCouncilMember } from '@workspace/db'
 import {
     useCreateEvaluationCouncilMember,
-    useFindManyLecturer,
+    useFindManyUserProfile,
     useFindUniqueEvaluationCouncilMember,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
@@ -71,27 +71,21 @@ const PutEvaluationCouncilMember = () => {
         }
     }
 
-    const { data: lecturerData = [] } = useFindManyLecturer({
+    const { data: lecturerData = [] } = useFindManyUserProfile({
         include: {
-            userProfile: {
-                include: {
-                    academicDegreeType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
+            academicDegreeType: {
+                select: {
+                    sTen: true,
+                },
+            },
+            academicRankType: {
+                select: {
+                    sTen: true,
                 },
             },
         },
         orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
+            firstName: 'asc',
         },
     })
 
@@ -108,8 +102,8 @@ const PutEvaluationCouncilMember = () => {
         if (!roleWatch || roleWatch.length === 0) return lecturerData
 
         return lecturerData.filter((lecturer) => {
-            const academicRank = lecturer.userProfile.academicRankType?.sTen || ''
-            const degree = lecturer.userProfile.academicDegreeType?.sTen || ''
+            const academicRank = lecturer.academicRankType?.sTen || ''
+            const degree = lecturer.academicDegreeType?.sTen || ''
 
             const isChairmanQualified =
                 academicRank.includes('Giáo sư') || degree.includes('Tiến sĩ')
@@ -149,7 +143,7 @@ const PutEvaluationCouncilMember = () => {
                 ...initialValue,
             })
         }
-    }, [initialValue])
+    }, [initialValue, form.setFieldsValue])
 
     return (
         <PutFormModal
@@ -180,12 +174,12 @@ const PutEvaluationCouncilMember = () => {
                     <Select
                         placeholder="Chọn giảng viên"
                         options={filteredLecturers.map((i) => {
-                            const academicRank = i.userProfile?.academicRankType?.sTen || ''
-                            const degree = i.userProfile?.academicDegreeType?.sTen || ''
+                            const academicRank = i.academicRankType?.sTen || ''
+                            const degree = i.academicDegreeType?.sTen || ''
 
-                            const fullName = i?.userProfile?.fullname
-                                ? i?.userProfile?.fullname
-                                : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`
+                            const fullName = i?.fullname
+                                ? i?.fullname
+                                : `${i?.firstName} ${i?.lastName}`
 
                             const academicTitle = [academicRank, degree].filter(Boolean).join('.')
 

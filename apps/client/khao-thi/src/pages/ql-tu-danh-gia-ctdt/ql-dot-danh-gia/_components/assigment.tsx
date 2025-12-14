@@ -79,7 +79,6 @@ export default function AssigmentOfAssessmentTab() {
                             sTen: true,
                         },
                     },
-                    organization: true,
                 },
             },
         },
@@ -453,13 +452,13 @@ export default function AssigmentOfAssessmentTab() {
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
-                                                        i.academicRankType?.sTen || ''
+                                                        i.lecturer?.academicRankType?.sTen || ''
                                                     const degreeRank =
-                                                        i.academicDegreeType?.sTen || ''
+                                                        i.lecturer?.academicDegreeType?.sTen || ''
 
-                                                    const fullName = i?.fullname
-                                                        ? i?.fullname
-                                                        : `${i?.firstName} ${i?.lastName}`
+                                                    const fullName = i.lecturer?.fullname
+                                                        ? i.lecturer?.fullname
+                                                        : `${i.lecturer?.firstName} ${i.lecturer?.lastName}`
 
                                                     const academicTitle = [academicRank, degreeRank]
                                                         .filter(Boolean)
@@ -467,7 +466,7 @@ export default function AssigmentOfAssessmentTab() {
 
                                                     return {
                                                         value: i?.lecturerId,
-                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}`,
+                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
                                                     }
                                                 })}
                                             />
