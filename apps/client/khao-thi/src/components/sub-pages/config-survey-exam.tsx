@@ -39,7 +39,7 @@ function ConfigSurveyExam({
                 surveyTopic: true,
                 surveyQuestion: true,
             },
-            orderBy: { name: 'asc' },
+            orderBy: { createdAt: 'asc' },
         },
         {
             enabled: !!surveyTopicId,

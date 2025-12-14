@@ -128,7 +128,7 @@ function TabDotKhaoSatCum({
                   }
                 : {}),
         }),
-        [filters]
+        [filters,semesterId]
     )
 
     const { data = [], refetch } = useFindManyClusterSurvey({

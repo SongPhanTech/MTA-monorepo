@@ -543,7 +543,7 @@ const PutSurveyModal = () => {
                 surveyChoice: choices,
             })
         }
-    }, [survey])
+    }, [survey,semesterIdStore])
 
     return (
         <Modal

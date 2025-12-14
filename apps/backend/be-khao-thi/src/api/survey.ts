@@ -862,7 +862,7 @@ app.openapi(getSurveysByProfile, async (c) => {
     const { semesterId, limit = 10, page = 1, ...q } = c.req.valid('query')
 
     const profile = await prisma.userProfile.findUniqueOrThrow({
-        where: { id, ...(semesterId && { semesterId }) },
+        where: { id },
         include: {
             lecturer: true,
             staffs: true,
@@ -1001,6 +1001,7 @@ app.openapi(getSurveysByProfile, async (c) => {
 
     const where: Prisma.SurveyWhereInput = {
         ...(q.name ? { name: { contains: q.name, mode: 'insensitive' } } : {}),
+        ...(semesterId && { semesterId }),
         ...(q.lecturerName
             ? {
                   lecturer: {

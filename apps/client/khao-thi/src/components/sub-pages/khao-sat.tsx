@@ -104,7 +104,7 @@ function TabDotKhaoSat({
                   }
                 : {}),
         }),
-        [filters]
+        [filters,semesterId]
     )
 
     const { data = [], refetch } = useFindManySurvey({
