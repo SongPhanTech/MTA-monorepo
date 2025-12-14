@@ -7,7 +7,6 @@ import { env } from '@/env'
 const HeaderApp: React.FC = () => {
     useEffect(() => {
         try {
-            if (env.NEXT_PUBLIC_ENVIRONMENT === 'local') return
             window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                 menuAppId: 'menuContainer',
                 notificationAppId: 'notificationContainer',
