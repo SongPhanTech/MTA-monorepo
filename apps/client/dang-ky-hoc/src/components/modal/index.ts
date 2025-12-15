@@ -8,6 +8,7 @@ import ModalChiTietGiangVien from './modal-chi-tiet-giang-vien'
 import ModalChiTietLopBienChe from './modal-chi-tiet-lop-bien-che'
 import ModalChiTietMonHoc from './modal-chi-tiet-mon-hoc'
 import ModalChiTietSinhVien from './modal-chi-tiet-sinh-vien'
+import PutOneSubjectClassModal from './put-one-subject-class'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -19,4 +20,5 @@ export {
     ModalChiTietLopBienChe,
     ModalChiTietMonHoc,
     ModalChiTietSinhVien,
+    PutOneSubjectClassModal
 }

@@ -16,7 +16,6 @@ import {
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { Button, Col, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import { Check, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -631,7 +630,6 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Mã môn học',
                                 align: 'center',
-
                                 dataIndex: 'code',
                                 type: 'input',
                                 width: 120,
@@ -640,7 +638,6 @@ export default function StudentScoreClassPage() {
                             },
                             {
                                 title: 'Tên môn học',
-                                align: 'center',
                                 dataIndex: 'name',
                                 type: 'input_search',
                                 options: trainingSubjectVersions.map((item) => ({
@@ -677,79 +674,52 @@ export default function StudentScoreClassPage() {
                                 width: 100,
                                 render: (_, record) => record?.subjectClassStudent?.[0]?.examScore,
                             },
-                            {
-                                title: 'Điểm cộng',
-                                align: 'center',
-                                width: 100,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.awards.reduce(
-                                        (
-                                            acc: number,
-                                            curr: {
-                                                archivedAward: ArchivedAward
-                                            }
-                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
-                                        0
-                                    ),
-                            },
-                            {
-                                title: 'Chứng chỉ',
-                                align: 'center',
-                                width: 150,
-                                render: (_, { id, subjectClassStudent }) =>
-                                    subjectClassStudent?.[0]?.certificates
-                                        .map(
-                                            (i: { archivedCertificate: ArchivedCertificate }) =>
-                                                i?.archivedCertificate?.code
-                                        )
-                                        .join(', '),
-                            },
-                            {
-                                title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
-                                align: 'center',
-                                width: 80,
-                                render: (__, { id, subjectClassStudent }) => {
-                                    const arr: { finalScore: number }[] =
-                                        subjectClassStudent?.[0]?.certificates.map(
-                                            (i: { archivedCertificate: ArchivedCertificate }) => {
-                                                return {
-                                                    ...i,
-                                                    finalScore:
-                                                        Number(
-                                                            i?.archivedCertificate?.finalScore
-                                                        ) || 0,
-                                                }
-                                            }
-                                        )
-                                    return arr?.length > 0
-                                        ? _.maxBy(arr, 'finalScore')?.finalScore
-                                        : ''
-                                },
-                            },
+                            // {
+                            //     title: <Tooltip title="Điểm tương đương">Điểm TĐ</Tooltip>,
+                            //     align: 'center',
+                            //     width: 80,
+                            //     render: (__, { id, subjectClassStudent }) => {
+                            //         const arr: { finalScore: number }[] =
+                            //             subjectClassStudent?.[0]?.certificates.map(
+                            //                 (i: { archivedCertificate: ArchivedCertificate }) => {
+                            //                     return {
+                            //                         ...i,
+                            //                         finalScore:
+                            //                             Number(
+                            //                                 i?.archivedCertificate?.finalScore
+                            //                             ) || 0,
+                            //                     }
+                            //                 }
+                            //             )
+                            //         return arr?.length > 0
+                            //             ? _.maxBy(arr, 'finalScore')?.finalScore
+                            //             : ''
+                            //     },
+                            // },
                             {
                                 title: <Tooltip title="Số tín chỉ">STC</Tooltip>,
                                 align: 'center',
                                 dataIndex: 'creditCmp',
                                 type: 'cmp',
-                                width: 100,
+                                width: 80,
                                 render: (_, record) =>
                                     record?.subjectClassStudent?.[0]?.subjectVersion.credit,
                             },
-                            // {
-                            //     title: 'Điểm hệ 10',
-                            //     align: 'center',
-                            //     dataIndex: 'finalScoreCmp',
-                            //     type: 'cmp',
-                            //     width: 100,
-                            //     render: (_, record) => {
-                            //         const subjectClassStudent = record?.subjectClassStudent?.[0]
-                            //         return (
-                            //             subjectClassStudent?.manualFinalScore ??
-                            //             subjectClassStudent?.finalScore?.toNumber() ??
-                            //             ''
-                            //         )
-                            //     },
-                            // },
+                            {
+                                title: 'Điểm hệ 10',
+                                align: 'center',
+                                dataIndex: 'finalScoreCmp',
+                                type: 'cmp',
+                                width: 100,
+                                render: (_, record) => {
+                                    const subjectClassStudent = record?.subjectClassStudent?.[0]
+                                    return (
+                                        subjectClassStudent?.manualFinalScore ??
+                                        subjectClassStudent?.finalScore?.toNumber() ??
+                                        ''
+                                    )
+                                },
+                            },
                             {
                                 title: 'Điểm hệ 4',
                                 align: 'center',
@@ -801,6 +771,33 @@ export default function StudentScoreClassPage() {
                                         </div>
                                     )
                                 },
+                            },
+                            {
+                                title: 'Điểm cộng',
+                                align: 'center',
+                                width: 100,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.awards.reduce(
+                                        (
+                                            acc: number,
+                                            curr: {
+                                                archivedAward: ArchivedAward
+                                            }
+                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                        0
+                                    ),
+                            },
+                            {
+                                title: 'Chứng chỉ',
+                                align: 'center',
+                                width: 150,
+                                render: (_, { id, subjectClassStudent }) =>
+                                    subjectClassStudent?.[0]?.certificates
+                                        .map(
+                                            (i: { archivedCertificate: ArchivedCertificate }) =>
+                                                i?.archivedCertificate?.code
+                                        )
+                                        .join(', '),
                             },
                             {
                                 title: 'Ghi chú',
