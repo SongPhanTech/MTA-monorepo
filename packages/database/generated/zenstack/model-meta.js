@@ -1333,12 +1333,6 @@ const metadata = {
                     isArray: true,
                     backLink: 'userProfiles',
                     isRelationOwner: true,
-                }, evaluationCouncilMember: {
-                    name: "evaluationCouncilMember",
-                    type: "EvaluationCouncilMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'lecturer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15905,6 +15899,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, evaluationCouncilMember: {
+                    name: "evaluationCouncilMember",
+                    type: "EvaluationCouncilMember",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19153,7 +19153,7 @@ const metadata = {
                     relationField: 'evaluationCouncil',
                 }, lecturer: {
                     name: "lecturer",
-                    type: "UserProfile",
+                    type: "Lecturer",
                     isDataModel: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationCouncilMember',

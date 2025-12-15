@@ -53,6 +53,7 @@ const relationSchema = z.object({
     examRoomsExtra: z.array(z.unknown()).optional(),
     evaluationCriterions: z.array(z.unknown()).optional(),
     analysisCriterion: z.array(z.unknown()).optional(),
+    evaluationCouncilMember: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

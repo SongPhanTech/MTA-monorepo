@@ -450,6 +450,7 @@ enum EvaluationMemberRole {
   SECRETARY
   MEMBER
   ADVISORY_BOARD
+  HEAD_SPECIALIZED
   SPECIALIZED
 
   @@schema("khao-thi")
@@ -855,7 +856,6 @@ model UserProfile {
   surveySession                 SurveySession[]
   evaluationCriterionComments   EvaluationCriterionComment[]
   classSchedules                ClassSchedule[]
-  evaluationCouncilMember       EvaluationCouncilMember[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4231,6 +4231,7 @@ model Lecturer {
   examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
   evaluationCriterions        EvaluationCriterion[]
   analysisCriterion           AnalysisCriterion[]
+  evaluationCouncilMember     EvaluationCouncilMember[]
 
   @@schema("ql-dao-tao")
 }
@@ -4985,7 +4986,7 @@ model EvaluationCouncilMember {
   createdBy            String?                @db.Uuid()
   evaluationCouncil    EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId  String
-  lecturer             UserProfile            @relation(fields: [lecturerId], references: [id])
+  lecturer             Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId           String
   role                 EvaluationMemberRole[]
   evaluationCriterions EvaluationCriterion[]
