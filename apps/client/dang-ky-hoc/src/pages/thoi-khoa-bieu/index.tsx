@@ -1,12 +1,13 @@
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import ViewIcon from '@components/icons/view'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { $Enums, FixedClass, Prisma, SubjectClassTime } from '@workspace/db/client'
+import type { $Enums, Prisma, SubjectClassTime } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindFirstSemester,
@@ -321,7 +322,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                         columns={[
                             {
                                 title: 'Mã LMH',
-                                width: 130,
+                                width: 80,
                                 align: 'center',
                                 type: 'input',
                                 render: (_, record) => record?.code || '',
@@ -336,36 +337,36 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                                     </p>
                                 ),
                             },
-                            {
-                                title: 'Kíp',
-                                align: 'center',
-                                type: 'select',
-                                width: 60,
-                                options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                    ([key, value_]) => {
-                                        return {
-                                            label: value_,
-                                            value: key,
-                                        }
-                                    }
-                                ),
-                                render: (_, record) =>
-                                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                                        record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                    ],
-                            },
-                            {
-                                title: 'Lớp QL',
-                                align: 'center',
-                                width: 100,
-                                render: (_, record) => (
-                                    <p>
-                                        {record?.fixedClasses
-                                            ?.map((e: FixedClass) => e.code)
-                                            .join(', ') || '-'}
-                                    </p>
-                                ),
-                            },
+                            // {
+                            //     title: 'Kíp',
+                            //     align: 'center',
+                            //     type: 'select',
+                            //     width: 60,
+                            //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                            //         ([key, value_]) => {
+                            //             return {
+                            //                 label: value_,
+                            //                 value: key,
+                            //             }
+                            //         }
+                            //     ),
+                            //     render: (_, record) =>
+                            //         SUBJECT_CLASS_SCHEDULE_TYPE[
+                            //             record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                            //         ],
+                            // },
+                            // {
+                            //     title: 'Lớp QL',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     render: (_, record) => (
+                            //         <p>
+                            //             {record?.fixedClasses
+                            //                 ?.map((e: FixedClass) => e.code)
+                            //                 .join(', ') || '-'}
+                            //         </p>
+                            //     ),
+                            // },
                             {
                                 title: 'Số SV',
                                 width: 80,
@@ -446,6 +447,21 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                                 width: 100,
                                 render: (_, record) =>
                                     record.examDate ? formatDate(record.examDate) : '',
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                render: (_, record) => (
+                                    <ViewIcon
+                                        onClick={() => {
+                                            onOpenEditSubjectClass({
+                                                id: record.id,
+                                                mode: 'view',
+                                            })
+                                        }}
+                                    />
+                                ),
                             },
                         ]}
                         data={subjectClasses}
