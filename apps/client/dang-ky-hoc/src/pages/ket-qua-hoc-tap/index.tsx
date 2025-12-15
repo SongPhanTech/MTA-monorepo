@@ -594,11 +594,13 @@ export default function StudentScoreClassPage() {
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
-                        headerTitleKey={({ code, name, schoolYear }) => (
+                        headerTitleKey={({ name, schoolYear }) => (
                             <p className="font-bold text-base">
-                                {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                                {[name, schoolYear?.name].filter(Boolean).join(' - ')}
                             </p>
                         )}
+                        scrollable
+                        maxHeight={'calc(100vh - 250px)'}
                         headerColumn={[
                             {
                                 colSpan: 1,
@@ -606,7 +608,7 @@ export default function StudentScoreClassPage() {
                             {
                                 render: (_, { code, name, schoolYear }) => (
                                     <p className="font-bold text-base">
-                                        {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
+                                        {[name, schoolYear?.name].filter(Boolean).join(' - ')}
                                     </p>
                                 ),
                                 colSpan: 15,
@@ -632,7 +634,6 @@ export default function StudentScoreClassPage() {
 
                                 dataIndex: 'code',
                                 type: 'input',
-                                fixed: 'left',
                                 width: 120,
                                 render: (_, record) =>
                                     record?.subjectClassStudent?.[0]?.subjectVersion.code,
@@ -641,7 +642,6 @@ export default function StudentScoreClassPage() {
                                 title: 'Tên môn học',
                                 align: 'center',
                                 dataIndex: 'name',
-                                fixed: 'left',
                                 type: 'input_search',
                                 options: trainingSubjectVersions.map((item) => ({
                                     label: item.name,

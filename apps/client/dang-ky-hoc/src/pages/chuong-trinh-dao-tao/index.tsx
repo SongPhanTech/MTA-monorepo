@@ -426,8 +426,6 @@ export default function TrainingProgramSubjects() {
                 {[
                     initialValue?.code,
                     initialValue?.name,
-                    initialValue?.curriculum?.trainingMajor?.name,
-                    initialValue?.curriculum?.managementOrganization?.sTen,
                 ]
                     .filter(Boolean)
                     .join(' - ')}
@@ -447,7 +445,7 @@ export default function TrainingProgramSubjects() {
                     </div>
                     <TableCollapse
                         scrollable
-                        maxHeight={'calc(100vh - 305px)'}
+                        maxHeight={'calc(100vh - 250px)'}
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
                             `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
@@ -586,9 +584,6 @@ export default function TrainingProgramSubjects() {
                             {
                                 colSpan: 1,
                             },
-                            {
-                                colSpan: 1,
-                            },
                         ]}
                         childrenFieldName="subjects"
                         defaultExpandAll
@@ -619,7 +614,7 @@ export default function TrainingProgramSubjects() {
                                         <span>TCTC</span>
                                     </Tooltip>
                                 ),
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                             },
                             {
@@ -682,7 +677,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Số tiết TKB',
-                                dataIndex: 'periodCmp',
                                 width: 120,
                                 align: 'center',
                                 type: 'cmp',
@@ -703,7 +697,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'LT',
-                                dataIndex: 'numberOfTheoryCmp',
                                 width: 80,
                                 type: 'cmp',
                                 align: 'center',
@@ -724,7 +717,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'BT',
-                                dataIndex: 'numberOfPracticalCmp',
                                 type: 'cmp',
                                 width: 80,
                                 align: 'center',
@@ -745,7 +737,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'ThL',
-                                dataIndex: 'numberOfSelfStudyCmp',
                                 width: 80,
                                 align: 'center',
                                 type: 'cmp',
@@ -766,7 +757,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'TN, TH',
-                                dataIndex: 'numberOfPracticeCmp',
                                 width: 90,
                                 align: 'center',
                                 type: 'cmp',
@@ -787,7 +777,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Ôn',
-                                dataIndex: 'numberOfReviewCmp',
                                 width: 60,
                                 align: 'center',
                                 type: 'cmp',
@@ -808,7 +797,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'KT, Thi',
-                                dataIndex: 'numberOfExamCmp',
                                 width: 90,
                                 align: 'center',
                                 type: 'cmp',
@@ -829,7 +817,6 @@ export default function TrainingProgramSubjects() {
                             },
                             {
                                 title: 'Thi',
-                                dataIndex: 'examType',
                                 width: 90,
                                 align: 'center',
                                 type: 'select',

@@ -173,7 +173,7 @@ const TableCollapse = <
             {
                 title: 'TT',
                 align: 'center',
-                width: 35,
+                width: 40,
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
@@ -232,14 +232,9 @@ const TableCollapse = <
             <Table
                 id={id}
                 rowKey={rowKey}
-                className="mt-1"
-                // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
-                // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
-                // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
-                // scroll={{
-                //     x: 'max-content',
-                //     y: scrollable ? maxHeight : undefined,
-                // }}
+                className="mt-2"
+                scrollable={scrollable}
+                maxHeight={maxHeight}
                 bordered
                 data={dataWithKey}
                 pagination={pagination}
