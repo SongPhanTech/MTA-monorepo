@@ -1,23 +1,23 @@
 import { PrismaClient } from '../generated/prisma-client'
-import DMNhanvien from '../DM_Nhanvien.json'
+
 const prisma = new PrismaClient()
 
-const ids = DMNhanvien.map((item) => item.sCCCD.toLowerCase())
-
-console.log(ids.length, ids[0])
-
-const profiles = await prisma.userProfile.findMany({
-    // data: {
-    //   bLaGiangVien: false,
-    // },
+const profile = await prisma.userProfile.findMany({
     where: {
-        bLaGiangVien: true,
-        lecturer: null,
+        bLaHocVien: true,
+        sDM_DonViId: null,
     },
 })
 
-console.log(profiles.length)
+await prisma.lecturer.deleteMany({
+    where: {
+        userProfile: {
+            fullname: 'Bùi Thành Luân',
+        },
+    },
+})
 
-// const missing = ids.filter((id) => !profiles.some((p) => p.id === id));
-
-// console.log(missing.length, missing);
+console.log(
+    profile.map((p) => p.fullname),
+    profile.length
+)

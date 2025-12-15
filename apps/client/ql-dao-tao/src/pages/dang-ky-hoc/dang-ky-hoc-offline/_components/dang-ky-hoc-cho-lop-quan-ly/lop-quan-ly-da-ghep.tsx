@@ -162,6 +162,7 @@ export default function LopQuanLyDaGhep() {
         <div>
             <Row align="top" justify="space-between">
                 <Col span={24}>
+                    <h3 className="text-lg">Lớp có môn theo KHGD</h3>
                     <Form.Item className="m-0" name="searchText">
                         <Input
                             id="search"
@@ -181,7 +182,6 @@ export default function LopQuanLyDaGhep() {
                     </Form.Item>
                 </Col>
             </Row>
-            <p className="mt-2">Lớp có môn theo KHGD</p>
             <Table
                 rowKey="id"
                 rowSelection={{

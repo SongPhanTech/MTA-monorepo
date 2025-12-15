@@ -543,7 +543,9 @@ export default function StudentScoreClassPage() {
         },
     })
 
-    const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts || [])
+    const { convertScore } = useScoreConverter(
+        student?.fixedClass?.trainingCourse.scoreConverts || []
+    )
 
     return (
         <div>
@@ -594,7 +596,7 @@ export default function StudentScoreClassPage() {
                         rowKey="key"
                         currentPage={1}
                         headerTitleKey={({ name, schoolYear }) => (
-                            <p className="font-bold text-base">
+                            <p className="font-medium text-base">
                                 {[name, schoolYear?.name].filter(Boolean).join(' - ')}
                             </p>
                         )}
@@ -729,8 +731,8 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore?.toNumber() ||
-                                        0
+                                        subjectClassStudent?.finalScore?.toNumber()
+                                    if (score === undefined || score === null) return null
                                     return score !== undefined ? convertScore(score).base4 : ''
                                 },
                             },
@@ -742,9 +744,9 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore?.toNumber() ||
-                                        0
-                                    return score !== undefined ? convertScore(score).letter : ''
+                                        subjectClassStudent?.finalScore?.toNumber()
+                                    if (score === undefined || score === null) return null
+                                    return score ?? convertScore(score).letter
                                 },
                             },
                             {
@@ -758,8 +760,7 @@ export default function StudentScoreClassPage() {
                                         subjectClassStudent?.finalScore
 
                                     if (score === undefined || score === null) return null
-
-                                    const result = convertScore(score)
+                                    const result = convertScore(score.toNumber())
 
                                     return (
                                         <div className="flex items-center justify-center">

@@ -1,5 +1,6 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
+import useSpinner from '@hooks/spinner'
 import { useStore } from '@tanstack/react-store'
 import type { ScoreConvert } from '@workspace/db/client'
 import {
@@ -15,7 +16,6 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useEffect, useState } from 'react'
 import { dangKyHocChoLopQuanLyStore } from '../..'
-import useSpinner from '@hooks/spinner'
 
 interface FilterProps {
     searchText: string | null
@@ -347,6 +347,10 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
 
     return (
         <Row gutter={[4, 0]}>
+            <Col span={24}>
+                <h3 className="text-lg">Danh sách học viên</h3>
+            </Col>
+
             <Col span={8}>
                 <Form.Item className="mb-1" name="searchText">
                     <Input
@@ -397,7 +401,6 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             <Col span={24}>
                 <Table
                     rowKey="id"
-                    className="mt-2"
                     scrollable
                     maxHeight={'calc(100vh - 380px)'}
                     data={students}

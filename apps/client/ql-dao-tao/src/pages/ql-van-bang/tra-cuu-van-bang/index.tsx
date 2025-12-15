@@ -150,9 +150,9 @@ export default function GraduationDecisionDiploma() {
                           fixedClassId: filters.fixedClassId,
                       }
                     : filters.trainingCourseId
-                      ? { trainingCourseId: filters.trainingCourseId }
+                      ? { fixedClass: { trainingCourseId: filters.trainingCourseId } }
                       : trainingObjectTypeId
-                        ? { trainingCourse: { trainingObjectTypeId } }
+                        ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
                         : {}),
             },
         }),

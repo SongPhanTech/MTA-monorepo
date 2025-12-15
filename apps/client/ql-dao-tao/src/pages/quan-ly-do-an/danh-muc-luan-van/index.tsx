@@ -1482,16 +1482,16 @@ export default function PostgraduateProject({
                                         .name
                                 },
                             },
-                            {
-                                title: 'Đợt xét',
-                                width: 100,
-                                render: (_, record) => {
-                                    return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject
-                                            ?.thesisSession?.name || ''
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Đợt xét',
+                            //     width: 100,
+                            //     render: (_, record) => {
+                            //         return (
+                            //             record?.thesisRegistrations?.[0]?.thesisProject
+                            //                 ?.thesisSession?.name || ''
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Khoa quản lí',
                                 dataIndex: 'organization',

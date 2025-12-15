@@ -1,6 +1,7 @@
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { $Enums } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -9,7 +10,6 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
 import { dangKyHocChoLopQuanLyStore } from '../..'
-import { $Enums } from '@workspace/db/client'
 
 interface FilterProps {
     searchText: string | null
@@ -128,6 +128,7 @@ export default function DangKyHocChoLopQuanLy() {
         <div>
             <Row align="top" justify="space-between">
                 <Col span={24}>
+                    <h3 className="text-lg">Danh sách lớp môn học</h3>
                     <Form.Item className="m-0" name="searchText">
                         <Input
                             id="search"
