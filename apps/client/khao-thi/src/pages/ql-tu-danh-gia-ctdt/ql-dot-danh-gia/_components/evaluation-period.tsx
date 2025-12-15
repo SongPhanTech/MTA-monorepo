@@ -19,7 +19,7 @@ import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { type Key, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import ExportReport from './export-eport'
+import ExportReport from './export-report'
 import { useSemesterStore } from '@workspace/ui'
 
 export default function EvaluationPeriod() {
