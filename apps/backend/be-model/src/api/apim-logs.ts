@@ -9,7 +9,7 @@ const app = new OpenAPIHono({ strict: false })
 
 app.openapi(
     createRoute({
-        operationId: 'config-logs',
+        operationId: 'get-config-logs',
         path: '/config-logs',
         method: 'get',
         request: {
@@ -55,7 +55,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        operationId: 'config-logs',
+        operationId: 'update-config-logs',
         path: '/config-logs',
         method: 'post',
         request: {
