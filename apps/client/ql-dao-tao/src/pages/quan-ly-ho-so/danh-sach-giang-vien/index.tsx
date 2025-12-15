@@ -68,18 +68,20 @@ export default function UserProfilePageLecture() {
         }
     )
 
-    const orgIds = [
-        ...buildOrgFlat(
-            dmDonViIds.map((e) => ({
-                Id: e.Id,
-                sTen: null,
-                sParentId: null,
-                sMa: null,
-            })),
-            orgId || '0'
-        ).map((org) => org.value),
-        orgId,
-    ]
+    const orgIds = useMemo(() => {
+        return [
+            ...buildOrgFlat(
+                dmDonViIds.map((e) => ({
+                    Id: e.Id,
+                    sTen: null,
+                    sParentId: null,
+                    sMa: null,
+                })),
+                orgId || '0'
+            ).map((org) => org.value),
+            orgId,
+        ]
+    }, [orgId, dmDonViIds])
 
     const where = useMemo(
         () => ({
@@ -184,13 +186,6 @@ export default function UserProfilePageLecture() {
                       },
                   }
                 : {}),
-            ...(filters.organization
-                ? {
-                      organizationId: {
-                          in: filters.organization,
-                      },
-                  }
-                : {}),
             ...(filters.lecturerType
                 ? {
                       lecturerTypeId: {
@@ -204,10 +199,11 @@ export default function UserProfilePageLecture() {
                           in: filters.organization,
                       },
                   }
-                : {}),
-            ...(!canXemTatCa ? { organizationId: { in: orgIds } } : {}),
+                : !canXemTatCa
+                  ? { organizationId: { in: orgIds } }
+                  : {}),
         }),
-        [filters, canXemTatCa]
+        [filters, canXemTatCa, orgIds]
     )
 
     const { data = [], refetch } = useFindManyLecturer({
