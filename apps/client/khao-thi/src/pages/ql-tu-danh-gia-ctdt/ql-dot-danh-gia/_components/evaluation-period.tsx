@@ -245,11 +245,7 @@ export default function EvaluationPeriod() {
                                 width: 150,
                                 dataIndex: 'description',
                                 render: (value: string) => {
-                                    return (
-                                        <Tooltip title={value}>
-                                            <div className="line-clamp-2">{value}</div>
-                                        </Tooltip>
-                                    )
+                                    return <div className="line-clamp-2">{value}</div>
                                 },
                             },
                             {

@@ -12,7 +12,6 @@ import {
     Paragraph,
     Table,
     TableCell,
-    TableOfContents,
     TableRow,
     TextRun,
     WidthType,
@@ -97,17 +96,22 @@ export default function CriteriaAnalysisPeriodList() {
                 }),
                 new TableCell({
                     columnSpan: 2,
-                    children: [new Paragraph('Phân tích tiêu chí')],
+                    children: [
+                        new Paragraph({
+                            text: 'Phân tích tiêu chí',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
                 new TableCell({
                     columnSpan: 3,
-                    children: [new Paragraph('Thông tin minh chứng')],
-                    verticalAlign: VerticalAlign.CENTER,
-                }),
-                new TableCell({
-                    rowSpan: 2,
-                    children: [new Paragraph('Thao tác')],
+                    children: [
+                        new Paragraph({
+                            text: 'Thông tin minh chứng',
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                 }),
             ],
@@ -260,6 +264,9 @@ export default function CriteriaAnalysisPeriodList() {
                                 new Paragraph({
                                     indent: { firstLine: 720 },
                                     alignment: AlignmentType.JUSTIFIED,
+                                    spacing: {
+                                        after: 200,
+                                    },
                                     children: [
                                         new TextRun({
                                             text: `Trạng thái: ${criterion?.analysisCriterions?.status ? getStatusEvaluation(criterion?.analysisCriterions?.status)?.label : ''}`,
@@ -276,33 +283,23 @@ export default function CriteriaAnalysisPeriodList() {
                                     criterion?.analysisCriterions?.requirementCriterions
                                 )
                             )
+
+                            // Add spacing after each criterion
+                            children.push(
+                                new Paragraph({
+                                    spacing: {
+                                        after: 400,
+                                    },
+                                    children: [],
+                                })
+                            )
                         }
 
                         return { children }
                     }),
                 ])
                 const doc = new Document({
-                    sections: [
-                        {
-                            children: [
-                                new Paragraph({
-                                    heading: HeadingLevel.HEADING_1,
-                                    children: [
-                                        new TextRun({
-                                            text: 'Mục lục',
-                                            size: 28,
-                                            color: '000000',
-                                        }),
-                                    ],
-                                }),
-                                new TableOfContents('Mục lục', {
-                                    hyperlink: true,
-                                    headingStyleRange: '1-5',
-                                }),
-                            ],
-                        },
-                        ...sections,
-                    ],
+                    sections: [...sections],
                 })
 
                 const blob = await Packer.toBlob(doc)

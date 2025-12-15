@@ -10,7 +10,7 @@ import {
     useFindFirstEvaluationCouncilMember,
     useFindManyEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
-    useFindUniqueUserProfile,
+    useFindUniqueLecturer,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Flex, Form, message, Row } from 'antd'
@@ -49,7 +49,7 @@ export default function AssigmentOfAssessmentTab() {
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
 
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
+    const idProfile = me?.sDM_NhanVienId || '879df395-99ce-448c-b057-e8df891406cb'
 
     const { onOpen: openPhanCongHangLoat } = useDisclosure<PutPhanCongHangLoatModalProps>({
         tag: 'PutPhanCongHangLoatModal',
@@ -118,10 +118,10 @@ export default function AssigmentOfAssessmentTab() {
         }
     )
 
-    const { data: lecturer } = useFindUniqueUserProfile(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                id: idProfile || '',
+                userProfileId: idProfile,
             },
         },
         {

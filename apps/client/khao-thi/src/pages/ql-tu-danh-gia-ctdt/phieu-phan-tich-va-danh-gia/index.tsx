@@ -135,14 +135,6 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             )
         )
 
-        const disableAnalysisWritingTab =
-            !selectedEvaluationPeriodId ||
-            (evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING &&
-                !hasRevisionAnalysisCriterion)
-        const disabledEvaluationWriteTab =
-            !selectedEvaluationPeriodId ||
-            (evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.EVALUATION_WRITING &&
-                !hasRevisionEvaluationCriterion)
         const disableCrossReviewAssignmentTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
@@ -166,12 +158,16 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '2',
                 label: 'Phiếu phân tích tiêu chí',
                 children: <CriteriaAnalysisWrite />,
-                disabled: disableAnalysisWritingTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
         const isAdvisoryBoard = councilMember?.role?.includes(
             $Enums.EvaluationMemberRole.ADVISORY_BOARD
+        )
+
+        const isHeadSpecialized = councilMember?.role?.includes(
+            $Enums.EvaluationMemberRole.HEAD_SPECIALIZED
         )
 
         const isSecretary =
@@ -204,22 +200,23 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 'THEM'
             )
         ) {
-            tabs.push(
-                {
-                    key: '5',
-                    label: 'Phiếu đánh giá tiêu chí',
-                    children: <CriteriaEvaluationWrite />,
-                    // disabled: !selectedEvaluationPeriodId,
-                    disabled: !selectedEvaluationPeriodId,
-                },
-                {
-                    key: '6',
-                    label: 'Báo cáo tiêu chuẩn',
-                    children: <StandardReports />,
-                    // disabled: disabledEvaluationWriteTab,
-                    disabled: !selectedEvaluationPeriodId,
-                }
-            )
+            tabs.push({
+                key: '5',
+                label: 'Phiếu đánh giá tiêu chí',
+                children: <CriteriaEvaluationWrite />,
+                // disabled: !selectedEvaluationPeriodId,
+                disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (isHeadSpecialized || isSecretary) {
+            tabs.push({
+                key: '6',
+                label: 'Báo cáo tiêu chuẩn',
+                children: <StandardReports />,
+                // disabled: disabledEvaluationWriteTab,
+                disabled: !selectedEvaluationPeriodId,
+            })
         }
 
         if (isSecretary) {

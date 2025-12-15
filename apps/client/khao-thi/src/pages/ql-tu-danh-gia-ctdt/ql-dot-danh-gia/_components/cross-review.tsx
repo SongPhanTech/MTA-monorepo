@@ -148,7 +148,7 @@ export default function CrossReviewPeriod() {
                     ) : (
                         <div className="flex items-center justify-center h-[calc(100vh-200px)]">
                             <Empty
-                                description="Chưa có phiếu đánh giá tiêu chí nào"
+                                description="Chưa có phản biện nào"
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
                         </div>

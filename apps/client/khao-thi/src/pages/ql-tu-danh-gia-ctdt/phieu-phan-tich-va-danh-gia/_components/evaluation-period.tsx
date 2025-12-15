@@ -83,6 +83,11 @@ export default function EvaluationPeriod() {
                         name: true,
                     },
                 },
+                semester: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
             orderBy: { createdAt: 'desc' },
             take: numberOfPages,
@@ -140,7 +145,9 @@ export default function EvaluationPeriod() {
                             title: 'Tên đợt đánh giá',
                             width: 200,
                             align: 'center',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => {
+                                return <div className="text-left">{record?.name}</div>
+                            },
                         },
                         {
                             title: 'Hội đồng đánh giá',
@@ -148,6 +155,11 @@ export default function EvaluationPeriod() {
                             render: (_, record) => {
                                 return <div className="text-left">{record.council?.name}</div>
                             },
+                        },
+                        {
+                            title: 'Kỳ học',
+                            width: 180,
+                            render: (_, record) => record.semester?.name,
                         },
                         {
                             title: 'Ngày bắt đầu',
@@ -160,6 +172,13 @@ export default function EvaluationPeriod() {
                             width: 150,
                             render: (_, record) =>
                                 record?.endDate ? formatDate(record.endDate) : undefined,
+                        },
+                        {
+                            title: 'Mô tả',
+                            width: 150,
+                            render: (_, record) => {
+                                return <div className="line-clamp-2">{record?.description}</div>
+                            },
                         },
                         {
                             title: 'Trạng thái',

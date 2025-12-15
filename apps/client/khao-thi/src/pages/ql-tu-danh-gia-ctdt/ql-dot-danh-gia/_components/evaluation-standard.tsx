@@ -103,13 +103,6 @@ export default function EvaluationStandardTab() {
                     className="w-full mt-2"
                     columns={[
                         {
-                            title: 'Thứ tự',
-                            dataIndex: 'order',
-                            width: 50,
-                            align: 'center',
-                            type: 'order',
-                        },
-                        {
                             title: 'Tiêu chí',
                             dataIndex: 'name',
                             type: 'input',

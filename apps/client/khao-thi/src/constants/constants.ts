@@ -13,6 +13,7 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
     { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
+    { label: 'Trướng nhóm chuyên trách', value: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED },
     { label: 'Nhóm chuyên trách', value: $Enums.EvaluationMemberRole.SPECIALIZED },
 ]
 

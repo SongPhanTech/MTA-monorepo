@@ -1,4 +1,5 @@
 import TableCollapse from '@components/commons/tableCollapse'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
@@ -12,10 +13,14 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Col, Empty, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncilTab() {
+    const [filters, setFilters] = useState<FilterProps>({
+        name: '',
+    })
+
     const { onOpen } = useDisclosure<{
         evaluationCouncilId?: string
         evaluationCouncilMemberId?: string
@@ -38,6 +43,32 @@ export default function EvaluationCouncilTab() {
                     members: {
                         where: {
                             deletedAt: null,
+                            ...(filters.name && {
+                                lecturer: {
+                                    userProfile: {
+                                        OR: [
+                                            {
+                                                fullname: {
+                                                    contains: filters.name,
+                                                    mode: 'insensitive',
+                                                },
+                                            },
+                                            {
+                                                firstName: {
+                                                    contains: filters.name,
+                                                    mode: 'insensitive',
+                                                },
+                                            },
+                                            {
+                                                lastName: {
+                                                    contains: filters.name,
+                                                    mode: 'insensitive',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            }),
                         },
                         include: {
                             lecturer: {
@@ -79,22 +110,27 @@ export default function EvaluationCouncilTab() {
         const advisoryBoardMembers: typeof evaluationCouncil.members = []
         const specializedMembers: typeof evaluationCouncil.members = []
 
-        const hasRole = (
+        const hasAnyRole = (
             member: (typeof evaluationCouncil.members)[0],
-            role: $Enums.EvaluationMemberRole
-        ) => member.role?.includes(role)
+            roles: $Enums.EvaluationMemberRole[]
+        ) => roles.some((role) => member.role?.includes(role))
 
         for (const member of evaluationCouncil.members) {
-            const isSecretary = hasRole(member, $Enums.EvaluationMemberRole.SECRETARY)
-            const isHeadSecretary = hasRole(member, $Enums.EvaluationMemberRole.HEAD_SECRETARY)
-            const isAdvisory = hasRole(member, $Enums.EvaluationMemberRole.ADVISORY_BOARD)
-            const isSpecialized = hasRole(member, $Enums.EvaluationMemberRole.SPECIALIZED)
-
-            if (isSecretary || isHeadSecretary) {
+            if (
+                hasAnyRole(member, [
+                    $Enums.EvaluationMemberRole.SECRETARY,
+                    $Enums.EvaluationMemberRole.HEAD_SECRETARY,
+                ])
+            ) {
                 secretaryMembers.push(member)
-            } else if (isAdvisory) {
+            } else if (hasAnyRole(member, [$Enums.EvaluationMemberRole.ADVISORY_BOARD])) {
                 advisoryBoardMembers.push(member)
-            } else if (isSpecialized) {
+            } else if (
+                hasAnyRole(member, [
+                    $Enums.EvaluationMemberRole.SPECIALIZED,
+                    $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
+                ])
+            ) {
                 specializedMembers.push(member)
             } else {
                 otherMembers.push(member)
@@ -192,7 +228,7 @@ export default function EvaluationCouncilTab() {
                             >
                                 <Button
                                     type="primary"
-                                    icon={<BookPlus size={16} />}
+                                    icon={<BookPlus size={16} className="top-1" />}
                                     size="small"
                                     onClick={() => {
                                         onOpen({
@@ -226,6 +262,10 @@ export default function EvaluationCouncilTab() {
 
                             <TableCollapse
                                 rowKey="id"
+                                filters={filters}
+                                setFilters={(value) => {
+                                    setFilters(value)
+                                }}
                                 loading={isLoadingEvaluationCouncil}
                                 headerTitleKey="name"
                                 childrenFieldName="children"
@@ -234,6 +274,7 @@ export default function EvaluationCouncilTab() {
                                     {
                                         title: 'Tên đồng chí',
                                         dataIndex: 'name',
+                                        type: 'input',
                                         width: 200,
                                         render: (__, record) => {
                                             if (record.$type === 'parent') return ''
@@ -263,6 +304,13 @@ export default function EvaluationCouncilTab() {
                                         width: 100,
                                         render: (__, record) =>
                                             record?.lecturer?.userProfile?.phoneNumber,
+                                    },
+                                    {
+                                        title: 'Email',
+                                        width: 200,
+                                        render: (__, record) => {
+                                            return record?.lecturer?.userProfile?.email
+                                        },
                                     },
                                     {
                                         title: 'Đơn vị',
