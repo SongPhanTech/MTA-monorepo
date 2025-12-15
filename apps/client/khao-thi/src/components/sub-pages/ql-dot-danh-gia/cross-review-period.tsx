@@ -31,6 +31,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
                         strengths: item.evaluationCriterion?.strengths || '',
                         weakness: item.evaluationCriterion?.weakness || '',
                         actionPlan: item.evaluationCriterion?.actionPlan || '',
+                        score: item.evaluationCriterion?.score || '',
                     },
                 })),
             })
@@ -41,7 +42,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
         (c) => c.evaluationCriterion
     )?.evaluationCriterion
     const evaluatorName = firstEvaluationCriterion?.lecturer?.userProfile?.fullname
-    const reviewerName = firstEvaluationCriterion?.reviewer?.lecturer?.fullname
+    const reviewerName = firstEvaluationCriterion?.reviewer?.lecturer?.userProfile?.fullname
     const reviewDeadline = firstEvaluationCriterion?.deadlineReview
     const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
     const status = firstEvaluationCriterion?.status
@@ -182,6 +183,19 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
                                                                 {/* <div className="mb-3 font-bold">
                                                                 5. Tự đánh giá
                                                             </div> */}
+                                                                <Form.Item
+                                                                    label="5. Tự đánh giá"
+                                                                    name={[
+                                                                        name,
+                                                                        'evaluationCriterion',
+                                                                        'score',
+                                                                    ]}
+                                                                >
+                                                                    <RichTextEditor
+                                                                        id={item.id}
+                                                                        editable={false}
+                                                                    />
+                                                                </Form.Item>
                                                             </>
                                                         ),
                                                     },

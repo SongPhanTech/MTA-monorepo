@@ -6,39 +6,17 @@ import useSpinner from '@hooks/spinner'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import {
-    $Enums,
-    type EvaluationCriterionComment,
-    type StandardPeriod,
-    type CriterionPeriod,
-    type EvaluationCriterion,
-} from '@workspace/db/client'
+import { $Enums, type CriterionPeriod, type EvaluationCriterion } from '@workspace/db/client'
+import type { DataTabCrossReviewType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review'
 import {
     useFindFirstEvaluationCouncilMember,
-    useFindUniqueUserProfile,
+    useFindUniqueLecturer,
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Collapse, Form, message, Card, Tag, Badge } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-
-export type DataTabCrossReviewType = StandardPeriod & {
-    criteria: (CriterionPeriod & {
-        evaluationCriterion?:
-            | (EvaluationCriterion & {
-                  evaluationCriterionComments?: (EvaluationCriterionComment & {
-                      reviewer?: { fullname?: string | null }
-                  })[]
-                  lecturer?: { userProfile?: { fullname?: string | null } } | null
-                  reviewer?: {
-                      lecturer?: { userProfile?: { fullname?: string | null } } | null
-                  } | null
-                  deadlineReview?: Date | null
-              })
-            | null
-    })[]
-}
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -62,10 +40,10 @@ export default function CrossReviewSubPage({
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '97edb89d-9803-45b9-ac83-e81125dd59c4'
 
-    const { data: lecturer } = useFindUniqueUserProfile(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                id: idProfile || '',
+                userProfileId: idProfile || '',
             },
         },
         {

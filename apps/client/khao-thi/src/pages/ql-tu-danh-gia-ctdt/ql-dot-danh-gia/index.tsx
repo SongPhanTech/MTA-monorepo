@@ -7,7 +7,7 @@ import EvaluationCouncilTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_co
 import EvaluationStandardTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-standard'
 import AssigmentOfAssessmentTab from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/assigment'
 import { useSession } from '@workspace/auth/react'
-import { useFindFirstEvaluationCouncilMember, useFindUniqueUserProfile } from '@workspace/db/hooks'
+import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from '@workspace/db/hooks'
 import { $Enums } from '@workspace/db/client'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
@@ -29,10 +29,10 @@ export default function EvaluationPeriodTabPage() {
     const { data: me } = useSession()
     const idProfile = me?.sDM_NhanVienId || '0dbb92be-c919-4799-bf9d-a9a3b4189145'
     const { can } = useAbility()
-    const { data: lecturer } = useFindUniqueUserProfile(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                id: idProfile || '',
+                userProfileId: idProfile || '',
             },
         },
         {
