@@ -266,7 +266,7 @@ const CriteriaAnalysisSubPage = ({
                     />
                     {userRole !== 'P13' &&
                         can(
-                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                             'THEM'
                         ) &&
                         hasSubmittableCriteria && (
@@ -284,7 +284,7 @@ const CriteriaAnalysisSubPage = ({
                             </Popconfirm>
                         )}
                     {can(
-                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                         'XEM_TAT_CA'
                     ) && (
                         <Button type="primary" size="small" onClick={handleViewAll}>
@@ -339,7 +339,7 @@ const CriteriaAnalysisSubPage = ({
                                     {userRole !== 'P13' && (
                                         <div className="flex gap-2 flex-shrink-0">
                                             {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                 'THEM'
                                             ) &&
                                                 status !==
@@ -372,7 +372,7 @@ const CriteriaAnalysisSubPage = ({
                                                 )}
 
                                             {can(
-                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                 'THEM'
                                             ) &&
                                                 status !==
@@ -507,7 +507,7 @@ const CriteriaAnalysisSubPage = ({
                                                 return (
                                                     <div className="flex gap-2 items-center justify-center">
                                                         {can(
-                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                                                             'SUA'
                                                         ) &&
                                                             status !==

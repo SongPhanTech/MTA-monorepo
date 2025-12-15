@@ -18,7 +18,6 @@ import {
     ImageRun,
 } from 'docx'
 import { saveAs } from 'file-saver'
-import type { $Enums } from '@workspace/db/client'
 import { sqlTransaction } from '@workspace/libs/api/model'
 export default function ExportReport({ id }: { id: string }) {
     const role = {
@@ -115,10 +114,7 @@ export default function ExportReport({ id }: { id: string }) {
                             ],
                         }),
                         new TableCell({
-                            children: item.role.map(
-                                (t: $Enums.EvaluationMemberRole) =>
-                                    new Paragraph(`${role[t as $Enums.EvaluationMemberRole]}`)
-                            ),
+                            children: item.role.map(() => new Paragraph(`${role}`)),
                         }),
                         new TableCell({ children: [new Paragraph('')] }),
                     ],

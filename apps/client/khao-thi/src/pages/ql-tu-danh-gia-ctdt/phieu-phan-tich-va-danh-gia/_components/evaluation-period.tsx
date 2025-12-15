@@ -8,7 +8,7 @@ import { $Enums } from '@workspace/db/client'
 import {
     useCountEvaluationPeriod,
     useFindManyEvaluationPeriod,
-    useFindUniqueUserProfile,
+    useFindUniqueLecturer,
 } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import { Col, Row, Tag } from 'antd'
@@ -22,10 +22,10 @@ export default function EvaluationPeriod() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { id: semesterId } = useSemesterStore()
 
-    const { data: lecturer } = useFindUniqueUserProfile(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                id: idProfile || '',
+                userProfileId: idProfile || '',
             },
         },
         {
@@ -101,8 +101,6 @@ export default function EvaluationPeriod() {
             enabled: !!idProfile,
         }
     )
-
-    console.log('assignments', assignments)
 
     return (
         <Row gutter={[8, 0]}>

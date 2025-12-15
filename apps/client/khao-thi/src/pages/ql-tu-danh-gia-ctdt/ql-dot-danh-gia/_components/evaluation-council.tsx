@@ -42,16 +42,21 @@ export default function EvaluationCouncilTab() {
                         include: {
                             lecturer: {
                                 include: {
-                                    academicDegreeType: {
-                                        select: {
-                                            sTen: true,
+                                    userProfile: {
+                                        include: {
+                                            academicDegreeType: {
+                                                select: {
+                                                    sTen: true,
+                                                },
+                                            },
+                                            academicRankType: {
+                                                select: {
+                                                    sTen: true,
+                                                },
+                                            },
                                         },
                                     },
-                                    academicRankType: {
-                                        select: {
-                                            sTen: true,
-                                        },
-                                    },
+                                    organization: true,
                                 },
                             },
                         },

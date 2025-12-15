@@ -7520,6 +7520,7 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   SECRETARY: 'SECRETARY',
   MEMBER: 'MEMBER',
   ADVISORY_BOARD: 'ADVISORY_BOARD',
+  HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
   SPECIALIZED: 'SPECIALIZED'
 };
 

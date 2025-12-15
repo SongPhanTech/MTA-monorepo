@@ -69,16 +69,24 @@ export default function AssigmentOfAssessmentTab() {
         include: {
             lecturer: {
                 include: {
-                    academicDegreeType: {
+                    userProfile: {
                         select: {
-                            sTen: true,
+                            fullname: true,
+                            firstName: true,
+                            lastName: true,
+                            academicDegreeType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                            academicRankType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
                         },
                     },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
+                    organization: true,
                 },
             },
         },
@@ -452,13 +460,16 @@ export default function AssigmentOfAssessmentTab() {
                                                 onClick={(e) => e.stopPropagation()}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
-                                                        i.lecturer?.academicRankType?.sTen || ''
+                                                        i.lecturer?.userProfile?.academicRankType
+                                                            ?.sTen || ''
                                                     const degreeRank =
-                                                        i.lecturer?.academicDegreeType?.sTen || ''
+                                                        i.lecturer?.userProfile?.academicDegreeType
+                                                            ?.sTen || ''
 
-                                                    const fullName = i.lecturer?.fullname
-                                                        ? i.lecturer?.fullname
-                                                        : `${i.lecturer?.firstName} ${i.lecturer?.lastName}`
+                                                    const fullName = i?.lecturer?.userProfile
+                                                        ?.fullname
+                                                        ? i?.lecturer?.userProfile?.fullname
+                                                        : `${i?.lecturer?.userProfile?.firstName} ${i?.lecturer?.userProfile?.lastName}`
 
                                                     const academicTitle = [academicRank, degreeRank]
                                                         .filter(Boolean)
@@ -466,7 +477,7 @@ export default function AssigmentOfAssessmentTab() {
 
                                                     return {
                                                         value: i?.lecturerId,
-                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
+                                                        label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}-${i.lecturer?.organization?.sTen}`,
                                                     }
                                                 })}
                                             />
