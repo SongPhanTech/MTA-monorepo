@@ -1,28 +1,24 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma, SubjectVersion } from '@workspace/db/client'
-import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 import {
-    useDeleteManyTrainingBlockSubject,
-    useDeleteTrainingBlockOnCurriculumVersion,
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
     useFindUniqueUserProfile,
-    useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { cn } from '@workspace/ui/lib/utils'
-import { Col, Divider, message, Row, Tooltip } from 'antd'
+import { Col, Divider, Row, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useSession } from '@workspace/auth/react'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const [filters, setFilters] = useState<FilterProps>({
@@ -335,6 +331,11 @@ export default function TrainingProgramSubjects() {
                                     trainingMajors: true,
                                 },
                             },
+                            subject: {
+                                select: {
+                                    id: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -348,87 +349,19 @@ export default function TrainingProgramSubjects() {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
 
-    const { onOpen: onOpenSubjectVersion } = useDisclosure<{
+    const { onOpen: openChiTietMonHoc } = useDisclosure<{
         subjectId: string
         subjectVersionId?: string
-        isLocked?: boolean
     }>({
-        tag: 'PutVersionSubjectModal',
+        tag: 'ModalChiTietMonHoc',
     })
-
-    const handleModalSubjectVersion = (
-        subjectId: string,
-        subjectVersionId: string,
-        isLocked: boolean
-    ) => {
-        onOpenSubjectVersion({ subjectId, subjectVersionId, isLocked })
-    }
-
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const { mutateAsync: deleteTrainingBlockOnCurriculumVersion } =
-        useDeleteTrainingBlockOnCurriculumVersion()
-    const { mutateAsync: deleteManyTrainingBlockSubject } = useDeleteManyTrainingBlockSubject()
-    async function handleDeleteTrainingBlockOnCurriculumVersion(id: string) {
-        try {
-            showSpinner()
-            await deleteManyTrainingBlockSubject({
-                where: {
-                    trainingBlockOnCurriculumVersionId: id,
-                },
-            })
-            await deleteTrainingBlockOnCurriculumVersion({
-                where: {
-                    id,
-                },
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
-    async function handleDeleteTrainingBlockSubject(id: string) {
-        try {
-            showSpinner()
-            await updateTrainingBlockSubject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-            message.success('Xóa thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
     const treeData = buildOrgTree(manageOrgData)
 
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
                 CTĐT toàn khoá:{' '}
-                {[
-                    initialValue?.code,
-                    initialValue?.name,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
+                {[initialValue?.code, initialValue?.name].filter(Boolean).join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -455,7 +388,25 @@ export default function TrainingProgramSubjects() {
                             if (isParent) {
                                 return {}
                             }
-                            const subject = record as unknown as TrainingBlockSubject
+                            const subject =
+                                record as unknown as Prisma.TrainingBlockSubjectGetPayload<{
+                                    include: {
+                                        subject: {
+                                            include: {
+                                                managementOrganization: {
+                                                    include: {
+                                                        trainingMajors: true
+                                                    }
+                                                }
+                                                subject: {
+                                                    select: {
+                                                        id: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }>
                             return {
                                 className: cn(
                                     !subject.useForFinalScore && 'bg-orange-300',
@@ -464,6 +415,12 @@ export default function TrainingProgramSubjects() {
                                     subject.type === $Enums.SubjectRequirementType.Optional &&
                                         'bg-yellow-100'
                                 ),
+                                onClick: () => {
+                                    openChiTietMonHoc({
+                                        subjectId: subject?.subject?.subject?.id,
+                                        subjectVersionId: subject?.subjectId,
+                                    })
+                                },
                             }
                         }}
                         headerColumn={[

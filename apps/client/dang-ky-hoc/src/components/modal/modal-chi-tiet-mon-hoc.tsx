@@ -30,7 +30,7 @@ export default function ModalChiTietMonHoc() {
     const { getSubjectRequirementTypeLabel } = useSubjectRequirementTypeOptions()
     const { getHistoryActionLabel, getHistoryActionColor } = useHistorySubjectVersionActionOptions()
 
-    const { data: subjectData, isLoading } = useFindUniqueSubject(
+    const { data: subjectData } = useFindUniqueSubject(
         {
             where: { id: subjectId },
             include: {
@@ -126,6 +126,9 @@ export default function ModalChiTietMonHoc() {
                                 updatedBy: true,
                             },
                         },
+                    },
+                    where: {
+                        id: subjectVersionId,
                     },
                 },
                 certificateOnSubject: {
@@ -659,94 +662,94 @@ export default function ModalChiTietMonHoc() {
                 />
             ),
         },
-        {
-            key: '5',
-            label: `Khối đào tạo (${currentVersion?.trainingBlocks.length || 0})`,
-            children: (
-                <Table
-                    size="small"
-                    dataSource={currentVersion?.trainingBlocks}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 10,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Chương trình đào tạo',
-                            width: 250,
-                            render: (_: any, record: any) =>
-                                record.trainingBlockOnCurriculumVersion?.curriculumVersion
-                                    ?.curriculum?.name,
-                        },
-                        {
-                            title: 'Khối đào tạo',
-                            width: 200,
-                            render: (_: any, record: any) =>
-                                record.trainingBlockOnCurriculumVersion?.trainingBlock?.name,
-                        },
-                        {
-                            title: 'Học kỳ',
-                            dataIndex: 'semester',
-                            width: 100,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Bắt buộc',
-                            dataIndex: 'isRequired',
-                            width: 100,
-                            align: 'center',
-                            render: (value) => (value ? 'Có' : 'Không'),
-                        },
-                        {
-                            title: 'Thứ tự',
-                            dataIndex: 'order',
-                            width: 80,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Loại',
-                            dataIndex: 'type',
-                            width: 120,
-                            render: (value) => getSubjectRequirementTypeLabel(value),
-                        },
-                        {
-                            title: 'Tính điểm cuối',
-                            dataIndex: 'useForFinalScore',
-                            width: 120,
-                            align: 'center' as const,
-                            render: (value: boolean) => (value ? 'Có' : 'Không'),
-                        },
-                        {
-                            title: 'Môn tốt nghiệp',
-                            dataIndex: 'graduation',
-                            width: 120,
-                            align: 'center' as const,
-                            render: (value: boolean) => (value ? 'Có' : 'Không'),
-                        },
-                        {
-                            title: 'Trạng thái',
-                            dataIndex: 'active',
-                            width: 120,
-                            align: 'center' as const,
-                            render: (value: boolean) =>
-                                value ? (
-                                    <Tag color="success">Hoạt động</Tag>
-                                ) : (
-                                    <Tag color="error">Không hoạt động</Tag>
-                                ),
-                        },
-                    ]}
-                />
-            ),
-        },
+        // {
+        //     key: '5',
+        //     label: `Khối đào tạo (${currentVersion?.trainingBlocks.length || 0})`,
+        //     children: (
+        //         <Table
+        //             size="small"
+        //             dataSource={currentVersion?.trainingBlocks}
+        //             rowKey="id"
+        //             pagination={{
+        //                 pageSize: 10,
+        //                 showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+        //             }}
+        //             scroll={{ x: 'max-content' }}
+        //             columns={[
+        //                 {
+        //                     title: 'STT',
+        //                     width: 60,
+        //                     align: 'center',
+        //                     render: (_, __, index) => index + 1,
+        //                 },
+        //                 {
+        //                     title: 'Chương trình đào tạo',
+        //                     width: 250,
+        //                     render: (_: any, record: any) =>
+        //                         record.trainingBlockOnCurriculumVersion?.curriculumVersion
+        //                             ?.curriculum?.name,
+        //                 },
+        //                 {
+        //                     title: 'Khối đào tạo',
+        //                     width: 200,
+        //                     render: (_: any, record: any) =>
+        //                         record.trainingBlockOnCurriculumVersion?.trainingBlock?.name,
+        //                 },
+        //                 {
+        //                     title: 'Học kỳ',
+        //                     dataIndex: 'semester',
+        //                     width: 100,
+        //                     align: 'center',
+        //                 },
+        //                 {
+        //                     title: 'Bắt buộc',
+        //                     dataIndex: 'isRequired',
+        //                     width: 100,
+        //                     align: 'center',
+        //                     render: (value) => (value ? 'Có' : 'Không'),
+        //                 },
+        //                 {
+        //                     title: 'Thứ tự',
+        //                     dataIndex: 'order',
+        //                     width: 80,
+        //                     align: 'center',
+        //                 },
+        //                 {
+        //                     title: 'Loại',
+        //                     dataIndex: 'type',
+        //                     width: 120,
+        //                     render: (value) => getSubjectRequirementTypeLabel(value),
+        //                 },
+        //                 {
+        //                     title: 'Tính điểm cuối',
+        //                     dataIndex: 'useForFinalScore',
+        //                     width: 120,
+        //                     align: 'center' as const,
+        //                     render: (value: boolean) => (value ? 'Có' : 'Không'),
+        //                 },
+        //                 {
+        //                     title: 'Môn tốt nghiệp',
+        //                     dataIndex: 'graduation',
+        //                     width: 120,
+        //                     align: 'center' as const,
+        //                     render: (value: boolean) => (value ? 'Có' : 'Không'),
+        //                 },
+        //                 {
+        //                     title: 'Trạng thái',
+        //                     dataIndex: 'active',
+        //                     width: 120,
+        //                     align: 'center' as const,
+        //                     render: (value: boolean) =>
+        //                         value ? (
+        //                             <Tag color="success">Hoạt động</Tag>
+        //                         ) : (
+        //                             <Tag color="error">Không hoạt động</Tag>
+        //                         ),
+        //                 },
+        //             ]}
+        //         />
+        //     ),
+        // },
         {
             key: '6',
             label: `Môn tiên quyết (${currentVersion?.prerequisiteSubject.length || 0})`,
@@ -890,115 +893,115 @@ export default function ModalChiTietMonHoc() {
                 />
             ),
         },
-        {
-            key: '9',
-            label: `Khối kiến thức (${currentVersion?.knowledgeBlocks.length || 0})`,
-            children: (
-                <Table
-                    size="small"
-                    dataSource={currentVersion?.knowledgeBlocks}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 10,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center' as const,
-                            render: (_: any, __: any, index: number) => index + 1,
-                        },
-                        {
-                            title: 'Tên khối',
-                            dataIndex: 'name',
-                            width: 250,
-                        },
-                        {
-                            title: 'Mô tả',
-                            dataIndex: 'description',
-                            width: 300,
-                        },
-                    ]}
-                />
-            ),
-        },
-        {
-            key: '10',
-            label: `Đề thi (${currentVersion?.exams.length || 0})`,
-            children: (
-                <Table
-                    size="small"
-                    dataSource={currentVersion?.exams}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 10,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Mã đề',
-                            dataIndex: 'code',
-                            width: 120,
-                        },
-                        {
-                            title: 'Tên đề',
-                            dataIndex: 'name',
-                            width: 250,
-                        },
-                        {
-                            title: 'Ngân hàng câu hỏi',
-                            width: 150,
-                            render: (_: any, record: any) => record.questionBank?.name,
-                        },
-                        {
-                            title: 'Thời gian (phút)',
-                            dataIndex: 'duration',
-                            width: 120,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Số ca',
-                            dataIndex: 'session',
-                            width: 80,
-                            align: 'center' as const,
-                        },
-                        {
-                            title: 'Trạng thái',
-                            dataIndex: 'active',
-                            width: 120,
-                            align: 'center',
-                            render: (value) =>
-                                value ? (
-                                    <Tag color="success">Hoạt động</Tag>
-                                ) : (
-                                    <Tag color="error">Không hoạt động</Tag>
-                                ),
-                        },
-                        {
-                            title: 'Khóa DS thi',
-                            dataIndex: 'lockExamSessions',
-                            width: 100,
-                            align: 'center' as const,
-                            render: (value: boolean) => (value ? 'Có' : 'Không'),
-                        },
-                        {
-                            title: 'Mô tả',
-                            dataIndex: 'description',
-                            width: 250,
-                        },
-                    ]}
-                />
-            ),
-        },
+        // {
+        //     key: '9',
+        //     label: `Khối kiến thức (${currentVersion?.knowledgeBlocks.length || 0})`,
+        //     children: (
+        //         <Table
+        //             size="small"
+        //             dataSource={currentVersion?.knowledgeBlocks}
+        //             rowKey="id"
+        //             pagination={{
+        //                 pageSize: 10,
+        //                 showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+        //             }}
+        //             scroll={{ x: 'max-content' }}
+        //             columns={[
+        //                 {
+        //                     title: 'STT',
+        //                     width: 60,
+        //                     align: 'center' as const,
+        //                     render: (_: any, __: any, index: number) => index + 1,
+        //                 },
+        //                 {
+        //                     title: 'Tên khối',
+        //                     dataIndex: 'name',
+        //                     width: 250,
+        //                 },
+        //                 {
+        //                     title: 'Mô tả',
+        //                     dataIndex: 'description',
+        //                     width: 300,
+        //                 },
+        //             ]}
+        //         />
+        //     ),
+        // },
+        // {
+        //     key: '10',
+        //     label: `Đề thi (${currentVersion?.exams.length || 0})`,
+        //     children: (
+        //         <Table
+        //             size="small"
+        //             dataSource={currentVersion?.exams}
+        //             rowKey="id"
+        //             pagination={{
+        //                 pageSize: 10,
+        //                 showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+        //             }}
+        //             scroll={{ x: 'max-content' }}
+        //             columns={[
+        //                 {
+        //                     title: 'STT',
+        //                     width: 60,
+        //                     align: 'center',
+        //                     render: (_, __, index) => index + 1,
+        //                 },
+        //                 {
+        //                     title: 'Mã đề',
+        //                     dataIndex: 'code',
+        //                     width: 120,
+        //                 },
+        //                 {
+        //                     title: 'Tên đề',
+        //                     dataIndex: 'name',
+        //                     width: 250,
+        //                 },
+        //                 {
+        //                     title: 'Ngân hàng câu hỏi',
+        //                     width: 150,
+        //                     render: (_: any, record: any) => record.questionBank?.name,
+        //                 },
+        //                 {
+        //                     title: 'Thời gian (phút)',
+        //                     dataIndex: 'duration',
+        //                     width: 120,
+        //                     align: 'center',
+        //                 },
+        //                 {
+        //                     title: 'Số ca',
+        //                     dataIndex: 'session',
+        //                     width: 80,
+        //                     align: 'center' as const,
+        //                 },
+        //                 {
+        //                     title: 'Trạng thái',
+        //                     dataIndex: 'active',
+        //                     width: 120,
+        //                     align: 'center',
+        //                     render: (value) =>
+        //                         value ? (
+        //                             <Tag color="success">Hoạt động</Tag>
+        //                         ) : (
+        //                             <Tag color="error">Không hoạt động</Tag>
+        //                         ),
+        //                 },
+        //                 {
+        //                     title: 'Khóa DS thi',
+        //                     dataIndex: 'lockExamSessions',
+        //                     width: 100,
+        //                     align: 'center' as const,
+        //                     render: (value: boolean) => (value ? 'Có' : 'Không'),
+        //                 },
+        //                 {
+        //                     title: 'Mô tả',
+        //                     dataIndex: 'description',
+        //                     width: 250,
+        //                 },
+        //             ]}
+        //         />
+        //     ),
+        // },
         {
             key: '11',
             label: `Tài liệu (${currentVersion?.documentFiles.length || 0})`,
@@ -1044,57 +1047,57 @@ export default function ModalChiTietMonHoc() {
                 />
             ),
         },
-        {
-            key: '12',
-            label: `Ngân hàng câu hỏi (${currentVersion?.questionBanks.length || 0})`,
-            children: (
-                <Table
-                    size="small"
-                    dataSource={currentVersion?.questionBanks}
-                    rowKey="id"
-                    pagination={{
-                        pageSize: 10,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
-                    }}
-                    scroll={{ x: 'max-content' }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Mã ngân hàng',
-                            dataIndex: 'code',
-                            width: 150,
-                        },
-                        {
-                            title: 'Tên ngân hàng',
-                            dataIndex: 'name',
-                            width: 300,
-                        },
-                        {
-                            title: 'Mô tả',
-                            dataIndex: 'description',
-                            width: 350,
-                        },
-                        {
-                            title: 'Trạng thái',
-                            dataIndex: 'active',
-                            width: 120,
-                            align: 'center',
-                            render: (value) =>
-                                value ? (
-                                    <Tag color="success">Hoạt động</Tag>
-                                ) : (
-                                    <Tag color="error">Không hoạt động</Tag>
-                                ),
-                        },
-                    ]}
-                />
-            ),
-        },
+        // {
+        //     key: '12',
+        //     label: `Ngân hàng câu hỏi (${currentVersion?.questionBanks.length || 0})`,
+        //     children: (
+        //         <Table
+        //             size="small"
+        //             dataSource={currentVersion?.questionBanks}
+        //             rowKey="id"
+        //             pagination={{
+        //                 pageSize: 10,
+        //                 showTotal: (total, range) => `${range[0]}-${range[1]} của ${total}`,
+        //             }}
+        //             scroll={{ x: 'max-content' }}
+        //             columns={[
+        //                 {
+        //                     title: 'STT',
+        //                     width: 60,
+        //                     align: 'center',
+        //                     render: (_, __, index) => index + 1,
+        //                 },
+        //                 {
+        //                     title: 'Mã ngân hàng',
+        //                     dataIndex: 'code',
+        //                     width: 150,
+        //                 },
+        //                 {
+        //                     title: 'Tên ngân hàng',
+        //                     dataIndex: 'name',
+        //                     width: 300,
+        //                 },
+        //                 {
+        //                     title: 'Mô tả',
+        //                     dataIndex: 'description',
+        //                     width: 350,
+        //                 },
+        //                 {
+        //                     title: 'Trạng thái',
+        //                     dataIndex: 'active',
+        //                     width: 120,
+        //                     align: 'center',
+        //                     render: (value) =>
+        //                         value ? (
+        //                             <Tag color="success">Hoạt động</Tag>
+        //                         ) : (
+        //                             <Tag color="error">Không hoạt động</Tag>
+        //                         ),
+        //                 },
+        //             ]}
+        //         />
+        //     ),
+        // },
         {
             key: '13',
             label: `Lịch sử thay đổi (${currentVersion?.subjectVersionHistory.length || 0})`,

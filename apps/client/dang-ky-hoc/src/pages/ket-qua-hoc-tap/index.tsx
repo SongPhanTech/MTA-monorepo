@@ -491,7 +491,7 @@ export default function StudentScoreClassPage() {
         }
     }, [filters, studentId, subjectVersionWhere])
 
-    const { data = [], refetch } = useFindManySemester({
+    const { data = [] } = useFindManySemester({
         where: {
             subjectClasses: {
                 some: {
@@ -543,7 +543,7 @@ export default function StudentScoreClassPage() {
         },
     })
 
-    const { convertScore } = useScoreConverter(data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts)
+    const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts || [])
 
     return (
         <div>
