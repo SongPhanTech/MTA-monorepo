@@ -8,8 +8,8 @@ import { useSubjectVersionTypeOptions } from '@hooks/subjectVersionType'
 import { useFindUniqueSubject } from '@workspace/db/hooks'
 import { Descriptions, Modal, Table, Tabs, Tag } from 'antd'
 import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
