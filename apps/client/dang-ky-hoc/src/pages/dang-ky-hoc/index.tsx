@@ -294,7 +294,7 @@ const DanhSachMonDangKy = ({
                         [record.code, record.name].filter(Boolean).join(' - ')
                     }
                     childrenFieldName={'subjectClass'}
-                    data={classesInfo?.data}
+                    data={classesInfo?.data.filter((cls) => cls.subjectClass.length > 0)}
                 />
             )}
 

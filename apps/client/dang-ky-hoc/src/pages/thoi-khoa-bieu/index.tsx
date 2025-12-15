@@ -322,7 +322,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                         columns={[
                             {
                                 title: 'Mã LMH',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 type: 'input',
                                 render: (_, record) => record?.code || '',
@@ -411,7 +411,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                             {
                                 title: 'Khu vực',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 type: 'input',
                                 render: (_, record) =>
                                     record.trainingLocation ? record.trainingLocation?.name : '-',
@@ -419,12 +419,12 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                             {
                                 title: 'Phòng học',
                                 align: 'center',
-                                width: 200,
+                                width: 120,
                                 render: (_, record) => record?.room?.name || '',
                             },
                             {
                                 title: 'Thời khoá biểu',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                                 render: (_, record) => {
                                     return record.subjectClassTimes
@@ -450,17 +450,19 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 render: (_, record) => (
-                                    <ViewIcon
-                                        onClick={() => {
-                                            onOpenEditSubjectClass({
-                                                id: record.id,
-                                                mode: 'view',
-                                            })
-                                        }}
-                                    />
+                                    <div className="flex items-center justify-center">
+                                        <ViewIcon
+                                            onClick={() => {
+                                                onOpenEditSubjectClass({
+                                                    id: record.id,
+                                                    mode: 'view',
+                                                })
+                                            }}
+                                        />
+                                    </div>
                                 ),
                             },
                         ]}
