@@ -49,7 +49,6 @@ export default function ThoiKhoaBieu({
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -218,6 +217,7 @@ export default function ThoiKhoaBieu({
                 deletedAt: null,
                 active: true,
                 status: 'OFFICIAL',
+                cancelled: false,
                 trainingObjectTypeId,
                 ...(khoaBoMon
                     ? {
@@ -721,11 +721,7 @@ export default function ThoiKhoaBieu({
                                               width: 120,
                                               align: 'center' as const,
                                               render: (_: any, record: SubjectClass) => {
-                                                  if (record.cancelled) {
-                                                      return null
-                                                  }
                                                   const id = record?.id
-
                                                   if (id) {
                                                       return (
                                                           <Row className="justify-center gap-2">
