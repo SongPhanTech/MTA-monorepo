@@ -224,7 +224,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '7',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
-                disabled: disableCrossReviewAssignmentTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -233,7 +233,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '8',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
-                disabled: disableCrossReviewTab,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 

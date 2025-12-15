@@ -8,7 +8,6 @@ import {
     Paragraph,
     Table,
     TableCell,
-    TableOfContents,
     TableRow,
     TextRun,
     WidthType,
@@ -75,15 +74,15 @@ export default function ExportReport({ id }: { id: string }) {
                     children: [new Paragraph('TT')],
                 }),
                 new TableCell({
-                    width: { size: 30, type: WidthType.PERCENTAGE },
+                    width: { size: 35, type: WidthType.PERCENTAGE },
                     children: [new Paragraph('Quân hàm, học hàm, học vị, họ và tên')],
                 }),
                 new TableCell({
-                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    width: { size: 23, type: WidthType.PERCENTAGE },
                     children: [new Paragraph('Chức vụ, đơn vị')],
                 }),
                 new TableCell({
-                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    width: { size: 22, type: WidthType.PERCENTAGE },
                     children: [new Paragraph('Chức vụ trong HĐ')],
                 }),
                 new TableCell({
@@ -102,19 +101,46 @@ export default function ExportReport({ id }: { id: string }) {
                         new TableCell({
                             children: [
                                 new Paragraph(
-                                    `${item?.lecturer?.userProfile?.rank?.sTen || ''} ${item?.lecturer?.userProfile?.academicDegreeType?.sTen ? `, ${item?.lecturer?.userProfile?.academicDegreeType?.sTen}` : ''} ${item?.lecturer?.userProfile?.academicRankType?.sTen ? `, ${item?.lecturer?.userProfile?.academicRankType?.sTen}` : ''} ${item?.lecturer?.userProfile?.lastName || ''} ${item?.lecturer?.userProfile?.firstName || ''}`
+                                    [
+                                        item?.lecturer?.userProfile?.rank?.sTen,
+                                        item?.lecturer?.userProfile?.academicDegreeType?.sTen,
+                                        item?.lecturer?.userProfile?.academicRankType?.sTen,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ') +
+                                        ' ' +
+                                        [
+                                            item?.lecturer?.userProfile?.lastName,
+                                            item?.lecturer?.userProfile?.firstName,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(' ')
                                 ),
                             ],
                         }),
                         new TableCell({
                             children: [
                                 new Paragraph(
-                                    `${item?.lecturer?.userProfile?.positionCPV?.sTen || ''}, ${item?.lecturer?.organization?.sMa || ''}`
+                                    [
+                                        item?.lecturer?.userProfile?.positionCPV?.sTen,
+                                        item?.lecturer?.organization?.sMa,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ')
                                 ),
                             ],
                         }),
                         new TableCell({
-                            children: item.role.map(() => new Paragraph(`${role}`)),
+                            children: Array.isArray(item.role)
+                                ? item.role.map(
+                                      (r: string) =>
+                                          new Paragraph(role[r as keyof typeof role] || r)
+                                  )
+                                : [
+                                      new Paragraph(
+                                          role[item.role as keyof typeof role] || item.role
+                                      ),
+                                  ],
                         }),
                         new TableCell({ children: [new Paragraph('')] }),
                     ],
@@ -489,6 +515,148 @@ export default function ExportReport({ id }: { id: string }) {
                 if (!data) return
                 const { evidenceTags, result }: any = CalcevidenceTags(data?.standards)
 
+                // Tạo mục lục thủ công
+                const tableOfContentsChildren: Paragraph[] = [
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 400 },
+                        children: [
+                            new TextRun({
+                                text: 'MỤC LỤC',
+                                bold: true,
+                                size: 32,
+                                color: '000000',
+                            }),
+                        ],
+                    }),
+                    new Paragraph({
+                        children: [new TextRun({ text: '' })],
+                        spacing: { after: 200 },
+                    }),
+                    // Danh sách hội đồng
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: 'Danh sách các đồng chí tham gia hội đồng',
+                                bold: true,
+                                size: 28,
+                            }),
+                            new TextRun({
+                                text: '\t',
+                            }),
+                        ],
+                        tabStops: [
+                            {
+                                type: 'right',
+                                position: 9000,
+                                leader: 'dot',
+                            },
+                        ],
+                    }),
+                    new Paragraph({
+                        children: [new TextRun({ text: '' })],
+                        spacing: { after: 200 },
+                    }),
+                ]
+
+                // Thêm các tiêu chuẩn vào mục lục
+                data.standards.forEach((standard: any, idx: number) => {
+                    tableOfContentsChildren.push(
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
+                                    bold: true,
+                                    size: 28,
+                                }),
+                                new TextRun({
+                                    text: '\t',
+                                }),
+                            ],
+                            tabStops: [
+                                {
+                                    type: 'right',
+                                    position: 9000,
+                                    leader: 'dot',
+                                },
+                            ],
+                        })
+                    )
+
+                    // Thêm các tiêu chí vào mục lục
+                    standard.criteria.forEach((criterion: any, cIdx: number) => {
+                        tableOfContentsChildren.push(
+                            new Paragraph({
+                                indent: { left: 360 },
+                                children: [
+                                    new TextRun({
+                                        text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
+                                        italics: true,
+                                        size: 26,
+                                    }),
+                                    new TextRun({
+                                        text: '\t',
+                                    }),
+                                ],
+                                tabStops: [
+                                    {
+                                        type: 'right',
+                                        position: 9000,
+                                        leader: 'dot',
+                                    },
+                                ],
+                            })
+                        )
+                    })
+
+                    tableOfContentsChildren.push(
+                        new Paragraph({
+                            indent: { left: 360 },
+                            children: [
+                                new TextRun({
+                                    text: `Kết luận về Tiêu chuẩn ${idx + 1}`,
+                                    italics: true,
+                                    size: 26,
+                                }),
+                                new TextRun({
+                                    text: '\t',
+                                }),
+                            ],
+                            tabStops: [
+                                {
+                                    type: 'right',
+                                    position: 9000,
+                                    leader: 'dot',
+                                },
+                            ],
+                        })
+                    )
+                })
+
+                // Thêm mục Danh sách minh chứng
+                tableOfContentsChildren.push(
+                    new Paragraph({
+                        spacing: { before: 200 },
+                        children: [
+                            new TextRun({
+                                text: 'Bảng danh mục minh chứng',
+                                bold: true,
+                                size: 28,
+                            }),
+                            new TextRun({
+                                text: '\t',
+                            }),
+                        ],
+                        tabStops: [
+                            {
+                                type: 'right',
+                                position: 9000,
+                                leader: 'dot',
+                            },
+                        ],
+                    })
+                )
+
                 const listMembers = await Promise.all([
                     {
                         children: exportDanhSachHoiDong(data?.council?.members),
@@ -696,22 +864,10 @@ export default function ExportReport({ id }: { id: string }) {
                     sections: [
                         ...listMembers,
                         {
-                            children: [
-                                new Paragraph({
-                                    heading: HeadingLevel.HEADING_1,
-                                    children: [
-                                        new TextRun({
-                                            text: 'Mục lục',
-                                            size: 28,
-                                            color: '000000',
-                                        }),
-                                    ],
-                                }),
-                                new TableOfContents('Mục lục', {
-                                    hyperlink: true,
-                                    headingStyleRange: '1-5',
-                                }),
-                            ],
+                            properties: {
+                                type: 'nextPage',
+                            },
+                            children: tableOfContentsChildren,
                         },
                         ...sections,
                     ],
