@@ -260,12 +260,12 @@ function TakeTestPage() {
             <Button
                 type="primary"
                 onClick={() => {
-                    router.push('/home')
+                    router.push('/thiet-lap-khao-sat/danh-sach-khao-sat')
                 }}
                 size="large"
                 className="mb-20"
             >
-                Quay về trang chủ
+                Quay về
             </Button>
             <Confetti width={window?.innerWidth || 1000} height={window?.innerHeight || 1000} />
         </div>

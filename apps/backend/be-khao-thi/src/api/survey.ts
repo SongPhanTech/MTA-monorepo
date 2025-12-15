@@ -1030,7 +1030,11 @@ app.openapi(getSurveysByProfile, async (c) => {
             surveyTopic: true,
             subjectClass: true,
             surveyQuestion: true,
-            surveySessions: true,
+            surveySessions: {
+                where:{
+                    profileId:id
+                }
+            },
         },
         take: limit,
         skip: (page - 1) * limit,

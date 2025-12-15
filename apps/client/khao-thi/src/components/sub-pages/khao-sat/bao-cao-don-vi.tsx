@@ -8,6 +8,23 @@ import ReactECharts from 'echarts-for-react'
 import Table from '@components/commons/table'
 import { cn } from '@lib/utils'
 const { Title } = Typography
+
+type AnswerItem = {
+id: string
+  code: string | null
+  active: boolean
+  description: string
+  deletedAt: string | null
+  createdAt: string
+  updatedAt: string
+  createdBy: string | null
+  answer: string
+  requireExplanation: boolean
+  clusterSurveyId: string
+  totalCount: number
+}
+
+type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function OrganizationSurveyReport({
     selectedId,
     surveyName,
@@ -190,8 +207,9 @@ function OrganizationSurveyReport({
                     headerRowValue.values = [
                         index + 1,
                         `${i?.organization?.sMa || ''} - ${i?.organization?.sTen || ''}`,
-                        // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                        ...i?.average.map((t: any) => t?.totalCount),
+                         ...calculatePercent(i?.average).map(
+                        (a: any) => `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
+                    ),
                     ]
                 })
             }
@@ -257,9 +275,13 @@ function OrganizationSurveyReport({
                                   dataIndex: i?.id,
                                   align: 'center',
                                   render: (__: any, record: any) => {
-                                      return record?.average
-                                          ? record?.average[index]?.totalCount
-                                          : 0
+                                     const count = calculatePercent(record?.average).find(
+                                          (a) => a.id === i?.id
+                                      )
+                                         return (
+                                          `${count?.percent || 0}% (${count?.totalCount || 0}/${count?.total})` ||
+                                          '0'
+                                      )
                                   },
                               })),
                           ]
@@ -284,6 +306,15 @@ function OrganizationSurveyReport({
                 pagination={false}
             />
         )
+    }
+
+        function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
+        const total = items.reduce((sum, item) => sum + item.totalCount, 0)
+        return items.map((item) => ({
+            ...item,
+            total,
+            percent: total === 0 ? 0 : Number.parseFloat(((item.totalCount / total) * 100).toFixed(2)),
+        }))
     }
 
     return (

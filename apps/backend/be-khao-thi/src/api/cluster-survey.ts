@@ -165,6 +165,7 @@ app.openapi(createClusterSurvey, async (c) => {
                 subjectClassId: cls.id,
                 surveyTopicId,
                 lectureId: cls.lecturerId,
+                semesterId
             })),
         })
 
@@ -624,6 +625,7 @@ app.openapi(exportClusterSurveyStatistics, async (c) => {
             surveyChoice: { orderBy: { answer: 'asc' } },
             surveys: {
                 include: {
+                    subjectClass: true,
                     lecture: {
                         include: {
                             userProfile: true,

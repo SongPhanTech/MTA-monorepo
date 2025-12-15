@@ -9,6 +9,7 @@ import { GetSurveyStatistics200QuestionsItemAnswersItem } from '@workspace/libs/
 import Table from '@components/commons/table'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
+import HtmlTruncate from '@components/commons/html-truncate'
 const { Title } = Typography
 
 export interface CriteriaItem {
@@ -292,7 +293,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                     `Câu hỏi ${index + 1}`,
                     i?.name,
                     ...calculatePercent(i?.answers).map(
-                        (a: any) => `${a.percent || 0} (${a?.count || 0}/${a?.total || 0})`
+                        (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
                     ),
                 ]
             })
@@ -328,8 +329,18 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                               {
                                   title: 'Câu hỏi',
                                   align: 'center',
+                                  width: 100,
                                   render: (_, record, index) => {
                                       return `Câu hỏi ${index + 1}`
+                                  },
+                              },
+                                  {
+                                  title: 'Nội dung câu hỏi',
+                                  align: 'left',
+                                  render: (_, record, index) => {
+                                      return  <HtmlTruncate>
+                                          {record?.name}
+                                      </HtmlTruncate>
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
@@ -337,6 +348,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                   title: i?.description,
                                   id: i?.id,
                                   dataIndex: i?.id,
+                                  width: 170,
                                   align: 'center',
                                   render: (__: any, record: any) => {
                                       const count = calculatePercent(record?.answers).find(
@@ -344,7 +356,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                       )
 
                                       return (
-                                          `${count?.percent || 0} (${count?.count || 0}/${count?.total})` ||
+                                          `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` ||
                                           '0'
                                       )
                                   },

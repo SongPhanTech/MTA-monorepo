@@ -111,6 +111,7 @@ export const getSurveyStats = async (
     questions: SurveyQuestion[],
     choices: SurveyChoice[]
 ) => {
+
     const questionIds = questions.map((q) => q.id)
 
     const answerCounts = await prisma.surveyResponse.groupBy({
@@ -181,13 +182,16 @@ export const getSurveyStats = async (
                 totalRate: 0,
             }
 
-        const totalRate = questionsStatistics.reduce((acc, curr) => {
-            return acc + (curr.answers.find((i) => i.id === choice.id)?.rate || 0)
+        const count = questionsStatistics.reduce((acc, curr) => {
+            return acc + (curr.answers.find((i) => i.id === choice.id)?.count || 0)
         }, 0)
 
-        const average = Number((totalRate / questionsStatistics.length).toFixed(2))
-        return { average, totalRate }
+        // const average = Number((totalRate / questionsStatistics.length).toFixed(2))
+        return { average: 0, totalRate: count }
     })
+
+  
+    
 
     return {
         surveyId: survey.id,

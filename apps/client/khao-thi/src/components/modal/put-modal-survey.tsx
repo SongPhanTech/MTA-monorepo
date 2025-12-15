@@ -133,8 +133,7 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
-            // console.log(output,'2');
-            // return
+            
             if (input?.type === 'multiple') {
                 const res = await createMultiple({
                     data: {
@@ -244,6 +243,11 @@ const PutSurveyModal = () => {
                                 connect: output.surveyQuestionIds.length
                                     ? output.surveyQuestionIds.map((item) => ({ id: item }))
                                     : [],
+                            },
+                            semester: {
+                                connect: {
+                                    id: output.semesterId,
+                                },
                             },
                         },
                     })
