@@ -13,7 +13,7 @@ import { $Enums } from '@workspace/db/client'
 import {
     useFindFirstEvaluationCouncilMember,
     useFindUniqueEvaluationPeriod,
-    useFindUniqueUserProfile,
+    useFindUniqueLecturer,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
@@ -28,10 +28,10 @@ export default function CriteriaAnalysisAndEvaluationPage() {
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
     const { can } = useAbility()
 
-    const { data: lecturer } = useFindUniqueUserProfile(
+    const { data: lecturer } = useFindUniqueLecturer(
         {
             where: {
-                id: idProfile || '',
+                userProfileId: idProfile,
             },
         },
         {
@@ -42,9 +42,9 @@ export default function CriteriaAnalysisAndEvaluationPage() {
     const { data: councilMember } = useFindFirstEvaluationCouncilMember(
         {
             where: {
-                lecturerId: lecturer?.id || '',
+                lecturerId: lecturer?.id,
                 evaluationCouncil: {
-                    periodId: selectedEvaluationPeriodId || '',
+                    periodId: selectedEvaluationPeriodId,
                 },
             },
             include: {

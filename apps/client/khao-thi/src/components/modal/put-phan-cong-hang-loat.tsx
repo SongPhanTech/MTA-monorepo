@@ -44,16 +44,21 @@ export default function PutPhanCongHangLoatModal() {
         include: {
             lecturer: {
                 include: {
-                    academicDegreeType: {
-                        select: {
-                            sTen: true,
+                    userProfile: {
+                        include: {
+                            academicDegreeType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
+                            academicRankType: {
+                                select: {
+                                    sTen: true,
+                                },
+                            },
                         },
                     },
-                    academicRankType: {
-                        select: {
-                            sTen: true,
-                        },
-                    },
+                    organization: true,
                 },
             },
         },
@@ -149,18 +154,20 @@ export default function PutPhanCongHangLoatModal() {
                     <Select
                         placeholder="Chọn giảng viên"
                         options={lecturers.map((i) => {
-                            const academicRank = i.lecturer?.academicRankType?.sTen || ''
-                            const degreeRank = i.lecturer?.academicDegreeType?.sTen || ''
-                            const fullName = i?.lecturer?.fullname
-                                ? i?.lecturer?.fullname
-                                : `${i?.lecturer?.firstName} ${i?.lecturer?.lastName}`
+                            const academicRank =
+                                i.lecturer?.userProfile?.academicRankType?.sTen || ''
+                            const degreeRank =
+                                i.lecturer?.userProfile?.academicDegreeType?.sTen || ''
+                            const fullName = i?.lecturer?.userProfile?.fullname
+                                ? i?.lecturer?.userProfile?.fullname
+                                : `${i?.lecturer?.userProfile?.firstName} ${i?.lecturer?.userProfile?.lastName}`
                             const academicTitle = [academicRank, degreeRank]
                                 .filter(Boolean)
                                 .join('.')
 
                             return {
                                 value: i?.lecturerId,
-                                label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
+                                label: `${academicTitle ? `${academicTitle} ` : ''}${fullName}-${i?.lecturer?.organization?.sTen}`,
                             }
                         })}
                     />

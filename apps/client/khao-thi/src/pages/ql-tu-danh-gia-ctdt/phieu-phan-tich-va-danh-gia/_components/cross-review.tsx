@@ -46,7 +46,7 @@ export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: 'P13'
                                 evaluationCriterion: {
                                     reviewer: {
                                         lecturer: {
-                                            id: idProfile,
+                                            userProfileId: idProfile,
                                         },
                                     },
                                 },
@@ -66,7 +66,7 @@ export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: 'P13'
                                     },
                                     reviewer: {
                                         lecturer: {
-                                            id: idProfile,
+                                            userProfileId: idProfile,
                                         },
                                     },
                                 },
@@ -82,7 +82,7 @@ export default function CrossReview({ userRole = 'REVIEWER' }: { userRole: 'P13'
                                     },
                                     reviewer: {
                                         lecturer: {
-                                            id: idProfile,
+                                            userProfileId: idProfile,
                                         },
                                     },
                                 },

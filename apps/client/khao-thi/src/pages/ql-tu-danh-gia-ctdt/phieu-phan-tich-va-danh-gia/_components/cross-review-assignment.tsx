@@ -65,7 +65,7 @@ export default function CrossReviewAssignment() {
     const { can } = useAbility()
 
     const canApprove = can(
-        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+        KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
         'DUYET'
     )
 
@@ -83,18 +83,22 @@ export default function CrossReviewAssignment() {
             },
             include: {
                 lecturer: {
-                    select: {
-                        fullname: true,
-                        firstName: true,
-                        lastName: true,
-                        academicDegreeType: {
+                    include: {
+                        userProfile: {
                             select: {
-                                sTen: true,
-                            },
-                        },
-                        academicRankType: {
-                            select: {
-                                sTen: true,
+                                fullname: true,
+                                firstName: true,
+                                lastName: true,
+                                academicDegreeType: {
+                                    select: {
+                                        sTen: true,
+                                    },
+                                },
+                                academicRankType: {
+                                    select: {
+                                        sTen: true,
+                                    },
+                                },
                             },
                         },
                     },
@@ -441,13 +445,16 @@ export default function CrossReviewAssignment() {
                                                 disabled={!canApprove}
                                                 options={lecturers.map((i) => {
                                                     const academicRank =
-                                                        i.lecturer.academicRankType?.sTen || ''
+                                                        i.lecturer.userProfile?.academicRankType
+                                                            ?.sTen || ''
                                                     const degreeRank =
-                                                        i.lecturer.academicDegreeType?.sTen || ''
+                                                        i.lecturer.userProfile?.academicDegreeType
+                                                            ?.sTen || ''
 
-                                                    const fullName = i?.lecturer?.fullname
-                                                        ? i?.lecturer.fullname
-                                                        : `${i?.lecturer?.firstName} ${i?.lecturer?.lastName}`
+                                                    const fullName = i?.lecturer.userProfile
+                                                        ?.fullname
+                                                        ? i?.lecturer.userProfile?.fullname
+                                                        : `${i?.lecturer.userProfile?.firstName} ${i?.lecturer.userProfile?.lastName}`
 
                                                     const academicTitle = [academicRank, degreeRank]
                                                         .filter(Boolean)
