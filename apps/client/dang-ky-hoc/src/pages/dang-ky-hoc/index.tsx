@@ -216,7 +216,7 @@ const DanhSachMonDangKy = ({
                             width: 150,
                             align: 'center',
                             render: (_, record) => {
-                                return record.subjectClassTimes?.map?.((tkb) => {
+                                return record.subjectClassTimes?.uniqueByKey?.('dayOfWeek')?.map?.((tkb) => {
                                     return (
                                         <p>
                                             {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
@@ -398,7 +398,7 @@ const DanhSachMonDangKy = ({
                             width: 150,
                             align: 'center',
                             render: (_, record) => {
-                                return record.subjectClassTimes?.map?.(
+                                return record.subjectClassTimes?.uniqueByKey?.('dayOfWeek')?.map?.(
                                     (
                                         tkb: GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem
                                     ) => {

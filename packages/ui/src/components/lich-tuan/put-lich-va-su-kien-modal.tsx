@@ -730,16 +730,18 @@ const PutLichVaSuKienModal = () => {
                                         width: 250,
                                         align: 'center',
                                         render: (_, record) => {
-                                            return record.subjectClassTimes?.map?.((tkb) => {
-                                                return (
-                                                    <p>
-                                                        {tkb.dayOfWeek === 8
-                                                            ? 'CN'
-                                                            : `T${tkb.dayOfWeek}`}{' '}
-                                                        - {tkb.startPeriod} - {tkb.endPeriod}
-                                                    </p>
-                                                )
-                                            })
+                                            return record.subjectClassTimes
+                                                ?.uniqueByKey?.('dayOfWeek')
+                                                ?.map?.((tkb) => {
+                                                    return (
+                                                        <p>
+                                                            {tkb.dayOfWeek === 8
+                                                                ? 'CN'
+                                                                : `T${tkb.dayOfWeek}`}{' '}
+                                                            - {tkb.startPeriod} - {tkb.endPeriod}
+                                                        </p>
+                                                    )
+                                                })
                                         },
                                     },
                                     {
