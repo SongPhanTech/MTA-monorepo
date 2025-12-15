@@ -1,7 +1,6 @@
 import StandarReportsSubPage from '@components/sub-pages/tu-danh-gia-ctdt/standar-reports'
 import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
 import { useStore } from '@tanstack/react-store'
-import { useSession } from '@workspace/auth/react'
 import type {
     CriterionPeriod,
     EvaluationCriterion,
@@ -26,60 +25,21 @@ export type DataTabEvaluationCriterionType = StandardPeriod & {
 }
 
 export default function StandardReports() {
-    const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'd4a3bb87-f834-44b7-98a4-f7b76556cbfe'
-
     const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data, refetch } = useFindUniqueEvaluationPeriod(
         {
             where: {
                 id: selectedEvaluationPeriodId,
-                standards: {
-                    some: {
-                        criteria: {
-                            some: {
-                                evaluationCriterion: {
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
             },
             include: {
                 standards: {
-                    where: {
-                        criteria: {
-                            some: {
-                                evaluationCriterion: {
-                                    status: {
-                                        not: $Enums.EvaluationStatus.LOCK,
-                                    },
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
                     include: {
                         criteria: {
                             where: {
                                 evaluationCriterion: {
                                     status: {
                                         not: $Enums.EvaluationStatus.LOCK,
-                                    },
-                                    lecturer: {
-                                        userProfile: {
-                                            id: idProfile,
-                                        },
                                     },
                                 },
                             },
@@ -122,7 +82,7 @@ export default function StandardReports() {
             },
         },
         {
-            enabled: !!idProfile && !!selectedEvaluationPeriodId,
+            enabled: !!selectedEvaluationPeriodId,
             refetchOnWindowFocus: false,
         }
     )
