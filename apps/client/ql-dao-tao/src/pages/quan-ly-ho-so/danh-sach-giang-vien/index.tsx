@@ -196,7 +196,7 @@ export default function UserProfilePageLecture() {
             ...(filters.organization
                 ? {
                       organizationId: {
-                          in: filters.organization,
+                          in: (filters?.organization as any)?.checked || [],
                       },
                   }
                 : !canXemTatCa
