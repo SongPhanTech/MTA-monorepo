@@ -18,7 +18,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -26,6 +26,7 @@ import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
 export default function AcademicWarningRule() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -75,6 +76,9 @@ export default function AcademicWarningRule() {
         }
 
         return {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
                       id: filters.trainingCourseId,
@@ -90,8 +94,6 @@ export default function AcademicWarningRule() {
                     some: academicWarningRuleFilter,
                 },
             }),
-            trainingObjectTypeId,
-            active: true,
         }
     }, [
         filters.trainingCourseId,
@@ -112,12 +114,7 @@ export default function AcademicWarningRule() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingCourse({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const { data: count } = useCountTrainingCourse({ where })
 
     const { onOpen: onOpenAcademicWarningRule } = useDisclosure<{
         trainingCourseId: string
@@ -161,8 +158,8 @@ export default function AcademicWarningRule() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Flex>
-                            <Col span={12}>
+                        <Col span={18}>
+                            <Flex gap={8}>
                                 <Select
                                     placeholder="Chọn khoá"
                                     options={trainingCourseData.map((i: TrainingCourse) => {
@@ -177,8 +174,6 @@ export default function AcademicWarningRule() {
                                     }
                                     allowClear
                                 />
-                            </Col>
-                            <Col span={12}>
                                 <Select
                                     placeholder="Chọn đối tượng đào tạo"
                                     options={trainingObjectTypeData.map((i: TrainingObjectType) => {
@@ -193,8 +188,15 @@ export default function AcademicWarningRule() {
                                     }
                                     allowClear
                                 />
-                            </Col>
-                        </Flex>
+                            </Flex>
+                        </Col>
+                        <Col span={6}>
+                            <Flex justify="end" className="gap-2">
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
+                            </Flex>
+                        </Col>
                     </Row>
                 </Col>
 
@@ -204,7 +206,7 @@ export default function AcademicWarningRule() {
                         headerTitleKey={({ code, name, trainingObjectType }) =>
                             `${[code, name, trainingObjectType?.name].filter(Boolean).join(' - ')}`
                         }
-                        defaultExpandAll
+                        defaultExpandAll={expandAll}
                         currentPage={currentPage}
                         columns={[
                             {

@@ -53,6 +53,7 @@ export interface IHocKi {
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(true)
     const studentId = router.query.id as string
     const [semesterId, setSemesterId] = useState<string>()
     const [filters, setFilters] = useState<FilterProps>({
@@ -622,17 +623,22 @@ export default function StudentScoreClassPage() {
 
                 <Col span={24}>
                     <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
-                    <Select
-                        value={semesterId}
-                        onChange={(v) => {
-                            setSemesterId(v)
-                        }}
-                        className="w-64"
-                        options={data.map((s) => ({
-                            label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
-                            value: s.id,
-                        }))}
-                    />
+                    <Flex justify="space-between">
+                        <Select
+                            value={semesterId}
+                            onChange={(v) => {
+                                setSemesterId(v)
+                            }}
+                            className="w-64"
+                            options={data.map((s) => ({
+                                label: `${s.code} - ${s.name} - ${s.schoolYear.name}`,
+                                value: s.id,
+                            }))}
+                        />
+                        <Button onClick={() => setExpandAll(!expandAll)}>
+                            {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                        </Button>
+                    </Flex>
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
@@ -647,7 +653,7 @@ export default function StudentScoreClassPage() {
                             },
                             {
                                 render: (_, { code, name, schoolYear }) => (
-                                    <p className="font-bold text-base">
+                                    <p className="font-medium text-base">
                                         {[code, name, schoolYear?.name].filter(Boolean).join(' - ')}
                                     </p>
                                 ),
@@ -666,7 +672,7 @@ export default function StudentScoreClassPage() {
                             setFilters(value)
                         }}
                         childrenFieldName="subjectClasses"
-                        defaultExpandAll
+                        defaultExpandAll={expandAll}
                         columns={[
                             {
                                 title: 'Mã môn học',

@@ -33,6 +33,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [isLocked, setIsLocked] = useState(true)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -86,7 +87,9 @@ export default function SubjectList() {
             hideSpinner()
         }
     }
-    const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const { data: organization = [] } = useFindManyDM_DonVi({
+        orderBy: { sTen: 'asc' },
+    })
     const treeData = buildOrgTree(organization)
 
     const where = useMemo(() => {
@@ -114,7 +117,12 @@ export default function SubjectList() {
                   }
                 : {}),
             ...(filters.searchText
-                ? { name: { contains: filters.searchText, mode: 'insensitive' as const } }
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive' as const,
+                      },
+                  }
                 : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
@@ -226,7 +234,10 @@ export default function SubjectList() {
     const { onOpen } = useDisclosure<{ id: string; isLocked: boolean }>({
         tag: 'PutSubjectListModal',
     })
-    const { onOpen: onOpenHistory } = useDisclosure<{ id: string; isLocked: boolean }>({
+    const { onOpen: onOpenHistory } = useDisclosure<{
+        id: string
+        isLocked: boolean
+    }>({
         tag: 'ModalViewHistoryChange',
     })
 
@@ -398,6 +409,9 @@ export default function SubjectList() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
                                     'THEM'
@@ -446,7 +460,7 @@ export default function SubjectList() {
                         className="mt-0"
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        defaultExpandAll={expandAll}
                         scrollable
                         maxHeight={'calc(100vh - 340px)'}
                         filters={filters}

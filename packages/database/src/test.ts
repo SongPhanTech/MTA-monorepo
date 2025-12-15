@@ -1,33 +1,23 @@
 import { PrismaClient } from '../generated/prisma-client'
-
+import DMNhanvien from '../DM_Nhanvien.json'
 const prisma = new PrismaClient()
 
+const ids = DMNhanvien.map((item) => item.sCCCD.toLowerCase())
+
+console.log(ids.length, ids[0])
+
 const profiles = await prisma.userProfile.findMany({
+    // data: {
+    //   bLaGiangVien: false,
+    // },
     where: {
         bLaGiangVien: true,
         lecturer: null,
-        sDM_DonViId: { not: null },
     },
 })
 
-const orgs = await prisma.dM_DonVi.findMany({
-  select:{Id:true}
-})
+console.log(profiles.length)
 
-const missingOrgs = profiles.map((profile) => profile.sDM_DonViId).filter(id => !orgs.find(org => org.Id === id))
-console.log(missingOrgs);
+// const missing = ids.filter((id) => !profiles.some((p) => p.id === id));
 
-
-await prisma.lecturer.createMany({
-    data: profiles.map((profile) => {
-      console.log(profile.sDM_DonViId);
-      
-      return ({
-        userProfileId: profile.id,
-        code: profile.code,
-        lecturerTypeId: 'cmhlda9w0000g1ynzifel7n1t',
-        organizationId: profile.sDM_DonViId as string,
-    })
-    }),
-})
-
+// console.log(missing.length, missing);

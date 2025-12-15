@@ -44,6 +44,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -442,6 +443,9 @@ export default function TrainingProgramCatalog() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" className="gap-2">
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'THEM'
@@ -515,7 +519,7 @@ export default function TrainingProgramCatalog() {
                         }}
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
-                        defaultExpandAll
+                        defaultExpandAll={expandAll}
                         onRowClick={(record) => handleRowClick(record)}
                         filters={filters}
                         setFilters={(value) => {

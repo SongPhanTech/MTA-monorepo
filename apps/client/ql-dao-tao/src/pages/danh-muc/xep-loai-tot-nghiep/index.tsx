@@ -27,6 +27,7 @@ interface FilterProps {
 
 export default function GraduationRankingPage() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -200,7 +201,10 @@ export default function GraduationRankingPage() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" className="gap-2">
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
                                     'THEM'
@@ -220,6 +224,7 @@ export default function GraduationRankingPage() {
                 <Col span={24}>
                     <TableCollapse
                         data={data}
+                        defaultExpandAll={expandAll}
                         headerTitleKey={'name'}
                         childrenFieldName="academicRankingConvert"
                         onRowClick={(record) => handleOpenModalGraduationCriteria(record)}

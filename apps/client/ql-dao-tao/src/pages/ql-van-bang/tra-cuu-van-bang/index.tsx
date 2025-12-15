@@ -38,6 +38,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function GraduationDecisionDiploma() {
     const { can, canSome } = useAbility()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [student, setStudent] = useState<any>(null)
@@ -273,10 +274,9 @@ export default function GraduationDecisionDiploma() {
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
         orderBy: { name: 'asc' },
     })
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
-        where: { id: trainingObjectTypeId, deletedAt: null, active: true },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: { name: 'asc' },

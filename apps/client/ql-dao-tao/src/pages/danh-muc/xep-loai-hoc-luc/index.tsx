@@ -35,6 +35,7 @@ const DataActive = [
 
 export default function AcademicRankingConvertPage() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -242,7 +243,10 @@ export default function AcademicRankingConvertPage() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" className="gap-2">
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
                                     'THEM'
@@ -259,6 +263,7 @@ export default function AcademicRankingConvertPage() {
                 <Col span={24}>
                     <TableCollapse
                         data={data}
+                        defaultExpandAll={expandAll}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
                                 {can(

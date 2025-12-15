@@ -29,6 +29,7 @@ import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
 export default function Scholarship() {
     const { can, canSome } = useAbility()
+    const [expandAll, setExpandAll] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -107,9 +108,7 @@ export default function Scholarship() {
                 },
             },
         },
-        orderBy: {
-            rankOrder: 'asc',
-        },
+        orderBy: [{ trainingCourse: { name: 'desc' } }, { rankOrder: 'asc' }],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -216,7 +215,10 @@ export default function Scholarship() {
                         </Col>
 
                         <Col span={4}>
-                            <Flex justify="end" gap={4}>
+                            <Flex justify="end" className="gap-2">
+                                <Button onClick={() => setExpandAll(!expandAll)}>
+                                    {expandAll ? 'Thu gọn' : 'Mở rộng'}
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_HOC_BONG,
                                     'THEM'
@@ -237,7 +239,7 @@ export default function Scholarship() {
                         headerTitleKey={({ code, name, trainingCourse, rankOrder }) =>
                             `${[trainingCourse.name, code, name].filter(Boolean).join(' - ')} (${rankOrder})`
                         }
-                        defaultExpandAll
+                        defaultExpandAll={expandAll}
                         currentPage={currentPage}
                         filters={filters}
                         setFilters={(value) => {

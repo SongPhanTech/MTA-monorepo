@@ -141,18 +141,24 @@ const TableCollapse = <
     }, [data, childrenFieldName])
 
     useEffect(() => {
+        if (!defaultExpandAll) {
+            setExpandedKeys([])
+            return
+        }
+
         if (defaultExpandAll && dataWithKey.length > 0) {
             setExpandedKeys(dataWithKey.map((d) => d.key as React.Key))
-        } else {
-            const firstWithChildren = dataWithKey.find(
-                (item) =>
-                    Array.isArray(item[childrenFieldName]) && item[childrenFieldName]?.length > 0
-            )
-            if (firstWithChildren?.key) {
-                setExpandedKeys([firstWithChildren.key])
-            }
+            return
         }
-    }, [defaultExpandAll, dataWithKey, childrenFieldName])
+
+        // const firstWithChildren = dataWithKey.find(
+        //     (item) => Array.isArray(item[childrenFieldName]) && item[childrenFieldName]?.length > 0
+        // )
+        // if (firstWithChildren?.key) {
+        //     setExpandedKeys([firstWithChildren.key])
+        // }
+        // }, [defaultExpandAll, dataWithKey, childrenFieldName])
+    }, [defaultExpandAll, dataWithKey])
 
     const allChildren = useMemo(() => {
         const children: T[ChildKey][] = []

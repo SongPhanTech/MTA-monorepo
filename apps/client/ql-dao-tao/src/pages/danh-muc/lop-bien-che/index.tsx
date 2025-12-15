@@ -76,6 +76,7 @@ export default function FixedClassPage() {
         }
 
         return {
+            deletedAt: null,
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -140,13 +141,13 @@ export default function FixedClassPage() {
     }, [filters, filters.trainingCourses, trainingObjectTypeId, profileId, canReadAll])
 
     const { data = [] } = useFindManyFixedClass({
-        where: {
-            ...where,
-        },
+        where,
         include: {
-            students: {
-                include: {
-                    userProfile: true,
+            _count: {
+                select: {
+                    students: {
+                        where: { deletedAt: null },
+                    },
                 },
             },
             lecturerManagement: {
@@ -355,7 +356,7 @@ export default function FixedClassPage() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 50,
+                                width: 45,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -376,6 +377,12 @@ export default function FixedClassPage() {
                                 fixed: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
+                            },
+                            {
+                                title: 'Sĩ số',
+                                align: 'center',
+                                width: 60,
+                                render: (_, record) => record._count.students,
                             },
                             {
                                 title: 'Đơn vị quản lý',
