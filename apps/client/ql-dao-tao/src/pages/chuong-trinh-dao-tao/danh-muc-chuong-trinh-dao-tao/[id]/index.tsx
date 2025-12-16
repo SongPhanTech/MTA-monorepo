@@ -1025,14 +1025,19 @@ export default function TrainingProgramSubjects() {
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteTrainingBlockSubject(
-                                                                record.id
-                                                            ),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () =>
+                                                                handleDeleteTrainingBlockSubject(
+                                                                    record.id
+                                                                ),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
