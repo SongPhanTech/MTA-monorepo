@@ -31,6 +31,7 @@ import PutPhanCongHangLoatModal from './put-phan-cong-hang-loat'
 import PutPhanCongHangLoatCrossModal from './put-phan-cong-hang-loat-cross'
 import ReviewSurveyModal from './review-survey-modal'
 import { XemTaiLieu } from '@workspace/ui'
+import ModalPrintExamSurvey from './modal-print-de-khao-sat'
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -65,4 +66,5 @@ export {
     PutPhanCongHangLoatCrossModal,
     ReviewSurveyModal,
     XemTaiLieu,
+    ModalPrintExamSurvey
 }

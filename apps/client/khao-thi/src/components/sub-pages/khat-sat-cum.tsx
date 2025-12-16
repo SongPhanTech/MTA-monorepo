@@ -252,6 +252,11 @@ function TabDotKhaoSatCum({
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
 
+
+        const { onOpen: onOpenPrint } = useDisclosure<{ id:string }>({
+        tag: 'ModalPrintExamSurvey',
+    })
+
     return (
         <div>
             <Row gutter={[16, 8]}>
@@ -455,9 +460,7 @@ function TabDotKhaoSatCum({
                                                 >
                                                     <EyeOutlined
                                                         onClick={() => {
-                                                            router.push(
-                                                                `/thiet-lap-khao-sat/dot-khao-sat/${id}`
-                                                            )
+                                                          onOpenPrint({id})
                                                         }}
                                                         style={{ fontSize: '16px' }}
                                                     />
