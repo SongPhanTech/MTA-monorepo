@@ -1,6 +1,6 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useFindUniqueClusterSurvey } from '@workspace/db/hooks'
-import { Button, Col, Modal, Radio, Row, Space, Table } from 'antd'
+import { Button, Col, Modal, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
