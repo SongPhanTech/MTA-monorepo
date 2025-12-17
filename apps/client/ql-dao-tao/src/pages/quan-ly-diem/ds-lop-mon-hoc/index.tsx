@@ -9,7 +9,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { Prisma, SubjectVersion } from '@workspace/db/client'
+import { $Enums, type Prisma, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManyFixedClass,
@@ -37,6 +37,7 @@ import {
     Popover,
     Row,
     Switch,
+    Tag,
     Tooltip,
 } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
@@ -688,12 +689,23 @@ export default function ClassSubject() {
                             },
                             {
                                 title: 'Môn học',
-                                dataIndex: 'name',
                                 width: 175,
                                 align: 'left',
                                 type: 'input',
-                                render: (text, record: { subject?: SubjectVersion }) =>
-                                    record.subject?.name || text,
+                                render: (_, record) => (
+                                    <p>
+                                        {record.type === $Enums.SubjectClassType.RETAKE ? (
+                                            <Tag color={'blue'} className="p-0 px-1">
+                                                Học lại
+                                            </Tag>
+                                        ) : record.type === $Enums.SubjectClassType.REEXAM ? (
+                                            <Tag color={'yellow'} className="p-0 px-1">
+                                                Thi lại
+                                            </Tag>
+                                        ) : null}
+                                        {record.subject?.name} ({record.subject?.credit})
+                                    </p>
+                                ),
                             },
                             // {
                             //     title: 'Số TC',

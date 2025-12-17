@@ -2,13 +2,15 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
+import { $Enums, Prisma } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassReExamStudents } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -42,6 +44,7 @@ export default function CaNhanThiLai() {
         },
     })
 
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
@@ -73,100 +76,99 @@ export default function CaNhanThiLai() {
         },
         { query: { enabled: !!trainingObjectTypeId && !!subjectClassData?.subjectId } }
     )
-    // queryKey /api/subject-class/open-subject-class-retake
+    // queryKey /api/subject-class/open-subject-class-reexam
 
     const handleSaveStudentClass = async () => {
         try {
-            // const allSubjectClassInfo = await sqlTransaction(
-            //     selectedSubjectClassRowKeys.map((subjectClassId) => ({
-            //         model: 'SubjectClass',
-            //         operation: 'findUnique',
-            //         data: {
-            //             where: { id: subjectClassId },
-            //             select: {
-            //                 id: true,
-            //                 subjectId: true,
-            //                 subject: {
-            //                     select: {
-            //                         // Lấy điểm cao nhất của sinh viên trong các lần đăng ký học cải thiện
-            //                         studentSubjectScore: {
-            //                             where: {
-            //                                 studentId,
-            //                             },
-            //                             orderBy: {
-            //                                 finalScore: 'desc',
-            //                             },
-            //                             select: {
-            //                                 finalScore: true,
-            //                                 student: {
-            //                                     select: {
-            //                                         fixedClass: {
-            //                                             select: {
-            //                                                 trainingCourse: {
-            //                                                     select: {
-            //                                                         scoreConverts: true,
-            //                                                     },
-            //                                                 },
-            //                                             },
-            //                                         },
-            //                                     },
-            //                                 },
-            //                             },
-            //                         },
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     }))
-            // )
-            // if (allSubjectClassInfo.status !== 200) {
-            //     throw new Error('Có lỗi xảy ra khi lấy thông tin lớp học phần!')
-            // }
-            // const res = await sqlTransaction([
-            //     {
-            //         model: 'StudentSubjectScore',
-            //         operation: 'deleteMany',
-            //         data: {
-            //             where: {
-            //                 subjectClass: {
-            //                     semesterId,
-            //                     trainingObjectTypeId,
-            //                     type: $Enums.SubjectClassType.RETAKE,
-            //                 },
-            //             },
-            //         },
-            //     },
-            //     ...allSubjectClassInfo.data.map((subjectClass: any) => ({
-            //         model: 'StudentSubjectScore' as const,
-            //         operation: 'create',
-            //         data: {
-            //             data: {
-            //                 studentId,
-            //                 subjectClassId: subjectClass.id,
-            //                 subjectVersionId: subjectClass.subjectId,
-            //                 isImproving:
-            //                     subjectClass.subject.studentSubjectScore.length > 0 &&
-            //                     subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
-            //                         ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
-            //                               (sc: ScoreConvert) =>
-            //                                   sc?.base10Min <=
-            //                                       subjectClass.subject.studentSubjectScore[0]
-            //                                           ?.finalScore &&
-            //                                   subjectClass.subject.studentSubjectScore[0]
-            //                                       ?.finalScore <= sc?.base10Max &&
-            //                                   sc?.improvementRegister
-            //                           )
-            //                         : false,
-            //             },
-            //         },
-            //     })),
-            // ])
-            // if (res.status !== 200) {
-            //     throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
-            // }
+            if (!subjectClassData) return
+            const studentsRes = await sqlTransaction([
+                {
+                    model: 'Student',
+                    operation: 'findMany',
+                    data: {
+                        where: {
+                            id: { in: studentIds },
+                            subjectClassStudent: {
+                                some: {
+                                    subjectVersionId: subjectClassData.subjectId,
+                                },
+                            },
+                        },
+                        select: {
+                            id: true,
+                            subjectClassStudent: {
+                                where: {
+                                    subjectVersionId: subjectClassData.subjectId,
+                                    attendanceScore: {
+                                        not: null,
+                                    },
+                                    midtermScore: {
+                                        not: null,
+                                    },
+                                },
+                                orderBy: {
+                                    createdAt: 'desc',
+                                },
+                                take: 1,
+                            },
+                        },
+                    },
+                },
+            ])
+
+            if (studentsRes.status !== 200) {
+                throw new Error('Có lỗi xảy ra khi kiểm tra điều kiện đăng ký học lại!')
+            }
+
+            const studentsData = studentsRes.data as Prisma.StudentGetPayload<{
+                select: {
+                    id: true
+                    subjectClassStudent: true
+                }
+            }>[]
+
+            const res = await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                type: $Enums.SubjectClassType.REEXAM,
+                            },
+                        },
+                    },
+                },
+                ...studentsData.map((student) => ({
+                    model: 'StudentSubjectScore' as const,
+                    operation: 'create',
+                    data: {
+                        data: {
+                            studentId: student.id,
+                            subjectClassId: subjectClassId,
+                            subjectVersionId: subjectClassData.subjectId,
+                            attendanceScore: student?.subjectClassStudent?.[0]?.attendanceScore,
+                            midtermScore: student?.subjectClassStudent?.[0]?.midtermScore,
+                        },
+                    },
+                })),
+            ])
+
+            if (res.status !== 200) {
+                throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+            }
+            dangKyThiLaiStore.setState((prev) => ({
+                ...prev,
+                studentIds: [],
+            }))
             message.success('Lưu đăng ký học lại thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
+            queryClient.invalidateQueries({
+                queryKey: ['/api/subject-class/open-subject-class-reexam'],
+            })
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)

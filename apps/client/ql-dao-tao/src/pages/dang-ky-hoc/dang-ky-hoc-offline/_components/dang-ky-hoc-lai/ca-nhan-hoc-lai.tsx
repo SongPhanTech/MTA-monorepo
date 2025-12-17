@@ -5,6 +5,7 @@ import { useStore } from '@tanstack/react-store'
 import { $Enums } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
+    useFindManyStudent,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
@@ -14,7 +15,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dangKyHocLaiStore } from '../..'
 
 interface FilterProps {
@@ -35,33 +36,36 @@ export default function CaNhanHocLai() {
 
     const { subjectClassId, studentIds = [] } = useStore(dangKyHocLaiStore)
 
-    const { data: subjectClassData } = useFindUniqueSubjectClass({
-        where: {
-            id: subjectClassId,
-        },
-        select: {
-            subjectId: true,
-            subject: {
-                select: {
-                    studentSubjectScore: {
-                        select: {
-                            finalScore: true,
-                            student: {
-                                select: {
-                                    fixedClass: {
-                                        select: {
-                                            trainingCourse: {
-                                                select: {
-                                                    scoreConverts: true,
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
+    const { data: subjectClassData } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId,
+            },
+            select: {
+                subjectId: true,
+                subjectClassStudent: {
+                    select: {
+                        studentId: true,
                     },
                 },
+            },
+        },
+        {
+            enabled: !!subjectClassId,
+        }
+    )
+
+    const { data: students = [] } = useFindManyStudent({
+        where: {
+            id: { in: studentIds },
+        },
+        select: {
+            id: true,
+            subjectClassStudent: {
+                where: {
+                    subjectVersionId: subjectClassData?.subjectId,
+                },
+                select: {},
             },
         },
     })
@@ -125,19 +129,6 @@ export default function CaNhanHocLai() {
                             studentId,
                             subjectClassId: subjectClassId,
                             subjectVersionId: subjectClassData.subjectId,
-                            isImproving:
-                                subjectClassData.subject.studentSubjectScore.length > 0 &&
-                                subjectClassData.subject.studentSubjectScore[0]?.finalScore !== null
-                                    ? subjectClassData.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
-                                          (sc) =>
-                                              sc?.base10Min <=
-                                                  (subjectClassData?.subject?.studentSubjectScore?.[0]?.finalScore?.toNumber?.() ||
-                                                      0) &&
-                                              (subjectClassData?.subject?.studentSubjectScore?.[0]?.finalScore?.toNumber?.() ||
-                                                  0) <= sc?.base10Max &&
-                                              sc?.improvementRegister
-                                      )
-                                    : false,
                         },
                     },
                 })),
@@ -152,6 +143,9 @@ export default function CaNhanHocLai() {
             message.success('Lưu đăng ký học lại thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
+            queryClient.invalidateQueries({
+                queryKey: ['/api/subject-class/open-subject-class-retake'],
+            })
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -170,6 +164,15 @@ export default function CaNhanHocLai() {
         }, 500),
         []
     )
+
+    useEffect(() => {
+        if (subjectClassData) {
+            dangKyHocLaiStore.setState((prev) => ({
+                ...prev,
+                studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+            }))
+        }
+    }, [subjectClassData])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -322,13 +325,6 @@ export default function CaNhanHocLai() {
                             render: (value) => <Checkbox checked={value} />,
                         },
                         {
-                            title: 'Hoãn thi',
-                            align: 'center',
-                            dataIndex: 'hoan_thi',
-                            width: 80,
-                            render: (value) => <Checkbox checked={value} />,
-                        },
-                        {
                             title: 'Đình chỉ thi',
                             align: 'center',
                             dataIndex: 'dinh_chi',
@@ -338,7 +334,7 @@ export default function CaNhanHocLai() {
                         {
                             title: 'Lý do',
                             align: 'center',
-                            width: 80,
+                            width: 120,
                             render: (_, record) =>
                                 record?.ly_do_cam_thi ??
                                 record?.ly_do_dinh_chi ??

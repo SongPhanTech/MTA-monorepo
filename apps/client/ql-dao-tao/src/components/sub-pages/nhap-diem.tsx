@@ -14,7 +14,7 @@ import {
 } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
-import type { StudentSubjectScore } from '@workspace/db/client'
+import { $Enums, type StudentSubjectScore } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore, useFindUniqueSubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
@@ -419,6 +419,7 @@ export default function NhapDiem({
                 isLockScore: true,
                 isLockExamScore: true,
                 enteredScore: true,
+                type: true,
                 enteredExamScore: true,
                 subject: {
                     select: {
@@ -518,7 +519,8 @@ export default function NhapDiem({
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
                 !dataDetailSubjectClass?.isLockScore &&
                 !dataDetailSubjectClass?.isLockExamScore &&
-                !dataDetailSubjectClass?.subject.onePoint
+                !dataDetailSubjectClass?.subject.onePoint &&
+                dataDetailSubjectClass?.type !== $Enums.SubjectClassType.REEXAM
             )
         }
         return !(

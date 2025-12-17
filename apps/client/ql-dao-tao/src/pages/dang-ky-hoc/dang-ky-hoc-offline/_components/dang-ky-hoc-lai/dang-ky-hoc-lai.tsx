@@ -188,7 +188,7 @@ export default function DangKyHocLai() {
                         {
                             title: 'Tên môn',
                             align: 'center',
-                            width: 150,
+                            width: 200,
                             render: (_, record) => <p className="text-left">{record?.name}</p>,
                         },
                         {

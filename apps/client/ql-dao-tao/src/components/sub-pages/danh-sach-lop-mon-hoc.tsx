@@ -9,7 +9,7 @@ import {
     diemLopMonHocStore,
 } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
-import type { Prisma, SubjectVersion } from '@workspace/db/client'
+import { $Enums, type Prisma, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManyFixedClass,
@@ -18,7 +18,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Checkbox, Col, Flex, Form, Input, Row, Tooltip } from 'antd'
+import { Checkbox, Col, Flex, Form, Input, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -351,6 +351,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                                     selectedSubjectClassId: selectedRowKeys?.[0] as string,
                                 })
                             },
+                            columnWidth: 35,
                         }}
                         onRow={(record) => {
                             return {
@@ -390,27 +391,30 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                             },
                             {
                                 title: 'Sĩ số',
-                                dataIndex: ['_count', 'subjectClassStudent'],
                                 align: 'center',
                                 width: 50,
+                                render: (_, record) => record._count.subjectClassStudent || 0,
                             },
                             {
                                 title: 'Môn học',
                                 dataIndex: 'name',
-                                width: 175,
+                                width: 225,
                                 align: 'left',
                                 type: 'input',
-                                render: (text, record: { subject?: SubjectVersion }) =>
-                                    record.subject?.name || text,
-                            },
-                            {
-                                title: 'Số TC',
-                                dataIndex: 'credit',
-                                width: 80,
-                                align: 'center',
-                                type: 'order',
-                                render: (text, record: { subject?: SubjectVersion }) =>
-                                    record.subject?.credit || text,
+                                render: (_, record) => (
+                                    <p>
+                                        {record.type === $Enums.SubjectClassType.RETAKE ? (
+                                            <Tag color={'blue'} className="p-0 px-1">
+                                                Học lại
+                                            </Tag>
+                                        ) : record.type === $Enums.SubjectClassType.REEXAM ? (
+                                            <Tag color={'yellow'} className="p-0 px-1">
+                                                Thi lại
+                                            </Tag>
+                                        ) : null}
+                                        {record.subject?.name} ({record.subject?.credit})
+                                    </p>
+                                ),
                             },
                             {
                                 title: 'Thi',
@@ -478,7 +482,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                             },
                             {
                                 title: 'Hạn ĐQT',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
@@ -531,7 +535,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                             },
                             {
                                 title: 'Hạn ĐT',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
