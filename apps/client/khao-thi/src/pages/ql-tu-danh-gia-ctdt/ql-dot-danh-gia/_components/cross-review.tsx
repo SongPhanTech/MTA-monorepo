@@ -7,7 +7,6 @@ import type {
     EvaluationCriterionComment,
     StandardPeriod,
 } from '@workspace/db/client'
-import { $Enums } from '@workspace/db/client'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Empty, Row, Tabs } from 'antd'
 import { useMemo } from 'react'
@@ -39,26 +38,8 @@ export default function CrossReviewPeriod() {
             },
             include: {
                 standards: {
-                    where: {
-                        criteria: {
-                            some: {
-                                evaluationCriterion: {
-                                    status: {
-                                        not: $Enums.EvaluationStatus.LOCK,
-                                    },
-                                },
-                            },
-                        },
-                    },
                     include: {
                         criteria: {
-                            where: {
-                                evaluationCriterion: {
-                                    status: {
-                                        not: $Enums.EvaluationStatus.LOCK,
-                                    },
-                                },
-                            },
                             include: {
                                 evaluationCriterion: {
                                     include: {

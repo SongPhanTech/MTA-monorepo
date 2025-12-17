@@ -7,6 +7,7 @@ import { getStatusConfig } from '@constants/constants'
 import { getDeadlineStatus } from '@/utils/getDeadlineStatus'
 import CommentList from '@components/commons/comment-list'
 import type { DataTabEvaluationCriterionType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports'
+import ExportAllCriteriaEvaluation from '@components/modal/export-all-criteria-evaluation'
 
 export type PutRequirementCriterion = {
     criteria: Record<string, any>
@@ -16,8 +17,10 @@ export type PutRequirementCriterion = {
 
 export default function CriteriaEvaluationListSubPage({
     data,
+    allStandards,
 }: {
     data: DataTabEvaluationCriterionType
+    allStandards?: DataTabEvaluationCriterionType[]
 }) {
     const [form] = Form.useForm<PutRequirementCriterion>()
     const [showComments, setShowComments] = useState<Record<string, boolean>>({})
@@ -110,6 +113,9 @@ export default function CriteriaEvaluationListSubPage({
                                 Xem đánh giá
                             </Button>
                         </Badge>
+                        {allStandards && allStandards.length > 0 && (
+                            <ExportAllCriteriaEvaluation standards={allStandards} />
+                        )}
                     </div>
                 </div>
 

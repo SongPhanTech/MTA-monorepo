@@ -14,7 +14,7 @@ import {
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Collapse, Form, message, Card, Tag, Badge } from 'antd'
+import { Button, Collapse, Form, message, Card, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -169,7 +169,7 @@ export default function CrossReviewSubPage({
                                     periodId: selectedEvaluationPeriodId,
                                 },
                             },
-                            status: $Enums.EvaluationStatus.APPROVED,
+                            status: $Enums.EvaluationStatus.COMPLETED,
                             deletedAt: null,
                         },
                     },
@@ -185,7 +185,7 @@ export default function CrossReviewSubPage({
                         id: selectedEvaluationPeriodId,
                     },
                     data: {
-                        status: $Enums.EvaluationPeriodStatus.CONSOLIDATION,
+                        status: $Enums.EvaluationPeriodStatus.COMPLETED,
                     },
                 })
             }
@@ -218,7 +218,7 @@ export default function CrossReviewSubPage({
                                         criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
                                     },
                                     data: {
-                                        status: $Enums.EvaluationStatus.APPROVED,
+                                        status: $Enums.EvaluationStatus.COMPLETED,
                                     },
                                 },
                             }
@@ -303,36 +303,17 @@ export default function CrossReviewSubPage({
                 </div>
 
                 <div className="flex gap-2 mr-2">
-                    {role === 'P13' ? (
-                        <Badge count={commentsCount} showZero offset={[-5, 5]}>
-                            <Button
-                                type="primary"
-                                className="bg-yellow-400"
-                                size="small"
-                                onClick={() => setShowComments(!showComments)}
-                            >
-                                Xem đánh giá
-                            </Button>
-                        </Badge>
-                    ) : (
-                        isCouncilMember &&
-                        status !== $Enums.EvaluationStatus.APPROVED &&
-                        status !== $Enums.EvaluationStatus.COMPLETED && (
-                            <>
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    className="bg-yellow-400"
-                                    onClick={() => setShowComments(!showComments)}
-                                >
-                                    Gửi ý kiến phản biện
-                                </Button>
-                                <Button type="primary" size="small" onClick={handleSubmitCross}>
-                                    Phê duyệt
-                                </Button>
-                            </>
-                        )
-                    )}
+                    <Button
+                        type="primary"
+                        size="small"
+                        className="bg-yellow-400"
+                        onClick={() => setShowComments(!showComments)}
+                    >
+                        Gửi ý kiến phản biện
+                    </Button>
+                    <Button type="primary" size="small" onClick={handleSubmitCross}>
+                        Phê duyệt
+                    </Button>
                 </div>
             </div>
 
