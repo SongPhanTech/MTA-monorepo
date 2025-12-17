@@ -118,49 +118,23 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             },
         ]
 
-        // Kiểm tra xem có phiếu phân tích nào đang yêu cầu chỉnh sửa không
-        const hasRevisionAnalysisCriterion = evaluationPeriod?.standards?.some((standard) =>
-            standard.criteria?.some(
-                (criterion) =>
-                    criterion.analysisCriterions?.status ===
-                    $Enums.EvaluationCriterionStatus.REVISION
-            )
-        )
-
-        // Kiểm tra xem có phiếu đánh giá nào đang yêu cầu chỉnh sửa không
-        const hasRevisionEvaluationCriterion = evaluationPeriod?.standards?.some((standard) =>
-            standard.criteria?.some(
-                (criterion) =>
-                    criterion.evaluationCriterion?.status === $Enums.EvaluationStatus.REVISION
-            )
-        )
-
-        const disableCrossReviewAssignmentTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
-        const disableCrossReviewTab =
-            !selectedEvaluationPeriodId ||
-            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW
         const disabledReviewAnalysisTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.DIRECTOR_REVIEW
         const disabledAdvisoryBoardTab =
             !selectedEvaluationPeriodId ||
             evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.SECRETARY_REVIEW
+        const disabledCrossReviewAssignmentTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT
 
-        if (
-            can(
-                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                'THEM'
-            )
-        ) {
-            tabs.push({
-                key: '2',
-                label: 'Phiếu phân tích tiêu chí',
-                children: <CriteriaAnalysisWrite />,
-                disabled: !selectedEvaluationPeriodId,
-            })
-        }
+        const disabledStandardReportTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CONSOLIDATION
+
+        const disabledCrossReviewTab =
+            !selectedEvaluationPeriodId ||
+            evaluationPeriod?.status !== $Enums.EvaluationPeriodStatus.CROSS_REVIEW
 
         const isAdvisoryBoard = councilMember?.role?.includes(
             $Enums.EvaluationMemberRole.ADVISORY_BOARD
@@ -176,21 +150,17 @@ export default function CriteriaAnalysisAndEvaluationPage() {
 
         const isCouncilMember = !!councilMember
 
-        if (isAdvisoryBoard) {
+        if (
+            can(
+                KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+                'THEM'
+            )
+        ) {
             tabs.push({
-                key: '3',
-                label: 'Xét duyệt phiếu (Ban tư vấn)',
-                children: <ReviewCriteriaAnalysis userRole="BAN_TU_VAN" />,
-                disabled: disabledAdvisoryBoardTab,
-            })
-        }
-
-        if (isSecretary) {
-            tabs.push({
-                key: '4',
-                label: 'Xét duyệt phiếu (Thư ký)',
-                children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
-                disabled: disabledReviewAnalysisTab,
+                key: '2',
+                label: 'Phiếu phân tích tiêu chí',
+                children: <CriteriaAnalysisWrite />,
+                disabled: !selectedEvaluationPeriodId,
             })
         }
 
@@ -201,11 +171,28 @@ export default function CriteriaAnalysisAndEvaluationPage() {
             )
         ) {
             tabs.push({
-                key: '5',
+                key: '3',
                 label: 'Phiếu đánh giá tiêu chí',
                 children: <CriteriaEvaluationWrite />,
-                // disabled: !selectedEvaluationPeriodId,
                 disabled: !selectedEvaluationPeriodId,
+            })
+        }
+
+        if (isAdvisoryBoard) {
+            tabs.push({
+                key: '4',
+                label: 'Xét duyệt phiếu (Ban tư vấn)',
+                children: <ReviewCriteriaAnalysis userRole="BAN_TU_VAN" />,
+                disabled: disabledAdvisoryBoardTab,
+            })
+        }
+
+        if (isSecretary) {
+            tabs.push({
+                key: '5',
+                label: 'Xét duyệt phiếu (Thư ký)',
+                children: <ReviewCriteriaAnalysis userRole="THU_KY" />,
+                disabled: disabledReviewAnalysisTab,
             })
         }
 
@@ -214,8 +201,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '6',
                 label: 'Báo cáo tiêu chuẩn',
                 children: <StandardReports />,
-                // disabled: disabledEvaluationWriteTab,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disabledStandardReportTab,
             })
         }
 
@@ -224,7 +210,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '7',
                 label: 'Phân công phản biện chéo',
                 children: <CrossReviewAssignment />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disabledCrossReviewAssignmentTab,
             })
         }
 
@@ -233,7 +219,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
                 key: '8',
                 label: 'Phản biện chéo',
                 children: <CrossReview userRole="REVIEWER" />,
-                disabled: !selectedEvaluationPeriodId,
+                disabled: disabledCrossReviewTab,
             })
         }
 

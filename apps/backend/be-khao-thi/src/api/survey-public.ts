@@ -88,6 +88,8 @@ const getPublicSurvey = createRoute({
                                     organization: z.string().nullable(),
                                 })
                                 .nullable(),
+                            subjectClass: models.SubjectClassScalarSchema.nullable(),
+                            semester: models.SemesterScalarSchema.nullable(),
                         })
                     ).openapi('get-survey-result'),
                 },

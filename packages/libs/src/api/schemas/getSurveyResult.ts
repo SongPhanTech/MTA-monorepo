@@ -7,6 +7,8 @@
 import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem'
 import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem'
 import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo'
+import type { GetSurveyResultSubjectClass } from './getSurveyResultSubjectClass'
+import type { GetSurveyResultSemester } from './getSurveyResultSemester'
 
 export interface GetSurveyResult {
     id: string
@@ -35,4 +37,8 @@ export interface GetSurveyResult {
     surveyChoice: GetSurveyResultSurveyChoiceItem[]
     /** @nullable */
     lectureInfo: GetSurveyResultLectureInfo
+    /** @nullable */
+    subjectClass: GetSurveyResultSubjectClass
+    /** @nullable */
+    semester: GetSurveyResultSemester
 }
