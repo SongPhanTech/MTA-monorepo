@@ -1,3 +1,4 @@
+import TreeSelect from '@/components/commons/tree-select'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
@@ -34,7 +35,6 @@ import { Button, Col, DatePicker, Flex, Form, Input, message, Popconfirm, Row, T
 import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 
 // import { getMinioUrl } from '@workspace/constant'
 
@@ -55,6 +55,7 @@ export interface PostgraduateProjectProps {
     role?: 'P7' | 'P2' | 'P13'
     isManage?: boolean
 }
+const { TextArea } = Input
 
 // component PostgraduateProject
 export default function PostgraduateProject({
@@ -62,7 +63,6 @@ export default function PostgraduateProject({
     isManage = false,
 }: PostgraduateProjectProps) {
     // dùng cho textarea của antd
-    const { TextArea } = Input
     // dùng cho spinner
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -1475,24 +1475,6 @@ export default function PostgraduateProject({
                                 },
                             },
                             {
-                                title: 'Đối tượng đào tạo',
-                                width: 120,
-                                render: (_, record) => {
-                                    return record?.fixedClass?.trainingCourse.trainingObjectType
-                                        .name
-                                },
-                            },
-                            // {
-                            //     title: 'Đợt xét',
-                            //     width: 100,
-                            //     render: (_, record) => {
-                            //         return (
-                            //             record?.thesisRegistrations?.[0]?.thesisProject
-                            //                 ?.thesisSession?.name || ''
-                            //         )
-                            //     },
-                            // },
-                            {
                                 title: 'Khoa quản lí',
                                 dataIndex: 'organization',
                                 width: 240,
@@ -1554,8 +1536,9 @@ export default function PostgraduateProject({
                             },
                             {
                                 title: 'Ngày sinh',
-                                width: 130,
+                                width: 100,
                                 dataIndex: 'name',
+                                align: 'center',
                                 render: (_, record) => {
                                     return record?.userProfile?.dateOfBirth
                                         ? dayjs(record?.userProfile?.dateOfBirth).format(
@@ -1602,7 +1585,10 @@ export default function PostgraduateProject({
                                         )
                                     }
                                     return (
-                                        record?.thesisRegistrations?.[0]?.thesisProject?.title || ''
+                                        <p className="line-clamp-2">
+                                            {record?.thesisRegistrations?.[0]?.thesisProject
+                                                ?.title || ''}
+                                        </p>
                                     )
                                 },
                             },
