@@ -95,7 +95,7 @@ const StandarReportsSubPage = ({
                                     periodId: selectedEvaluationPeriodId,
                                 },
                             },
-                            status: $Enums.EvaluationStatus.COMPLETED,
+                            status: $Enums.EvaluationStatus.APPROVED,
                             deletedAt: null,
                         },
                     },
@@ -111,7 +111,7 @@ const StandarReportsSubPage = ({
                         id: selectedEvaluationPeriodId,
                     },
                     data: {
-                        status: $Enums.EvaluationPeriodStatus.COMPLETED,
+                        status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT,
                     },
                 })
             }
@@ -144,7 +144,7 @@ const StandarReportsSubPage = ({
                                 id: i.evaluationCriterion.id,
                             },
                             data: {
-                                status: $Enums.EvaluationStatus.COMPLETED,
+                                status: $Enums.EvaluationStatus.APPROVED,
                             },
                         },
                     }

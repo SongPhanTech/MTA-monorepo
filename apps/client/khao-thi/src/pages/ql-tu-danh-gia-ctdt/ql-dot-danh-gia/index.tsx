@@ -99,10 +99,7 @@ export default function EvaluationPeriodTabPage() {
             })
         }
 
-        if (
-            idProfile === 'e0bf913a-7b9c-40ac-9a52-266a4326e02f' ||
-            can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM_CHI_TIET')
-        ) {
+        if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, 'XEM_CHI_TIET')) {
             tabs.push(
                 {
                     key: '5',
@@ -125,7 +122,7 @@ export default function EvaluationPeriodTabPage() {
             )
         }
         return tabs
-    }, [selectedEvaluationPeriodId, councilMember, can, idProfile])
+    }, [selectedEvaluationPeriodId, councilMember, can])
 
     return (
         <Row gutter={[12, 0]}>

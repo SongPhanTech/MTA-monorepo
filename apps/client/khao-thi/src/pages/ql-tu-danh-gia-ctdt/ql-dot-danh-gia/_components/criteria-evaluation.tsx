@@ -62,7 +62,13 @@ export default function CriteriaEvaluationPeriodList() {
                 return {
                     key: standard.id,
                     label: `Tiêu chuẩn ${standard.order}`,
-                    children: <CriteriaEvaluationListSubPage key={standard.id} data={standard} />,
+                    children: (
+                        <CriteriaEvaluationListSubPage
+                            key={standard.id}
+                            data={standard}
+                            allStandards={data.standards}
+                        />
+                    ),
                 }
             })
         }

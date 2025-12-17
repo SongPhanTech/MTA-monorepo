@@ -15,6 +15,7 @@ import {
     VerticalAlign,
     type IImageOptions,
     ImageRun,
+    TableOfContents,
 } from 'docx'
 import { saveAs } from 'file-saver'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -58,10 +59,13 @@ export default function ExportReport({ id }: { id: string }) {
     const exportDanhSachHoiDong = (dataTable: any) => {
         const title = new Paragraph({
             alignment: AlignmentType.CENTER,
+            heading: HeadingLevel.HEADING_1,
             children: [
                 new TextRun({
                     text: 'DANH SÁCH CÁC ĐỒNG CHÍ THAM GIA HỘI ĐỒNG',
                     bold: true,
+                    size: 32,
+                    color: '000000',
                 }),
             ],
         })
@@ -170,10 +174,13 @@ export default function ExportReport({ id }: { id: string }) {
     const exportDanhSachMinhchung = (dataTable: any) => {
         const title = new Paragraph({
             alignment: AlignmentType.CENTER,
+            heading: HeadingLevel.HEADING_1,
             children: [
                 new TextRun({
                     text: 'BẢNG DANH MỤC MINH CHỨNG',
                     bold: true,
+                    size: 32,
+                    color: '000000',
                 }),
             ],
         })
@@ -515,148 +522,6 @@ export default function ExportReport({ id }: { id: string }) {
                 if (!data) return
                 const { evidenceTags, result }: any = CalcevidenceTags(data?.standards)
 
-                // Tạo mục lục thủ công
-                const tableOfContentsChildren: Paragraph[] = [
-                    new Paragraph({
-                        alignment: AlignmentType.CENTER,
-                        spacing: { after: 400 },
-                        children: [
-                            new TextRun({
-                                text: 'MỤC LỤC',
-                                bold: true,
-                                size: 32,
-                                color: '000000',
-                            }),
-                        ],
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: '' })],
-                        spacing: { after: 200 },
-                    }),
-                    // Danh sách hội đồng
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: 'Danh sách các đồng chí tham gia hội đồng',
-                                bold: true,
-                                size: 28,
-                            }),
-                            new TextRun({
-                                text: '\t',
-                            }),
-                        ],
-                        tabStops: [
-                            {
-                                type: 'right',
-                                position: 9000,
-                                leader: 'dot',
-                            },
-                        ],
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: '' })],
-                        spacing: { after: 200 },
-                    }),
-                ]
-
-                // Thêm các tiêu chuẩn vào mục lục
-                data.standards.forEach((standard: any, idx: number) => {
-                    tableOfContentsChildren.push(
-                        new Paragraph({
-                            children: [
-                                new TextRun({
-                                    text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
-                                    bold: true,
-                                    size: 28,
-                                }),
-                                new TextRun({
-                                    text: '\t',
-                                }),
-                            ],
-                            tabStops: [
-                                {
-                                    type: 'right',
-                                    position: 9000,
-                                    leader: 'dot',
-                                },
-                            ],
-                        })
-                    )
-
-                    // Thêm các tiêu chí vào mục lục
-                    standard.criteria.forEach((criterion: any, cIdx: number) => {
-                        tableOfContentsChildren.push(
-                            new Paragraph({
-                                indent: { left: 360 },
-                                children: [
-                                    new TextRun({
-                                        text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
-                                        italics: true,
-                                        size: 26,
-                                    }),
-                                    new TextRun({
-                                        text: '\t',
-                                    }),
-                                ],
-                                tabStops: [
-                                    {
-                                        type: 'right',
-                                        position: 9000,
-                                        leader: 'dot',
-                                    },
-                                ],
-                            })
-                        )
-                    })
-
-                    tableOfContentsChildren.push(
-                        new Paragraph({
-                            indent: { left: 360 },
-                            children: [
-                                new TextRun({
-                                    text: `Kết luận về Tiêu chuẩn ${idx + 1}`,
-                                    italics: true,
-                                    size: 26,
-                                }),
-                                new TextRun({
-                                    text: '\t',
-                                }),
-                            ],
-                            tabStops: [
-                                {
-                                    type: 'right',
-                                    position: 9000,
-                                    leader: 'dot',
-                                },
-                            ],
-                        })
-                    )
-                })
-
-                // Thêm mục Danh sách minh chứng
-                tableOfContentsChildren.push(
-                    new Paragraph({
-                        spacing: { before: 200 },
-                        children: [
-                            new TextRun({
-                                text: 'Bảng danh mục minh chứng',
-                                bold: true,
-                                size: 28,
-                            }),
-                            new TextRun({
-                                text: '\t',
-                            }),
-                        ],
-                        tabStops: [
-                            {
-                                type: 'right',
-                                position: 9000,
-                                leader: 'dot',
-                            },
-                        ],
-                    })
-                )
-
                 const listMembers = await Promise.all([
                     {
                         children: exportDanhSachHoiDong(data?.council?.members),
@@ -811,20 +676,27 @@ export default function ExportReport({ id }: { id: string }) {
                                     )
                                 ))
                             )
-
-                            // children.push(
-                            //     new Paragraph({
-                            //         indent: { firstLine: 720 },
-                            //         alignment: AlignmentType.JUSTIFIED,
-                            //         children: [
-                            //             new TextRun({
-                            //                 text: '5. Tự đánh giá',
-                            //                 italics: true,
-                            //                 size: 28,
-                            //             }),
-                            //         ],
-                            //     })
-                            // )
+                            children.push(
+                                new Paragraph({
+                                    indent: { firstLine: 720 },
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    children: [
+                                        new TextRun({
+                                            text: '5. Tự đánh giá',
+                                            italics: true,
+                                            size: 28,
+                                        }),
+                                    ],
+                                })
+                            )
+                            children.push(
+                                ...(await htmlToParagraphs(
+                                    processHtmlContent(
+                                        criterion?.evaluationCriterion?.score || '',
+                                        evidenceTags
+                                    )
+                                ))
+                            )
                         }
 
                         // Kết luận
@@ -867,7 +739,24 @@ export default function ExportReport({ id }: { id: string }) {
                             properties: {
                                 type: 'nextPage',
                             },
-                            children: tableOfContentsChildren,
+                            children: [
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    heading: HeadingLevel.HEADING_1,
+                                    children: [
+                                        new TextRun({
+                                            text: 'MỤC LỤC',
+                                            bold: true,
+                                            size: 32,
+                                            color: '000000',
+                                        }),
+                                    ],
+                                }),
+                                new TableOfContents('Mục lục', {
+                                    hyperlink: true,
+                                    headingStyleRange: '1-2',
+                                }),
+                            ],
                         },
                         ...sections,
                     ],
