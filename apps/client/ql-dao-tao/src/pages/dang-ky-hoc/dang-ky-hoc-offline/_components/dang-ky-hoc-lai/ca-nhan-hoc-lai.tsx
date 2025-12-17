@@ -2,13 +2,15 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useStore } from '@tanstack/react-store'
+import { $Enums } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyTrainingCourse,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -39,9 +41,32 @@ export default function CaNhanHocLai() {
         },
         select: {
             subjectId: true,
+            subject: {
+                select: {
+                    studentSubjectScore: {
+                        select: {
+                            finalScore: true,
+                            student: {
+                                select: {
+                                    fixedClass: {
+                                        select: {
+                                            trainingCourse: {
+                                                select: {
+                                                    scoreConverts: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         },
     })
 
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
@@ -77,93 +102,53 @@ export default function CaNhanHocLai() {
 
     const handleSaveStudentClass = async () => {
         try {
-            // const allSubjectClassInfo = await sqlTransaction(
-            //     selectedSubjectClassRowKeys.map((subjectClassId) => ({
-            //         model: 'SubjectClass',
-            //         operation: 'findUnique',
-            //         data: {
-            //             where: { id: subjectClassId },
-            //             select: {
-            //                 id: true,
-            //                 subjectId: true,
-            //                 subject: {
-            //                     select: {
-            //                         // Lấy điểm cao nhất của sinh viên trong các lần đăng ký học cải thiện
-            //                         studentSubjectScore: {
-            //                             where: {
-            //                                 studentId,
-            //                             },
-            //                             orderBy: {
-            //                                 finalScore: 'desc',
-            //                             },
-            //                             select: {
-            //                                 finalScore: true,
-            //                                 student: {
-            //                                     select: {
-            //                                         fixedClass: {
-            //                                             select: {
-            //                                                 trainingCourse: {
-            //                                                     select: {
-            //                                                         scoreConverts: true,
-            //                                                     },
-            //                                                 },
-            //                                             },
-            //                                         },
-            //                                     },
-            //                                 },
-            //                             },
-            //                         },
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     }))
-            // )
-            // if (allSubjectClassInfo.status !== 200) {
-            //     throw new Error('Có lỗi xảy ra khi lấy thông tin lớp học phần!')
-            // }
-            // const res = await sqlTransaction([
-            //     {
-            //         model: 'StudentSubjectScore',
-            //         operation: 'deleteMany',
-            //         data: {
-            //             where: {
-            //                 subjectClass: {
-            //                     semesterId,
-            //                     trainingObjectTypeId,
-            //                     type: $Enums.SubjectClassType.RETAKE,
-            //                 },
-            //             },
-            //         },
-            //     },
-            //     ...allSubjectClassInfo.data.map((subjectClass: any) => ({
-            //         model: 'StudentSubjectScore' as const,
-            //         operation: 'create',
-            //         data: {
-            //             data: {
-            //                 studentId,
-            //                 subjectClassId: subjectClass.id,
-            //                 subjectVersionId: subjectClass.subjectId,
-            //                 isImproving:
-            //                     subjectClass.subject.studentSubjectScore.length > 0 &&
-            //                     subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
-            //                         ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
-            //                               (sc: ScoreConvert) =>
-            //                                   sc?.base10Min <=
-            //                                       subjectClass.subject.studentSubjectScore[0]
-            //                                           ?.finalScore &&
-            //                                   subjectClass.subject.studentSubjectScore[0]
-            //                                       ?.finalScore <= sc?.base10Max &&
-            //                                   sc?.improvementRegister
-            //                           )
-            //                         : false,
-            //             },
-            //         },
-            //     })),
-            // ])
-            // if (res.status !== 200) {
-            //     throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
-            // }
+            if (!subjectClassData) return
+            const res = await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                type: $Enums.SubjectClassType.RETAKE,
+                            },
+                        },
+                    },
+                },
+                ...studentIds.map((studentId: string) => ({
+                    model: 'StudentSubjectScore' as const,
+                    operation: 'create',
+                    data: {
+                        data: {
+                            studentId,
+                            subjectClassId: subjectClassId,
+                            subjectVersionId: subjectClassData.subjectId,
+                            isImproving:
+                                subjectClassData.subject.studentSubjectScore.length > 0 &&
+                                subjectClassData.subject.studentSubjectScore[0]?.finalScore !== null
+                                    ? subjectClassData.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                                          (sc) =>
+                                              sc?.base10Min <=
+                                                  (subjectClassData?.subject?.studentSubjectScore?.[0]?.finalScore?.toNumber?.() ||
+                                                      0) &&
+                                              (subjectClassData?.subject?.studentSubjectScore?.[0]?.finalScore?.toNumber?.() ||
+                                                  0) <= sc?.base10Max &&
+                                              sc?.improvementRegister
+                                      )
+                                    : false,
+                        },
+                    },
+                })),
+            ])
+            if (res.status !== 200) {
+                throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+            }
+            dangKyHocLaiStore.setState((prev) => ({
+                ...prev,
+                studentIds: [],
+            }))
             message.success('Lưu đăng ký học lại thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })

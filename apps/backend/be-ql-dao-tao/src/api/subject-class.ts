@@ -912,7 +912,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id)
+                        where TBS."subjectId" = sv.id and (SSS."attendanceScore" is not null
+                                                            or SSS."midtermScore" is not null
+                                                            or SSS."examScore" is not null
+                                                            or SSS."finalScore" is not null))
         select "studentId",
                diem_cuoi,
                withdrew,
