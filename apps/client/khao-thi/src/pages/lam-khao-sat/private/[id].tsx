@@ -8,19 +8,17 @@ import type { SurveySession } from '@workspace/db'
 import { useSuspenseFindFirstStudent } from '@workspace/db/hooks'
 import { useSavePublicSurvey, getPrivateSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Radio, Row } from 'antd'
 
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Confetti from 'react-confetti'
 
 type PutSurveySession = SurveySession & {
     responses: {
-        surveyQuestionId: string
         surveyChoiceId?: string
         answerText?: string
         explanation?: string
-        requireExplanation?: boolean
     }[]
     additionalSuggestion: string
 }
@@ -46,59 +44,9 @@ function TakeTestPage() {
     const [survey, setSurvey] = useState<SurveyType>()
     const [isLoading, setIsLoading] = useState(true)
     const [isDone, setIsDone] = useState(false)
-    const [selected, setSelected] = useState<
-        {
-            surveyQuestionId: string
-            surveyChoiceId?: string
-            answerText?: string
-            explanation?: string
-            requireExplanation?: boolean
-        }[]
-    >([])
-    const [requireExplanation, setRequireExplanation] = useState<string[]>([])
 
     // const { data } =  useGetPublicSurvey(id)
     const { mutateAsync: createSavePublicSurvey } = useSavePublicSurvey()
-    const onChange = (SurveyQuestionId: string, value: string, requireExplanation: boolean) => {
-        const result = form.getFieldValue('responses').map((i: { surveyQuestionId?: string }) => {
-            if (i.surveyQuestionId === SurveyQuestionId) {
-                if (!requireExplanation) {
-                    return {
-                        ...i,
-                        surveyChoiceId: value,
-                        explanation: '',
-                        requireExplanation: false,
-                    }
-                }
-                return {
-                    ...i,
-                    surveyChoiceId: value,
-                    requireExplanation: true,
-                }
-            }
-            return { ...i }
-        })
-
-        form.setFieldsValue({
-            responses: result,
-        })
-        setSelected(result)
-        const listRequireExplanation = result
-            .filter((i: { requireExplanation?: boolean }) => i.requireExplanation === true)
-            .map((j: any) => j.surveyQuestionId)
-        setRequireExplanation(listRequireExplanation)
-    }
-
-    const checkedQuestion = useCallback(
-        (surveyQuestionId: string, surveyChoiceId: string) => {
-            if (!selected) return false
-            return !!selected?.filter(
-                (i: { surveyQuestionId?: string; surveyChoiceId?: string }) =>
-                    i.surveyQuestionId === surveyQuestionId && i.surveyChoiceId === surveyChoiceId
-            ).length
-        },
-        [selected]
-    )
 
     const { data: student } = useSuspenseFindFirstStudent({
         where: {
@@ -109,65 +57,72 @@ function TakeTestPage() {
         },
     })
 
-    const dataTest = useMemo(() => {
-        const groupedMap = (survey?.surveyQuestion ?? []).reduce<
-            Record<string, GroupedSurveyQuestion>
-        >((acc: any, item: any, index: number) => {
-            const groupId = item.surveyQuestionGroupId
+    const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 
-            if (!acc[groupId]) {
-                acc[groupId] = {
-                    id: item.surveyQuestionGroup.id,
-                    name: item.surveyQuestionGroup.name,
-                    children: [],
-                }
-            }
+    const handleChange = (questionId: string, value: any) => {
+        const choice = survey?.surveyChoice.find((i) => i.id === value)
+        if (choice?.requireExplanation) {
+            setExpandedRowKeys((prev) => (prev.includes(questionId) ? prev : [...prev, questionId]))
+        }
+    }
 
-            acc[groupId].children.push({
-                id: item.id,
-                name: item.name,
-                type: item.type,
-            })
+    // const dataTest = useMemo(() => {
+    //     const groupedMap = (survey?.surveyQuestion ?? []).reduce<
+    //         Record<string, GroupedSurveyQuestion>
+    //     >((acc: any, item: any, index: number) => {
+    //         const groupId = item.surveyQuestionGroupId
 
-            return acc
-        }, {})
+    //         if (!acc[groupId]) {
+    //             acc[groupId] = {
+    //                 id: item.surveyQuestionGroup.id,
+    //                 name: item.surveyQuestionGroup.name,
+    //                 children: [],
+    //             }
+    //         }
 
-        // Chuyển thành array
-        const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
-            return { ...i, name: `${index + 1}. ${i.name}` }
-        })
-        return grouped || []
-        // return classGroups
-    }, [survey?.surveyQuestion])
+    //         acc[groupId].children.push({
+    //             id: item.id,
+    //             name: item.name,
+    //             type: item.type,
+    //         })
+
+    //         return acc
+    //     }, {})
+
+    //     // Chuyển thành array
+    //     const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
+    //         return { ...i, name: `${index + 1}. ${i.name}` }
+    //     })
+    //     return grouped || []
+    //     // return classGroups
+    // }, [survey?.surveyQuestion])
+    const requireExplanation = useMemo(() => {
+        return survey?.surveyChoice?.filter((i: any) => !!i?.requireExplanation).map((i) => i.id)
+    }, [survey])
 
     async function onOk() {
         const dataSubmit = form.getFieldsValue()
+
         const responsesError = dataSubmit?.responses.filter(
-            (i: any) => i?.type === 'SINGLE_CHOICE' && !i.surveyChoiceId
+            (i: any) => !i?.answerText && !i.surveyChoiceId
         )
+
         if (
-            (!dataSubmit.additionalSuggestion && survey?.additionalSuggestion === true) ||
-            responsesError?.length
+            responsesError?.length ||
+            survey?.surveyQuestion?.length !== dataSubmit?.responses?.length
         ) {
             message.error('Bạn chưa hoàn thành mẫu khảo sát')
             return
         }
 
-        const reason = dataSubmit.responses.filter(
-            (i: { requireExplanation?: boolean; explanation?: string; type?: string }) =>
-                i.requireExplanation === true && !i.explanation && i.type === 'SINGLE_CHOICE'
+        const reason = dataSubmit?.responses.filter(
+            (i: any) => requireExplanation?.includes(i?.surveyChoiceId) && !i.explanation
         )
         if (reason.length) {
             message.error('Bạn chưa nhập lý do cho những khảo sát đặc biệt')
             return
         }
-        const reason2 = dataSubmit.responses.filter(
-            (i: { answerText?: string; type?: string }) => !i.answerText && i.type === 'ESSAY'
-        )
-        if (reason2.length) {
-            message.error('Bạn chưa hoàn thành câu hỏi tự luận')
-            return
-        }
+
         try {
             showSpinner()
             const res = await createSavePublicSurvey({
@@ -178,12 +133,12 @@ function TakeTestPage() {
                     profileId: profileId,
                     studentId: student?.id,
                     studentCode: student?.code || undefined,
-                    responses: dataSubmit?.responses?.map((i) => {
+                    responses: dataSubmit?.responses?.map((i, index) => {
                         return {
-                            surveyQuestionId: i.surveyQuestionId,
-                            surveyChoiceId: i.surveyChoiceId,
-                            explanation: i.explanation,
-                            answerText: i.answerText,
+                            surveyQuestionId: survey?.surveyQuestion[index]?.id,
+                            surveyChoiceId: i?.surveyChoiceId,
+                            explanation: i?.explanation,
+                            answerText: i?.answerText,
                         }
                     }),
                 },
@@ -215,28 +170,6 @@ function TakeTestPage() {
             }
             setSurvey(response?.data)
             setStartAt(new Date())
-            const list = response?.data?.surveyQuestion?.map((i) => {
-                if (i?.type === 'SINGLE_CHOICE') {
-                    return {
-                        surveyQuestionId: i.id,
-                        surveyChoiceId: '',
-                        explanation: '',
-                        type: i.type,
-                    }
-                }
-                return {
-                    surveyQuestionId: i.id,
-                    answerText: '',
-                    type: i.type,
-                }
-            })
-
-            form.setFieldsValue({
-                responses: list,
-                additionalSuggestion: '',
-            })
-            setSelected(list)
-            setRequireExplanation([])
         } else {
             message.error(response?.data?.message)
         }
@@ -270,8 +203,83 @@ function TakeTestPage() {
             <Confetti width={window?.innerWidth || 1000} height={window?.innerHeight || 1000} />
         </div>
     ) : (
-        <Form form={form} className="p-6 max-w-[1100px] w-full mx-auto">
-            <div className="text-xl font-bold">{survey?.name}</div>
+        <Form form={form} className="px-6 max-w-[1100px] w-full mx-auto">
+            <div className="text-xl font-bold mb-4 text-center uppercase color-black">
+                {survey?.name}
+            </div>
+            {survey?.lectureInfo && (
+                <Row gutter={[0, 2]} className="mb-3 color-black">
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Tên giảng viên: </div>
+                            <span>
+                                {survey?.lectureInfo?.lastName || ''}{' '}
+                                {survey?.lectureInfo?.firstName || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Tên học phần: </div>
+                            <span>
+                                {survey?.subjectClass?.code || ''}{' '}
+                                {survey?.subjectClass?.name || ''}
+                            </span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
+                            <span>{survey?.lectureInfo?.organization || ''}</span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={6}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Bộ môn: </div>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={6}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Lớp: </div>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Ngày lấy ý kiến: </div>
+                            {/* <span>{dayjs(new Date()).format('DD/MM/YYYY')}</span> */}
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={12}>
+                        <div className="flex items-end">
+                            <div className="!w-fit whitespace-nowrap">Học kỳ: </div>
+                            <span>{survey?.semester?.name || ''}</span>
+                            {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="italic indent-8 mt-4">
+                            Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người
+                            học, Học viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng ,
+                            cho ý kiến về hoạt động giảng dạy của giảng viên thông qua phiếu phản
+                            hồi này. Thông tin do Anh/Chị cung cấp sẽ được Học viên bảo mật và xử lý
+                            đảm bảo không làm ảnh hưởng đến kết quả học tập, rèn luyên của Anh/Chị
+                        </div>
+                    </Col>
+                    <Col span={24}>
+                        <div className="italic indent-8">
+                            Đề nghị Anh/chị đánh xấu "X" vào các ô tương ứng với nội dung trong bảng
+                            câu hỏi theo thang phản hồi
+                        </div>
+                    </Col>
+                </Row>
+            )}
+
             {survey?.surveyChoice?.length && (
                 <Row gutter={[16, 16]}>
                     <Col span={24}>
@@ -296,11 +304,108 @@ function TakeTestPage() {
                             pagination={false}
                         />
                     </Col>
-                    <Col span={24} className="text-base text-[#e80808]">
+                    <Col span={24} className="text-[14px] text-[#e80808]">
                         Nếu ở mức (*), bạn phải ghi rõ lý do
                     </Col>
 
-                    <Col span={24}>
+                    <Col span={24} className="mb-3">
+                        <Table
+                            rowKey="id"
+                            dataSource={survey?.surveyQuestion || []}
+                            pagination={false}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
+                                    title: 'Nội dung phản hồi',
+                                    dataIndex: 'content',
+                                    render: (_, record) => {
+                                        return (
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: record?.name,
+                                                }}
+                                            />
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Mức phản hồi',
+                                    width: 200,
+                                    align: 'center',
+                                    render: (_, record, qIndex) => {
+                                        return record?.type === 'SINGLE_CHOICE' ? (
+                                            <Form.Item
+                                                name={['responses', qIndex, 'surveyChoiceId']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Vui lòng chọn mức phản hồi',
+                                                    },
+                                                ]}
+                                                style={{ marginBottom: 0 }}
+                                                className="w-full"
+                                            >
+                                                <Radio.Group
+                                                    className="w-full gap-x-2 flex"
+                                                    onChange={(e) =>
+                                                        handleChange(record.id, e.target.value)
+                                                    }
+                                                >
+                                                    {survey?.surveyChoice.map((i) => (
+                                                        <Radio.Button key={i?.id} value={i?.id}>
+                                                            {i?.answer}
+                                                        </Radio.Button>
+                                                    ))}
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        ) : (
+                                            <Form.Item
+                                                name={['responses', qIndex, 'answerText']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Nhập câu trả lời',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input.TextArea placeholder="Nhập câu trả lời" />
+                                            </Form.Item>
+                                        )
+                                    },
+                                },
+                            ]}
+                            expandable={{
+                                expandedRowKeys,
+                                showExpandColumn: false,
+                                expandedRowRender: (record, index) => (
+                                    <Form.Item
+                                        label="Lý do"
+                                        name={['responses', index, 'explanation']}
+                                        // rules={[
+                                        //     {
+                                        //     required:
+                                        //         form.getFieldValue(['responses', record.id]) === 4,
+                                        //     message: 'Vui lòng nhập lý do',
+                                        //     },
+                                        // ]}
+                                    >
+                                        <Input.TextArea
+                                            rows={3}
+                                            placeholder="Nhập lý do tại đây..."
+                                        />
+                                    </Form.Item>
+                                ),
+                            }}
+                            bordered={true}
+                        />
+                    </Col>
+
+                    {/* <Col span={24}>
                         <Form.List name="responses">
                             {(fields) => (
                                 <>
@@ -341,7 +446,6 @@ function TakeTestPage() {
                                                                     </div>
                                                                 </div>
 
-                                                                {/* Nếu requireExplanation true thì hiển thị input */}
                                                                 {requireExplanation?.length > 0 &&
                                                                     requireExplanation.includes(
                                                                         q?.id
@@ -374,7 +478,6 @@ function TakeTestPage() {
                                                                     )}
                                                             </>
                                                         ) : (
-                                                            // ESSAY
                                                             <>
                                                                 <div className="mb-2">
                                                                     {sectionIndex + 1}.{qIndex + 1}.{' '}
@@ -402,7 +505,7 @@ function TakeTestPage() {
                                 </>
                             )}
                         </Form.List>
-                    </Col>
+                    </Col> */}
                     {survey.additionalSuggestion && (
                         <Col span={24}>
                             <div className="mb-3 font-bold">Ý kiến khác :</div>

@@ -22,6 +22,8 @@ export type GetClassRegisterSession200Item = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     startDate: string | null

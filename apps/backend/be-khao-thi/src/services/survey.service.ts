@@ -111,7 +111,6 @@ export const getSurveyStats = async (
     questions: SurveyQuestion[],
     choices: SurveyChoice[]
 ) => {
-
     const questionIds = questions.map((q) => q.id)
 
     const answerCounts = await prisma.surveyResponse.groupBy({
@@ -189,9 +188,6 @@ export const getSurveyStats = async (
         // const average = Number((totalRate / questionsStatistics.length).toFixed(2))
         return { average: 0, totalRate: count }
     })
-
-  
-    
 
     return {
         surveyId: survey.id,

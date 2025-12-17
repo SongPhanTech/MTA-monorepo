@@ -20,6 +20,8 @@ export type GetClassRegisterSession200ItemSemester = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     shortName?: string | null
@@ -28,6 +30,6 @@ export type GetClassRegisterSession200ItemSemester = {
     /** @nullable */
     startDate: string | null
     /** @nullable */
-    endDate?: string | null
+    endDate: string | null
     schoolYear: GetClassRegisterSession200ItemSemesterSchoolYear
 }

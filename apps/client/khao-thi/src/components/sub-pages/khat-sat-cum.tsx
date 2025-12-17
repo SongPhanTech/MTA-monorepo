@@ -128,7 +128,7 @@ function TabDotKhaoSatCum({
                   }
                 : {}),
         }),
-        [filters,semesterId]
+        [filters, semesterId]
     )
 
     const { data = [], refetch } = useFindManyClusterSurvey({
@@ -252,9 +252,8 @@ function TabDotKhaoSatCum({
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
 
-
-        const { onOpen: onOpenPrint } = useDisclosure<{ id:string }>({
-        tag: 'ModalPrintExamSurvey',
+    const { onOpen: onOpenPrint } = useDisclosure<{ id: string }>({
+        tag: 'ModalPrintExamClusterSurvey',
     })
 
     return (
@@ -460,7 +459,7 @@ function TabDotKhaoSatCum({
                                                 >
                                                     <EyeOutlined
                                                         onClick={() => {
-                                                          onOpenPrint({id})
+                                                            onOpenPrint({ id })
                                                         }}
                                                         style={{ fontSize: '16px' }}
                                                     />

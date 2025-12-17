@@ -20,5 +20,5 @@ export {
     ModalChiTietLopBienChe,
     ModalChiTietMonHoc,
     ModalChiTietSinhVien,
-    PutOneSubjectClassModal
+    PutOneSubjectClassModal,
 }

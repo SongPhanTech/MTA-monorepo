@@ -334,13 +334,11 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                                       return `Câu hỏi ${index + 1}`
                                   },
                               },
-                                  {
+                              {
                                   title: 'Nội dung câu hỏi',
                                   align: 'left',
                                   render: (_, record, index) => {
-                                      return  <HtmlTruncate>
-                                          {record?.name}
-                                      </HtmlTruncate>
+                                      return <HtmlTruncate>{record?.name}</HtmlTruncate>
                                   },
                               },
                               // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>

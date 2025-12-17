@@ -139,9 +139,9 @@ function LecturerSurveyReport({
                                   id: i?.id,
                                   dataIndex: i?.id,
                                   align: 'center',
-                                  render: (__: any, record: any,idx:number) => {
-                                       const count = calculatePercent(record?.average)[idx]
-                                         return (
+                                  render: (__: any, record: any, idx: number) => {
+                                      const count = calculatePercent(record?.average)[idx]
+                                      return (
                                           `${count?.percent || 0}% (${count?.totalRate || 0}/${count?.total})` ||
                                           '0'
                                       )
@@ -171,13 +171,13 @@ function LecturerSurveyReport({
         )
     }
 
-            function calculatePercent(items: any[]): any[] {
-                
+    function calculatePercent(items: any[]): any[] {
         const total = items.reduce((sum, item) => sum + item.totalRate, 0)
         return items.map((item) => ({
             ...item,
             total,
-            percent: total === 0 ? 0 : Number.parseFloat(((item.totalRate / total) * 100).toFixed(2)),
+            percent:
+                total === 0 ? 0 : Number.parseFloat(((item.totalRate / total) * 100).toFixed(2)),
         }))
     }
 

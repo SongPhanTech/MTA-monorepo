@@ -5,7 +5,6 @@ import { SessionContext } from './provider'
 export const useSession = () => {
     const { sessionState, setSessionState, setStatus, status } = useContext(SessionContext)
     // const router = useRouter()
-    console.log(process.env)
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {

@@ -149,6 +149,8 @@ app.openapi(getPublicSurvey, async (c) => {
                     },
                 },
             },
+            subjectClass: true,
+            semester: true,
         },
     })
     if (!survey) {

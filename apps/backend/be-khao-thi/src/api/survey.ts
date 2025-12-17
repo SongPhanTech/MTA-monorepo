@@ -1031,9 +1031,9 @@ app.openapi(getSurveysByProfile, async (c) => {
             subjectClass: true,
             surveyQuestion: true,
             surveySessions: {
-                where:{
-                    profileId:id
-                }
+                where: {
+                    profileId: id,
+                },
             },
         },
         take: limit,
@@ -1156,6 +1156,8 @@ app.openapi(getPrivateSurvey, async (c) => {
                     },
                 },
             },
+            subjectClass: true,
+            semester: true,
         },
     })
     if (!survey) {

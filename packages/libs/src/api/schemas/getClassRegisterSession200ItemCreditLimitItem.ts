@@ -20,6 +20,8 @@ export type GetClassRegisterSession200ItemCreditLimitItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     minCredit?: number
     maxCredit?: number
     baseScore: GetClassRegisterSession200ItemCreditLimitItemBaseScore

@@ -18,6 +18,8 @@ export type GetClassRegisterSession200ItemSemesterSchoolYear = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     name: string
     /** @nullable */
     startDate: string | null

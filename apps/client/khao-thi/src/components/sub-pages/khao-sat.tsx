@@ -104,7 +104,7 @@ function TabDotKhaoSat({
                   }
                 : {}),
         }),
-        [filters,semesterId]
+        [filters, semesterId]
     )
 
     const { data = [], refetch } = useFindManySurvey({
@@ -190,6 +190,10 @@ function TabDotKhaoSat({
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
         orderBy: { name: 'asc' },
+    })
+
+    const { onOpen: onOpenPrint } = useDisclosure<{ id: string }>({
+        tag: 'ModalPrintExamSurvey',
     })
     return (
         <div>
@@ -401,6 +405,24 @@ function TabDotKhaoSat({
                                                     />
                                                 </Tooltip>
                                             )} */}
+                                        {surveyQuestion?.length > 0 &&
+                                            can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'XEM_CHI_TIET'
+                                            ) && (
+                                                <Tooltip
+                                                    className="mr-2"
+                                                    title={'Xem đề khảo sát'}
+                                                    placement="top"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={() => {
+                                                            onOpenPrint({ id })
+                                                        }}
+                                                        style={{ fontSize: '16px' }}
+                                                    />
+                                                </Tooltip>
+                                            )}
 
                                         {surveyQuestion?.length > 0 &&
                                             can(

@@ -46,7 +46,7 @@ import {
     message,
     Upload,
     type UploadFile,
-    type UploadProps
+    type UploadProps,
 } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
@@ -65,7 +65,7 @@ export default function UpdateUserPage() {
     const router = useRouter()
     const { data: sessionData } = useSession()
 
-    const id = sessionData?.sDM_NhanVienId  || ''
+    const id = sessionData?.sDM_NhanVienId || ''
     // const id = router.query.id as string
     const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')

@@ -108,3 +108,35 @@
 .ant-layout {
     background: #ffffff;
 }
+
+.ant-radio-button-wrapper {
+    border: 1px solid #ff4d4f;
+    border-radius: 6px !important;
+    min-width: 32px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    color: #ff4d4f;
+    background: #fff;
+    margin-right: 6px;
+    padding-inline: 0;
+    font-weight: 500;
+}
+
+/* Khi hover */
+.ant-radio-button-wrapper:hover {
+    color: #ff4d4f;
+    border-color: #ff4d4f;
+}
+
+/* Khi được chọn */
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background-color: #ff4d4f;
+    border-color: #ff4d4f;
+    color: #fff;
+    box-shadow: none;
+}
+
+.ant-radio-button-wrapper:first-child {
+    border: 1px solid #ff4d4f;
+}

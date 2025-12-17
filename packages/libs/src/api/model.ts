@@ -37,6 +37,7 @@ import type {
     ExportTableBySqlParams,
     GetColumns200Item,
     GetColumnsParams,
+    GetConfigLogsParams,
     GetDatabases200Item,
     GetDatabasesParams,
     GetSessionParams,
@@ -57,6 +58,8 @@ import type {
     Throughput200Item,
     ThroughputParams,
     Unauthorized,
+    UpdateConfigLogs200,
+    UpdateConfigLogsBody,
     UrlDto,
 } from './schemas'
 
@@ -213,6 +216,234 @@ export function useGetSession<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+export type getConfigLogsResponse200 = {
+    data: boolean
+    status: 200
+}
+
+export type getConfigLogsResponseSuccess = getConfigLogsResponse200 & {
+    headers: Headers
+}
+
+export type getConfigLogsResponse = getConfigLogsResponseSuccess
+
+export const getGetConfigLogsUrl = (params: GetConfigLogsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/apim-logs/config-logs?${stringifiedParams}`
+        : `/api/apim-logs/config-logs`
+}
+
+export const getConfigLogs = async (
+    params: GetConfigLogsParams,
+    options?: RequestInit
+): Promise<getConfigLogsResponse> => {
+    return customModelFetch<getConfigLogsResponse>(getGetConfigLogsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getGetConfigLogsQueryKey = (params?: GetConfigLogsParams) => {
+    return [`/api/apim-logs/config-logs`, ...(params ? [params] : [])] as const
+}
+
+export const getGetConfigLogsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getConfigLogs>>,
+    TError = unknown,
+>(
+    params: GetConfigLogsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetConfigLogsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigLogs>>> = ({ signal }) =>
+        getConfigLogs(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getConfigLogs>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetConfigLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getConfigLogs>>>
+export type GetConfigLogsQueryError = unknown
+
+export function useGetConfigLogs<
+    TData = Awaited<ReturnType<typeof getConfigLogs>>,
+    TError = unknown,
+>(
+    params: GetConfigLogsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getConfigLogs>>,
+                    TError,
+                    Awaited<ReturnType<typeof getConfigLogs>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigLogs<
+    TData = Awaited<ReturnType<typeof getConfigLogs>>,
+    TError = unknown,
+>(
+    params: GetConfigLogsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getConfigLogs>>,
+                    TError,
+                    Awaited<ReturnType<typeof getConfigLogs>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigLogs<
+    TData = Awaited<ReturnType<typeof getConfigLogs>>,
+    TError = unknown,
+>(
+    params: GetConfigLogsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetConfigLogs<
+    TData = Awaited<ReturnType<typeof getConfigLogs>>,
+    TError = unknown,
+>(
+    params: GetConfigLogsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetConfigLogsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type updateConfigLogsResponse200 = {
+    data: UpdateConfigLogs200
+    status: 200
+}
+
+export type updateConfigLogsResponseSuccess = updateConfigLogsResponse200 & {
+    headers: Headers
+}
+
+export type updateConfigLogsResponse = updateConfigLogsResponseSuccess
+
+export const getUpdateConfigLogsUrl = () => {
+    return `/api/apim-logs/config-logs`
+}
+
+export const updateConfigLogs = async (
+    updateConfigLogsBody: UpdateConfigLogsBody,
+    options?: RequestInit
+): Promise<updateConfigLogsResponse> => {
+    return customModelFetch<updateConfigLogsResponse>(getUpdateConfigLogsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(updateConfigLogsBody),
+    })
+}
+
+export const getUpdateConfigLogsMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof updateConfigLogs>>,
+        TError,
+        { data: UpdateConfigLogsBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateConfigLogs>>,
+    TError,
+    { data: UpdateConfigLogsBody },
+    TContext
+> => {
+    const mutationKey = ['updateConfigLogs']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateConfigLogs>>,
+        { data: UpdateConfigLogsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return updateConfigLogs(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateConfigLogsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateConfigLogs>>
+>
+export type UpdateConfigLogsMutationBody = UpdateConfigLogsBody
+export type UpdateConfigLogsMutationError = unknown
+
+export const useUpdateConfigLogs = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateConfigLogs>>,
+            TError,
+            { data: UpdateConfigLogsBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customModelFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateConfigLogs>>,
+    TError,
+    { data: UpdateConfigLogsBody },
+    TContext
+> => {
+    const mutationOptions = getUpdateConfigLogsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 export type accessRequestsResponse200 = {

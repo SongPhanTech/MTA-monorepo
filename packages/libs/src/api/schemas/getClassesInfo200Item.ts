@@ -21,6 +21,8 @@ export type GetClassesInfo200Item = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     isLocked?: boolean
     name: string
     /** @nullable */
@@ -31,7 +33,8 @@ export type GetClassesInfo200Item = {
     credit: number
     /** @nullable */
     week?: number | null
-    period?: number
+    /** @nullable */
+    period?: number | null
     /** @nullable */
     schedulePeriod?: number | null
     /** @nullable */

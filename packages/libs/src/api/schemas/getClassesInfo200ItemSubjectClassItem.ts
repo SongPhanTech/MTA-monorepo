@@ -5,6 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetClassesInfo200ItemSubjectClassItemSchedule } from './getClassesInfo200ItemSubjectClassItemSchedule'
+import type { GetClassesInfo200ItemSubjectClassItemType } from './getClassesInfo200ItemSubjectClassItemType'
+import type { GetClassesInfo200ItemSubjectClassItemStatus } from './getClassesInfo200ItemSubjectClassItemStatus'
 import type { GetClassesInfo200ItemSubjectClassItemExamType } from './getClassesInfo200ItemSubjectClassItemExamType'
 import type { GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem } from './getClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem'
 import type { GetClassesInfo200ItemSubjectClassItemMainLecturer } from './getClassesInfo200ItemSubjectClassItemMainLecturer'
@@ -13,7 +15,6 @@ import type { GetClassesInfo200ItemSubjectClassItemRoom } from './getClassesInfo
 import type { _GetClassesInfo200ItemSubjectClassItemCount } from './_getClassesInfo200ItemSubjectClassItemCount'
 import type { GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItem } from './getClassesInfo200ItemSubjectClassItemClassRegisterLogsItem'
 import type { GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem } from './getClassesInfo200ItemSubjectClassItemSubjectClassTimesItem'
-import type { GetClassesInfo200ItemSubjectClassItemType } from './getClassesInfo200ItemSubjectClassItemType'
 
 export type GetClassesInfo200ItemSubjectClassItem = {
     id: string
@@ -35,6 +36,8 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     /** @nullable */
     schedule?: GetClassesInfo200ItemSubjectClassItemSchedule
     maxStudent: number
+    type?: GetClassesInfo200ItemSubjectClassItemType
+    status: GetClassesInfo200ItemSubjectClassItemStatus
     cancelled?: boolean
     /** @nullable */
     lecturerAssignmentDeadline?: string | null
@@ -42,6 +45,8 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     sendLecturerAssignmentAt?: string | null
     /** @nullable */
     submitLecturerAssignmentAt?: string | null
+    /** @nullable */
+    approveLecturerAssignmentAt?: string | null
     /** @nullable */
     examDate?: string | null
     /** @nullable */
@@ -72,5 +77,4 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     _count: _GetClassesInfo200ItemSubjectClassItemCount
     classRegisterLogs: GetClassesInfo200ItemSubjectClassItemClassRegisterLogsItem[]
     subjectClassTimes: GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem[]
-    type?: GetClassesInfo200ItemSubjectClassItemType
 }

@@ -133,9 +133,8 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
-            console.log(output,semesterIdStore);
-            
-            
+            console.log(output, semesterIdStore)
+
             if (input?.type === 'multiple') {
                 const res = await createMultiple({
                     data: {
@@ -543,14 +542,14 @@ const PutSurveyModal = () => {
             })
         } else {
             form.setFieldsValue({
-                 semesterId: semesterIdStore,
+                semesterId: semesterIdStore,
                 isPublic: false,
                 anonymous: false,
                 additionalSuggestion: false,
                 surveyChoice: choices,
             })
         }
-    }, [survey,semesterIdStore])
+    }, [survey, semesterIdStore])
 
     return (
         <Modal

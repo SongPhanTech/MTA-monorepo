@@ -165,7 +165,7 @@ app.openapi(createClusterSurvey, async (c) => {
                 subjectClassId: cls.id,
                 surveyTopicId,
                 lectureId: cls.lecturerId,
-                semesterId
+                semesterId,
             })),
         })
 

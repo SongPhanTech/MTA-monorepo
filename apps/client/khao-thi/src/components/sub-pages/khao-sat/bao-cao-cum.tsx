@@ -11,18 +11,18 @@ import { buildOrgTree, cn } from '@lib/utils'
 const { Title } = Typography
 
 type AnswerItem = {
-id: string
-  code: string | null
-  active: boolean
-  description: string
-  deletedAt: string | null
-  createdAt: string
-  updatedAt: string
-  createdBy: string | null
-  answer: string
-  requireExplanation: boolean
-  clusterSurveyId: string
-  totalCount: number
+    id: string
+    code: string | null
+    active: boolean
+    description: string
+    deletedAt: string | null
+    createdAt: string
+    updatedAt: string
+    createdBy: string | null
+    answer: string
+    requireExplanation: boolean
+    clusterSurveyId: string
+    totalCount: number
 }
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
@@ -209,9 +209,10 @@ function ClusterSurveyReport({
                     headerRowValue.values = [
                         index + 1,
                         `${i?.lecture?.code || ''} - ${i?.lecture?.userProfile?.fullname || ''}`,
-                          ...calculatePercent(i?.average).map(
-                        (a: any) => `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
-                    ),
+                        ...calculatePercent(i?.average).map(
+                            (a: any) =>
+                                `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
+                        ),
                     ]
                 })
             }
@@ -240,12 +241,13 @@ function ClusterSurveyReport({
         click: onChartClick,
     }
 
-        function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
+    function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
         const total = items.reduce((sum, item) => sum + item.totalCount, 0)
         return items.map((item) => ({
             ...item,
             total,
-            percent: total === 0 ? 0 : Number.parseFloat(((item.totalCount / total) * 100).toFixed(2)),
+            percent:
+                total === 0 ? 0 : Number.parseFloat(((item.totalCount / total) * 100).toFixed(2)),
         }))
     }
 
@@ -283,11 +285,11 @@ function ClusterSurveyReport({
                                   id: i?.id,
                                   dataIndex: i?.id,
                                   align: 'center',
-                                    render: (__: any, record: any) => {
-                                     const count = calculatePercent(record?.average).find(
+                                  render: (__: any, record: any) => {
+                                      const count = calculatePercent(record?.average).find(
                                           (a) => a.id === i?.id
                                       )
-                                         return (
+                                      return (
                                           `${count?.percent || 0}% (${count?.totalCount || 0}/${count?.total})` ||
                                           '0'
                                       )

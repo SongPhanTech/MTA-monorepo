@@ -1,6 +1,6 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useFindUniqueClusterSurvey } from '@workspace/db/hooks'
-import { Button, Col, Modal, Row, Table } from 'antd'
+import { Button, Col, Input, Modal, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -8,12 +8,12 @@ import { useReactToPrint } from 'react-to-print'
 
 dayjs.locale('vi')
 
-const ModalPrintExamSurvey = () => {
+const ModalPrintExamClusterSurvey = () => {
     const printRef = useRef<HTMLDivElement>(null)
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
     }>({
-        tag: 'ModalPrintExamSurvey',
+        tag: 'ModalPrintExamClusterSurvey',
     })
 
     const { data } = useFindUniqueClusterSurvey({
@@ -23,6 +23,7 @@ const ModalPrintExamSurvey = () => {
         include: {
             surveyChoice: true,
             surveyQuestion: true,
+            surveys: true,
         },
     })
 
@@ -76,8 +77,10 @@ const ModalPrintExamSurvey = () => {
                 ref={printRef}
                 className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
             >
-                <div className="text-xl font-bold mb-4 text-center uppercase">{data?.name}</div>
-                <Row gutter={[0, 2]} className="mb-3">
+                <div className="text-xl font-bold mb-4 text-center uppercase color-black">
+                    {data?.name}
+                </div>
+                <Row gutter={[0, 2]} className="mb-3 color-black">
                     <Col span={12}>
                         <div className="flex items-end">
                             <div className="!w-fit whitespace-nowrap">Tên giảng viên: </div>
@@ -166,101 +169,110 @@ const ModalPrintExamSurvey = () => {
                                 pagination={false}
                             />
                         </Col>
-                        <Col span={24} className="text-[14px] text-[#e80808]">
+                        <Col span={24} className="text-[14px] text-[#e80808] mb-4">
                             Nếu ở mức (*), bạn phải ghi rõ lý do
                         </Col>
-                        <Col span={24}>
+                        <Col span={24} className="mb-3">
                             <Table
                                 rowKey="id"
                                 dataSource={data?.surveyQuestion || []}
                                 pagination={false}
-                                columns={
-                                    [
-                                              {
-                                                  title: 'STT',
-                                                  width: 50,
-                                                  align: 'center',
-                                                  render: (_, __, index) => index + 1,
-                                              },
-                                              {
-                                                  title: 'Nội dung phản hồi',
-                                                  dataIndex: 'content',
-                                                  render: (_, record) => {
-                                                      return (
-                                                          <div
-                                                              dangerouslySetInnerHTML={{
-                                                                  __html: record?.name,
-                                                              }}
-                                                          />
-                                                      )
-                                                  },
-                                              },
-                                                {
-                                                  title: 'Mức phản hồi',
-                                                  dataIndex: 'level',
-                                                  width:200,
-                                                  align: 'center',
-                                                  render: (_, record) => {
-                                                      return (
-                                                        <div className="w-full flex items-center justify-center gap-x-2">
-                                                                {
-                                                                    data?.surveyChoice.map(i=>{
-                                                                        return (
-                                                                             <div className="flex items-center justify-center">
-                                            <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
-                                                {i?.answer}
-                                            </Button>
-                                        </div>
-                                                                        )
-                                                                    })
-                                                                }
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 50,
+                                        align: 'center',
+                                        render: (_, __, index) => index + 1,
+                                    },
+                                    {
+                                        title: 'Nội dung phản hồi',
+                                        dataIndex: 'content',
+                                        render: (_, record) => {
+                                            return (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: record?.name,
+                                                    }}
+                                                />
+                                            )
+                                        },
+                                    },
+                                    {
+                                        title: 'Mức phản hồi',
+                                        dataIndex: 'level',
+                                        width: 200,
+                                        align: 'center',
+                                        render: (_, record) => {
+                                            return record?.type === 'SINGLE_CHOICE' ? (
+                                                <div className="w-full flex items-center justify-center gap-x-2">
+                                                    {data?.surveyChoice.map((i) => {
+                                                        return (
+                                                            <div className="flex items-center justify-center">
+                                                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
+                                                                    {i?.answer}
+                                                                </Button>
                                                             </div>
-                                                      )
-                                                  }
-                                              },
-                                          ]
-                                }
+                                                        )
+                                                    })}
+                                                </div>
+                                            ) : (
+                                                <Input.TextArea placeholder="Nhập câu trả lời" />
+                                            )
+                                        },
+                                    },
+                                ]}
                                 bordered={true}
                             />
                         </Col>
+                        {data?.surveys[0]?.additionalSuggestion && (
+                            <Col span={24}>
+                                <div className="mb-3 font-bold">Ý kiến khác :</div>
+                                <Input.TextArea placeholder="Nhập ý kiến khác" />
+                            </Col>
+                        )}
                     </Row>
                 )}
             </div>
             <style>
                 {`
-            @media print {
-                .page {
-                    width: 210mm;
-                    min-height: 297mm; 
-                    page-break-after: auto;
-                    background: white;
-                    overflow: visible;
-                }
-            }
-            table {
-                page-break-inside: auto;
-            }
-            tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
-            @page {
-                size: A4;
-            }
-            @media screen {
-                .page {
-                    width: 210mm;
-                    min-height: 297mm;
-                    margin: 10px auto;
-                    padding: 20mm;
-                    background: white;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }
-            }
+                    @media print {
+                    .color-black {
+                        color: #000 !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                        .page {
+                            width: 210mm;
+                            min-height: 297mm; 
+                            page-break-after: auto;
+                            background: white;
+                            overflow: visible;
+                        }
+                    }
+                    table {
+                        page-break-inside: auto;
+                    }
+                    tr {
+                        page-break-inside: avoid;
+                        page-break-after: auto;
+                    }
+                    @page {
+                        size: A4;
+                    }
+                    @media screen {
+                        .page {
+                            width: 210mm;
+                            min-height: 297mm;
+                            margin: 10px auto;
+                            padding: 20mm;
+                            background: white;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                    }
             `}
             </style>
         </Modal>
     )
 }
 
-export default ModalPrintExamSurvey
+export default ModalPrintExamClusterSurvey

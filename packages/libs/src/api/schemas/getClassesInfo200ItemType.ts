@@ -14,4 +14,6 @@ export const GetClassesInfo200ItemType = {
     Internship: 'Internship',
     Research: 'Research',
     Project: 'Project',
+    Practice: 'Practice',
+    Graduation: 'Graduation',
 } as const

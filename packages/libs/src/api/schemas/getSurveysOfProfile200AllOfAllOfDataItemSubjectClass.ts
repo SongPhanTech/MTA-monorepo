@@ -23,6 +23,8 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    /** @nullable */
+    createdBy?: string | null
     code: string
     name: string
     /** @nullable */
