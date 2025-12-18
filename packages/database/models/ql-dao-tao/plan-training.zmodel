@@ -149,6 +149,8 @@ model StudentSubjectScore extends Base {
 
   /// thí sinh trong kì thi
   examPaper                    ExamPaper?
+  /// chuyên đề nghiên cứu
+  studentResearchTopic         StudentResearchTopic?
 
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
@@ -190,6 +192,32 @@ model StudentSubjectScoreHistory extends Base {
 
   updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
   updatedById           String?
+
+  @@schema("ql-dao-tao")
+}
+
+/// chuyên đề nghiên cứu
+model StudentResearchTopic extends Base {
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique
+
+  /// hạn nhập chuyên đề
+  deadline              DateTime?
+  /// tên chuyên đề
+  name                  String?
+  /// nội dung chính
+  mainContent           String?
+
+  /// GVHD 1
+  supervisor            Lecturer?           @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
+  supervisorId          String?
+
+  /// GVHD 2
+  coSupervisor          Lecturer?           @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
+  coSupervisorId        String?
+
+  /// ngày báo cáo
+  reportDate            DateTime?
 
   @@schema("ql-dao-tao")
 }

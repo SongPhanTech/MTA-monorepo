@@ -7628,6 +7628,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'studentSubjectScore',
+                }, studentResearchTopic: {
+                    name: "studentResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
                 }, graduationGpaScores: {
                     name: "graduationGpaScores",
                     type: "StudentGraduationApplication",
@@ -7793,6 +7799,113 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        studentResearchTopic: {
+            name: 'StudentResearchTopic', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentResearchTopic$createdBy,
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    backLink: 'studentResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    isOptional: true,
+                }, mainContent: {
+                    name: "mainContent",
+                    type: "String",
+                    isOptional: true,
+                }, supervisor: {
+                    name: "supervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'supervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "supervisorId" },
+                }, supervisorId: {
+                    name: "supervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'supervisor',
+                }, coSupervisor: {
+                    name: "coSupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'coSupervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "coSupervisorId" },
+                }, coSupervisorId: {
+                    name: "coSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'coSupervisor',
+                }, reportDate: {
+                    name: "reportDate",
+                    type: "DateTime",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    fields: ["studentSubjectScoreId"]
                 },
             },
         },
@@ -15131,6 +15244,18 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, supervisorResearchTopic: {
+                    name: "supervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'supervisor',
+                }, coSupervisorResearchTopic: {
+                    name: "coSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'coSupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24760,6 +24885,10 @@ function $default$StudentSubjectScore$createdBy(user: any): unknown {
 }
 
 function $default$StudentSubjectScoreHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StudentResearchTopic$createdBy(user: any): unknown {
     return user?.id;
 }
 

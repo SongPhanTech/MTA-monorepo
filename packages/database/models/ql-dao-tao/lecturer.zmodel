@@ -44,6 +44,8 @@ model Lecturer extends Base {
   evaluationCriterions        EvaluationCriterion[]
   analysisCriterion           AnalysisCriterion[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  supervisorResearchTopic     StudentResearchTopic[]        @relation("SupervisorToResearchTopic")
+  coSupervisorResearchTopic   StudentResearchTopic[]        @relation("CoSupervisorToResearchTopic")
 
   @@schema("ql-dao-tao")
 }

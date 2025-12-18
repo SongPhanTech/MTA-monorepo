@@ -14,8 +14,6 @@ import {
     useFindManyDM_TonGiao,
     useFindManyDM_TrinhDoHocVan,
     useFindManyLecturerType,
-    useFindManyStaffPosition,
-    useFindManyStaffType,
 } from '@workspace/db/hooks'
 import { Checkbox, Col, Collapse, Flex, Form, Input, InputNumber, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
@@ -37,13 +35,13 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
     const bLaGiangVien = Form.useWatch('bLaGiangVien', form) || false
-    const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
+    // const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
     const { data: lecturerTypeData = [] } = useFindManyLecturerType({}, { enabled: bLaGiangVien })
-    const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: !!bLaCanBoNhanVien })
-    const { data: staffPositionData = [] } = useFindManyStaffPosition(
-        {},
-        { enabled: !!bLaCanBoNhanVien }
-    )
+    // const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: !!bLaCanBoNhanVien })
+    // const { data: staffPositionData = [] } = useFindManyStaffPosition(
+    //     {},
+    //     { enabled: !!bLaCanBoNhanVien }
+    // )
     const renderContent = () => {
         return (
             <div className="px-6">
@@ -347,7 +345,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             </FormItem>
                         </Col>
                     )}
-                    {bLaCanBoNhanVien && (
+                    {/* {bLaCanBoNhanVien && (
                         <>
                             <Col span={12}>
                                 <FormItem
@@ -384,7 +382,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 </FormItem>
                             </Col>
                         </>
-                    )}
+                    )} */}
                 </Row>
                 <div className="mb-6 font-semibold text-base">CCCD/CMND</div>
                 <Row className="mb-6" gutter={[16, 16]}>

@@ -248,7 +248,7 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountStudent({
+    const { data: count, refetch: refetchCount } = useCountStudent({
         where: {
             ...where,
             deletedAt: null,
@@ -396,6 +396,7 @@ export default function UserProfilePageDs() {
                                             onCancel={() => {
                                                 setImportModalVisible(false)
                                                 refetch()
+                                                refetchCount()
                                             }}
                                         />
                                         <ExportTemplateStudent />

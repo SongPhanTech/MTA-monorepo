@@ -380,8 +380,8 @@ export default function UpdateUserPage() {
         ethnicityId,
         bLaGiangVien,
         lecturerTypeId,
-        staffTypeId,
-        staffPositionId,
+        // staffTypeId,
+        // staffPositionId,
         ...values
     }: SubmitForm) => {
         if (!values) return
@@ -944,69 +944,69 @@ export default function UpdateUserPage() {
                 ]
             }
 
-            if (
-                cccdUserProfileData?.staffs &&
-                values.bLaCanBoNhanVien &&
-                staffTypeId &&
-                staffPositionId
-            ) {
-                listTransaction = [
-                    ...listTransaction,
-                    {
-                        model: 'Staff',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: cccdUserProfileData?.staffs?.id,
-                            },
-                            data: {
-                                code: values?.code,
-                                staffPositionId,
-                                staffTypeId,
-                                organizationId: values?.sDM_DonViId,
-                            },
-                        },
-                    },
-                ]
-            }
-            if (
-                !cccdUserProfileData?.staffs &&
-                values.bLaCanBoNhanVien &&
-                staffTypeId &&
-                staffPositionId
-            ) {
-                listTransaction = [
-                    ...listTransaction,
-                    {
-                        model: 'Staff',
-                        operation: 'create',
-                        data: {
-                            data: {
-                                userProfileId: id,
-                                code: values?.code,
-                                staffPositionId,
-                                staffTypeId,
-                                organizationId: values?.sDM_DonViId,
-                            },
-                        },
-                    },
-                ]
-            }
+            // if (
+            //     cccdUserProfileData?.staffs &&
+            //     values.bLaCanBoNhanVien &&
+            //     staffTypeId &&
+            //     staffPositionId
+            // ) {
+            //     listTransaction = [
+            //         ...listTransaction,
+            //         {
+            //             model: 'Staff',
+            //             operation: 'update',
+            //             data: {
+            //                 where: {
+            //                     id: cccdUserProfileData?.staffs?.id,
+            //                 },
+            //                 data: {
+            //                     code: values?.code,
+            //                     staffPositionId,
+            //                     staffTypeId,
+            //                     organizationId: values?.sDM_DonViId,
+            //                 },
+            //             },
+            //         },
+            //     ]
+            // }
+            // if (
+            //     !cccdUserProfileData?.staffs &&
+            //     values.bLaCanBoNhanVien &&
+            //     staffTypeId &&
+            //     staffPositionId
+            // ) {
+            //     listTransaction = [
+            //         ...listTransaction,
+            //         {
+            //             model: 'Staff',
+            //             operation: 'create',
+            //             data: {
+            //                 data: {
+            //                     userProfileId: id,
+            //                     code: values?.code,
+            //                     staffPositionId,
+            //                     staffTypeId,
+            //                     organizationId: values?.sDM_DonViId,
+            //                 },
+            //             },
+            //         },
+            //     ]
+            // }
 
-            if (cccdUserProfileData?.staffs && !values.bLaCanBoNhanVien) {
-                listTransaction = [
-                    ...listTransaction,
-                    {
-                        model: 'Staff',
-                        operation: 'delete',
-                        data: {
-                            where: {
-                                id: cccdUserProfileData?.staffs?.id,
-                            },
-                        },
-                    },
-                ]
-            }
+            // if (cccdUserProfileData?.staffs && !values.bLaCanBoNhanVien) {
+            //     listTransaction = [
+            //         ...listTransaction,
+            //         {
+            //             model: 'Staff',
+            //             operation: 'delete',
+            //             data: {
+            //                 where: {
+            //                     id: cccdUserProfileData?.staffs?.id,
+            //                 },
+            //             },
+            //         },
+            //     ]
+            // }
 
             const res = await sqlTransaction(listTransaction)
             if (res?.status === 200) {
@@ -1065,7 +1065,7 @@ export default function UpdateUserPage() {
                 nhomMau: true,
                 trinhDoHocVan: true,
                 lecturer: true,
-                staffs: true,
+                // staffs: true,
             },
         },
         {
@@ -1094,8 +1094,8 @@ export default function UpdateUserPage() {
                 CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
-                staffPositionId: userData.staffs?.staffPositionId,
-                staffTypeId: userData.staffs?.staffTypeId,
+                // staffPositionId: userData.staffs?.staffPositionId,
+                // staffTypeId: userData.staffs?.staffTypeId,
                 lecturerTypeId: userData.lecturer?.lecturerTypeId,
             })
             if (userData?.avatar) {
