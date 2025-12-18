@@ -231,7 +231,7 @@ export default function UserProfilePageLecture() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountLecturer({
+    const { data: count, refetch: refetchCount } = useCountLecturer({
         where: {
             ...where,
             deletedAt: null,
@@ -300,6 +300,7 @@ export default function UserProfilePageLecture() {
                             onSuccess={() => {
                                 setImportModalVisible(false)
                                 refetch()
+                                refetchCount()
                             }}
                             onCancel={() => setImportModalVisible(false)}
                         />
