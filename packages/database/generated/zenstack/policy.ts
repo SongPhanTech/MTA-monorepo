@@ -1566,6 +1566,26 @@ const policy: PolicyDef = {
             },
 
         },
+        studentResearchTopic: {
+            modelLevel: {
+                read: { guard: StudentResearchTopic_read, },
+                create: { guard: StudentResearchTopic_create, inputChecker: StudentResearchTopic_create_input, },
+                update: { guard: StudentResearchTopic_update, },
+                postUpdate: { guard: StudentResearchTopic_postUpdate, },
+                delete: { guard: StudentResearchTopic_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
                 read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
@@ -5143,6 +5163,7 @@ const policy: PolicyDef = {
         subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
         studentSubjectScoreHistory: { hasValidation: true },
+        studentResearchTopic: { hasValidation: false },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: false },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -10170,6 +10191,71 @@ function StudentSubjectScoreHistory_delete(context: QueryContext, db: CrudContra
 }
 
 function $check_StudentSubjectScoreHistory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentResearchTopic_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentResearchTopic_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentResearchTopic_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentResearchTopic_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentResearchTopic_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentResearchTopic_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentResearchTopic_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentResearchTopic_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentResearchTopic_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentResearchTopic_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentResearchTopic_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

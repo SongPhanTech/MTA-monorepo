@@ -7996,6 +7996,12 @@ const metadata = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'studentSubjectScore',
+                }, studentResearchTopic: {
+                    name: "studentResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
                 }, graduationGpaScores: {
                     name: "graduationGpaScores",
                     type: "StudentGraduationApplication",
@@ -8174,6 +8180,120 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentResearchTopic: {
+            name: 'StudentResearchTopic', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentResearchTopic$createdBy,
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    isOptional: true,
+                }, mainContent: {
+                    name: "mainContent",
+                    type: "String",
+                    isOptional: true,
+                }, supervisor: {
+                    name: "supervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToResearchTopic" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'supervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "supervisorId" },
+                }, supervisorId: {
+                    name: "supervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'supervisor',
+                }, coSupervisor: {
+                    name: "coSupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'coSupervisorResearchTopic',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "coSupervisorId" },
+                }, coSupervisorId: {
+                    name: "coSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'coSupervisor',
+                }, reportDate: {
+                    name: "reportDate",
+                    type: "DateTime",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    fields: ["studentSubjectScoreId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -15905,6 +16025,20 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, supervisorResearchTopic: {
+                    name: "supervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToResearchTopic" }] }],
+                    backLink: 'supervisor',
+                }, coSupervisorResearchTopic: {
+                    name: "coSupervisorResearchTopic",
+                    type: "StudentResearchTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToResearchTopic" }] }],
+                    backLink: 'coSupervisor',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -26057,6 +26191,9 @@ function $default$StudentSubjectScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$StudentSubjectScoreHistory$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$StudentResearchTopic$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$ArchivedCertificateOnStudentSubjectScore$createdBy(user) {

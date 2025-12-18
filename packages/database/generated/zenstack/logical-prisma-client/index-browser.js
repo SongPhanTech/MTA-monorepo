@@ -1551,6 +1551,24 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   updatedById: 'updatedById'
 };
 
+exports.Prisma.StudentResearchTopicScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  deadline: 'deadline',
+  name: 'name',
+  mainContent: 'mainContent',
+  supervisorId: 'supervisorId',
+  coSupervisorId: 'coSupervisorId',
+  reportDate: 'reportDate'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5393,6 +5411,18 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   updatedById: 'updatedById'
 };
 
+exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  name: 'name',
+  mainContent: 'mainContent',
+  supervisorId: 'supervisorId',
+  coSupervisorId: 'coSupervisorId'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7682,6 +7712,7 @@ exports.Prisma.ModelName = {
   SubjectScoreConvert: 'SubjectScoreConvert',
   StudentSubjectScore: 'StudentSubjectScore',
   StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
+  StudentResearchTopic: 'StudentResearchTopic',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
