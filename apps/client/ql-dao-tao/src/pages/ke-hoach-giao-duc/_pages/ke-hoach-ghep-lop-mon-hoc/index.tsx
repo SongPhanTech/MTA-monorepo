@@ -282,7 +282,7 @@ export default function KeHoachGhepLopMonHoc() {
                             select: {
                                 curriculumVersion: {
                                     select: {
-                                        fixedClasses: {
+                                        fixedClass: {
                                             select: {
                                                 id: true,
                                                 code: true,
@@ -367,11 +367,7 @@ export default function KeHoachGhepLopMonHoc() {
                         code: cur?.code,
                         maxStudent:
                             cur.subjectClass?.[0]?.maxStudent ??
-                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
-                            cur.trainingBlocks[0].trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce?.(
-                                (sum, fc) => sum + (fc._count?.students ?? 0),
-                                0
-                            ),
+                            cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount,
                         examType: cur?.examType,
                         subjectClasses: cur.subjectClass.reduce(
                             (subAcc, subCur) => {

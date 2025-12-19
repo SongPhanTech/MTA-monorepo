@@ -1,3 +1,4 @@
+import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -15,11 +16,10 @@ import { getMinioUrl } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
-    FixedClass,
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingMajor,
-    TrainingTime,
+    TrainingTime
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -41,7 +41,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)
@@ -224,7 +223,7 @@ export default function TrainingProgramCatalog() {
                     },
                     trainingObjectType: true,
                     documentFiles: true,
-                    fixedClasses: {
+                    fixedClass: {
                         include: {
                             trainingCourse: true,
                         },
@@ -563,7 +562,6 @@ export default function TrainingProgramCatalog() {
                             // },
                             {
                                 title: 'Khoá',
-                                dataIndex: 'trainingCourses',
                                 align: 'center',
                                 width: 120,
                                 type: 'select',
@@ -571,21 +569,8 @@ export default function TrainingProgramCatalog() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                render: (
-                                    __,
-                                    record: {
-                                        fixedClasses?: (FixedClass & {
-                                            trainingCourse: TrainingCourse
-                                        })[]
-                                    }
-                                ) => {
-                                    const map = new Map(
-                                        record?.fixedClasses?.map(({ trainingCourse }) => [
-                                            trainingCourse.id,
-                                            trainingCourse.name,
-                                        ])
-                                    )
-                                    return Array.from(map.values()).join(', ')
+                                render: (__, record) => {
+                                    return record?.fixedClass?.trainingCourse?.name
                                 },
                             },
                             {

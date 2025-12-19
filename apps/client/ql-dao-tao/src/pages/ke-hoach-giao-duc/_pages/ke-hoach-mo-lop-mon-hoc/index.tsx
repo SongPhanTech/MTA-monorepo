@@ -104,7 +104,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         select: {
                             curriculumVersion: {
                                 select: {
-                                    fixedClasses: {
+                                    fixedClass: {
                                         select: {
                                             id: true,
                                             code: true,
@@ -168,11 +168,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         code: cur?.code,
                         maxStudent:
                             cur.trainingBlocks?.[0]?.planTrainingSubjects?.[0]?.studentCount ??
-                            cur.subjectClass?.[0]?.maxStudent ??
-                            cur.trainingBlocks[0].trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce?.(
-                                (sum, fc) => sum + (fc._count?.students ?? 0),
-                                0
-                            ),
+                            cur.subjectClass?.[0]?.maxStudent,
                         isEdit: false,
                     }
                     return acc

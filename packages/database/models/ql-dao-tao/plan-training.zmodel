@@ -485,7 +485,7 @@ model FixedClass extends Base {
   students                 Student[]
 
   curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?
+  curriculumVersionId      String?            @unique
 
   subjectClasses           SubjectClass[]
   notifications            Notification[]  // Thông báo cho lớp
@@ -570,7 +570,8 @@ model CurriculumVersion extends Base {
   outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
-  fixedClasses                     FixedClass[] // Lớp niên chế
+  fixedClass                       FixedClass?                       
+  fixedClassId                     String?                            @unique
   students                         Student[]                          @relation('CurriculumVersion') // Học viên
   studentCurriculumVersionParallel Student[]                          @relation('CurriculumVersionParallel') // Học viên học song song CTĐT
 

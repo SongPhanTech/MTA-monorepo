@@ -2494,6 +2494,7 @@ model StudentResearchTopic {
   /// GVHD 2
   coSupervisor          Lecturer?           @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
   coSupervisorId        String?
+  /// ngày báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")
@@ -2800,7 +2801,7 @@ model FixedClass {
   staffManagementId        String?
   students                 Student[]
   curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?
+  curriculumVersionId      String?            @unique()
   subjectClasses           SubjectClass[]
   notifications            Notification[]
   surveyObjectTypes        SurveyObjectType[]
@@ -2883,7 +2884,8 @@ model CurriculumVersion {
   outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
-  fixedClasses                     FixedClass[]
+  fixedClass                       FixedClass?
+  fixedClassId                     String?                            @unique()
   students                         Student[]                          @relation("CurriculumVersion")
   studentCurriculumVersionParallel Student[]                          @relation("CurriculumVersionParallel")
 

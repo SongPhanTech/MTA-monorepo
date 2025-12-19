@@ -87,19 +87,17 @@ const PutFixedClassModal = () => {
                         ...(trainingCourseIdForm
                             ? [
                                   {
-                                      fixedClasses: {
-                                          some: {
-                                              trainingCourse: {
-                                                  id: trainingCourseIdForm,
-                                              },
+                                      fixedClass: {
+                                          trainingCourse: {
+                                              id: trainingCourseIdForm,
                                           },
                                       },
                                   },
                               ]
                             : []),
                         {
-                            fixedClasses: {
-                                none: {},
+                            fixedClass: {
+                                is: null,
                             },
                         },
                     ],
@@ -116,7 +114,7 @@ const PutFixedClassModal = () => {
                             managementOrganization: true,
                         },
                     },
-                    fixedClasses: {
+                    fixedClass: {
                         include: {
                             trainingCourse: true,
                         },

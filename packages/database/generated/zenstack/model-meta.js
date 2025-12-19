@@ -9559,13 +9559,14 @@ const metadata = {
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'fixedClasses',
+                    backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
                 }, curriculumVersionId: {
                     name: "curriculumVersionId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
                 }, subjectClasses: {
@@ -9603,6 +9604,9 @@ const metadata = {
                 }, unionLeaderId: {
                     name: "unionLeaderId",
                     fields: ["unionLeaderId"]
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    fields: ["curriculumVersionId"]
                 }, name_trainingCourseId_curriculumVersionId: {
                     name: "name_trainingCourseId_curriculumVersionId",
                     fields: ["name", "trainingCourseId", "curriculumVersionId"]
@@ -9961,12 +9965,17 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'curriculumVersion',
-                }, fixedClasses: {
-                    name: "fixedClasses",
+                }, fixedClass: {
+                    name: "fixedClass",
                     type: "FixedClass",
                     isDataModel: true,
-                    isArray: true,
+                    isOptional: true,
                     backLink: 'curriculumVersion',
+                }, fixedClassId: {
+                    name: "fixedClassId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -9989,6 +9998,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, fixedClassId: {
+                    name: "fixedClassId",
+                    fields: ["fixedClassId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

@@ -76,7 +76,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                     include: {
                                         curriculumVersion: {
                                             include: {
-                                                fixedClasses: {
+                                                fixedClass: {
                                                     include: {
                                                         _count: {
                                                             select: {
@@ -88,9 +88,6 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                                                 },
                                                             },
                                                         },
-                                                    },
-                                                    orderBy: {
-                                                        code: 'asc',
                                                     },
                                                 },
                                             },
@@ -214,85 +211,75 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                             },
                                             tableStartCell: { row: 7, col: 1 },
                                             rows:
-                                                planTraining?.planTrainingSubjects.flatMap(
-                                                    (item, index) =>
-                                                        item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
-                                                            (fc, idx, arr) => {
-                                                                const rowSpan =
-                                                                    idx === 0 ? arr.length : 1
-                                                                return {
-                                                                    cells: [
-                                                                        {
-                                                                            value: index + 1,
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value:
-                                                                                item
-                                                                                    .trainingBlockSubject
-                                                                                    .subject
-                                                                                    ?.code ?? '',
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value:
-                                                                                item
-                                                                                    .trainingBlockSubject
-                                                                                    .subject
-                                                                                    ?.name ?? '',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value:
-                                                                                item
-                                                                                    .trainingBlockSubject
-                                                                                    .subject
-                                                                                    ?.credit ?? '',
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value: `${fc.code}`,
-                                                                            align: 'center',
-                                                                        },
-                                                                        {
-                                                                            value: `${fc._count.students ?? 0}`,
-                                                                            align: 'center',
-                                                                        },
-                                                                        {
-                                                                            value: '',
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value:
-                                                                                item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion.curriculumVersion?.fixedClasses?.reduce?.(
-                                                                                    (sum, fc) =>
-                                                                                        sum +
-                                                                                        (fc._count
-                                                                                            ?.students ??
-                                                                                            0),
-                                                                                    0
-                                                                                ) ?? 0,
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                        {
-                                                                            value:
-                                                                                item
-                                                                                    ?.trainingBlockSubject
-                                                                                    ?.subject
-                                                                                    ?.managementOrganization
-                                                                                    ?.sMa ?? '',
-                                                                            align: 'center',
-                                                                            rowSpan,
-                                                                        },
-                                                                    ],
-                                                                }
-                                                            }
-                                                        )
+                                                planTraining?.planTrainingSubjects.map(
+                                                    (item, index) => {
+                                                        const fc =
+                                                            item?.trainingBlockSubject
+                                                                ?.trainingBlockOnCurriculumVersion
+                                                                ?.curriculumVersion?.fixedClass
+                                                        const rowSpan = 1
+                                                        return {
+                                                            cells: [
+                                                                {
+                                                                    value: index + 1,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item.trainingBlockSubject
+                                                                            .subject?.code ?? '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item.trainingBlockSubject
+                                                                            .subject?.name ?? '',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item.trainingBlockSubject
+                                                                            .subject?.credit ?? '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: `${fc?.code}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: `${fc?._count.students ?? 0}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item?.trainingBlockSubject
+                                                                            ?.trainingBlockOnCurriculumVersion
+                                                                            .curriculumVersion
+                                                                            ?.fixedClass?._count
+                                                                            ?.students ?? 0,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item?.trainingBlockSubject
+                                                                            ?.subject
+                                                                            ?.managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                            ],
+                                                        }
+                                                    }
                                                 ) ?? ([] as any[]),
                                         },
                                     ],

@@ -14,11 +14,18 @@ await prisma.subjectVersionHistory.deleteMany({
 
 await prisma.planTrainingSubject.deleteMany({
     where: {
-        subjectVersion: {
-            deletedAt: {
-                not: null,
-            },
-        },
+        // subjectVersion: {
+        //     deletedAt: {
+        //         not: null,
+        //     },
+        // },
+        trainingBlockSubject:{
+            subject:{
+                deletedAt:{
+                    not: null,
+                },
+            }
+        }
     },
 })
 
