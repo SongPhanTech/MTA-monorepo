@@ -571,7 +571,6 @@ model CurriculumVersion extends Base {
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClass                       FixedClass?                       
-  fixedClassId                     String?                            @unique
   students                         Student[]                          @relation('CurriculumVersion') // Học viên
   studentCurriculumVersionParallel Student[]                          @relation('CurriculumVersionParallel') // Học viên học song song CTĐT
 

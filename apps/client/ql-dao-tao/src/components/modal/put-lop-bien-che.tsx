@@ -83,25 +83,19 @@ const PutFixedClassModal = () => {
         where: {
             curriculumVersion: {
                 some: {
+                    trainingObjectTypeId,
                     OR: [
-                        ...(trainingCourseIdForm
-                            ? [
-                                  {
-                                      fixedClass: {
-                                          trainingCourse: {
-                                              id: trainingCourseIdForm,
-                                          },
-                                      },
-                                  },
-                              ]
-                            : []),
                         {
                             fixedClass: {
                                 is: null,
                             },
                         },
+                        {
+                            fixedClass: {
+                                id: id ?? undefined,
+                            },
+                        },
                     ],
-                    trainingObjectTypeId,
                 },
             },
         },
@@ -114,15 +108,22 @@ const PutFixedClassModal = () => {
                             managementOrganization: true,
                         },
                     },
-                    fixedClass: {
-                        include: {
-                            trainingCourse: true,
-                        },
-                    },
                     trainingObjectType: true,
                 },
                 where: {
                     trainingObjectTypeId,
+                    OR: [
+                        {
+                            fixedClass: {
+                                is: null,
+                            },
+                        },
+                        {
+                            fixedClass: {
+                                id: id ?? undefined,
+                            },
+                        },
+                    ],
                 },
             },
         },
@@ -210,7 +211,6 @@ const PutFixedClassModal = () => {
             code: dataOutput.code,
             name: dataOutput.name,
             description: dataOutput.description,
-            // startYear: dataOutput.startYear,
             graduated: dataOutput.graduated,
             active: dataOutput.active,
             summary: dataOutput.summary,
@@ -218,6 +218,11 @@ const PutFixedClassModal = () => {
         await updateFixedClass({
             data: {
                 ...payload,
+                trainingCourseId: dataOutput.trainingCourseId,
+                managementOrganizationId: dataOutput.managementOrganizationId,
+                curriculumVersionId: dataOutput.curriculumVersionId,
+                staffManagementId: dataOutput.staffManagementId,
+                lecturerManagementId: dataOutput.lecturerManagementId,
                 students: {
                     updateMany: {
                         where: {
@@ -228,11 +233,6 @@ const PutFixedClassModal = () => {
                         },
                     },
                 },
-                trainingCourseId: dataOutput.trainingCourseId,
-                managementOrganizationId: dataOutput.managementOrganizationId,
-                curriculumVersionId: dataOutput.curriculumVersionId,
-                staffManagementId: dataOutput.staffManagementId,
-                lecturerManagementId: dataOutput.lecturerManagementId,
             },
             where: {
                 id,

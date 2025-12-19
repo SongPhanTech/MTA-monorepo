@@ -1,15 +1,13 @@
 import { TreeSelect as AntdTreeSelect, type TreeSelectProps } from 'antd'
-
+function normalizeVietnamese(str: string): string {
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+}
 const TreeSelect = (props: TreeSelectProps) => {
-    function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
-    }
-
     // Fuzzy match đơn giản
     function fuzzyMatch(input: string, label: string): boolean {
         const normInput = normalizeVietnamese(input)
@@ -32,7 +30,7 @@ const TreeSelect = (props: TreeSelectProps) => {
             showSearch
             treeDefaultExpandAll
             filterTreeNode={(input, treeNode) =>
-                fuzzyMatch(input, treeNode.label?.toString() || '')
+                fuzzyMatch(input, treeNode?.title?.toString?.() || '')
             }
             {...props}
         />

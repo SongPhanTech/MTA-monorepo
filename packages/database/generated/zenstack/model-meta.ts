@@ -9974,11 +9974,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'curriculumVersion',
-                }, fixedClassId: {
-                    name: "fixedClassId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -10001,9 +9996,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, fixedClassId: {
-                    name: "fixedClassId",
-                    fields: ["fixedClassId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

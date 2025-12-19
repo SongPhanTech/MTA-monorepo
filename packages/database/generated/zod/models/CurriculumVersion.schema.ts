@@ -37,7 +37,6 @@ const baseSchema = z.object({
     learningDiagram: z.string().nullish(),
     guide: z.string().nullish(),
     renderPath: z.string().nullish(),
-    fixedClassId: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -70,7 +69,6 @@ const baseSchemaWithoutDefaults = z.object({
     learningDiagram: z.string().nullish(),
     guide: z.string().nullish(),
     renderPath: z.string().nullish(),
-    fixedClassId: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -152,8 +150,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
     summary: z.string().nullish(),
     learningDiagram: z.string().nullish(),
     guide: z.string().nullish(),
-    renderPath: z.string().nullish(),
-    fixedClassId: z.string().nullish()
+    renderPath: z.string().nullish()
 }).partial().passthrough();
 
 

@@ -1820,8 +1820,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   summary: 'summary',
   learningDiagram: 'learningDiagram',
   guide: 'guide',
-  renderPath: 'renderPath',
-  fixedClassId: 'fixedClassId'
+  renderPath: 'renderPath'
 };
 
 exports.Prisma.SubjectScalarFieldEnum = {
@@ -5576,8 +5575,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   summary: 'summary',
   learningDiagram: 'learningDiagram',
   guide: 'guide',
-  renderPath: 'renderPath',
-  fixedClassId: 'fixedClassId'
+  renderPath: 'renderPath'
 };
 
 exports.Prisma.SubjectOrderByRelevanceFieldEnum = {

@@ -144815,7 +144815,6 @@ export namespace Prisma {
     learningDiagram: string | null
     guide: string | null
     renderPath: string | null
-    fixedClassId: string | null
   }
 
   export type CurriculumVersionMaxAggregateOutputType = {
@@ -144855,7 +144854,6 @@ export namespace Prisma {
     learningDiagram: string | null
     guide: string | null
     renderPath: string | null
-    fixedClassId: string | null
   }
 
   export type CurriculumVersionCountAggregateOutputType = {
@@ -144895,7 +144893,6 @@ export namespace Prisma {
     learningDiagram: number
     guide: number
     renderPath: number
-    fixedClassId: number
     _all: number
   }
 
@@ -144953,7 +144950,6 @@ export namespace Prisma {
     learningDiagram?: true
     guide?: true
     renderPath?: true
-    fixedClassId?: true
   }
 
   export type CurriculumVersionMaxAggregateInputType = {
@@ -144993,7 +144989,6 @@ export namespace Prisma {
     learningDiagram?: true
     guide?: true
     renderPath?: true
-    fixedClassId?: true
   }
 
   export type CurriculumVersionCountAggregateInputType = {
@@ -145033,7 +145028,6 @@ export namespace Prisma {
     learningDiagram?: true
     guide?: true
     renderPath?: true
-    fixedClassId?: true
     _all?: true
   }
 
@@ -145160,7 +145154,6 @@ export namespace Prisma {
     learningDiagram: string | null
     guide: string | null
     renderPath: string | null
-    fixedClassId: string | null
     _count: CurriculumVersionCountAggregateOutputType | null
     _avg: CurriculumVersionAvgAggregateOutputType | null
     _sum: CurriculumVersionSumAggregateOutputType | null
@@ -145219,7 +145212,6 @@ export namespace Prisma {
     learningDiagram?: boolean
     guide?: boolean
     renderPath?: boolean
-    fixedClassId?: boolean
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -145273,7 +145265,6 @@ export namespace Prisma {
     learningDiagram?: boolean
     guide?: boolean
     renderPath?: boolean
-    fixedClassId?: boolean
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -145320,7 +145311,6 @@ export namespace Prisma {
     learningDiagram?: boolean
     guide?: boolean
     renderPath?: boolean
-    fixedClassId?: boolean
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -145367,10 +145357,9 @@ export namespace Prisma {
     learningDiagram?: boolean
     guide?: boolean
     renderPath?: boolean
-    fixedClassId?: boolean
   }
 
-  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath" | "fixedClassId", ExtArgs["result"]["curriculumVersion"]>
+  export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "type" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTypeId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>
   export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
     curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
@@ -145460,7 +145449,6 @@ export namespace Prisma {
       learningDiagram: string | null
       guide: string | null
       renderPath: string | null
-      fixedClassId: string | null
     }, ExtArgs["result"]["curriculumVersion"]>
     composites: {}
   }
@@ -145933,7 +145921,6 @@ export namespace Prisma {
     readonly learningDiagram: FieldRef<"CurriculumVersion", 'String'>
     readonly guide: FieldRef<"CurriculumVersion", 'String'>
     readonly renderPath: FieldRef<"CurriculumVersion", 'String'>
-    readonly fixedClassId: FieldRef<"CurriculumVersion", 'String'>
   }
     
 
@@ -349291,8 +349278,7 @@ export namespace Prisma {
     summary: 'summary',
     learningDiagram: 'learningDiagram',
     guide: 'guide',
-    renderPath: 'renderPath',
-    fixedClassId: 'fixedClassId'
+    renderPath: 'renderPath'
   };
 
   export type CurriculumVersionScalarFieldEnum = (typeof CurriculumVersionScalarFieldEnum)[keyof typeof CurriculumVersionScalarFieldEnum]
@@ -353815,8 +353801,7 @@ export namespace Prisma {
     summary: 'summary',
     learningDiagram: 'learningDiagram',
     guide: 'guide',
-    renderPath: 'renderPath',
-    fixedClassId: 'fixedClassId'
+    renderPath: 'renderPath'
   };
 
   export type CurriculumVersionOrderByRelevanceFieldEnum = (typeof CurriculumVersionOrderByRelevanceFieldEnum)[keyof typeof CurriculumVersionOrderByRelevanceFieldEnum]
@@ -367336,7 +367321,6 @@ export namespace Prisma {
     learningDiagram?: StringNullableFilter<"CurriculumVersion"> | string | null
     guide?: StringNullableFilter<"CurriculumVersion"> | string | null
     renderPath?: StringNullableFilter<"CurriculumVersion"> | string | null
-    fixedClassId?: StringNullableFilter<"CurriculumVersion"> | string | null
     trainingLanguage?: XOR<TrainingLanguageNullableScalarRelationFilter, TrainingLanguageWhereInput> | null
     curriculum?: XOR<CurriculumScalarRelationFilter, CurriculumWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -367389,7 +367373,6 @@ export namespace Prisma {
     learningDiagram?: SortOrderInput | SortOrder
     guide?: SortOrderInput | SortOrder
     renderPath?: SortOrderInput | SortOrder
-    fixedClassId?: SortOrderInput | SortOrder
     trainingLanguage?: TrainingLanguageOrderByWithRelationInput
     curriculum?: CurriculumOrderByWithRelationInput
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
@@ -367409,7 +367392,6 @@ export namespace Prisma {
   export type CurriculumVersionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    fixedClassId?: string
     AND?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
     OR?: CurriculumVersionWhereInput[]
     NOT?: CurriculumVersionWhereInput | CurriculumVersionWhereInput[]
@@ -367460,7 +367442,7 @@ export namespace Prisma {
     fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
     students?: StudentListRelationFilter
     studentCurriculumVersionParallel?: StudentListRelationFilter
-  }, "id" | "code" | "fixedClassId">
+  }, "id" | "code">
 
   export type CurriculumVersionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -367499,7 +367481,6 @@ export namespace Prisma {
     learningDiagram?: SortOrderInput | SortOrder
     guide?: SortOrderInput | SortOrder
     renderPath?: SortOrderInput | SortOrder
-    fixedClassId?: SortOrderInput | SortOrder
     _count?: CurriculumVersionCountOrderByAggregateInput
     _avg?: CurriculumVersionAvgOrderByAggregateInput
     _max?: CurriculumVersionMaxOrderByAggregateInput
@@ -367547,7 +367528,6 @@ export namespace Prisma {
     learningDiagram?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     guide?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
     renderPath?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
-    fixedClassId?: StringNullableWithAggregatesFilter<"CurriculumVersion"> | string | null
   }
 
   export type SubjectWhereInput = {
@@ -396751,7 +396731,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -396804,7 +396783,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -396843,7 +396821,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -396896,7 +396873,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -396942,7 +396918,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type CurriculumVersionUpdateManyMutationInput = {
@@ -396975,7 +396950,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CurriculumVersionUncheckedUpdateManyInput = {
@@ -397015,7 +396989,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectCreateInput = {
@@ -424284,7 +424257,6 @@ export namespace Prisma {
     learningDiagram?: SortOrder
     guide?: SortOrder
     renderPath?: SortOrder
-    fixedClassId?: SortOrder
   }
 
   export type CurriculumVersionAvgOrderByAggregateInput = {
@@ -424332,7 +424304,6 @@ export namespace Prisma {
     learningDiagram?: SortOrder
     guide?: SortOrder
     renderPath?: SortOrder
-    fixedClassId?: SortOrder
   }
 
   export type CurriculumVersionMinOrderByAggregateInput = {
@@ -424372,7 +424343,6 @@ export namespace Prisma {
     learningDiagram?: SortOrder
     guide?: SortOrder
     renderPath?: SortOrder
-    fixedClassId?: SortOrder
   }
 
   export type CurriculumVersionSumOrderByAggregateInput = {
@@ -513680,7 +513650,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
     trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
@@ -513731,7 +513700,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -513822,7 +513790,6 @@ export namespace Prisma {
     learningDiagram?: StringNullableFilter<"CurriculumVersion"> | string | null
     guide?: StringNullableFilter<"CurriculumVersion"> | string | null
     renderPath?: StringNullableFilter<"CurriculumVersion"> | string | null
-    fixedClassId?: StringNullableFilter<"CurriculumVersion"> | string | null
   }
 
   export type SemesterCreateWithoutTrainingCoursesStartInput = {
@@ -516174,7 +516141,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -516226,7 +516192,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -517137,7 +517102,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -517189,7 +517153,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -517552,7 +517515,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
     trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
@@ -517603,7 +517565,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -528895,7 +528856,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingLevel: TrainingLevelCreateNestedOneWithoutCurriculumVersionInput
@@ -528946,7 +528906,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -529932,7 +529891,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -529983,7 +529941,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -530048,7 +530005,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -530099,7 +530055,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -533902,7 +533857,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -533954,7 +533908,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassUncheckedCreateNestedOneWithoutCurriculumVersionInput
@@ -534093,7 +534046,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -534145,7 +534097,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUncheckedUpdateOneWithoutCurriculumVersionNestedInput
@@ -534199,7 +534150,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -534250,7 +534200,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -534817,7 +534766,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -534868,7 +534816,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -535465,7 +535412,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -535517,7 +535463,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassUncheckedCreateNestedOneWithoutCurriculumVersionInput
@@ -535608,7 +535553,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -535660,7 +535604,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUncheckedUpdateOneWithoutCurriculumVersionNestedInput
@@ -536385,7 +536328,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -536437,7 +536379,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -536480,7 +536421,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -536532,7 +536472,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
@@ -538263,7 +538202,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -538315,7 +538253,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -538364,7 +538301,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -538416,7 +538352,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -540693,7 +540628,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     trainingLanguage?: TrainingLanguageCreateNestedOneWithoutCurriculumVersionInput
     curriculum: CurriculumCreateNestedOneWithoutCurriculumVersionInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutCurriculumVersionInput
@@ -540745,7 +540679,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedCreateNestedManyWithoutCurriculumVersionInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutCurriculumVersionInput
     fixedClass?: FixedClassUncheckedCreateNestedOneWithoutCurriculumVersionInput
@@ -541824,7 +541757,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -541876,7 +541808,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     fixedClass?: FixedClassUncheckedUpdateOneWithoutCurriculumVersionNestedInput
@@ -607105,7 +607036,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type TrainingCourseUpdateWithoutTrainingLanguageInput = {
@@ -607281,7 +607211,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -607332,7 +607261,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -607377,7 +607305,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingCourseRegulationCreateManyTrainingCourseInput = {
@@ -608912,7 +608839,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type DocumentFileUpdateWithoutCurriculumInput = {
@@ -609047,7 +608973,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -609098,7 +609023,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -609143,7 +609067,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OutputStandardOnCurriculumCreateManyCurriculumVersionInput = {
@@ -613632,7 +613555,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type TrainingMajorOnTrainingObjectTypeCreateManyTrainingObjectTypeInput = {
@@ -614032,7 +613954,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingLevel?: TrainingLevelUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -614083,7 +614004,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -614128,7 +614048,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingMajorOnTrainingObjectTypeUpdateWithoutTrainingObjectTypeInput = {
@@ -614919,7 +614838,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type CurriculumVersionUpdateWithoutTrainingTypeInput = {
@@ -614952,7 +614870,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -615003,7 +614920,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -615048,7 +614964,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CurriculumVersionCreateManyTrainingLevelInput = {
@@ -615087,7 +615002,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type TrainingObjectTypeCreateManyTrainingLevelInput = {
@@ -615134,7 +615048,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -615185,7 +615098,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -615230,7 +615142,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingObjectTypeUpdateWithoutTrainingLevelInput = {
@@ -617590,7 +617501,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type CurriculumVersionUpdateWithoutTrainingTimeInput = {
@@ -617623,7 +617533,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -617674,7 +617583,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -617719,7 +617627,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArchivedCertificateCreateManyCertificateInput = {
@@ -617999,7 +617906,6 @@ export namespace Prisma {
     learningDiagram?: string | null
     guide?: string | null
     renderPath?: string | null
-    fixedClassId?: string | null
   }
 
   export type GraduationDecisionCreateManyDiplomaTypeInput = {
@@ -618074,7 +617980,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguage?: TrainingLanguageUpdateOneWithoutCurriculumVersionNestedInput
     curriculum?: CurriculumUpdateOneRequiredWithoutCurriculumVersionNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutCurriculumVersionNestedInput
@@ -618125,7 +618030,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
     outputStandardOnCurriculum?: OutputStandardOnCurriculumUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     trainingBlocks?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutCurriculumVersionNestedInput
@@ -618170,7 +618074,6 @@ export namespace Prisma {
     learningDiagram?: NullableStringFieldUpdateOperationsInput | string | null
     guide?: NullableStringFieldUpdateOperationsInput | string | null
     renderPath?: NullableStringFieldUpdateOperationsInput | string | null
-    fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type GraduationDecisionUpdateWithoutDiplomaTypeInput = {

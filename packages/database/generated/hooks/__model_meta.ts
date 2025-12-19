@@ -9509,10 +9509,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'curriculumVersion',
-                }, fixedClassId: {
-                    name: "fixedClassId",
-                    type: "String",
-                    isOptional: true,
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -9533,9 +9529,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, fixedClassId: {
-                    name: "fixedClassId",
-                    fields: ["fixedClassId"]
                 },
             },
         },

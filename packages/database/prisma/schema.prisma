@@ -2885,7 +2885,6 @@ model CurriculumVersion {
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
   fixedClass                       FixedClass?
-  fixedClassId                     String?                            @unique()
   students                         Student[]                          @relation("CurriculumVersion")
   studentCurriculumVersionParallel Student[]                          @relation("CurriculumVersionParallel")
 
