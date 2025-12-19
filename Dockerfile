@@ -38,4 +38,4 @@ COPY --from=builder /app/apps/client/${PACKAGE}/public ./apps/client/${PACKAGE}/
 
 EXPOSE 3000
 
-CMD node apps/client/${PACKAGE}/server.js
+CMD ["sh", "-c", "node apps/client/${PACKAGE}/server.js"]

@@ -1576,12 +1576,12 @@ export default function PhanCongGiangDay({
                                         [subjectClassId]: {
                                             ...subjectClassForm?.[subjectClassId],
                                             ...changedValue.subjectClass[subjectClassId],
-                                            enterGradeLecturerId:
-                                                subjectClassForm?.[subjectClassId]
-                                                    ?.enterGradeLecturerId ??
-                                                changedValue.subjectClass[subjectClassId]
-                                                    ?.lecturerId ??
-                                                null,
+                                            // enterGradeLecturerId:
+                                            //     subjectClassForm?.[subjectClassId]
+                                            //         ?.enterGradeLecturerId ??
+                                            //     changedValue.subjectClass[subjectClassId]
+                                            //         ?.lecturerId ??
+                                            //     null,
                                             isEdit: true,
                                         },
                                     })
@@ -1838,7 +1838,7 @@ export default function PhanCongGiangDay({
                                     align: 'center',
                                     type: 'input',
                                     render: (__, record) =>
-                                        khoaBoMon &&
+                                        // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
                                         !record?.submitLecturerAssignmentAt &&
                                         !record?.approveLecturerAssignmentAt ? (
@@ -1875,7 +1875,7 @@ export default function PhanCongGiangDay({
                                     align: 'center',
                                     type: 'input',
                                     render: (__, record) =>
-                                        khoaBoMon &&
+                                        // khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
                                         !record?.submitLecturerAssignmentAt &&
                                         !record?.approveLecturerAssignmentAt ? (
@@ -1912,40 +1912,77 @@ export default function PhanCongGiangDay({
                                         ),
                                 },
                                 {
+                                    title: 'GV nhập điểm',
+                                    align: 'center',
+                                    render: (__, record) =>
+                                        // khoaBoMon &&
+                                        !subjectClassForm?.[record.id]?.cancelled &&
+                                        !record?.submitLecturerAssignmentAt &&
+                                        !record?.approveLecturerAssignmentAt ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'enterGradeLecturerId',
+                                                ]}
+                                            >
+                                                <LectureTreeSelect
+                                                    placeholder="Chọn giảng viên"
+                                                    organizationId={
+                                                        record?.subject?.managementOrganizationId
+                                                    }
+                                                    disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
+                                                        !!record?.submitLecturerAssignmentAt ||
+                                                        (!!record.lecturerAssignmentDeadline &&
+                                                            dayjs(
+                                                                record.lecturerAssignmentDeadline
+                                                            ).isBefore(dayjs().startOf('day')))
+                                                    }
+                                                />
+                                            </FormItem>
+                                        ) : (
+                                            (record?.enterGradeLecturer?.userProfile?.fullname ??
+                                            '-')
+                                        ),
+                                },
+                                {
                                     title: 'Hình thức thi',
                                     align: 'center',
                                     width: 150,
                                     type: 'select',
                                     options: options,
-                                    render: (__, record) =>
-                                        khoaBoMon ? (
-                                            <FormItem
-                                                form={form}
-                                                name={['subjectClass', record.id, 'examType']}
-                                            >
-                                                <Select
-                                                    dropdownStyle={{
-                                                        width: 250,
-                                                    }}
-                                                    options={options}
-                                                    disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
-                                                        (khoaBoMon &&
-                                                            (!!record?.submitLecturerAssignmentAt ||
-                                                                (!!record.lecturerAssignmentDeadline &&
-                                                                    dayjs(
-                                                                        record.lecturerAssignmentDeadline
-                                                                    ).isBefore(
-                                                                        dayjs().startOf('day')
-                                                                    ))))
-                                                    }
-                                                />
-                                            </FormItem>
-                                        ) : (
-                                            !!record.submitLecturerAssignmentAt &&
-                                            record.examType &&
-                                            getExamTypeLabel(record.examType)
-                                        ),
+                                    render: (__, record) => (
+                                        // khoaBoMon ? (
+                                        <FormItem
+                                            form={form}
+                                            name={['subjectClass', record.id, 'examType']}
+                                        >
+                                            <Select
+                                                dropdownStyle={{
+                                                    width: 250,
+                                                }}
+                                                options={options}
+                                                disabled={
+                                                    subjectClassForm?.[record.id]?.cancelled ||
+                                                    (khoaBoMon &&
+                                                        (!!record?.submitLecturerAssignmentAt ||
+                                                            (!!record.lecturerAssignmentDeadline &&
+                                                                dayjs(
+                                                                    record.lecturerAssignmentDeadline
+                                                                ).isBefore(
+                                                                    dayjs().startOf('day')
+                                                                ))))
+                                                }
+                                            />
+                                        </FormItem>
+                                    ),
+                                    // ) : (
+                                    //     !!record.submitLecturerAssignmentAt &&
+                                    //     record.examType &&
+                                    //     getExamTypeLabel(record.examType)
+                                    // ),
                                 },
                                 {
                                     title: 'Khu vực',
@@ -2054,42 +2091,6 @@ export default function PhanCongGiangDay({
                                             />
                                         </FormItem>
                                     ),
-                                },
-                                {
-                                    title: 'GV nhập điểm',
-                                    align: 'center',
-                                    render: (__, record) =>
-                                        khoaBoMon &&
-                                        !subjectClassForm?.[record.id]?.cancelled &&
-                                        !record?.submitLecturerAssignmentAt &&
-                                        !record?.approveLecturerAssignmentAt ? (
-                                            <FormItem
-                                                form={form}
-                                                name={[
-                                                    'subjectClass',
-                                                    record.id,
-                                                    'enterGradeLecturerId',
-                                                ]}
-                                            >
-                                                <LectureTreeSelect
-                                                    placeholder="Chọn giảng viên"
-                                                    organizationId={
-                                                        record?.subject?.managementOrganizationId
-                                                    }
-                                                    disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
-                                                        !!record?.submitLecturerAssignmentAt ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day')))
-                                                    }
-                                                />
-                                            </FormItem>
-                                        ) : (
-                                            (record?.enterGradeLecturer?.userProfile?.fullname ??
-                                            '-')
-                                        ),
                                 },
 
                                 // {
