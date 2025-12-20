@@ -1,24 +1,25 @@
 import { CloseOutlined } from '@ant-design/icons'
+import type { Student, StudentSubjectScore } from '@workspace/db'
 import { Button, Modal, message, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
 
 export type ImportScoreData = {
-    key: any
-    studentCode: any
-    studentName: any
-    dobStudent: any
-    className: any
-    attendanceScore: number
-    midtermScore: number
-    examScore: number
+    id: string
+    studentCode: string
+    studentName: string
+    dobStudent: string
+    className: string
+    attendanceScore: number | null
+    midtermScore: number | null
+    examScore: number | null
 }
 
 interface ImportScoreModalProps {
     visible: boolean
     onCancel: () => void
     onConfirm: (data: ImportScoreData[]) => void
-    existingStudents: any[]
+    existingStudents: (StudentSubjectScore & { student: Student })[]
 }
 
 const ImportScoreModal = ({
@@ -45,7 +46,7 @@ const ImportScoreModal = ({
             const data = new Uint8Array(e.target?.result as ArrayBuffer)
             const workbook = XLSX.read(data, { type: 'array' })
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-            const jsonData = XLSX.utils.sheet_to_json(firstSheet)
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet) as Record<string, string>[]
 
             // Tìm vị trí bắt đầu của bảng dữ liệu (dòng có STT)
             const tableStartIndex = jsonData.findIndex(
@@ -62,17 +63,28 @@ const ImportScoreModal = ({
 
             // Format dữ liệu theo cấu trúc mong muốn
             const formattedData = tableData
-                .map((row: any) => ({
-                    key: row.__EMPTY, // Sử dụng mã sinh viên làm key
-                    studentCode: row.__EMPTY, // Mã sinh viên
-                    studentName: row.__EMPTY_1, // Họ và Tên
-                    dobStudent: row.__EMPTY_2, // Ngày sinh
-                    className: row.__EMPTY_3, // Tên lớp
-                    attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm CC
-                    midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm TX
-                    examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm thi
-                }))
-                .filter((item: any) => item.studentCode) // Lọc các dòng trống
+                .map((row) => {
+                    const attendanceScore = Number.parseFloat(row.__EMPTY_4) // Điểm CC
+                    const midtermScore = Number.parseFloat(row.__EMPTY_5) // Điểm TX
+                    const examScore = Number.parseFloat(row.__EMPTY_6) // Điểm thi
+                    const id = existingStudents.find((s) => s.student?.code === row.__EMPTY)?.id
+
+                    if (!id) {
+                        return null
+                    }
+
+                    return {
+                        id,
+                        studentCode: row.__EMPTY, // Mã sinh viên
+                        studentName: row.__EMPTY_1, // Họ và Tên
+                        dobStudent: row.__EMPTY_2, // Ngày sinh
+                        className: row.__EMPTY_3, // Tên lớp
+                        attendanceScore: Number.isNaN(attendanceScore) ? null : attendanceScore,
+                        midtermScore: Number.isNaN(midtermScore) ? null : midtermScore,
+                        examScore: Number.isNaN(examScore) ? null : examScore,
+                    }
+                })
+                .filter((item) => item?.studentCode) as ImportScoreData[] // Lọc các dòng trống
 
             setPreviewData(formattedData)
         }
@@ -102,7 +114,8 @@ const ImportScoreModal = ({
         }
 
         // Lọc chỉ những sinh viên được chọn
-        const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.key))
+        const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.id))
+        console.log(111, selectedData)
 
         // Validate data
         const errors: string[] = []
@@ -117,17 +130,9 @@ const ImportScoreModal = ({
                 errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)
             }
 
-            // Kiểm tra điểm có đủ 3 loại không
-            if (
-                item.attendanceScore === undefined ||
-                item.midtermScore === undefined ||
-                item.examScore === undefined
-            ) {
-                errors.push(`Thiếu điểm cho sinh viên ${item.studentCode}`)
-            }
-
             // Kiểm tra điểm nằm trong khoảng 0-10
-            const checkScoreRange = (score: number, scoreName: string) => {
+            const checkScoreRange = (score: number | null, scoreName: string) => {
+                if (score === null) return
                 if (score < 0 || score > 10) {
                     errors.push(
                         `${scoreName} của sinh viên ${item.studentCode} phải từ 0 đến 10 (hiện tại: ${score})`
@@ -273,7 +278,7 @@ const ImportScoreModal = ({
                     }}
                     columns={columns}
                     dataSource={previewData}
-                    rowKey="key"
+                    rowKey="id"
                     pagination={false}
                     scroll={{ y: 400 }}
                     bordered

@@ -393,6 +393,37 @@ export default function NhapDiem({
     }
 
     const handleImportConfirm = (importedData: ImportScoreData[]) => {
+        const changedData = Object.fromEntries(
+            importedData.map((item) => {
+                const scoreToTakeExam = listForm[item.id]?.scoreToTakeExam
+                // TODO: fix not work if directly uncheck exam banned
+                const isExamBanned =
+                    !!listForm[item.id]?.examBannedReason ||
+                    (item.attendanceScore !== null &&
+                        scoreToTakeExam !== null &&
+                        scoreToTakeExam !== undefined &&
+                        item.attendanceScore < scoreToTakeExam) ||
+                    (item.midtermScore !== null &&
+                        scoreToTakeExam !== null &&
+                        scoreToTakeExam !== undefined &&
+                        item.midtermScore < scoreToTakeExam)
+                return [
+                    item.id,
+                    {
+                        attendanceScore: item.attendanceScore,
+                        midtermScore: item.midtermScore,
+                        examScore: item.examScore,
+                        isChanged:
+                            listForm[item.id].attendanceScore !== item.attendanceScore ||
+                            listForm[item.id].midtermScore !== item.midtermScore ||
+                            listForm[item.id].examScore !== item.examScore,
+                        examBanned: isExamBanned,
+                    },
+                ]
+            })
+        )
+
+        form.setFieldsValue({ list: { ...listForm, ...changedData } })
         showSpinner()
         try {
             message.success('Nhập điểm từ file thành công!')
