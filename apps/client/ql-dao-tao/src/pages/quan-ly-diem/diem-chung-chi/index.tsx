@@ -1,43 +1,83 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import { useArchivedCertificateStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useUpdateArchivedCertificate,
     useFindManyStudent,
     useCountStudent,
+    useFindManyTrainingCourse,
+    useFindManyFixedClass,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
+    useFindManyCurriculumVersion,
+    useFindManyCertificate,
 } from '@workspace/db/hooks'
 import { InfoIcon } from 'lucide-react'
 import { useCertificateScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Modal, Row } from 'antd'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, message, Modal, Row, Select, Tooltip } from 'antd'
+import type { TrainingCourse, FixedClass } from '@workspace/db/client'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ArchivedCertificate() {
-    const { can, canSome } = useAbility()
+    const { can } = useAbility()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [currentPage, setCurrentPage] = useState(1)
-    const [open, setOpen] = useState(false)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
         count: undefined,
+        trainingCourseId: undefined,
+        fixedClassId: undefined,
+        certificateId: undefined,
     })
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const {
-        archivedCertificateStatusOptions,
-        getArchivedCertificateStatusStatusLabel,
-        getArchivedCertificateStatusColor,
-    } = useArchivedCertificateStatusOptions()
-
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
+        where: {
+            trainingObjectTypeId,
+            deletedAt: null,
+            active: true,
+        },
+        orderBy: { name: 'asc' },
+    }, { enabled: !!trainingObjectTypeId })
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        where: {
+            trainingCourse: {
+                trainingObjectTypeId,
+                deletedAt: null,
+                active: true,
+            },
+        },
+        include: {
+            trainingCourse: true,
+        },
+    }, { enabled: !!trainingObjectTypeId })
+
+    const { data: trainingFieldData = [] } = useFindManyTrainingField()
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: certificatesData = [] } = useFindManyCertificate({
+        orderBy: { name: 'asc' },
+    })
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: 'PutCertificateArchivedModal',
@@ -86,13 +126,7 @@ export default function ArchivedCertificate() {
     }
 
     const where = useMemo(() => {
-        const conditions: any = {
-            archivedCertificate: {
-                some: {
-                    deletedAt: null,
-                },
-            },
-        }
+        const conditions: any = {}
 
         if (filters.name && filters.name !== '') {
             conditions.OR = [
@@ -115,19 +149,76 @@ export default function ArchivedCertificate() {
             ]
         }
 
+        if (filters.fixedClassId) {
+            conditions.fixedClassId = filters.fixedClassId
+        } else if (filters.trainingCourseId) {
+            conditions.fixedClass = {
+                trainingCourseId: filters.trainingCourseId,
+            }
+        } else {
+            // Mặc định lọc theo trainingObjectTypeId nếu không có filter khác
+            conditions.fixedClass = {
+                trainingCourse: {
+                    trainingObjectTypeId,
+                },
+            }
+        }
+
+        if (filters.certificateId) {
+            conditions.archivedCertificate = {
+                some: {
+                    certificateId: filters.certificateId,
+                    deletedAt: null,
+                },
+            }
+        }
+
         return conditions
-    }, [filters])
+    }, [filters, trainingObjectTypeId])
 
     // Lấy danh sách học viên có chứng chỉ
     const { data: dataTable = [], refetch } = useFindManyStudent({
         where,
         include: {
-            userProfile: true,
+            userProfile: {
+                include: { rank: true },
+            },
             fixedClass: {
                 include: {
-                    trainingCourse: true,
+                    trainingCourse: {
+                        include: {
+                            trainingObjectType: true,
+                        },
+                    },
+                    curriculumVersion: {
+                        include: {
+                            curriculum: {
+                                include: {
+                                    trainingMajor: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
+            curriculumVersion: {
+                include: {
+                    curriculum: {
+                        include: {
+                            trainingMajor: {
+                                include: {
+                                    trainingField: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            curriculumVersionParallel: true,
             archivedCertificate: {
                 where: {
                     deletedAt: null,
@@ -142,9 +233,8 @@ export default function ArchivedCertificate() {
             },
         },
         orderBy: [
-            {
-                createdAt: 'desc',
-            },
+            { userProfile: { firstName: 'asc' } },
+            { userProfile: { lastName: 'asc' } },
         ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -239,7 +329,59 @@ export default function ArchivedCertificate() {
         <Row gutter={[16, 0]}>
             <Col span={24}>
                 <Row gutter={[16, 16]} align="top" justify="space-between">
-                    <Col span={24} className="mt-3">
+                    <Col span={16}>
+                        <Flex gap={8}>
+                            <Select
+                                className="w-full"
+                                placeholder="Chọn khóa học"
+                                options={TrainingCourseData.map((i: TrainingCourse) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                }))}
+                                onChange={(val) =>
+                                    setFilters({
+                                        ...filters,
+                                        trainingCourseId: val,
+                                    })
+                                }
+                                value={filters.trainingCourseId}
+                                allowClear
+                            />
+                            <Select
+                                className="w-full"
+                                placeholder="Chọn lớp quản lý"
+                                options={fixedClassData.map((i: FixedClass) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                }))}
+                                onChange={(val) =>
+                                    setFilters({
+                                        ...filters,
+                                        fixedClassId: val,
+                                    })
+                                }
+                                value={filters.fixedClassId}
+                                allowClear
+                            />
+                            <Select
+                                className="w-full"
+                                placeholder="Chọn chứng chỉ"
+                                options={certificatesData.map((i: any) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                }))}
+                                onChange={(val) =>
+                                    setFilters({
+                                        ...filters,
+                                        certificateId: val,
+                                    })
+                                }
+                                value={filters.certificateId}
+                                allowClear
+                            />
+                        </Flex>
+                    </Col>
+                    <Col span={8}>
                         <Flex justify="end">
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
@@ -322,40 +464,94 @@ export default function ArchivedCertificate() {
                             title: 'Mã học viên',
                             dataIndex: ['userProfile', 'code'],
                             align: 'center',
-                            width: 120,
+                            width: 130,
+                            fixed: 'left',
+                            type: 'input',
                         },
                         {
                             title: 'Họ và tên',
                             dataIndex: 'name',
-                            align: 'left',
+                            align: 'center',
+                            width: 180,
+                            fixed: 'left',
                             type: 'input',
-                            width: 200,
                             render: (__, record) => {
                                 return `${record?.userProfile?.lastName || ''} ${record?.userProfile?.firstName || ''}`.trim()
                             },
                         },
                         {
-                            title: 'Email',
-                            dataIndex: ['userProfile', 'email'],
-                            align: 'left',
-                            width: 220,
+                            title: 'SĐT',
+                            align: 'center',
+                            width: 120,
+                            dataIndex: 'phone',
+                            type: 'input',
+                            render: (__, record) =>
+                                record.userProfile?.phoneNumber
+                                    ? record.userProfile?.phoneNumber
+                                    : '',
                         },
                         {
-                            title: 'Khóa',
-                            dataIndex: ['fixedClass', 'trainingCourse', 'name'],
+                            title: 'Lớp',
                             align: 'center',
-                            width: 150,
+                            width: 120,
+                            dataIndex: 'fixedClassId',
+                            type: 'select',
+                            options: fixedClassData.map((item: FixedClass) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
                             render: (__, record) => {
-                                return record?.fixedClass?.trainingCourse?.code || '-'
+                                if (!record.fixedClass) return '-'
+                                return (
+                                    <Tooltip title={record.fixedClass?.name}>
+                                        {record.fixedClass?.code}
+                                    </Tooltip>
+                                )
                             },
                         },
                         {
-                            title: 'Lớp quản lý',
-                            dataIndex: ['fixedClass', 'name'],
+                            title: 'Khóa',
                             align: 'center',
-                            width: 120,
+                            width: 100,
+                            dataIndex: 'trainingCourseId',
+                            type: 'select',
+                            options: TrainingCourseData.map((item: TrainingCourse) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
                             render: (__, record) => {
-                                return record?.fixedClass?.code || '-'
+                                const trainingCourse = record?.fixedClass?.trainingCourse
+                                return trainingCourse ? trainingCourse?.name : '-'
+                            },
+                        },
+                        {
+                            title: 'Ngành',
+                            align: 'center',
+                            width: 160,
+                            dataIndex: 'trainingFieldId',
+                            type: 'select',
+                            options: trainingFieldData.map((item: any) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                return record?.fixedClass?.curriculumVersion?.curriculum
+                                    ?.trainingMajor?.trainingField?.name || '-'
+                            },
+                        },
+                        {
+                            title: 'Chuyên ngành',
+                            align: 'center',
+                            width: 180,
+                            dataIndex: 'trainingMajorId',
+                            type: 'select',
+                            options: trainingMajorData.map((item: any) => ({
+                                label: item.name,
+                                value: item.id,
+                            })),
+                            render: (__, record) => {
+                                return record?.fixedClass?.curriculumVersion?.curriculum
+                                    ?.trainingMajor?.name || '-'
                             },
                         },
                         {

@@ -168,6 +168,7 @@ export type FilterProps = {
     trainingLevelId?: string[]
     formStatus?: ScoreConvertStatus
     subjects?: string
+    certificateId?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
