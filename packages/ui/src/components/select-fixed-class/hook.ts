@@ -9,7 +9,7 @@ export const fixedClassStore = new Store<FixedClassState>({
     selectedFixedClassId: undefined,
 })
 
-export const selectFixedClass = (id: string) => {
+export const selectFixedClass = (id?: string) => {
     if (id) {
         localStorage.setItem('selectedFixedClassId', id)
     } else {

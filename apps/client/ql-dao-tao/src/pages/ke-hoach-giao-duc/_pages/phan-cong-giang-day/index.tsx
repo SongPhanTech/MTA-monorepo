@@ -30,6 +30,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import {
     dayjs,
+    useFixedClassStore,
     useSemesterStore,
     useTrainingCourseStore,
     useTrainingObjectTypeStore,
@@ -120,6 +121,7 @@ export default function PhanCongGiangDay({
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: fixedClassId } = useFixedClassStore()
     const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, 'XEM_TAT_CA')
     const orgId = window.contextData?.organizationId
     const where = useMemo(
@@ -263,6 +265,24 @@ export default function PhanCongGiangDay({
                           }
                         : {}),
                 },
+                ...(trainingCourseId
+                    ? {
+                          fixedClasses: {
+                              some: {
+                                  trainingCourseId,
+                              },
+                          },
+                      }
+                    : {}),
+                ...(fixedClassId
+                    ? {
+                          fixedClasses: {
+                              some: {
+                                  id: fixedClassId,
+                              },
+                          },
+                      }
+                    : {}),
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
@@ -275,19 +295,15 @@ export default function PhanCongGiangDay({
                     : {}),
                 type: type,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
+        [filters, semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId, khoaBoMon, type]
     )
 
     const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
         {
             select: { Id: true },
-            where: {
-                bActive: true,
-            },
+            where: { bActive: true },
         },
-        {
-            refetchOnWindowFocus: false,
-        }
+        { refetchOnWindowFocus: false }
     )
 
     const orgIds = [
@@ -309,31 +325,13 @@ export default function PhanCongGiangDay({
                 subjectVersions: {
                     select: {
                         subjectClass: {
-                            where: {
-                                ...where,
-                            },
+                            where,
                             include: {
                                 semester: true,
-                                mainLecturer: {
-                                    include: {
-                                        userProfile: true,
-                                    },
-                                },
-                                subject: {
-                                    include: {
-                                        managementOrganization: true,
-                                    },
-                                },
-                                extraLecturer: {
-                                    include: {
-                                        userProfile: true,
-                                    },
-                                },
-                                enterGradeLecturer: {
-                                    include: {
-                                        userProfile: true,
-                                    },
-                                },
+                                mainLecturer: { include: { userProfile: true } },
+                                subject: { include: { managementOrganization: true } },
+                                extraLecturer: { include: { userProfile: true } },
+                                enterGradeLecturer: { include: { userProfile: true } },
                                 room: true,
                                 trainingLocation: true,
                                 subjectClassStudent: true,

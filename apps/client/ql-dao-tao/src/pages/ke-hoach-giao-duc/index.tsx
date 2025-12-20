@@ -222,30 +222,22 @@ export default function KeHoachDaoTao({ type = 'NORMAL', role }: KeHoachDaoTaoPa
                         allowClear
                     />
                 </Form.Item>
-                <Form.Item
-                    className="m-0"
-                    name="fixedClassId"
-                    label="Lớp quản lý"
-                    labelAlign="left"
-                >
-                    <Select
-                        placeholder="Chọn lớp quản lý"
-                        options={fixedClassData.map((i) => ({
-                            value: i.id,
-                            label: [i.code, i.name].filter(Boolean).join(' - '),
-                        }))}
-                        showSearch
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
-                        }
-                        value={fixedClassId}
-                        onChange={onSelectFixedClass}
-                        dropdownStyle={{
-                            minWidth: 600,
-                        }}
-                        allowClear
-                    />
-                </Form.Item>
+                <div className="flex items-center">Lớp quản lý:</div>
+                <Select
+                    placeholder="Chọn lớp quản lý"
+                    options={fixedClassData.map((i) => ({
+                        value: i.id,
+                        label: [i.code, i.name].filter(Boolean).join(' - '),
+                    }))}
+                    showSearch
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
+                    }
+                    value={fixedClassId}
+                    onChange={onSelectFixedClass}
+                    styles={{ popup: { root: { minWidth: 600 } } }}
+                    allowClear
+                />
             </Flex>
             <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
                 {tabs.map((tab) => (
