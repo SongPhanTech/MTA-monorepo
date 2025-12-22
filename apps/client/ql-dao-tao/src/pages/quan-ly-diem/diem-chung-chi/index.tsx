@@ -43,27 +43,34 @@ export default function ArchivedCertificate() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
-        where: {
-            trainingObjectTypeId,
-            deletedAt: null,
-            active: true,
-        },
-        orderBy: { name: 'asc' },
-    }, { enabled: !!trainingObjectTypeId })
-
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        where: {
-            trainingCourse: {
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
+        {
+            where: {
                 trainingObjectTypeId,
                 deletedAt: null,
                 active: true,
             },
+            orderBy: { name: 'asc' },
         },
-        include: {
-            trainingCourse: true,
+        { enabled: !!trainingObjectTypeId }
+    )
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass(
+        {
+            where: {
+                trainingCourse: {
+                    trainingObjectTypeId,
+                    deletedAt: null,
+                    active: true,
+                    ...(filters.trainingCourseId ? { id: filters.trainingCourseId } : {}),
+                },
+            },
+            include: {
+                trainingCourse: true,
+            },
         },
-    }, { enabled: !!trainingObjectTypeId })
+        { enabled: !!trainingObjectTypeId }
+    )
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
@@ -232,10 +239,7 @@ export default function ArchivedCertificate() {
                 },
             },
         },
-        orderBy: [
-            { userProfile: { firstName: 'asc' } },
-            { userProfile: { lastName: 'asc' } },
-        ],
+        orderBy: [{ userProfile: { firstName: 'asc' } }, { userProfile: { lastName: 'asc' } }],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -334,7 +338,7 @@ export default function ArchivedCertificate() {
                             <Select
                                 className="w-full"
                                 placeholder="Chọn khóa học"
-                                options={TrainingCourseData.map((i: TrainingCourse) => ({
+                                options={trainingCourseData.map((i: TrainingCourse) => ({
                                     value: i.id,
                                     label: i.name,
                                 }))}
@@ -515,7 +519,7 @@ export default function ArchivedCertificate() {
                             width: 100,
                             dataIndex: 'trainingCourseId',
                             type: 'select',
-                            options: TrainingCourseData.map((item: TrainingCourse) => ({
+                            options: trainingCourseData.map((item: TrainingCourse) => ({
                                 label: item.name,
                                 value: item.id,
                             })),
@@ -535,8 +539,10 @@ export default function ArchivedCertificate() {
                                 value: item.id,
                             })),
                             render: (__, record) => {
-                                return record?.fixedClass?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.trainingField?.name || '-'
+                                return (
+                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                        ?.trainingField?.name || '-'
+                                )
                             },
                         },
                         {
@@ -550,8 +556,10 @@ export default function ArchivedCertificate() {
                                 value: item.id,
                             })),
                             render: (__, record) => {
-                                return record?.fixedClass?.curriculumVersion?.curriculum
-                                    ?.trainingMajor?.name || '-'
+                                return (
+                                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                                        ?.name || '-'
+                                )
                             },
                         },
                         {
