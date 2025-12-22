@@ -1,12 +1,10 @@
 import {
-    AppstoreOutlined,
     CloseOutlined,
     MenuOutlined,
     UnorderedListOutlined,
 } from '@ant-design/icons'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import APPS_TYPES from '@/navigations/header-content/app_types'
 
 const { Header } = Layout
@@ -30,9 +28,6 @@ const ChatIframeHeader = ({
     onToggleChatWidget,
 }: ChatIframeHeaderProps) => {
     const pathname = usePathname()
-    const { onOpen: openAppModal } = useDisclosure({
-        tag: 'AppSwitcherModal',
-    })
 
     const currentApp = APPS_TYPES.find((app) => {
         const paths = app.matchPaths || [app.path]
@@ -71,13 +66,6 @@ const ChatIframeHeader = ({
                         title={collapsed ? 'Hiện danh sách chat' : 'Ẩn danh sách chat'}
                     />
                 )}
-                <Button
-                    type="text"
-                    icon={<AppstoreOutlined />}
-                    onClick={openAppModal}
-                    className="flex items-center justify-center text-primary bg-primary/8 border border-primary/15 hover:bg-primary/12 hover:border-primary/25 transition-all duration-200"
-                    title="Chuyển đổi ứng dụng"
-                />
                 {currentApp && (
                     <Title level={5} className="!mb-0 !text-primary">
                         {currentApp.label}

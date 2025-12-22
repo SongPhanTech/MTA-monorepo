@@ -1,3 +1,4 @@
+// Header.tsx
 import type React from 'react'
 import { useEffect } from 'react'
 import { env } from '@/env'
@@ -5,7 +6,7 @@ import { env } from '@/env'
 const HeaderApp: React.FC = () => {
     useEffect(() => {
         try {
-            if (env.NEXT_PUBLIC_ENVIRONMENT === 'local') return
+            // if (env.NEXT_PUBLIC_ENVIRONMENT === 'local') return
             window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                 menuAppId: 'menuContainer',
                 notificationAppId: 'notificationContainer',
