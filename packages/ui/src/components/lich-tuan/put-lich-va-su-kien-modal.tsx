@@ -10,6 +10,7 @@ import {
     useUpdateClassSchedule,
 } from '@workspace/db/hooks'
 import { cn } from '@workspace/ui/lib/utils'
+import '@workspace/libs/utils'
 import {
     Button,
     Checkbox,
