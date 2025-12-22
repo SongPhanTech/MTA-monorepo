@@ -1,5 +1,6 @@
 import { Store, useStore } from '@tanstack/react-store'
 import { useEffect } from 'react'
+import { selectFixedClass } from '../select-fixed-class'
 
 export type TrainingCourseState = {
     selectedTrainingCourseId?: string
@@ -15,6 +16,9 @@ export const selectTrainingCourse = (id: string) => {
     } else {
         localStorage.removeItem('selectedTrainingCourseId')
     }
+
+    // clear selected fixed class when training course changes
+    selectFixedClass()
     trainingCourseStore.setState((prev) => ({
         ...prev,
         selectedTrainingCourseId: id,

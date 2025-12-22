@@ -83,7 +83,7 @@ const SelectTrainingCourse = (props: AntdSelectProps) => {
                     value: e.id,
                 }
             })}
-            allowClear={false}
+            allowClear={true}
             style={{ width: 200 }}
             {...props}
             value={id}
