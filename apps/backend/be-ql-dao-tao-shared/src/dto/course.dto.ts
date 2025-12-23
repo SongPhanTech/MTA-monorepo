@@ -36,6 +36,7 @@ export const ClassDetailsSchema = z
         class_students_reg: z.number(),
         class_students_count: z.number(),
         class_teachers: z.string(),
+       class_credit_hour:z.number(),
         class_tuition: z.number(),
         class_time: z.string(),
         class_exam_date: z.date().nullable(),
