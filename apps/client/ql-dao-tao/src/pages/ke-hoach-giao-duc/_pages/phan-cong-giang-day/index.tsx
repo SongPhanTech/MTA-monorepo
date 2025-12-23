@@ -1805,10 +1805,10 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Lớp QL',
                                     align: 'center',
-                                    width: 100,
+                                    width: 120,
                                     render: (_, record) => (
-                                        <p>
-                                            {record?.fixedClasses?.map((e) => e.code).join(', ') ||
+                                        <p className='text-left'>
+                                            {record?.fixedClasses?.map((e) => e.code).join('\n') ||
                                                 '-'}
                                         </p>
                                     ),

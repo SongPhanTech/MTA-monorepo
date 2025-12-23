@@ -479,15 +479,58 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                        label: 'Danh mục đồ án',
+                        label: 'Đợt xét đồ án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                        description: 'Danh mục đồ án',
+                        description: 'Đợt xét đồ án',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        label: 'Danh mục luận văn/đề án',
+                        label: 'Quản lý đồ án',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
-                        description: 'Danh mục luận văn/đề án',
+                        description: 'Quản lý đồ án',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        label: 'Danh sách chuyên gia',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        description: 'Danh sách chuyên gia',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                        label: 'Danh sách thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                        description: 'Danh sách thanh toán',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                        label: 'Danh sách thanh toán GVHD',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                        description: 'Danh sách thanh toán GVHD',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_THONG_KE,
+                        label: 'Thống kê kết quả bảo vệ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
+                        description: 'Thống kê kết quả bảo vệ',
+                    },
+                ],
+            },
+            {
+                id: 'ql-luan-van-de-an',
+                label: 'Quản lý luận văn/đề án',
+                icon: FileCheck2,
+                children: [
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
+                        label: 'Đợt xét luận văn',
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
+                        description: 'Đợt xét luận văn',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        label: 'Quản lý luận văn/đề án',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        description: 'Quản lý luận văn/đề án',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
@@ -526,12 +569,7 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
                         description: 'Đợt xét tốt nghiệp',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
-                        label: 'Đợt xét luận văn',
-                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
-                        description: 'Đợt xét luận văn',
-                    },
+
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         label: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
