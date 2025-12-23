@@ -1,5 +1,4 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { context, SpanKind, trace } from '@opentelemetry/api'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -192,20 +191,6 @@ app.use(
 
 app.onError((err, c) => {
     console.log('[BE-MODEL] Error: ', err)
-    const parentSpan = trace.getActiveSpan()
-
-    const subSpan = tracer.startSpan(
-        'internal-error',
-        {
-            attributes: { 'error.message': err.message },
-            kind: SpanKind.INTERNAL,
-        },
-        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
-    )
-
-    subSpan.recordException(err)
-    subSpan.end()
-
     if (err instanceof HTTPException) {
         return err.getResponse()
     }
