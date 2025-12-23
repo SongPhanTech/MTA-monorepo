@@ -10,6 +10,11 @@ export class MinIOService {
     constructor() {
         this.minioClient = new Client({
             endPoint: process.env.MINIO_ENDPOINT || '',
+            ...(process.env.MINIO_PORT
+                ? {
+                      port: Number.parseInt(process.env.MINIO_PORT, 10),
+                  }
+                : {}),
             accessKey: process.env.MINIO_ACCESS_KEY,
             secretKey: process.env.MINIO_SECRET_KEY,
             pathStyle: true,
@@ -20,55 +25,55 @@ export class MinIOService {
         this.bucketName = process.env.MINIO_BUCKET || ''
     }
 
-    async onModuleInit() {
-        const exists = await this.minioClient.bucketExists(this.bucketName)
-        console.log(`Bucket ${this.bucketName} exists: ${exists}`)
-        if (!exists) {
-            await this.minioClient.makeBucket(this.bucketName)
-            await this.minioClient.setBucketPolicy(
-                this.bucketName,
-                JSON.stringify({
-                    Version: '2012-10-17',
-                    Statement: [
-                        {
-                            Effect: 'Allow',
-                            Principal: {
-                                AWS: ['*'],
-                            },
-                            Action: ['s3:GetBucketLocation'],
-                            Resource: [`arn:aws:s3:::${this.bucketName}`],
-                        },
-                        {
-                            Effect: 'Allow',
-                            Principal: {
-                                AWS: ['*'],
-                            },
-                            Action: ['s3:ListBucket'],
-                            Resource: [`arn:aws:s3:::${this.bucketName}`],
-                            Condition: {
-                                StringEquals: {
-                                    's3:prefix': ['media', 'public'],
-                                },
-                            },
-                        },
-                        {
-                            Effect: 'Allow',
-                            Principal: {
-                                AWS: ['*'],
-                            },
-                            Action: ['s3:GetObject'],
-                            Resource: [
-                                `arn:aws:s3:::${this.bucketName}/media*`,
-                                `arn:aws:s3:::${this.bucketName}/public*`,
-                            ],
-                        },
-                    ],
-                })
-            )
-            console.log(`Created bucket ${this.bucketName} successfully`)
-        }
-        console.log(`Bucket ${this.bucketName} is ready`)
-    }
+    // async onModuleInit() {
+    //     const exists = await this.minioClient.bucketExists(this.bucketName)
+    //     console.log(`Bucket ${this.bucketName} exists: ${exists}`)
+    //     if (!exists) {
+    //         await this.minioClient.makeBucket(this.bucketName)
+    //         await this.minioClient.setBucketPolicy(
+    //             this.bucketName,
+    //             JSON.stringify({
+    //                 Version: '2012-10-17',
+    //                 Statement: [
+    //                     {
+    //                         Effect: 'Allow',
+    //                         Principal: {
+    //                             AWS: ['*'],
+    //                         },
+    //                         Action: ['s3:GetBucketLocation'],
+    //                         Resource: [`arn:aws:s3:::${this.bucketName}`],
+    //                     },
+    //                     {
+    //                         Effect: 'Allow',
+    //                         Principal: {
+    //                             AWS: ['*'],
+    //                         },
+    //                         Action: ['s3:ListBucket'],
+    //                         Resource: [`arn:aws:s3:::${this.bucketName}`],
+    //                         Condition: {
+    //                             StringEquals: {
+    //                                 's3:prefix': ['media', 'public'],
+    //                             },
+    //                         },
+    //                     },
+    //                     {
+    //                         Effect: 'Allow',
+    //                         Principal: {
+    //                             AWS: ['*'],
+    //                         },
+    //                         Action: ['s3:GetObject'],
+    //                         Resource: [
+    //                             `arn:aws:s3:::${this.bucketName}/media*`,
+    //                             `arn:aws:s3:::${this.bucketName}/public*`,
+    //                         ],
+    //                     },
+    //                 ],
+    //             })
+    //         )
+    //         console.log(`Created bucket ${this.bucketName} successfully`)
+    //     }
+    //     console.log(`Bucket ${this.bucketName} is ready`)
+    // }
 
     async generatePresignedUrl({
         path: folder,

@@ -15,12 +15,15 @@ import RegistrationSessionApp from './api/registration-session'
 import SemesterApp from './api/semester'
 import SpecializedApp from './api/specialized'
 import SchedulesApp from './api/student-schedule'
-import SubjectApp from './api/subject'
 import StudentScoreApp from './api/student-score'
+import SubjectApp from './api/subject'
 import { setupOpenApi } from './utils/openapi'
 export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
+
+const originEnv = process.env.ORIGIN || ''
+const originList = originEnv.split(',').map((item) => item.trim())
 
 app.use(
     '*',
@@ -33,6 +36,8 @@ app.use(
             'https://am.swantech.vn',
             'https://api.am.swantech.vn',
             'https://*.swantech.vn',
+            ...originList,
+            '*',
         ],
         credentials: true,
     })

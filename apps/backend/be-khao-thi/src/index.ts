@@ -31,6 +31,9 @@ app.get('/metrics', async (c) => {
     return c.text(await register.metrics())
 })
 
+const originEnv = process.env.ORIGIN || ''
+const originList = originEnv.split(',').map((item) => item.trim())
+
 app.use(
     '*',
     cors({
@@ -38,8 +41,12 @@ app.use(
             'http://localhost:3000',
             'https://user.mta.swantech.vn',
             'https://mta.swantech.vn',
+            'https://daotao.mta.swantech.vn',
             'https://am.swantech.vn',
+            'https://api.am.swantech.vn',
             'https://*.swantech.vn',
+            ...originList,
+            '*',
         ],
         credentials: true,
     })

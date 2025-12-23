@@ -32,7 +32,7 @@ const ModalPrintToKQHT = () => {
                 id: input?.dataStudent?.curriculumVersionId,
             },
             include: {
-                fixedClasses: {
+                fixedClass: {
                     where: {
                         id: input?.dataStudent?.fixedClassId,
                     },
@@ -68,12 +68,12 @@ const ModalPrintToKQHT = () => {
     )
 
     const { convertScore } = useScoreConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.scoreConverts
+        subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
     )
 
     const { convertAcademicRanking } = useAcademicRankingConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert,
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.baseScore
+        subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
+        subjectScoreData?.fixedClass?.trainingCourse?.baseScore
     )
 
     const handlePrint = useReactToPrint({
@@ -543,7 +543,7 @@ const ModalPrintToKQHT = () => {
                     <p className="mt-2">
                         - Phân hạng tốt nghiệp theo thang điểm 4: {(() => {
                             const rankingData =
-                                subjectScoreData?.fixedClasses?.[0]?.trainingCourse
+                                subjectScoreData?.fixedClass?.trainingCourse
                                     ?.academicRankingConvert || []
 
                             const sortedRankings = rankingData

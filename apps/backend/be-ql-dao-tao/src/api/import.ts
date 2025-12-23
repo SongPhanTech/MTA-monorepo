@@ -160,43 +160,112 @@ app.openapi(importLecturer, async (c) => {
         }
 
         const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
-        if (existingProfileId) {
-            const payload = {
-                Id: existingProfileId,
-                sMa: lecturer.code,
-                bLaGiangVien: true,
-                bLaCanBoNhanVien: true,
-                dNgaySinh: lecturer.dateOfBirth
-                    ? new Date(lecturer.dateOfBirth)?.toISOString()
-                    : null,
-                sCCCD: lecturer.idCardNumber,
-                sHoVaDem: profileData.lastName,
-                sTen: profileData.firstName,
-                sTenDayDu: lecturer.fullname,
-                sSDTDiDong: lecturer.phoneNumber ?? '',
-                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                sEmail: lecturer.email,
-                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-            }
-            console.log(payload)
+        try {
+            if (existingProfileId) {
+                const payload = {
+                    Id: existingProfileId,
+                    sMa: lecturer.code,
+                    bLaGiangVien: true,
+                    bLaCanBoNhanVien: true,
+                    dNgaySinh: lecturer.dateOfBirth
+                        ? new Date(lecturer.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: lecturer.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: lecturer.fullname,
+                    sSDTDiDong: lecturer.phoneNumber ?? '',
+                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                    sEmail: lecturer.email,
+                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                }
+                console.log(payload)
 
-            const res = await putDMNhanViens(payload, {
-                headers: {
-                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                },
-            })
+                const res = await putDMNhanViens(payload, {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                })
 
-            const existing = existingLecturerMap.get(lecturer.code)
-            if (existing) {
-                // @ts-expect-error
-                console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
-                if (res.status === 200) {
-                    await prisma.lecturer.update({
-                        where: { id: existing.id },
+                const existing = existingLecturerMap.get(lecturer.code)
+                if (existing) {
+                    // @ts-expect-error
+                    console.log('[LSB update User]:', res.status, res.data, res.data?.extra?.data)
+                    if (res.status === 200) {
+                        await prisma.lecturer.update({
+                            where: { id: existing.id },
+                            data: {
+                                ...lecturerData,
+                                userProfile: { update: profileData },
+                            },
+                        })
+                    } else {
+                        const extra = res.data?.extra as ErrorExtra | undefined
+                        return c.json(
+                            { message: extra?.message || [extra?.code, extra?.data].join(' ') },
+                            400
+                        )
+                    }
+                } else {
+                    await prisma.lecturer.create({
                         data: {
                             ...lecturerData,
-                            userProfile: { update: profileData },
+                            userProfile: {
+                                connectOrCreate: {
+                                    where: { idCardNumber: lecturer.idCardNumber },
+                                    create: { id: res.data as string, ...profileData },
+                                },
+                            },
+                        },
+                    })
+                }
+            } else {
+                // const profileId = crypto.randomUUID()
+                const payload = {
+                    // Id: profileId,
+                    sMa: lecturer.idCardNumber,
+                    bLaGiangVien: true,
+                    bLaCanBoNhanVien: true,
+                    bLaTaiKhoan: true,
+                    dNgaySinh: lecturer.dateOfBirth
+                        ? new Date(lecturer.dateOfBirth)?.toISOString()
+                        : null,
+                    sCCCD: lecturer.idCardNumber,
+                    sHoVaDem: profileData.lastName,
+                    sTen: profileData.firstName,
+                    sTenDayDu: lecturer.fullname,
+                    sSDTDiDong: lecturer.phoneNumber ?? '',
+                    sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                    sEmail: lecturer.email,
+                    sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                }
+                console.log(payload)
+
+                const res = await postDMNhanViens(payload, {
+                    headers: {
+                        'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                        'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                    },
+                })
+
+                // @ts-expect-error
+                console.log(
+                    '[LSB create User]:',
+                    res.status,
+                    res.data,
+                    res.data?.extra?.data.Master
+                )
+                if (res.status === 200) {
+                    await prisma.lecturer.create({
+                        data: {
+                            ...lecturerData,
+                            userProfile: {
+                                connectOrCreate: {
+                                    where: { idCardNumber: lecturer.idCardNumber },
+                                    create: { id: res.data as string, ...profileData },
+                                },
+                            },
                         },
                     })
                 } else {
@@ -206,69 +275,9 @@ app.openapi(importLecturer, async (c) => {
                         400
                     )
                 }
-            } else {
-                await prisma.lecturer.create({
-                    data: {
-                        ...lecturerData,
-                        userProfile: {
-                            connectOrCreate: {
-                                where: { idCardNumber: lecturer.idCardNumber },
-                                create: { id: res.data as string, ...profileData },
-                            },
-                        },
-                    },
-                })
             }
-        } else {
-            // const profileId = crypto.randomUUID()
-            const payload = {
-                // Id: profileId,
-                sMa: lecturer.idCardNumber,
-                bLaGiangVien: true,
-                bLaCanBoNhanVien: true,
-                bLaTaiKhoan: true,
-                dNgaySinh: lecturer.dateOfBirth
-                    ? new Date(lecturer.dateOfBirth)?.toISOString()
-                    : null,
-                sCCCD: lecturer.idCardNumber,
-                sHoVaDem: profileData.lastName,
-                sTen: profileData.firstName,
-                sTenDayDu: lecturer.fullname,
-                sSDTDiDong: lecturer.phoneNumber ?? '',
-                sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                sEmail: lecturer.email,
-                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
-            }
-            console.log(payload)
-
-            const res = await postDMNhanViens(payload, {
-                headers: {
-                    'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
-                    'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
-                },
-            })
-
-            // @ts-expect-error
-            console.log('[LSB create User]:', res.status, res.data, res.data?.extra?.data.Master)
-            if (res.status === 200) {
-                await prisma.lecturer.create({
-                    data: {
-                        ...lecturerData,
-                        userProfile: {
-                            connectOrCreate: {
-                                where: { idCardNumber: lecturer.idCardNumber },
-                                create: { id: res.data as string, ...profileData },
-                            },
-                        },
-                    },
-                })
-            } else {
-                const extra = res.data?.extra as ErrorExtra | undefined
-                return c.json(
-                    { message: extra?.message || [extra?.code, extra?.data].join(' ') },
-                    400
-                )
-            }
+        } catch (error) {
+            console.error(error)
         }
     }
     //     },
