@@ -1,11 +1,11 @@
 import { useScoreConverter } from '@hooks/scoreConverter'
+import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
-import { LichCongTac, DanhSachThongBao } from '@workspace/ui'
+import { DanhSachThongBao, LichCongTac } from '@workspace/ui'
 import { Col, Progress, Row, Typography } from 'antd'
 import { useMemo } from 'react'
-import DefaultLayout from '@layouts/default-layout'
 
 const { Title } = Typography
 
@@ -37,7 +37,7 @@ function Page() {
                 id: curriculumVersionId,
             },
             include: {
-                fixedClasses: {
+                fixedClass: {
                     where: {
                         id: fixedClassId,
                     },
@@ -48,9 +48,6 @@ function Page() {
                                 academicRankingConvert: true,
                             },
                         },
-                    },
-                    orderBy: {
-                        createdAt: 'desc',
                     },
                 },
                 trainingBlocks: {
@@ -76,12 +73,12 @@ function Page() {
     )
 
     const { convertScore } = useScoreConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.scoreConverts
+        subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
     )
 
     const { convertAcademicRanking } = useAcademicRankingConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert,
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.baseScore
+        subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
+        subjectScoreData?.fixedClass?.trainingCourse?.baseScore
     )
     const gpaScore = useMemo(() => {
         const validSubjects =

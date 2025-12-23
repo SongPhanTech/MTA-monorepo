@@ -1,8 +1,5 @@
-import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { context, SpanKind, trace } from '@opentelemetry/api'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
-import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -22,26 +19,11 @@ import WSO2AmApp from './api/wso2am'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
 
-import './otel'
-
-const openTelemetrySDK = new NodeSDK({
-    traceExporter: new OTLPTraceExporter(),
-})
-openTelemetrySDK.start()
-
 export const prisma: PrismaClient = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 
-const tracer = trace.getTracer('mta-be-ql-dao-tao-tracer')
-
-app.use(
-    httpInstrumentationMiddleware({
-        serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
-        serviceVersion: '1.0.0',
-        captureRequestHeaders: ['user-agent', 'service-name', 'x-forwarded-for'],
-        tracer,
-    })
-)
+const originEnv = process.env.ORIGIN || ''
+const originList = originEnv.split(',').map((item) => item.trim())
 
 app.use(
     '*',
@@ -59,6 +41,9 @@ app.use(
             'https://am.swantech.vn',
             'https://14.224.217.69:8243',
             'https://*.swantech.vn',
+            'https://*.swantech.vn',
+            ...originList,
+            '*',
         ],
         credentials: true,
     })
