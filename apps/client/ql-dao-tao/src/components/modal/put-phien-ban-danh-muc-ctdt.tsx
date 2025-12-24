@@ -37,8 +37,8 @@ import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Download } from 'lucide-react'
-import { getMinioUrl } from '@workspace/constant'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]

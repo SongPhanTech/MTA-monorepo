@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import {
     Button as AntdButton,
     Checkbox,
@@ -33,7 +34,6 @@ import {
     RiMoneyDollarCircleLine,
     RiStrikethrough,
 } from 'react-icons/ri'
-import { env } from '@/env'
 import 'katex/dist/katex.min.css'
 import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from 'lucide-react'
 
@@ -97,7 +97,7 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
                 body: file,
             })
 
-            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+            const imageUrl = `${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${resPresignedUrl.data.fileName}`
 
             editor
                 ?.chain()

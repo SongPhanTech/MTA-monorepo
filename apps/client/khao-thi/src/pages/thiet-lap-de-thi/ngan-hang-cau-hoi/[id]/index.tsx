@@ -21,6 +21,7 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
@@ -28,7 +29,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { env } from '@/env'
 
 export default function QuestionPage() {
     const router = useRouter()
@@ -210,7 +210,7 @@ export default function QuestionPage() {
     const handleDownloadTemplate = async () => {
         try {
             const response = await fetch(
-                `${env.NEXT_PUBLIC_ASSET_PREFIX}/files/file-mau-import-cau-hoi.docx`
+                `${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/files/file-mau-import-cau-hoi.docx`
             )
             const blob = await response.blob()
             const url = window.URL.createObjectURL(blob)

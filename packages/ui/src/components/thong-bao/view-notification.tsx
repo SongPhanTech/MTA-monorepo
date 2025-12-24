@@ -1,5 +1,5 @@
-import { getMinioUrl } from '@workspace/constant'
 import { useFindUniqueNotification } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Col, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { CalendarIcon } from 'lucide-react'

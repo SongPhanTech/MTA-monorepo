@@ -5,13 +5,13 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
 import type { DocumentFile } from '@workspace/db/client'
 import {
     useCountNotification,
     useFindManyNotification,
     useUpdateNotification,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'

@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
@@ -10,6 +9,7 @@ import {
     useFindUniqueSemester,
 } from '@workspace/db/hooks'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'

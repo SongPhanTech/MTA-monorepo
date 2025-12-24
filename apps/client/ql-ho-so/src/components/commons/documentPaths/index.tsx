@@ -1,11 +1,11 @@
 import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
 import type { DocumentFile, Prisma } from '@workspace/db'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { env } from '@/env'
 
 const { Dragger } = Upload
 const { Link } = Typography
@@ -73,7 +73,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 setTimeout(() => URL.revokeObjectURL(fileUrl), 100)
             } else {
                 // Nếu là file từ server
-                const fileUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${file.path}`
+                const fileUrl = `${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${file.path}`
                 const a = document.createElement('a')
                 a.href = fileUrl
                 a.download = file.name

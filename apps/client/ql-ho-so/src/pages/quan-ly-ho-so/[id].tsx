@@ -51,6 +51,7 @@ import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { putDMNhanViens } from '@workspace/libs/api/system'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
@@ -391,15 +392,15 @@ export default function UpdateUserPage() {
             formData.append('file', file?.originFileObj)
             // const tenantCode = getCookie(c, 'x-tenantcode')
             const resPresignedUrl = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${
+                `${getRuntimeEnv('NEXT_PUBLIC_API_UPLOAD_URL')}/Files/single/6?tenantCode=${
                     window.tenantCode || 'dev'
-                }&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                }&appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm'}`,
                 formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'K-TenantCode': window.tenantCode || 'dev',
-                        'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                        'K-AppCode': getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm',
                     },
                 }
             )
@@ -1113,18 +1114,18 @@ export default function UpdateUserPage() {
     )
     const getLInkImage = async () => {
         const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/employee/${id}/image`,
+            `${getRuntimeEnv('NEXT_PUBLIC_API_UPLOAD_URL')}/Files/employee/${id}/image`,
             {
                 responseType: 'blob',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'K-TenantCode': window.tenantCode || 'dev',
-                    'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                    'K-AppCode': getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm',
                 },
                 params: {
                     h: 100,
                     w: 100,
-                    appCode: process.env.NEXT_PUBLIC_APP_CODE,
+                    appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm',
                     tenantCode: window.tenantCode || 'dev',
                 },
             }

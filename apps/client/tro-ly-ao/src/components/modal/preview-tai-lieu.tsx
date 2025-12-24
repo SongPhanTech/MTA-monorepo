@@ -1,8 +1,8 @@
 import { ArrowDownOutlined } from '@ant-design/icons'
 import { FileUploadIcon } from '@components/commons/upload'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
 import { useDeleteDocument, useFindFirstDocument } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Divider, Modal, message, Tag } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 

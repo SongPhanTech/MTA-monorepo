@@ -1,10 +1,8 @@
 import { $Enums } from '@workspace/db'
-import { env } from '@/env'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
 const MAX_TEXTAREA_LENGTH = 1000
-const API_MODEL_BASE_URL = env.NEXT_PUBLIC_API_MODEL_BASE_URL
 
 const EVALUATION_MEMBER_ROLE = [
     { label: 'Chủ tịch hội đồng', value: $Enums.EvaluationMemberRole.CHAIRMAN },
@@ -160,7 +158,6 @@ export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
     MAX_TEXTAREA_LENGTH,
-    API_MODEL_BASE_URL,
     EVALUATION_MEMBER_ROLE,
     SUBJECT_OBJECT,
     getStatusEvaluation,

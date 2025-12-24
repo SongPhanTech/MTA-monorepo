@@ -51,6 +51,7 @@ import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
 import { postDMNhanViens } from '@workspace/libs/api/system'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
@@ -434,15 +435,15 @@ export default function CreateUserPage() {
             const formData = new FormData()
             formData.append('file', file?.originFileObj)
             const resPresignedUrl = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/single/6?tenantCode=${
+                `${getRuntimeEnv('NEXT_PUBLIC_API_UPLOAD_URL')}/Files/single/6?tenantCode=${
                     window.tenantCode || 'dev'
-                }&appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
+                }&appCode=${getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm'}`,
                 formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'K-TenantCode': window.tenantCode || 'dev',
-                        'K-AppCode': process.env.NEXT_PUBLIC_APP_CODE,
+                        'K-AppCode': getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm',
                     },
                 }
             )

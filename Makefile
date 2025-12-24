@@ -45,65 +45,73 @@ ql-dao-tao:
 	cd apps/client/ql-dao-tao && \
 	pnpm i && \
 	pnpm build && \
-	zip -r out.zip out && \
-	scp out.zip swan1:app && \
+	mv out lms-cdn && \
+	zip -r lms-cdn.zip lms-cdn && \
+	rm -rf lms-cdn && \
+	scp lms-cdn.zip swan1:app && \
 	ssh swan1 "cd app && \
 			docker compose -f app-docker-compose.yml down mta-lms-cdn router-lms-api && \
 			rm -rf lms-cdn && \
-			unzip out.zip && \
-			mv out lms-cdn && \
+			unzip lms-cdn.zip && \
 			docker compose -f app-docker-compose.yml up mta-lms-cdn router-lms-api -d"
 
 dang-ky-hoc:
 	cd apps/client/dang-ky-hoc && \
 	pnpm i && \
 	pnpm build && \
-	zip -r out.zip out && \
-	scp out.zip swan1:app && \
+	mv out dang-ky-hoc-cdn && \
+	zip -r dang-ky-hoc-cdn.zip dang-ky-hoc-cdn && \
+	rm -rf dang-ky-hoc-cdn && \
+	scp dang-ky-hoc-cdn.zip swan1:app && \
 	ssh swan1 "cd app &&\
 		docker compose -f app-docker-compose.yml down mta-dang-ky-hoc-cdn router-dang-ky-hoc-api && \
 		rm -rf dang-ky-hoc-cdn && \
-		unzip out.zip && \
-		mv out dang-ky-hoc-cdn && \
+		unzip dang-ky-hoc-cdn.zip && \
 		docker compose -f app-docker-compose.yml up mta-dang-ky-hoc-cdn router-dang-ky-hoc-api -d"
 
 tro-ly-ao:
 	cd apps/client/tro-ly-ao && \
 	pnpm i && \
 	pnpm build && \
-	zip -r out.zip out && \
-	scp out.zip swan1:app && \
+	mv out chatbot-cdn && \
+	zip -r chatbot-cdn.zip chatbot-cdn && \
+	rm -rf chatbot-cdn && \
+	scp chatbot-cdn.zip swan1:app && \
 	ssh swan1 "cd app && \
 		docker compose -f app-docker-compose.yml down mta-chatbot-cdn router-chatbot-api && \
 		rm -rf chatbot-cdn && \
-		unzip out.zip && \
-		mv out chatbot-cdn && \
+		unzip chatbot-cdn.zip && \
 		docker compose -f app-docker-compose.yml up mta-chatbot-cdn router-chatbot-api -d"
 
 ql-ho-so:
 	cd apps/client/ql-ho-so && \
 	pnpm i && \
 	pnpm build && \
-	zip -r out.zip out && \
-	scp out.zip swan1:app && \
+	mv out hrm-cdn && \
+	zip -r hrm-cdn.zip hrm-cdn && \
+	rm -rf hrm-cdn && \
+	scp hrm-cdn.zip swan1:app && \
 	ssh swan1 "cd app && \
 		docker compose -f app-docker-compose.yml down mta-hrm-cdn router-hrm-api && \
 		rm -rf hrm-cdn && \
-		unzip out.zip && \
-		mv out hrm-cdn && \
+		unzip hrm-cdn.zip && \
 		docker compose -f app-docker-compose.yml up mta-hrm-cdn router-hrm-api -d"
 
 khao-thi:
 	cd apps/client/khao-thi && \
 	pnpm i && \
 	pnpm build && \
-	zip -r out.zip out && \
-	scp out.zip swan1:app && \
+	mv out ems-cdn && \
+	zip -r ems-cdn.zip ems-cdn && \
+	rm -rf ems-cdn && \
+	scp ems-cdn.zip swan1:app && \
 	ssh swan1 "cd app && \
 		docker compose -f app-docker-compose.yml down mta-ems-cdn router-ems-api && \
 		rm -rf ems-cdn && \
-		unzip out.zip && \
-		mv out ems-cdn && \
+		unzip ems-cdn.zip && \
+		docker compose -f app-docker-compose.yml up mta-ems-cdn router-ems-api -d"
+
+ql-dao-tao-shared:
 		docker compose -f app-docker-compose.yml up mta-ems-cdn router-ems-api -d"
 
 # Pattern rule: build-<name>

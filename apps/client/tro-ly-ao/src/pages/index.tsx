@@ -1,16 +1,19 @@
 import Loading from '@components/commons/loading'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { ROUTER_PATH } from '@workspace/router'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { env } from '@/env'
 
 const checkSessionQuietly = async (): Promise<boolean> => {
     try {
-        const response = await fetch(`${env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session`, {
-            method: 'GET',
-            credentials: 'include',
-        })
+        const response = await fetch(
+            `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/auth/get-session`,
+            {
+                method: 'GET',
+                credentials: 'include',
+            }
+        )
         return response.ok
     } catch (error) {
         return false

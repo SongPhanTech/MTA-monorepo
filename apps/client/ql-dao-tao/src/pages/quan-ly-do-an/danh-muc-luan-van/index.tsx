@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
@@ -8,7 +7,6 @@ import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
 import {
     CouncilProposalStatus,
     CouncilRole,
@@ -30,13 +28,15 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, DatePicker, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
 import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 
-// import { getMinioUrl } from '@workspace/constant'
+// import { getMinioUrl } from '@workspace/libs/utils'
 
 // interface thống kê các chuyên gia hướng dẫn
 interface ExpertStat {

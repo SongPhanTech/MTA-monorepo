@@ -18,8 +18,8 @@ import './index.css'
 import Image from '@tiptap/extension-image'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { message } from 'antd'
-import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
@@ -306,7 +306,7 @@ export function RichTextEditor({
                 body: file,
             })
 
-            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+            const imageUrl = `${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${resPresignedUrl.data.fileName}`
 
             editor
                 .chain()

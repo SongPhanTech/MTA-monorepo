@@ -5,6 +5,66 @@ import Decimal from 'decimal.js'
 
 export { fastIsEqual } from './fast-is-equal'
 
+declare const window: (Window & typeof globalThis & Record<string, any>) | undefined
+
+export const env = {
+    NEXT_PUBLIC_APP_CODE: process.env.NEXT_PUBLIC_APP_CODE,
+    NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
+    NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
+    NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+    NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,
+    NEXT_PUBLIC_ASSET_PREFIX: process.env.NEXT_PUBLIC_ASSET_PREFIX,
+    NEXT_PUBLIC_CHATBOT_SRC: process.env.NEXT_PUBLIC_CHATBOT_SRC,
+    NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH,
+    NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT: process.env.NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT,
+    NEXT_PUBLIC_API_UPLOAD_URL: process.env.NEXT_PUBLIC_API_UPLOAD_URL,
+    NEXT_PUBLIC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_CHAT_BOT_URL,
+    NEXT_PUBLIC_DOC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_DOC_CHAT_BOT_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+}
+
+export type ConfigKeys =
+    | 'NEXT_PUBLIC_APP_CODE'
+    | 'NEXT_PUBLIC_ENVIRONMENT'
+    | 'NEXT_PUBLIC_API_MODEL_BASE_URL'
+    | 'NEXT_PUBLIC_MINIO_ENDPOINT'
+    | 'NEXT_PUBLIC_AUTH_ISSUER'
+    | 'NEXT_PUBLIC_ASSET_PREFIX'
+    | 'NEXT_PUBLIC_CHATBOT_SRC'
+    | 'NEXT_PUBLIC_BASE_PATH'
+    | 'NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT'
+    | 'NEXT_PUBLIC_API_UPLOAD_URL'
+    | 'NEXT_PUBLIC_CHAT_BOT_URL'
+    | 'NEXT_PUBLIC_DOC_CHAT_BOT_URL'
+    | 'NEXT_PUBLIC_APP_URL'
+
+export const getRuntimeEnv = (name: ConfigKeys): string => {
+    if (typeof window === 'undefined') {
+        return env[name] || ''
+    }
+
+    const config = window?.[name] || env[name] || ''
+
+    if (!config) {
+        console.error('Runtime config not found on window')
+        return ''
+    }
+
+    return config
+}
+
+export const getMinioUrl = (uri: string | undefined | null) => {
+    if (!uri) return ''
+    const isAbsolutePath = uri.startsWith('http') || uri.startsWith('blob')
+    if (isAbsolutePath) return uri
+    // TODO: check env minio domain
+    const url = new URL(
+        uri,
+        getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT') || 'https://minio.swantech.vn'
+    )
+    return url.href
+}
+
 export function range(start: number, end: number): number[] {
     const result: number[] = []
     for (let i = start; i < end; i++) {

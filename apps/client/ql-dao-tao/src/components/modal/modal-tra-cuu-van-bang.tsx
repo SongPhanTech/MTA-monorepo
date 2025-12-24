@@ -10,9 +10,9 @@ import {
     useFindManyGraduationDecision,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Checkbox, Col, Image, Modal, message, Row } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
-import { env } from '@/env'
 
 const ModalTraCuuVanBang = () => {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -148,7 +148,7 @@ const ModalTraCuuVanBang = () => {
                                         <Row gutter={16} className="flex items-center">
                                             <Col span={7}>
                                                 <Image
-                                                    src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.student?.userProfile?.avatar}`}
+                                                    src={`${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${item?.student?.userProfile?.avatar}`}
                                                     alt={item?.student?.code || ''}
                                                     className="h-28 w-20 border border-primary object-contain"
                                                 />
@@ -210,11 +210,11 @@ const ModalTraCuuVanBang = () => {
                                 <Col span={15}>
                                     <div className="flex w-full gap-4">
                                         <Image
-                                            src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.diplomaFront?.path}`}
+                                            src={`${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${item?.diplomaFront?.path}`}
                                             className="w-full object-contain"
                                         />
                                         <Image
-                                            src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.diplomaBack?.path}`}
+                                            src={`${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${item?.diplomaBack?.path}`}
                                             className="w-full object-contain"
                                         />
                                     </div>

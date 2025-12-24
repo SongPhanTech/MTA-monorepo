@@ -3,7 +3,7 @@ import { cn } from '@lib/utils'
 import type { Document } from '@workspace/db'
 import { Image, Popconfirm } from 'antd'
 import { useCallback, useMemo } from 'react'
-import { env } from '@/env'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { FileUploadIcon } from '../upload'
 
 type CardDocumentProps = {
@@ -39,7 +39,7 @@ export const CardDocument = ({ title, onDelete, className, fileType, uri }: Card
     const getUrl = useCallback((path: string) => {
         const isAbsolutePath = path.startsWith('http') || path.startsWith('blob')
         if (isAbsolutePath) return path
-        return new URL(path, env.NEXT_PUBLIC_MINIO_ENDPOINT).href
+        return new URL(path, getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')).href
     }, [])
 
     return (

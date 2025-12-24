@@ -1,7 +1,7 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { RELATIONSHIP_TYPE } from '@constants/constants'
-import { getMinioUrl } from '@workspace/constant'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'

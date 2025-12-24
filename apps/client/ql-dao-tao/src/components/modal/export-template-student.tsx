@@ -1,6 +1,7 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import { getMinioUrl } from '@workspace/constant'
-import { Flex, Button } from 'antd'
+import { getMinioUrl } from '@workspace/libs/utils'
+import { Button, Flex } from 'antd'
+
 // import ExcelJS from 'exceljs'
 // import { saveAs } from 'file-saver'
 
