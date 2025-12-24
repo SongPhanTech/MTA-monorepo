@@ -12,7 +12,7 @@ export default class MyDocument extends NextDocument {
                         href={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.css`}
                     />
                     <script
-                        src={`${process.env.NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT}/web-apps/apps/api/documents/api.js`}
+                        src={`${env.NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT}/web-apps/apps/api/documents/api.js`}
                         async
                     />
                     <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />

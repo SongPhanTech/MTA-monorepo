@@ -15,11 +15,11 @@ export default class MyDocument extends NextDocument {
                         src={`${process.env.NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT}/web-apps/apps/api/documents/api.js`}
                         async
                     />
-                    <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />
                 </Head>
                 <body>
                     <Main />
                     <NextScript />
+                    <script src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`} />
                 </body>
             </Html>
         )

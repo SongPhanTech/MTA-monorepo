@@ -111,7 +111,7 @@ app.all('/api/system/:appcode/*', async (c) => {
         }
     })()
 
-    const urlProxy = new URL(`${pathProxy}`, 'https://mta.swantech.vn/api/system/public/')
+    const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/public/`)
     const res = await proxy(urlProxy, {
         ...c.req,
         headers: {
