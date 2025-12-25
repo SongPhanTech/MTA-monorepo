@@ -64,7 +64,7 @@ export default function SubjectClassScore() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: initialValue, refetch: refetchSession } = useFindUniqueTrainingScoreSession(
+    const { data: initialValue } = useFindUniqueTrainingScoreSession(
         {
             where: { id },
             include: {

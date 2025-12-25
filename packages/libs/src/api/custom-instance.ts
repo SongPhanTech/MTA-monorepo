@@ -1,6 +1,5 @@
 import { BROWSER } from 'esm-env'
-
-declare const window: (Window & typeof globalThis & Record<string, any>) | undefined
+import { getRuntimeEnv } from '../utils'
 
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
     const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
@@ -38,7 +37,7 @@ const getUrl = (baseUrl: string, contextUrl: string): string => {
 
 export const customModelFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        window?.NEXT_PUBLIC_API_MODEL_BASE_URL || 'https://api.model.mta.swantech.vn',
+        getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL') || 'https://api.model.mta.swantech.vn',
         url
     )
 
@@ -50,7 +49,7 @@ export const customModelFetch = async <T>(url: string, options: RequestInit): Pr
 
 export const customTrainingFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        window?.NEXT_PUBLIC_API_LMS_BASE_URL || 'https://api.daotao.mta.swantech.vn',
+        getRuntimeEnv('NEXT_PUBLIC_API_LMS_BASE_URL') || 'https://api.daotao.mta.swantech.vn',
         url
     )
 
@@ -62,7 +61,7 @@ export const customTrainingFetch = async <T>(url: string, options: RequestInit):
 
 export const customExamFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        window?.NEXT_PUBLIC_API_LMS_BASE_URL || 'https://api.khaothi.mta.swantech.vn',
+        getRuntimeEnv('NEXT_PUBLIC_API_EMS_BASE_URL') || 'https://api.khaothi.mta.swantech.vn',
         url
     )
 
@@ -74,7 +73,7 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
 
 export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        window?.NEXT_PUBLIC_API_LMS_BASE_URL || 'https://api.portal.mta.swantech.vn',
+        getRuntimeEnv('NEXT_PUBLIC_API_PORTAL_BASE_URL') || 'https://api.portal.mta.swantech.vn',
         url
     )
 
@@ -87,8 +86,8 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
     const requestUrl = getUrl(
         process.env.SYSTEM_BASE_URL
             ? `${process.env.SYSTEM_BASE_URL}/api/system/public`
-            : window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL
-              ? `${window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL}/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
+            : getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')
+              ? `${getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')}/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
               : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
         url
     )
@@ -100,12 +99,12 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
 }
 
 export const customSystemShareFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const appCode = window?.NEXT_PUBLIC_APP_CODE || process.env.NEXT_PUBLIC_APP_CODE
+    const appCode = getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || process.env.NEXT_PUBLIC_APP_CODE
     const requestUrl = getUrl(
         process.env.SYSTEM_BASE_URL
             ? `${process.env.SYSTEM_BASE_URL}/api/system/share`
-            : window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL
-              ? `${window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL}/api/system/${appCode}`
+            : getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')
+              ? `${getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')}/api/system/${appCode}`
               : `https://api.model.mta.swantech.vn/api/system/${appCode}`,
         url
     )
@@ -120,8 +119,8 @@ export const customStorageFetch = async <T>(url: string, options: RequestInit): 
     const requestUrl = getUrl(
         process.env.SYSTEM_BASE_URL
             ? `${process.env.SYSTEM_BASE_URL}/api/system/share`
-            : window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL
-              ? `${window?.NEXT_PUBLIC_API_SYSTEM_BASE_URL}/api/system/storage`
+            : getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')
+              ? `${getRuntimeEnv('NEXT_PUBLIC_API_SYSTEM_BASE_URL')}/api/system/storage`
               : 'https://api.model.mta.swantech.vn/api/system/storage',
         url
     )

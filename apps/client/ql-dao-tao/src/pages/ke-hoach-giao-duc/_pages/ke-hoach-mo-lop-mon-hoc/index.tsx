@@ -576,16 +576,20 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                     align: 'center',
                                     hidden: type !== $Enums.SubjectClassType.NORMAL,
                                     render: (__, record) => {
+                                        const fixedClasses = record?.trainingBlocks?.map(
+                                            // @ts-expect-error
+                                            (block) =>
+                                                block.trainingBlockOnCurriculumVersion
+                                                    .curriculumVersion.fixedClass
+                                        )
                                         return (
                                             <TextTruncate
-                                                arr={record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses.map(
-                                                    (i: any) => {
-                                                        return {
-                                                            key: i?.id,
-                                                            label: `${i?.code} (${i?._count?.students || 0})`,
-                                                        }
+                                                arr={fixedClasses.map((i: any) => {
+                                                    return {
+                                                        key: i?.id,
+                                                        label: `${i?.code} (${i?._count?.students || 0})`,
                                                     }
-                                                )}
+                                                })}
                                                 key="fixedClass"
                                             />
                                         )
@@ -597,12 +601,21 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                                               title: 'Tổng SV',
                                               width: 80,
                                               align: 'center' as const,
-                                              render: (_: any, record: any) =>
-                                                  record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
-                                                      (sum: number, fc: any) =>
-                                                          sum + (fc._count?.students ?? 0),
-                                                      0
-                                                  ) || 0,
+                                              render: (_: any, record: any) => {
+                                                  const fixedClasses = record?.trainingBlocks.map(
+                                                      // @ts-expect-error
+                                                      (block) =>
+                                                          block.trainingBlockOnCurriculumVersion
+                                                              .curriculumVersion.fixedClass
+                                                  )
+                                                  return (
+                                                      fixedClasses?.reduce(
+                                                          (sum: number, fc: any) =>
+                                                              sum + (fc._count?.students ?? 0),
+                                                          0
+                                                      ) || 0
+                                                  )
+                                              },
                                           },
                                       ]
                                     : []),

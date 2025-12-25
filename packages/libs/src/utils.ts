@@ -21,6 +21,10 @@ export const env = {
     NEXT_PUBLIC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_CHAT_BOT_URL,
     NEXT_PUBLIC_DOC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_DOC_CHAT_BOT_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_API_LMS_BASE_URL: process.env.NEXT_PUBLIC_API_LMS_BASE_URL,
+    NEXT_PUBLIC_API_SYSTEM_BASE_URL: process.env.NEXT_PUBLIC_API_SYSTEM_BASE_URL,
+    NEXT_PUBLIC_API_PORTAL_BASE_URL: process.env.NEXT_PUBLIC_API_PORTAL_BASE_URL,
+    NEXT_PUBLIC_API_EMS_BASE_URL: process.env.NEXT_PUBLIC_API_EMS_BASE_URL,
 }
 
 export type ConfigKeys =
@@ -37,6 +41,10 @@ export type ConfigKeys =
     | 'NEXT_PUBLIC_CHAT_BOT_URL'
     | 'NEXT_PUBLIC_DOC_CHAT_BOT_URL'
     | 'NEXT_PUBLIC_APP_URL'
+    | 'NEXT_PUBLIC_API_LMS_BASE_URL'
+    | 'NEXT_PUBLIC_API_SYSTEM_BASE_URL'
+    | 'NEXT_PUBLIC_API_PORTAL_BASE_URL'
+    | 'NEXT_PUBLIC_API_EMS_BASE_URL'
 
 export const getRuntimeEnv = (name: ConfigKeys): string => {
     if (typeof window === 'undefined') {

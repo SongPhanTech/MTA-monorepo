@@ -1,6 +1,6 @@
 import { CommonContext } from "./commonContext";
+import { getRuntimeEnv } from "@workspace/libs/utils";
 
-const baseUrl = "https://api.model.mta.swantech.vn";
 
 export type ErrorWrapper<TError> =
   | TError
@@ -59,7 +59,7 @@ export async function commonFetch<
     }
 
     const response = await window.fetch(
-      `${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
+      `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}${resolveUrl(url, queryParams, pathParams)}`,
       {
         signal,
         method: method.toUpperCase(),
