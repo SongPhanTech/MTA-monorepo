@@ -6,7 +6,11 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { QuaTrinhCuDiCongTac } from '@workspace/db'
-import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
+import {
+    useFindManyDM_ChucVu,
+    useFindManyDM_LoaiTinhTrangCongTac,
+    useFindManyDM_TinhTrangCongTac,
+} from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -28,6 +32,9 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
             enabled: expland.includes('quaTrinhCuDiCongTac'),
         }
     )
+
+    const { data: loaiTinhTrangCongTacList = [] } = useFindManyDM_LoaiTinhTrangCongTac()
+    const { data: tinhTrangCongTacList = [] } = useFindManyDM_TinhTrangCongTac()
 
     const handleSave = (data: QuaTrinhCuDiCongTac) => {
         const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []
@@ -132,6 +139,28 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
                             render: (_, record) => {
                                 const chucVu = chucVuList.find((cv) => cv.Id === record?.chucVuId)
                                 return chucVu ? chucVu.sTen : ''
+                            },
+                        },
+                        {
+                            title: 'Loại tình trạng công tác',
+                            align: 'center',
+                            width: 180,
+                            render: (_, record) => {
+                                const loaiTinhTrang = loaiTinhTrangCongTacList.find(
+                                    (item) => item.id === record?.dM_LoaiTinhTrangCongTacId
+                                )
+                                return loaiTinhTrang ? loaiTinhTrang.name : ''
+                            },
+                        },
+                        {
+                            title: 'Tình trạng công tác',
+                            align: 'center',
+                            width: 160,
+                            render: (_, record) => {
+                                const tinhTrang = tinhTrangCongTacList.find(
+                                    (item) => item.id === record?.dM_TinhTrangCongTacId
+                                )
+                                return tinhTrang ? tinhTrang.name : ''
                             },
                         },
                         {

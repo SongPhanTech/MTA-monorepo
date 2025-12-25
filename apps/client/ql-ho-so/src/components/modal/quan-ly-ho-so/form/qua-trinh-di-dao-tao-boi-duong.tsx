@@ -6,7 +6,10 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { QuaTrinhCuDiDaoTao } from '@workspace/db'
-import { useFindManyDM_LoaiHinhDiHocTap } from '@workspace/db/hooks'
+import {
+    useFindManyDM_LoaiHinhDiHocTap,
+    useFindManyDM_TinhTrangDiHocTap,
+} from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -23,6 +26,13 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: Do
     })
 
     const { data: loaiHinhList } = useFindManyDM_LoaiHinhDiHocTap(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiDaoTao'),
+        }
+    )
+
+    const { data: tinhTrangList } = useFindManyDM_TinhTrangDiHocTap(
         {},
         {
             enabled: expland.includes('quaTrinhCuDiDaoTao'),
@@ -128,6 +138,17 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: Do
                                     (item) => item.id === record?.loaiId
                                 )
                                 return loaiHinh ? loaiHinh.name : ''
+                            },
+                        },
+                        {
+                            title: 'Tình trạng đi học tập',
+                            align: 'center',
+                            width: 180,
+                            render: (_, record) => {
+                                const tinhTrang = tinhTrangList?.find(
+                                    (item) => item.id === record?.dM_TinhTrangDiHocTapId
+                                )
+                                return tinhTrang ? tinhTrang.name : ''
                             },
                         },
                         {
