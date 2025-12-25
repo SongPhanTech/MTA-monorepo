@@ -4,12 +4,15 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { QuaTrinhCuDiCongTac } from '@workspace/db'
-import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
+import {
+    useFindManyDM_ChucVu,
+    useFindManyDM_LoaiTinhTrangCongTac,
+    useFindManyDM_TinhTrangCongTac,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 export default function PutQuaTrinhCuDiCongTacModal() {
     const [form] = Form.useForm<QuaTrinhCuDiCongTac>()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -22,6 +25,8 @@ export default function PutQuaTrinhCuDiCongTacModal() {
     })
 
     const { data: chucVuOptions } = useFindManyDM_ChucVu()
+    const { data: loaiTinhTrangCongTacList = [] } = useFindManyDM_LoaiTinhTrangCongTac()
+    const { data: tinhTrangCongTacList = [] } = useFindManyDM_TinhTrangCongTac()
 
     async function onOk(output: QuaTrinhCuDiCongTac) {
         try {
@@ -104,6 +109,33 @@ export default function PutQuaTrinhCuDiCongTacModal() {
                         options={chucVuOptions?.map((item) => ({
                             label: item.sTen,
                             value: item.Id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem
+                    label="Loại tình trạng công tác"
+                    name="dM_LoaiTinhTrangCongTacId"
+                    form={form}
+                >
+                    <Select
+                        placeholder="Chọn loại tình trạng công tác"
+                        options={loaiTinhTrangCongTacList?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Tình trạng công tác" name="dM_TinhTrangCongTacId" form={form}>
+                    <Select
+                        placeholder="Chọn tình trạng công tác"
+                        options={tinhTrangCongTacList?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
                         }))}
                     />
                 </FormItem>

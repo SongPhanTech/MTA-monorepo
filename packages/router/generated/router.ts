@@ -41,6 +41,7 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
+  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -151,6 +152,7 @@ export default {
     "DANH_MUC_HO_SO_NGACH": "/danh-muc-ho-so/ngach",
     "DANH_MUC_HO_SO_NGANH_HOC": "/danh-muc-ho-so/nganh-hoc",
     "DANH_MUC_HO_SO_NHOM_MAU": "/danh-muc-ho-so/nhom-mau",
+    "DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN": "/danh-muc-ho-so/quan-he-than-nhan",
     "DANH_MUC_HO_SO_TINH_TRANG_CONG_TAC": "/danh-muc-ho-so/tinh-trang-cong-tac",
     "DANH_MUC_HO_SO_TINH_TRANG_DI_HOC_TAP": "/danh-muc-ho-so/tinh-trang-di-hoc-tap",
     "DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN": "/danh-muc-ho-so/tinh-trang-hon-nhan",
@@ -164,12 +166,12 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "QL_CAN_BO": "/ql-can-bo",
-    "QL_GIANG_VIEN": "/ql-giang-vien",
     "QUAN_LY_HO_SO_ID": "/quan-ly-ho-so/[id]",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

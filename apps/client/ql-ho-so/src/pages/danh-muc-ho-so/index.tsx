@@ -35,6 +35,7 @@ import {
     School,
     Tangent,
     TypeOutline,
+    User,
     UserCog,
     Users,
     GitBranch,
@@ -229,7 +230,13 @@ export default function DanhMucHoSo() {
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN,
                     description: 'Quản lý tình trạng hôn nhân',
                 },
-
+                {
+                    id: 'relatie-type',
+                    label: 'Quan hệ thân nhân',
+                    icon: <User style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN,
+                    description: 'Quản lý quan hệ thân nhân',
+                },
                 {
                     id: 'type-of-work',
                     label: 'Loại hình công tác',

@@ -1,8 +1,13 @@
 import { CaretRightOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import {
+    useFindManyDM_HinhThucKhenThuongDang,
+    useFindManyDM_XepLoaiDanhGiaChatLuongDangVien,
+} from '@workspace/db/hooks'
 import { Col, Collapse, Form, Input, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
 
@@ -10,6 +15,12 @@ dayjs.locale('vi')
 const { Title, Text } = Typography
 export default function DoanDang({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
+
+    const { data: xepLoaiDanhGiaChatLuongDangVien = [] } =
+        useFindManyDM_XepLoaiDanhGiaChatLuongDangVien()
+
+    const { data: hinhThucKhenThuongDang = [] } = useFindManyDM_HinhThucKhenThuongDang()
+
     const renderContent = () => {
         return (
             <div className="px-6">
@@ -99,6 +110,57 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
                                 }}
                                 className="w-full h-9"
                                 disabledDate={(date) => date && date > dayjs().endOf('day')}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="tenureDate"
+                            label="Xếp loại đánh giá chất lượng đảng viên"
+                            className="mb-0"
+                        >
+                            <Select
+                                options={xepLoaiDanhGiaChatLuongDangVien.map((i) => {
+                                    return {
+                                        label: i.name,
+                                        value: i.id,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_XepLoaiDanhGiaChatLuongDangVienId"
+                            label="Xếp loại đánh giá chất lượng đảng viên"
+                            className="mb-0"
+                        >
+                            <Select
+                                options={xepLoaiDanhGiaChatLuongDangVien.map((i) => {
+                                    return {
+                                        label: i.name,
+                                        value: i.id,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_HinhThucKhenThuongDangId"
+                            label="Hình thức khen thưởng Đảng"
+                            className="mb-0"
+                        >
+                            <Select
+                                options={hinhThucKhenThuongDang.map((i) => {
+                                    return {
+                                        label: i.name,
+                                        value: i.id,
+                                    }
+                                })}
                             />
                         </FormItem>
                     </Col>
