@@ -5,7 +5,6 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
-import { RelativeTypeSchema } from '../enums/RelativeType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,7 +15,6 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    type: RelativeTypeSchema,
     birthYear: z.number().nullish(),
     queQuan: z.string().nullish(),
     noiOHienTai: z.string().nullish(),
@@ -34,7 +32,6 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    type: RelativeTypeSchema,
     birthYear: z.number().nullish(),
     queQuan: z.string().nullish(),
     noiOHienTai: z.string().nullish(),
@@ -43,10 +40,12 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    quanHeThanNhan: z.record(z.string(), z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
+    quanHeThanNhanId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );
@@ -84,7 +83,6 @@ export const RelativePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
-    type: RelativeTypeSchema,
     birthYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     queQuan: z.string().nullish(),
     noiOHienTai: z.string().nullish(),

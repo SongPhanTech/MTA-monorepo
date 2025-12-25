@@ -29,6 +29,10 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    userProfile: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `DM_HinhThucKhenThuongChinhQuyen` schema excluding foreign keys and relations.
@@ -39,7 +43,7 @@ export const DM_HinhThucKhenThuongChinhQuyenScalarSchema = baseSchema;
 /**
  * `DM_HinhThucKhenThuongChinhQuyen` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_HinhThucKhenThuongChinhQuyenSchema = DM_HinhThucKhenThuongChinhQuyenScalarSchema;
+export const DM_HinhThucKhenThuongChinhQuyenSchema = DM_HinhThucKhenThuongChinhQuyenScalarSchema.merge(relationSchema.partial());
 
 
 /**
