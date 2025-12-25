@@ -326,9 +326,8 @@ export function useSuspenseCountRelative<TArgs extends Prisma.RelativeCountArgs,
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Relative', `${endpoint}/relative/count`, args, options, fetch);
 }
-import type { RelativeType } from '../zenstack/models';
 
-export function useCheckRelative<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; type?: RelativeType; birthYear?: number; queQuan?: string; noiOHienTai?: string; job?: string; information?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRelative<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; birthYear?: number; queQuan?: string; noiOHienTai?: string; job?: string; information?: string; quanHeThanNhanId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Relative', `${endpoint}/relative/check`, args, options, fetch);
 }

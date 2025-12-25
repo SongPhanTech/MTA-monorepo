@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const RelativeOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "queQuan", "noiOHienTai", "job", "information", "userProfileId"])
+export const RelativeOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "queQuan", "noiOHienTai", "job", "information", "quanHeThanNhanId", "userProfileId"])

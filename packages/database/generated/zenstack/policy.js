@@ -2930,6 +2930,19 @@ const policy = {
                 update: {},
             },
         },
+        dM_QuanHeThanNhan: {
+            modelLevel: {
+                read: { guard: DM_QuanHeThanNhan_read, },
+                create: { guard: DM_QuanHeThanNhan_create, inputChecker: DM_QuanHeThanNhan_create_input, },
+                update: { guard: DM_QuanHeThanNhan_update, },
+                postUpdate: { guard: DM_QuanHeThanNhan_postUpdate, },
+                delete: { guard: DM_QuanHeThanNhan_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         dM_TrangThaiLamViec: {
             modelLevel: {
                 read: { guard: DM_TrangThaiLamViec_read, },
@@ -3015,6 +3028,19 @@ const policy = {
                 update: { guard: DM_TinhTrangCongTac_update, },
                 postUpdate: { guard: DM_TinhTrangCongTac_postUpdate, },
                 delete: { guard: DM_TinhTrangCongTac_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_LoaiTinhTrangCongTac: {
+            modelLevel: {
+                read: { guard: DM_LoaiTinhTrangCongTac_read, },
+                create: { guard: DM_LoaiTinhTrangCongTac_create, inputChecker: DM_LoaiTinhTrangCongTac_create_input, },
+                update: { guard: DM_LoaiTinhTrangCongTac_update, },
+                postUpdate: { guard: DM_LoaiTinhTrangCongTac_postUpdate, },
+                delete: { guard: DM_LoaiTinhTrangCongTac_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3495,6 +3521,7 @@ const policy = {
         dM_TrinhDoLyLuanChinhTri: { hasValidation: false },
         dM_TrinhDoQuanLyNhaNuoc: { hasValidation: false },
         dM_TinhTrangHonNhan: { hasValidation: false },
+        dM_QuanHeThanNhan: { hasValidation: false },
         dM_TrangThaiLamViec: { hasValidation: false },
         dM_HinhThucKhenThuongChinhQuyen: { hasValidation: false },
         dM_HinhThucKhenThuongDang: { hasValidation: false },
@@ -3502,6 +3529,7 @@ const policy = {
         dM_XepLoaiDanhGiaChatLuongDangVien: { hasValidation: false },
         dM_LoaiHinhCongTac: { hasValidation: false },
         dM_TinhTrangCongTac: { hasValidation: false },
+        dM_LoaiTinhTrangCongTac: { hasValidation: false },
         dM_LoaiHinhDiHocTap: { hasValidation: false },
         dM_TinhTrangDiHocTap: { hasValidation: false },
         dM_NuocCuDiHocTap: { hasValidation: false },
@@ -21034,6 +21062,84 @@ function $check_DM_TinhTrangHonNhan_delete(input, context) {
     }
     return false;
 }
+function DM_QuanHeThanNhan_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_QuanHeThanNhan_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHeThanNhan_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHeThanNhan_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHeThanNhan_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_QuanHeThanNhan_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHeThanNhan_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHeThanNhan_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_QuanHeThanNhan_postUpdate(input, context) {
+    return true;
+}
+function DM_QuanHeThanNhan_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHeThanNhan_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function DM_TrangThaiLamViec_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -21573,6 +21679,84 @@ function DM_TinhTrangCongTac_delete(context, db) {
     return { OR: [] };
 }
 function $check_DM_TinhTrangCongTac_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_LoaiTinhTrangCongTac_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_LoaiTinhTrangCongTac_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_LoaiTinhTrangCongTac_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_LoaiTinhTrangCongTac_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_LoaiTinhTrangCongTac_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_LoaiTinhTrangCongTac_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_LoaiTinhTrangCongTac_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_LoaiTinhTrangCongTac_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_LoaiTinhTrangCongTac_postUpdate(input, context) {
+    return true;
+}
+function DM_LoaiTinhTrangCongTac_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_LoaiTinhTrangCongTac_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

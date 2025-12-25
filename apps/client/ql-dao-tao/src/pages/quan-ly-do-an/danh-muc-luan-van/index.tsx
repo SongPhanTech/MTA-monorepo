@@ -52,7 +52,7 @@ interface ExpertStat {
 
 // interface props cho component PostgraduateProject
 export interface PostgraduateProjectProps {
-    role?: 'P7' | 'P2' | 'P13'
+    role?: 'P7' | 'P2'
     isManage?: boolean
 }
 const { TextArea } = Input
@@ -270,7 +270,7 @@ export default function PostgraduateProject({
     const { data: defenseSessionData } = useFindManyDefenseSession()
 
     // hàm xử lý build tree cho danh sách đơn vị
-    const treeData = buildOrgTree(sDm_Donvi ?? [], '0')
+    const treeOrgData = buildOrgTree(sDm_Donvi ?? [], '0')
     // hàm xử lý lấy ra label và color cho trạng thái đồ án
     const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
         useThesisProjectStatusOptions()
@@ -1349,7 +1349,7 @@ export default function PostgraduateProject({
                                         allowClear
                                         showSearch
                                         treeDefaultExpandAll
-                                        treeData={treeData}
+                                        treeData={treeOrgData}
                                     />
                                 </Form.Item>
                                 <Form.Item className="flex justify-end gap-3">
@@ -1491,7 +1491,7 @@ export default function PostgraduateProject({
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <TreeSelect
                                                     className="w-full"
-                                                    treeData={treeData}
+                                                    treeData={treeOrgData}
                                                     placeholder="Chọn đơn vị quản lý"
                                                     allowClear
                                                     showSearch
@@ -1513,7 +1513,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject
-                                            ?.organization?.sTen || ''
+                                            ?.organization?.sMa || ''
                                     )
                                 },
                             },

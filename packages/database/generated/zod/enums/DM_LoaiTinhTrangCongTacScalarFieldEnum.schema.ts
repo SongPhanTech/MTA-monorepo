@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const RelativeTypeSchema = z.enum(["FATHER", "MOTHER", "OLDER_BROTHER", "OLDER_SISTER", "YOUNGER_BROTHER", "YOUNGER_SISTER", "MARRIER", "FATHER_IN_LOW", "MOTHER_IN_LOW", "SON", "DAUGHTER"])
+export const DM_LoaiTinhTrangCongTacScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name"])

@@ -117,6 +117,11 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
                     />
                 </FormItem>
             </Col>
+            <Col span={12}>
+                <FormItem label="Tình Trạng Đi Học Tập" name="dM_TinhTrangDiHocTapId" form={form}>
+                    <Input placeholder="Nhập loại hình đào tạo" />
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }

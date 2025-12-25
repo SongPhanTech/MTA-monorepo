@@ -46,22 +46,6 @@ enum UserType {
   @@schema("ql-nguoi-dung")
 }
 
-enum RelativeType {
-  FATHER
-  MOTHER
-  OLDER_BROTHER
-  OLDER_SISTER
-  YOUNGER_BROTHER
-  YOUNGER_SISTER
-  MARRIER
-  FATHER_IN_LOW
-  MOTHER_IN_LOW
-  SON
-  DAUGHTER
-
-  @@schema("ql-ho-so")
-}
-
 /// !DEPRECATED: user UserProfile instead
 enum UserRole {
   ADMIN
@@ -657,205 +641,223 @@ model ChangeLog {
 }
 
 model UserProfile {
-  id                            String                       @id() @default(cuid())
-  code                          String?                      @unique()
-  active                        Boolean                      @default(true)
-  description                   String?                      @db.Text()
-  deletedAt                     DateTime?
-  createdAt                     DateTime                     @default(now())
-  updatedAt                     DateTime                     @default(now()) @updatedAt()
-  createdBy                     String?                      @db.Uuid()
-  bLaNguoiDung                  Boolean?
-  bLaGiangVien                  Boolean?
-  bLaCanBoNhanVien              Boolean?
-  bLaHocVien                    Boolean?
-  group                         Group?                       @relation(fields: [groupId], references: [id])
-  groupId                       String?
-  sDM_DonViId                   String?                      @db.Uuid()
-  sDM_ViTriCongViecId           String?                      @db.Uuid()
-  sQuanlyTrucTiepId             String?                      @db.Uuid()
-  iDictionaryKey                Int?
-  bSystem                       Boolean?
-  sNguoiTao                     String?
-  sNguoiSua                     String?
-  sThietBiTao                   String?
-  sThietBiSua                   String?
-  avatar                        String?
-  firstName                     String
-  lastName                      String
-  idCardNumber                  String                       @unique()
-  placeOfIdCardNumber           String?
-  fullname                      String?
-  healthInsuranceNumber         String?
-  bankAccountNumber             String?
-  bankName                      String?
-  currentAddress                String?
-  newCurrentAddress             String?
-  occupationWhenRecruiting      String?
-  thuongBinh                    String?
-  benh                          String?
-  tinhHinhNhaO                  String?
-  truocKhiNhapNgu               String?
-  thanhPhanGiaDinh              String?
-  soTruong                      String?
-  hoTenThuongDung               String?
-  lichSuBanThan                 String?
-  conThuMay                     Int?
-  chieuCao                      String?
-  canNang                       String?
-  soACE                         Int?
-  kinhTeGiaDinh                 String?
-  chinhTriGiaDinh               String?
-  fSoACE                        Int?
-  fKinhTeGiaDinh                String?
-  fThanhPhanGiaDinh             String?
-  fChinhTriGiaDinh              String?
-  fBanThan                      String?
-  nationalId                    String?                      @db.Uuid()
-  provinceCurrentAddress        DM_Tinh?                     @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
-  provinceCurrentAddressId      String?                      @db.Uuid()
-  districtCurrentAddress        DM_QuanHuyen?                @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
-  districtCurrentAddressId      String?                      @db.Uuid()
-  communeCurrentAddress         DM_XaPhuong?                 @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
-  communeCurrentAddressId       String?                      @db.Uuid()
-  newProvinceCurrentAddress     DM_Tinh_New?                 @relation(name: "NewProvinceCurrentAddress", fields: [newProvinceCurrentAddressId], references: [Id])
-  newProvinceCurrentAddressId   String?                      @db.Uuid()
-  newCommuneCurrentAddress      DM_XaPhuong_New?             @relation(name: "NewCommuneCurrentAddress", fields: [newCommuneCurrentAddressId], references: [Id])
-  newCommuneCurrentAddressId    String?                      @db.Uuid()
-  dateOfBirth                   DateTime?
-  placeOfBirth                  String?
-  provinceOfBirth               DM_Tinh?                     @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
-  provinceOfBirthId             String?                      @db.Uuid()
-  districtOfBirth               DM_QuanHuyen?                @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
-  districtOfBirthId             String?                      @db.Uuid()
-  communeOfBirth                DM_XaPhuong?                 @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
-  communeOfBirthId              String?                      @db.Uuid()
-  newProvinceOfBirth            DM_Tinh_New?                 @relation(name: "NewProvincePlaceOfBirth", fields: [newProvinceOfBirthId], references: [Id])
-  newProvinceOfBirthId          String?                      @db.Uuid()
-  newCommuneOfBirth             DM_XaPhuong_New?             @relation(name: "NewCommunePlaceOfBirth", fields: [newCommuneOfBirthId], references: [Id])
-  newCommuneOfBirthId           String?                      @db.Uuid()
-  homeTown                      String?
-  idCardDate                    DateTime?
-  idCardExpirationDate          DateTime?
-  gender                        DM_GioiTinh?                 @relation(fields: [genderId], references: [Id])
-  genderId                      String?                      @db.Uuid()
-  permanentAddress              String?
-  provincePermanentAddress      DM_Tinh?                     @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
-  provincePermanentAddressId    String?                      @db.Uuid()
-  districtPermanentAddress      DM_QuanHuyen?                @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
-  districtPermanentAddressId    String?                      @db.Uuid()
-  communePermanentAddress       DM_XaPhuong?                 @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
-  communePermanentAddressId     String?                      @db.Uuid()
-  newProvincePermanentAddress   DM_Tinh_New?                 @relation(name: "NewProvincePermanentAddress", fields: [newProvincePermanentAddressId], references: [Id])
-  newProvincePermanentAddressId String?                      @db.Uuid()
-  newCommunePermanentAddress    DM_XaPhuong_New?             @relation(name: "NewCommunePermanentAddress", fields: [newCommunePermanentAddressId], references: [Id])
-  newCommunePermanentAddressId  String?                      @db.Uuid()
-  temporaryAddress              String?
-  contactAddress                String?
-  phoneNumber                   String?
-  email                         String?
-  nationality                   DM_QuocGia?                  @relation(fields: [nationalityId], references: [Id])
-  nationalityId                 String?                      @db.Uuid()
-  religion                      DM_TonGiao?                  @relation(fields: [religionId], references: [Id])
-  religionId                    String?                      @db.Uuid()
-  ethnicity                     DM_DanToc?                   @relation(fields: [ethnicityId], references: [Id])
-  ethnicityId                   String?                      @db.Uuid()
-  provinceHometown              DM_Tinh?                     @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
-  provinceHometownId            String?                      @db.Uuid()
-  districtHometown              DM_QuanHuyen?                @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
-  districtHometownId            String?                      @db.Uuid()
-  communeHometown               DM_XaPhuong?                 @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
-  communeHometownId             String?                      @db.Uuid()
-  newProvinceHometown           DM_Tinh_New?                 @relation(name: "NewProvinceHometown", fields: [newProvinceHometownId], references: [Id])
-  newProvinceHometownId         String?                      @db.Uuid()
-  newCommuneHometown            DM_XaPhuong_New?             @relation(name: "NewCommuneHometown", fields: [newCommuneHometownId], references: [Id])
-  newCommuneHometownId          String?                      @db.Uuid()
-  officerNumber                 String?
-  rank                          DM_CapBac?                   @relation(fields: [rankId], references: [Id])
-  rankId                        String?                      @db.Uuid()
-  rankDate                      DateTime?
-  academicDegreeType            DM_HocVi?                    @relation(fields: [academicDegreeTypeId], references: [Id])
-  academicDegreeTypeId          String?                      @db.Uuid()
-  academicDegreeDate            DateTime?
-  academicRankType              DM_HocHam?                   @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId            String?                      @db.Uuid()
-  academicRankDate              DateTime?
-  level                         DM_ChucDanh?                 @relation(fields: [levelId], references: [Id])
-  levelId                       String?                      @db.Uuid()
-  chiHuyQuanLy                  DM_ChiHuyQuanLy?             @relation(fields: [chiHuyQuanLyId], references: [id])
-  chiHuyQuanLyId                String?
-  chuyenMonKyThuat              DM_ChuyenMonKyThuat?         @relation(fields: [chuyenMonKyThuatId], references: [id])
-  chuyenMonKyThuatId            String?
-  sucKhoe                       DM_SucKhoe?                  @relation(fields: [sucKhoeId], references: [id])
-  sucKhoeId                     String?
-  nhomMau                       DM_NhomMau?                  @relation(fields: [nhomMauId], references: [id])
-  nhomMauId                     String?
-  unionDate                     DateTime?
-  unionPlace                    String?
-  CPVJoinDate                   DateTime?
-  officialCPVDate               DateTime?
-  CPVJoinPlace                  String?
-  positionCPV                   DM_ChucVu?                   @relation(fields: [positionCPVId], references: [Id])
-  positionCPVId                 String?                      @db.Uuid()
-  tenureDate                    DateTime?
-  enlistmentDate                DateTime?
-  reEnlistmentDate              DateTime?
-  dischargeDate                 DateTime?
-  recruitmentDate               DateTime?
-  recruitmentAgency             String?
-  mainJobAssigned               String?
-  revolutionaryDate             DateTime?
-  originalPlace                 String?
-  familyPhone                   String?
-  familyName                    String?
-  relatives                     Relative[]
-  trinhDoLyLuanChinhTri         TrinhDoLyLuanChinhTri[]
-  trinhDoQuanLyNhaNuoc          TrinhDoQuanLyNhaNuoc[]
-  ngoaiNgu                      NgoaiNgu[]
-  tinHoc                        TinHoc[]
-  boiDuongQuocPhongAnNinh       BoiDuongQuocPhongAnNinh[]
-  capBac                        CapBac[]
-  quaTrinhCongTac               QuaTrinhCongTac[]
-  quaTrinhCuDiCongTac           QuaTrinhCuDiCongTac[]
-  quaTrinhCuDiDaoTao            QuaTrinhCuDiDaoTao[]
-  khenThuong                    KhenThuong[]
-  kyLuat                        KyLuat[]
-  doiTuongChinhSach             DoiTuongChinhSach[]
-  keKhaiTaiSan                  KeKhaiTaiSan[]
-  hocVi                         HocVi[]
-  hocHam                        HocHam[]
-  tiengDanToc                   TiengDanToc[]
-  chienDau                      ChienDau[]
-  diNuocNgoai                   NuocNgoai[]
-  thuongTat                     ThuongTat[]
-  danhHieu                      DanhHieu[]
-  quaTrinhHocTap                QuaTrinhHocTap[]
-  ToChucXaHoi                   ToChucXaHoi[]
-  QuaTrinhLuong                 QuaTrinhLuong[]
-  trinhDoHocVan                 DM_TrinhDoHocVan?            @relation(fields: [trinhDoHocVanId], references: [id])
-  trinhDoHocVanId               String?
+  id                                   String                              @id() @default(cuid())
+  code                                 String?                             @unique()
+  active                               Boolean                             @default(true)
+  description                          String?                             @db.Text()
+  deletedAt                            DateTime?
+  createdAt                            DateTime                            @default(now())
+  updatedAt                            DateTime                            @default(now()) @updatedAt()
+  createdBy                            String?                             @db.Uuid()
+  bLaNguoiDung                         Boolean?
+  bLaGiangVien                         Boolean?
+  bLaCanBoNhanVien                     Boolean?
+  bLaHocVien                           Boolean?
+  group                                Group?                              @relation(fields: [groupId], references: [id])
+  groupId                              String?
+  sDM_DonViId                          String?                             @db.Uuid()
+  sDM_ViTriCongViecId                  String?                             @db.Uuid()
+  sQuanlyTrucTiepId                    String?                             @db.Uuid()
+  iDictionaryKey                       Int?
+  bSystem                              Boolean?
+  sNguoiTao                            String?
+  sNguoiSua                            String?
+  sThietBiTao                          String?
+  sThietBiSua                          String?
+  avatar                               String?
+  firstName                            String
+  lastName                             String
+  idCardNumber                         String                              @unique()
+  placeOfIdCardNumber                  String?
+  fullname                             String?
+  healthInsuranceNumber                String?
+  bankAccountNumber                    String?
+  bankName                             String?
+  currentAddress                       String?
+  newCurrentAddress                    String?
+  occupationWhenRecruiting             String?
+  thuongBinh                           String?
+  benh                                 String?
+  tinhHinhNhaO                         String?
+  truocKhiNhapNgu                      String?
+  thanhPhanGiaDinh                     String?
+  soTruong                             String?
+  hoTenThuongDung                      String?
+  lichSuBanThan                        String?
+  conThuMay                            Int?
+  chieuCao                             String?
+  canNang                              String?
+  soACE                                Int?
+  kinhTeGiaDinh                        String?
+  chinhTriGiaDinh                      String?
+  fSoACE                               Int?
+  fKinhTeGiaDinh                       String?
+  fThanhPhanGiaDinh                    String?
+  fChinhTriGiaDinh                     String?
+  fBanThan                             String?
+  nationalId                           String?                             @db.Uuid()
+  provinceCurrentAddress               DM_Tinh?                            @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
+  provinceCurrentAddressId             String?                             @db.Uuid()
+  districtCurrentAddress               DM_QuanHuyen?                       @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
+  districtCurrentAddressId             String?                             @db.Uuid()
+  communeCurrentAddress                DM_XaPhuong?                        @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddressId              String?                             @db.Uuid()
+  newProvinceCurrentAddress            DM_Tinh_New?                        @relation(name: "NewProvinceCurrentAddress", fields: [newProvinceCurrentAddressId], references: [Id])
+  newProvinceCurrentAddressId          String?                             @db.Uuid()
+  newCommuneCurrentAddress             DM_XaPhuong_New?                    @relation(name: "NewCommuneCurrentAddress", fields: [newCommuneCurrentAddressId], references: [Id])
+  newCommuneCurrentAddressId           String?                             @db.Uuid()
+  dateOfBirth                          DateTime?
+  placeOfBirth                         String?
+  provinceOfBirth                      DM_Tinh?                            @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
+  provinceOfBirthId                    String?                             @db.Uuid()
+  districtOfBirth                      DM_QuanHuyen?                       @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
+  districtOfBirthId                    String?                             @db.Uuid()
+  communeOfBirth                       DM_XaPhuong?                        @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
+  communeOfBirthId                     String?                             @db.Uuid()
+  newProvinceOfBirth                   DM_Tinh_New?                        @relation(name: "NewProvincePlaceOfBirth", fields: [newProvinceOfBirthId], references: [Id])
+  newProvinceOfBirthId                 String?                             @db.Uuid()
+  newCommuneOfBirth                    DM_XaPhuong_New?                    @relation(name: "NewCommunePlaceOfBirth", fields: [newCommuneOfBirthId], references: [Id])
+  newCommuneOfBirthId                  String?                             @db.Uuid()
+  homeTown                             String?
+  idCardDate                           DateTime?
+  idCardExpirationDate                 DateTime?
+  gender                               DM_GioiTinh?                        @relation(fields: [genderId], references: [Id])
+  genderId                             String?                             @db.Uuid()
+  permanentAddress                     String?
+  provincePermanentAddress             DM_Tinh?                            @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
+  provincePermanentAddressId           String?                             @db.Uuid()
+  districtPermanentAddress             DM_QuanHuyen?                       @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
+  districtPermanentAddressId           String?                             @db.Uuid()
+  communePermanentAddress              DM_XaPhuong?                        @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
+  communePermanentAddressId            String?                             @db.Uuid()
+  newProvincePermanentAddress          DM_Tinh_New?                        @relation(name: "NewProvincePermanentAddress", fields: [newProvincePermanentAddressId], references: [Id])
+  newProvincePermanentAddressId        String?                             @db.Uuid()
+  newCommunePermanentAddress           DM_XaPhuong_New?                    @relation(name: "NewCommunePermanentAddress", fields: [newCommunePermanentAddressId], references: [Id])
+  newCommunePermanentAddressId         String?                             @db.Uuid()
+  temporaryAddress                     String?
+  contactAddress                       String?
+  phoneNumber                          String?
+  email                                String?
+  nationality                          DM_QuocGia?                         @relation(fields: [nationalityId], references: [Id])
+  nationalityId                        String?                             @db.Uuid()
+  religion                             DM_TonGiao?                         @relation(fields: [religionId], references: [Id])
+  religionId                           String?                             @db.Uuid()
+  ethnicity                            DM_DanToc?                          @relation(fields: [ethnicityId], references: [Id])
+  ethnicityId                          String?                             @db.Uuid()
+  provinceHometown                     DM_Tinh?                            @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometownId                   String?                             @db.Uuid()
+  districtHometown                     DM_QuanHuyen?                       @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
+  districtHometownId                   String?                             @db.Uuid()
+  communeHometown                      DM_XaPhuong?                        @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
+  communeHometownId                    String?                             @db.Uuid()
+  newProvinceHometown                  DM_Tinh_New?                        @relation(name: "NewProvinceHometown", fields: [newProvinceHometownId], references: [Id])
+  newProvinceHometownId                String?                             @db.Uuid()
+  newCommuneHometown                   DM_XaPhuong_New?                    @relation(name: "NewCommuneHometown", fields: [newCommuneHometownId], references: [Id])
+  newCommuneHometownId                 String?                             @db.Uuid()
+  officerNumber                        String?
+  rank                                 DM_CapBac?                          @relation(fields: [rankId], references: [Id])
+  rankId                               String?                             @db.Uuid()
+  rankDate                             DateTime?
+  academicDegreeType                   DM_HocVi?                           @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId                 String?                             @db.Uuid()
+  academicDegreeDate                   DateTime?
+  academicRankType                     DM_HocHam?                          @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId                   String?                             @db.Uuid()
+  academicRankDate                     DateTime?
+  level                                DM_ChucDanh?                        @relation(fields: [levelId], references: [Id])
+  levelId                              String?                             @db.Uuid()
+  chiHuyQuanLy                         DM_ChiHuyQuanLy?                    @relation(fields: [chiHuyQuanLyId], references: [id])
+  chiHuyQuanLyId                       String?
+  chuyenMonKyThuat                     DM_ChuyenMonKyThuat?                @relation(fields: [chuyenMonKyThuatId], references: [id])
+  chuyenMonKyThuatId                   String?
+  sucKhoe                              DM_SucKhoe?                         @relation(fields: [sucKhoeId], references: [id])
+  sucKhoeId                            String?
+  nhomMau                              DM_NhomMau?                         @relation(fields: [nhomMauId], references: [id])
+  nhomMauId                            String?
+  tinhTrangHonNhan                     DM_TinhTrangHonNhan?                @relation(fields: [tinhTrangHonNhanId], references: [id])
+  tinhTrangHonNhanId                   String?
+  trangThaiLamViec                     DM_TrangThaiLamViec?                @relation(fields: [trangThaiLamViecId], references: [id])
+  trangThaiLamViecId                   String?
+  dM_ChucDanhCMNVGiangVien             DM_ChucDanhCMNVGiangVien?           @relation(fields: [dM_ChucDanhCMNVGiangVienId], references: [id])
+  dM_ChucDanhCMNVGiangVienId           String?
+  dM_ChucDanhCMNVNghienCuuVien         DM_ChucDanhCMNVNghienCuuVien?       @relation(fields: [dM_ChucDanhCMNVNghienCuuVienId], references: [id])
+  dM_ChucDanhCMNVNghienCuuVienId       String?
+  dM_ChucDanhCMNVKySu                  DM_ChucDanhCMNVKySu?                @relation(fields: [dM_ChucDanhCMNVKySuId], references: [id])
+  dM_ChucDanhCMNVKySuId                String?
+  dM_XepLoaiDanhGiaChatLuongDangVien   DM_XepLoaiDanhGiaChatLuongDangVien? @relation(fields: [dM_XepLoaiDanhGiaChatLuongDangVienId], references: [id])
+  dM_XepLoaiDanhGiaChatLuongDangVienId String?
+  dM_XepLoaiDanhGiaCanBo               DM_XepLoaiDanhGiaCanBo?             @relation(fields: [dM_XepLoaiDanhGiaCanBoId], references: [id])
+  dM_XepLoaiDanhGiaCanBoId             String?
+  dM_HinhThucKhenThuongChinhQuyen      DM_HinhThucKhenThuongChinhQuyen?    @relation(fields: [dM_HinhThucKhenThuongChinhQuyenId], references: [id])
+  dM_HinhThucKhenThuongChinhQuyenId    String?
+  dM_HinhThucKhenThuongDang            DM_HinhThucKhenThuongDang?          @relation(fields: [dM_HinhThucKhenThuongDangId], references: [id])
+  dM_HinhThucKhenThuongDangId          String?
+  unionDate                            DateTime?
+  unionPlace                           String?
+  CPVJoinDate                          DateTime?
+  officialCPVDate                      DateTime?
+  CPVJoinPlace                         String?
+  positionCPV                          DM_ChucVu?                          @relation(fields: [positionCPVId], references: [Id])
+  positionCPVId                        String?                             @db.Uuid()
+  tenureDate                           DateTime?
+  enlistmentDate                       DateTime?
+  reEnlistmentDate                     DateTime?
+  dischargeDate                        DateTime?
+  recruitmentDate                      DateTime?
+  recruitmentAgency                    String?
+  mainJobAssigned                      String?
+  revolutionaryDate                    DateTime?
+  originalPlace                        String?
+  familyPhone                          String?
+  familyName                           String?
+  relatives                            Relative[]
+  trinhDoLyLuanChinhTri                TrinhDoLyLuanChinhTri[]
+  trinhDoQuanLyNhaNuoc                 TrinhDoQuanLyNhaNuoc[]
+  ngoaiNgu                             NgoaiNgu[]
+  tinHoc                               TinHoc[]
+  boiDuongQuocPhongAnNinh              BoiDuongQuocPhongAnNinh[]
+  capBac                               CapBac[]
+  quaTrinhCongTac                      QuaTrinhCongTac[]
+  quaTrinhCuDiCongTac                  QuaTrinhCuDiCongTac[]
+  quaTrinhCuDiDaoTao                   QuaTrinhCuDiDaoTao[]
+  khenThuong                           KhenThuong[]
+  kyLuat                               KyLuat[]
+  doiTuongChinhSach                    DoiTuongChinhSach[]
+  keKhaiTaiSan                         KeKhaiTaiSan[]
+  hocVi                                HocVi[]
+  hocHam                               HocHam[]
+  tiengDanToc                          TiengDanToc[]
+  chienDau                             ChienDau[]
+  diNuocNgoai                          NuocNgoai[]
+  thuongTat                            ThuongTat[]
+  danhHieu                             DanhHieu[]
+  quaTrinhHocTap                       QuaTrinhHocTap[]
+  ToChucXaHoi                          ToChucXaHoi[]
+  QuaTrinhLuong                        QuaTrinhLuong[]
+  trinhDoHocVan                        DM_TrinhDoHocVan?                   @relation(fields: [trinhDoHocVanId], references: [id])
+  trinhDoHocVanId                      String?
   /// hồ sơ đào tạo
-  educationAndTraining          Student[]
+  educationAndTraining                 Student[]
   /// hồ sơ giảng viên
-  lecturer                      Lecturer?
-  lecturerHistory               LecturerHistory[]
+  lecturer                             Lecturer?
+  lecturerHistory                      LecturerHistory[]
   /// người cập nhật điểm
-  studentSubjectScoreHistory    StudentSubjectScoreHistory[]
+  studentSubjectScoreHistory           StudentSubjectScoreHistory[]
   /// hồ sơ cán bộ
-  staffs                        Staff?
-  staffHistory                  StaffHistory[]
-  evidenceFiles                 EvidenceFile[]
-  documentsUploaded             Document[]                   @relation("DocumentUploaded")
-  documentsApproved             Document[]                   @relation("DocumentApproved")
-  faqsUploaded                  FAQ[]                        @relation("FAQUploaded")
-  faqsApproved                  FAQ[]                        @relation("FAQApproved")
-  conversations                 Conversation[]
-  subjectVersionHistory         SubjectVersionHistory[]
-  subjectClassHistory           SubjectClassHistory[]
-  changeLog                     ChangeLog[]
-  surveySession                 SurveySession[]
-  evaluationCriterionComments   EvaluationCriterionComment[]
-  classSchedules                ClassSchedule[]
+  staffs                               Staff?
+  staffHistory                         StaffHistory[]
+  evidenceFiles                        EvidenceFile[]
+  documentsUploaded                    Document[]                          @relation("DocumentUploaded")
+  documentsApproved                    Document[]                          @relation("DocumentApproved")
+  faqsUploaded                         FAQ[]                               @relation("FAQUploaded")
+  faqsApproved                         FAQ[]                               @relation("FAQApproved")
+  conversations                        Conversation[]
+  subjectVersionHistory                SubjectVersionHistory[]
+  subjectClassHistory                  SubjectClassHistory[]
+  changeLog                            ChangeLog[]
+  surveySession                        SurveySession[]
+  evaluationCriterionComments          EvaluationCriterionComment[]
+  classSchedules                       ClassSchedule[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -905,23 +907,24 @@ model HocVi {
 }
 
 model Relative {
-  id            String       @id() @default(cuid())
-  code          String?      @unique()
-  active        Boolean      @default(true)
-  description   String?      @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt()
-  createdBy     String?      @db.Uuid()
-  name          String
-  type          RelativeType
-  birthYear     Int?
-  queQuan       String?
-  noiOHienTai   String?
-  job           String?
-  information   String?
-  userProfile   UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @db.Uuid()
+  name             String
+  birthYear        Int?
+  queQuan          String?
+  noiOHienTai      String?
+  job              String?
+  information      String?
+  quanHeThanNhan   DM_QuanHeThanNhan? @relation(fields: [quanHeThanNhanId], references: [id])
+  quanHeThanNhanId String?
+  userProfile      UserProfile        @relation(fields: [userProfileId], references: [id])
+  userProfileId    String
 
   @@schema("ql-ho-so")
 }
@@ -1078,43 +1081,49 @@ model QuaTrinhCongTac {
 }
 
 model QuaTrinhCuDiCongTac {
-  id            String      @id() @default(cuid())
-  code          String?     @unique()
-  active        Boolean     @default(true)
-  description   String?     @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt()
-  createdBy     String?     @db.Uuid()
-  tuThangNam    DateTime?
-  denThangNam   DateTime?
-  donVi         String
-  chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
-  chucVuId      String      @db.Uuid()
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  id                        String                   @id() @default(cuid())
+  code                      String?                  @unique()
+  active                    Boolean                  @default(true)
+  description               String?                  @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @default(now()) @updatedAt()
+  createdBy                 String?                  @db.Uuid()
+  tuThangNam                DateTime?
+  denThangNam               DateTime?
+  donVi                     String
+  chucVu                    DM_ChucVu                @relation(fields: [chucVuId], references: [Id])
+  chucVuId                  String                   @db.Uuid()
+  dM_TinhTrangCongTac       DM_TinhTrangCongTac?     @relation(fields: [dM_TinhTrangCongTacId], references: [id])
+  dM_TinhTrangCongTacId     String?
+  dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
+  dM_LoaiTinhTrangCongTacId String?
+  userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
+  userProfileId             String
 
   @@schema("ql-ho-so")
 }
 
 model QuaTrinhCuDiDaoTao {
-  id            String              @id() @default(cuid())
-  code          String?             @unique()
-  active        Boolean             @default(true)
-  description   String?             @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @default(now()) @updatedAt()
-  createdBy     String?             @db.Uuid()
-  ten           String?
-  donViToChuc   String?
-  tuNgay        DateTime?
-  denNgay       DateTime?
-  vanBang       String?
-  loai          DM_LoaiHinhDiHocTap @relation(fields: [loaiId], references: [id])
-  loaiId        String
-  userProfile   UserProfile         @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @db.Uuid()
+  ten                    String?
+  donViToChuc            String?
+  tuNgay                 DateTime?
+  denNgay                DateTime?
+  vanBang                String?
+  loai                   DM_LoaiHinhDiHocTap   @relation(fields: [loaiId], references: [id])
+  loaiId                 String
+  dM_TinhTrangDiHocTap   DM_TinhTrangDiHocTap? @relation(fields: [dM_TinhTrangDiHocTapId], references: [id])
+  dM_TinhTrangDiHocTapId String?
+  userProfile            UserProfile           @relation(fields: [userProfileId], references: [id])
+  userProfileId          String
 
   @@schema("ql-ho-so")
 }
@@ -6176,85 +6185,106 @@ model DM_TrinhDoQuanLyNhaNuoc {
 }
 
 model DM_TinhTrangHonNhan {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_QuanHeThanNhan {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  createdBy   String?    @db.Uuid()
+  name        String     @unique()
+  relative    Relative[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_TrangThaiLamViec {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_HinhThucKhenThuongChinhQuyen {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_HinhThucKhenThuongDang {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_XepLoaiDanhGiaCanBo {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_XepLoaiDanhGiaChatLuongDangVien {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
@@ -6275,15 +6305,31 @@ model DM_LoaiHinhCongTac {
 }
 
 model DM_TinhTrangCongTac {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiTinhTrangCongTac {
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
   @@schema("ql-ho-so")
 }
@@ -6304,15 +6350,16 @@ model DM_LoaiHinhDiHocTap {
 }
 
 model DM_TinhTrangDiHocTap {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  createdBy          String?              @db.Uuid()
+  name               String               @unique()
+  quaTrinhCuDiDaoTao QuaTrinhCuDiDaoTao[]
 
   @@schema("ql-ho-so")
 }
@@ -6332,43 +6379,46 @@ model DM_NuocCuDiHocTap {
 }
 
 model DM_ChucDanhCMNVGiangVien {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_ChucDanhCMNVNghienCuuVien {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_ChucDanhCMNVKySu {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @db.Uuid()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  createdBy   String?       @db.Uuid()
+  name        String        @unique()
+  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }

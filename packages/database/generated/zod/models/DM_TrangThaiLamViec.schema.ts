@@ -29,6 +29,10 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    userProfile: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `DM_TrangThaiLamViec` schema excluding foreign keys and relations.
@@ -39,7 +43,7 @@ export const DM_TrangThaiLamViecScalarSchema = baseSchema;
 /**
  * `DM_TrangThaiLamViec` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_TrangThaiLamViecSchema = DM_TrangThaiLamViecScalarSchema;
+export const DM_TrangThaiLamViecSchema = DM_TrangThaiLamViecScalarSchema.merge(relationSchema.partial());
 
 
 /**

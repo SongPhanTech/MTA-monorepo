@@ -75,7 +75,8 @@ const PutPaymentRecord = () => {
 
                 return [...councilMembers, ...supervisorMember]
             })
-            .filter(Boolean) ?? []
+            .filter(Boolean)
+            .sort((a, b) => a.role.localeCompare(b.role)) ?? []
 
     const { data: defaultCouncilRolePayAmount } = useFindManyDefaultCouncilRolePayAmount()
 
@@ -211,13 +212,13 @@ const PutPaymentRecord = () => {
             onCancel={onClose}
             maskClosable={true}
             title={'Thêm thông tin thanh toán'}
-            className="w-[60vw]"
+            className="w-[80vw]"
         >
             <Table
                 rowKey="id"
                 id="expert-profile"
                 dataSource={membersData}
-                className="mb-8"
+                className="mb-2"
                 scroll={{ y: 300 }}
                 columns={[
                     {
@@ -256,8 +257,8 @@ const PutPaymentRecord = () => {
                     },
                     {
                         title: 'Đề tài',
-                        width: 250,
                         align: 'center',
+                        minWidth: 250,
                         render: (_, record) => record?.thesisProjectTitle,
                     },
                 ]}
@@ -271,6 +272,10 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         suffix="VNĐ"
                     />
                 </FormItem>
@@ -281,6 +286,10 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         suffix="VNĐ"
                     />
                 </FormItem>
@@ -291,6 +300,10 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         suffix="VNĐ"
                     />
                 </FormItem>
@@ -300,6 +313,10 @@ const PutPaymentRecord = () => {
                     <InputNumber
                         className="w-full"
                         min={0}
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
                     />
@@ -311,6 +328,10 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         suffix="VNĐ"
                     />
                 </FormItem>
@@ -321,6 +342,10 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                         suffix="VNĐ"
                     />
                 </FormItem>

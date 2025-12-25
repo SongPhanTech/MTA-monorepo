@@ -29,6 +29,10 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    userProfile: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `DM_XepLoaiDanhGiaChatLuongDangVien` schema excluding foreign keys and relations.
@@ -39,7 +43,7 @@ export const DM_XepLoaiDanhGiaChatLuongDangVienScalarSchema = baseSchema;
 /**
  * `DM_XepLoaiDanhGiaChatLuongDangVien` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_XepLoaiDanhGiaChatLuongDangVienSchema = DM_XepLoaiDanhGiaChatLuongDangVienScalarSchema;
+export const DM_XepLoaiDanhGiaChatLuongDangVienSchema = DM_XepLoaiDanhGiaChatLuongDangVienScalarSchema.merge(relationSchema.partial());
 
 
 /**

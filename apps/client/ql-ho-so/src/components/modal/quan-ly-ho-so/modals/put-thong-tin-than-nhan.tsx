@@ -1,9 +1,9 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { RELATIONSHIP_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
+import { useFindManyDM_QuanHeThanNhan } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -17,6 +17,8 @@ export default function PutThongTinThanNhan() {
         tag: 'PutThongTinThanNhan',
         onClose: form.resetFields,
     })
+
+    const { data: quanHeThanNhanData = [] } = useFindManyDM_QuanHeThanNhan()
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -66,13 +68,13 @@ export default function PutThongTinThanNhan() {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem label="Tên mối quan hệ" name="type" required form={form}>
+                <FormItem label="Tên mối quan hệ" name="quanHeThanNhanId" required form={form}>
                     <Select
                         placeholder="Chọn mối quan hệ"
-                        options={Object.entries(RELATIONSHIP_TYPE).map(([key, value_]) => {
+                        options={quanHeThanNhanData.map((i) => {
                             return {
-                                value: key,
-                                label: value_,
+                                value: i.id,
+                                label: i.name,
                             }
                         })}
                     />

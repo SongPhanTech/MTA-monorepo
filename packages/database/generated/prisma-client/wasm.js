@@ -260,6 +260,15 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   chuyenMonKyThuatId: 'chuyenMonKyThuatId',
   sucKhoeId: 'sucKhoeId',
   nhomMauId: 'nhomMauId',
+  tinhTrangHonNhanId: 'tinhTrangHonNhanId',
+  trangThaiLamViecId: 'trangThaiLamViecId',
+  dM_ChucDanhCMNVGiangVienId: 'dM_ChucDanhCMNVGiangVienId',
+  dM_ChucDanhCMNVNghienCuuVienId: 'dM_ChucDanhCMNVNghienCuuVienId',
+  dM_ChucDanhCMNVKySuId: 'dM_ChucDanhCMNVKySuId',
+  dM_XepLoaiDanhGiaChatLuongDangVienId: 'dM_XepLoaiDanhGiaChatLuongDangVienId',
+  dM_XepLoaiDanhGiaCanBoId: 'dM_XepLoaiDanhGiaCanBoId',
+  dM_HinhThucKhenThuongChinhQuyenId: 'dM_HinhThucKhenThuongChinhQuyenId',
+  dM_HinhThucKhenThuongDangId: 'dM_HinhThucKhenThuongDangId',
   unionDate: 'unionDate',
   unionPlace: 'unionPlace',
   CPVJoinDate: 'CPVJoinDate',
@@ -324,12 +333,12 @@ exports.Prisma.RelativeScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   name: 'name',
-  type: 'type',
   birthYear: 'birthYear',
   queQuan: 'queQuan',
   noiOHienTai: 'noiOHienTai',
   job: 'job',
   information: 'information',
+  quanHeThanNhanId: 'quanHeThanNhanId',
   userProfileId: 'userProfileId'
 };
 
@@ -468,6 +477,8 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   denThangNam: 'denThangNam',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
+  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -486,6 +497,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoScalarFieldEnum = {
   denNgay: 'denNgay',
   vanBang: 'vanBang',
   loaiId: 'loaiId',
+  dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -4134,6 +4146,18 @@ exports.Prisma.DM_TinhTrangHonNhanScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.DM_QuanHeThanNhanScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
 exports.Prisma.DM_TrangThaiLamViecScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4207,6 +4231,18 @@ exports.Prisma.DM_LoaiHinhCongTacScalarFieldEnum = {
 };
 
 exports.Prisma.DM_TinhTrangCongTacScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.DM_LoaiTinhTrangCongTacScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4587,6 +4623,15 @@ exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
   chuyenMonKyThuatId: 'chuyenMonKyThuatId',
   sucKhoeId: 'sucKhoeId',
   nhomMauId: 'nhomMauId',
+  tinhTrangHonNhanId: 'tinhTrangHonNhanId',
+  trangThaiLamViecId: 'trangThaiLamViecId',
+  dM_ChucDanhCMNVGiangVienId: 'dM_ChucDanhCMNVGiangVienId',
+  dM_ChucDanhCMNVNghienCuuVienId: 'dM_ChucDanhCMNVNghienCuuVienId',
+  dM_ChucDanhCMNVKySuId: 'dM_ChucDanhCMNVKySuId',
+  dM_XepLoaiDanhGiaChatLuongDangVienId: 'dM_XepLoaiDanhGiaChatLuongDangVienId',
+  dM_XepLoaiDanhGiaCanBoId: 'dM_XepLoaiDanhGiaCanBoId',
+  dM_HinhThucKhenThuongChinhQuyenId: 'dM_HinhThucKhenThuongChinhQuyenId',
+  dM_HinhThucKhenThuongDangId: 'dM_HinhThucKhenThuongDangId',
   unionPlace: 'unionPlace',
   CPVJoinPlace: 'CPVJoinPlace',
   positionCPVId: 'positionCPVId',
@@ -4631,6 +4676,7 @@ exports.Prisma.RelativeOrderByRelevanceFieldEnum = {
   noiOHienTai: 'noiOHienTai',
   job: 'job',
   information: 'information',
+  quanHeThanNhanId: 'quanHeThanNhanId',
   userProfileId: 'userProfileId'
 };
 
@@ -4721,6 +4767,8 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
+  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -4733,6 +4781,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum = {
   donViToChuc: 'donViToChuc',
   vanBang: 'vanBang',
   loaiId: 'loaiId',
+  dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -6979,6 +7028,14 @@ exports.Prisma.DM_TinhTrangHonNhanOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.DM_QuanHeThanNhanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
 exports.Prisma.DM_TrangThaiLamViecOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7028,6 +7085,14 @@ exports.Prisma.DM_LoaiHinhCongTacOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.DM_TinhTrangCongTacOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.DM_LoaiTinhTrangCongTacOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
@@ -7203,20 +7268,6 @@ exports.ConfigKey = exports.$Enums.ConfigKey = {
   WARD: 'WARD',
   USER_SESSION_TIMEOUT: 'USER_SESSION_TIMEOUT',
   ACADEMIC_ACTION_RULES: 'ACADEMIC_ACTION_RULES'
-};
-
-exports.RelativeType = exports.$Enums.RelativeType = {
-  FATHER: 'FATHER',
-  MOTHER: 'MOTHER',
-  OLDER_BROTHER: 'OLDER_BROTHER',
-  OLDER_SISTER: 'OLDER_SISTER',
-  YOUNGER_BROTHER: 'YOUNGER_BROTHER',
-  YOUNGER_SISTER: 'YOUNGER_SISTER',
-  MARRIER: 'MARRIER',
-  FATHER_IN_LOW: 'FATHER_IN_LOW',
-  MOTHER_IN_LOW: 'MOTHER_IN_LOW',
-  SON: 'SON',
-  DAUGHTER: 'DAUGHTER'
 };
 
 exports.PermissionType = exports.$Enums.PermissionType = {
@@ -7862,6 +7913,7 @@ exports.Prisma.ModelName = {
   DM_TrinhDoLyLuanChinhTri: 'DM_TrinhDoLyLuanChinhTri',
   DM_TrinhDoQuanLyNhaNuoc: 'DM_TrinhDoQuanLyNhaNuoc',
   DM_TinhTrangHonNhan: 'DM_TinhTrangHonNhan',
+  DM_QuanHeThanNhan: 'DM_QuanHeThanNhan',
   DM_TrangThaiLamViec: 'DM_TrangThaiLamViec',
   DM_HinhThucKhenThuongChinhQuyen: 'DM_HinhThucKhenThuongChinhQuyen',
   DM_HinhThucKhenThuongDang: 'DM_HinhThucKhenThuongDang',
@@ -7869,6 +7921,7 @@ exports.Prisma.ModelName = {
   DM_XepLoaiDanhGiaChatLuongDangVien: 'DM_XepLoaiDanhGiaChatLuongDangVien',
   DM_LoaiHinhCongTac: 'DM_LoaiHinhCongTac',
   DM_TinhTrangCongTac: 'DM_TinhTrangCongTac',
+  DM_LoaiTinhTrangCongTac: 'DM_LoaiTinhTrangCongTac',
   DM_LoaiHinhDiHocTap: 'DM_LoaiHinhDiHocTap',
   DM_TinhTrangDiHocTap: 'DM_TinhTrangDiHocTap',
   DM_NuocCuDiHocTap: 'DM_NuocCuDiHocTap',
