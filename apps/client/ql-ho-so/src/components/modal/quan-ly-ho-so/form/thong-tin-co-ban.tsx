@@ -381,27 +381,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="dM_ChucDanhCMNVKySuId"
-                            label="Chức danh CMNV ngạch Kỹ sư"
-                            className="mb-0"
-                        >
-                            <Select
-                                allowClear
-                                placeholder="Chọn chức danh CMNV ngạch Kỹ sư"
-                                className="h-9"
-                                options={chucDanhKySuData.map((i) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                })}
-                            />
-                        </FormItem>
-                    </Col>
-
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
                             name="sDM_DonViId"
                             label="Đơn vị quản lý"
                             className="mb-2"

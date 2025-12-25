@@ -245,6 +245,13 @@ export default function DanhMucHoSo() {
                     description: 'Loại hình công tác',
                 },
                 {
+                    id: 'type-of-work-status',
+                    label: 'Loại tình trạng công tác',
+                    icon: <BookOpen style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_LOAI_TINH_TRANG_CONG_TAC,
+                    description: 'Loại tình trạng công tác',
+                },
+                {
                     id: 'work-status',
                     label: 'Tình Trạng Công Tác',
                     icon: <BadgeJapaneseYen style={{ fontSize: '24px' }} />,

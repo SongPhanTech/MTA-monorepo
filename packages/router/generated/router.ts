@@ -149,6 +149,7 @@ export default {
     "DANH_MUC_HO_SO_LOAI_HINH_DI_HOC_TAP": "/danh-muc-ho-so/loai-hinh-di-hoc-tap",
     "DANH_MUC_HO_SO_LOAI_SUC_KHOE": "/danh-muc-ho-so/loai-suc-khoe",
     "DANH_MUC_HO_SO_LOAI_THUONG_TAT": "/danh-muc-ho-so/loai-thuong-tat",
+    "DANH_MUC_HO_SO_LOAI_TINH_TRANG_CONG_TAC": "/danh-muc-ho-so/loai-tinh-trang-cong-tac",
     "DANH_MUC_HO_SO_NGACH": "/danh-muc-ho-so/ngach",
     "DANH_MUC_HO_SO_NGANH_HOC": "/danh-muc-ho-so/nganh-hoc",
     "DANH_MUC_HO_SO_NHOM_MAU": "/danh-muc-ho-so/nhom-mau",
