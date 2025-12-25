@@ -1,6 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
-import { RELATIONSHIP_TYPE } from '@constants/constants'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Modal } from 'antd'
@@ -114,7 +113,11 @@ const ModalLyLichCanBo = () => {
                         capBac: true,
                     },
                 },
-                relatives: true,
+                relatives: {
+                    include: {
+                        quanHeThanNhan: true,
+                    },
+                },
                 gender: true,
                 QuaTrinhLuong: {
                     include: {
@@ -138,51 +141,8 @@ const ModalLyLichCanBo = () => {
         { enabled: !!input?.id }
     )
 
-    const familyRelatives =
-        initialData?.relatives?.filter((rel) =>
-            [
-                'FATHER',
-                'MOTHER',
-                'OLDER_BROTHER',
-                'OLDER_SISTER',
-                'YOUNGER_BROTHER',
-                'YOUNGER_SISTER',
-                'MARRIER',
-                'SON',
-                'DAUGHTER',
-            ].includes(rel.type)
-        ) || []
-
-    const spouseRelatives =
-        initialData?.relatives?.filter((rel) =>
-            ['FATHER_IN_LOW', 'MOTHER_IN_LOW'].includes(rel.type)
-        ) || []
-
-    const getRelationshipText = (relationType: string, userGender?: string) => {
-        const genderBasedRelationships: Record<string, Record<string, string>> = {
-            FATHER_IN_LOW: {
-                Nam: 'Bố vợ',
-                Nữ: 'Bố chồng',
-            },
-            MOTHER_IN_LOW: {
-                Nam: 'Mẹ vợ',
-                Nữ: 'Mẹ chồng',
-            },
-            MARRIER: {
-                Nam: 'Vợ',
-                Nữ: 'Chồng',
-            },
-        }
-
-        if (genderBasedRelationships[relationType] && userGender) {
-            return (
-                genderBasedRelationships[relationType][userGender] ||
-                RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE]
-            )
-        }
-
-        return RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE] || ''
-    }
+    const familyRelatives = initialData?.relatives || []
+    const spouseRelatives: typeof familyRelatives = []
 
     const totalRows = Math.max(5, data.length)
     const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
@@ -648,10 +608,7 @@ const ModalLyLichCanBo = () => {
                         {familyRelatives.map((relative, index) => (
                             <tr key={relative.id}>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {getRelationshipText(
-                                        relative.type,
-                                        initialData?.gender?.sTen ?? undefined
-                                    )}
+                                    {relative.quanHeThanNhan?.name || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
                                     {relative.name || ''}
@@ -697,10 +654,7 @@ const ModalLyLichCanBo = () => {
                         {spouseRelatives.map((relative, index) => (
                             <tr key={relative.id}>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {getRelationshipText(
-                                        relative.type,
-                                        initialData?.gender?.sTen ?? undefined
-                                    )}
+                                    {relative.quanHeThanNhan?.name || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
                                     {relative.name || ''}

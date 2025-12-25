@@ -1,7 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
-import type { Relative } from '@workspace/db'
-// import { Gender } from '@workspace/db'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Input, Modal } from 'antd'
@@ -41,8 +39,11 @@ const ModalTomTatLyLich = () => {
         )
     }
 
-    const getRelativeByType = (relatives: Relative[], type: string) => {
-        return relatives?.find((rel) => rel.type === type)
+    const getRelativeByType = (
+        relatives: NonNullable<typeof initialData>['relatives'],
+        type: string
+    ) => {
+        return relatives?.find((rel) => rel.quanHeThanNhan?.code === type)
     }
 
     const getCapBacForPeriodBeforeStart = (tuThangNam: Date | null) => {
@@ -176,7 +177,11 @@ const ModalTomTatLyLich = () => {
                         capBac: true,
                     },
                 },
-                relatives: true,
+                relatives: {
+                    include: {
+                        quanHeThanNhan: true,
+                    },
+                },
                 gender: true,
             },
         },
@@ -832,7 +837,9 @@ const ModalTomTatLyLich = () => {
         const fatherInLaw = getRelativeByType(relatives, 'FATHER_IN_LOW')
         const motherInLaw = getRelativeByType(relatives, 'MOTHER_IN_LOW')
         const spouse = getRelativeByType(relatives, 'MARRIER')
-        const children = relatives?.filter((rel) => ['SON', 'DAUGHTER'].includes(rel.type))
+        const children = relatives?.filter((rel) =>
+            ['SON', 'DAUGHTER'].includes(rel.quanHeThanNhan?.code || '')
+        )
 
         return (
             <div className="flex flex-col">
@@ -976,7 +983,6 @@ const ModalTomTatLyLich = () => {
                 </p>
                 <p>
                     <span className="pl-6 font-bold italic">+ Hạn chế:</span>{' '}
-                    <span className="text-blue-500"></span>
                 </p>
                 <p>
                     <span className="pl-6 font-bold">+ Kết luận:</span>

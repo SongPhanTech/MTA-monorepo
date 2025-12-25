@@ -1,5 +1,4 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { RELATIONSHIP_TYPE } from '@constants/constants'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Modal } from 'antd'
@@ -23,31 +22,6 @@ const ModalSoYeuLyLich = () => {
         tag: 'ModalSoYeuLyLich',
     })
 
-    const getRelationshipText = (relationType: string, userGender?: string) => {
-        const genderBasedRelationships: Record<string, Record<string, string>> = {
-            FATHER_IN_LOW: {
-                Nam: 'Bố vợ',
-                Nữ: 'Bố chồng',
-            },
-            MOTHER_IN_LOW: {
-                Nam: 'Mẹ vợ',
-                Nữ: 'Mẹ chồng',
-            },
-            MARRIER: {
-                Nam: 'Vợ',
-                Nữ: 'Chồng',
-            },
-        }
-
-        if (genderBasedRelationships[relationType] && userGender) {
-            return (
-                genderBasedRelationships[relationType][userGender] ||
-                RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE]
-            )
-        }
-
-        return RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE] || ''
-    }
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -134,7 +108,11 @@ const ModalSoYeuLyLich = () => {
                         capBac: true,
                     },
                 },
-                relatives: true,
+                relatives: {
+                    include: {
+                        quanHeThanNhan: true,
+                    },
+                },
                 gender: true,
                 tinHoc: {
                     include: {
@@ -474,10 +452,7 @@ const ModalSoYeuLyLich = () => {
                             {initialData?.relatives?.map((relative, index) => (
                                 <tr key={relative.id}>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {getRelationshipText(
-                                            relative.type,
-                                            initialData?.gender?.sTen ?? undefined
-                                        )}
+                                        {relative.quanHeThanNhan?.name || ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
                                         {relative.name || ''}
