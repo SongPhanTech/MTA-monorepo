@@ -1,35 +1,22 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { context, SpanKind, trace } from '@opentelemetry/api'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
-import { contextStorage, getContext } from 'hono/context-storage'
+import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import { Registry } from 'prom-client'
 import clusterSurveyApp from './api/cluster-survey'
 import examApp from './api/exam'
 import surveyApp from './api/survey'
 import surveyPublicApp from './api/survey-public'
 import { checkIp } from './middlewares/check-ip'
-import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
 
-import './otel'
-
-export const prisma = new PrismaClient()
+export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
-const register = new Registry()
-
-// collectDefaultMetrics({ register })
-
-app.get('/metrics', async (c) => {
-    c.header('Content-Type', register.contentType)
-    return c.text(await register.metrics())
-})
 
 const originEnv = process.env.ORIGIN || ''
 const originList = originEnv.split(',').map((item) => item.trim())
@@ -60,7 +47,6 @@ const config = {
     },
 }
 app.use(contextStorage())
-app.use(tracingMiddleware)
 app.use('*', checkIp)
 
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
@@ -95,21 +81,6 @@ app.onError((err, c) => {
     if (err instanceof HTTPException) {
         return c.json({ message: err.message }, err.status)
     }
-
-    const tracer = trace.getTracer('InternalError')
-    const parentSpan = getContext().var.rootSpan
-
-    const subSpan = tracer.startSpan(
-        'internal-error',
-        {
-            attributes: { 'error.message': err.message },
-            kind: SpanKind.INTERNAL,
-        },
-        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
-    )
-
-    subSpan.recordException(err)
-    subSpan.end()
 
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
         let status: ContentfulStatusCode = 500

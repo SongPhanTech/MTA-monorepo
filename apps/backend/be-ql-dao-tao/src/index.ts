@@ -1,8 +1,4 @@
-import { httpInstrumentationMiddleware } from '@hono/otel'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { context, SpanKind, trace } from '@opentelemetry/api'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
-import { NodeSDK } from '@opentelemetry/sdk-node'
 import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
@@ -10,7 +6,7 @@ import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import type { Context } from 'hono'
-import { contextStorage, getContext } from 'hono/context-storage'
+import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
@@ -34,7 +30,6 @@ import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
-// import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
 
 dayjs.extend(utc)
@@ -42,27 +37,9 @@ dayjs.extend(timezone)
 
 dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
 
-import './otel'
-
-const openTelemetrySDK = new NodeSDK({
-    traceExporter: new OTLPTraceExporter(),
-})
-openTelemetrySDK.start()
-
 export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
-
-const tracer = trace.getTracer('mta-be-ql-dao-tao-tracer')
-
-app.use(
-    httpInstrumentationMiddleware({
-        serviceName: process.env.OTEL_SERVICE_NAME || 'mta-be-ql-dao-tao',
-        serviceVersion: '1.0.0',
-        captureRequestHeaders: ['user-agent', 'service-name', 'x-forwarded-for'],
-        tracer,
-    })
-)
 
 const originEnv = process.env.ORIGIN || ''
 const originList = originEnv.split(',').map((item) => item.trim())
@@ -139,20 +116,6 @@ app.onError((err, c) => {
     if (err instanceof HTTPException) {
         return c.json({ message: err.message }, err.status)
     }
-
-    const parentSpan = trace.getActiveSpan() || getContext().var.rootSpan
-
-    const subSpan = tracer.startSpan(
-        'internal-error',
-        {
-            attributes: { 'error.message': err.message },
-            kind: SpanKind.INTERNAL,
-        },
-        parentSpan ? trace.setSpan(context.active(), parentSpan) : context.active()
-    )
-
-    subSpan.recordException(err)
-    subSpan.end()
 
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
         let status: ContentfulStatusCode = 500
