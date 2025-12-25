@@ -117,8 +117,9 @@ const ModalCauHinhLuanVan = () => {
         return validExpertIds.length !== uniqueIds.size
     }
     const { TextArea } = Input
-    const [document, setDocument] = useState<DocumentFile[]>([])
-    const [attachments, setAttachments] = useState<DocumentFile[]>([])
+    const [document] = useState<DocumentFile[]>([])
+
+    const [attachments] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<ModalCauHinhLuanVanType>()
     const [activeTabKey, setActiveTabKey] = useState<string>('defenseConfig')
     const { isOpen, onClose, input } = useDisclosure<{
