@@ -63,66 +63,70 @@ enum ThesisType {
 
 // Bảng đồ án
 model ThesisProject extends Base {
-  title              String?                       // Tên đồ án
-  titleEN            String?                       // Tên đồ án (Tiếng Anh)
-  summary            String?                     @db.Text() // Tóm tắt đồ án
-  objectives         String?                     @db.Text() // Mục tiêu
-  scope              String?                     @db.Text() // Phạm vi thực hiện
-  methodology        String?                     @db.Text() // Phương pháp thực hiện
-  expectedResults    String?                     @db.Text() // Kết quả mong đợi
-  requirements       String?                     @db.Text() // Yêu cầu với học viên
-  technologies       String?                     @db.Text() // Công nghệ sử dụng
-  thesisType         ThesisType                  @default(PROJECT)
-  status             ThesisProjectStatus         @default(PROPOSED)
-  language           String?                     @db.Text() // Ngôn ngữ
-  type               String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
+  title                 String?                       // Tên đồ án
+  titleEN               String?                       // Tên đồ án (Tiếng Anh)
+  summary               String?                     @db.Text() // Tóm tắt đồ án
+  objectives            String?                     @db.Text() // Mục tiêu
+  scope                 String?                     @db.Text() // Phạm vi thực hiện
+  methodology           String?                     @db.Text() // Phương pháp thực hiện
+  expectedResults       String?                     @db.Text() // Kết quả mong đợi
+  requirements          String?                     @db.Text() // Yêu cầu với học viên
+  technologies          String?                     @db.Text() // Công nghệ sử dụng
+  thesisType            ThesisType                  @default(PROJECT)
+  status                ThesisProjectStatus         @default(PROPOSED)
+  language              String?                     @db.Text() // Ngôn ngữ
+  type                  String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
 
-  subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String?
+  subjectClass          SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId        String?
 
-  thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
-  thesisSessionId    String?
+  thesisSession         ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId       String?
 
-  /// Chuyên gia hướng dẫn
-  supervisor         ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId       String?
+  /// Chuyên gia hướng dẫn b 
+  supervisor            ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId          String?
+  supervisorPayment     SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
+  supervisorPaymentId   String?
 
-  /// Chuyên gia hướng dẫn phụ
-  coSupervisor       ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
-  coSupervisorId     String?
+  /// Chuyên gia hướng dẫn bảo vệ phụ
+  coSupervisor          ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
+  coSupervisorId        String?
+  coSupervisorPayment   SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
+  coSupervisorPaymentId String?
 
   /// Đơn vị quản lý
-  organization       DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
-  organizationId     String?                     @db.Uuid
+  organization          DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
+  organizationId        String?                     @db.Uuid
 
   // Thông tin đăng ký
-  maxStudents        Int?                           // Số lượng học viên tối đa
+  maxStudents           Int?                           // Số lượng học viên tối đa
 
   /// Hội đồng đánh giá
-  council            Council?                    @relation(fields: [councilId], references: [id])
-  councilId          String?
+  council               Council?                    @relation(fields: [councilId], references: [id])
+  councilId             String?
 
   /// phòng bảo vệ
-  room               Room?                       @relation(fields: [roomId], references: [id])
-  roomId             String?
+  room                  Room?                       @relation(fields: [roomId], references: [id])
+  roomId                String?
 
   /// Ngày bảo vệ
-  defenseDate        DateTime?
-  defenseSession     DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
-  defenseSessionId   String?
+  defenseDate           DateTime?
+  defenseSession        DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
+  defenseSessionId      String?
 
   // Thời gian
-  registrationStart  DateTime?                     // Thời gian mở đăng ký
-  registrationEnd    DateTime?                     // Thời gian đóng đăng ký
-  projectStart       DateTime?                     // Thời gian bắt đầu thực hiện
-  projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
+  registrationStart     DateTime?                     // Thời gian mở đăng ký
+  registrationEnd       DateTime?                     // Thời gian đóng đăng ký
+  projectStart          DateTime?                     // Thời gian bắt đầu thực hiện
+  projectEnd            DateTime?                     // Thời gian kết thúc dự kiến
 
-  defenseRecord      DefenseRecord?
-  librarySubmission  LibrarySubmission?
+  defenseRecord         DefenseRecord?
+  librarySubmission     LibrarySubmission?
 
-  decisions          Decision[]
-  registrations      StudentThesisRegistration[]
-  supervisorPayments SupervisorPaymentRecord[]
+  decisions             Decision[]
+  registrations         StudentThesisRegistration[]
+  // supervisorPayments SupervisorPaymentRecord[]
 
   @@schema("ql-dao-tao")
 }
@@ -176,30 +180,30 @@ model StudentThesisRegistration extends Base {
 
 /// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
 model ExpertProfile extends Base {
-  lecturer                Lecturer?                 @relation(fields: [lecturerId], references: [id])
-  lecturerId              String?                   @unique // Null nếu là chuyên gia ngoài trường
-  name                    String?   // Họ tên
-  academicRank            String?   // Học hàm
-  academicDegree          String?   // Học vị
-  organization            String?   // Đơn vị
-  position                String?   // Chức vụ
-  specialization          String?   // Chuyên ngành
-  major                   TrainingMajor[]
-  workplace               String?   // Đơn vị công tác
-  phone                   String?
-  email                   String?                   @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
-  bankAccountNumber       String? // số tài khoản ngân hàng
-  bankName                String? // tên ngân hàng
+  lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
+  lecturerId         String?         @unique // Null nếu là chuyên gia ngoài trường
+  name               String?   // Họ tên
+  academicRank       String?   // Học hàm
+  academicDegree     String?   // Học vị
+  organization       String?   // Đơn vị
+  position           String?   // Chức vụ
+  specialization     String?   // Chuyên ngành
+  major              TrainingMajor[]
+  workplace          String?   // Đơn vị công tác
+  phone              String?
+  email              String?         @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
+  bankAccountNumber  String? // số tài khoản ngân hàng
+  bankName           String? // tên ngân hàng
 
-  eligiblePresident       Boolean // có thể làm chủ tịch
-  eligibleSecretary       Boolean // có thể làm thư ký
+  eligiblePresident  Boolean // có thể làm chủ tịch
+  eligibleSecretary  Boolean // có thể làm thư ký
 
-  supervisedTheses        ThesisProject[]           @relation("SupervisorToThesis")
-  coSupervisedTheses      ThesisProject[]           @relation("CoSupervisorToThesis")
-  subjectClass            SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
-  councilMemberships      CouncilMember[]
-  payments                PaymentRecord[]
-  supervisorPaymentRecord SupervisorPaymentRecord[]
+  supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  coSupervisedTheses ThesisProject[] @relation("CoSupervisorToThesis")
+  subjectClass       SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
+  councilMemberships CouncilMember[]
+  // payments                PaymentRecord[]
+  // supervisorPaymentRecord SupervisorPaymentRecord[]
 
   @@schema("ql-dao-tao")
 }
@@ -322,7 +326,11 @@ model DefaultCouncilRolePayAmount extends Base {
 
   @@schema("ql-dao-tao")
 }
+model DefaultSupervisorPayAmount extends Base {
+  amount Decimal
 
+  @@schema("ql-dao-tao")
+}
 enum PaymentStatus {
   PENDING // Chờ thanh toán
   PROCESSING // Đang xử lý
@@ -339,8 +347,8 @@ model PaymentRecord  extends Base {
   paymentDate     DateTime?
   transactionCode String?
 
-  expert          ExpertProfile  @relation(fields: [expertId], references: [id])
-  expertId        String
+  // expert          ExpertProfile  @relation(fields: [expertId], references: [id])
+  // expertId        String
 
   // Có thể liên kết với thành viên hội đồng
   councilMemberId String?        @unique
@@ -351,14 +359,15 @@ model PaymentRecord  extends Base {
 
 /// Quản lý việc thanh toán hướng dẫn
 model SupervisorPaymentRecord  extends Base {
-  thesisProject   ThesisProject @relation(fields: [thesisProjectId], references: [id])
-  thesisProjectId String
-  expert          ExpertProfile @relation(fields: [expertId], references: [id])
-  expertId        String
-  amount          Decimal
-  status          PaymentStatus @default(PENDING)
-  paymentDate     DateTime?
-  transactionCode String?
-
+  // thesisProject   ThesisProject @relation(fields: [thesisProjectId], references: [id])
+  // thesisProjectId String
+  // expert          ExpertProfile @relation(fields: [expertId], references: [id])
+  // expertId        String
+  amount           Decimal
+  status           PaymentStatus   @default(PENDING)
+  paymentDate      DateTime?
+  transactionCode  String?
+  thesisProjects   ThesisProject[] @relation("SupervisorToSupervisorPayment")
+  coThesisProjects ThesisProject[] @relation("CoSupervisorToSupervisorPayment")
   @@schema("ql-dao-tao")
 }

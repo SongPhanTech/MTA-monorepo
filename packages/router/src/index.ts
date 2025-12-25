@@ -645,6 +645,12 @@ const NAVIGATION: NavigationType = {
                 description: 'Quản lý thông báo đào tạo',
             },
             {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN,
+                label: 'Cấu hình thanh toán',
+                path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN,
+                description: 'Quản lý cấu hình thanh toán',
+            },
+            {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
                 label: 'Lịch tuần tháng',
                 path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
