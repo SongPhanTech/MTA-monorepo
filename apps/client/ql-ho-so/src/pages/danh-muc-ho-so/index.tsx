@@ -519,7 +519,7 @@ export default function DanhMucHoSo() {
                                                                     )
                                                                 ) {
                                                                     if (item?.id === 'dao-tao') {
-                                                                        window.location.href = `${process.env.NEXT_PUBLIC_LMS_URL}${i.path}`
+                                                                        window.open(`/lms${i.path}`, '_blank')
                                                                         return
                                                                     }
                                                                     router.push(i.path)
