@@ -1,12 +1,12 @@
 import useSpinner from '@hooks/spinner'
 import { useFindUniqueStudent, useUpdateGraduationDecision } from '@workspace/db/hooks'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Checkbox, Input, Modal, message, Space } from 'antd'
 import dayjs from 'dayjs'
 import { Printer } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { env } from '@/env'
 
 export const ModalVanBang = () => {
     const formattedDate = `Hà Nội, ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
@@ -137,7 +137,7 @@ export const ModalVanBang = () => {
                                 </strong>
                             </div>
                             <img
-                                src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${data?.graduationDecision?.diplomaFront?.path}`}
+                                src={`${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${data?.graduationDecision?.diplomaFront?.path}`}
                                 alt={data?.graduationDecision?.diplomaFront?.name}
                                 className={`w-full ${!checkedItems.front ? 'print:hidden' : ''}`}
                             />
@@ -159,7 +159,7 @@ export const ModalVanBang = () => {
                                 </strong>
                             </div>
                             <img
-                                src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${data?.graduationDecision?.diplomaBack?.path}`}
+                                src={`${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${data?.graduationDecision?.diplomaBack?.path}`}
                                 alt={data?.graduationDecision?.diplomaBack?.name}
                                 className={`w-full ${!checkedItems.back ? 'print:hidden' : ''}`}
                             />

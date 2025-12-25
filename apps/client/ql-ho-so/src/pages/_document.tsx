@@ -1,6 +1,6 @@
 import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import NextDocument, { type DocumentContext, Head, Html, Main, NextScript } from 'next/document'
-import { env } from '@/env'
 
 export default class MyDocument extends NextDocument {
     render() {
@@ -9,16 +9,16 @@ export default class MyDocument extends NextDocument {
                 <Head>
                     <link
                         rel="stylesheet"
-                        href={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.css`}
-                    />
-                    <script
-                        src={`${env.NEXT_PUBLIC_ASSET_PREFIX}/mta-components.umd.js`}
-                        defer={false}
+                        href={`${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/mta-components.css`}
                     />
                 </Head>
                 <body>
                     <Main />
                     <NextScript />
+                    <script
+                        src={`${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/mta-components.umd.js`}
+                        defer={false}
+                    />
                 </body>
             </Html>
         )

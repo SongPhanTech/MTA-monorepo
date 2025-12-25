@@ -1,7 +1,8 @@
 // Header.tsx
+
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import type React from 'react'
 import { useEffect } from 'react'
-import { env } from '@/env'
 
 const HeaderApp: React.FC = () => {
     useEffect(() => {
@@ -12,7 +13,7 @@ const HeaderApp: React.FC = () => {
                 notificationAppId: 'notificationContainer',
                 userAppId: 'userContainer',
                 tenantCode: window.tenantCode || 'dev',
-                appCode: env.NEXT_PUBLIC_APP_CODE,
+                appCode: getRuntimeEnv('NEXT_PUBLIC_APP_CODE') || 'hrm',
             })
         } catch (error) {
             console.log(error)

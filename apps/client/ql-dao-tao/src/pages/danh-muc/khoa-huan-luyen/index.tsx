@@ -5,7 +5,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountTrainingCourse,
     useFindManySchoolYear,
@@ -23,6 +23,7 @@ import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { getMinioUrl } from '@workspace/libs/utils'
 
 export default function TrainingCoursePage() {
     const { can, canSome } = useAbility()

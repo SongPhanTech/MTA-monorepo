@@ -4,7 +4,6 @@ import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { getMinioUrl } from '@workspace/constant'
 import type { ArchivedAward, ArchivedCertificate, Prisma } from '@workspace/db/client'
 import {
     useFindManySemester,
@@ -14,6 +13,7 @@ import {
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Col, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { Check, X } from 'lucide-react'

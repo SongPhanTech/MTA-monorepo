@@ -1,4 +1,4 @@
-import { env } from '@/env'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 
 export async function fetchHoiDap({
     prompt,
@@ -21,7 +21,7 @@ export async function fetchHoiDap({
         }
     }
 
-    const response = await fetch(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`, {
+    const response = await fetch(`${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/hoi_dap_v4`, {
         method: 'POST',
         // do NOT set Content-Type header for FormData; the browser will set the boundary automatically
         body: formData,
@@ -50,7 +50,7 @@ export async function fetchHoiDapFaq({
 
     const response = await fetch(
         // 'https://api.chat.chatbot.swantech.vn/hoi_dap_faq',
-        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_faq`,
+        `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/hoi_dap_faq`,
         {
             method: 'POST',
             body: formData,
@@ -75,12 +75,15 @@ export async function fetchRecommendByTopicId({
     const formData = new URLSearchParams()
     formData.append('topic_id', topic_id)
 
-    const response = await fetch(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/recommend_by_topic_id`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString(),
-        signal: signal,
-    })
+    const response = await fetch(
+        `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/recommend_by_topic_id`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString(),
+            signal: signal,
+        }
+    )
 
     if (!response.ok) {
         throw new Error('Lỗi khi tải danh sách câu hỏi FAQ')
@@ -105,7 +108,7 @@ export async function fetchGetFaqAnswer({
     formData.append('topic_id', topic_id)
     formData.append('conversation_id', conversation_id)
 
-    const response = await fetch(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/get_faq_answer`, {
+    const response = await fetch(`${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/get_faq_answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData.toString(),

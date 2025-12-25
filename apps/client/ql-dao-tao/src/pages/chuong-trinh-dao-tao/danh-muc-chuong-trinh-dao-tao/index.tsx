@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
@@ -12,14 +11,13 @@ import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingMajor,
-    TrainingTime
+    TrainingTime,
 } from '@workspace/db/client'
 import {
     useCountCurriculum,
@@ -31,6 +29,7 @@ import {
     useUpdateCurriculum,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -41,6 +40,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const [expandAll, setExpandAll] = useState(false)

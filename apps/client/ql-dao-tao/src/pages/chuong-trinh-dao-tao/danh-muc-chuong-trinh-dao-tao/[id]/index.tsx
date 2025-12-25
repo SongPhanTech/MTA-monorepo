@@ -9,7 +9,8 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf } from '@workspace/constant'
+
 import type {
     CurriculumVersion,
     DocumentFile,
@@ -36,6 +37,7 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
+import { getMinioUrl } from '@workspace/libs/utils'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()

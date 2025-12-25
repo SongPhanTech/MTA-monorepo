@@ -1,13 +1,13 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
-import { API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
 import * as modals from '@components/modal'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { SessionProvider } from '@workspace/auth/react'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { lightThemeCustom } from '@workspace/ui'
 import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
@@ -79,7 +79,7 @@ function App({ Component, pageProps }: AppProps) {
                     <QueryClientProvider client={queryClient}>
                         <ZenStackHooksProvider
                             value={{
-                                endpoint: `${API_MODEL_BASE_URL}/api/model`,
+                                endpoint: `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/model`,
                                 fetch: fetchInstance,
                             }}
                         >

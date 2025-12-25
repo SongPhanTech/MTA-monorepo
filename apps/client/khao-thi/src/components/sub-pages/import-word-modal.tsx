@@ -1,11 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Modal, message, Table } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
 import { useState } from 'react'
-import { env } from '@/env'
 
 interface WordImportModalProps {
     visible: boolean
@@ -114,7 +114,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                 body: img.blob,
             })
 
-            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+            const imageUrl = `${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${resPresignedUrl.data.fileName}`
             result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100%;" />`)
         }
         result = result.replace(/\n/g, '<br />')

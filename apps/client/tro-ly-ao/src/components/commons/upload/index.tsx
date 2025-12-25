@@ -6,10 +6,10 @@ import TxtIcon from '@assets/images/txt.svg'
 import UploadIcon from '@assets/images/upload.svg'
 import ExcelIcon from '@assets/images/xlsx.svg'
 import { cn } from '@lib/utils'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Divider, Image } from 'antd'
 import ImageNext from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { env } from '@/env'
 
 type UploadDragAndDropWrapperProps = {
     onUpload: (
@@ -69,7 +69,7 @@ const UploadDragAndDrop = ({
     const getUrl = useCallback((path: string) => {
         const isAbsolutePath = path.startsWith('http') || path.startsWith('blob')
         if (isAbsolutePath) return path
-        return new URL(path, env.NEXT_PUBLIC_MINIO_ENDPOINT).href
+        return new URL(path, getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')).href
     }, [])
     useEffect(() => {
         setImageFromValue(value)

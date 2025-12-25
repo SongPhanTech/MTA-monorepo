@@ -1,15 +1,15 @@
-import { TimKiemTheoNguNghia, TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 import DocumentSidebar from '@components/commons/document-sidebar'
 import { FileUploadIcon } from '@components/commons/upload'
 import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
 import { useFindManyDocument } from '@workspace/db/hooks'
-import { Button, Divider, Empty, Input, message, Modal, Radio, Spin, Tag, Typography } from 'antd'
+import { getMinioUrl } from '@workspace/libs/utils'
+import { Button, Divider, Empty, Input, Modal, message, Radio, Spin, Tag, Typography } from 'antd'
 import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
+import { TimKiemTheoNguNghia, TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 
 const { Title } = Typography
 

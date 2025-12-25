@@ -2,6 +2,7 @@ import { renderWithMath } from '@components/commons/rich-text-editor/renderWithM
 import { formatDateVN } from '@lib/utils'
 import type { ExamBankQuestion, Question } from '@workspace/db'
 import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Modal, message, Space } from 'antd'
 import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
@@ -9,7 +10,6 @@ import { FileDown, Printer } from 'lucide-react'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { env } from '@/env'
 
 export const ModalPrintExamBank = () => {
     const formattedDate = `Ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
@@ -39,7 +39,9 @@ export const ModalPrintExamBank = () => {
 
         try {
             console.log('Loading template file...')
-            const res = await loadFile(`${env.NEXT_PUBLIC_ASSET_PREFIX}/templates/InDeThi.docx`)
+            const res = await loadFile(
+                `${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/templates/InDeThi.docx`
+            )
             console.log('Template loaded successfully:', !!res)
 
             console.log('Initializing Docxtemplater...')

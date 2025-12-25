@@ -1,4 +1,4 @@
-import { env } from '@/env'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 
 export async function fetchXuLyVanBan({
     text,
@@ -18,7 +18,7 @@ export async function fetchXuLyVanBan({
     })
 
     const response = await fetch(
-        `${env.NEXT_PUBLIC_DOC_CHAT_BOT_URL}/util/nlp_task?${params.toString()}`,
+        `${getRuntimeEnv('NEXT_PUBLIC_DOC_CHAT_BOT_URL')}/util/nlp_task?${params.toString()}`,
         {
             method: 'GET',
             signal,
