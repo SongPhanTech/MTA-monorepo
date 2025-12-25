@@ -107,7 +107,7 @@ export default function PutKhenThuongModal() {
                     />
                 </FormItem>
             </Col>
-            <Col>
+            <Col span={24}>
                 <FormItem label="Lý do" name="lyDo" required form={form}>
                     <TextArea placeholder="Nhập lý do" rows={3} />
                 </FormItem>

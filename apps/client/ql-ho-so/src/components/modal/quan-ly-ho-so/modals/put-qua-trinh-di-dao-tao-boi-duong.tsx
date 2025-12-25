@@ -4,7 +4,10 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { QuaTrinhCuDiDaoTao } from '@workspace/db'
-import { useFindManyDM_LoaiHinhDiHocTap } from '@workspace/db/hooks'
+import {
+    useFindManyDM_LoaiHinhDiHocTap,
+    useFindManyDM_TinhTrangDiHocTap,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -22,6 +25,7 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
     })
 
     const { data: loaiHinhList } = useFindManyDM_LoaiHinhDiHocTap()
+    const { data: tinhTrangList } = useFindManyDM_TinhTrangDiHocTap()
 
     async function onOk(output: QuaTrinhCuDiDaoTao) {
         try {
@@ -117,9 +121,15 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem label="Tình Trạng Đi Học Tập" name="dM_TinhTrangDiHocTapId" form={form}>
-                    <Input placeholder="Nhập loại hình đào tạo" />
+                    <Select
+                        placeholder="Chọn tình trạng đi học tập"
+                        options={tinhTrangList?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

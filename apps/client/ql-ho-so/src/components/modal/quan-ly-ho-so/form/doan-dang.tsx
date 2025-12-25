@@ -116,23 +116,6 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="tenureDate"
-                            label="Xếp loại đánh giá chất lượng đảng viên"
-                            className="mb-0"
-                        >
-                            <Select
-                                options={xepLoaiDanhGiaChatLuongDangVien.map((i) => {
-                                    return {
-                                        label: i.name,
-                                        value: i.id,
-                                    }
-                                })}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
                             name="dM_XepLoaiDanhGiaChatLuongDangVienId"
                             label="Xếp loại đánh giá chất lượng đảng viên"
                             className="mb-0"

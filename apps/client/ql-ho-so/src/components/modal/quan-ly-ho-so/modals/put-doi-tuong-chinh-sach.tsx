@@ -67,7 +67,7 @@ export default function PutDoiTuongChinhSachModal() {
         >
             <Col span={24}>
                 <FormItem label="Đối tượng" name="tenDoiTuong" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                    <Input placeholder="Nhập đối tượng chính sách" />
                 </FormItem>
             </Col>
 

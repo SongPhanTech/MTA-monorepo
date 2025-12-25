@@ -339,6 +339,27 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
+                            name="dM_ChucDanhCMNVKySuId"
+                            label="Chức danh CMNV kỹ sư"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn chức danh CMNV kỹ sư"
+                                className="h-9"
+                                options={chucDanhKySuData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
                             name="dM_ChucDanhCMNVNghienCuuVienId"
                             label="Chức danh CMNV ngạch Nghiên cứu viên"
                             className="mb-0"
@@ -406,6 +427,27 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 placeholder="Chọn hình thức khen thưởng chính quyền"
                                 className="h-9"
                                 options={hinhThucKhenThuongChinhQuyenData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="trangThaiLamViecId"
+                            label="Trạng thái làm việc"
+                            className="mb-2"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn trạng thái làm việc"
+                                className="h-9"
+                                options={trangThaiLamViec.map((i) => {
                                     return {
                                         value: i.id,
                                         label: i.name,
