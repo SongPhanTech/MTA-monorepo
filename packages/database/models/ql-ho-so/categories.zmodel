@@ -22,32 +22,52 @@ model DM_TrinhDoQuanLyNhaNuoc extends Base {
 }
 
 model DM_TinhTrangHonNhan extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
+  @@schema("ql-ho-so")
+}
+
+model DM_QuanHeThanNhan extends Base {
+  name     String     @unique
+
+  relative Relative[]
+
   @@schema("ql-ho-so")
 }
 
 model DM_TrangThaiLamViec extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_HinhThucKhenThuongChinhQuyen extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_HinhThucKhenThuongDang extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_XepLoaiDanhGiaCanBo extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_XepLoaiDanhGiaChatLuongDangVien extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
@@ -59,8 +79,16 @@ model DM_LoaiHinhCongTac extends Base {
 }
 
 model DM_TinhTrangCongTac extends Base {
-  name String @unique
+  name            String            @unique
 
+  quaTrinhCongTac QuaTrinhCongTac[]
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiTinhTrangCongTac extends Base {
+  name            String            @unique
+
+  quaTrinhCongTac QuaTrinhCongTac[]
   @@schema("ql-ho-so")
 }
 
@@ -82,17 +110,23 @@ model DM_NuocCuDiHocTap extends Base {
 }
 
 model DM_ChucDanhCMNVGiangVien extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_ChucDanhCMNVNghienCuuVien extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
 model DM_ChucDanhCMNVKySu extends Base {
-  name String @unique
+  name        String        @unique
+
+  userProfile UserProfile[]
   @@schema("ql-ho-so")
 }
 
