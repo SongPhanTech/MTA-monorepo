@@ -259,9 +259,8 @@ app.openapi(
                 .filter((col) => columns.includes(col.columnName))
                 .map((col) => `\`${col.columnName}\``)
                 .join(', ')
-
-            res = await prismaClient.$queryRaw<any[]>`SELECT ${Prisma.raw(selectedColumns)}
-            FROM ${Prisma.raw(`\`${database}\`.\`${table}\``)};`
+            res = await prismaClient.$queryRawUnsafe<any[]>(`SELECT ${selectedColumns}
+            FROM \`${database}\`.\`${table}\`;`)
         } else {
             // MSSQL
             const prismaClient = new MssqlPrismaClient({ datasourceUrl: url })

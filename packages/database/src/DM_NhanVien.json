@@ -1,0 +1,1227 @@
+[
+  {
+    "Id": "09E9D308-1B94-4856-923E-ED84679D7585",
+    "sTenDayDu": "Nguyễn Viết Cường",
+    "sCCCD": "001001001096"
+  },
+  {
+    "Id": "DCF747A6-191B-4B4D-8584-5E14FEE84475",
+    "sTenDayDu": "NGUYỄN VIỆT HOÀNG",
+    "sCCCD": "001001001580"
+  },
+  {
+    "Id": "2345FD68-9789-4CBF-8910-929FA05721C1",
+    "sTenDayDu": "NGUYỄN VIỆT HOÀNG",
+    "sCCCD": "001001001444"
+  },
+  {
+    "Id": "50263442-01C6-49F4-9E66-6E8A1D455E04",
+    "sTenDayDu": "Nguyễn Việt Hùng",
+    "sCCCD": "001001001012"
+  },
+  {
+    "Id": "D6EAE2E2-CFE4-4B26-A525-C70BCCE27545",
+    "sTenDayDu": "NGUYỄN VIỆT LONG",
+    "sCCCD": "001001001155"
+  },
+  {
+    "Id": "4D6DD353-2B9B-4405-B051-751E717B5D90",
+    "sTenDayDu": "Nguyễn Việt Tuấn",
+    "sCCCD": "36"
+  },
+  {
+    "Id": "A4E82BB2-A4B7-4C41-BB89-9D749755E39C",
+    "sTenDayDu": "NGUYỄN VŨ HẢI ANH",
+    "sCCCD": "001001001253"
+  },
+  {
+    "Id": "7A35C0DC-914F-4996-9BDC-6B5BEE40CFBB",
+    "sTenDayDu": "NGUYỄN XUÂN BẰNG",
+    "sCCCD": "001001001560"
+  },
+  {
+    "Id": "4F11F043-AE65-4467-926A-5C1239F5FC2B",
+    "sTenDayDu": "NGUYỄN XUÂN DƯƠNG",
+    "sCCCD": "001001001131"
+  },
+  {
+    "Id": "7AED7907-F061-47D5-95EB-D914D31367DB",
+    "sTenDayDu": "Nguyễn Xuân Hoài",
+    "sCCCD": "001001001008"
+  },
+  {
+    "Id": "09250451-D24A-4C4C-854E-D64F7D72D313",
+    "sTenDayDu": "NGUYỄN XUÂN HÙNG",
+    "sCCCD": "001001001515"
+  },
+  {
+    "Id": "F8D41B82-B512-4C9C-B9B3-0A566B997FA0",
+    "sTenDayDu": "NGUYỄN XUÂN PHONG",
+    "sCCCD": "001001001465"
+  },
+  {
+    "Id": "D53477E0-5085-4125-86F3-A7C08342B53F",
+    "sTenDayDu": "NGUYỄN XUÂN QUYỀN",
+    "sCCCD": "001001001602"
+  },
+  {
+    "Id": "4EB697FB-3ED1-4730-9527-D339F7EF0A7A",
+    "sTenDayDu": "Nguyễn Xuân Viên",
+    "sCCCD": "001001001022"
+  },
+  {
+    "Id": "4370EA29-536A-4811-956D-11F6B2626146",
+    "sTenDayDu": "NGUYỄN XUÂN VƯƠNG",
+    "sCCCD": "001001001484"
+  },
+  {
+    "Id": "725C09F0-43F5-4258-A16F-BF9BC1101D3F",
+    "sTenDayDu": "Ninh Gia Hưng",
+    "sCCCD": "01202123459"
+  },
+  {
+    "Id": "00168B82-182B-4516-B327-55005AA7D3C2",
+    "sTenDayDu": "Ninh Ngọc Ánh",
+    "sCCCD": "01202123460"
+  },
+  {
+    "Id": "9EB2D26D-A9DE-4631-B1EE-4B57D00E97B1",
+    "sTenDayDu": "NINH VĂN ĐẠT",
+    "sCCCD": "001001001628"
+  },
+  {
+    "Id": "84849B1C-B58E-4CA3-B997-A3EE07428EB6",
+    "sTenDayDu": "P13 Đánh phách",
+    "sCCCD": "324354565465"
+  },
+  {
+    "Id": "9EE1016C-1606-43C1-B199-23CC3F8A2114",
+    "sTenDayDu": "P13 Nhập điểm",
+    "sCCCD": "212334455687"
+  },
+  {
+    "Id": "E2FE30B3-AB43-48E0-8DBF-3D8353546FC5",
+    "sTenDayDu": "P2 Ban quản lý đào tạo",
+    "sCCCD": "988776564543"
+  },
+  {
+    "Id": "3CD0E96F-98D3-48B6-B76C-3B2A7D6D6C74",
+    "sTenDayDu": "P2 Phòng Đào Tạo",
+    "sCCCD": "673467324672"
+  },
+  {
+    "Id": "57A48ACB-7454-4A21-91FE-048665EBEAC7",
+    "sTenDayDu": "P2 Quản lý chương trình",
+    "sCCCD": "324345657687"
+  },
+  {
+    "Id": "37DBA379-4B83-45C2-8435-E28BF9559BCC",
+    "sTenDayDu": "P7 Phòng sau đại học",
+    "sCCCD": "763486234823"
+  },
+  {
+    "Id": "5E4BD5C5-816F-4331-AF7B-725B71D6826B",
+    "sTenDayDu": "P7 Quản lý đào tạo",
+    "sCCCD": "326587541298"
+  },
+  {
+    "Id": "D58083AE-FE7B-481D-B777-B39F548E93E0",
+    "sTenDayDu": "P7 Quản lý kế hoạch",
+    "sCCCD": "823756238421"
+  },
+  {
+    "Id": "0FB67B32-0097-4828-A1B8-4F408215B353",
+    "sTenDayDu": "PHAÌ£M NGOÌ£C BAÌI",
+    "sCCCD": "001001001325"
+  },
+  {
+    "Id": "FA96600D-8043-447B-96AD-2925C0E1F259",
+    "sTenDayDu": "Phạm Anh Việt",
+    "sCCCD": "048756348544"
+  },
+  {
+    "Id": "385C33CC-C888-4F16-B63F-C3295C201A44",
+    "sTenDayDu": "PHẠM BÌNH MINH",
+    "sCCCD": "001001001295"
+  },
+  {
+    "Id": "27B92A2C-DF46-43F2-AB8D-06284D678778",
+    "sTenDayDu": "PHẠM CÔNG PHONG",
+    "sCCCD": "001001001301"
+  },
+  {
+    "Id": "2CB31746-C763-407D-8B9F-3C6679DF7DEA",
+    "sTenDayDu": "PHẠM ĐÌNH LONG",
+    "sCCCD": "001001001590"
+  },
+  {
+    "Id": "ABBFAED9-258C-4E56-BEB2-3577BBD63EEA",
+    "sTenDayDu": "PHẠM ĐỨC ANH",
+    "sCCCD": "001001001254"
+  },
+  {
+    "Id": "024AB8A4-07A4-4B54-8733-B18ED0BA5E26",
+    "sTenDayDu": "PHẠM ĐỨC CHIẾN",
+    "sCCCD": "001001001494"
+  },
+  {
+    "Id": "0752BC29-A8F7-4F30-A04C-F880BD24358D",
+    "sTenDayDu": "PHẠM ĐỨC HUY",
+    "sCCCD": "001001001450"
+  },
+  {
+    "Id": "8B4CED46-9DCC-470C-A8E8-E556DA17FC93",
+    "sTenDayDu": "PHẠM ĐỨC MINH HOÀNG",
+    "sCCCD": "001001001207"
+  },
+  {
+    "Id": "1F29C5BA-0AD5-4BF8-AF31-B63BA1822847",
+    "sTenDayDu": "PHẠM HOÀNG ANH",
+    "sCCCD": "001001001255"
+  },
+  {
+    "Id": "E41CBD01-1E63-4294-A98A-C18313AFEFB5",
+    "sTenDayDu": "PHẠM HÙNG SANG",
+    "sCCCD": "001001001536"
+  },
+  {
+    "Id": "E7D3E4A1-81D9-4578-B422-C2F84A68CC7C",
+    "sTenDayDu": "Phạm Mai Trang",
+    "sCCCD": "005745765634"
+  },
+  {
+    "Id": "917E8689-4ECF-4105-9C9C-F54F2D6CFCCD",
+    "sTenDayDu": "Phạm Minh Khôi",
+    "sCCCD": "01202123779"
+  },
+  {
+    "Id": "C167EC76-5F87-42F2-AF12-8349D25026E0",
+    "sTenDayDu": "PHẠM MINH KHƯƠNG",
+    "sCCCD": "001001001400"
+  },
+  {
+    "Id": "25175BB6-DDEA-45F5-AF00-EC259F4DAAD3",
+    "sTenDayDu": "PHẠM MINH TUẤN",
+    "sCCCD": "001001001317"
+  },
+  {
+    "Id": "98BEC7AF-5932-41DC-A015-80CD3CE0C82F",
+    "sTenDayDu": "PHẠM MỸ LINH",
+    "sCCCD": "001001001152"
+  },
+  {
+    "Id": "7F567D03-64DF-49BF-B6E9-BFC60352D362",
+    "sTenDayDu": "PHẠM NGỌC ĐẠT",
+    "sCCCD": "001001001660"
+  },
+  {
+    "Id": "6ED87A35-CF4A-466A-B86F-2EA29A3850E9",
+    "sTenDayDu": "PHẠM NGỌC KHÁNH",
+    "sCCCD": "001001001643"
+  },
+  {
+    "Id": "84A9A98F-8BA0-4513-8BE3-018EFF84D055",
+    "sTenDayDu": "Phạm Ngọc Phúc",
+    "sCCCD": "001001001020"
+  },
+  {
+    "Id": "D0FA35CA-779D-4676-84DE-E73DDB7C725F",
+    "sTenDayDu": "PHẠM NGUYỄN TRƯỜNG AN",
+    "sCCCD": "001001001372"
+  },
+  {
+    "Id": "D2C2FDA8-6436-475C-B562-25978BE02FC9",
+    "sTenDayDu": "PHẠM QUANG MINH",
+    "sCCCD": "001001001408"
+  },
+  {
+    "Id": "BC4F6BC3-FFDB-418B-9445-2691BFC9AE71",
+    "sTenDayDu": "PHẠM QUANG THIỆN",
+    "sCCCD": "001001001363"
+  },
+  {
+    "Id": "157306AF-2C1C-40C8-92C8-7B27AFD1DEF0",
+    "sTenDayDu": "PHẠM QUỐC TUẤN",
+    "sCCCD": "001001001549"
+  },
+  {
+    "Id": "8CAB103D-8159-4AA8-8E25-0EDCDBA5D0A1",
+    "sTenDayDu": "Phạm Thái Hưng",
+    "sCCCD": "001001001097"
+  },
+  {
+    "Id": "F7BFD36B-3994-4441-B0E0-84538A676B09",
+    "sTenDayDu": "PHẠM THÁI SƠN",
+    "sCCCD": "001001001233"
+  },
+  {
+    "Id": "44D92EE7-3B90-4E25-B42E-70F8039956F9",
+    "sTenDayDu": "Phạm Thanh Hải",
+    "sCCCD": "001001001112"
+  },
+  {
+    "Id": "A952A5D5-C38D-45D1-8AEC-422286A6F12D",
+    "sTenDayDu": "PHẠM THANH LIÊM",
+    "sCCCD": "001001001522"
+  },
+  {
+    "Id": "2A8B807A-E1C5-4CB3-B721-2A9409DE5C54",
+    "sTenDayDu": "Phạm Thế Anh",
+    "sCCCD": "001001001024"
+  },
+  {
+    "Id": "2EE944FD-FC60-4429-B49A-9E20394C216F",
+    "sTenDayDu": "Phạm Thị Bích Vân",
+    "sCCCD": "001001001072"
+  },
+  {
+    "Id": "7A415754-1F6F-42B8-8025-8829D7EB46B6",
+    "sTenDayDu": "PHẠM THỊ HẠNH",
+    "sCCCD": "001001001199"
+  },
+  {
+    "Id": "8E6AEBC7-9A30-46A7-87DA-B7CB617C91E4",
+    "sTenDayDu": "PHẠM THỊ LAN ANH",
+    "sCCCD": "001001001622"
+  },
+  {
+    "Id": "9055F3C8-C859-4162-BF02-E77A30F33568",
+    "sTenDayDu": "PHẠM TIẾN ĐẠT",
+    "sCCCD": "001001001567"
+  },
+  {
+    "Id": "2031BFB3-38C3-436E-96BE-0AB086223904",
+    "sTenDayDu": "Phạm Tiến Dũng",
+    "sCCCD": "001001001036"
+  },
+  {
+    "Id": "A717B97A-166D-427B-BB09-C83965395C86",
+    "sTenDayDu": "Phạm Trúc Lam",
+    "sCCCD": "01202123462"
+  },
+  {
+    "Id": "A0179B81-4368-496F-AD12-002AE26AE6AC",
+    "sTenDayDu": "PHẠM TRUNG HIẾU",
+    "sCCCD": "001001001137"
+  },
+  {
+    "Id": "7E448509-B918-4507-8E4D-90E6452BDBAE",
+    "sTenDayDu": "Phạm Trường Sơn",
+    "sCCCD": "001001001089"
+  },
+  {
+    "Id": "4B3CD607-ED85-43B1-9AAE-E1F1DFCAFF96",
+    "sTenDayDu": "PHẠM VĂN DÁNG",
+    "sCCCD": "001001001190"
+  },
+  {
+    "Id": "D327544D-9A88-4FBF-BA15-4761463E15A6",
+    "sTenDayDu": "PHẠM VĂN ĐÌNH",
+    "sCCCD": "001001001262"
+  },
+  {
+    "Id": "8ECEE658-D8C2-4D47-9DFE-D34B48874911",
+    "sTenDayDu": "PHẠM VĂN HIẾU",
+    "sCCCD": "001001001203"
+  },
+  {
+    "Id": "61A608E4-22BA-40DB-8870-DA337AB10CDF",
+    "sTenDayDu": "PHẠM VĂN HỢP",
+    "sCCCD": "001001001340"
+  },
+  {
+    "Id": "222000EE-6A81-4E04-8D4A-FB04E6D3E2F7",
+    "sTenDayDu": "Phạm Văn Khánh",
+    "sCCCD": "001001001025"
+  },
+  {
+    "Id": "B3B3EABA-E62F-469C-8F57-EB317FFAEBF4",
+    "sTenDayDu": "PHẠM VĂN LUÂN",
+    "sCCCD": "001001001525"
+  },
+  {
+    "Id": "EED1856F-CD6F-4785-ACBF-EE53B952C5C8",
+    "sTenDayDu": "PHẠM VĂN TÚ",
+    "sCCCD": "001001001615"
+  },
+  {
+    "Id": "6CEB05AA-BAAF-4622-B074-F3F799E8B7BE",
+    "sTenDayDu": "PHẠM VĂN TÙNG",
+    "sCCCD": "001001001183"
+  },
+  {
+    "Id": "2080B517-35D7-49A3-99AF-573CB79FC238",
+    "sTenDayDu": "Phạm Văn Việt",
+    "sCCCD": "001001001060"
+  },
+  {
+    "Id": "3CA243B5-07D5-4D52-96E7-97FC4723ED67",
+    "sTenDayDu": "PHẠM XUÂN HIẾU",
+    "sCCCD": "001001001512"
+  },
+  {
+    "Id": "67FFB720-6C28-49DE-B4CE-57FB9CE844FC",
+    "sTenDayDu": "PHẠM XUÂN NAM",
+    "sCCCD": "001001001226"
+  },
+  {
+    "Id": "DE444D9E-E7D0-497D-BA05-63D45E651EF9",
+    "sTenDayDu": "PHẠM XUÂN VŨ",
+    "sCCCD": "001001001619"
+  },
+  {
+    "Id": "EC012CB6-0EBC-49E0-A8AD-BDBA04EFE6EB",
+    "sTenDayDu": "PHAN ĐẶNG THẾ HÙNG",
+    "sCCCD": "001001001582"
+  },
+  {
+    "Id": "16786073-9FA6-4E37-9FDD-684C9773ED30",
+    "sTenDayDu": "PHAN GIA HIỂN",
+    "sCCCD": "001001001334"
+  },
+  {
+    "Id": "E3F023F2-0E72-411C-A7B2-EFDCBA6D7F7E",
+    "sTenDayDu": "PHAN NGỌC MINH",
+    "sCCCD": "001001001296"
+  },
+  {
+    "Id": "012D0389-94AA-484A-ACB9-D453C18D14ED",
+    "sTenDayDu": "Phan Nguyên Hải",
+    "sCCCD": "001001001064"
+  },
+  {
+    "Id": "1CBE51E4-BE8A-495D-B7E4-005C881C1255",
+    "sTenDayDu": "Phan Thanh Sơn",
+    "sCCCD": "001001001076"
+  },
+  {
+    "Id": "A3582528-2D15-451C-A7B8-E4C828DF27DB",
+    "sTenDayDu": "PHAN THANH TÙNG",
+    "sCCCD": "001001001250"
+  },
+  {
+    "Id": "CF6D0070-E678-4EBC-9C19-9BA0AD858F72",
+    "sTenDayDu": "PHAN THẾ TIẾN",
+    "sCCCD": "001001001313"
+  },
+  {
+    "Id": "7DC4C788-D396-4411-9437-40A9F684FB79",
+    "sTenDayDu": "Phan Thị Hải Hồng",
+    "sCCCD": "001001001069"
+  },
+  {
+    "Id": "B8159A26-D6A7-4CBC-AB06-C573DBB15AAF",
+    "sTenDayDu": "Phan Thị Hương",
+    "sCCCD": "001001001039"
+  },
+  {
+    "Id": "20886A7B-A920-4B2F-B157-DC95FCAFFC0A",
+    "sTenDayDu": "Phan Thị Loan",
+    "sCCCD": "001001001109"
+  },
+  {
+    "Id": "294B567D-9557-4512-84F2-831BBC94D3C8",
+    "sTenDayDu": "Phan Thị Thùy An",
+    "sCCCD": "316621663998"
+  },
+  {
+    "Id": "CD211C47-5596-4FE8-923A-32A07198B601",
+    "sTenDayDu": "Phan Thu Hà",
+    "sCCCD": "001001001067"
+  },
+  {
+    "Id": "1FE28D91-D1FB-44F1-97AF-24F8F30BEBCC",
+    "sTenDayDu": "PHAN THUỲ DƯƠNG",
+    "sCCCD": "001001001573"
+  },
+  {
+    "Id": "BB50508E-5BF9-4D30-B7B1-6D2030A4B07E",
+    "sTenDayDu": "Phan Việt Anh",
+    "sCCCD": "001001001065"
+  },
+  {
+    "Id": "31962692-5BB0-48C8-A114-08468191EE29",
+    "sTenDayDu": "PHÒNG VĂN HUỲNH",
+    "sCCCD": "001001001287"
+  },
+  {
+    "Id": "05D23106-348A-4C91-A57E-CAF16CD4286D",
+    "sTenDayDu": "PHÙNG ANH TUẤN",
+    "sCCCD": "001001001617"
+  },
+  {
+    "Id": "6B3ED0CD-537A-45FB-AA82-99EDAA50E8D9",
+    "sTenDayDu": "PHÙNG KHẮC LINH",
+    "sCCCD": "001001001455"
+  },
+  {
+    "Id": "B607DCB9-C480-46E7-AECC-1FE2C4424188",
+    "sTenDayDu": "PHÙNG MINH QUANG",
+    "sCCCD": "001001001601"
+  },
+  {
+    "Id": "EC7616B6-E86C-4744-BFA9-37BDA3415F43",
+    "sTenDayDu": "PHÙNG THANH PHONG",
+    "sCCCD": "001001001411"
+  },
+  {
+    "Id": "E14CDA5F-D7C9-4EEE-989F-A9C3163C8130",
+    "sTenDayDu": "PHÙNG THỊ NGỌC",
+    "sCCCD": "001001001300"
+  },
+  {
+    "Id": "6B15D688-3DB5-48A8-AD32-34843BA0AEF6",
+    "sTenDayDu": "PHÙNG VĂN TRƯỜNG",
+    "sCCCD": "001001001181"
+  },
+  {
+    "Id": "011D5FE4-9D9D-4F41-AF7D-155480F8E62E",
+    "sTenDayDu": "PHƯƠNG MINH PHƯƠNG",
+    "sCCCD": "001001001533"
+  },
+  {
+    "Id": "20BD4CE6-7471-4072-BE75-19781D0E75B9",
+    "sTenDayDu": "QUÁCH VIỆT HOÀNG",
+    "sCCCD": "001001001391"
+  },
+  {
+    "Id": "CC254921-7050-46C2-A533-E6B79DBE4EDF",
+    "sTenDayDu": "SA VĂN SƠN",
+    "sCCCD": "001001001167"
+  },
+  {
+    "Id": "266369DB-FBAA-453E-B5FC-147ED06F959D",
+    "sTenDayDu": "superadmin Toàn quyền",
+    "sCCCD": "058186000028"
+  },
+  {
+    "Id": "9A746094-05F0-4354-BE9B-703D5AAA85CB",
+    "sTenDayDu": "sv Sinh viên",
+    "sCCCD": "058187000028"
+  },
+  {
+    "Id": "B8622103-4E85-493B-B8DA-064916DD3B12",
+    "sTenDayDu": "Tạ Đức Tâm",
+    "sCCCD": "087423038692"
+  },
+  {
+    "Id": "411ECDCD-988E-4BAE-AD19-2CFF3A48E00F",
+    "sTenDayDu": "Tạ Hiếu Tâm",
+    "sCCCD": "001001001050"
+  },
+  {
+    "Id": "267BD0BB-29FB-4656-91BD-2CAD8A6C31B6",
+    "sTenDayDu": "TẠ HỮU SƠN",
+    "sCCCD": "001001001234"
+  },
+  {
+    "Id": "26DB38D4-6F03-45FD-A5E0-AB75E5593F48",
+    "sTenDayDu": "TẠ MINH HOÀNG",
+    "sCCCD": "001001001514"
+  },
+  {
+    "Id": "20263244-B08C-45BB-ACB0-5EC3834F2BE2",
+    "sTenDayDu": "Tạ Minh Thanh",
+    "sCCCD": "001001001009"
+  },
+  {
+    "Id": "A6A0D33F-01BC-4CCE-9788-A1AF2EDF1CE3",
+    "sTenDayDu": "Tạ Ngọc Ánh",
+    "sCCCD": "001001001028"
+  },
+  {
+    "Id": "2E0BE604-3F1A-41CE-A9E1-47DC89DDE868",
+    "sTenDayDu": "TẠ QUỐC HÙNG",
+    "sCCCD": "001001001283"
+  },
+  {
+    "Id": "7E1CB6AA-EF3D-401E-85A6-08990A57771D",
+    "sTenDayDu": "Tăng Văn Hạ",
+    "sCCCD": "001001001045"
+  },
+  {
+    "Id": "C26C1FE2-72B0-4E5A-BC77-CF72EA5A2F78",
+    "sTenDayDu": "THẠCH THỌ HIẾU",
+    "sCCCD": "001001001138"
+  },
+  {
+    "Id": "6C57D3A0-E29B-42D0-87E7-A50CAA51C454",
+    "sTenDayDu": "THÁI VIỆT HOÀNG",
+    "sCCCD": "001001001280"
+  },
+  {
+    "Id": "52694DEF-EE96-4914-B49F-7ED6703C70E5",
+    "sTenDayDu": "Thiều Lê Quyên",
+    "sCCCD": "001001001040"
+  },
+  {
+    "Id": "02D69720-B35E-48C1-AA02-339C58D65239",
+    "sTenDayDu": "TÔ ĐÌNH KHẢI",
+    "sCCCD": "001001001518"
+  },
+  {
+    "Id": "9CF918F3-223D-4CE5-A0B3-C36FF3A3A8BD",
+    "sTenDayDu": "Tô Văn Ban",
+    "sCCCD": "001001001017"
+  },
+  {
+    "Id": "0F6D15B2-323F-4C23-8E1A-95B6FDFA007E",
+    "sTenDayDu": "TÔN VĂN TOÀN",
+    "sCCCD": "001001001417"
+  },
+  {
+    "Id": "C3BD5378-2749-4277-B973-6ACEB3AD72FC",
+    "sTenDayDu": "Tống Minh Đức",
+    "sCCCD": "001001001002"
+  },
+  {
+    "Id": "BBBF6CAF-5209-40EE-8068-C2E7E838787B",
+    "sTenDayDu": "TRẦN ANH ĐỨC",
+    "sCCCD": "001001001193"
+  },
+  {
+    "Id": "F1837FAA-972B-4BCA-A9EA-A00CA6D28FF1",
+    "sTenDayDu": "TRẦN ANH GIANG",
+    "sCCCD": "001001001575"
+  },
+  {
+    "Id": "6AA9DD43-DE41-4E7A-A83C-2390A3D0808E",
+    "sTenDayDu": "TRẦN ANH QUÂN",
+    "sCCCD": "001001001164"
+  },
+  {
+    "Id": "E4C5BA54-5373-4523-8F57-1F661029DA8E",
+    "sTenDayDu": "TRẦN ANH TUẤN",
+    "sCCCD": "001001001480"
+  },
+  {
+    "Id": "FF825871-FAEB-4E91-889B-D85942837473",
+    "sTenDayDu": "Trần Cao Trưởng",
+    "sCCCD": "001001001014"
+  },
+  {
+    "Id": "2AA4695B-4F35-4AB4-8DB2-8B661E816D35",
+    "sTenDayDu": "TRẦN CHÍ TIẾN",
+    "sCCCD": "001001001655"
+  },
+  {
+    "Id": "9863D2E1-74D3-412D-88C8-654E2F621058",
+    "sTenDayDu": "TRẦN ĐÌNH HUỲNH",
+    "sCCCD": "001001001398"
+  },
+  {
+    "Id": "23304C50-B80B-4EFE-8ECE-FCF2703CBF16",
+    "sTenDayDu": "TRẦN ĐỨC",
+    "sCCCD": "001001001380"
+  },
+  {
+    "Id": "0A5D70FE-EFF9-419D-8E09-B0D2F749BB92",
+    "sTenDayDu": "TRẦN ĐỨC ANH",
+    "sCCCD": "001001001256"
+  },
+  {
+    "Id": "0C59511F-63EC-4CD9-B179-4D56710FA4C7",
+    "sTenDayDu": "TRẦN ĐỨC DŨNG",
+    "sCCCD": "001001001194"
+  },
+  {
+    "Id": "03EB8045-0B67-4960-A9EC-16C569A09717",
+    "sTenDayDu": "TRẦN ĐỨC MINH",
+    "sCCCD": "001001001529"
+  },
+  {
+    "Id": "7B9681B9-5B9E-46BC-B1A0-E5EBD06008FF",
+    "sTenDayDu": "TRẦN DUY HÙNG",
+    "sCCCD": "001001001342"
+  },
+  {
+    "Id": "56DCBBDC-3F3B-43EE-99E9-4D26D1A907BB",
+    "sTenDayDu": "TRẦN HẢI ANH",
+    "sCCCD": "001001001490"
+  },
+  {
+    "Id": "123022B0-49CB-41AD-98B1-985B2B26DAAC",
+    "sTenDayDu": "TRẦN HÀO PHONG",
+    "sCCCD": "001001001162"
+  },
+  {
+    "Id": "1AA73FBD-6EBA-4EFD-A1D5-E2D8445B446A",
+    "sTenDayDu": "Trần Hoài Linh",
+    "sCCCD": "012345678969"
+  },
+  {
+    "Id": "C79ACB04-45F6-439E-B726-3C8580F19D39",
+    "sTenDayDu": "TRẦN HOÀNG GIANG",
+    "sCCCD": "001001001198"
+  },
+  {
+    "Id": "29485A1C-5E9B-45B1-AF47-9FF079B2CCD8",
+    "sTenDayDu": "Trần Hồng Quang",
+    "sCCCD": "001001001055"
+  },
+  {
+    "Id": "195898CA-E3A3-48DB-82FB-C88E9A3D376C",
+    "sTenDayDu": "TRẦN HÙNG PHONG",
+    "sCCCD": "001001001229"
+  },
+  {
+    "Id": "11762988-AC3D-4A79-B896-5986816023F5",
+    "sTenDayDu": "Trần Hữu Phi",
+    "sCCCD": "001001001084"
+  },
+  {
+    "Id": "34A7AE35-F7EE-4725-B5F3-22B1BA29A025",
+    "sTenDayDu": "Trần Hữu Phi",
+    "sCCCD": "001001001085"
+  },
+  {
+    "Id": "D186749E-AFBD-4764-9D98-BB425C4F5A9C",
+    "sTenDayDu": "Trần Huy Hoàng",
+    "sCCCD": "012355678999"
+  },
+  {
+    "Id": "EF1E46CB-A669-46B6-9D7C-B0EBF7D76F1F",
+    "sTenDayDu": "TRẦN KHÁNH AN",
+    "sCCCD": "001001001428"
+  },
+  {
+    "Id": "0DA55580-CA2B-43BE-A089-C65A8B81BD28",
+    "sTenDayDu": "TRẦN MẠNH TIẾN",
+    "sCCCD": "001001001365"
+  },
+  {
+    "Id": "1B32904B-7660-4836-99C2-0DAC7D44E350",
+    "sTenDayDu": "TRẦN MINH ĐỨC",
+    "sCCCD": "001001001503"
+  },
+  {
+    "Id": "54114BDC-4130-4ABC-BC22-8CA6E0FB37B2",
+    "sTenDayDu": "TRẦN MINH DUYỆT",
+    "sCCCD": "001001001132"
+  },
+  {
+    "Id": "5CA582AF-0634-49B3-BC85-AD253A0DF73D",
+    "sTenDayDu": "TRẦN MINH HIẾU",
+    "sCCCD": "001001001637"
+  },
+  {
+    "Id": "BB9E9C8E-AB28-4775-9AF5-A668E2A3C0B4",
+    "sTenDayDu": "Trần Minh Tú",
+    "sCCCD": "003764133543"
+  },
+  {
+    "Id": "5860735A-5002-4BC7-92E0-37BF76C6832E",
+    "sTenDayDu": "Trần Minh Tuấn",
+    "sCCCD": "013764133543"
+  },
+  {
+    "Id": "004B92A6-E9AD-431F-A824-0B46496F1C8A",
+    "sTenDayDu": "TRẦN NGỌC VIÊN",
+    "sCCCD": "001001001481"
+  },
+  {
+    "Id": "72FFD256-153B-4C71-95EA-B5F5D95E142E",
+    "sTenDayDu": "TRẦN NGUYÊN MINH",
+    "sCCCD": "001001001224"
+  },
+  {
+    "Id": "1812541A-D4AB-4CBC-8F5F-52E9B39D7648",
+    "sTenDayDu": "Trần Nguyên Ngọc",
+    "sCCCD": "001001001011"
+  },
+  {
+    "Id": "958F653E-AD79-4A66-9A86-5423F23725D9",
+    "sTenDayDu": "TRẦN NHẬT TÂN",
+    "sCCCD": "001001001538"
+  },
+  {
+    "Id": "FB218373-6895-4E1F-AB1F-84D0E162901A",
+    "sTenDayDu": "TRẦN NHỮ TRUNG",
+    "sCCCD": "001001001614"
+  },
+  {
+    "Id": "05CB4413-09FA-4F76-9756-2236BADE7D78",
+    "sTenDayDu": "TRẦN NHUẬN QUÝ",
+    "sCCCD": "001001001303"
+  },
+  {
+    "Id": "3AF5F215-2240-42E4-8A1B-32C814CC6155",
+    "sTenDayDu": "Trần Phương Mai",
+    "sCCCD": "003486534534"
+  },
+  {
+    "Id": "62D18AC4-14B6-4050-A818-E3D44F2610CF",
+    "sTenDayDu": "TRẦN QUANG BÁU",
+    "sCCCD": "001001001561"
+  },
+  {
+    "Id": "BBEB2CA2-FE96-49C8-BA1E-8056C877E077",
+    "sTenDayDu": "TRẦN QUANG DỰ",
+    "sCCCD": "001001001328"
+  },
+  {
+    "Id": "0C0E340E-1A5E-4961-BA77-AE95636F5474",
+    "sTenDayDu": "TRẦN QUANG HÀ",
+    "sCCCD": "001001001633"
+  },
+  {
+    "Id": "DD86B016-728C-470E-8993-A03BF2FC743F",
+    "sTenDayDu": "Trần Quang Huy",
+    "sCCCD": "012346678999"
+  },
+  {
+    "Id": "B5D1221B-06DB-4FA8-8A1C-045996C1D4A2",
+    "sTenDayDu": "TRẦN QUANG HUY",
+    "sCCCD": "001001001145"
+  },
+  {
+    "Id": "84C64491-CB0C-40B6-B48F-3A0767B2C491",
+    "sTenDayDu": "TRẦN QUANG PHONG",
+    "sCCCD": "001001001652"
+  },
+  {
+    "Id": "7BC83084-D662-404A-A94F-DDF181CC8E58",
+    "sTenDayDu": "Trần Quốc Hoàn",
+    "sCCCD": "33"
+  },
+  {
+    "Id": "2DE00B89-F1A9-442B-AB80-3E7322F438AC",
+    "sTenDayDu": "TRẦN THÁI BẢO",
+    "sCCCD": "001001001123"
+  },
+  {
+    "Id": "907EAF40-2EBD-4B6B-B63A-EEAA4F00A3CC",
+    "sTenDayDu": "TRẦN THÁI DƯƠNG",
+    "sCCCD": "001001001507"
+  },
+  {
+    "Id": "D7A7BFAB-1988-4895-863D-D81D3EE9C137",
+    "sTenDayDu": "TRẦN THANH BÌNH",
+    "sCCCD": "001001001562"
+  },
+  {
+    "Id": "AB6DB5A5-5A2D-446D-942D-6CE588C7A381",
+    "sTenDayDu": "TRẦN THANH VŨ",
+    "sCCCD": "001001001552"
+  },
+  {
+    "Id": "25E73786-439C-4A8A-ACD6-3E0A5D85CA46",
+    "sTenDayDu": "TRẦN THỊ HƯƠNG",
+    "sCCCD": "001001001448"
+  },
+  {
+    "Id": "97AF2EE7-9CDC-4E28-8846-A0A3101BFDEE",
+    "sTenDayDu": "TRẦN THỊ HUYỀN",
+    "sCCCD": "001001001286"
+  },
+  {
+    "Id": "591C6F5B-649F-45C5-8EE9-B11D7C7352DF",
+    "sTenDayDu": "Trần Thị Huyền Thanh",
+    "sCCCD": "001001001091"
+  },
+  {
+    "Id": "CD5B558C-703D-4851-969F-B56AE20E9461",
+    "sTenDayDu": "Trần Thị Lan",
+    "sCCCD": "001001001111"
+  },
+  {
+    "Id": "37E050A6-3CB3-4159-A470-A1F171208718",
+    "sTenDayDu": "TRẦN THỊ LƯƠNG",
+    "sCCCD": "001001001526"
+  },
+  {
+    "Id": "12BAA8B0-563C-4A71-86FA-B043F4A497AA",
+    "sTenDayDu": "Trần Thị Mai",
+    "sCCCD": "036303123445"
+  },
+  {
+    "Id": "4E5BC808-FBE6-4B91-A1C7-A7BE1427924E",
+    "sTenDayDu": "TRẦN THỊ THU",
+    "sCCCD": "001001001175"
+  },
+  {
+    "Id": "629899B3-4CA6-41AA-BB7B-5A69366EDB16",
+    "sTenDayDu": "TRẦN THỊ XUYÊN",
+    "sCCCD": "001001001553"
+  },
+  {
+    "Id": "82025502-D285-4469-8BDF-73CBB6150F63",
+    "sTenDayDu": "Trần Tiến Tùng",
+    "sCCCD": "30092001003"
+  },
+  {
+    "Id": "522A28E3-8DE9-44C4-B8ED-D245467BC1B1",
+    "sTenDayDu": "TRẦN TRUNG KIÊN",
+    "sCCCD": "001001001587"
+  },
+  {
+    "Id": "77A69325-840A-4F19-A689-908A735CDD29",
+    "sTenDayDu": "TRẦN TUẤN ANH",
+    "sCCCD": "001001001257"
+  },
+  {
+    "Id": "089558DE-C98F-43EB-8079-3C8236EC6CE1",
+    "sTenDayDu": "TRẦN TUẤN ANH",
+    "sCCCD": "001001001187"
+  },
+  {
+    "Id": "9B1C85D1-BE0B-49F7-A57F-611E309378E0",
+    "sTenDayDu": "TRẦN TUỆ KIÊN",
+    "sCCCD": "001001001453"
+  },
+  {
+    "Id": "3AEAEFBA-38BC-473F-9A0F-F154106786B2",
+    "sTenDayDu": "Trần Văn An",
+    "sCCCD": "001001001087"
+  },
+  {
+    "Id": "BF1B4B0C-A9E1-439D-AD84-29F080A7C0B6",
+    "sTenDayDu": "TRẦN VĂN HÀ",
+    "sCCCD": "001001001271"
+  },
+  {
+    "Id": "A078A8CF-D03D-4420-9E2E-70FE45B801C2",
+    "sTenDayDu": "Trần Văn Kế",
+    "sCCCD": "107469870600"
+  },
+  {
+    "Id": "3BB12FFB-ADA2-4B56-8049-C87EF6586B43",
+    "sTenDayDu": "TRẦN VĂN LINH",
+    "sCCCD": "001001001218"
+  },
+  {
+    "Id": "5CE255AE-A162-4AC7-95FF-B10F1574E622",
+    "sTenDayDu": "TRẦN VĂN NHẬT",
+    "sCCCD": "001001001464"
+  },
+  {
+    "Id": "537E27C5-A8C8-4F52-9174-B53FC5FF6EFB",
+    "sTenDayDu": "TRẦN VĂN THÀNH",
+    "sCCCD": "001001001362"
+  },
+  {
+    "Id": "17B8654B-71AC-4F79-A49B-135586DDDE59",
+    "sTenDayDu": "TRẦN VĂN THỊNH",
+    "sCCCD": "001001001174"
+  },
+  {
+    "Id": "1F6386A3-718B-45D8-AEF8-A03C987D6447",
+    "sTenDayDu": "TRẦN VĂN TIẾN",
+    "sCCCD": "001001001543"
+  },
+  {
+    "Id": "F245E735-09E2-4155-9E7E-AD885756F096",
+    "sTenDayDu": "TRẦN XUÂN ĐOÀN",
+    "sCCCD": "001001001379"
+  },
+  {
+    "Id": "41C4E5AF-978F-4357-A6D5-B761F00A6241",
+    "sTenDayDu": "TRIỆU HỮU HOÀNG",
+    "sCCCD": "001001001581"
+  },
+  {
+    "Id": "5CA58757-95B3-43B8-A172-211E065A3A23",
+    "sTenDayDu": "TRIỆU HỮU HƯNG",
+    "sCCCD": "001001001447"
+  },
+  {
+    "Id": "B61747F1-8F81-4566-B3EE-165E7BCBA0A1",
+    "sTenDayDu": "TRỊNH ĐỨC NHẬT MINH",
+    "sCCCD": "001001001460"
+  },
+  {
+    "Id": "9108E300-CE19-46B9-8A7C-51241692F7B0",
+    "sTenDayDu": "TRỊNH HOÀNG HẢI",
+    "sCCCD": "001001001635"
+  },
+  {
+    "Id": "A5510A5E-CF34-47B1-B613-433D874D130D",
+    "sTenDayDu": "Trịnh Minh Châu",
+    "sCCCD": "001001001006"
+  },
+  {
+    "Id": "E0184B95-FDA5-475A-9D79-F9817A6C9247",
+    "sTenDayDu": "TRỊNH MINH SƠN",
+    "sCCCD": "001001001471"
+  },
+  {
+    "Id": "B9F975D9-A01E-4D5D-BA7E-3BD45D325767",
+    "sTenDayDu": "TRỊNH NGỌC HOÀNG DƯƠNG",
+    "sCCCD": "001001001632"
+  },
+  {
+    "Id": "09A8FD39-0C41-41D0-8C4E-98E229422503",
+    "sTenDayDu": "TRỊNH NGỌC MINH",
+    "sCCCD": "001001001407"
+  },
+  {
+    "Id": "DA054E90-A773-4B37-B6D3-51D28005B9B8",
+    "sTenDayDu": "TRỊNH PHƯƠNG NAM",
+    "sCCCD": "001001001298"
+  },
+  {
+    "Id": "71ED5717-3E3D-459E-9A29-95C71D598B46",
+    "sTenDayDu": "TRỊNH QUANG HUY",
+    "sCCCD": "001001001584"
+  },
+  {
+    "Id": "882A0CF4-F33D-4C97-88E0-BC2D31C76083",
+    "sTenDayDu": "TRỊNH THẾ HỮU",
+    "sCCCD": "001001001396"
+  },
+  {
+    "Id": "DE1AA4F1-CB9F-4EB4-82B4-6C554CA00089",
+    "sTenDayDu": "TRỊNH VĂN PHÚC",
+    "sCCCD": "001001001532"
+  },
+  {
+    "Id": "539763DE-494C-4728-8955-D91C9F7D9BFB",
+    "sTenDayDu": "TRƯƠNG ANH QUÂN",
+    "sCCCD": "001001001231"
+  },
+  {
+    "Id": "44C5592E-03A8-4B98-B239-E3E735EA8A00",
+    "sTenDayDu": "Trương Thái Sơn",
+    "sCCCD": "01202123463"
+  },
+  {
+    "Id": "96A8F4EA-CFEE-4DA7-9D43-2C6C9FC5CB74",
+    "sTenDayDu": "TRƯƠNG TUẤN NGHĨA",
+    "sCCCD": "001001001160"
+  },
+  {
+    "Id": "D363C59B-C79A-4AFE-947B-69E673406ABD",
+    "sTenDayDu": "TRƯƠNG VĂN ĐẠT",
+    "sCCCD": "001001001261"
+  },
+  {
+    "Id": "7CC815DA-31ED-42B1-A203-DDE80B83FA01",
+    "sTenDayDu": "TƯỜNG THỊ SANG",
+    "sCCCD": "001001001470"
+  },
+  {
+    "Id": "610DE022-5883-4603-9700-CB087E8B4EB6",
+    "sTenDayDu": "Vi Bảo Ngọc",
+    "sCCCD": "001001001010"
+  },
+  {
+    "Id": "70D6455F-3BD1-40EB-ABAD-226C3BB17EE6",
+    "sTenDayDu": "Võ Anh Khoa",
+    "sCCCD": "01202123781"
+  },
+  {
+    "Id": "8207DBD9-BD9A-429A-83CC-B96270FEFACA",
+    "sTenDayDu": "VÕ DUY HẢI",
+    "sCCCD": "001001001576"
+  },
+  {
+    "Id": "9C47E6DB-90AC-4E01-A682-9F6FDAED0A40",
+    "sTenDayDu": "Võ Minh Phổ",
+    "sCCCD": "001001001005"
+  },
+  {
+    "Id": "E7DF698D-4113-4ED4-B122-A4892E9B3301",
+    "sTenDayDu": "VÕ SỸ VIỆT",
+    "sCCCD": "001001001320"
+  },
+  {
+    "Id": "039D561C-0136-4F4C-8FA8-B7745B7DF4DB",
+    "sTenDayDu": "VÕ THÀNH AN",
+    "sCCCD": "001001001621"
+  },
+  {
+    "Id": "EDD5C30E-D617-4967-9246-22B5DD7F02DF",
+    "sTenDayDu": "Vũ Anh Mỹ",
+    "sCCCD": "001001001033"
+  },
+  {
+    "Id": "E859A359-154E-4A46-AE11-B7B635BE78F5",
+    "sTenDayDu": "Vũ Đình Phái",
+    "sCCCD": "001001001082"
+  },
+  {
+    "Id": "D92D1A8D-3C58-45ED-8E28-E463F89EE59A",
+    "sTenDayDu": "VŨ ĐÌNH QUANG",
+    "sCCCD": "001001001534"
+  },
+  {
+    "Id": "7BE11D4D-2EC9-483D-B539-7CAA7BBD266E",
+    "sTenDayDu": "VŨ ĐÌNH TUYÊN",
+    "sCCCD": "001001001184"
+  },
+  {
+    "Id": "DE23C27B-3B06-4349-8864-77C5C76A1928",
+    "sTenDayDu": "VŨ ĐỨC CHÍNH",
+    "sCCCD": "001001001124"
+  },
+  {
+    "Id": "51ABDD9E-6017-42DC-B4B7-131C863B4025",
+    "sTenDayDu": "Vũ Đức Chính",
+    "sCCCD": "111111111111"
+  },
+  {
+    "Id": "E636A7A3-3CED-4A70-8DA0-2531EE2C9E28",
+    "sTenDayDu": "VŨ ĐỨC THẮNG",
+    "sCCCD": "001001001306"
+  },
+  {
+    "Id": "10B8E30A-EF0F-45D9-B701-8CD747641482",
+    "sTenDayDu": "VŨ ĐỨC TOÀN",
+    "sCCCD": "001001001475"
+  },
+  {
+    "Id": "4DAD56E3-3062-444E-8B4E-BC106F6983EF",
+    "sTenDayDu": "VŨ DUY THÀNH",
+    "sCCCD": "001001001239"
+  },
+  {
+    "Id": "819820D1-A0BD-4C08-BE1A-FA211026C6AE",
+    "sTenDayDu": "VŨ HOÀNG NGỌC",
+    "sCCCD": "001001001650"
+  },
+  {
+    "Id": "82BF2305-35A8-4C97-9840-8BA9CAAB4C46",
+    "sTenDayDu": "VŨ HOÀNG TRUNG",
+    "sCCCD": "001001001180"
+  },
+  {
+    "Id": "C9CD28C4-A6B1-4F6A-B18A-F3D57567627F",
+    "sTenDayDu": "VŨ KHẮC TOÀN",
+    "sCCCD": "001001001544"
+  },
+  {
+    "Id": "B106A1DD-3355-4126-B09E-687CE6C7F834",
+    "sTenDayDu": "VŨ MINH HIẾU",
+    "sCCCD": "001001001139"
+  },
+  {
+    "Id": "ABED73CB-B18E-45A3-A323-21103259C60D",
+    "sTenDayDu": "VŨ MINH HIẾU",
+    "sCCCD": "001001001337"
+  },
+  {
+    "Id": "337474C0-58BB-45E9-917C-68DC20C61397",
+    "sTenDayDu": "Vũ Minh Hoàng",
+    "sCCCD": "838631202547"
+  },
+  {
+    "Id": "37004AB8-FA75-46D5-8CBC-C8C4CCB2C784",
+    "sTenDayDu": "VŨ MINH QUANG",
+    "sCCCD": "001001001302"
+  },
+  {
+    "Id": "35CC34D0-86A1-4518-A79B-9519BA71DDE1",
+    "sTenDayDu": "VŨ NGỌC HOÀ",
+    "sCCCD": "001001001443"
+  },
+  {
+    "Id": "C2CF68BE-A55A-49D4-A7B5-45D1078501EA",
+    "sTenDayDu": "VŨ QUANG TRUNG",
+    "sCCCD": "001001001368"
+  },
+  {
+    "Id": "5964E9C6-0FCD-4CF6-BDF0-452F4DFCF415",
+    "sTenDayDu": "Vũ Thanh Hà",
+    "sCCCD": "001001001018"
+  },
+  {
+    "Id": "F23008CD-3BA5-4496-8AA4-C796E33C2F63",
+    "sTenDayDu": "Vũ Thế Kiên",
+    "sCCCD": "01202123465"
+  },
+  {
+    "Id": "D9281371-9D20-4694-9345-2D1E9299E5AB",
+    "sTenDayDu": "VŨ THỊ KHÁNH LY",
+    "sCCCD": "001001001645"
+  },
+  {
+    "Id": "1F2BDB48-5A55-41FD-9518-5B710F3A0C92",
+    "sTenDayDu": "Vũ Thị Ly",
+    "sCCCD": "001001001094"
+  },
+  {
+    "Id": "123356C0-40B6-479F-B8C4-864D66C59AC3",
+    "sTenDayDu": "VŨ THỊ THANH THANH",
+    "sCCCD": "001001001540"
+  },
+  {
+    "Id": "8BB2AE8D-08F1-4878-80FE-58D02D393863",
+    "sTenDayDu": "VŨ THỊ THU HÀ",
+    "sCCCD": "001001001438"
+  },
+  {
+    "Id": "3FD642A5-8FC8-4388-9500-04732E0F3777",
+    "sTenDayDu": "VŨ TIẾN ĐẠT",
+    "sCCCD": "001001001500"
+  },
+  {
+    "Id": "AB7663EB-BBA7-4584-8EE6-3DA7E16779A8",
+    "sTenDayDu": "VŨ TRẦN HIẾU",
+    "sCCCD": "001001001638"
+  },
+  {
+    "Id": "58E85551-B25D-490A-95AE-A5A8E24C05B5",
+    "sTenDayDu": "VŨ TRỌNG HƯNG",
+    "sCCCD": "001001001344"
+  },
+  {
+    "Id": "F580A6EB-E761-4023-8605-207C3A9ED463",
+    "sTenDayDu": "VŨ TRỌNG NGHĨA",
+    "sCCCD": "001001001357"
+  },
+  {
+    "Id": "D0C5EEC6-7C3C-4ACC-B451-F1A2DFADFB27",
+    "sTenDayDu": "VŨ TRƯỜNG SƠN",
+    "sCCCD": "001001001304"
+  },
+  {
+    "Id": "9D328BF4-C44C-47ED-BDFA-4477B0FF2A64",
+    "sTenDayDu": "Vũ Văn Cảnh",
+    "sCCCD": "001001001099"
+  },
+  {
+    "Id": "2B6B72F1-9F84-45C7-8770-A008E9F72AF8",
+    "sTenDayDu": "VŨ VĂN LƯỢNG",
+    "sCCCD": "001001001353"
+  },
+  {
+    "Id": "69A6CAC3-7AD3-430E-9FE7-47ECEDE11A2C",
+    "sTenDayDu": "Vũ Văn Quyết",
+    "sCCCD": "626318073697"
+  },
+  {
+    "Id": "1BD8BDDC-CA9F-4330-9322-20C8D7B9050D",
+    "sTenDayDu": "VŨ VIỆT HOÀNG",
+    "sCCCD": "001001001339"
+  },
+  {
+    "Id": "F1B0E1D7-6A81-4CCC-9B88-517BB731F134",
+    "sTenDayDu": "VŨ XUÂN AN",
+    "sCCCD": "001001001485"
+  },
+  {
+    "Id": "AE1CFA95-7A34-41B9-87E6-63A4A43062A1",
+    "sTenDayDu": "VŨ XUÂN HƯNG",
+    "sCCCD": "001001001284"
+  },
+  {
+    "Id": "F8B680C0-DEC4-4396-90C2-612A597D1871",
+    "sTenDayDu": "VŨ XUÂN TRƯỜNG",
+    "sCCCD": "001001001477"
+  },
+  {
+    "Id": "C0CD3130-885E-410D-BE01-AFBA4F0BFDE2",
+    "sTenDayDu": "VƯƠNG CÔNG VŨ",
+    "sCCCD": "001001001427"
+  },
+  {
+    "Id": "FB0F813B-46FD-4AF3-BE09-7F008C50AB00",
+    "sTenDayDu": "Vương Minh Đại",
+    "sCCCD": "01202123468"
+  },
+  {
+    "Id": "C6CC54BD-A89D-47D5-8180-406CFDDC6BEE",
+    "sTenDayDu": "VƯƠNG VĂN TIẾN VINH",
+    "sCCCD": "001001001482"
+  }
+]

@@ -1,10 +1,8 @@
 import { $Enums } from '@workspace/db/client'
-import { env } from '@/env'
 
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
 const MAX_TEXTAREA_LENGTH = 1000
-const API_MODEL_BASE_URL = env.NEXT_PUBLIC_API_MODEL_BASE_URL
 const TRAINING_COURSE_STATUS = {
     ACTIVE: 'Đang hoạt động',
     COMPLETED: 'Hoàn thành',
@@ -182,7 +180,6 @@ export {
     GENDER_LIST,
     CTDT_STATUS,
     KHOA_HL_STATUS,
-    API_MODEL_BASE_URL,
     LOAI_MON_HOC_CTDT,
     TRANG_THAI_HOC_VIEN,
     FIXED_CLASS_STUDENT_STATUS,

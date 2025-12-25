@@ -81,7 +81,7 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
         >
             <Col span={24}>
                 <FormItem label="Hình thức đào tạo" name="hinhThucDaoTao" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                    <Input placeholder="Nhập hình thức đào tạo" />
                 </FormItem>
             </Col>
 

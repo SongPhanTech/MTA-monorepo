@@ -29,6 +29,10 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
 }
 ).strict();
+const relationSchema = z.object({
+    quaTrinhCuDiCongTac: z.array(z.unknown()).optional(),
+}
+);
 
 /**
  * `DM_TinhTrangCongTac` schema excluding foreign keys and relations.
@@ -39,7 +43,7 @@ export const DM_TinhTrangCongTacScalarSchema = baseSchema;
 /**
  * `DM_TinhTrangCongTac` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DM_TinhTrangCongTacSchema = DM_TinhTrangCongTacScalarSchema;
+export const DM_TinhTrangCongTacSchema = DM_TinhTrangCongTacScalarSchema.merge(relationSchema.partial());
 
 
 /**

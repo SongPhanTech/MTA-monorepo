@@ -5,7 +5,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
 import type {
     ArchivedAward,
     ArchivedCertificate,
@@ -19,6 +18,7 @@ import {
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'

@@ -1,7 +1,6 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
-import { API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
 import * as modals from '@components/modal'
@@ -25,6 +24,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { lightThemeCustom } from '@workspace/ui'
 
 dayjs.locale('vi')
@@ -93,13 +93,13 @@ function App({ Component, pageProps }: AppProps) {
                     <QueryClientProvider client={queryClient}>
                         <ZenStackHooksProvider
                             value={{
-                                endpoint: `${API_MODEL_BASE_URL}/api/model`,
+                                endpoint: `${getRuntimeEnv('NEXT_PUBLIC_API_MODEL_BASE_URL')}/api/model`,
                                 fetch: fetchInstance,
                             }}
                         >
                             <ReactHookModalProvider modals={modals}>
                                 {getLayout(<Component {...pageProps} />)}
-                                {/* <WidgetChatbot src={env.NEXT_PUBLIC_CHATBOT_SRC} /> */}
+                                {/* <WidgetChatbot src={getRuntimeEnv('NEXT_PUBLIC_CHATBOT_SRC')} /> */}
                                 <Spinner />
                             </ReactHookModalProvider>
                         </ZenStackHooksProvider>

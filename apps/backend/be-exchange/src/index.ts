@@ -18,6 +18,9 @@ export const prisma: PrismaClient = new PrismaClient()
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
+const originEnv = process.env.ORIGIN || ''
+const originList = originEnv.split(',').map((item) => item.trim())
+
 app.use(
     '*',
     cors({
@@ -29,6 +32,8 @@ app.use(
             'https://am.swantech.vn',
             'https://api.am.swantech.vn',
             'https://*.swantech.vn',
+            ...originList,
+            '*',
         ],
         credentials: true,
     })

@@ -10,7 +10,7 @@ import { MinIOService } from '../services/minio'
 const app = new OpenAPIHono({ strict: false })
 
 const minioService = new MinIOService()
-await minioService.onModuleInit()
+// await minioService.onModuleInit()
 
 app.openapi(
     createRoute({

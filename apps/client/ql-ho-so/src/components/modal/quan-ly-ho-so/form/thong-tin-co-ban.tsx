@@ -6,13 +6,20 @@ import type { DomProps } from '@constants/type'
 import { buildOrgTree } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
+    useFindManyDM_ChucDanhCMNVGiangVien,
+    useFindManyDM_ChucDanhCMNVKySu,
+    useFindManyDM_ChucDanhCMNVNghienCuuVien,
     useFindManyDM_DanToc,
     useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
+    useFindManyDM_HinhThucKhenThuongChinhQuyen,
     useFindManyDM_NhomMau,
     useFindManyDM_QuocGia,
+    useFindManyDM_TinhTrangHonNhan,
     useFindManyDM_TonGiao,
+    useFindManyDM_TrangThaiLamViec,
     useFindManyDM_TrinhDoHocVan,
+    useFindManyDM_XepLoaiDanhGiaCanBo,
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
 import { Checkbox, Col, Collapse, Flex, Form, Input, InputNumber, Row, Typography } from 'antd'
@@ -33,6 +40,15 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: bloodType = [] } = useFindManyDM_NhomMau()
     const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
     const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { data: trangThaiLamViec = [] } = useFindManyDM_TrangThaiLamViec()
+    const { data: tinhTrangHonNhan = [] } = useFindManyDM_TinhTrangHonNhan()
+    const { data: chucDanhGiangVienData = [] } = useFindManyDM_ChucDanhCMNVGiangVien()
+    const { data: chucDanhNghienCuuVienData = [] } = useFindManyDM_ChucDanhCMNVNghienCuuVien()
+    const { data: chucDanhKySuData = [] } = useFindManyDM_ChucDanhCMNVKySu()
+    const { data: hinhThucKhenThuongChinhQuyenData = [] } =
+        useFindManyDM_HinhThucKhenThuongChinhQuyen()
+    const { data: xepLoaiDanhGiaCanBoData = [] } = useFindManyDM_XepLoaiDanhGiaCanBo()
+
     const treeData = buildOrgTree(organizations)
     const bLaGiangVien = Form.useWatch('bLaGiangVien', form) || false
     // const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
@@ -216,6 +232,25 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
+                            name="tinhTrangHonNhanId"
+                            label="Tình trạng hôn nhân"
+                            className="mb-0"
+                        >
+                            <Select
+                                placeholder="Chọn tình trạng hôn nhân"
+                                options={tinhTrangHonNhan.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
                             name="dateOfBirth"
                             label="Ngày sinh"
                             className="mb-0"
@@ -279,6 +314,69 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             />
                         </FormItem>
                     </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_ChucDanhCMNVGiangVienId"
+                            label="Chức danh CMNV ngạch Giảng viên"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn chức danh CMNV ngạch Giảng viên"
+                                className="h-9"
+                                options={chucDanhGiangVienData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_ChucDanhCMNVKySuId"
+                            label="Chức danh CMNV kỹ sư"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn chức danh CMNV kỹ sư"
+                                className="h-9"
+                                options={chucDanhKySuData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_ChucDanhCMNVNghienCuuVienId"
+                            label="Chức danh CMNV ngạch Nghiên cứu viên"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn chức danh CMNV ngạch Nghiên cứu viên"
+                                className="h-9"
+                                options={chucDanhNghienCuuVienData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
                     <Col span={12}>
                         <FormItem
                             form={form}
@@ -295,6 +393,70 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             />
                         </FormItem>
                     </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_XepLoaiDanhGiaCanBoId"
+                            label="Xếp loại cán bộ"
+                            className="mb-2"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn xếp loại cán bộ"
+                                className="h-9"
+                                options={xepLoaiDanhGiaCanBoData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="dM_HinhThucKhenThuongChinhQuyenId"
+                            label="Hình thức khen thưởng chính quyền"
+                            className="mb-2"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn hình thức khen thưởng chính quyền"
+                                className="h-9"
+                                options={hinhThucKhenThuongChinhQuyenData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="trangThaiLamViecId"
+                            label="Trạng thái làm việc"
+                            className="mb-2"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn trạng thái làm việc"
+                                className="h-9"
+                                options={trangThaiLamViec.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
                     <Col span={24}>
                         <Flex>
                             <FormItem

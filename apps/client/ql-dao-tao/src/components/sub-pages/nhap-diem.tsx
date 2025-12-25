@@ -644,10 +644,8 @@ export default function NhapDiem({
                             <Button
                                 onClick={() => setImportModalVisible(true)}
                                 disabled={
-                                    !selectedSubjectClassId ||
-                                    role !== 'GV' ||
-                                    disabledForm ||
-                                    dataDetailSubjectClass?.enteredScore
+                                    !selectedSubjectClassId || role !== 'GV' || disabledForm
+                                    // dataDetailSubjectClass?.enteredScore
                                 }
                                 className="w-full flex justify-start"
                             >
@@ -1238,7 +1236,7 @@ export default function NhapDiem({
                     hàng ngang
                 </div>
                 <div className="text-red-500 font-bold uppercase text-lg">
-                    Giảng viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho
+                    Giảng viên nhập Lý do "Cấm thi", "Ghi chú" với trường hợp điểm 0 hoặc không cho
                     điểm
                 </div>
             </div>

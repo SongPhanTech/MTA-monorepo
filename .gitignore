@@ -24,6 +24,8 @@ coverage
 # Build Outputs
 .next/
 out/
+*-cdn
+*-cdn.zip
 build
 dist
 

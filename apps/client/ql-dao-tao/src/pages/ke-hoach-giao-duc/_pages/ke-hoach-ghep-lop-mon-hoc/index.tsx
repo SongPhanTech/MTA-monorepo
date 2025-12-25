@@ -662,7 +662,7 @@ export default function KeHoachGhepLopMonHoc() {
                                         render: (_, record) => {
                                             return (
                                                 <div className="text-left">
-                                                    {`${record?.name} (${record?.credit})` || ''}
+                                                    {`${record?.name} (${record?.credit})`}
                                                 </div>
                                             )
                                         },
@@ -707,7 +707,26 @@ export default function KeHoachGhepLopMonHoc() {
                                                             </Tooltip>
                                                         </div>
                                                         <div className="flex h-fit">
-                                                            {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
+                                                            {record?.trainingBlocks?.map(
+                                                                // @ts-expect-error
+                                                                (block) => {
+                                                                    const fixedClass =
+                                                                        block
+                                                                            .trainingBlockOnCurriculumVersion
+                                                                            ?.curriculumVersion
+                                                                            ?.fixedClass
+                                                                    return (
+                                                                        <FixedClassDragItem
+                                                                            subjectVersionId={
+                                                                                record.id
+                                                                            }
+                                                                            item={fixedClass}
+                                                                            key={fixedClass?.id}
+                                                                        />
+                                                                    )
+                                                                }
+                                                            )}
+                                                            {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem
                                                                         subjectVersionId={record.id}
@@ -715,7 +734,7 @@ export default function KeHoachGhepLopMonHoc() {
                                                                         key={e.id}
                                                                     />
                                                                 )
-                                                            )}
+                                                            )} */}
                                                         </div>
                                                     </div>
                                                 </DndProvider>
@@ -726,12 +745,21 @@ export default function KeHoachGhepLopMonHoc() {
                                         title: 'Tổng SV',
                                         width: 80,
                                         align: 'center',
-                                        render: (_, record) =>
-                                            record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
-                                                (sum: number, fc: any) =>
-                                                    sum + (fc._count?.students ?? 0),
-                                                0
-                                            ) || 0,
+                                        render: (_: any, record: any) => {
+                                            const fixedClasses = record?.trainingBlocks.map(
+                                                // @ts-expect-error
+                                                (block) =>
+                                                    block.trainingBlockOnCurriculumVersion
+                                                        .curriculumVersion.fixedClass
+                                            )
+                                            return (
+                                                fixedClasses?.reduce(
+                                                    (sum: number, fc: any) =>
+                                                        sum + (fc._count?.students ?? 0),
+                                                    0
+                                                ) || 0
+                                            )
+                                        },
                                     },
                                     {
                                         title: 'Đơn vị phụ trách',

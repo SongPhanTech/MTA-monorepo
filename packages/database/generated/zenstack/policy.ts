@@ -8,7 +8,6 @@ import { type QueryContext, type CrudContract, type PermissionCheckerContext } f
 import { allFieldsEqual } from "@zenstackhq/runtime/validation";
 import { type PolicyDef, type PermissionCheckerConstraint } from "@zenstackhq/runtime/enhancements/node";
 import { ConfigKey } from "../prisma-client";
-import { RelativeType } from "../prisma-client";
 import { PermissionType } from "../prisma-client";
 import { MessageSender } from "../prisma-client";
 import { DocumentStatus } from "../prisma-client";
@@ -4566,6 +4565,26 @@ const policy: PolicyDef = {
             },
 
         },
+        dM_QuanHeThanNhan: {
+            modelLevel: {
+                read: { guard: DM_QuanHeThanNhan_read, },
+                create: { guard: DM_QuanHeThanNhan_create, inputChecker: DM_QuanHeThanNhan_create_input, },
+                update: { guard: DM_QuanHeThanNhan_update, },
+                postUpdate: { guard: DM_QuanHeThanNhan_postUpdate, },
+                delete: { guard: DM_QuanHeThanNhan_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         dM_TrangThaiLamViec: {
             modelLevel: {
                 read: { guard: DM_TrangThaiLamViec_read, },
@@ -4693,6 +4712,26 @@ const policy: PolicyDef = {
                 update: { guard: DM_TinhTrangCongTac_update, },
                 postUpdate: { guard: DM_TinhTrangCongTac_postUpdate, },
                 delete: { guard: DM_TinhTrangCongTac_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        dM_LoaiTinhTrangCongTac: {
+            modelLevel: {
+                read: { guard: DM_LoaiTinhTrangCongTac_read, },
+                create: { guard: DM_LoaiTinhTrangCongTac_create, inputChecker: DM_LoaiTinhTrangCongTac_create_input, },
+                update: { guard: DM_LoaiTinhTrangCongTac_update, },
+                postUpdate: { guard: DM_LoaiTinhTrangCongTac_postUpdate, },
+                delete: { guard: DM_LoaiTinhTrangCongTac_delete, }
             },
             fieldLevel: {
                 read:
@@ -5313,6 +5352,7 @@ const policy: PolicyDef = {
         dM_TrinhDoLyLuanChinhTri: { hasValidation: false },
         dM_TrinhDoQuanLyNhaNuoc: { hasValidation: false },
         dM_TinhTrangHonNhan: { hasValidation: false },
+        dM_QuanHeThanNhan: { hasValidation: false },
         dM_TrangThaiLamViec: { hasValidation: false },
         dM_HinhThucKhenThuongChinhQuyen: { hasValidation: false },
         dM_HinhThucKhenThuongDang: { hasValidation: false },
@@ -5320,6 +5360,7 @@ const policy: PolicyDef = {
         dM_XepLoaiDanhGiaChatLuongDangVien: { hasValidation: false },
         dM_LoaiHinhCongTac: { hasValidation: false },
         dM_TinhTrangCongTac: { hasValidation: false },
+        dM_LoaiTinhTrangCongTac: { hasValidation: false },
         dM_LoaiHinhDiHocTap: { hasValidation: false },
         dM_TinhTrangDiHocTap: { hasValidation: false },
         dM_NuocCuDiHocTap: { hasValidation: false },
@@ -19949,6 +19990,71 @@ function $check_DM_TinhTrangHonNhan_delete(input: any, context: QueryContext): a
     return false;
 }
 
+function DM_QuanHeThanNhan_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DM_QuanHeThanNhan_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_QuanHeThanNhan_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_QuanHeThanNhan_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_QuanHeThanNhan_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DM_QuanHeThanNhan_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_QuanHeThanNhan_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_QuanHeThanNhan_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DM_QuanHeThanNhan_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DM_QuanHeThanNhan_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_QuanHeThanNhan_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function DM_TrangThaiLamViec_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -20398,6 +20504,71 @@ function DM_TinhTrangCongTac_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_DM_TinhTrangCongTac_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_LoaiTinhTrangCongTac_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DM_LoaiTinhTrangCongTac_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_LoaiTinhTrangCongTac_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_LoaiTinhTrangCongTac_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_LoaiTinhTrangCongTac_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DM_LoaiTinhTrangCongTac_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_LoaiTinhTrangCongTac_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DM_LoaiTinhTrangCongTac_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DM_LoaiTinhTrangCongTac_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DM_LoaiTinhTrangCongTac_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DM_LoaiTinhTrangCongTac_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

@@ -2,10 +2,10 @@ import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { RELATIONSHIP_TYPE } from '@constants/constants'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { Relative } from '@workspace/db'
+import { useFindManyDM_QuanHeThanNhan } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -18,6 +18,11 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
     const { onOpen } = useDisclosure<Partial<Relative> & { onSave: (val: Relative) => void }>({
         tag: 'PutThongTinThanNhan',
     })
+
+    const { data = [] } = useFindManyDM_QuanHeThanNhan(
+        {},
+        { enabled: expland.includes('thongTinThanNhan') }
+    )
 
     const handleSave = (data: Relative) => {
         const currentList = form.getFieldValue('relatives') || []
@@ -105,9 +110,10 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
                             title: 'Tên mối quan hệ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) =>
-                                RELATIONSHIP_TYPE[record?.type as keyof typeof RELATIONSHIP_TYPE] ||
-                                '',
+                            render: (_, record) => {
+                                const found = data.find((i) => i.id === record?.quanHeThanNhanId)
+                                return found?.name || ''
+                            },
                         },
                         {
                             title: 'Năm sinh',

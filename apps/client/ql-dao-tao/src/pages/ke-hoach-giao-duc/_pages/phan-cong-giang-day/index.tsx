@@ -13,7 +13,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgFlat, buildOrgTree } from '@lib/utils'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClass } from '@workspace/db/client'
 import {
     useCountDM_DonVi,
@@ -26,6 +26,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import {
@@ -1805,10 +1806,10 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Lớp QL',
                                     align: 'center',
-                                    width: 100,
+                                    width: 120,
                                     render: (_, record) => (
-                                        <p>
-                                            {record?.fixedClasses?.map((e) => e.code).join(', ') ||
+                                        <p className="text-left">
+                                            {record?.fixedClasses?.map((e) => e.code).join('\n') ||
                                                 '-'}
                                         </p>
                                     ),

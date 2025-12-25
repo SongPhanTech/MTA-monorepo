@@ -69,9 +69,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
         {
             where: {
                 ...((trainingObjectTypeId || semesterId) && {
-                    trainingCourse: {
-                        ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-                    },
+                    trainingCourse: trainingObjectTypeId ? { trainingObjectTypeId } : {},
                     subjectClasses: { some: { semesterId } },
                 }),
             },

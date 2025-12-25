@@ -18,11 +18,11 @@ import {
     useFindUniqueQuestionBank,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { env } from '@/env'
 
 interface QuestionListProps {
     questionBankId: string
@@ -192,7 +192,7 @@ export function QuestionList({ questionBankId }: QuestionListProps) {
     const handleDownloadTemplate = async () => {
         try {
             const response = await fetch(
-                `${env.NEXT_PUBLIC_ASSET_PREFIX}/files/file-mau-import-cau-hoi.docx`
+                `${getRuntimeEnv('NEXT_PUBLIC_ASSET_PREFIX')}/files/file-mau-import-cau-hoi.docx`
             )
             const blob = await response.blob()
             const url = window.URL.createObjectURL(blob)

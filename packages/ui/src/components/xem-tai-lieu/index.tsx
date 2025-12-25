@@ -1,5 +1,5 @@
-import { getMinioUrl } from '@workspace/constant'
 import { createId } from '@workspace/db'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { Button, Col, Flex, Image, Modal, Row } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

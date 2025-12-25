@@ -6,13 +6,12 @@ import {
 } from '@ant-design/icons'
 import type { DocumentFile, Prisma } from '@workspace/db/client'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { getMinioUrl, getRuntimeEnv } from '@workspace/libs/utils'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { env } from '@/env'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { getMinioUrl } from '@workspace/constant'
 
 const { Dragger } = Upload
 const { Link } = Typography
@@ -258,7 +257,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         e.preventDefault()
-                                        const fileUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item.path}`
+                                        const fileUrl = `${getRuntimeEnv('NEXT_PUBLIC_MINIO_ENDPOINT')}/${item.path}`
                                         const a = document.createElement('a')
                                         a.href = fileUrl
                                         a.download = item.name

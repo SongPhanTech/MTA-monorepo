@@ -1,5 +1,5 @@
+import { getRuntimeEnv } from '@workspace/libs/utils'
 import axios from 'axios'
-import { env } from '@/env'
 
 const postFormUrlEncoded = async (url: string, id_document: string, fieldName: string) => {
     const params = new URLSearchParams()
@@ -17,7 +17,7 @@ const postFormUrlEncoded = async (url: string, id_document: string, fieldName: s
 export const fetchChungkingAndVectorizeDocument = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_document_v4`,
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/index_document_v4`,
             id_document,
             'id_document'
         )
@@ -28,7 +28,9 @@ export const fetchChungkingAndVectorizeDocument = async (id_document: string) =>
 
 export const fetchChungkingAndVectorizeDocumentAll = async () => {
     try {
-        const response = await axios.post(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_all_v4`)
+        const response = await axios.post(
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/index_all_v4`
+        )
         return response.data
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API' }
@@ -37,7 +39,9 @@ export const fetchChungkingAndVectorizeDocumentAll = async () => {
 
 export const getStatusChungkingAndVectorizeDocument = async () => {
     try {
-        const response = await axios.get(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/index_v4_status`)
+        const response = await axios.get(
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/index_v4_status`
+        )
         return response.data
     } catch (_error: any) {
         return { status: 500, error: 'True', message: 'Lỗi gọi API' }
@@ -47,7 +51,7 @@ export const getStatusChungkingAndVectorizeDocument = async () => {
 export const fetchFAQVectorize = async (faq_id: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/faq_vectorize`,
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/faq_vectorize`,
             faq_id,
             'faq_id'
         )
@@ -59,7 +63,7 @@ export const fetchFAQVectorize = async (faq_id: string) => {
 export const deleteVectorRecordHoiDap = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
             id_document,
             'id_document'
         )
@@ -75,7 +79,7 @@ export const deleteVectorRecordHoiDap = async (id_document: string) => {
 export const deleteVectorRecordFAQ = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/xoa_ban_ghi_trong_db_faq`,
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/xoa_ban_ghi_trong_db_faq`,
             id_document,
             'id_document'
         )
@@ -87,7 +91,7 @@ export const deleteVectorRecordFAQ = async (id_document: string) => {
 export const reloadBM25 = async (id_document: string) => {
     try {
         return await postFormUrlEncoded(
-            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/reload_bm25`,
+            `${getRuntimeEnv('NEXT_PUBLIC_CHAT_BOT_URL')}/reload_bm25`,
             id_document,
             'id_document'
         )

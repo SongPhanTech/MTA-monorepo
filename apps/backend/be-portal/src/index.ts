@@ -7,26 +7,18 @@ import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import { Registry } from 'prom-client'
 import AuthApp from './api/auth'
 import ClassRegisterApp from './api/class-register'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
 
-// import './otel'
-
 export const prisma: PrismaClient = new PrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
-const register = new Registry()
 
-// collectDefaultMetrics({ register })
-
-app.get('/metrics', async (c) => {
-    c.header('Content-Type', register.contentType)
-    return c.text(await register.metrics())
-})
+const originEnv = process.env.ORIGIN || ''
+const originList = originEnv.split(',').map((item) => item.trim())
 
 app.use(
     '*',
@@ -37,6 +29,8 @@ app.use(
             'https://user.mta.swantech.vn',
             'https://am.swantech.vn',
             'https://*.swantech.vn',
+            ...originList,
+            '*',
         ],
         credentials: true,
     })

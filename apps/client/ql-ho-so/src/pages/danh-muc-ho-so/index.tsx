@@ -10,7 +10,9 @@ import {
     BookMinus,
     BookOpenCheck,
     BookType,
+    BookOpen,
     Boxes,
+    Building,
     Building2,
     ChartBarDecreasing,
     ChartBarStacked,
@@ -26,12 +28,23 @@ import {
     HandCoins,
     HeartCrack,
     HeartPulse,
+    Layers,
     LibraryBig,
+    ListOrdered,
     Network,
     School,
     Tangent,
     TypeOutline,
+    User,
     UserCog,
+    Users,
+    GitBranch,
+    Blocks,
+    Presentation,
+    ListChecks,
+    Medal,
+    Calculator,
+    Clock,
 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -217,13 +230,26 @@ export default function DanhMucHoSo() {
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN,
                     description: 'Quản lý tình trạng hôn nhân',
                 },
-
+                {
+                    id: 'relatie-type',
+                    label: 'Quan hệ thân nhân',
+                    icon: <User style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN,
+                    description: 'Quản lý quan hệ thân nhân',
+                },
                 {
                     id: 'type-of-work',
                     label: 'Loại hình công tác',
                     icon: <TypeOutline style={{ fontSize: '24px' }} />,
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_LOAI_HINH_CONG_TAC,
                     description: 'Loại hình công tác',
+                },
+                {
+                    id: 'type-of-work-status',
+                    label: 'Loại tình trạng công tác',
+                    icon: <BookOpen style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_LOAI_TINH_TRANG_CONG_TAC,
+                    description: 'Loại tình trạng công tác',
                 },
                 {
                     id: 'work-status',
@@ -235,7 +261,7 @@ export default function DanhMucHoSo() {
                 {
                     id: 'to-chuc-xa-hoi',
                     label: 'Tổ chức xã hội',
-                    icon: <Building2 style={{ fontSize: '24px' }} />,
+                    icon: <Building style={{ fontSize: '24px' }} />,
                     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TO_CHUC_XA_HOI,
                     description: 'Quản lý tổ chức xã hội',
                 },
@@ -283,6 +309,102 @@ export default function DanhMucHoSo() {
                 },
             ],
         },
+        {
+            id: 'dao-tao',
+            label: 'Đào tạo',
+            children: [
+                {
+                    id: 'doi-tuong-dao-tao',
+                    label: 'Đối tượng đào tạo',
+                    icon: <Users style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DOI_TUONG_DAO_TAO,
+                    description: 'Đối tượng đào tạo',
+                },
+
+                {
+                    id: 'loai-hinh-dao-tao',
+                    label: 'Loại hình đào tạo',
+                    icon: <Layers style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOAI_HINH_DAO_TAO,
+                    description: 'Loại hình đào tạo',
+                },
+                {
+                    id: 'bac-dao-tao',
+                    label: 'Bậc đào tạo',
+                    icon: <ListOrdered style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_TRINH_DO_DAO_TAO,
+                    description: 'Bậc đào tạo',
+                },
+                {
+                    id: 'dia-diem-dao-tao',
+                    label: 'Khu vực đào tạo',
+                    icon: <Building2 style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
+                    description: 'Khu vực đào tạo',
+                },
+
+                {
+                    id: 'danh-muc-nganh',
+                    label: 'Danh mục ngành',
+                    icon: <BookOpen style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_NGANH,
+                    description: 'Danh mục ngành',
+                },
+                {
+                    id: 'chuyen-nganh',
+                    label: 'Chuyên ngành',
+                    icon: <GitBranch style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_NGANH,
+                    description: 'Chuyên ngành',
+                },
+
+                {
+                    id: 'Khối kiến thức CTĐT',
+                    label: 'Khối kiến thức CTĐT',
+                    icon: <Blocks style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                    description: 'Khối kiến thức CTĐT',
+                },
+
+                {
+                    id: 'Thời gian đào tạo',
+                    label: 'Thời gian đào tạo',
+                    icon: <Clock style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_THOI_GIAN_DAO_TAO,
+                    description: 'Thời gian đào tạo',
+                },
+                {
+                    id: 'Hình thức huấn luyện',
+                    label: 'Hình thức huấn luyện',
+                    icon: <Presentation style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
+                    description: 'Hình thức huấn luyện',
+                },
+
+                {
+                    id: 'Xếp loại học lực',
+                    label: 'Xếp loại học lực',
+                    icon: <Medal style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_HOC_LUC,
+                    description: 'Xếp loại học lực',
+                },
+
+                {
+                    id: 'Quản lý đợt rèn luyện',
+                    label: 'Quản lý đợt rèn luyện',
+                    icon: <ListChecks style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
+                    description: 'Quản lý đợt rèn luyện',
+                },
+                {
+                    id: 'Nội dung tính tải',
+                    label: 'Nội dung tính tải',
+                    icon: <Calculator style={{ fontSize: '24px' }} />,
+                    path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NOI_DUNG_TINH_TAI,
+                    description: 'Nội dung tính tải',
+                },
+            ],
+        },
     ]
     function normalizeText(text: string): string {
         return text
@@ -315,6 +437,25 @@ export default function DanhMucHoSo() {
         }
 
         return dfs(tree)
+    }
+    const HighlightText = ({ text, searchText }: { text: string; searchText?: string }) => {
+        if (!searchText) return <div className="font-semibold truncate text-sm">{text}</div>
+
+        const parts = text.split(new RegExp(`(${searchText})`, 'gi'))
+
+        return (
+            <div className="font-semibold truncate text-sm">
+                {parts.map((part) =>
+                    part.toLowerCase() === searchText.toLocaleLowerCase() ? (
+                        <span key={part} className="text-yellow-800 bg-yellow-300 font-semibold">
+                            {part}
+                        </span>
+                    ) : (
+                        part
+                    )
+                )}
+            </div>
+        )
     }
 
     const data = useMemo(() => {
@@ -384,15 +525,23 @@ export default function DanhMucHoSo() {
                                                                         'XOA'
                                                                     )
                                                                 ) {
+                                                                    if (item?.id === 'dao-tao') {
+                                                                        window.open(`/lms${i.path}`, '_blank')
+                                                                        return
+                                                                    }
                                                                     router.push(i.path)
                                                                 }
                                                             }}
                                                         >
                                                             <div>{i?.icon}</div>
                                                             <div className="ml-4">
-                                                                <p className="font-semibold truncate text-sm">
+                                                                <HighlightText
+                                                                    text={i.label}
+                                                                    searchText={search}
+                                                                />
+                                                                {/* <p className="font-semibold truncate text-sm">
                                                                     {i.label}
-                                                                </p>
+                                                                </p> */}
                                                                 <p className="text-xs">
                                                                     {i.description}
                                                                 </p>

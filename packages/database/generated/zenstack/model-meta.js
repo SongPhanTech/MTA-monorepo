@@ -981,6 +981,141 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'nhomMau',
+                }, tinhTrangHonNhan: {
+                    name: "tinhTrangHonNhan",
+                    type: "DM_TinhTrangHonNhan",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "tinhTrangHonNhanId" },
+                }, tinhTrangHonNhanId: {
+                    name: "tinhTrangHonNhanId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'tinhTrangHonNhan',
+                }, trangThaiLamViec: {
+                    name: "trangThaiLamViec",
+                    type: "DM_TrangThaiLamViec",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trangThaiLamViecId" },
+                }, trangThaiLamViecId: {
+                    name: "trangThaiLamViecId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trangThaiLamViec',
+                }, dM_ChucDanhCMNVGiangVien: {
+                    name: "dM_ChucDanhCMNVGiangVien",
+                    type: "DM_ChucDanhCMNVGiangVien",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_ChucDanhCMNVGiangVienId" },
+                }, dM_ChucDanhCMNVGiangVienId: {
+                    name: "dM_ChucDanhCMNVGiangVienId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_ChucDanhCMNVGiangVien',
+                }, dM_ChucDanhCMNVNghienCuuVien: {
+                    name: "dM_ChucDanhCMNVNghienCuuVien",
+                    type: "DM_ChucDanhCMNVNghienCuuVien",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_ChucDanhCMNVNghienCuuVienId" },
+                }, dM_ChucDanhCMNVNghienCuuVienId: {
+                    name: "dM_ChucDanhCMNVNghienCuuVienId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_ChucDanhCMNVNghienCuuVien',
+                }, dM_ChucDanhCMNVKySu: {
+                    name: "dM_ChucDanhCMNVKySu",
+                    type: "DM_ChucDanhCMNVKySu",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_ChucDanhCMNVKySuId" },
+                }, dM_ChucDanhCMNVKySuId: {
+                    name: "dM_ChucDanhCMNVKySuId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_ChucDanhCMNVKySu',
+                }, dM_XepLoaiDanhGiaChatLuongDangVien: {
+                    name: "dM_XepLoaiDanhGiaChatLuongDangVien",
+                    type: "DM_XepLoaiDanhGiaChatLuongDangVien",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_XepLoaiDanhGiaChatLuongDangVienId" },
+                }, dM_XepLoaiDanhGiaChatLuongDangVienId: {
+                    name: "dM_XepLoaiDanhGiaChatLuongDangVienId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_XepLoaiDanhGiaChatLuongDangVien',
+                }, dM_XepLoaiDanhGiaCanBo: {
+                    name: "dM_XepLoaiDanhGiaCanBo",
+                    type: "DM_XepLoaiDanhGiaCanBo",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_XepLoaiDanhGiaCanBoId" },
+                }, dM_XepLoaiDanhGiaCanBoId: {
+                    name: "dM_XepLoaiDanhGiaCanBoId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_XepLoaiDanhGiaCanBo',
+                }, dM_HinhThucKhenThuongChinhQuyen: {
+                    name: "dM_HinhThucKhenThuongChinhQuyen",
+                    type: "DM_HinhThucKhenThuongChinhQuyen",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_HinhThucKhenThuongChinhQuyenId" },
+                }, dM_HinhThucKhenThuongChinhQuyenId: {
+                    name: "dM_HinhThucKhenThuongChinhQuyenId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_HinhThucKhenThuongChinhQuyen',
+                }, dM_HinhThucKhenThuongDang: {
+                    name: "dM_HinhThucKhenThuongDang",
+                    type: "DM_HinhThucKhenThuongDang",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_HinhThucKhenThuongDangId" },
+                }, dM_HinhThucKhenThuongDangId: {
+                    name: "dM_HinhThucKhenThuongDangId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_HinhThucKhenThuongDang',
                 }, unionDate: {
                     name: "unionDate",
                     type: "DateTime",
@@ -1605,9 +1740,6 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, type: {
-                    name: "type",
-                    type: "RelativeType",
                 }, birthYear: {
                     name: "birthYear",
                     type: "Int",
@@ -1628,6 +1760,21 @@ const metadata = {
                     name: "information",
                     type: "String",
                     isOptional: true,
+                }, quanHeThanNhan: {
+                    name: "quanHeThanNhan",
+                    type: "DM_QuanHeThanNhan",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'relative',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "quanHeThanNhanId" },
+                }, quanHeThanNhanId: {
+                    name: "quanHeThanNhanId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'quanHeThanNhan',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -2404,6 +2551,36 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'chucVu',
+                }, dM_TinhTrangCongTac: {
+                    name: "dM_TinhTrangCongTac",
+                    type: "DM_TinhTrangCongTac",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_TinhTrangCongTacId" },
+                }, dM_TinhTrangCongTacId: {
+                    name: "dM_TinhTrangCongTacId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_TinhTrangCongTac',
+                }, dM_LoaiTinhTrangCongTac: {
+                    name: "dM_LoaiTinhTrangCongTac",
+                    type: "DM_LoaiTinhTrangCongTac",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_LoaiTinhTrangCongTacId" },
+                }, dM_LoaiTinhTrangCongTacId: {
+                    name: "dM_LoaiTinhTrangCongTacId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_LoaiTinhTrangCongTac',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -2501,6 +2678,21 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'loai',
+                }, dM_TinhTrangDiHocTap: {
+                    name: "dM_TinhTrangDiHocTap",
+                    type: "DM_TinhTrangDiHocTap",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'quaTrinhCuDiDaoTao',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_TinhTrangDiHocTapId" },
+                }, dM_TinhTrangDiHocTapId: {
+                    name: "dM_TinhTrangDiHocTapId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_TinhTrangDiHocTap',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -24403,6 +24595,76 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'tinhTrangHonNhan',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
+        },
+        dM_QuanHeThanNhan: {
+            name: 'DM_QuanHeThanNhan', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_QuanHeThanNhan$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, relative: {
+                    name: "relative",
+                    type: "Relative",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'quanHeThanNhan',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24461,6 +24723,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trangThaiLamViec',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24519,6 +24787,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_HinhThucKhenThuongChinhQuyen',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24577,6 +24851,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_HinhThucKhenThuongDang',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24635,6 +24915,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_XepLoaiDanhGiaCanBo',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24693,6 +24979,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_XepLoaiDanhGiaChatLuongDangVien',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24815,6 +25107,76 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_TinhTrangCongTac',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
+        },
+        dM_LoaiTinhTrangCongTac: {
+            name: 'DM_LoaiTinhTrangCongTac', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DM_LoaiTinhTrangCongTac$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_LoaiTinhTrangCongTac',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -24937,6 +25299,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, quaTrinhCuDiDaoTao: {
+                    name: "quaTrinhCuDiDaoTao",
+                    type: "QuaTrinhCuDiDaoTao",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_TinhTrangDiHocTap',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -25053,6 +25421,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_ChucDanhCMNVGiangVien',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -25111,6 +25485,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_ChucDanhCMNVNghienCuuVien',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -25169,6 +25549,12 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_ChucDanhCMNVKySu',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -26647,6 +27033,9 @@ function $default$DM_TrinhDoQuanLyNhaNuoc$createdBy(user) {
 function $default$DM_TinhTrangHonNhan$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
+function $default$DM_QuanHeThanNhan$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
 function $default$DM_TrangThaiLamViec$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
@@ -26666,6 +27055,9 @@ function $default$DM_LoaiHinhCongTac$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$DM_TinhTrangCongTac$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$DM_LoaiTinhTrangCongTac$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$DM_LoaiHinhDiHocTap$createdBy(user) {

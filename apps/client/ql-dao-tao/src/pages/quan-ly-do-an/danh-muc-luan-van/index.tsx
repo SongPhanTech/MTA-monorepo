@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import ApproveIcon from '@components/icons/approve'
@@ -8,7 +7,6 @@ import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { getMinioUrl } from '@workspace/constant'
 import {
     CouncilProposalStatus,
     CouncilRole,
@@ -30,13 +28,15 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getMinioUrl } from '@workspace/libs/utils'
 import { dayjs, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, DatePicker, Flex, Form, Input, message, Popconfirm, Row, Tag } from 'antd'
 import { SquarePen } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 
-// import { getMinioUrl } from '@workspace/constant'
+// import { getMinioUrl } from '@workspace/libs/utils'
 
 // interface thống kê các chuyên gia hướng dẫn
 interface ExpertStat {
@@ -52,7 +52,7 @@ interface ExpertStat {
 
 // interface props cho component PostgraduateProject
 export interface PostgraduateProjectProps {
-    role?: 'P7' | 'P2' | 'P13'
+    role?: 'P7' | 'P2'
     isManage?: boolean
 }
 const { TextArea } = Input
@@ -270,7 +270,7 @@ export default function PostgraduateProject({
     const { data: defenseSessionData } = useFindManyDefenseSession()
 
     // hàm xử lý build tree cho danh sách đơn vị
-    const treeData = buildOrgTree(sDm_Donvi ?? [], '0')
+    const treeOrgData = buildOrgTree(sDm_Donvi ?? [], '0')
     // hàm xử lý lấy ra label và color cho trạng thái đồ án
     const { getThesisProjectStatusLabel, getThesisProjectStatusColor } =
         useThesisProjectStatusOptions()
@@ -1349,7 +1349,7 @@ export default function PostgraduateProject({
                                         allowClear
                                         showSearch
                                         treeDefaultExpandAll
-                                        treeData={treeData}
+                                        treeData={treeOrgData}
                                     />
                                 </Form.Item>
                                 <Form.Item className="flex justify-end gap-3">
@@ -1491,7 +1491,7 @@ export default function PostgraduateProject({
                                             <div onClick={(e) => e.stopPropagation()}>
                                                 <TreeSelect
                                                     className="w-full"
-                                                    treeData={treeData}
+                                                    treeData={treeOrgData}
                                                     placeholder="Chọn đơn vị quản lý"
                                                     allowClear
                                                     showSearch
@@ -1513,7 +1513,7 @@ export default function PostgraduateProject({
                                     }
                                     return (
                                         record?.thesisRegistrations?.[0]?.thesisProject
-                                            ?.organization?.sTen || ''
+                                            ?.organization?.sMa || ''
                                     )
                                 },
                             },
