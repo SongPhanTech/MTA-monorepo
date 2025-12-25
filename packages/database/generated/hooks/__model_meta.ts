@@ -16048,6 +16048,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisor',
+                }, supervisorPayment: {
+                    name: "supervisorPayment",
+                    type: "SupervisorPaymentRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'thesisProjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "supervisorPaymentId" },
+                }, supervisorPaymentId: {
+                    name: "supervisorPaymentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'supervisorPayment',
                 }, coSupervisor: {
                     name: "coSupervisor",
                     type: "ExpertProfile",
@@ -16062,6 +16076,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisor',
+                }, coSupervisorPayment: {
+                    name: "coSupervisorPayment",
+                    type: "SupervisorPaymentRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'coThesisProjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "coSupervisorPaymentId" },
+                }, coSupervisorPaymentId: {
+                    name: "coSupervisorPaymentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'coSupervisorPayment',
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -16163,12 +16191,6 @@ const metadata: ModelMeta = {
                 }, registrations: {
                     name: "registrations",
                     type: "StudentThesisRegistration",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'thesisProject',
-                }, supervisorPayments: {
-                    name: "supervisorPayments",
-                    type: "SupervisorPaymentRecord",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'thesisProject',
@@ -16479,6 +16501,14 @@ const metadata: ModelMeta = {
                     name: "bankName",
                     type: "String",
                     isOptional: true,
+                }, projectExpert: {
+                    name: "projectExpert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, thesisExpert: {
+                    name: "thesisExpert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
@@ -16507,18 +16537,6 @@ const metadata: ModelMeta = {
                 }, councilMemberships: {
                     name: "councilMemberships",
                     type: "CouncilMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'expert',
-                }, payments: {
-                    name: "payments",
-                    type: "PaymentRecord",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'expert',
-                }, supervisorPaymentRecord: {
-                    name: "supervisorPaymentRecord",
-                    type: "SupervisorPaymentRecord",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'expert',
@@ -17081,6 +17099,57 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        defaultSupervisorPayAmount: {
+            name: 'DefaultSupervisorPayAmount', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$DefaultSupervisorPayAmount$createdBy,
+                }, amount: {
+                    name: "amount",
+                    type: "Decimal",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         paymentRecord: {
             name: 'PaymentRecord', fields: {
                 id: {
@@ -17133,18 +17202,6 @@ const metadata: ModelMeta = {
                     name: "transactionCode",
                     type: "String",
                     isOptional: true,
-                }, expert: {
-                    name: "expert",
-                    type: "ExpertProfile",
-                    isDataModel: true,
-                    backLink: 'payments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "expertId" },
-                }, expertId: {
-                    name: "expertId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'expert',
                 }, councilMemberId: {
                     name: "councilMemberId",
                     type: "String",
@@ -17210,30 +17267,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                     defaultValueProvider: $default$SupervisorPaymentRecord$createdBy,
-                }, thesisProject: {
-                    name: "thesisProject",
-                    type: "ThesisProject",
-                    isDataModel: true,
-                    backLink: 'supervisorPayments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "thesisProjectId" },
-                }, thesisProjectId: {
-                    name: "thesisProjectId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'thesisProject',
-                }, expert: {
-                    name: "expert",
-                    type: "ExpertProfile",
-                    isDataModel: true,
-                    backLink: 'supervisorPaymentRecord',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "expertId" },
-                }, expertId: {
-                    name: "expertId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'expert',
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
@@ -17249,6 +17282,18 @@ const metadata: ModelMeta = {
                     name: "transactionCode",
                     type: "String",
                     isOptional: true,
+                }, thesisProjects: {
+                    name: "thesisProjects",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'supervisorPayment',
+                }, coThesisProjects: {
+                    name: "coThesisProjects",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'coSupervisorPayment',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -25577,6 +25622,10 @@ function $default$LibrarySubmission$createdBy(user: any): unknown {
 }
 
 function $default$DefaultCouncilRolePayAmount$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$DefaultSupervisorPayAmount$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -40,13 +40,8 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    thesisProject: z.record(z.string(), z.unknown()),
-    expert: z.record(z.string(), z.unknown()),
-}
-);
-const fkSchema = z.object({
-    thesisProjectId: z.string(),
-    expertId: z.string(),
+    thesisProjects: z.array(z.unknown()).optional(),
+    coThesisProjects: z.array(z.unknown()).optional(),
 }
 );
 
@@ -59,7 +54,7 @@ export const SupervisorPaymentRecordScalarSchema = baseSchema;
 /**
  * `SupervisorPaymentRecord` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const SupervisorPaymentRecordSchema = SupervisorPaymentRecordScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const SupervisorPaymentRecordSchema = SupervisorPaymentRecordScalarSchema.merge(relationSchema.partial());
 
 
 /**
@@ -100,7 +95,9 @@ export const SupervisorPaymentRecordCreateScalarSchema = baseSchemaWithoutDefaul
 /**
  * `SupervisorPaymentRecord` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SupervisorPaymentRecordCreateSchema = SupervisorPaymentRecordCreateScalarSchema.merge(fkSchema);
+export const SupervisorPaymentRecordCreateSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, status: true
+});
 
 
 /**
@@ -112,5 +109,5 @@ export const SupervisorPaymentRecordUpdateScalarSchema = baseSchemaWithoutDefaul
 /**
  * `SupervisorPaymentRecord` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const SupervisorPaymentRecordUpdateSchema = SupervisorPaymentRecordUpdateScalarSchema.merge(fkSchema.partial());
+export const SupervisorPaymentRecordUpdateSchema = SupervisorPaymentRecordUpdateScalarSchema;
 

@@ -3185,6 +3185,26 @@ const policy: PolicyDef = {
             },
 
         },
+        defaultSupervisorPayAmount: {
+            modelLevel: {
+                read: { guard: DefaultSupervisorPayAmount_read, },
+                create: { guard: DefaultSupervisorPayAmount_create, inputChecker: DefaultSupervisorPayAmount_create_input, },
+                update: { guard: DefaultSupervisorPayAmount_update, },
+                postUpdate: { guard: DefaultSupervisorPayAmount_postUpdate, },
+                delete: { guard: DefaultSupervisorPayAmount_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         paymentRecord: {
             modelLevel: {
                 read: { guard: PaymentRecord_read, },
@@ -5283,6 +5303,7 @@ const policy: PolicyDef = {
         defenseRecord: { hasValidation: false },
         librarySubmission: { hasValidation: false },
         defaultCouncilRolePayAmount: { hasValidation: false },
+        defaultSupervisorPayAmount: { hasValidation: false },
         paymentRecord: { hasValidation: false },
         supervisorPaymentRecord: { hasValidation: false },
         evaluationPeriod: { hasValidation: false },
@@ -15497,6 +15518,71 @@ function DefaultCouncilRolePayAmount_delete(context: QueryContext, db: CrudContr
 }
 
 function $check_DefaultCouncilRolePayAmount_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DefaultSupervisorPayAmount_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DefaultSupervisorPayAmount_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DefaultSupervisorPayAmount_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DefaultSupervisorPayAmount_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DefaultSupervisorPayAmount_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DefaultSupervisorPayAmount_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DefaultSupervisorPayAmount_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DefaultSupervisorPayAmount_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DefaultSupervisorPayAmount_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DefaultSupervisorPayAmount_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DefaultSupervisorPayAmount_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
