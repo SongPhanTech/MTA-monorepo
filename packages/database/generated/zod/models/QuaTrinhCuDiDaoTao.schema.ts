@@ -39,11 +39,13 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     loai: z.record(z.string(), z.unknown()),
+    dM_TinhTrangDiHocTap: z.record(z.string(), z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
     loaiId: z.string(),
+    dM_TinhTrangDiHocTapId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );

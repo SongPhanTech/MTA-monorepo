@@ -461,8 +461,6 @@ exports.Prisma.QuaTrinhCongTacScalarFieldEnum = {
   ngayNhanQuyetDinh: 'ngayNhanQuyetDinh',
   chucVuId: 'chucVuId',
   loaiHinhCongTacId: 'loaiHinhCongTacId',
-  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
-  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -479,6 +477,8 @@ exports.Prisma.QuaTrinhCuDiCongTacScalarFieldEnum = {
   denThangNam: 'denThangNam',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
+  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -497,6 +497,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoScalarFieldEnum = {
   denNgay: 'denNgay',
   vanBang: 'vanBang',
   loaiId: 'loaiId',
+  dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
   userProfileId: 'userProfileId'
 };
 
@@ -4756,8 +4757,6 @@ exports.Prisma.QuaTrinhCongTacOrderByRelevanceFieldEnum = {
   soQuyetDinh: 'soQuyetDinh',
   chucVuId: 'chucVuId',
   loaiHinhCongTacId: 'loaiHinhCongTacId',
-  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
-  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -4768,6 +4767,8 @@ exports.Prisma.QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   donVi: 'donVi',
   chucVuId: 'chucVuId',
+  dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+  dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
   userProfileId: 'userProfileId'
 };
 
@@ -4780,6 +4781,7 @@ exports.Prisma.QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum = {
   donViToChuc: 'donViToChuc',
   vanBang: 'vanBang',
   loaiId: 'loaiId',
+  dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
   userProfileId: 'userProfileId'
 };
 

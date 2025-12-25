@@ -1094,6 +1094,36 @@ model CapBac {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model QuaTrinhCongTac {
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  createdBy         String?             @default("") @db.Uuid()
+  tuThangNam        DateTime?
+  denThangNam       DateTime?
+  donVi             String?
+  diaChi            String?
+  chucDanh          String?
+  chucVuDangDoan    String?
+  soQuyetDinh       String?
+  ngayNhanQuyetDinh DateTime?
+  chucVu            DM_ChucVu?          @relation(fields: [chucVuId], references: [Id])
+  chucVuId          String?             @db.Uuid()
+  loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
+  loaiHinhCongTacId String?
+  userProfile       UserProfile         @relation(fields: [userProfileId], references: [id])
+  userProfileId     String
+
+  @@schema("ql-ho-so")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model QuaTrinhCuDiCongTac {
   id                        String                   @id() @default(cuid())
   code                      String?                  @unique()
   active                    Boolean                  @default(true)
@@ -1104,16 +1134,9 @@ model QuaTrinhCongTac {
   createdBy                 String?                  @default("") @db.Uuid()
   tuThangNam                DateTime?
   denThangNam               DateTime?
-  donVi                     String?
-  diaChi                    String?
-  chucDanh                  String?
-  chucVuDangDoan            String?
-  soQuyetDinh               String?
-  ngayNhanQuyetDinh         DateTime?
-  chucVu                    DM_ChucVu?               @relation(fields: [chucVuId], references: [Id])
-  chucVuId                  String?                  @db.Uuid()
-  loaiHinhCongTac           DM_LoaiHinhCongTac?      @relation(fields: [loaiHinhCongTacId], references: [id])
-  loaiHinhCongTacId         String?
+  donVi                     String
+  chucVu                    DM_ChucVu                @relation(fields: [chucVuId], references: [Id])
+  chucVuId                  String                   @db.Uuid()
   dM_TinhTrangCongTac       DM_TinhTrangCongTac?     @relation(fields: [dM_TinhTrangCongTacId], references: [id])
   dM_TinhTrangCongTacId     String?
   dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
@@ -1127,47 +1150,26 @@ model QuaTrinhCongTac {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model QuaTrinhCuDiCongTac {
-  id            String      @id() @default(cuid())
-  code          String?     @unique()
-  active        Boolean     @default(true)
-  description   String?     @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt()
-  createdBy     String?     @default("") @db.Uuid()
-  tuThangNam    DateTime?
-  denThangNam   DateTime?
-  donVi         String
-  chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
-  chucVuId      String      @db.Uuid()
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-
-  @@schema("ql-ho-so")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
 model QuaTrinhCuDiDaoTao {
-  id            String              @id() @default(cuid())
-  code          String?             @unique()
-  active        Boolean             @default(true)
-  description   String?             @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @default(now()) @updatedAt()
-  createdBy     String?             @default("") @db.Uuid()
-  ten           String?
-  donViToChuc   String?
-  tuNgay        DateTime?
-  denNgay       DateTime?
-  vanBang       String?
-  loai          DM_LoaiHinhDiHocTap @relation(fields: [loaiId], references: [id])
-  loaiId        String
-  userProfile   UserProfile         @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @default("") @db.Uuid()
+  ten                    String?
+  donViToChuc            String?
+  tuNgay                 DateTime?
+  denNgay                DateTime?
+  vanBang                String?
+  loai                   DM_LoaiHinhDiHocTap   @relation(fields: [loaiId], references: [id])
+  loaiId                 String
+  dM_TinhTrangDiHocTap   DM_TinhTrangDiHocTap? @relation(fields: [dM_TinhTrangDiHocTapId], references: [id])
+  dM_TinhTrangDiHocTapId String?
+  userProfile            UserProfile           @relation(fields: [userProfileId], references: [id])
+  userProfileId          String
 
   @@schema("ql-ho-so")
 }
@@ -7026,16 +7028,16 @@ model DM_LoaiHinhCongTac {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model DM_TinhTrangCongTac {
-  id              String            @id() @default(cuid())
-  code            String?           @unique()
-  active          Boolean           @default(true)
-  description     String?           @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt()
-  createdBy       String?           @default("") @db.Uuid()
-  name            String            @unique()
-  quaTrinhCongTac QuaTrinhCongTac[]
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @default("") @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
   @@schema("ql-ho-so")
 }
@@ -7044,16 +7046,16 @@ model DM_TinhTrangCongTac {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model DM_LoaiTinhTrangCongTac {
-  id              String            @id() @default(cuid())
-  code            String?           @unique()
-  active          Boolean           @default(true)
-  description     String?           @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt()
-  createdBy       String?           @default("") @db.Uuid()
-  name            String            @unique()
-  quaTrinhCongTac QuaTrinhCongTac[]
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @default("") @db.Uuid()
+  name                String                @unique()
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
   @@schema("ql-ho-so")
 }
@@ -7080,15 +7082,16 @@ model DM_LoaiHinhDiHocTap {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model DM_TinhTrangDiHocTap {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @default("") @db.Uuid()
-  name        String    @unique()
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  createdBy          String?              @default("") @db.Uuid()
+  name               String               @unique()
+  quaTrinhCuDiDaoTao QuaTrinhCuDiDaoTao[]
 
   @@schema("ql-ho-so")
 }

@@ -2312,34 +2312,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'loaiHinhCongTac',
-                }, dM_TinhTrangCongTac: {
-                    name: "dM_TinhTrangCongTac",
-                    type: "DM_TinhTrangCongTac",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'quaTrinhCongTac',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "dM_TinhTrangCongTacId" },
-                }, dM_TinhTrangCongTacId: {
-                    name: "dM_TinhTrangCongTacId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'dM_TinhTrangCongTac',
-                }, dM_LoaiTinhTrangCongTac: {
-                    name: "dM_LoaiTinhTrangCongTac",
-                    type: "DM_LoaiTinhTrangCongTac",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'quaTrinhCongTac',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "dM_LoaiTinhTrangCongTacId" },
-                }, dM_LoaiTinhTrangCongTacId: {
-                    name: "dM_LoaiTinhTrangCongTacId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'dM_LoaiTinhTrangCongTac',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -2423,6 +2395,34 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'chucVu',
+                }, dM_TinhTrangCongTac: {
+                    name: "dM_TinhTrangCongTac",
+                    type: "DM_TinhTrangCongTac",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_TinhTrangCongTacId" },
+                }, dM_TinhTrangCongTacId: {
+                    name: "dM_TinhTrangCongTacId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_TinhTrangCongTac',
+                }, dM_LoaiTinhTrangCongTac: {
+                    name: "dM_LoaiTinhTrangCongTac",
+                    type: "DM_LoaiTinhTrangCongTac",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'quaTrinhCuDiCongTac',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_LoaiTinhTrangCongTacId" },
+                }, dM_LoaiTinhTrangCongTacId: {
+                    name: "dM_LoaiTinhTrangCongTacId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_LoaiTinhTrangCongTac',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -2515,6 +2515,20 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'loai',
+                }, dM_TinhTrangDiHocTap: {
+                    name: "dM_TinhTrangDiHocTap",
+                    type: "DM_TinhTrangDiHocTap",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'quaTrinhCuDiDaoTao',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "dM_TinhTrangDiHocTapId" },
+                }, dM_TinhTrangDiHocTapId: {
+                    name: "dM_TinhTrangDiHocTapId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_TinhTrangDiHocTap',
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -23795,9 +23809,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, quaTrinhCongTac: {
-                    name: "quaTrinhCongTac",
-                    type: "QuaTrinhCongTac",
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'dM_TinhTrangCongTac',
@@ -23855,9 +23869,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, quaTrinhCongTac: {
-                    name: "quaTrinhCongTac",
-                    type: "QuaTrinhCongTac",
+                }, quaTrinhCuDiCongTac: {
+                    name: "quaTrinhCuDiCongTac",
+                    type: "QuaTrinhCuDiCongTac",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'dM_LoaiTinhTrangCongTac',
@@ -23975,6 +23989,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, quaTrinhCuDiDaoTao: {
+                    name: "quaTrinhCuDiDaoTao",
+                    type: "QuaTrinhCuDiDaoTao",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_TinhTrangDiHocTap',
                 },
             }, uniqueConstraints: {
                 id: {

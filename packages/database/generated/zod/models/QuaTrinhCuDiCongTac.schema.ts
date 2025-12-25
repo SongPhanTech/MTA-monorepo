@@ -35,11 +35,15 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     chucVu: z.record(z.string(), z.unknown()),
+    dM_TinhTrangCongTac: z.record(z.string(), z.unknown()).optional(),
+    dM_LoaiTinhTrangCongTac: z.record(z.string(), z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
     chucVuId: z.string().uuid(),
+    dM_TinhTrangCongTacId: z.string().nullish(),
+    dM_LoaiTinhTrangCongTacId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );

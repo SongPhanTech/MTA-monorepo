@@ -30,7 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    quaTrinhCongTac: z.array(z.unknown()).optional(),
+    quaTrinhCuDiCongTac: z.array(z.unknown()).optional(),
 }
 );
 

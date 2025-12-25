@@ -6347,8 +6347,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh: 'ngayNhanQuyetDinh',
         chucVuId: 'chucVuId',
         loaiHinhCongTacId: 'loaiHinhCongTacId',
-        dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
-        dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
         userProfileId: 'userProfileId'
     };
     export const QuaTrinhCuDiCongTacScalarFieldEnum: {
@@ -6364,6 +6362,8 @@ export namespace Prisma {
         denThangNam: 'denThangNam',
         donVi: 'donVi',
         chucVuId: 'chucVuId',
+        dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+        dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
         userProfileId: 'userProfileId'
     };
     export const QuaTrinhCuDiDaoTaoScalarFieldEnum: {
@@ -6381,6 +6381,7 @@ export namespace Prisma {
         denNgay: 'denNgay',
         vanBang: 'vanBang',
         loaiId: 'loaiId',
+        dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
         userProfileId: 'userProfileId'
     };
     export const KhenThuongScalarFieldEnum: {
@@ -10384,8 +10385,6 @@ export namespace Prisma {
         soQuyetDinh: 'soQuyetDinh',
         chucVuId: 'chucVuId',
         loaiHinhCongTacId: 'loaiHinhCongTacId',
-        dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
-        dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
         userProfileId: 'userProfileId'
     };
     export const QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum: {
@@ -10395,6 +10394,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         donVi: 'donVi',
         chucVuId: 'chucVuId',
+        dM_TinhTrangCongTacId: 'dM_TinhTrangCongTacId',
+        dM_LoaiTinhTrangCongTacId: 'dM_LoaiTinhTrangCongTacId',
         userProfileId: 'userProfileId'
     };
     export const QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum: {
@@ -10406,6 +10407,7 @@ export namespace Prisma {
         donViToChuc: 'donViToChuc',
         vanBang: 'vanBang',
         loaiId: 'loaiId',
+        dM_TinhTrangDiHocTapId: 'dM_TinhTrangDiHocTapId',
         userProfileId: 'userProfileId'
     };
     export const KhenThuongOrderByRelevanceFieldEnum: {
@@ -18263,8 +18265,6 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         chucVu<T extends QuaTrinhCongTac$chucVuArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$chucVuArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         loaiHinhCongTac<T extends QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>>): Prisma__DM_LoaiHinhCongTacClient<$Result.GetResult<Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        dM_TinhTrangCongTac<T extends QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_TinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_TinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        dM_LoaiTinhTrangCongTac<T extends QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_LoaiTinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18310,8 +18310,6 @@ export namespace Prisma {
         readonly ngayNhanQuyetDinh: FieldRef<"QuaTrinhCongTac", 'DateTime'>;
         readonly chucVuId: FieldRef<"QuaTrinhCongTac", 'String'>;
         readonly loaiHinhCongTacId: FieldRef<"QuaTrinhCongTac", 'String'>;
-        readonly dM_TinhTrangCongTacId: FieldRef<"QuaTrinhCongTac", 'String'>;
-        readonly dM_LoaiTinhTrangCongTacId: FieldRef<"QuaTrinhCongTac", 'String'>;
         readonly userProfileId: FieldRef<"QuaTrinhCongTac", 'String'>;
     }
 
@@ -18659,6 +18657,8 @@ export namespace Prisma {
     export interface Prisma__QuaTrinhCuDiCongTacClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         chucVu<T extends DM_ChucVuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVuDefaultArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        dM_TinhTrangCongTac<T extends QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_TinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_TinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        dM_LoaiTinhTrangCongTac<T extends QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>>): Prisma__DM_LoaiTinhTrangCongTacClient<$Result.GetResult<Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18698,6 +18698,8 @@ export namespace Prisma {
         readonly denThangNam: FieldRef<"QuaTrinhCuDiCongTac", 'DateTime'>;
         readonly donVi: FieldRef<"QuaTrinhCuDiCongTac", 'String'>;
         readonly chucVuId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>;
+        readonly dM_TinhTrangCongTacId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>;
+        readonly dM_LoaiTinhTrangCongTacId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>;
         readonly userProfileId: FieldRef<"QuaTrinhCuDiCongTac", 'String'>;
     }
 
@@ -19045,6 +19047,7 @@ export namespace Prisma {
     export interface Prisma__QuaTrinhCuDiDaoTaoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         loai<T extends DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>>): Prisma__DM_LoaiHinhDiHocTapClient<$Result.GetResult<Prisma.$DM_LoaiHinhDiHocTapPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        dM_TinhTrangDiHocTap<T extends QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>>): Prisma__DM_TinhTrangDiHocTapClient<$Result.GetResult<Prisma.$DM_TinhTrangDiHocTapPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -19086,6 +19089,7 @@ export namespace Prisma {
         readonly denNgay: FieldRef<"QuaTrinhCuDiDaoTao", 'DateTime'>;
         readonly vanBang: FieldRef<"QuaTrinhCuDiDaoTao", 'String'>;
         readonly loaiId: FieldRef<"QuaTrinhCuDiDaoTao", 'String'>;
+        readonly dM_TinhTrangDiHocTapId: FieldRef<"QuaTrinhCuDiDaoTao", 'String'>;
         readonly userProfileId: FieldRef<"QuaTrinhCuDiDaoTao", 'String'>;
     }
 
@@ -103383,7 +103387,7 @@ export namespace Prisma {
      */
     export interface Prisma__DM_TinhTrangCongTacClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        quaTrinhCongTac<T extends DM_TinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_TinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        quaTrinhCuDiCongTac<T extends DM_TinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_TinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -103764,7 +103768,7 @@ export namespace Prisma {
      */
     export interface Prisma__DM_LoaiTinhTrangCongTacClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        quaTrinhCongTac<T extends DM_LoaiTinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_LoaiTinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        quaTrinhCuDiCongTac<T extends DM_LoaiTinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_LoaiTinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -104526,6 +104530,7 @@ export namespace Prisma {
      */
     export interface Prisma__DM_TinhTrangDiHocTapClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        quaTrinhCuDiDaoTao<T extends DM_TinhTrangDiHocTap$quaTrinhCuDiDaoTaoArgs<ExtArgs> = {}>(args?: Subset<T, DM_TinhTrangDiHocTap$quaTrinhCuDiDaoTaoArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiDaoTaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -136041,10 +136046,10 @@ export namespace Prisma {
      * Count Type DM_TinhTrangCongTacCountOutputType
      */
     export type DM_TinhTrangCongTacCountOutputType = {
-        quaTrinhCongTac: number
+        quaTrinhCuDiCongTac: number
     };
     export type DM_TinhTrangCongTacCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        quaTrinhCongTac?: boolean | DM_TinhTrangCongTacCountOutputTypeCountQuaTrinhCongTacArgs
+        quaTrinhCuDiCongTac?: boolean | DM_TinhTrangCongTacCountOutputTypeCountQuaTrinhCuDiCongTacArgs
     };
     /**
      * DM_TinhTrangCongTacCountOutputType without action
@@ -136058,17 +136063,17 @@ export namespace Prisma {
     /**
      * DM_TinhTrangCongTacCountOutputType without action
      */
-    export type DM_TinhTrangCongTacCountOutputTypeCountQuaTrinhCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: QuaTrinhCongTacWhereInput
+    export type DM_TinhTrangCongTacCountOutputTypeCountQuaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: QuaTrinhCuDiCongTacWhereInput
     };
     /**
      * Count Type DM_LoaiTinhTrangCongTacCountOutputType
      */
     export type DM_LoaiTinhTrangCongTacCountOutputType = {
-        quaTrinhCongTac: number
+        quaTrinhCuDiCongTac: number
     };
     export type DM_LoaiTinhTrangCongTacCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        quaTrinhCongTac?: boolean | DM_LoaiTinhTrangCongTacCountOutputTypeCountQuaTrinhCongTacArgs
+        quaTrinhCuDiCongTac?: boolean | DM_LoaiTinhTrangCongTacCountOutputTypeCountQuaTrinhCuDiCongTacArgs
     };
     /**
      * DM_LoaiTinhTrangCongTacCountOutputType without action
@@ -136082,8 +136087,8 @@ export namespace Prisma {
     /**
      * DM_LoaiTinhTrangCongTacCountOutputType without action
      */
-    export type DM_LoaiTinhTrangCongTacCountOutputTypeCountQuaTrinhCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: QuaTrinhCongTacWhereInput
+    export type DM_LoaiTinhTrangCongTacCountOutputTypeCountQuaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: QuaTrinhCuDiCongTacWhereInput
     };
     /**
      * Count Type DM_LoaiHinhDiHocTapCountOutputType
@@ -136107,6 +136112,30 @@ export namespace Prisma {
      * DM_LoaiHinhDiHocTapCountOutputType without action
      */
     export type DM_LoaiHinhDiHocTapCountOutputTypeCountQuaTrinhCuDiDaoTaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: QuaTrinhCuDiDaoTaoWhereInput
+    };
+    /**
+     * Count Type DM_TinhTrangDiHocTapCountOutputType
+     */
+    export type DM_TinhTrangDiHocTapCountOutputType = {
+        quaTrinhCuDiDaoTao: number
+    };
+    export type DM_TinhTrangDiHocTapCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        quaTrinhCuDiDaoTao?: boolean | DM_TinhTrangDiHocTapCountOutputTypeCountQuaTrinhCuDiDaoTaoArgs
+    };
+    /**
+     * DM_TinhTrangDiHocTapCountOutputType without action
+     */
+    export type DM_TinhTrangDiHocTapCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_TinhTrangDiHocTapCountOutputType
+         */
+        select?: DM_TinhTrangDiHocTapCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * DM_TinhTrangDiHocTapCountOutputType without action
+     */
+    export type DM_TinhTrangDiHocTapCountOutputTypeCountQuaTrinhCuDiDaoTaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: QuaTrinhCuDiDaoTaoWhereInput
     };
     /**
@@ -149188,8 +149217,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh: Date | null
         chucVuId: string | null
         loaiHinhCongTacId: string | null
-        dM_TinhTrangCongTacId: string | null
-        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCongTacMaxAggregateOutputType = {
@@ -149211,8 +149238,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh: Date | null
         chucVuId: string | null
         loaiHinhCongTacId: string | null
-        dM_TinhTrangCongTacId: string | null
-        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCongTacCountAggregateOutputType = {
@@ -149234,8 +149259,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh: number
         chucVuId: number
         loaiHinhCongTacId: number
-        dM_TinhTrangCongTacId: number
-        dM_LoaiTinhTrangCongTacId: number
         userProfileId: number
         _all: number
     };
@@ -149258,8 +149281,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: true
         chucVuId?: true
         loaiHinhCongTacId?: true
-        dM_TinhTrangCongTacId?: true
-        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
     };
     export type QuaTrinhCongTacMaxAggregateInputType = {
@@ -149281,8 +149302,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: true
         chucVuId?: true
         loaiHinhCongTacId?: true
-        dM_TinhTrangCongTacId?: true
-        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
     };
     export type QuaTrinhCongTacCountAggregateInputType = {
@@ -149304,8 +149323,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: true
         chucVuId?: true
         loaiHinhCongTacId?: true
-        dM_TinhTrangCongTacId?: true
-        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
         _all?: true
     };
@@ -149394,8 +149411,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh: Date | null
         chucVuId: string | null
         loaiHinhCongTacId: string | null
-        dM_TinhTrangCongTacId: string | null
-        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string
         _count: QuaTrinhCongTacCountAggregateOutputType | null
         _min: QuaTrinhCongTacMinAggregateOutputType | null
@@ -149432,13 +149447,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: boolean
         chucVuId?: boolean
         loaiHinhCongTacId?: boolean
-        dM_TinhTrangCongTacId?: boolean
-        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCongTac"]>;
     export type QuaTrinhCongTacSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -149460,13 +149471,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: boolean
         chucVuId?: boolean
         loaiHinhCongTacId?: boolean
-        dM_TinhTrangCongTacId?: boolean
-        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCongTac"]>;
     export type QuaTrinhCongTacSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -149488,13 +149495,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: boolean
         chucVuId?: boolean
         loaiHinhCongTacId?: boolean
-        dM_TinhTrangCongTacId?: boolean
-        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCongTac"]>;
     export type QuaTrinhCongTacSelectScalar = {
@@ -149516,30 +149519,22 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: boolean
         chucVuId?: boolean
         loaiHinhCongTacId?: boolean
-        dM_TinhTrangCongTacId?: boolean
-        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
     };
-    export type QuaTrinhCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "diaChi" | "chucDanh" | "chucVuDangDoan" | "soQuyetDinh" | "ngayNhanQuyetDinh" | "chucVuId" | "loaiHinhCongTacId" | "dM_TinhTrangCongTacId" | "dM_LoaiTinhTrangCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCongTac"]>;
+    export type QuaTrinhCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "diaChi" | "chucDanh" | "chucVuDangDoan" | "soQuyetDinh" | "ngayNhanQuyetDinh" | "chucVuId" | "loaiHinhCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCongTac"]>;
     export type QuaTrinhCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCongTacIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
         loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
-        dM_TinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
-        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type $QuaTrinhCongTacPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -149547,8 +149542,6 @@ export namespace Prisma {
         objects: {
             chucVu: Prisma.$DM_ChucVuPayload<ExtArgs> | null
             loaiHinhCongTac: Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs> | null
-            dM_TinhTrangCongTac: Prisma.$DM_TinhTrangCongTacPayload<ExtArgs> | null
-            dM_LoaiTinhTrangCongTac: Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs> | null
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -149570,8 +149563,6 @@ export namespace Prisma {
             ngayNhanQuyetDinh: Date | null
             chucVuId: string | null
             loaiHinhCongTacId: string | null
-            dM_TinhTrangCongTacId: string | null
-            dM_LoaiTinhTrangCongTacId: string | null
             userProfileId: string
         }, ExtArgs["result"]["quaTrinhCongTac"]>
         composites: {}
@@ -149994,42 +149985,6 @@ export namespace Prisma {
         where?: DM_LoaiHinhCongTacWhereInput
     };
     /**
-     * QuaTrinhCongTac.dM_TinhTrangCongTac
-     */
-    export type QuaTrinhCongTac$dM_TinhTrangCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the DM_TinhTrangCongTac
-         */
-        select?: DM_TinhTrangCongTacSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the DM_TinhTrangCongTac
-         */
-        omit?: DM_TinhTrangCongTacOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: DM_TinhTrangCongTacInclude<ExtArgs> | null
-        where?: DM_TinhTrangCongTacWhereInput
-    };
-    /**
-     * QuaTrinhCongTac.dM_LoaiTinhTrangCongTac
-     */
-    export type QuaTrinhCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the DM_LoaiTinhTrangCongTac
-         */
-        select?: DM_LoaiTinhTrangCongTacSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the DM_LoaiTinhTrangCongTac
-         */
-        omit?: DM_LoaiTinhTrangCongTacOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: DM_LoaiTinhTrangCongTacInclude<ExtArgs> | null
-        where?: DM_LoaiTinhTrangCongTacWhereInput
-    };
-    /**
      * QuaTrinhCongTac without action
      */
     export type QuaTrinhCongTacDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -150067,6 +150022,8 @@ export namespace Prisma {
         denThangNam: Date | null
         donVi: string | null
         chucVuId: string | null
+        dM_TinhTrangCongTacId: string | null
+        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCuDiCongTacMaxAggregateOutputType = {
@@ -150082,6 +150039,8 @@ export namespace Prisma {
         denThangNam: Date | null
         donVi: string | null
         chucVuId: string | null
+        dM_TinhTrangCongTacId: string | null
+        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCuDiCongTacCountAggregateOutputType = {
@@ -150097,6 +150056,8 @@ export namespace Prisma {
         denThangNam: number
         donVi: number
         chucVuId: number
+        dM_TinhTrangCongTacId: number
+        dM_LoaiTinhTrangCongTacId: number
         userProfileId: number
         _all: number
     };
@@ -150113,6 +150074,8 @@ export namespace Prisma {
         denThangNam?: true
         donVi?: true
         chucVuId?: true
+        dM_TinhTrangCongTacId?: true
+        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
     };
     export type QuaTrinhCuDiCongTacMaxAggregateInputType = {
@@ -150128,6 +150091,8 @@ export namespace Prisma {
         denThangNam?: true
         donVi?: true
         chucVuId?: true
+        dM_TinhTrangCongTacId?: true
+        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
     };
     export type QuaTrinhCuDiCongTacCountAggregateInputType = {
@@ -150143,6 +150108,8 @@ export namespace Prisma {
         denThangNam?: true
         donVi?: true
         chucVuId?: true
+        dM_TinhTrangCongTacId?: true
+        dM_LoaiTinhTrangCongTacId?: true
         userProfileId?: true
         _all?: true
     };
@@ -150225,6 +150192,8 @@ export namespace Prisma {
         denThangNam: Date | null
         donVi: string
         chucVuId: string
+        dM_TinhTrangCongTacId: string | null
+        dM_LoaiTinhTrangCongTacId: string | null
         userProfileId: string
         _count: QuaTrinhCuDiCongTacCountAggregateOutputType | null
         _min: QuaTrinhCuDiCongTacMinAggregateOutputType | null
@@ -150255,8 +150224,12 @@ export namespace Prisma {
         denThangNam?: boolean
         donVi?: boolean
         chucVuId?: boolean
+        dM_TinhTrangCongTacId?: boolean
+        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>;
     export type QuaTrinhCuDiCongTacSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -150272,8 +150245,12 @@ export namespace Prisma {
         denThangNam?: boolean
         donVi?: boolean
         chucVuId?: boolean
+        dM_TinhTrangCongTacId?: boolean
+        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>;
     export type QuaTrinhCuDiCongTacSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -150289,8 +150266,12 @@ export namespace Prisma {
         denThangNam?: boolean
         donVi?: boolean
         chucVuId?: boolean
+        dM_TinhTrangCongTacId?: boolean
+        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>;
     export type QuaTrinhCuDiCongTacSelectScalar = {
@@ -150306,25 +150287,35 @@ export namespace Prisma {
         denThangNam?: boolean
         donVi?: boolean
         chucVuId?: boolean
+        dM_TinhTrangCongTacId?: boolean
+        dM_LoaiTinhTrangCongTacId?: boolean
         userProfileId?: boolean
     };
-    export type QuaTrinhCuDiCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "chucVuId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiCongTac"]>;
+    export type QuaTrinhCuDiCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "tuThangNam" | "denThangNam" | "donVi" | "chucVuId" | "dM_TinhTrangCongTacId" | "dM_LoaiTinhTrangCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiCongTac"]>;
     export type QuaTrinhCuDiCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCuDiCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCuDiCongTacIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+        dM_TinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs>
+        dM_LoaiTinhTrangCongTac?: boolean | QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type $QuaTrinhCuDiCongTacPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "QuaTrinhCuDiCongTac"
         objects: {
             chucVu: Prisma.$DM_ChucVuPayload<ExtArgs>
+            dM_TinhTrangCongTac: Prisma.$DM_TinhTrangCongTacPayload<ExtArgs> | null
+            dM_LoaiTinhTrangCongTac: Prisma.$DM_LoaiTinhTrangCongTacPayload<ExtArgs> | null
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -150340,6 +150331,8 @@ export namespace Prisma {
             denThangNam: Date | null
             donVi: string
             chucVuId: string
+            dM_TinhTrangCongTacId: string | null
+            dM_LoaiTinhTrangCongTacId: string | null
             userProfileId: string
         }, ExtArgs["result"]["quaTrinhCuDiCongTac"]>
         composites: {}
@@ -150726,6 +150719,42 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * QuaTrinhCuDiCongTac.dM_TinhTrangCongTac
+     */
+    export type QuaTrinhCuDiCongTac$dM_TinhTrangCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_TinhTrangCongTac
+         */
+        select?: DM_TinhTrangCongTacSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_TinhTrangCongTac
+         */
+        omit?: DM_TinhTrangCongTacOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangCongTacInclude<ExtArgs> | null
+        where?: DM_TinhTrangCongTacWhereInput
+    };
+    /**
+     * QuaTrinhCuDiCongTac.dM_LoaiTinhTrangCongTac
+     */
+    export type QuaTrinhCuDiCongTac$dM_LoaiTinhTrangCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_LoaiTinhTrangCongTac
+         */
+        select?: DM_LoaiTinhTrangCongTacSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_LoaiTinhTrangCongTac
+         */
+        omit?: DM_LoaiTinhTrangCongTacOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_LoaiTinhTrangCongTacInclude<ExtArgs> | null
+        where?: DM_LoaiTinhTrangCongTacWhereInput
+    };
+    /**
      * QuaTrinhCuDiCongTac without action
      */
     export type QuaTrinhCuDiCongTacDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -150765,6 +150794,7 @@ export namespace Prisma {
         denNgay: Date | null
         vanBang: string | null
         loaiId: string | null
+        dM_TinhTrangDiHocTapId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCuDiDaoTaoMaxAggregateOutputType = {
@@ -150782,6 +150812,7 @@ export namespace Prisma {
         denNgay: Date | null
         vanBang: string | null
         loaiId: string | null
+        dM_TinhTrangDiHocTapId: string | null
         userProfileId: string | null
     };
     export type QuaTrinhCuDiDaoTaoCountAggregateOutputType = {
@@ -150799,6 +150830,7 @@ export namespace Prisma {
         denNgay: number
         vanBang: number
         loaiId: number
+        dM_TinhTrangDiHocTapId: number
         userProfileId: number
         _all: number
     };
@@ -150817,6 +150849,7 @@ export namespace Prisma {
         denNgay?: true
         vanBang?: true
         loaiId?: true
+        dM_TinhTrangDiHocTapId?: true
         userProfileId?: true
     };
     export type QuaTrinhCuDiDaoTaoMaxAggregateInputType = {
@@ -150834,6 +150867,7 @@ export namespace Prisma {
         denNgay?: true
         vanBang?: true
         loaiId?: true
+        dM_TinhTrangDiHocTapId?: true
         userProfileId?: true
     };
     export type QuaTrinhCuDiDaoTaoCountAggregateInputType = {
@@ -150851,6 +150885,7 @@ export namespace Prisma {
         denNgay?: true
         vanBang?: true
         loaiId?: true
+        dM_TinhTrangDiHocTapId?: true
         userProfileId?: true
         _all?: true
     };
@@ -150935,6 +150970,7 @@ export namespace Prisma {
         denNgay: Date | null
         vanBang: string | null
         loaiId: string
+        dM_TinhTrangDiHocTapId: string | null
         userProfileId: string
         _count: QuaTrinhCuDiDaoTaoCountAggregateOutputType | null
         _min: QuaTrinhCuDiDaoTaoMinAggregateOutputType | null
@@ -150967,8 +151003,10 @@ export namespace Prisma {
         denNgay?: boolean
         vanBang?: boolean
         loaiId?: boolean
+        dM_TinhTrangDiHocTapId?: boolean
         userProfileId?: boolean
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiDaoTao"]>;
     export type QuaTrinhCuDiDaoTaoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -150986,8 +151024,10 @@ export namespace Prisma {
         denNgay?: boolean
         vanBang?: boolean
         loaiId?: boolean
+        dM_TinhTrangDiHocTapId?: boolean
         userProfileId?: boolean
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiDaoTao"]>;
     export type QuaTrinhCuDiDaoTaoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -151005,8 +151045,10 @@ export namespace Prisma {
         denNgay?: boolean
         vanBang?: boolean
         loaiId?: boolean
+        dM_TinhTrangDiHocTapId?: boolean
         userProfileId?: boolean
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["quaTrinhCuDiDaoTao"]>;
     export type QuaTrinhCuDiDaoTaoSelectScalar = {
@@ -151024,25 +151066,30 @@ export namespace Prisma {
         denNgay?: boolean
         vanBang?: boolean
         loaiId?: boolean
+        dM_TinhTrangDiHocTapId?: boolean
         userProfileId?: boolean
     };
-    export type QuaTrinhCuDiDaoTaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "ten" | "donViToChuc" | "tuNgay" | "denNgay" | "vanBang" | "loaiId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiDaoTao"]>;
+    export type QuaTrinhCuDiDaoTaoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "ten" | "donViToChuc" | "tuNgay" | "denNgay" | "vanBang" | "loaiId" | "dM_TinhTrangDiHocTapId" | "userProfileId", ExtArgs["result"]["quaTrinhCuDiDaoTao"]>;
     export type QuaTrinhCuDiDaoTaoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCuDiDaoTaoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type QuaTrinhCuDiDaoTaoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         loai?: boolean | DM_LoaiHinhDiHocTapDefaultArgs<ExtArgs>
+        dM_TinhTrangDiHocTap?: boolean | QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
     };
     export type $QuaTrinhCuDiDaoTaoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "QuaTrinhCuDiDaoTao"
         objects: {
             loai: Prisma.$DM_LoaiHinhDiHocTapPayload<ExtArgs>
+            dM_TinhTrangDiHocTap: Prisma.$DM_TinhTrangDiHocTapPayload<ExtArgs> | null
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -151060,6 +151107,7 @@ export namespace Prisma {
             denNgay: Date | null
             vanBang: string | null
             loaiId: string
+            dM_TinhTrangDiHocTapId: string | null
             userProfileId: string
         }, ExtArgs["result"]["quaTrinhCuDiDaoTao"]>
         composites: {}
@@ -151444,6 +151492,24 @@ export namespace Prisma {
          * Limit how many QuaTrinhCuDiDaoTaos to delete.
          */
         limit?: number
+    };
+    /**
+     * QuaTrinhCuDiDaoTao.dM_TinhTrangDiHocTap
+     */
+    export type QuaTrinhCuDiDaoTao$dM_TinhTrangDiHocTapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_TinhTrangDiHocTap
+         */
+        select?: DM_TinhTrangDiHocTapSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_TinhTrangDiHocTap
+         */
+        omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        where?: DM_TinhTrangDiHocTapWhereInput
     };
     /**
      * QuaTrinhCuDiDaoTao without action
@@ -320587,7 +320653,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        quaTrinhCongTac?: boolean | DM_TinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>
+        quaTrinhCuDiCongTac?: boolean | DM_TinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>
         _count?: boolean | DM_TinhTrangCongTacCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_TinhTrangCongTac"]>;
     export type DM_TinhTrangCongTacSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -320625,7 +320691,7 @@ export namespace Prisma {
     };
     export type DM_TinhTrangCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["dM_TinhTrangCongTac"]>;
     export type DM_TinhTrangCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        quaTrinhCongTac?: boolean | DM_TinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>
+        quaTrinhCuDiCongTac?: boolean | DM_TinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>
         _count?: boolean | DM_TinhTrangCongTacCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_TinhTrangCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -320633,7 +320699,7 @@ export namespace Prisma {
     export type $DM_TinhTrangCongTacPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_TinhTrangCongTac"
         objects: {
-            quaTrinhCongTac: Prisma.$QuaTrinhCongTacPayload<ExtArgs>[]
+            quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -321022,27 +321088,27 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * DM_TinhTrangCongTac.quaTrinhCongTac
+     * DM_TinhTrangCongTac.quaTrinhCuDiCongTac
      */
-    export type DM_TinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type DM_TinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the QuaTrinhCongTac
+         * Select specific fields to fetch from the QuaTrinhCuDiCongTac
          */
-        select?: QuaTrinhCongTacSelect<ExtArgs> | null
+        select?: QuaTrinhCuDiCongTacSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the QuaTrinhCongTac
+         * Omit specific fields from the QuaTrinhCuDiCongTac
          */
-        omit?: QuaTrinhCongTacOmit<ExtArgs> | null
+        omit?: QuaTrinhCuDiCongTacOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: QuaTrinhCongTacInclude<ExtArgs> | null
-        where?: QuaTrinhCongTacWhereInput
-        orderBy?: QuaTrinhCongTacOrderByWithRelationInput | QuaTrinhCongTacOrderByWithRelationInput[]
-        cursor?: QuaTrinhCongTacWhereUniqueInput
+        include?: QuaTrinhCuDiCongTacInclude<ExtArgs> | null
+        where?: QuaTrinhCuDiCongTacWhereInput
+        orderBy?: QuaTrinhCuDiCongTacOrderByWithRelationInput | QuaTrinhCuDiCongTacOrderByWithRelationInput[]
+        cursor?: QuaTrinhCuDiCongTacWhereUniqueInput
         take?: number
         skip?: number
-        distinct?: QuaTrinhCongTacScalarFieldEnum | QuaTrinhCongTacScalarFieldEnum[]
+        distinct?: QuaTrinhCuDiCongTacScalarFieldEnum | QuaTrinhCuDiCongTacScalarFieldEnum[]
     };
     /**
      * DM_TinhTrangCongTac without action
@@ -321239,7 +321305,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        quaTrinhCongTac?: boolean | DM_LoaiTinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>
+        quaTrinhCuDiCongTac?: boolean | DM_LoaiTinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>
         _count?: boolean | DM_LoaiTinhTrangCongTacCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_LoaiTinhTrangCongTac"]>;
     export type DM_LoaiTinhTrangCongTacSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -321277,7 +321343,7 @@ export namespace Prisma {
     };
     export type DM_LoaiTinhTrangCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["dM_LoaiTinhTrangCongTac"]>;
     export type DM_LoaiTinhTrangCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        quaTrinhCongTac?: boolean | DM_LoaiTinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs>
+        quaTrinhCuDiCongTac?: boolean | DM_LoaiTinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs>
         _count?: boolean | DM_LoaiTinhTrangCongTacCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_LoaiTinhTrangCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -321285,7 +321351,7 @@ export namespace Prisma {
     export type $DM_LoaiTinhTrangCongTacPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_LoaiTinhTrangCongTac"
         objects: {
-            quaTrinhCongTac: Prisma.$QuaTrinhCongTacPayload<ExtArgs>[]
+            quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -321674,27 +321740,27 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * DM_LoaiTinhTrangCongTac.quaTrinhCongTac
+     * DM_LoaiTinhTrangCongTac.quaTrinhCuDiCongTac
      */
-    export type DM_LoaiTinhTrangCongTac$quaTrinhCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type DM_LoaiTinhTrangCongTac$quaTrinhCuDiCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the QuaTrinhCongTac
+         * Select specific fields to fetch from the QuaTrinhCuDiCongTac
          */
-        select?: QuaTrinhCongTacSelect<ExtArgs> | null
+        select?: QuaTrinhCuDiCongTacSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the QuaTrinhCongTac
+         * Omit specific fields from the QuaTrinhCuDiCongTac
          */
-        omit?: QuaTrinhCongTacOmit<ExtArgs> | null
+        omit?: QuaTrinhCuDiCongTacOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: QuaTrinhCongTacInclude<ExtArgs> | null
-        where?: QuaTrinhCongTacWhereInput
-        orderBy?: QuaTrinhCongTacOrderByWithRelationInput | QuaTrinhCongTacOrderByWithRelationInput[]
-        cursor?: QuaTrinhCongTacWhereUniqueInput
+        include?: QuaTrinhCuDiCongTacInclude<ExtArgs> | null
+        where?: QuaTrinhCuDiCongTacWhereInput
+        orderBy?: QuaTrinhCuDiCongTacOrderByWithRelationInput | QuaTrinhCuDiCongTacOrderByWithRelationInput[]
+        cursor?: QuaTrinhCuDiCongTacWhereUniqueInput
         take?: number
         skip?: number
-        distinct?: QuaTrinhCongTacScalarFieldEnum | QuaTrinhCongTacScalarFieldEnum[]
+        distinct?: QuaTrinhCuDiCongTacScalarFieldEnum | QuaTrinhCuDiCongTacScalarFieldEnum[]
     };
     /**
      * DM_LoaiTinhTrangCongTac without action
@@ -322543,6 +322609,8 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
+        quaTrinhCuDiDaoTao?: boolean | DM_TinhTrangDiHocTap$quaTrinhCuDiDaoTaoArgs<ExtArgs>
+        _count?: boolean | DM_TinhTrangDiHocTapCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_TinhTrangDiHocTap"]>;
     export type DM_TinhTrangDiHocTapSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -322578,9 +322646,17 @@ export namespace Prisma {
         name?: boolean
     };
     export type DM_TinhTrangDiHocTapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["dM_TinhTrangDiHocTap"]>;
+    export type DM_TinhTrangDiHocTapInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        quaTrinhCuDiDaoTao?: boolean | DM_TinhTrangDiHocTap$quaTrinhCuDiDaoTaoArgs<ExtArgs>
+        _count?: boolean | DM_TinhTrangDiHocTapCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type DM_TinhTrangDiHocTapIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type DM_TinhTrangDiHocTapIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
     export type $DM_TinhTrangDiHocTapPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_TinhTrangDiHocTap"
-        objects: {}
+        objects: {
+            quaTrinhCuDiDaoTao: Prisma.$QuaTrinhCuDiDaoTaoPayload<ExtArgs>[]
+        }
         scalars: $Extensions.GetPayloadResult<{
             id: string
             code: string | null
@@ -322611,6 +322687,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * Filter, which DM_TinhTrangDiHocTap to fetch.
          */
         where: DM_TinhTrangDiHocTapWhereUniqueInput
@@ -322628,6 +322708,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * Filter, which DM_TinhTrangDiHocTap to fetch.
          */
         where: DM_TinhTrangDiHocTapWhereUniqueInput
@@ -322644,6 +322728,10 @@ export namespace Prisma {
          * Omit specific fields from the DM_TinhTrangDiHocTap
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
         /**
          * Filter, which DM_TinhTrangDiHocTap to fetch.
          */
@@ -322692,6 +322780,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * Filter, which DM_TinhTrangDiHocTap to fetch.
          */
         where?: DM_TinhTrangDiHocTapWhereInput
@@ -322739,6 +322831,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * Filter, which DM_TinhTrangDiHocTaps to fetch.
          */
         where?: DM_TinhTrangDiHocTapWhereInput
@@ -322780,6 +322876,10 @@ export namespace Prisma {
          * Omit specific fields from the DM_TinhTrangDiHocTap
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
         /**
          * The data needed to create a DM_TinhTrangDiHocTap.
          */
@@ -322825,6 +322925,10 @@ export namespace Prisma {
          * Omit specific fields from the DM_TinhTrangDiHocTap
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
         /**
          * The data needed to update a DM_TinhTrangDiHocTap.
          */
@@ -322889,6 +322993,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * The filter to search for the DM_TinhTrangDiHocTap to update in case it exists.
          */
         where: DM_TinhTrangDiHocTapWhereUniqueInput
@@ -322914,6 +323022,10 @@ export namespace Prisma {
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
+        /**
          * Filter which DM_TinhTrangDiHocTap to delete.
          */
         where: DM_TinhTrangDiHocTapWhereUniqueInput
@@ -322932,6 +323044,29 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * DM_TinhTrangDiHocTap.quaTrinhCuDiDaoTao
+     */
+    export type DM_TinhTrangDiHocTap$quaTrinhCuDiDaoTaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the QuaTrinhCuDiDaoTao
+         */
+        select?: QuaTrinhCuDiDaoTaoSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the QuaTrinhCuDiDaoTao
+         */
+        omit?: QuaTrinhCuDiDaoTaoOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: QuaTrinhCuDiDaoTaoInclude<ExtArgs> | null
+        where?: QuaTrinhCuDiDaoTaoWhereInput
+        orderBy?: QuaTrinhCuDiDaoTaoOrderByWithRelationInput | QuaTrinhCuDiDaoTaoOrderByWithRelationInput[]
+        cursor?: QuaTrinhCuDiDaoTaoWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: QuaTrinhCuDiDaoTaoScalarFieldEnum | QuaTrinhCuDiDaoTaoScalarFieldEnum[]
+    };
+    /**
      * DM_TinhTrangDiHocTap without action
      */
     export type DM_TinhTrangDiHocTapDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -322943,6 +323078,10 @@ export namespace Prisma {
          * Omit specific fields from the DM_TinhTrangDiHocTap
          */
         omit?: DM_TinhTrangDiHocTapOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_TinhTrangDiHocTapInclude<ExtArgs> | null
     };
     /**
      * Model DM_NuocCuDiHocTap
@@ -337021,13 +337160,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
         chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
         loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
         chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
         loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
-        dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
-        dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     };
     export type QuaTrinhCongTacOrderByWithRelationInput = {
@@ -337049,13 +337184,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: SortOrderInput | SortOrder
         chucVuId?: SortOrderInput | SortOrder
         loaiHinhCongTacId?: SortOrderInput | SortOrder
-        dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
-        dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         chucVu?: DM_ChucVuOrderByWithRelationInput
         loaiHinhCongTac?: DM_LoaiHinhCongTacOrderByWithRelationInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacOrderByWithRelationInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacOrderByWithRelationInput
         userProfile?: UserProfileOrderByWithRelationInput
         _relevance?: QuaTrinhCongTacOrderByRelevanceInput
     };
@@ -337081,13 +337212,9 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
         chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
         loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
         chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
         loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
-        dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
-        dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     }, "id" | "code">;
     export type QuaTrinhCongTacOrderByWithAggregationInput = {
@@ -337109,8 +337236,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: SortOrderInput | SortOrder
         chucVuId?: SortOrderInput | SortOrder
         loaiHinhCongTacId?: SortOrderInput | SortOrder
-        dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
-        dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         _count?: QuaTrinhCongTacCountOrderByAggregateInput
         _max?: QuaTrinhCongTacMaxOrderByAggregateInput
@@ -337138,8 +337263,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
         chucVuId?: UuidNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
         loaiHinhCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
-        dM_TinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
-        dM_LoaiTinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
         userProfileId?: StringWithAggregatesFilter<"QuaTrinhCongTac"> | string
     };
     export type QuaTrinhCuDiCongTacWhereInput = {
@@ -337158,8 +337281,12 @@ export namespace Prisma {
         denThangNam?: DateTimeNullableFilter<"QuaTrinhCuDiCongTac"> | Date | string | null
         donVi?: StringFilter<"QuaTrinhCuDiCongTac"> | string
         chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
+        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
         chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
+        dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
+        dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     };
     export type QuaTrinhCuDiCongTacOrderByWithRelationInput = {
@@ -337175,8 +337302,12 @@ export namespace Prisma {
         denThangNam?: SortOrderInput | SortOrder
         donVi?: SortOrder
         chucVuId?: SortOrder
+        dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
+        dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         chucVu?: DM_ChucVuOrderByWithRelationInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacOrderByWithRelationInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacOrderByWithRelationInput
         userProfile?: UserProfileOrderByWithRelationInput
         _relevance?: QuaTrinhCuDiCongTacOrderByRelevanceInput
     };
@@ -337196,8 +337327,12 @@ export namespace Prisma {
         denThangNam?: DateTimeNullableFilter<"QuaTrinhCuDiCongTac"> | Date | string | null
         donVi?: StringFilter<"QuaTrinhCuDiCongTac"> | string
         chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
+        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
         chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
+        dM_TinhTrangCongTac?: XOR<DM_TinhTrangCongTacNullableScalarRelationFilter, DM_TinhTrangCongTacWhereInput> | null
+        dM_LoaiTinhTrangCongTac?: XOR<DM_LoaiTinhTrangCongTacNullableScalarRelationFilter, DM_LoaiTinhTrangCongTacWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     }, "id" | "code">;
     export type QuaTrinhCuDiCongTacOrderByWithAggregationInput = {
@@ -337213,6 +337348,8 @@ export namespace Prisma {
         denThangNam?: SortOrderInput | SortOrder
         donVi?: SortOrder
         chucVuId?: SortOrder
+        dM_TinhTrangCongTacId?: SortOrderInput | SortOrder
+        dM_LoaiTinhTrangCongTacId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         _count?: QuaTrinhCuDiCongTacCountOrderByAggregateInput
         _max?: QuaTrinhCuDiCongTacMaxOrderByAggregateInput
@@ -337234,6 +337371,8 @@ export namespace Prisma {
         denThangNam?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | Date | string | null
         donVi?: StringWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
         chucVuId?: UuidWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
+        dM_TinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
+        dM_LoaiTinhTrangCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string | null
         userProfileId?: StringWithAggregatesFilter<"QuaTrinhCuDiCongTac"> | string
     };
     export type QuaTrinhCuDiDaoTaoWhereInput = {
@@ -337254,8 +337393,10 @@ export namespace Prisma {
         denNgay?: DateTimeNullableFilter<"QuaTrinhCuDiDaoTao"> | Date | string | null
         vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+        dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
         loai?: XOR<DM_LoaiHinhDiHocTapScalarRelationFilter, DM_LoaiHinhDiHocTapWhereInput>
+        dM_TinhTrangDiHocTap?: XOR<DM_TinhTrangDiHocTapNullableScalarRelationFilter, DM_TinhTrangDiHocTapWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     };
     export type QuaTrinhCuDiDaoTaoOrderByWithRelationInput = {
@@ -337273,8 +337414,10 @@ export namespace Prisma {
         denNgay?: SortOrderInput | SortOrder
         vanBang?: SortOrderInput | SortOrder
         loaiId?: SortOrder
+        dM_TinhTrangDiHocTapId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         loai?: DM_LoaiHinhDiHocTapOrderByWithRelationInput
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapOrderByWithRelationInput
         userProfile?: UserProfileOrderByWithRelationInput
         _relevance?: QuaTrinhCuDiDaoTaoOrderByRelevanceInput
     };
@@ -337296,8 +337439,10 @@ export namespace Prisma {
         denNgay?: DateTimeNullableFilter<"QuaTrinhCuDiDaoTao"> | Date | string | null
         vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+        dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
         loai?: XOR<DM_LoaiHinhDiHocTapScalarRelationFilter, DM_LoaiHinhDiHocTapWhereInput>
+        dM_TinhTrangDiHocTap?: XOR<DM_TinhTrangDiHocTapNullableScalarRelationFilter, DM_TinhTrangDiHocTapWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     }, "id" | "code">;
     export type QuaTrinhCuDiDaoTaoOrderByWithAggregationInput = {
@@ -337315,6 +337460,7 @@ export namespace Prisma {
         denNgay?: SortOrderInput | SortOrder
         vanBang?: SortOrderInput | SortOrder
         loaiId?: SortOrder
+        dM_TinhTrangDiHocTapId?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         _count?: QuaTrinhCuDiDaoTaoCountOrderByAggregateInput
         _max?: QuaTrinhCuDiDaoTaoMaxOrderByAggregateInput
@@ -337338,6 +337484,7 @@ export namespace Prisma {
         denNgay?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | Date | string | null
         vanBang?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string | null
         loaiId?: StringWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string
+        dM_TinhTrangDiHocTapId?: StringNullableWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string | null
         userProfileId?: StringWithAggregatesFilter<"QuaTrinhCuDiDaoTao"> | string
     };
     export type KhenThuongWhereInput = {
@@ -360178,7 +360325,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"DM_TinhTrangCongTac"> | Date | string
         createdBy?: UuidNullableFilter<"DM_TinhTrangCongTac"> | string | null
         name?: StringFilter<"DM_TinhTrangCongTac"> | string
-        quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     };
     export type DM_TinhTrangCongTacOrderByWithRelationInput = {
         id?: SortOrder
@@ -360190,7 +360337,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        quaTrinhCongTac?: QuaTrinhCongTacOrderByRelationAggregateInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
         _relevance?: DM_TinhTrangCongTacOrderByRelevanceInput
     };
     export type DM_TinhTrangCongTacWhereUniqueInput = Prisma.AtLeast<{
@@ -360206,7 +360353,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DM_TinhTrangCongTac"> | Date | string
         updatedAt?: DateTimeFilter<"DM_TinhTrangCongTac"> | Date | string
         createdBy?: UuidNullableFilter<"DM_TinhTrangCongTac"> | string | null
-        quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     }, "id" | "code" | "name">;
     export type DM_TinhTrangCongTacOrderByWithAggregationInput = {
         id?: SortOrder
@@ -360249,7 +360396,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"DM_LoaiTinhTrangCongTac"> | Date | string
         createdBy?: UuidNullableFilter<"DM_LoaiTinhTrangCongTac"> | string | null
         name?: StringFilter<"DM_LoaiTinhTrangCongTac"> | string
-        quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     };
     export type DM_LoaiTinhTrangCongTacOrderByWithRelationInput = {
         id?: SortOrder
@@ -360261,7 +360408,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        quaTrinhCongTac?: QuaTrinhCongTacOrderByRelationAggregateInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
         _relevance?: DM_LoaiTinhTrangCongTacOrderByRelevanceInput
     };
     export type DM_LoaiTinhTrangCongTacWhereUniqueInput = Prisma.AtLeast<{
@@ -360277,7 +360424,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DM_LoaiTinhTrangCongTac"> | Date | string
         updatedAt?: DateTimeFilter<"DM_LoaiTinhTrangCongTac"> | Date | string
         createdBy?: UuidNullableFilter<"DM_LoaiTinhTrangCongTac"> | string | null
-        quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     }, "id" | "code" | "name">;
     export type DM_LoaiTinhTrangCongTacOrderByWithAggregationInput = {
         id?: SortOrder
@@ -360391,6 +360538,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"DM_TinhTrangDiHocTap"> | Date | string
         createdBy?: UuidNullableFilter<"DM_TinhTrangDiHocTap"> | string | null
         name?: StringFilter<"DM_TinhTrangDiHocTap"> | string
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoListRelationFilter
     };
     export type DM_TinhTrangDiHocTapOrderByWithRelationInput = {
         id?: SortOrder
@@ -360402,6 +360550,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoOrderByRelationAggregateInput
         _relevance?: DM_TinhTrangDiHocTapOrderByRelevanceInput
     };
     export type DM_TinhTrangDiHocTapWhereUniqueInput = Prisma.AtLeast<{
@@ -360417,6 +360566,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"DM_TinhTrangDiHocTap"> | Date | string
         updatedAt?: DateTimeFilter<"DM_TinhTrangDiHocTap"> | Date | string
         createdBy?: UuidNullableFilter<"DM_TinhTrangDiHocTap"> | string | null
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoListRelationFilter
     }, "id" | "code" | "name">;
     export type DM_TinhTrangDiHocTapOrderByWithAggregationInput = {
         id?: SortOrder
@@ -363964,8 +364114,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
         loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
     };
     export type QuaTrinhCongTacUncheckedCreateInput = {
@@ -363987,8 +364135,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCongTacUpdateInput = {
@@ -364010,8 +364156,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
         loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
     };
     export type QuaTrinhCongTacUncheckedUpdateInput = {
@@ -364033,8 +364177,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCongTacCreateManyInput = {
@@ -364056,8 +364198,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCongTacUpdateManyMutationInput = {
@@ -364097,8 +364237,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiCongTacCreateInput = {
@@ -364114,6 +364252,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     };
     export type QuaTrinhCuDiCongTacUncheckedCreateInput = {
@@ -364129,6 +364269,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVuId: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiCongTacUpdateInput = {
@@ -364144,6 +364286,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     };
     export type QuaTrinhCuDiCongTacUncheckedUpdateInput = {
@@ -364159,6 +364303,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVuId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiCongTacCreateManyInput = {
@@ -364174,6 +364320,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVuId: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiCongTacUpdateManyMutationInput = {
@@ -364202,6 +364350,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVuId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiDaoTaoCreateInput = {
@@ -364219,6 +364369,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loai: DM_LoaiHinhDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedCreateInput = {
@@ -364236,6 +364387,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loaiId: string
+        dM_TinhTrangDiHocTapId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiDaoTaoUpdateInput = {
@@ -364253,6 +364405,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loai?: DM_LoaiHinhDiHocTapUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapUpdateOneWithoutQuaTrinhCuDiDaoTaoNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedUpdateInput = {
@@ -364270,6 +364423,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loaiId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiDaoTaoCreateManyInput = {
@@ -364287,6 +364441,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loaiId: string
+        dM_TinhTrangDiHocTapId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiDaoTaoUpdateManyMutationInput = {
@@ -364319,6 +364474,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loaiId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type KhenThuongCreateInput = {
@@ -390228,7 +390384,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutDM_TinhTrangCongTacInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_TinhTrangCongTacInput
     };
     export type DM_TinhTrangCongTacUncheckedCreateInput = {
         id?: string
@@ -390240,7 +390396,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutDM_TinhTrangCongTacInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_TinhTrangCongTacInput
     };
     export type DM_TinhTrangCongTacUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390252,7 +390408,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutDM_TinhTrangCongTacNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutDM_TinhTrangCongTacNestedInput
     };
     export type DM_TinhTrangCongTacUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390264,7 +390420,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacNestedInput
     };
     export type DM_TinhTrangCongTacCreateManyInput = {
         id?: string
@@ -390309,7 +390465,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput
     };
     export type DM_LoaiTinhTrangCongTacUncheckedCreateInput = {
         id?: string
@@ -390321,7 +390477,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput
     };
     export type DM_LoaiTinhTrangCongTacUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390333,7 +390489,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput
     };
     export type DM_LoaiTinhTrangCongTacUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390345,7 +390501,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput
     };
     export type DM_LoaiTinhTrangCongTacCreateManyInput = {
         id?: string
@@ -390471,6 +390627,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutDM_TinhTrangDiHocTapInput
     };
     export type DM_TinhTrangDiHocTapUncheckedCreateInput = {
         id?: string
@@ -390482,6 +390639,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutDM_TinhTrangDiHocTapInput
     };
     export type DM_TinhTrangDiHocTapUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390493,6 +390651,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutDM_TinhTrangDiHocTapNestedInput
     };
     export type DM_TinhTrangDiHocTapUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -390504,6 +390663,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutDM_TinhTrangDiHocTapNestedInput
     };
     export type DM_TinhTrangDiHocTapCreateManyInput = {
         id?: string
@@ -393706,14 +393866,6 @@ export namespace Prisma {
         is?: DM_LoaiHinhCongTacWhereInput | null
         isNot?: DM_LoaiHinhCongTacWhereInput | null
     };
-    export type DM_TinhTrangCongTacNullableScalarRelationFilter = {
-        is?: DM_TinhTrangCongTacWhereInput | null
-        isNot?: DM_TinhTrangCongTacWhereInput | null
-    };
-    export type DM_LoaiTinhTrangCongTacNullableScalarRelationFilter = {
-        is?: DM_LoaiTinhTrangCongTacWhereInput | null
-        isNot?: DM_LoaiTinhTrangCongTacWhereInput | null
-    };
     export type QuaTrinhCongTacOrderByRelevanceInput = {
         fields: QuaTrinhCongTacOrderByRelevanceFieldEnum | QuaTrinhCongTacOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -393738,8 +393890,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: SortOrder
         chucVuId?: SortOrder
         loaiHinhCongTacId?: SortOrder
-        dM_TinhTrangCongTacId?: SortOrder
-        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCongTacMaxOrderByAggregateInput = {
@@ -393761,8 +393911,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: SortOrder
         chucVuId?: SortOrder
         loaiHinhCongTacId?: SortOrder
-        dM_TinhTrangCongTacId?: SortOrder
-        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCongTacMinOrderByAggregateInput = {
@@ -393784,13 +393932,19 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: SortOrder
         chucVuId?: SortOrder
         loaiHinhCongTacId?: SortOrder
-        dM_TinhTrangCongTacId?: SortOrder
-        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type DM_ChucVuScalarRelationFilter = {
         is?: DM_ChucVuWhereInput
         isNot?: DM_ChucVuWhereInput
+    };
+    export type DM_TinhTrangCongTacNullableScalarRelationFilter = {
+        is?: DM_TinhTrangCongTacWhereInput | null
+        isNot?: DM_TinhTrangCongTacWhereInput | null
+    };
+    export type DM_LoaiTinhTrangCongTacNullableScalarRelationFilter = {
+        is?: DM_LoaiTinhTrangCongTacWhereInput | null
+        isNot?: DM_LoaiTinhTrangCongTacWhereInput | null
     };
     export type QuaTrinhCuDiCongTacOrderByRelevanceInput = {
         fields: QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum | QuaTrinhCuDiCongTacOrderByRelevanceFieldEnum[]
@@ -393810,6 +393964,8 @@ export namespace Prisma {
         denThangNam?: SortOrder
         donVi?: SortOrder
         chucVuId?: SortOrder
+        dM_TinhTrangCongTacId?: SortOrder
+        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCuDiCongTacMaxOrderByAggregateInput = {
@@ -393825,6 +393981,8 @@ export namespace Prisma {
         denThangNam?: SortOrder
         donVi?: SortOrder
         chucVuId?: SortOrder
+        dM_TinhTrangCongTacId?: SortOrder
+        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCuDiCongTacMinOrderByAggregateInput = {
@@ -393840,11 +393998,17 @@ export namespace Prisma {
         denThangNam?: SortOrder
         donVi?: SortOrder
         chucVuId?: SortOrder
+        dM_TinhTrangCongTacId?: SortOrder
+        dM_LoaiTinhTrangCongTacId?: SortOrder
         userProfileId?: SortOrder
     };
     export type DM_LoaiHinhDiHocTapScalarRelationFilter = {
         is?: DM_LoaiHinhDiHocTapWhereInput
         isNot?: DM_LoaiHinhDiHocTapWhereInput
+    };
+    export type DM_TinhTrangDiHocTapNullableScalarRelationFilter = {
+        is?: DM_TinhTrangDiHocTapWhereInput | null
+        isNot?: DM_TinhTrangDiHocTapWhereInput | null
     };
     export type QuaTrinhCuDiDaoTaoOrderByRelevanceInput = {
         fields: QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum | QuaTrinhCuDiDaoTaoOrderByRelevanceFieldEnum[]
@@ -393866,6 +394030,7 @@ export namespace Prisma {
         denNgay?: SortOrder
         vanBang?: SortOrder
         loaiId?: SortOrder
+        dM_TinhTrangDiHocTapId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCuDiDaoTaoMaxOrderByAggregateInput = {
@@ -393883,6 +394048,7 @@ export namespace Prisma {
         denNgay?: SortOrder
         vanBang?: SortOrder
         loaiId?: SortOrder
+        dM_TinhTrangDiHocTapId?: SortOrder
         userProfileId?: SortOrder
     };
     export type QuaTrinhCuDiDaoTaoMinOrderByAggregateInput = {
@@ -393900,6 +394066,7 @@ export namespace Prisma {
         denNgay?: SortOrder
         vanBang?: SortOrder
         loaiId?: SortOrder
+        dM_TinhTrangDiHocTapId?: SortOrder
         userProfileId?: SortOrder
     };
     export type KhenThuongOrderByRelevanceInput = {
@@ -412532,16 +412699,6 @@ export namespace Prisma {
         connectOrCreate?: DM_LoaiHinhCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
         connect?: DM_LoaiHinhCongTacWhereUniqueInput
     };
-    export type DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput = {
-        create?: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        connectOrCreate?: DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
-        connect?: DM_TinhTrangCongTacWhereUniqueInput
-    };
-    export type DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput = {
-        create?: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        connectOrCreate?: DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
-        connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
-    };
     export type UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhCongTacInput
@@ -412565,24 +412722,6 @@ export namespace Prisma {
         connect?: DM_LoaiHinhCongTacWhereUniqueInput
         update?: XOR<XOR<DM_LoaiHinhCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_LoaiHinhCongTacUpdateWithoutQuaTrinhCongTacInput>, DM_LoaiHinhCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
     };
-    export type DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput = {
-        create?: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        connectOrCreate?: DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
-        upsert?: DM_TinhTrangCongTacUpsertWithoutQuaTrinhCongTacInput
-        disconnect?: DM_TinhTrangCongTacWhereInput | boolean
-        delete?: DM_TinhTrangCongTacWhereInput | boolean
-        connect?: DM_TinhTrangCongTacWhereUniqueInput
-        update?: XOR<XOR<DM_TinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput>, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-    };
-    export type DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput = {
-        create?: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        connectOrCreate?: DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
-        upsert?: DM_LoaiTinhTrangCongTacUpsertWithoutQuaTrinhCongTacInput
-        disconnect?: DM_LoaiTinhTrangCongTacWhereInput | boolean
-        delete?: DM_LoaiTinhTrangCongTacWhereInput | boolean
-        connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
-        update?: XOR<XOR<DM_LoaiTinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput>, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-    };
     export type UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhCongTacInput
@@ -412594,6 +412733,16 @@ export namespace Prisma {
         create?: XOR<DM_ChucVuCreateWithoutQuaTrinhCuDiCongTacInput, DM_ChucVuUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
         connectOrCreate?: DM_ChucVuCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
         connect?: DM_ChucVuWhereUniqueInput
+    };
+    export type DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput = {
+        create?: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        connectOrCreate?: DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+        connect?: DM_TinhTrangCongTacWhereUniqueInput
+    };
+    export type DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput = {
+        create?: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        connectOrCreate?: DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+        connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
     };
     export type UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCuDiCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
@@ -412607,6 +412756,24 @@ export namespace Prisma {
         connect?: DM_ChucVuWhereUniqueInput
         update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput, DM_ChucVuUpdateWithoutQuaTrinhCuDiCongTacInput>, DM_ChucVuUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
     };
+    export type DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput = {
+        create?: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        connectOrCreate?: DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+        upsert?: DM_TinhTrangCongTacUpsertWithoutQuaTrinhCuDiCongTacInput
+        disconnect?: DM_TinhTrangCongTacWhereInput | boolean
+        delete?: DM_TinhTrangCongTacWhereInput | boolean
+        connect?: DM_TinhTrangCongTacWhereUniqueInput
+        update?: XOR<XOR<DM_TinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput>, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+    };
+    export type DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput = {
+        create?: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        connectOrCreate?: DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
+        upsert?: DM_LoaiTinhTrangCongTacUpsertWithoutQuaTrinhCuDiCongTacInput
+        disconnect?: DM_LoaiTinhTrangCongTacWhereInput | boolean
+        delete?: DM_LoaiTinhTrangCongTacWhereInput | boolean
+        connect?: DM_LoaiTinhTrangCongTacWhereUniqueInput
+        update?: XOR<XOR<DM_LoaiTinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput>, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+    };
     export type UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCuDiCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhCuDiCongTacInput
@@ -412619,6 +412786,11 @@ export namespace Prisma {
         connectOrCreate?: DM_LoaiHinhDiHocTapCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput
         connect?: DM_LoaiHinhDiHocTapWhereUniqueInput
     };
+    export type DM_TinhTrangDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput = {
+        create?: XOR<DM_TinhTrangDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
+        connectOrCreate?: DM_TinhTrangDiHocTapCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput
+        connect?: DM_TinhTrangDiHocTapWhereUniqueInput
+    };
     export type UserProfileCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCuDiDaoTaoInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput
@@ -412630,6 +412802,15 @@ export namespace Prisma {
         upsert?: DM_LoaiHinhDiHocTapUpsertWithoutQuaTrinhCuDiDaoTaoInput
         connect?: DM_LoaiHinhDiHocTapWhereUniqueInput
         update?: XOR<XOR<DM_LoaiHinhDiHocTapUpdateToOneWithWhereWithoutQuaTrinhCuDiDaoTaoInput, DM_LoaiHinhDiHocTapUpdateWithoutQuaTrinhCuDiDaoTaoInput>, DM_LoaiHinhDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput>
+    };
+    export type DM_TinhTrangDiHocTapUpdateOneWithoutQuaTrinhCuDiDaoTaoNestedInput = {
+        create?: XOR<DM_TinhTrangDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
+        connectOrCreate?: DM_TinhTrangDiHocTapCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput
+        upsert?: DM_TinhTrangDiHocTapUpsertWithoutQuaTrinhCuDiDaoTaoInput
+        disconnect?: DM_TinhTrangDiHocTapWhereInput | boolean
+        delete?: DM_TinhTrangDiHocTapWhereInput | boolean
+        connect?: DM_TinhTrangDiHocTapWhereUniqueInput
+        update?: XOR<XOR<DM_TinhTrangDiHocTapUpdateToOneWithWhereWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUpdateWithoutQuaTrinhCuDiDaoTaoInput>, DM_TinhTrangDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput>
     };
     export type UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput = {
         create?: XOR<UserProfileCreateWithoutQuaTrinhCuDiDaoTaoInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
@@ -432108,81 +432289,81 @@ export namespace Prisma {
         updateMany?: QuaTrinhCongTacUpdateManyWithWhereWithoutLoaiHinhCongTacInput | QuaTrinhCongTacUpdateManyWithWhereWithoutLoaiHinhCongTacInput[]
         deleteMany?: QuaTrinhCongTacScalarWhereInput | QuaTrinhCongTacScalarWhereInput[]
     };
-    export type QuaTrinhCongTacCreateNestedManyWithoutDM_TinhTrangCongTacInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
+    export type QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_TinhTrangCongTacInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
     };
-    export type QuaTrinhCongTacUncheckedCreateNestedManyWithoutDM_TinhTrangCongTacInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
+    export type QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_TinhTrangCongTacInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
     };
-    export type QuaTrinhCongTacUpdateManyWithoutDM_TinhTrangCongTacNestedInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
-        upsert?: QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
-        set?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        disconnect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        delete?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        update?: QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
-        updateMany?: QuaTrinhCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput[]
-        deleteMany?: QuaTrinhCongTacScalarWhereInput | QuaTrinhCongTacScalarWhereInput[]
+    export type QuaTrinhCuDiCongTacUpdateManyWithoutDM_TinhTrangCongTacNestedInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
+        upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
+        set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
+        updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput[]
+        deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
     };
-    export type QuaTrinhCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacNestedInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
-        upsert?: QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
-        set?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        disconnect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        delete?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        update?: QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
-        updateMany?: QuaTrinhCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput | QuaTrinhCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput[]
-        deleteMany?: QuaTrinhCongTacScalarWhereInput | QuaTrinhCongTacScalarWhereInput[]
+    export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacNestedInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput[]
+        upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInputEnvelope
+        set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput[]
+        updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput[]
+        deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
     };
-    export type QuaTrinhCongTacCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
+    export type QuaTrinhCuDiCongTacCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
     };
-    export type QuaTrinhCongTacUncheckedCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
+    export type QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutDM_LoaiTinhTrangCongTacInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
     };
-    export type QuaTrinhCongTacUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
-        upsert?: QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
-        set?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        disconnect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        delete?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        update?: QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
-        updateMany?: QuaTrinhCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput[]
-        deleteMany?: QuaTrinhCongTacScalarWhereInput | QuaTrinhCongTacScalarWhereInput[]
+    export type QuaTrinhCuDiCongTacUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
+        upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
+        set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
+        updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput[]
+        deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
     };
-    export type QuaTrinhCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput = {
-        create?: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
-        connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
-        upsert?: QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
-        createMany?: QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
-        set?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        disconnect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        delete?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        connect?: QuaTrinhCongTacWhereUniqueInput | QuaTrinhCongTacWhereUniqueInput[]
-        update?: QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
-        updateMany?: QuaTrinhCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput[]
-        deleteMany?: QuaTrinhCongTacScalarWhereInput | QuaTrinhCongTacScalarWhereInput[]
+    export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacNestedInput = {
+        create?: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput> | QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput[] | QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput[]
+        connectOrCreate?: QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput[]
+        upsert?: QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
+        createMany?: QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope
+        set?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        delete?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        connect?: QuaTrinhCuDiCongTacWhereUniqueInput | QuaTrinhCuDiCongTacWhereUniqueInput[]
+        update?: QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput[]
+        updateMany?: QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput[]
+        deleteMany?: QuaTrinhCuDiCongTacScalarWhereInput | QuaTrinhCuDiCongTacScalarWhereInput[]
     };
     export type QuaTrinhCuDiDaoTaoCreateNestedManyWithoutLoaiInput = {
         create?: XOR<QuaTrinhCuDiDaoTaoCreateWithoutLoaiInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutLoaiInput> | QuaTrinhCuDiDaoTaoCreateWithoutLoaiInput[] | QuaTrinhCuDiDaoTaoUncheckedCreateWithoutLoaiInput[]
@@ -432220,6 +432401,44 @@ export namespace Prisma {
         connect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
         update?: QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutLoaiInput | QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutLoaiInput[]
         updateMany?: QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutLoaiInput | QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutLoaiInput[]
+        deleteMany?: QuaTrinhCuDiDaoTaoScalarWhereInput | QuaTrinhCuDiDaoTaoScalarWhereInput[]
+    };
+    export type QuaTrinhCuDiDaoTaoCreateNestedManyWithoutDM_TinhTrangDiHocTapInput = {
+        create?: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput> | QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput[] | QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput[]
+        connectOrCreate?: QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput[]
+        createMany?: QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInputEnvelope
+        connect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+    };
+    export type QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutDM_TinhTrangDiHocTapInput = {
+        create?: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput> | QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput[] | QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput[]
+        connectOrCreate?: QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput[]
+        createMany?: QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInputEnvelope
+        connect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+    };
+    export type QuaTrinhCuDiDaoTaoUpdateManyWithoutDM_TinhTrangDiHocTapNestedInput = {
+        create?: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput> | QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput[] | QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput[]
+        connectOrCreate?: QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput[]
+        upsert?: QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput[]
+        createMany?: QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInputEnvelope
+        set?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        delete?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        connect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        update?: QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput[]
+        updateMany?: QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput[]
+        deleteMany?: QuaTrinhCuDiDaoTaoScalarWhereInput | QuaTrinhCuDiDaoTaoScalarWhereInput[]
+    };
+    export type QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutDM_TinhTrangDiHocTapNestedInput = {
+        create?: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput> | QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput[] | QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput[]
+        connectOrCreate?: QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput[]
+        upsert?: QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput[]
+        createMany?: QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInputEnvelope
+        set?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        disconnect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        delete?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        connect?: QuaTrinhCuDiDaoTaoWhereUniqueInput | QuaTrinhCuDiDaoTaoWhereUniqueInput[]
+        update?: QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput[]
+        updateMany?: QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput[]
         deleteMany?: QuaTrinhCuDiDaoTaoScalarWhereInput | QuaTrinhCuDiDaoTaoScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutDM_ChucDanhCMNVGiangVienInput = {
@@ -436726,8 +436945,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
         loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
     };
     export type QuaTrinhCongTacUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -436748,8 +436965,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
     };
     export type QuaTrinhCongTacCreateOrConnectWithoutUserProfileInput = {
         where: QuaTrinhCongTacWhereUniqueInput
@@ -436772,6 +436987,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     };
     export type QuaTrinhCuDiCongTacUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -436786,6 +437003,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVuId: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
     };
     export type QuaTrinhCuDiCongTacCreateOrConnectWithoutUserProfileInput = {
         where: QuaTrinhCuDiCongTacWhereUniqueInput
@@ -436810,6 +437029,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loai: DM_LoaiHinhDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -436826,6 +437046,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loaiId: string
+        dM_TinhTrangDiHocTapId?: string | null
     };
     export type QuaTrinhCuDiDaoTaoCreateOrConnectWithoutUserProfileInput = {
         where: QuaTrinhCuDiDaoTaoWhereUniqueInput
@@ -440499,8 +440720,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
         chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
         loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
-        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
     };
     export type QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -440532,6 +440751,8 @@ export namespace Prisma {
         denThangNam?: DateTimeNullableFilter<"QuaTrinhCuDiCongTac"> | Date | string | null
         donVi?: StringFilter<"QuaTrinhCuDiCongTac"> | string
         chucVuId?: UuidFilter<"QuaTrinhCuDiCongTac"> | string
+        dM_TinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
+        dM_LoaiTinhTrangCongTacId?: StringNullableFilter<"QuaTrinhCuDiCongTac"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiCongTac"> | string
     };
     export type QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -440565,6 +440786,7 @@ export namespace Prisma {
         denNgay?: DateTimeNullableFilter<"QuaTrinhCuDiDaoTao"> | Date | string | null
         vanBang?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         loaiId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
+        dM_TinhTrangDiHocTapId?: StringNullableFilter<"QuaTrinhCuDiDaoTao"> | string | null
         userProfileId?: StringFilter<"QuaTrinhCuDiDaoTao"> | string
     };
     export type KhenThuongUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -448820,58 +449042,6 @@ export namespace Prisma {
         where: DM_LoaiHinhCongTacWhereUniqueInput
         create: XOR<DM_LoaiHinhCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiHinhCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
     };
-    export type DM_TinhTrangCongTacCreateWithoutQuaTrinhCongTacInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput = {
-        where: DM_TinhTrangCongTacWhereUniqueInput
-        create: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-    };
-    export type DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCongTacInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        name: string
-    };
-    export type DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCongTacInput = {
-        where: DM_LoaiTinhTrangCongTacWhereUniqueInput
-        create: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-    };
     export type UserProfileCreateWithoutQuaTrinhCongTacInput = {
         id?: string
         code?: string | null
@@ -449296,68 +449466,6 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
     };
-    export type DM_TinhTrangCongTacUpsertWithoutQuaTrinhCongTacInput = {
-        update: XOR<DM_TinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-        create: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        where?: DM_TinhTrangCongTacWhereInput
-    };
-    export type DM_TinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput = {
-        where?: DM_TinhTrangCongTacWhereInput
-        data: XOR<DM_TinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-    };
-    export type DM_TinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
-    export type DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
-    export type DM_LoaiTinhTrangCongTacUpsertWithoutQuaTrinhCongTacInput = {
-        update: XOR<DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-        create: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
-        where?: DM_LoaiTinhTrangCongTacWhereInput
-    };
-    export type DM_LoaiTinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput = {
-        where?: DM_LoaiTinhTrangCongTacWhereInput
-        data: XOR<DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
-    };
-    export type DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCongTacInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
-    export type DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-    };
     export type UserProfileUpsertWithoutQuaTrinhCongTacInput = {
         update: XOR<UserProfileUpdateWithoutQuaTrinhCongTacInput, UserProfileUncheckedUpdateWithoutQuaTrinhCongTacInput>
         create: XOR<UserProfileCreateWithoutQuaTrinhCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput>
@@ -449750,6 +449858,58 @@ export namespace Prisma {
     export type DM_ChucVuCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
         where: DM_ChucVuWhereUniqueInput
         create: XOR<DM_ChucVuCreateWithoutQuaTrinhCuDiCongTacInput, DM_ChucVuUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+    };
+    export type DM_TinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_TinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
+        where: DM_TinhTrangCongTacWhereUniqueInput
+        create: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+    };
+    export type DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_LoaiTinhTrangCongTacCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
+        where: DM_LoaiTinhTrangCongTacWhereUniqueInput
+        create: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
     };
     export type UserProfileCreateWithoutQuaTrinhCuDiCongTacInput = {
         id?: string
@@ -450144,6 +450304,68 @@ export namespace Prisma {
         userProfile?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
         quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     };
+    export type DM_TinhTrangCongTacUpsertWithoutQuaTrinhCuDiCongTacInput = {
+        update: XOR<DM_TinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+        create: XOR<DM_TinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        where?: DM_TinhTrangCongTacWhereInput
+    };
+    export type DM_TinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput = {
+        where?: DM_TinhTrangCongTacWhereInput
+        data: XOR<DM_TinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput, DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+    };
+    export type DM_TinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_TinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_LoaiTinhTrangCongTacUpsertWithoutQuaTrinhCuDiCongTacInput = {
+        update: XOR<DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+        create: XOR<DM_LoaiTinhTrangCongTacCreateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
+        where?: DM_LoaiTinhTrangCongTacWhereInput
+    };
+    export type DM_LoaiTinhTrangCongTacUpdateToOneWithWhereWithoutQuaTrinhCuDiCongTacInput = {
+        where?: DM_LoaiTinhTrangCongTacWhereInput
+        data: XOR<DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput, DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
+    };
+    export type DM_LoaiTinhTrangCongTacUpdateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_LoaiTinhTrangCongTacUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
     export type UserProfileUpsertWithoutQuaTrinhCuDiCongTacInput = {
         update: XOR<UserProfileUpdateWithoutQuaTrinhCuDiCongTacInput, UserProfileUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput>
         create: XOR<UserProfileCreateWithoutQuaTrinhCuDiCongTacInput, UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput>
@@ -450519,6 +450741,32 @@ export namespace Prisma {
         where: DM_LoaiHinhDiHocTapWhereUniqueInput
         create: XOR<DM_LoaiHinhDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput, DM_LoaiHinhDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
     };
+    export type DM_TinhTrangDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_TinhTrangDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+    };
+    export type DM_TinhTrangDiHocTapCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput = {
+        where: DM_TinhTrangDiHocTapWhereUniqueInput
+        create: XOR<DM_TinhTrangDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
+    };
     export type UserProfileCreateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: string
         code?: string | null
@@ -450884,6 +451132,37 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
     };
     export type DM_LoaiHinhDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_TinhTrangDiHocTapUpsertWithoutQuaTrinhCuDiDaoTaoInput = {
+        update: XOR<DM_TinhTrangDiHocTapUpdateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput>
+        create: XOR<DM_TinhTrangDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput>
+        where?: DM_TinhTrangDiHocTapWhereInput
+    };
+    export type DM_TinhTrangDiHocTapUpdateToOneWithWhereWithoutQuaTrinhCuDiDaoTaoInput = {
+        where?: DM_TinhTrangDiHocTapWhereInput
+        data: XOR<DM_TinhTrangDiHocTapUpdateWithoutQuaTrinhCuDiDaoTaoInput, DM_TinhTrangDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput>
+    };
+    export type DM_TinhTrangDiHocTapUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type DM_TinhTrangDiHocTapUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -466757,8 +467036,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
     };
     export type QuaTrinhCongTacUncheckedCreateWithoutChucVuInput = {
@@ -466779,8 +467056,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCongTacCreateOrConnectWithoutChucVuInput = {
@@ -466803,6 +467078,8 @@ export namespace Prisma {
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
         donVi: string
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     };
     export type QuaTrinhCuDiCongTacUncheckedCreateWithoutChucVuInput = {
@@ -466817,6 +467094,8 @@ export namespace Prisma {
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
         donVi: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiCongTacCreateOrConnectWithoutChucVuInput = {
@@ -550006,8 +550285,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
     };
     export type QuaTrinhCongTacUncheckedCreateWithoutLoaiHinhCongTacInput = {
@@ -550028,8 +550305,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCongTacCreateOrConnectWithoutLoaiHinhCongTacInput = {
@@ -550053,7 +550328,7 @@ export namespace Prisma {
         where: QuaTrinhCongTacScalarWhereInput
         data: XOR<QuaTrinhCongTacUpdateManyMutationInput, QuaTrinhCongTacUncheckedUpdateManyWithoutLoaiHinhCongTacInput>
     };
-    export type QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -550064,18 +550339,12 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
-        loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
+        donVi: string
+        chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     };
-    export type QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -550086,39 +550355,33 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVuId?: string | null
-        loaiHinhCongTacId?: string | null
+        donVi: string
+        chucVuId: string
         dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
-    export type QuaTrinhCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        create: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_TinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInputEnvelope = {
-        data: QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInput | QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInput[]
+    export type QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInputEnvelope = {
+        data: QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInput[]
         skipDuplicates?: boolean
     };
-    export type QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        update: XOR<QuaTrinhCongTacUpdateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput>
-        create: XOR<QuaTrinhCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_TinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        update: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput>
+        create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_TinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        data: XOR<QuaTrinhCongTacUpdateWithoutDM_TinhTrangCongTacInput, QuaTrinhCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_TinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        data: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_TinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput = {
-        where: QuaTrinhCongTacScalarWhereInput
-        data: XOR<QuaTrinhCongTacUpdateManyMutationInput, QuaTrinhCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_TinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacScalarWhereInput
+        data: XOR<QuaTrinhCuDiCongTacUpdateManyMutationInput, QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -550129,18 +550392,12 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
-        loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
-        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
+        donVi: string
+        chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiCongTacInput
     };
-    export type QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -550151,37 +550408,31 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVuId?: string | null
-        loaiHinhCongTacId?: string | null
+        donVi: string
+        chucVuId: string
         dM_TinhTrangCongTacId?: string | null
         userProfileId: string
     };
-    export type QuaTrinhCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        create: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacCreateOrConnectWithoutDM_LoaiTinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope = {
-        data: QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInput | QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInput[]
+    export type QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInputEnvelope = {
+        data: QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInput | QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInput[]
         skipDuplicates?: boolean
     };
-    export type QuaTrinhCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        update: XOR<QuaTrinhCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput>
-        create: XOR<QuaTrinhCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpsertWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        update: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput>
+        create: XOR<QuaTrinhCuDiCongTacCreateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedCreateWithoutDM_LoaiTinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput = {
-        where: QuaTrinhCongTacWhereUniqueInput
-        data: XOR<QuaTrinhCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpdateWithWhereUniqueWithoutDM_LoaiTinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacWhereUniqueInput
+        data: XOR<QuaTrinhCuDiCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput, QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput>
     };
-    export type QuaTrinhCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput = {
-        where: QuaTrinhCongTacScalarWhereInput
-        data: XOR<QuaTrinhCongTacUpdateManyMutationInput, QuaTrinhCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacInput>
+    export type QuaTrinhCuDiCongTacUpdateManyWithWhereWithoutDM_LoaiTinhTrangCongTacInput = {
+        where: QuaTrinhCuDiCongTacScalarWhereInput
+        data: XOR<QuaTrinhCuDiCongTacUpdateManyMutationInput, QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacInput>
     };
     export type QuaTrinhCuDiDaoTaoCreateWithoutLoaiInput = {
         id?: string
@@ -550197,6 +550448,7 @@ export namespace Prisma {
         tuNgay?: Date | string | null
         denNgay?: Date | string | null
         vanBang?: string | null
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
         userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedCreateWithoutLoaiInput = {
@@ -550213,6 +550465,7 @@ export namespace Prisma {
         tuNgay?: Date | string | null
         denNgay?: Date | string | null
         vanBang?: string | null
+        dM_TinhTrangDiHocTapId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiDaoTaoCreateOrConnectWithoutLoaiInput = {
@@ -550235,6 +550488,61 @@ export namespace Prisma {
     export type QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutLoaiInput = {
         where: QuaTrinhCuDiDaoTaoScalarWhereInput
         data: XOR<QuaTrinhCuDiDaoTaoUpdateManyMutationInput, QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutLoaiInput>
+    };
+    export type QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ten?: string | null
+        donViToChuc?: string | null
+        tuNgay?: Date | string | null
+        denNgay?: Date | string | null
+        vanBang?: string | null
+        loai: DM_LoaiHinhDiHocTapCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
+        userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCuDiDaoTaoInput
+    };
+    export type QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ten?: string | null
+        donViToChuc?: string | null
+        tuNgay?: Date | string | null
+        denNgay?: Date | string | null
+        vanBang?: string | null
+        loaiId: string
+        userProfileId: string
+    };
+    export type QuaTrinhCuDiDaoTaoCreateOrConnectWithoutDM_TinhTrangDiHocTapInput = {
+        where: QuaTrinhCuDiDaoTaoWhereUniqueInput
+        create: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput>
+    };
+    export type QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInputEnvelope = {
+        data: QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInput | QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInput[]
+        skipDuplicates?: boolean
+    };
+    export type QuaTrinhCuDiDaoTaoUpsertWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput = {
+        where: QuaTrinhCuDiDaoTaoWhereUniqueInput
+        update: XOR<QuaTrinhCuDiDaoTaoUpdateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedUpdateWithoutDM_TinhTrangDiHocTapInput>
+        create: XOR<QuaTrinhCuDiDaoTaoCreateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedCreateWithoutDM_TinhTrangDiHocTapInput>
+    };
+    export type QuaTrinhCuDiDaoTaoUpdateWithWhereUniqueWithoutDM_TinhTrangDiHocTapInput = {
+        where: QuaTrinhCuDiDaoTaoWhereUniqueInput
+        data: XOR<QuaTrinhCuDiDaoTaoUpdateWithoutDM_TinhTrangDiHocTapInput, QuaTrinhCuDiDaoTaoUncheckedUpdateWithoutDM_TinhTrangDiHocTapInput>
+    };
+    export type QuaTrinhCuDiDaoTaoUpdateManyWithWhereWithoutDM_TinhTrangDiHocTapInput = {
+        where: QuaTrinhCuDiDaoTaoScalarWhereInput
+        data: XOR<QuaTrinhCuDiDaoTaoUpdateManyMutationInput, QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutDM_TinhTrangDiHocTapInput>
     };
     export type UserProfileCreateWithoutDM_ChucDanhCMNVGiangVienInput = {
         id?: string
@@ -553319,8 +553627,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
     };
     export type QuaTrinhCuDiCongTacCreateManyUserProfileInput = {
         id?: string
@@ -553335,6 +553641,8 @@ export namespace Prisma {
         denThangNam?: Date | string | null
         donVi: string
         chucVuId: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
     };
     export type QuaTrinhCuDiDaoTaoCreateManyUserProfileInput = {
         id?: string
@@ -553351,6 +553659,7 @@ export namespace Prisma {
         denNgay?: Date | string | null
         vanBang?: string | null
         loaiId: string
+        dM_TinhTrangDiHocTapId?: string | null
     };
     export type KhenThuongCreateManyUserProfileInput = {
         id?: string
@@ -554167,8 +554476,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
         loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
     };
     export type QuaTrinhCongTacUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554189,8 +554496,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554211,8 +554516,6 @@ export namespace Prisma {
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuaTrinhCuDiCongTacUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554227,6 +554530,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
     };
     export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554241,6 +554546,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVuId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554255,6 +554562,8 @@ export namespace Prisma {
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
         chucVuId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuaTrinhCuDiDaoTaoUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554271,6 +554580,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loai?: DM_LoaiHinhDiHocTapUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapUpdateOneWithoutQuaTrinhCuDiDaoTaoNestedInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554287,6 +554597,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loaiId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554303,6 +554614,7 @@ export namespace Prisma {
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
         loaiId?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type KhenThuongUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -558662,8 +558974,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         loaiHinhCongTacId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiCongTacCreateManyChucVuInput = {
@@ -558678,6 +558988,8 @@ export namespace Prisma {
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
         donVi: string
+        dM_TinhTrangCongTacId?: string | null
+        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type UserProfileUpdateWithoutPositionCPVInput = {
@@ -559166,8 +559478,6 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
     };
     export type QuaTrinhCongTacUncheckedUpdateWithoutChucVuInput = {
@@ -559188,8 +559498,6 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuInput = {
@@ -559210,8 +559518,6 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiCongTacUpdateWithoutChucVuInput = {
@@ -559226,6 +559532,8 @@ export namespace Prisma {
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     };
     export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutChucVuInput = {
@@ -559240,6 +559548,8 @@ export namespace Prisma {
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuInput = {
@@ -559254,6 +559564,8 @@ export namespace Prisma {
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         donVi?: StringFieldUpdateOperationsInput | string
+        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type UserProfileCreateManyAcademicRankTypeInput = {
@@ -607418,8 +607730,6 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         ngayNhanQuyetDinh?: Date | string | null
         chucVuId?: string | null
-        dM_TinhTrangCongTacId?: string | null
-        dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCongTacUpdateWithoutLoaiHinhCongTacInput = {
@@ -607440,8 +607750,6 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
     };
     export type QuaTrinhCongTacUncheckedUpdateWithoutLoaiHinhCongTacInput = {
@@ -607462,8 +607770,6 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCongTacUncheckedUpdateManyWithoutLoaiHinhCongTacInput = {
@@ -607484,11 +607790,9 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
-        dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type QuaTrinhCongTacCreateManyDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacCreateManyDM_TinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -607499,18 +607803,12 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVuId?: string | null
-        loaiHinhCongTacId?: string | null
+        donVi: string
+        chucVuId: string
         dM_LoaiTinhTrangCongTacId?: string | null
         userProfileId: string
     };
-    export type QuaTrinhCongTacUpdateWithoutDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUpdateWithoutDM_TinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607521,18 +607819,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
-        loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_LoaiTinhTrangCongTac?: DM_LoaiTinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     };
-    export type QuaTrinhCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_TinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607543,18 +607835,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVuId?: StringFieldUpdateOperationsInput | string
         dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type QuaTrinhCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_TinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607565,18 +607851,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVuId?: StringFieldUpdateOperationsInput | string
         dM_LoaiTinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type QuaTrinhCongTacCreateManyDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacCreateManyDM_LoaiTinhTrangCongTacInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -607587,18 +607867,12 @@ export namespace Prisma {
         createdBy?: string | null
         tuThangNam?: Date | string | null
         denThangNam?: Date | string | null
-        donVi?: string | null
-        diaChi?: string | null
-        chucDanh?: string | null
-        chucVuDangDoan?: string | null
-        soQuyetDinh?: string | null
-        ngayNhanQuyetDinh?: Date | string | null
-        chucVuId?: string | null
-        loaiHinhCongTacId?: string | null
+        donVi: string
+        chucVuId: string
         dM_TinhTrangCongTacId?: string | null
         userProfileId: string
     };
-    export type QuaTrinhCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUpdateWithoutDM_LoaiTinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607609,18 +607883,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
-        loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
-        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
+        dM_TinhTrangCongTac?: DM_TinhTrangCongTacUpdateOneWithoutQuaTrinhCuDiCongTacNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiCongTacNestedInput
     };
-    export type QuaTrinhCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedUpdateWithoutDM_LoaiTinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607631,18 +607899,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVuId?: StringFieldUpdateOperationsInput | string
         dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type QuaTrinhCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacInput = {
+    export type QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutDM_LoaiTinhTrangCongTacInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -607653,14 +607915,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        donVi?: NullableStringFieldUpdateOperationsInput | string | null
-        diaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
-        chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
-        soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
-        ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
-        loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
+        donVi?: StringFieldUpdateOperationsInput | string
+        chucVuId?: StringFieldUpdateOperationsInput | string
         dM_TinhTrangCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
@@ -607678,6 +607934,7 @@ export namespace Prisma {
         tuNgay?: Date | string | null
         denNgay?: Date | string | null
         vanBang?: string | null
+        dM_TinhTrangDiHocTapId?: string | null
         userProfileId: string
     };
     export type QuaTrinhCuDiDaoTaoUpdateWithoutLoaiInput = {
@@ -607694,6 +607951,7 @@ export namespace Prisma {
         tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_TinhTrangDiHocTap?: DM_TinhTrangDiHocTapUpdateOneWithoutQuaTrinhCuDiDaoTaoNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
     };
     export type QuaTrinhCuDiDaoTaoUncheckedUpdateWithoutLoaiInput = {
@@ -607710,6 +607968,7 @@ export namespace Prisma {
         tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutLoaiInput = {
@@ -607726,6 +607985,75 @@ export namespace Prisma {
         tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_TinhTrangDiHocTapId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type QuaTrinhCuDiDaoTaoCreateManyDM_TinhTrangDiHocTapInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        ten?: string | null
+        donViToChuc?: string | null
+        tuNgay?: Date | string | null
+        denNgay?: Date | string | null
+        vanBang?: string | null
+        loaiId: string
+        userProfileId: string
+    };
+    export type QuaTrinhCuDiDaoTaoUpdateWithoutDM_TinhTrangDiHocTapInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ten?: NullableStringFieldUpdateOperationsInput | string | null
+        donViToChuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        loai?: DM_LoaiHinhDiHocTapUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCuDiDaoTaoNestedInput
+    };
+    export type QuaTrinhCuDiDaoTaoUncheckedUpdateWithoutDM_TinhTrangDiHocTapInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ten?: NullableStringFieldUpdateOperationsInput | string | null
+        donViToChuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        loaiId?: StringFieldUpdateOperationsInput | string
+        userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutDM_TinhTrangDiHocTapInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        ten?: NullableStringFieldUpdateOperationsInput | string | null
+        donViToChuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tuNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        denNgay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        vanBang?: NullableStringFieldUpdateOperationsInput | string | null
+        loaiId?: StringFieldUpdateOperationsInput | string
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type UserProfileCreateManyDM_ChucDanhCMNVGiangVienInput = {
