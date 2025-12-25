@@ -423,21 +423,36 @@ model CapBac extends Base {
 }
 
 model QuaTrinhCongTac extends Base {
+  tuThangNam        DateTime?
+  denThangNam       DateTime?
+
+  donVi             String?
+  diaChi            String?
+  chucDanh          String?
+  chucVuDangDoan    String?
+  soQuyetDinh       String?
+  ngayNhanQuyetDinh DateTime?
+
+  chucVu            DM_ChucVu?          @relation(fields: [chucVuId], references: [Id])
+  chucVuId          String?             @db.Uuid
+
+  loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
+  loaiHinhCongTacId String?
+
+  userProfile       UserProfile         @relation(fields: [userProfileId], references: [id])
+  userProfileId     String
+
+  @@schema("ql-ho-so")
+}
+
+model QuaTrinhCuDiCongTac extends Base {
   tuThangNam                DateTime?
   denThangNam               DateTime?
 
-  donVi                     String?
-  diaChi                    String?
-  chucDanh                  String?
-  chucVuDangDoan            String?
-  soQuyetDinh               String?
-  ngayNhanQuyetDinh         DateTime?
+  donVi                     String
 
-  chucVu                    DM_ChucVu?               @relation(fields: [chucVuId], references: [Id])
-  chucVuId                  String?                  @db.Uuid
-
-  loaiHinhCongTac           DM_LoaiHinhCongTac?      @relation(fields: [loaiHinhCongTacId], references: [id])
-  loaiHinhCongTacId         String?
+  chucVu                    DM_ChucVu                @relation(fields: [chucVuId], references: [Id])
+  chucVuId                  String                   @db.Uuid
 
   dM_TinhTrangCongTac       DM_TinhTrangCongTac?     @relation(fields: [dM_TinhTrangCongTacId], references: [id])
   dM_TinhTrangCongTacId     String?
@@ -445,39 +460,28 @@ model QuaTrinhCongTac extends Base {
   dM_LoaiTinhTrangCongTac   DM_LoaiTinhTrangCongTac? @relation(fields: [dM_LoaiTinhTrangCongTacId], references: [id])
   dM_LoaiTinhTrangCongTacId String?
 
+
   userProfile               UserProfile              @relation(fields: [userProfileId], references: [id])
   userProfileId             String
 
   @@schema("ql-ho-so")
 }
 
-model QuaTrinhCuDiCongTac extends Base {
-  tuThangNam    DateTime?
-  denThangNam   DateTime?
-
-  donVi         String
-
-  chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
-  chucVuId      String      @db.Uuid
-
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-
-  @@schema("ql-ho-so")
-}
-
 model QuaTrinhCuDiDaoTao extends Base {
-  ten           String?
-  donViToChuc   String?
-  tuNgay        DateTime?
-  denNgay       DateTime?
-  vanBang       String?
+  ten                    String?
+  donViToChuc            String?
+  tuNgay                 DateTime?
+  denNgay                DateTime?
+  vanBang                String?
 
-  loai          DM_LoaiHinhDiHocTap @relation(fields: [loaiId], references: [id])
-  loaiId        String
+  loai                   DM_LoaiHinhDiHocTap   @relation(fields: [loaiId], references: [id])
+  loaiId                 String
 
-  userProfile   UserProfile         @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  dM_TinhTrangDiHocTap   DM_TinhTrangDiHocTap? @relation(fields: [dM_TinhTrangDiHocTapId], references: [id])
+  dM_TinhTrangDiHocTapId String?
+
+  userProfile            UserProfile           @relation(fields: [userProfileId], references: [id])
+  userProfileId          String
 
   @@schema("ql-ho-so")
 }

@@ -79,16 +79,15 @@ model DM_LoaiHinhCongTac extends Base {
 }
 
 model DM_TinhTrangCongTac extends Base {
-  name            String            @unique
+  name                String                @unique
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
-  quaTrinhCongTac QuaTrinhCongTac[]
   @@schema("ql-ho-so")
 }
 
 model DM_LoaiTinhTrangCongTac extends Base {
-  name            String            @unique
-
-  quaTrinhCongTac QuaTrinhCongTac[]
+  name                String                @unique
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
   @@schema("ql-ho-so")
 }
 
@@ -100,7 +99,9 @@ model DM_LoaiHinhDiHocTap extends Base {
 }
 
 model DM_TinhTrangDiHocTap extends Base {
-  name String @unique
+  name               String               @unique
+
+  quaTrinhCuDiDaoTao QuaTrinhCuDiDaoTao[]
   @@schema("ql-ho-so")
 }
 
