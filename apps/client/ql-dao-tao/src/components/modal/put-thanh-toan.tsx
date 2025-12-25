@@ -148,10 +148,36 @@ const PutPaymentRecord = () => {
                 await deleteSupervisorPayment({
                     where: {
                         status: PaymentStatus.PENDING,
-                        expertId: { in: ids },
-                        thesisProjectId: {
-                            in: dataSupervisorPayment.map((d) => d.thesisProjectId),
-                        },
+                        AND: [
+                            {
+                                OR: [
+                                    {
+                                        thesisProjects: {
+                                            some: { supervisorId: { in: ids } },
+                                        },
+                                    },
+                                    {
+                                        coThesisProjects: {
+                                            some: { coSupervisorId: { in: ids } },
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                OR: [
+                                    {
+                                        thesisProjects: {
+                                            some: { supervisorId: { in: ids } },
+                                        },
+                                    },
+                                    {
+                                        coThesisProjects: {
+                                            some: { coSupervisorId: { in: ids } },
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
                     },
                 })
                 await createSupervisorPayment({
